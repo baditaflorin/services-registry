@@ -22,6 +22,7 @@ https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.j
 | `services.summary.txt`     | counts by mesh + category, rebuilt by `bin/build.py`               |
 | `bin/sync.sh`              | refresh the upstream snapshots in `sources/` via `gh`              |
 | `bin/build.py`             | merge the snapshots into `services.json`                           |
+| `bin/notify-consumers.sh`  | tell the catalog + hub to re-fetch (run after `git push`)          |
 | `sources/`                 | upstream snapshots — never hand-edited                             |
 
 ## Entry shape
