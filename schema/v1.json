@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/v1.json",
+  "title": "Service Registry Entry v1",
+  "type": "object",
+  "required": ["id", "name", "category", "mesh", "url", "health_url", "repo_url", "auth"],
+  "properties": {
+    "id":           { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "Stable slug; kebab-case; unique across all meshes" },
+    "name":         { "type": "string", "description": "Human display name" },
+    "description":  { "type": "string", "description": "One-line summary" },
+    "category":     { "type": "string", "description": "One of: proxy, search, ocr, geo, nlp, content, domains, security, recon, infrastructure, web_analysis, visualization, registry, dashboard" },
+    "mesh":         { "type": "string", "enum": ["0exec", "0crawl"], "description": "Which service mesh / domain root" },
+    "tags":         { "type": "array", "items": { "type": "string" } },
+    "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },
+    "health_url":   { "type": "string", "format": "uri" },
+    "repo_url":     { "type": "string", "format": "uri", "description": "GitHub source repository" },
+    "example_path": { "type": "string", "description": "Path + query that produces a real response; begins with '/'. Example: '/?url=https://example.com'. May be empty if the service has no canonical example." },
+    "auth": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["api_key", "path_token", "none"] },
+        "query_param":        { "type": "string", "description": "auth=api_key: query string parameter name (e.g. 'api_key')" },
+        "header":             { "type": "string", "description": "auth=api_key: HTTP header alternative (e.g. 'X-API-Key')" },
+        "path_template":      { "type": "string", "description": "auth=path_token: how the token is embedded in the path, with '{token}' placeholder. Example: '/t/{token}'" },
+        "public_demo_token":  { "type": "string", "description": "auth=path_token: an intentionally-public demo token consumers may default to. NEVER include real secrets here." }
+      }
+    },
+    "port": { "type": "integer", "description": "Internal docker port; informational only" }
+  },
+  "additionalProperties": false
+}

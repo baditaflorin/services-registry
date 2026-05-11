@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+
+# Upstream snapshots are a build-time scratch dir. They contain raw private-
+# repo content (including the per-service api_key values from the hub) and
+# MUST NOT be committed. `bin/sync.sh` regenerates them on demand.
+/sources/

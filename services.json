@@ -1,0 +1,2793 @@
+[
+  {
+    "id": "a11y-quick",
+    "name": "A11y Quick",
+    "description": "Microservice for A11y Quick",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://a11y-quick.0crawl.com",
+    "health_url": "https://a11y-quick.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_a11y_quick",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8272
+  },
+  {
+    "id": "accessibility-score",
+    "name": "Accessibility Score",
+    "description": "Microservice for Accessibility Score",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://accessibility-score.0crawl.com",
+    "health_url": "https://accessibility-score.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_accessibility_score",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8273
+  },
+  {
+    "id": "ad-density",
+    "name": "Ad Density",
+    "description": "Microservice for Ad Density",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://ad-density.0crawl.com",
+    "health_url": "https://ad-density.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_ad_density",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8274
+  },
+  {
+    "id": "address-extractor",
+    "name": "Address Extractor",
+    "description": "Microservice for Address Extractor",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://address-extractor.0crawl.com",
+    "health_url": "https://address-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_address_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8275
+  },
+  {
+    "id": "admin-finder",
+    "name": "Admin Finder",
+    "description": "Microservice for Admin Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://admin-finder.0crawl.com",
+    "health_url": "https://admin-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_admin_finder",
+    "example_path": "/go_admin_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8335
+  },
+  {
+    "id": "api-extractor",
+    "name": "Api Extractor",
+    "description": "Microservice for Api Extractor",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://api-extractor.0crawl.com",
+    "health_url": "https://api-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_api_extractor",
+    "example_path": "/go_api_extractor?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8336
+  },
+  {
+    "id": "api-first",
+    "name": "Api First",
+    "description": "Microservice for Api First",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://api-first.0crawl.com",
+    "health_url": "https://api-first.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_api_first",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8276
+  },
+  {
+    "id": "apikey-scanner",
+    "name": "Apikey Scanner",
+    "description": "Microservice for Apikey Scanner",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://apikey-scanner.0crawl.com",
+    "health_url": "https://apikey-scanner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_apikey_scanner",
+    "example_path": "/go_apikey_scanner?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8230
+  },
+  {
+    "id": "asn-lookup",
+    "name": "Asn Lookup",
+    "description": "Microservice for Asn Lookup",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://asn-lookup.0crawl.com",
+    "health_url": "https://asn-lookup.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_asn_lookup",
+    "example_path": "/go_asn_lookup?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8337
+  },
+  {
+    "id": "biz-classifier",
+    "name": "Biz Classifier",
+    "description": "Microservice for Biz Classifier",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://biz-classifier.0crawl.com",
+    "health_url": "https://biz-classifier.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_biz_classifier",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8277
+  },
+  {
+    "id": "blocklist-checker",
+    "name": "Blocklist Checker",
+    "description": "Microservice for Blocklist Checker",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://blocklist-checker.0crawl.com",
+    "health_url": "https://blocklist-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_blocklist_checker",
+    "example_path": "/go_blocklist_checker?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8338
+  },
+  {
+    "id": "broken-links",
+    "name": "Broken Links",
+    "description": "Microservice for Broken Links",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://broken-links.0crawl.com",
+    "health_url": "https://broken-links.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_broken_links",
+    "example_path": "/go_broken_links?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8192
+  },
+  {
+    "id": "bucket-finder",
+    "name": "Bucket Finder",
+    "description": "Microservice for Bucket Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://bucket-finder.0crawl.com",
+    "health_url": "https://bucket-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_bucket_finder",
+    "example_path": "/go_bucket_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8339
+  },
+  {
+    "id": "caa-checker",
+    "name": "Caa Checker",
+    "description": "Microservice for Caa Checker",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://caa-checker.0crawl.com",
+    "health_url": "https://caa-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_caa_checker",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8325
+  },
+  {
+    "id": "captcha-detector",
+    "name": "Captcha Detector",
+    "description": "Microservice for Captcha Detector",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://captcha-detector.0crawl.com",
+    "health_url": "https://captcha-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_captcha_detector",
+    "example_path": "/go_captcha_detector?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8209
+  },
+  {
+    "id": "cas",
+    "name": "Cas",
+    "description": "Microservice for Cas",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://cas.0crawl.com",
+    "health_url": "https://cas.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_cas",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8279
+  },
+  {
+    "id": "cdn-detector",
+    "name": "Cdn Detector",
+    "description": "Microservice for Cdn Detector",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://cdn-detector.0crawl.com",
+    "health_url": "https://cdn-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_cdn_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8326
+  },
+  {
+    "id": "clickjacking-tester",
+    "name": "Clickjacking Tester",
+    "description": "Microservice for Clickjacking Tester",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://clickjacking-tester.0crawl.com",
+    "health_url": "https://clickjacking-tester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_clickjacking_tester",
+    "example_path": "/go_clickjacking_tester?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8225
+  },
+  {
+    "id": "cognitive-load",
+    "name": "Cognitive Load",
+    "description": "Microservice for Cognitive Load",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://cognitive-load.0crawl.com",
+    "health_url": "https://cognitive-load.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_cognitive_load",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8280
+  },
+  {
+    "id": "comment-extractor",
+    "name": "Comment Extractor",
+    "description": "Microservice for Comment Extractor",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://comment-extractor.0crawl.com",
+    "health_url": "https://comment-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_comment_extractor",
+    "example_path": "/go_comment_extractor?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8340
+  },
+  {
+    "id": "company-size",
+    "name": "Company Size",
+    "description": "Microservice for Company Size",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://company-size.0crawl.com",
+    "health_url": "https://company-size.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_company_size",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8281
+  },
+  {
+    "id": "compression-tester",
+    "name": "Compression Tester",
+    "description": "Microservice for Compression Tester",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://compression-tester.0crawl.com",
+    "health_url": "https://compression-tester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_compression_tester",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8327
+  },
+  {
+    "id": "cookie-checker",
+    "name": "Cookie Checker",
+    "description": "Microservice for Cookie Checker",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://cookie-checker.0crawl.com",
+    "health_url": "https://cookie-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_cookie_checker",
+    "example_path": "/go_cookie_checker?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8226
+  },
+  {
+    "id": "cors-scanner",
+    "name": "Cors Scanner",
+    "description": "Microservice for Cors Scanner",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://cors-scanner.0crawl.com",
+    "health_url": "https://cors-scanner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_cors_scanner",
+    "example_path": "/go_cors_scanner?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8239
+  },
+  {
+    "id": "cors-tester",
+    "name": "Cors Tester",
+    "description": "Microservice for Cors Tester",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://cors-tester.0crawl.com",
+    "health_url": "https://cors-tester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_cors_tester",
+    "example_path": "/go_cors_tester?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8141
+  },
+  {
+    "id": "crlf-tester",
+    "name": "Crlf Tester",
+    "description": "Microservice for Crlf Tester",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://crlf-tester.0crawl.com",
+    "health_url": "https://crlf-tester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_crlf_tester",
+    "example_path": "/go_crlf_tester?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8220
+  },
+  {
+    "id": "crypto-finder",
+    "name": "Crypto Finder",
+    "description": "Microservice for Crypto Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://crypto-finder.0crawl.com",
+    "health_url": "https://crypto-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_crypto_finder",
+    "example_path": "/go_crypto_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8341
+  },
+  {
+    "id": "currency-detector",
+    "name": "Currency Detector",
+    "description": "Microservice for Currency Detector",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://currency-detector.0crawl.com",
+    "health_url": "https://currency-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_currency_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8282
+  },
+  {
+    "id": "customer-logos",
+    "name": "Customer Logos",
+    "description": "Microservice for Customer Logos",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://customer-logos.0crawl.com",
+    "health_url": "https://customer-logos.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_customer_logos",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8283
+  },
+  {
+    "id": "data-inventory",
+    "name": "Data Inventory",
+    "description": "Microservice for Data Inventory",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://data-inventory.0crawl.com",
+    "health_url": "https://data-inventory.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_data_inventory",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8154
+  },
+  {
+    "id": "debug-detector",
+    "name": "Debug Detector",
+    "description": "Microservice for Debug Detector",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://debug-detector.0crawl.com",
+    "health_url": "https://debug-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_debug_detector",
+    "example_path": "/go_debug_detector?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8227
+  },
+  {
+    "id": "dependency-counter",
+    "name": "Dependency Counter",
+    "description": "Microservice for Dependency Counter",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://dependency-counter.0crawl.com",
+    "health_url": "https://dependency-counter.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_dependency_counter",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8285
+  },
+  {
+    "id": "dir-listing",
+    "name": "Dir Listing",
+    "description": "Microservice for Dir Listing",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://dir-listing.0crawl.com",
+    "health_url": "https://dir-listing.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_dir_listing",
+    "example_path": "/go_dir_listing?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8342
+  },
+  {
+    "id": "dtss",
+    "name": "Dtss",
+    "description": "Microservice for Dtss",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://dtss.0crawl.com",
+    "health_url": "https://dtss.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_dtss",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8286
+  },
+  {
+    "id": "email-extractor",
+    "name": "Email Extractor",
+    "description": "Microservice for Email Extractor",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://email-extractor.0crawl.com",
+    "health_url": "https://email-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_email_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8287
+  },
+  {
+    "id": "email-harvester",
+    "name": "Email Harvester",
+    "description": "Microservice for Email Harvester",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://email-harvester.0crawl.com",
+    "health_url": "https://email-harvester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_email_harvester",
+    "example_path": "/go_email_harvester?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8343
+  },
+  {
+    "id": "emotional-tone",
+    "name": "Emotional Tone",
+    "description": "Microservice for Emotional Tone",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://emotional-tone.0crawl.com",
+    "health_url": "https://emotional-tone.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_emotional_tone",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8288
+  },
+  {
+    "id": "env-finder",
+    "name": "Env Finder",
+    "description": "Microservice for Env Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://env-finder.0crawl.com",
+    "health_url": "https://env-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_env_finder",
+    "example_path": "/go_env_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8344
+  },
+  {
+    "id": "feed-finder",
+    "name": "Feed Finder",
+    "description": "Microservice for Feed Finder",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://feed-finder.0crawl.com",
+    "health_url": "https://feed-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_feed_finder",
+    "example_path": "/go_feed_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8164
+  },
+  {
+    "id": "founding-year",
+    "name": "Founding Year",
+    "description": "Microservice for Founding Year",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://founding-year.0crawl.com",
+    "health_url": "https://founding-year.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_founding_year",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8289
+  },
+  {
+    "id": "funding-detector",
+    "name": "Funding Detector",
+    "description": "Microservice for Funding Detector",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://funding-detector.0crawl.com",
+    "health_url": "https://funding-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_funding_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8290
+  },
+  {
+    "id": "gdpr-compliance",
+    "name": "Gdpr Compliance",
+    "description": "Microservice for Gdpr Compliance",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://gdpr-compliance.0crawl.com",
+    "health_url": "https://gdpr-compliance.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_gdpr_compliance",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8291
+  },
+  {
+    "id": "graphql-introspection",
+    "name": "Graphql Introspection",
+    "description": "Microservice for Graphql Introspection",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://graphql-introspection.0crawl.com",
+    "health_url": "https://graphql-introspection.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_graphql_introspection",
+    "example_path": "/go_graphql_introspection?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8147
+  },
+  {
+    "id": "hidden-fields",
+    "name": "Hidden Fields",
+    "description": "Microservice for Hidden Fields",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://hidden-fields.0crawl.com",
+    "health_url": "https://hidden-fields.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_hidden_fields",
+    "example_path": "/go_hidden_fields?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8345
+  },
+  {
+    "id": "host-header",
+    "name": "Host Header",
+    "description": "Microservice for Host Header",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://host-header.0crawl.com",
+    "health_url": "https://host-header.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_host_header",
+    "example_path": "/go_host_header?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8240
+  },
+  {
+    "id": "hsts-checker",
+    "name": "Hsts Checker",
+    "description": "Microservice for Hsts Checker",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://hsts-checker.0crawl.com",
+    "health_url": "https://hsts-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_hsts_checker",
+    "example_path": "/go_hsts_checker?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8328
+  },
+  {
+    "id": "http-method-checker",
+    "name": "HTTP Method Checker",
+    "description": "Checks allowed HTTP methods for a URL",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://http-methods.0crawl.com",
+    "health_url": "https://http-methods.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_http_method_checker",
+    "example_path": "/check?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8234
+  },
+  {
+    "id": "http-protocol",
+    "name": "Http Protocol",
+    "description": "Microservice for Http Protocol",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://http-protocol.0crawl.com",
+    "health_url": "https://http-protocol.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_http_protocol",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8241
+  },
+  {
+    "id": "idor-finder",
+    "name": "Idor Finder",
+    "description": "Microservice for Idor Finder",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://idor-finder.0crawl.com",
+    "health_url": "https://idor-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_idor_finder",
+    "example_path": "/go_idor_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8242
+  },
+  {
+    "id": "iframe-analyzer",
+    "name": "Iframe Analyzer",
+    "description": "Microservice for Iframe Analyzer",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://iframe-analyzer.0crawl.com",
+    "health_url": "https://iframe-analyzer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_iframe_analyzer",
+    "example_path": "/go_iframe_analyzer?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8243
+  },
+  {
+    "id": "ipv6-checker",
+    "name": "Ipv6 Checker",
+    "description": "Microservice for Ipv6 Checker",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://ipv6-checker.0crawl.com",
+    "health_url": "https://ipv6-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_ipv6_checker",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8244
+  },
+  {
+    "id": "jsonp-finder",
+    "name": "Jsonp Finder",
+    "description": "Microservice for Jsonp Finder",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://jsonp-finder.0crawl.com",
+    "health_url": "https://jsonp-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_jsonp_finder",
+    "example_path": "/go_jsonp_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8228
+  },
+  {
+    "id": "jwt-debugger",
+    "name": "Jwt Debugger",
+    "description": "Microservice for Jwt Debugger",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://jwt-debugger.0crawl.com",
+    "health_url": "https://jwt-debugger.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_jwt_debugger",
+    "example_path": "/go_jwt_debugger?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8202
+  },
+  {
+    "id": "keyword-density",
+    "name": "Keyword Density",
+    "description": "Microservice for Keyword Density",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://keyword-density.0crawl.com",
+    "health_url": "https://keyword-density.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_keyword_density",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8292
+  },
+  {
+    "id": "legal-entity",
+    "name": "Legal Entity",
+    "description": "Microservice for Legal Entity",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://legal-entity.0crawl.com",
+    "health_url": "https://legal-entity.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_legal_entity",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8293
+  },
+  {
+    "id": "loadbalancer-detect",
+    "name": "Loadbalancer Detect",
+    "description": "Microservice for Loadbalancer Detect",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://loadbalancer-detect.0crawl.com",
+    "health_url": "https://loadbalancer-detect.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_loadbalancer_detect",
+    "example_path": "/go_loadbalancer_detect?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8107
+  },
+  {
+    "id": "login-analyzer",
+    "name": "Login Analyzer",
+    "description": "Microservice for Login Analyzer",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://login-analyzer.0crawl.com",
+    "health_url": "https://login-analyzer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_login_analyzer",
+    "example_path": "/go_login_analyzer?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8170
+  },
+  {
+    "id": "mime-trap",
+    "name": "Mime Trap",
+    "description": "Microservice for Mime Trap",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://mime-trap.0crawl.com",
+    "health_url": "https://mime-trap.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_mime_trap",
+    "example_path": "/go_mime_trap?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8145
+  },
+  {
+    "id": "mobile-friendly",
+    "name": "Mobile Friendly",
+    "description": "Microservice for Mobile Friendly",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://mobile-friendly.0crawl.com",
+    "health_url": "https://mobile-friendly.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_mobile_friendly",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8294
+  },
+  {
+    "id": "oauth-mapper",
+    "name": "Oauth Mapper",
+    "description": "Microservice for Oauth Mapper",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://oauth-mapper.0crawl.com",
+    "health_url": "https://oauth-mapper.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_oauth_mapper",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8330
+  },
+  {
+    "id": "office-locations",
+    "name": "Office Locations",
+    "description": "Microservice for Office Locations",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://office-locations.0crawl.com",
+    "health_url": "https://office-locations.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_office_locations",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8295
+  },
+  {
+    "id": "open-redirect",
+    "name": "Open Redirect",
+    "description": "Microservice for Open Redirect",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://open-redirect.0crawl.com",
+    "health_url": "https://open-redirect.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_open_redirect",
+    "example_path": "/go_open_redirect?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8149
+  },
+  {
+    "id": "outlink-graph",
+    "name": "Outlink Graph",
+    "description": "Microservice for Outlink Graph",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://outlink-graph.0crawl.com",
+    "health_url": "https://outlink-graph.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_outlink_graph",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8296
+  },
+  {
+    "id": "page-load-metrics",
+    "name": "Page Load Metrics",
+    "description": "Microservice for Page Load Metrics",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://page-load-metrics.0crawl.com",
+    "health_url": "https://page-load-metrics.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_page_load_metrics",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8297
+  },
+  {
+    "id": "payment-detector",
+    "name": "Payment Detector",
+    "description": "Microservice for Payment Detector",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://payment-detector.0crawl.com",
+    "health_url": "https://payment-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_payment_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8298
+  },
+  {
+    "id": "phone-extractor",
+    "name": "Phone Extractor",
+    "description": "Microservice for Phone Extractor",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://phone-extractor.0crawl.com",
+    "health_url": "https://phone-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_phone_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 0
+  },
+  {
+    "id": "press-mentions",
+    "name": "Press Mentions",
+    "description": "Microservice for Press Mentions",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://press-mentions.0crawl.com",
+    "health_url": "https://press-mentions.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_press_mentions",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8300
+  },
+  {
+    "id": "price-range",
+    "name": "Price Range",
+    "description": "Microservice for Price Range",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://price-range.0crawl.com",
+    "health_url": "https://price-range.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_price_range",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8301
+  },
+  {
+    "id": "proxy-fingerprint",
+    "name": "Proxy Fingerprint",
+    "description": "Microservice for Proxy Fingerprint",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://proxy-fingerprint.0crawl.com",
+    "health_url": "https://proxy-fingerprint.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_proxy_fingerprint",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8331
+  },
+  {
+    "id": "pwa-manifest",
+    "name": "Pwa Manifest",
+    "description": "Microservice for Pwa Manifest",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://pwa-manifest.0crawl.com",
+    "health_url": "https://pwa-manifest.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_pwa_manifest",
+    "example_path": "/go_pwa_manifest?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8168
+  },
+  {
+    "id": "ratelimit-tester",
+    "name": "Ratelimit Tester",
+    "description": "Microservice for Ratelimit Tester",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://ratelimit-tester.0crawl.com",
+    "health_url": "https://ratelimit-tester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_ratelimit_tester",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8156
+  },
+  {
+    "id": "redirect-tracer",
+    "name": "Redirect Tracer",
+    "description": "Microservice for Redirect Tracer",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://redirect-tracer.0crawl.com",
+    "health_url": "https://redirect-tracer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_redirect_tracer",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8332
+  },
+  {
+    "id": "remote-detector",
+    "name": "Remote Detector",
+    "description": "Microservice for Remote Detector",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://remote-detector.0crawl.com",
+    "health_url": "https://remote-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_remote_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8302
+  },
+  {
+    "id": "revenue-model",
+    "name": "Revenue Model",
+    "description": "Microservice for Revenue Model",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://revenue-model.0crawl.com",
+    "health_url": "https://revenue-model.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_revenue_model",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8303
+  },
+  {
+    "id": "reverse-dns",
+    "name": "Reverse Dns",
+    "description": "Microservice for Reverse Dns",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://reverse-dns.0crawl.com",
+    "health_url": "https://reverse-dns.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_reverse_dns",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8333
+  },
+  {
+    "id": "robots-analyzer",
+    "name": "Robots Analyzer",
+    "description": "Microservice for Robots Analyzer",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://robots-analyzer.0crawl.com",
+    "health_url": "https://robots-analyzer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_robots_analyzer",
+    "example_path": "/go_robots_analyzer?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8161
+  },
+  {
+    "id": "robots-parser",
+    "name": "Robots Parser",
+    "description": "Microservice for Robots Parser",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://robots-parser.0crawl.com",
+    "health_url": "https://robots-parser.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_robots_parser",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8304
+  },
+  {
+    "id": "scc",
+    "name": "Scc",
+    "description": "Microservice for Scc",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://scc.0crawl.com",
+    "health_url": "https://scc.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_scc",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8305
+  },
+  {
+    "id": "schema-extractor",
+    "name": "Schema Extractor",
+    "description": "Microservice for Schema Extractor",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://schema-extractor.0crawl.com",
+    "health_url": "https://schema-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_schema_extractor",
+    "example_path": "/go_schema_extractor?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8165
+  },
+  {
+    "id": "seasonal-detector",
+    "name": "Seasonal Detector",
+    "description": "Microservice for Seasonal Detector",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://seasonal-detector.0crawl.com",
+    "health_url": "https://seasonal-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_seasonal_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8306
+  },
+  {
+    "id": "secrets-scanner",
+    "name": "Secrets Scanner",
+    "description": "Microservice for Secrets Scanner",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://secrets-scanner.0crawl.com",
+    "health_url": "https://secrets-scanner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_secrets_scanner",
+    "example_path": "/go_secrets_scanner?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8229
+  },
+  {
+    "id": "security-headers",
+    "name": "Security Headers",
+    "description": "Microservice for Security Headers",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://security-headers.0crawl.com",
+    "health_url": "https://security-headers.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_security_headers",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8307
+  },
+  {
+    "id": "security-txt",
+    "name": "Security Txt",
+    "description": "Microservice for Security Txt",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://security-txt.0crawl.com",
+    "health_url": "https://security-txt.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_security_txt",
+    "example_path": "/go_security_txt?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8167
+  },
+  {
+    "id": "seo-basics",
+    "name": "Seo Basics",
+    "description": "Microservice for Seo Basics",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://seo-basics.0crawl.com",
+    "health_url": "https://seo-basics.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_seo_basics",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8308
+  },
+  {
+    "id": "services-dashboard",
+    "name": "Services Dashboard",
+    "description": "Microservice for Services Dashboard",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://services-dashboard.0crawl.com",
+    "health_url": "https://services-dashboard.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_services_dashboard",
+    "example_path": "/go_services_dashboard?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 43565
+  },
+  {
+    "id": "shipping-regions",
+    "name": "Shipping Regions",
+    "description": "Microservice for Shipping Regions",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://shipping-regions.0crawl.com",
+    "health_url": "https://shipping-regions.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_shipping_regions",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8310
+  },
+  {
+    "id": "sitemap-finder",
+    "name": "Sitemap Finder",
+    "description": "Microservice for Sitemap Finder",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://sitemap-finder.0crawl.com",
+    "health_url": "https://sitemap-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_sitemap_finder",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8311
+  },
+  {
+    "id": "smuggling-probe",
+    "name": "Smuggling Probe",
+    "description": "Microservice for Smuggling Probe",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://smuggling-probe.0crawl.com",
+    "health_url": "https://smuggling-probe.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_smuggling_probe",
+    "example_path": "/go_smuggling_probe?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8224
+  },
+  {
+    "id": "social-graph",
+    "name": "Social Graph",
+    "description": "Microservice for Social Graph",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://social-graph.0crawl.com",
+    "health_url": "https://social-graph.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_social_graph",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8312
+  },
+  {
+    "id": "sourcemap-finder",
+    "name": "Sourcemap Finder",
+    "description": "Microservice for Sourcemap Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://sourcemap-finder.0crawl.com",
+    "health_url": "https://sourcemap-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_sourcemap_finder",
+    "example_path": "/go_sourcemap_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8347
+  },
+  {
+    "id": "subdomain-finder",
+    "name": "Subdomain Finder",
+    "description": "Microservice for Subdomain Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://subdomain-finder.0crawl.com",
+    "health_url": "https://subdomain-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_subdomain_finder",
+    "example_path": "/go_subdomain_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8348
+  },
+  {
+    "id": "subdomain-takeover",
+    "name": "Subdomain Takeover",
+    "description": "Microservice for Subdomain Takeover",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://subdomain-takeover.0crawl.com",
+    "health_url": "https://subdomain-takeover.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_subdomain_takeover",
+    "example_path": "/go_subdomain_takeover?domain=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8223
+  },
+  {
+    "id": "svi",
+    "name": "Svi",
+    "description": "Microservice for Svi",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://svi.0crawl.com",
+    "health_url": "https://svi.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_svi",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8313
+  },
+  {
+    "id": "swagger-finder",
+    "name": "Swagger Finder",
+    "description": "Microservice for Swagger Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://swagger-finder.0crawl.com",
+    "health_url": "https://swagger-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_swagger_finder",
+    "example_path": "/go_swagger_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8349
+  },
+  {
+    "id": "team-size",
+    "name": "Team Size",
+    "description": "Microservice for Team Size",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://team-size.0crawl.com",
+    "health_url": "https://team-size.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_team_size",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8314
+  },
+  {
+    "id": "tech-stack",
+    "name": "Tech Stack",
+    "description": "Microservice for Tech Stack",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "web_analysis"
+    ],
+    "url": "https://tech-stack.0crawl.com",
+    "health_url": "https://tech-stack.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_tech_stack",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8162
+  },
+  {
+    "id": "technology-stack",
+    "name": "Technology Stack",
+    "description": "Microservice for Technology Stack",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://technology-stack.0crawl.com",
+    "health_url": "https://technology-stack.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_technology_stack",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8315
+  },
+  {
+    "id": "tos-finder",
+    "name": "Tos Finder",
+    "description": "Microservice for Tos Finder",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://tos-finder.0crawl.com",
+    "health_url": "https://tos-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_tos_finder",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8316
+  },
+  {
+    "id": "trust-decay",
+    "name": "Trust Decay",
+    "description": "Microservice for Trust Decay",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://trust-decay.0crawl.com",
+    "health_url": "https://trust-decay.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_trust_decay",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8317
+  },
+  {
+    "id": "typosquat-finder",
+    "name": "Typosquat Finder",
+    "description": "Microservice for Typosquat Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://typosquat-finder.0crawl.com",
+    "health_url": "https://typosquat-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_typosquat_finder",
+    "example_path": "/go_typosquat_finder?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8350
+  },
+  {
+    "id": "ugc-detector",
+    "name": "Ugc Detector",
+    "description": "Microservice for Ugc Detector",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://ugc-detector.0crawl.com",
+    "health_url": "https://ugc-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_ugc_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8318
+  },
+  {
+    "id": "update-frequency",
+    "name": "Update Frequency",
+    "description": "Microservice for Update Frequency",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://update-frequency.0crawl.com",
+    "health_url": "https://update-frequency.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_update_frequency",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8319
+  },
+  {
+    "id": "wayback-checker",
+    "name": "Wayback Checker",
+    "description": "Microservice for Wayback Checker",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://wayback-checker.0crawl.com",
+    "health_url": "https://wayback-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_wayback_checker",
+    "example_path": "/go_wayback_checker?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8351
+  },
+  {
+    "id": "websocket-analyzer",
+    "name": "Websocket Analyzer",
+    "description": "Microservice for Websocket Analyzer",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "infrastructure",
+      "microservice"
+    ],
+    "url": "https://websocket-analyzer.0crawl.com",
+    "health_url": "https://websocket-analyzer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_websocket_analyzer",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8334
+  },
+  {
+    "id": "wellknown-scanner",
+    "name": "Wellknown Scanner",
+    "description": "Microservice for Wellknown Scanner",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://wellknown-scanner.0crawl.com",
+    "health_url": "https://wellknown-scanner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_wellknown_scanner",
+    "example_path": "/go_wellknown_scanner?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8352
+  },
+  {
+    "id": "wp-plugins",
+    "name": "Wp Plugins",
+    "description": "Microservice for Wp Plugins",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "recon"
+    ],
+    "url": "https://wp-plugins.0crawl.com",
+    "health_url": "https://wp-plugins.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_wp_plugins",
+    "example_path": "/go_wp_plugins?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8353
+  },
+  {
+    "id": "wps",
+    "name": "Wps",
+    "description": "Microservice for Wps",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://wps.0crawl.com",
+    "health_url": "https://wps.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_wps",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8270
+  },
+  {
+    "id": "xss-payload",
+    "name": "Xss Payload",
+    "description": "Microservice for Xss Payload",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://xss-payload.0crawl.com",
+    "health_url": "https://xss-payload.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_xss_payload",
+    "example_path": "/go_xss_payload?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8231
+  },
+  {
+    "id": "xss-scanner",
+    "name": "Xss Scanner",
+    "description": "Microservice for Xss Scanner",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go",
+      "microservice"
+    ],
+    "url": "https://xss-scanner.0crawl.com",
+    "health_url": "https://xss-scanner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_xss_scanner",
+    "example_path": "/go_xss_scanner?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8271
+  },
+  {
+    "id": "zone-transfer",
+    "name": "Zone Transfer",
+    "description": "Microservice for Zone Transfer",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "microservice",
+      "security"
+    ],
+    "url": "https://zone-transfer.0crawl.com",
+    "health_url": "https://zone-transfer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_zone_transfer",
+    "example_path": "/go_zone_transfer?domain=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "port": 8232
+  },
+  {
+    "id": "c-proxy",
+    "name": "Proxy (C)",
+    "description": "C proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "c",
+      "proxy"
+    ],
+    "url": "https://c-proxy.0exec.com",
+    "health_url": "https://c-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/c-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "d3-graph",
+    "name": "D3 Graph",
+    "description": "",
+    "category": "visualization",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "visualization"
+    ],
+    "url": "https://d3-graph.0exec.com",
+    "health_url": "https://d3-graph.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/d3-graph",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "db-geo-geocode",
+    "name": "Geocoding (Go / DB)",
+    "description": "City \u2192 lat/lon with local DB (?text=)",
+    "category": "geo",
+    "mesh": "0exec",
+    "tags": [
+      "geo"
+    ],
+    "url": "https://db-geo-geocode.0exec.com",
+    "health_url": "https://db-geo-geocode.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/db-geo-geocode",
+    "example_path": "/?text=Bucharest",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "geo-geocode",
+    "name": "Geocoding (Node)",
+    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
+    "category": "geo",
+    "mesh": "0exec",
+    "tags": [
+      "geo"
+    ],
+    "url": "https://geo-geocode.0exec.com",
+    "health_url": "https://geo-geocode.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/geo-geocode",
+    "example_path": "/?text=Bucharest",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "geo-places",
+    "name": "Geo Places",
+    "description": "Place search and details (?query=)",
+    "category": "geo",
+    "mesh": "0exec",
+    "tags": [
+      "geo"
+    ],
+    "url": "https://geo-places.0exec.com",
+    "health_url": "https://geo-places.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/geo-places",
+    "example_path": "/?query=coffee+Bucharest",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-js-proxy",
+    "name": "Proxy (Go+JS)",
+    "description": "JS-rendering proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy"
+    ],
+    "url": "https://go-js-proxy.0exec.com",
+    "health_url": "https://go-js-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-js-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-proxy",
+    "name": "Proxy (Go)",
+    "description": "HTTP proxy with rotation (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy"
+    ],
+    "url": "https://go-proxy.0exec.com",
+    "health_url": "https://go-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-search-duck",
+    "name": "Search DuckDuckGo (Go)",
+    "description": "DuckDuckGo SERP scraper in Go (?query=)",
+    "category": "search",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "search"
+    ],
+    "url": "https://go-search-duck.0exec.com",
+    "health_url": "https://go-search-duck.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-search-duck",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "linkedin-attributes",
+    "name": "LinkedIn Attributes",
+    "description": "Scrape LinkedIn profile badge (?url=)",
+    "category": "content",
+    "mesh": "0exec",
+    "tags": [
+      "content"
+    ],
+    "url": "https://linkedin-attributes.0exec.com",
+    "health_url": "https://linkedin-attributes.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/linkedin-attributes",
+    "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "nlp-extractinfo",
+    "name": "NLP / Compromise",
+    "description": "NLP entity extraction from URL (?url=)",
+    "category": "nlp",
+    "mesh": "0exec",
+    "tags": [
+      "nlp"
+    ],
+    "url": "https://nlp-extractinfo.0exec.com",
+    "health_url": "https://nlp-extractinfo.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/nlp-extractinfo",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "node-js-proxy",
+    "name": "Proxy (Node+JS)",
+    "description": "Node JS-rendering proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "proxy"
+    ],
+    "url": "https://node-js-proxy.0exec.com",
+    "health_url": "https://node-js-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-js-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "node-proxy",
+    "name": "Proxy (Node)",
+    "description": "Node proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "proxy"
+    ],
+    "url": "https://node-proxy.0exec.com",
+    "health_url": "https://node-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "node-search-bing",
+    "name": "Search Bing (Node)",
+    "description": "Bing SERP scraper in Node (?query=)",
+    "category": "search",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "search"
+    ],
+    "url": "https://node-search-bing.0exec.com",
+    "health_url": "https://node-search-bing.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-search-bing",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "node-search-duck",
+    "name": "Search DuckDuckGo (Node)",
+    "description": "DuckDuckGo SERP scraper in Node (?query=)",
+    "category": "search",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "search"
+    ],
+    "url": "https://node-search-duck.0exec.com",
+    "health_url": "https://node-search-duck.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-search-duck",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "ocr-pdf",
+    "name": "OCR / PDF",
+    "description": "Extract text from PDFs \u2014 upload or URL",
+    "category": "ocr",
+    "mesh": "0exec",
+    "tags": [
+      "ocr"
+    ],
+    "url": "https://ocr-pdf.0exec.com",
+    "health_url": "https://ocr-pdf.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/ocr-pdf",
+    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "ocr-pdf-express",
+    "name": "OCR PDF Express",
+    "description": "Express-based OCR / PDF (?url=)",
+    "category": "ocr",
+    "mesh": "0exec",
+    "tags": [
+      "ocr"
+    ],
+    "url": "https://ocr-pdf-express.0exec.com",
+    "health_url": "https://ocr-pdf-express.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/ocr-pdf-express",
+    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "python-proxy",
+    "name": "Proxy (Python)",
+    "description": "Python proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "proxy",
+      "python"
+    ],
+    "url": "https://python-proxy.0exec.com",
+    "health_url": "https://python-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/python-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "random-proxy",
+    "name": "Proxy (Random)",
+    "description": "Routes to a random proxy backend (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "proxy"
+    ],
+    "url": "https://random-proxy.0exec.com",
+    "health_url": "https://random-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/random-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "utils-readcontent",
+    "name": "Read Content",
+    "description": "Extract structured content from URL (?url=)",
+    "category": "content",
+    "mesh": "0exec",
+    "tags": [
+      "content"
+    ],
+    "url": "https://utils-readcontent.0exec.com",
+    "health_url": "https://utils-readcontent.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/utils-readcontent",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  }
+]
