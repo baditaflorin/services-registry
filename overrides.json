@@ -1,0 +1,481 @@
+{
+  "a11y-quick": {
+    "description": "Microservice for A11y Quick"
+  },
+  "accessibility-score": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Accessibility Score"
+  },
+  "ad-density": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Ad Density"
+  },
+  "address-extractor": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Address Extractor"
+  },
+  "admin-finder": {
+    "example_path": "/go_admin_finder?url=https://example.com",
+    "description": "Microservice for Admin Finder"
+  },
+  "api-extractor": {
+    "example_path": "/go_api_extractor?url=https://example.com",
+    "description": "Microservice for Api Extractor"
+  },
+  "api-first": {
+    "description": "Microservice for Api First"
+  },
+  "apikey-scanner": {
+    "example_path": "/go_apikey_scanner?url=https://example.com",
+    "description": "Microservice for Apikey Scanner"
+  },
+  "asn-lookup": {
+    "example_path": "/go_asn_lookup?url=https://example.com",
+    "description": "Microservice for Asn Lookup"
+  },
+  "biz-classifier": {
+    "description": "Microservice for Biz Classifier"
+  },
+  "blocklist-checker": {
+    "example_path": "/go_blocklist_checker?url=https://example.com",
+    "description": "Microservice for Blocklist Checker"
+  },
+  "broken-links": {
+    "example_path": "/go_broken_links?target=example.com",
+    "description": "Microservice for Broken Links"
+  },
+  "bucket-finder": {
+    "example_path": "/go_bucket_finder?url=https://example.com",
+    "description": "Microservice for Bucket Finder"
+  },
+  "c-proxy": {
+    "name": "Proxy (C)",
+    "description": "C proxy (?url=)"
+  },
+  "caa-checker": {
+    "description": "Microservice for Caa Checker"
+  },
+  "captcha-detector": {
+    "example_path": "/go_captcha_detector?target=example.com",
+    "description": "Microservice for Captcha Detector"
+  },
+  "cas": {
+    "description": "Microservice for Cas"
+  },
+  "cdn-detector": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Cdn Detector"
+  },
+  "clickjacking-tester": {
+    "example_path": "/go_clickjacking_tester?target=example.com",
+    "description": "Microservice for Clickjacking Tester"
+  },
+  "cognitive-load": {
+    "description": "Microservice for Cognitive Load"
+  },
+  "comment-extractor": {
+    "example_path": "/go_comment_extractor?url=https://example.com",
+    "description": "Microservice for Comment Extractor"
+  },
+  "company-size": {
+    "description": "Microservice for Company Size"
+  },
+  "compression-tester": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Compression Tester"
+  },
+  "cookie-checker": {
+    "example_path": "/go_cookie_checker?url=https://example.com",
+    "description": "Microservice for Cookie Checker"
+  },
+  "cors-scanner": {
+    "example_path": "/go_cors_scanner?target=example.com",
+    "description": "Microservice for Cors Scanner"
+  },
+  "cors-tester": {
+    "example_path": "/go_cors_tester?target=example.com",
+    "description": "Microservice for Cors Tester"
+  },
+  "crlf-tester": {
+    "example_path": "/go_crlf_tester?target=example.com",
+    "description": "Microservice for Crlf Tester"
+  },
+  "crypto-finder": {
+    "example_path": "/go_crypto_finder?url=https://example.com",
+    "description": "Microservice for Crypto Finder"
+  },
+  "currency-detector": {
+    "description": "Microservice for Currency Detector"
+  },
+  "customer-logos": {
+    "description": "Microservice for Customer Logos"
+  },
+  "data-inventory": {
+    "description": "Microservice for Data Inventory"
+  },
+  "db-geo-geocode": {
+    "name": "Geocoding (Go / DB)",
+    "description": "City \u2192 lat/lon with local DB (?text=)"
+  },
+  "debug-detector": {
+    "example_path": "/go_debug_detector?url=https://example.com",
+    "description": "Microservice for Debug Detector"
+  },
+  "dependency-counter": {
+    "description": "Microservice for Dependency Counter"
+  },
+  "dir-listing": {
+    "example_path": "/go_dir_listing?url=https://example.com",
+    "description": "Microservice for Dir Listing"
+  },
+  "dtss": {
+    "description": "Microservice for Dtss"
+  },
+  "email-extractor": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Email Extractor"
+  },
+  "email-harvester": {
+    "example_path": "/go_email_harvester?url=https://example.com",
+    "description": "Microservice for Email Harvester"
+  },
+  "emotional-tone": {
+    "description": "Microservice for Emotional Tone"
+  },
+  "env-finder": {
+    "example_path": "/go_env_finder?url=https://example.com",
+    "description": "Microservice for Env Finder"
+  },
+  "feed-finder": {
+    "example_path": "/go_feed_finder?url=https://example.com",
+    "description": "Microservice for Feed Finder"
+  },
+  "founding-year": {
+    "description": "Microservice for Founding Year"
+  },
+  "funding-detector": {
+    "description": "Microservice for Funding Detector"
+  },
+  "gdpr-compliance": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Gdpr Compliance"
+  },
+  "geo-geocode": {
+    "name": "Geocoding (Node)",
+    "description": "City/address \u2192 lat/lon via TomTom (?text=)"
+  },
+  "geo-places": {
+    "example_path": "/?query=coffee+Bucharest",
+    "description": "Place search and details (?query=)"
+  },
+  "go-js-proxy": {
+    "name": "Proxy (Go+JS)",
+    "description": "JS-rendering proxy (?url=)"
+  },
+  "go-proxy": {
+    "name": "Proxy (Go)",
+    "description": "HTTP proxy with rotation (?url=)"
+  },
+  "go-search-duck": {
+    "name": "Search DuckDuckGo (Go)",
+    "description": "DuckDuckGo SERP scraper in Go (?query=)"
+  },
+  "graphql-introspection": {
+    "example_path": "/go_graphql_introspection?url=https://example.com",
+    "description": "Microservice for Graphql Introspection"
+  },
+  "hidden-fields": {
+    "example_path": "/go_hidden_fields?url=https://example.com",
+    "description": "Microservice for Hidden Fields"
+  },
+  "host-header": {
+    "example_path": "/go_host_header?target=example.com",
+    "description": "Microservice for Host Header"
+  },
+  "hsts-checker": {
+    "example_path": "/go_hsts_checker?url=https://example.com",
+    "description": "Microservice for Hsts Checker"
+  },
+  "http-method-checker": {
+    "name": "HTTP Method Checker",
+    "example_path": "/check?url=https://example.com",
+    "description": "Checks allowed HTTP methods for a URL"
+  },
+  "http-protocol": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Http Protocol"
+  },
+  "idor-finder": {
+    "example_path": "/go_idor_finder?url=https://example.com",
+    "description": "Microservice for Idor Finder"
+  },
+  "iframe-analyzer": {
+    "example_path": "/go_iframe_analyzer?url=https://example.com",
+    "description": "Microservice for Iframe Analyzer"
+  },
+  "ipv6-checker": {
+    "description": "Microservice for Ipv6 Checker"
+  },
+  "jsonp-finder": {
+    "example_path": "/go_jsonp_finder?url=https://example.com",
+    "description": "Microservice for Jsonp Finder"
+  },
+  "jwt-debugger": {
+    "example_path": "/go_jwt_debugger?url=https://example.com",
+    "description": "Microservice for Jwt Debugger"
+  },
+  "keyword-density": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Keyword Density"
+  },
+  "legal-entity": {
+    "description": "Microservice for Legal Entity"
+  },
+  "linkedin-attributes": {
+    "name": "LinkedIn Attributes",
+    "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
+    "description": "Scrape LinkedIn profile badge (?url=)"
+  },
+  "loadbalancer-detect": {
+    "example_path": "/go_loadbalancer_detect?url=https://example.com",
+    "description": "Microservice for Loadbalancer Detect"
+  },
+  "login-analyzer": {
+    "example_path": "/go_login_analyzer?url=https://example.com",
+    "description": "Microservice for Login Analyzer"
+  },
+  "mime-trap": {
+    "example_path": "/go_mime_trap?url=https://example.com",
+    "description": "Microservice for Mime Trap"
+  },
+  "mobile-friendly": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Mobile Friendly"
+  },
+  "nlp-extractinfo": {
+    "name": "NLP / Compromise",
+    "description": "NLP entity extraction from URL (?url=)"
+  },
+  "node-js-proxy": {
+    "name": "Proxy (Node+JS)",
+    "description": "Node JS-rendering proxy (?url=)"
+  },
+  "node-proxy": {
+    "name": "Proxy (Node)",
+    "description": "Node proxy (?url=)"
+  },
+  "node-search-bing": {
+    "name": "Search Bing (Node)",
+    "description": "Bing SERP scraper in Node (?query=)"
+  },
+  "node-search-duck": {
+    "name": "Search DuckDuckGo (Node)",
+    "description": "DuckDuckGo SERP scraper in Node (?query=)"
+  },
+  "oauth-mapper": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Oauth Mapper"
+  },
+  "ocr-pdf": {
+    "name": "OCR / PDF",
+    "description": "Extract text from PDFs \u2014 upload or URL"
+  },
+  "ocr-pdf-express": {
+    "name": "OCR PDF Express",
+    "description": "Express-based OCR / PDF (?url=)"
+  },
+  "office-locations": {
+    "description": "Microservice for Office Locations"
+  },
+  "open-redirect": {
+    "example_path": "/go_open_redirect?target=example.com",
+    "description": "Microservice for Open Redirect"
+  },
+  "outlink-graph": {
+    "description": "Microservice for Outlink Graph"
+  },
+  "page-load-metrics": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Page Load Metrics"
+  },
+  "payment-detector": {
+    "description": "Microservice for Payment Detector"
+  },
+  "phone-extractor": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Phone Extractor"
+  },
+  "press-mentions": {
+    "description": "Microservice for Press Mentions"
+  },
+  "price-range": {
+    "description": "Microservice for Price Range"
+  },
+  "proxy-fingerprint": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Proxy Fingerprint"
+  },
+  "pwa-manifest": {
+    "example_path": "/go_pwa_manifest?url=https://example.com",
+    "description": "Microservice for Pwa Manifest"
+  },
+  "python-proxy": {
+    "name": "Proxy (Python)",
+    "description": "Python proxy (?url=)"
+  },
+  "random-proxy": {
+    "name": "Proxy (Random)",
+    "description": "Routes to a random proxy backend (?url=)"
+  },
+  "ratelimit-tester": {
+    "description": "Microservice for Ratelimit Tester"
+  },
+  "redirect-tracer": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Redirect Tracer"
+  },
+  "remote-detector": {
+    "description": "Microservice for Remote Detector"
+  },
+  "revenue-model": {
+    "description": "Microservice for Revenue Model"
+  },
+  "reverse-dns": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Reverse Dns"
+  },
+  "robots-analyzer": {
+    "example_path": "/go_robots_analyzer?target=example.com",
+    "description": "Microservice for Robots Analyzer"
+  },
+  "robots-parser": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Robots Parser"
+  },
+  "scc": {
+    "description": "Microservice for Scc"
+  },
+  "schema-extractor": {
+    "example_path": "/go_schema_extractor?url=https://example.com",
+    "description": "Microservice for Schema Extractor"
+  },
+  "seasonal-detector": {
+    "description": "Microservice for Seasonal Detector"
+  },
+  "secrets-scanner": {
+    "example_path": "/go_secrets_scanner?url=https://example.com",
+    "description": "Microservice for Secrets Scanner"
+  },
+  "security-headers": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Security Headers"
+  },
+  "security-txt": {
+    "example_path": "/go_security_txt?url=https://example.com",
+    "description": "Microservice for Security Txt"
+  },
+  "seo-basics": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Seo Basics"
+  },
+  "services-dashboard": {
+    "example_path": "/go_services_dashboard?url=https://example.com",
+    "description": "Microservice for Services Dashboard"
+  },
+  "shipping-regions": {
+    "description": "Microservice for Shipping Regions"
+  },
+  "sitemap-finder": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Sitemap Finder"
+  },
+  "smuggling-probe": {
+    "example_path": "/go_smuggling_probe?target=example.com",
+    "description": "Microservice for Smuggling Probe"
+  },
+  "social-graph": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Social Graph"
+  },
+  "sourcemap-finder": {
+    "example_path": "/go_sourcemap_finder?url=https://example.com",
+    "description": "Microservice for Sourcemap Finder"
+  },
+  "subdomain-finder": {
+    "example_path": "/go_subdomain_finder?url=https://example.com",
+    "description": "Microservice for Subdomain Finder"
+  },
+  "subdomain-takeover": {
+    "example_path": "/go_subdomain_takeover?domain=example.com",
+    "description": "Microservice for Subdomain Takeover"
+  },
+  "svi": {
+    "description": "Microservice for Svi"
+  },
+  "swagger-finder": {
+    "example_path": "/go_swagger_finder?url=https://example.com",
+    "description": "Microservice for Swagger Finder"
+  },
+  "team-size": {
+    "description": "Microservice for Team Size"
+  },
+  "tech-stack": {
+    "description": "Microservice for Tech Stack"
+  },
+  "technology-stack": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Technology Stack"
+  },
+  "tos-finder": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Tos Finder"
+  },
+  "trust-decay": {
+    "description": "Microservice for Trust Decay"
+  },
+  "typosquat-finder": {
+    "example_path": "/go_typosquat_finder?url=https://example.com",
+    "description": "Microservice for Typosquat Finder"
+  },
+  "ugc-detector": {
+    "description": "Microservice for Ugc Detector"
+  },
+  "update-frequency": {
+    "description": "Microservice for Update Frequency"
+  },
+  "utils-readcontent": {
+    "name": "Read Content",
+    "description": "Extract structured content from URL (?url=)"
+  },
+  "wayback-checker": {
+    "example_path": "/go_wayback_checker?url=https://example.com",
+    "description": "Microservice for Wayback Checker"
+  },
+  "websocket-analyzer": {
+    "example_path": "/?url=https://example.com",
+    "description": "Microservice for Websocket Analyzer"
+  },
+  "wellknown-scanner": {
+    "example_path": "/go_wellknown_scanner?url=https://example.com",
+    "description": "Microservice for Wellknown Scanner"
+  },
+  "wp-plugins": {
+    "example_path": "/go_wp_plugins?url=https://example.com",
+    "description": "Microservice for Wp Plugins"
+  },
+  "wps": {
+    "description": "Microservice for Wps"
+  },
+  "xss-payload": {
+    "example_path": "/go_xss_payload?url=https://example.com",
+    "description": "Microservice for Xss Payload"
+  },
+  "xss-scanner": {
+    "example_path": "/go_xss_scanner?url=https://example.com",
+    "description": "Microservice for Xss Scanner"
+  },
+  "zone-transfer": {
+    "example_path": "/go_zone_transfer?domain=example.com",
+    "description": "Microservice for Zone Transfer"
+  }
+}

@@ -20,10 +20,12 @@ https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.j
 | `services.json`            | the registry (array of entries)                                    |
 | `schema/v1.json`           | JSON Schema for an entry                                           |
 | `services.summary.txt`     | counts by mesh + category, rebuilt by `bin/build.py`               |
-| `bin/sync.sh`              | refresh the upstream snapshots in `sources/` via `gh`              |
-| `bin/build.py`             | merge the snapshots into `services.json`                           |
+| `bin/generate.py`          | rebuild `services.json` from GitHub topics + `overrides.json`      |
 | `bin/notify-consumers.sh`  | tell the catalog + hub to re-fetch (run after `git push`)          |
-| `sources/`                 | upstream snapshots — never hand-edited                             |
+| `overrides.json`           | per-slug patches (curated names, descriptions, custom example URLs)|
+| `bin/sync.sh`              | (legacy) snapshot the previous three sources                       |
+| `bin/build.py`             | (legacy) merge those snapshots — superseded by `generate.py`       |
+| `sources/`                 | (legacy) upstream snapshots, gitignored                            |
 
 ## Entry shape
 
@@ -90,23 +92,50 @@ function openLink(s, token) {
 
 ## How to add a service
 
-1. Add one entry to `services.json` matching `schema/v1.json`.
-2. Run `python3 bin/build.py` if you also edited upstream sources, otherwise
-   skip this step (manual edits are allowed; the rebuild is destructive).
-3. Open a PR. Validators run in CI; once merged, all consuming dashboards
-   pick up the change on their next refresh (≤ 5 min for `catalog.0exec.com`).
+The registry is regenerated from GitHub topics on every run of
+`bin/generate.py`. There is no manual `services.json` editing.
 
-## How to refresh from upstream
+1. Create or already-have the service repo under `baditaflorin/<name>`.
+2. Tag it with the right topics — one mesh, one category, plus optional tags:
+   ```bash
+   gh repo edit baditaflorin/<name> \
+     --add-topic mesh-0exec \
+     --add-topic category-proxy \
+     --add-topic go
+   ```
+3. (Optional) Add an entry to `overrides.json` if the auto-derived display
+   name / description / example query needs to be hand-curated:
+   ```json
+   {
+     "go-js-proxy": {
+       "name": "Proxy (Go+JS)",
+       "example_path": "/?url=https://example.com"
+     }
+   }
+   ```
+4. Regenerate and push:
+   ```bash
+   python3 bin/generate.py
+   git add services.json overrides.json services.summary.txt
+   git commit -m "feat: add <slug>"
+   git push
+   bin/notify-consumers.sh    # tells the live dashboards to re-fetch
+   ```
 
-```bash
-bin/sync.sh        # pulls latest 0crawl services.json, 0exec catalog, hub directory
-python3 bin/build.py   # rebuilds services.json + services.summary.txt
-git diff services.json # review
-```
+## Topic conventions
 
-Note: `build.py` is destructive — it overwrites `services.json` from the
-snapshots. If you've made manual edits since the last sync, capture them in
-the script before regenerating.
+| topic              | meaning                                                     |
+|--------------------|-------------------------------------------------------------|
+| `mesh-0exec`       | service in the 0exec.com mesh (auth: api_key)              |
+| `mesh-0crawl`      | service in the 0crawl.com mesh (auth: path_token)          |
+| `mesh-pages`       | static GitHub Pages site (no auth)                          |
+| `category-<x>`     | one of: proxy, search, ocr, geo, nlp, content, domains,    |
+|                    | security, recon, infrastructure, web-analysis, visualization |
+| anything else      | rendered as a tag (e.g. `go`, `node`, `python`, `c`)       |
+
+GitHub topics force lowercase + hyphens. The generator normalizes
+`web-analysis` back to `web_analysis` for the `category` field, matching
+the convention used by hub icons and the legacy 0crawl dashboard JSON.
 
 ## Consumers
 
