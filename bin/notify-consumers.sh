@@ -31,10 +31,11 @@ notify() {
   local label="$1" url="$2" auth_header="${3:-}"
   local code
   if [[ -n "$auth_header" ]]; then
-    code=$(curl -sS -o /dev/null -w '%{http_code}' -X POST -H "$auth_header" "$url" || echo 000)
+    code=$(curl -sS -L -o /dev/null -w '%{http_code}' -X POST -H "$auth_header" "$url" || echo 000)
   else
-    code=$(curl -sS -o /dev/null -w '%{http_code}' "$url" || echo 000)
+    code=$(curl -sS -L -o /dev/null -w '%{http_code}' "$url" || echo 000)
   fi
+  # 200/204 = ok; 302 + follow ends at 200; treat 2xx as success.
   case "$code" in
     20[0-9]) echo "  $label  HTTP $code  ok" ;;
     *)       echo "  $label  HTTP $code  FAIL" ; return 1 ;;
