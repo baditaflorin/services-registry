@@ -2,7 +2,13 @@
   "a11y-quick": {
     "description": "Microservice for A11y Quick",
     "host_port": 8272,
-    "container_port": 8272
+    "container_port": 8272,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Requires headless browser, DOM rendering",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "accessibility-score": {
     "example_path": "/?url=https://example.com",
@@ -56,7 +62,13 @@
     "description": "Microservice for Analyze Headers",
     "example_path": "/?url=https://example.com",
     "host_port": 8081,
-    "container_port": 8081
+    "container_port": 8081,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "api-extractor": {
     "example_path": "/go_api_extractor?url=https://example.com",
@@ -73,7 +85,13 @@
   "api-first": {
     "description": "Microservice for Api First",
     "host_port": 8276,
-    "container_port": 8276
+    "container_port": 8276,
+    "trl": 5,
+    "trl_evidence": "Multi-function service with basic error handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "apikey-scanner": {
     "example_path": "/go_apikey_scanner?url=https://example.com",
@@ -88,7 +106,7 @@
     "container_port": 8230
   },
   "apikey-service": {
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
     "host_port": 18021,
     "container_port": 8080,
@@ -103,7 +121,13 @@
     "example_path": "/go_asn_lookup?url=https://example.com",
     "description": "Microservice for Asn Lookup",
     "host_port": 8337,
-    "container_port": 8337
+    "container_port": 8337,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "biz-classifier": {
     "description": "Microservice for Biz Classifier",
@@ -132,7 +156,13 @@
     "example_path": "/go_broken_links?target=example.com",
     "description": "Microservice for Broken Links",
     "host_port": 8192,
-    "container_port": 8192
+    "container_port": 8192,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "bucket-finder": {
     "example_path": "/go_bucket_finder?url=https://example.com",
@@ -178,7 +208,13 @@
   "cas": {
     "description": "Microservice for Cas",
     "host_port": 8279,
-    "container_port": 8279
+    "container_port": 8279,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "cdn-detector": {
     "example_path": "/?url=https://example.com",
@@ -196,12 +232,24 @@
     "example_path": "/go_clickjacking_tester?target=example.com",
     "description": "Microservice for Clickjacking Tester",
     "host_port": 8225,
-    "container_port": 8225
+    "container_port": 8225,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "cognitive-load": {
     "description": "Microservice for Cognitive Load",
     "host_port": 8280,
-    "container_port": 8280
+    "container_port": 8280,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "comment-extractor": {
     "example_path": "/go_comment_extractor?url=https://example.com",
@@ -218,19 +266,37 @@
   "company-size": {
     "description": "Microservice for Company Size",
     "host_port": 8281,
-    "container_port": 8281
+    "container_port": 8281,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "compression-tester": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Compression Tester",
     "host_port": 8327,
-    "container_port": 8327
+    "container_port": 8327,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "cookie-checker": {
     "example_path": "/go_cookie_checker?url=https://example.com",
     "description": "Microservice for Cookie Checker",
     "host_port": 8226,
-    "container_port": 8226
+    "container_port": 8226,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "cors-scanner": {
     "example_path": "/go_cors_scanner?target=example.com",
@@ -248,19 +314,37 @@
     "example_path": "/go_cors_tester?target=example.com",
     "description": "Microservice for Cors Tester",
     "host_port": 8141,
-    "container_port": 8141
+    "container_port": 8141,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "crawl-web-application": {
     "description": "Microservice for Crawl Web Application",
     "example_path": "/?url=https://example.com",
     "host_port": 8082,
-    "container_port": 8082
+    "container_port": 8082,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "crlf-tester": {
     "example_path": "/go_crlf_tester?target=example.com",
     "description": "Microservice for Crlf Tester",
     "host_port": 8142,
-    "container_port": 8142
+    "container_port": 8142,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "crypto-finder": {
     "example_path": "/go_crypto_finder?url=https://example.com",
@@ -288,7 +372,13 @@
   "customer-logos": {
     "description": "Microservice for Customer Logos",
     "host_port": 8283,
-    "container_port": 8283
+    "container_port": 8283,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "d3-graph": {
     "host_port": 18020,
@@ -297,11 +387,17 @@
   "data-inventory": {
     "description": "Microservice for Data Inventory",
     "host_port": 8284,
-    "container_port": 8284
+    "container_port": 8284,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "db-geo-geocode": {
     "name": "Geocoding (Go / DB)",
-    "description": "City → lat/lon with local DB (?text=)",
+    "description": "City \u2192 lat/lon with local DB (?text=)",
     "host_port": 18009,
     "container_port": 3909
   },
@@ -320,7 +416,13 @@
   "dependency-counter": {
     "description": "Microservice for Dependency Counter",
     "host_port": 8285,
-    "container_port": 8285
+    "container_port": 8285,
+    "trl": 5,
+    "trl_evidence": "Multi-function service with basic error handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "dir-listing": {
     "example_path": "/go_dir_listing?url=https://example.com",
@@ -338,18 +440,36 @@
     "description": "Microservice for Dns Record",
     "example_path": "/?target=example.com",
     "host_port": 8084,
-    "container_port": 8084
+    "container_port": 8084,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "domain-details": {
     "description": "Microservice for Domain Details",
     "example_path": "/?target=example.com",
     "host_port": 8085,
-    "container_port": 8085
+    "container_port": 8085,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "dtss": {
     "description": "Microservice for Dtss",
     "host_port": 8286,
-    "container_port": 8286
+    "container_port": 8286,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "email-extractor": {
     "example_path": "/?url=https://example.com",
@@ -380,7 +500,7 @@
     "trl": 3,
     "trl_evidence": "Keyword-bag sentiment lexicon.",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8288,
@@ -425,7 +545,13 @@
   "founding-year": {
     "description": "Microservice for Founding Year",
     "host_port": 8289,
-    "container_port": 8289
+    "container_port": 8289,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "funding-detector": {
     "description": "Microservice for Funding Detector",
@@ -442,11 +568,17 @@
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Gdpr Compliance",
     "host_port": 8291,
-    "container_port": 8291
+    "container_port": 8291,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "geo-geocode": {
     "name": "Geocoding (Node)",
-    "description": "City/address → lat/lon via TomTom (?text=)",
+    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
     "host_port": 18008,
     "container_port": 4902
   },
@@ -534,25 +666,49 @@
     "description": "Microservice for Google Taxonomy",
     "example_path": "/?url=https://example.com",
     "host_port": 8096,
-    "container_port": 8096
+    "container_port": 8096,
+    "trl": 1,
+    "trl_evidence": "Minimal function count, no parsing or validation logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "graphql-introspection": {
     "example_path": "/go_graphql_introspection?url=https://example.com",
     "description": "Microservice for Graphql Introspection",
     "host_port": 8147,
-    "container_port": 8147
+    "container_port": 8147,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "hidden-fields": {
     "example_path": "/go_hidden_fields?url=https://example.com",
     "description": "Microservice for Hidden Fields",
     "host_port": 8345,
-    "container_port": 8345
+    "container_port": 8345,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "host-header": {
     "example_path": "/go_host_header?target=example.com",
     "description": "Microservice for Host Header",
     "host_port": 8240,
-    "container_port": 8240
+    "container_port": 8240,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "hsts-checker": {
     "example_path": "/go_hsts_checker?url=https://example.com",
@@ -575,13 +731,25 @@
     "description": "Microservice for Http Method Tester",
     "example_path": "/?url=https://example.com",
     "host_port": 8087,
-    "container_port": 8087
+    "container_port": 8087,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "http-protocol": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Http Protocol",
     "host_port": 8241,
-    "container_port": 8241
+    "container_port": 8241,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "idor-finder": {
     "example_path": "/go_idor_finder?url=https://example.com",
@@ -610,7 +778,13 @@
   "ipv6-checker": {
     "description": "Microservice for Ipv6 Checker",
     "host_port": 8244,
-    "container_port": 8244
+    "container_port": 8244,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "jsbundle-routes": {
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
@@ -652,13 +826,19 @@
     "example_path": "/go_jwt_debugger?url=https://example.com",
     "description": "Microservice for Jwt Debugger",
     "host_port": 8202,
-    "container_port": 8202
+    "container_port": 8202,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "jwt-pentest": {
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
     "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
     "trl": 6,
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass.",
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "trl_assessed_at": "2026-05-13",
@@ -670,12 +850,24 @@
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Keyword Density",
     "host_port": 8292,
-    "container_port": 8292
+    "container_port": 8292,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "legal-entity": {
     "description": "Microservice for Legal Entity",
     "host_port": 8293,
-    "container_port": 8293
+    "container_port": 8293,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "linkedin-attributes": {
     "name": "LinkedIn Attributes",
@@ -688,7 +880,13 @@
     "example_path": "/go_loadbalancer_detect?url=https://example.com",
     "description": "Microservice for Loadbalancer Detect",
     "host_port": 8107,
-    "container_port": 8107
+    "container_port": 8107,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "login-analyzer": {
     "example_path": "/go_login_analyzer?url=https://example.com",
@@ -706,13 +904,25 @@
     "example_path": "/go_mime_trap?url=https://example.com",
     "description": "Microservice for Mime Trap",
     "host_port": 8145,
-    "container_port": 8145
+    "container_port": 8145,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "mobile-friendly": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Mobile Friendly",
     "host_port": 8294,
-    "container_port": 8294
+    "container_port": 8294,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Requires headless browser, DOM rendering",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "nlp-extractinfo": {
     "name": "NLP / Compromise",
@@ -748,11 +958,17 @@
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Oauth Mapper",
     "host_port": 8330,
-    "container_port": 8330
+    "container_port": 8330,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "ocr-pdf": {
     "name": "OCR / PDF",
-    "description": "Extract text from PDFs — upload or URL",
+    "description": "Extract text from PDFs \u2014 upload or URL",
     "host_port": 18012,
     "container_port": 5500
   },
@@ -765,13 +981,25 @@
   "office-locations": {
     "description": "Microservice for Office Locations",
     "host_port": 8295,
-    "container_port": 8295
+    "container_port": 8295,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "open-redirect": {
     "example_path": "/go_open_redirect?target=example.com",
     "description": "Microservice for Open Redirect",
     "host_port": 8149,
-    "container_port": 8149
+    "container_port": 8149,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "outlink-graph": {
     "description": "Microservice for Outlink Graph",
@@ -788,7 +1016,13 @@
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Page Load Metrics",
     "host_port": 8297,
-    "container_port": 8297
+    "container_port": 8297,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Requires headless browser, DOM rendering",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "payment-detector": {
     "description": "Microservice for Payment Detector",
@@ -831,12 +1065,24 @@
   "press-mentions": {
     "description": "Microservice for Press Mentions",
     "host_port": 8300,
-    "container_port": 8300
+    "container_port": 8300,
+    "trl": 5,
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "price-range": {
     "description": "Microservice for Price Range",
     "host_port": 8301,
-    "container_port": 8301
+    "container_port": 8301,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "proto-pollution": {
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
@@ -854,13 +1100,25 @@
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Proxy Fingerprint",
     "host_port": 8331,
-    "container_port": 8331
+    "container_port": 8331,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "pwa-manifest": {
     "example_path": "/go_pwa_manifest?url=https://example.com",
     "description": "Microservice for Pwa Manifest",
     "host_port": 8168,
-    "container_port": 8168
+    "container_port": 8168,
+    "trl": 4,
+    "trl_evidence": "Multi-function structure, limited error handling and tests",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "python-proxy": {
     "name": "Proxy (Python)",
@@ -877,7 +1135,13 @@
   "ratelimit-tester": {
     "description": "Microservice for Ratelimit Tester",
     "host_port": 8156,
-    "container_port": 8156
+    "container_port": 8156,
+    "trl": 3,
+    "trl_evidence": "Basic multi-step logic without test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "redirect-tracer": {
     "example_path": "/?url=https://example.com",
@@ -905,19 +1169,37 @@
   "revenue-model": {
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
-    "container_port": 8303
+    "container_port": 8303,
+    "trl": 6,
+    "trl_evidence": "Evidence+verdict+confidence system with test coverage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "reverse-dns": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Reverse Dns",
     "host_port": 8333,
-    "container_port": 8333
+    "container_port": 8333,
+    "trl": 3,
+    "trl_evidence": "Multi-struct analyzer, 15 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "robots-analyzer": {
     "example_path": "/go_robots_analyzer?target=example.com",
     "description": "Microservice for Robots Analyzer",
     "host_port": 8161,
-    "container_port": 8161
+    "container_port": 8161,
+    "trl": 4,
+    "trl_evidence": "Multi-capability (2) analysis, 16 fields, tested",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "robots-parser": {
     "example_path": "/?url=https://example.com",
@@ -935,24 +1217,48 @@
     "description": "Microservice for Scan Port",
     "example_path": "/?target=example.com",
     "host_port": 8222,
-    "container_port": 8222
+    "container_port": 8222,
+    "trl": 3,
+    "trl_evidence": "Multi-struct analyzer, 5 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "scan-port-banner": {
     "description": "Microservice for Scan Port Banner",
     "example_path": "/?target=example.com",
     "host_port": 8089,
-    "container_port": 8089
+    "container_port": 8089,
+    "trl": 3,
+    "trl_evidence": "Multi-struct analyzer, 8 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "scan-port-ssh": {
     "description": "Microservice for Scan Port Ssh",
     "example_path": "/?target=example.com",
     "host_port": 8090,
-    "container_port": 8090
+    "container_port": 8090,
+    "trl": 2,
+    "trl_evidence": "Simple single-purpose analyzer",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "scc": {
     "description": "Microservice for Scc",
     "host_port": 8305,
-    "container_port": 8305
+    "container_port": 8305,
+    "trl": 3,
+    "trl_evidence": "Multi-struct analyzer, 9 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "schema-extractor": {
     "example_path": "/go_schema_extractor?url=https://example.com",
@@ -1017,7 +1323,13 @@
     "description": "Microservice for Security Header Analyzer",
     "example_path": "/?url=https://example.com",
     "host_port": 8091,
-    "container_port": 8091
+    "container_port": 8091,
+    "trl": 3,
+    "trl_evidence": "Structured detection with 19 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "security-headers": {
     "example_path": "/?url=https://example.com",
@@ -1035,17 +1347,35 @@
     "example_path": "/go_security_txt?url=https://example.com",
     "description": "Microservice for Security Txt",
     "host_port": 8167,
-    "container_port": 8167
+    "container_port": 8167,
+    "trl": 3,
+    "trl_evidence": "Structured detection with 12 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "seo-basics": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Seo Basics",
     "host_port": 8308,
-    "container_port": 8308
+    "container_port": 8308,
+    "trl": 4,
+    "trl_evidence": "Multi-capability (2) analysis, 25 fields, tested",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "services-dashboard": {
     "example_path": "/go_services_dashboard?url=https://example.com",
-    "description": "Microservice for Services Dashboard"
+    "description": "Microservice for Services Dashboard",
+    "trl": 2,
+    "trl_evidence": "Simple single-purpose analyzer",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "session-fixation": {
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
@@ -1074,7 +1404,13 @@
   "shipping-regions": {
     "description": "Microservice for Shipping Regions",
     "host_port": 8310,
-    "container_port": 8310
+    "container_port": 8310,
+    "trl": 4,
+    "trl_evidence": "Multi-capability (3) analysis, 18 fields, tested",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "simulate-ddos": {
     "description": "Microservice for Simulate Ddos",
@@ -1104,13 +1440,25 @@
     "example_path": "/go_smuggling_probe?target=example.com",
     "description": "Microservice for Smuggling Probe",
     "host_port": 8154,
-    "container_port": 8154
+    "container_port": 8154,
+    "trl": 3,
+    "trl_evidence": "Structured detection with 20 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "social-graph": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Social Graph",
     "host_port": 8312,
-    "container_port": 8312
+    "container_port": 8312,
+    "trl": 4,
+    "trl_evidence": "Multi-capability (4) analysis, 19 fields, tested",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "sourcemap-finder": {
     "example_path": "/go_sourcemap_finder?url=https://example.com",
@@ -1140,7 +1488,13 @@
     "example_path": "/go_subdomain_takeover?domain=example.com",
     "description": "Microservice for Subdomain Takeover",
     "host_port": 8223,
-    "container_port": 8223
+    "container_port": 8223,
+    "trl": 4,
+    "trl_evidence": "Multi-capability (2) analysis, 15 fields, tested",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "substack-scraper": {
     "description": "Public-metadata scraper for Substack publications: posts, cadence, recommendations, authors.",
@@ -1155,7 +1509,13 @@
     "container_port": 8236
   },
   "svi": {
-    "description": "Microservice for Svi"
+    "description": "Microservice for Svi",
+    "trl": 3,
+    "trl_evidence": "Multi-struct analyzer, 5 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "swagger-finder": {
     "example_path": "/go_swagger_finder?url=https://example.com",
@@ -1172,24 +1532,48 @@
   "team-size": {
     "description": "Microservice for Team Size",
     "host_port": 8314,
-    "container_port": 8314
+    "container_port": 8314,
+    "trl": 4,
+    "trl_evidence": "Multi-capability (2) analysis, 17 fields, tested",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "tech-stack": {
     "description": "Microservice for Tech Stack",
     "host_port": 8162,
-    "container_port": 8162
+    "container_port": 8162,
+    "trl": 3,
+    "trl_evidence": "Multi-struct analyzer, 5 response fields",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "technology-stack": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Technology Stack",
     "host_port": 8315,
-    "container_port": 8315
+    "container_port": 8315,
+    "trl": 2,
+    "trl_evidence": "Simple single-purpose analyzer",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "telnet-banner": {
     "description": "Microservice for Telnet Banner",
     "example_path": "/?target=example.com",
     "host_port": 8086,
-    "container_port": 8086
+    "container_port": 8086,
+    "trl": 2,
+    "trl_evidence": "Simple single-purpose analyzer",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "tos-finder": {
     "example_path": "/?url=https://example.com",
