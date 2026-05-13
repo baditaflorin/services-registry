@@ -3340,6 +3340,36 @@
     "container_port": 8232
   },
   {
+    "id": "apikey-service",
+    "name": "Apikey Service",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "tags": [
+      "apikey",
+      "go",
+      "keystore"
+    ],
+    "url": "https://apikey-service.0exec.com",
+    "health_url": "https://apikey-service.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-apikey-service",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Working keystore w/ SQLite + admin auth + WAL. 2026-05-13 added constant-time admin compare + method enforcement + max body size. Still: keys plaintext at rest, no rate-limit, no audit log, no tests.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18021,
+    "container_port": 8080
+  },
+  {
     "id": "c-proxy",
     "name": "Proxy (C)",
     "description": "C proxy (?url=)",

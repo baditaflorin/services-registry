@@ -61,6 +61,65 @@ Mesh is declared per repo via the GitHub topic `mesh-0exec` / `mesh-0crawl` /
 `mesh-pages`. Category is declared via `category-<x>`. `bin/generate.py`
 discovers repos by querying topics on `github.com/baditaflorin/*`.
 
+## Authentication: the keystore (`go-apikey-service`)
+
+**This is the fleet's single point of compromise.** Treat it like a CA
+root. Every 0exec service trusts whatever it says.
+
+- **What it is**: a Go HTTP service (`baditaflorin/go-apikey-service`)
+  backed by SQLite. Issues, verifies, revokes, lists keys. Runs on the
+  dockerhost, internal-only (not internet-reachable).
+- **How keys flow**:
+  1. Caller hits `https://<slug>.0exec.com/...?api_key=<key>`
+  2. nginx auth_request → `_verify_key` location
+  3. Static fallback first: if key matches the universal demo key
+     hardcoded in the vhost (e.g. `fb_05dea…`), accept immediately.
+  4. Otherwise POST `X-Verify-Key=<key>` to `/verify` on the keystore.
+  5. Keystore checks SQLite → returns 200 + `X-Auth-User`/`X-Auth-Scope`,
+     or 401.
+- **Why two layers**: the static fallback means a brief keystore
+  outage doesn't kill the public demo path. Real per-user keys still
+  flow through the dynamic check.
+
+### Clients MUST use `go-common/apikey`, not handroll HTTP calls
+
+Every service that needs to verify/issue/revoke keys imports the
+canonical package:
+
+```go
+import "github.com/baditaflorin/go-common/apikey"
+
+c := apikey.New() // wired from APIKEY_SERVICE_URL + APIKEY_SERVICE_ADMIN_TOKEN
+// Verify path:
+result, err := c.Verify(ctx, userKey)
+// or with graceful degradation across keystore outages:
+verifier := apikey.NewCache(c) // serves stale-but-valid for up to 15m
+result, err = verifier.Verify(ctx, userKey)
+```
+
+The `Cache` layer is the **graceful-degradation** primitive: positive
+results survive a short keystore outage; negative results (401) are
+never cached so revocations take effect immediately on next call.
+
+### What to do when the keystore is down
+
+- **Static fallback** in nginx vhosts keeps the public demo key working.
+- **Per-service caches** (via `apikey.Cache`) keep recently-verified
+  callers working up to 15 min.
+- **Snapshot data** in `fleet-state/state/snapshot.json` flags it as a
+  BROKEN service entry once `/health` fails — that's your alert.
+- **Procedure** to recover lives in private `fleet-state/RUNBOOK.md`
+  under "keystore outage". Short version: SSH dockerhost, restart
+  the `go-apikey-service` container, verify `/health` returns 200,
+  drop the Cache TTL on caller services if they're stuck on stale.
+
+### Admin token
+
+The keystore admin endpoints (`/issue`, `/revoke`, `/list`, `/purge`)
+require `X-Admin-Token: <token>`. Token is `ADMIN_TOKEN` env var on
+the keystore container; clients read it from `APIKEY_SERVICE_ADMIN_TOKEN`.
+**Token storage + rotation playbook**: private `fleet-state/OPS.md`.
+
 ## IaC pipeline
 
 ```

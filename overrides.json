@@ -87,6 +87,18 @@
     "host_port": 8230,
     "container_port": 8230
   },
+  "apikey-service": {
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "example_path": "/health",
+    "host_port": 18021,
+    "container_port": 8080,
+    "trl": 5,
+    "trl_evidence": "Working keystore w/ SQLite + admin auth + WAL. 2026-05-13 added constant-time admin compare + method enforcement + max body size. Still: keys plaintext at rest, no rate-limit, no audit log, no tests.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
   "asn-lookup": {
     "example_path": "/go_asn_lookup?url=https://example.com",
     "description": "Microservice for Asn Lookup",
