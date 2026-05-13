@@ -18,6 +18,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8272,
     "container_port": 8272
   },
@@ -40,6 +41,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "WCAG rule corpus, heading structure, image alt sampling.",
     "trl_ceiling": 8,
@@ -68,6 +70,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Ad-slot detection by class/id patterns, network call counting.",
     "trl_ceiling": 7,
@@ -96,6 +99,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 2,
     "trl_evidence": "Regex + small gazetteer. Toy for the multi-country general case.",
     "trl_ceiling": 5,
@@ -124,6 +128,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 3,
     "trl_evidence": "Wordlist enumeration of admin paths.",
     "trl_ceiling": 5,
@@ -152,6 +157,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8081,
     "container_port": 8081
   },
@@ -174,6 +180,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "31 canonical OpenAPI paths across stacks, AsyncAPI detection, gRPC-Web fingerprint, GraphQL introspection, auth-scheme inference.",
     "trl_ceiling": null,
@@ -202,6 +209,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8276,
     "container_port": 8276
   },
@@ -224,6 +232,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "Entropy-based + pattern-matched API key detection in HTML+JS.",
     "trl_ceiling": 7,
@@ -252,6 +261,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8337,
     "container_port": 8337
   },
@@ -274,6 +284,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict.",
     "trl_ceiling": null,
@@ -302,6 +313,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Wrapper around external DNSBL/feeds.",
     "trl_ceiling": 5,
@@ -330,6 +342,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8192,
     "container_port": 8192
   },
@@ -352,6 +365,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 4,
     "trl_evidence": "URL-pattern detection for S3/GCS/Azure buckets.",
     "trl_ceiling": 5,
@@ -380,6 +394,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation.",
     "trl_ceiling": null,
@@ -408,6 +423,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
     "trl_ceiling": 7,
@@ -436,6 +452,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8279,
     "container_port": 8279
   },
@@ -458,6 +475,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 8,
     "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring.",
     "trl_ceiling": null,
@@ -486,6 +504,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8225,
     "container_port": 8225
   },
@@ -508,6 +527,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8280,
     "container_port": 8280
   },
@@ -530,6 +550,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "HTML/JS comment extraction with multi-page crawl. 50KB.",
     "trl_ceiling": 7,
@@ -558,6 +579,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8281,
     "container_port": 8281
   },
@@ -580,6 +602,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8327,
     "container_port": 8327
   },
@@ -602,6 +625,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8226,
     "container_port": 8226
   },
@@ -624,6 +648,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "Endpoint discovery, CORS preflight testing, credential+wildcard checks, risk categorization.",
     "trl_ceiling": null,
@@ -652,6 +677,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8141,
     "container_port": 8141
   },
@@ -674,6 +700,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8082,
     "container_port": 8082
   },
@@ -696,6 +723,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8142,
     "container_port": 8142
   },
@@ -718,6 +746,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 4,
     "trl_evidence": "Wallet-address regex + crypto-library fingerprinting.",
     "trl_ceiling": 6,
@@ -746,6 +775,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "Symbol regex + locale patterns + currency-switcher heuristics.",
     "trl_ceiling": 7,
@@ -774,6 +804,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8283,
     "container_port": 8283
   },
@@ -796,6 +827,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8284,
     "container_port": 8284
   },
@@ -818,6 +850,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Stack-trace and debug-banner detection in error pages.",
     "trl_ceiling": 6,
@@ -846,6 +879,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8285,
     "container_port": 8285
   },
@@ -868,6 +902,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8342,
     "container_port": 8342
   },
@@ -890,6 +925,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8084,
     "container_port": 8084
   },
@@ -912,6 +948,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8085,
     "container_port": 8085
   },
@@ -934,6 +971,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8286,
     "container_port": 8286
   },
@@ -956,6 +994,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "RFC-light parser, 5444-domain disposable gazetteer, opt-in MX validation, multi-page crawl with frontier, Cloudflare/obfuscation decoder.",
     "trl_ceiling": null,
@@ -984,6 +1023,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Multi-page email extraction with role classification. 45KB of code.",
     "trl_ceiling": 7,
@@ -1012,6 +1052,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 3,
     "trl_evidence": "Keyword-bag sentiment lexicon.",
     "trl_ceiling": 4,
@@ -1040,6 +1081,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": ".env / config file probing at common locations.",
     "trl_ceiling": 6,
@@ -1068,6 +1110,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 1,
     "trl_evidence": "Pure shell skeleton.",
     "trl_ceiling": 5,
@@ -1096,6 +1139,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8221,
     "container_port": 8221
   },
@@ -1118,6 +1162,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8289,
     "container_port": 8289
   },
@@ -1140,6 +1185,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "189-investor gazetteer (top global VCs/angels), 11-currency regex with Asian numbering, round/year context windows, evidence trails.",
     "trl_ceiling": null,
@@ -1168,6 +1214,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8291,
     "container_port": 8291
   },
@@ -1190,6 +1237,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8096,
     "container_port": 8096
   },
@@ -1212,6 +1260,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8147,
     "container_port": 8147
   },
@@ -1234,6 +1283,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8345,
     "container_port": 8345
   },
@@ -1256,6 +1306,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8240,
     "container_port": 8240
   },
@@ -1278,6 +1329,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "Full HSTS spec, apex+www dual testing, preload-list lookup, max-age validation.",
     "trl_ceiling": null,
@@ -1306,6 +1358,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8087,
     "container_port": 8087
   },
@@ -1328,6 +1381,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8241,
     "container_port": 8241
   },
@@ -1350,6 +1404,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 3,
     "trl_evidence": "Baseline-response comparison heuristics.",
     "trl_ceiling": 5,
@@ -1378,6 +1433,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Sandbox/allow attribute analysis, cross-origin frame inventory.",
     "trl_ceiling": 7,
@@ -1406,6 +1462,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8244,
     "container_port": 8244
   },
@@ -1428,6 +1485,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Callback-parameter discovery + JSONP-response detection. Real but narrow.",
     "trl_ceiling": 6,
@@ -1456,6 +1514,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8202,
     "container_port": 8202
   },
@@ -1478,6 +1537,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8292,
     "container_port": 8292
   },
@@ -1500,6 +1560,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8293,
     "container_port": 8293
   },
@@ -1522,6 +1583,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8107,
     "container_port": 8107
   },
@@ -1544,6 +1606,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 2,
     "trl_evidence": "Toy: naive form-detection only.",
     "trl_ceiling": 4,
@@ -1572,6 +1635,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8145,
     "container_port": 8145
   },
@@ -1594,6 +1658,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8294,
     "container_port": 8294
   },
@@ -1616,6 +1681,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8330,
     "container_port": 8330
   },
@@ -1638,6 +1704,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8295,
     "container_port": 8295
   },
@@ -1660,6 +1727,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8149,
     "container_port": 8149
   },
@@ -1682,6 +1750,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails.",
     "trl_ceiling": null,
@@ -1710,6 +1779,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8297,
     "container_port": 8297
   },
@@ -1732,6 +1802,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "27 gateways with Stripe/PayPal variant resolution (Checkout vs Elements vs Connect), BNPL, regional (PIX/UPI/iDEAL), crypto.",
     "trl_ceiling": null,
@@ -1760,6 +1831,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic.",
     "trl_ceiling": null,
@@ -1788,6 +1860,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8300,
     "container_port": 8300
   },
@@ -1810,6 +1883,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8301,
     "container_port": 8301
   },
@@ -1832,6 +1906,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8331,
     "container_port": 8331
   },
@@ -1854,6 +1929,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8168,
     "container_port": 8168
   },
@@ -1876,6 +1952,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8156,
     "container_port": 8156
   },
@@ -1898,6 +1975,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "Redirect-chain tracing with loop detection, header validation.",
     "trl_ceiling": null,
@@ -1926,6 +2004,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 4,
     "trl_evidence": "Job-board keyword matching for remote-friendliness.",
     "trl_ceiling": 6,
@@ -1954,6 +2033,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8303,
     "container_port": 8303
   },
@@ -1976,6 +2056,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8333,
     "container_port": 8333
   },
@@ -1998,6 +2079,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8161,
     "container_port": 8161
   },
@@ -2020,6 +2102,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "RFC 9309 compliant: longest-match, wildcards, crawl-delay, Sitemap discovery. 10-case test suite.",
     "trl_ceiling": null,
@@ -2048,6 +2131,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8222,
     "container_port": 8222
   },
@@ -2070,6 +2154,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8089,
     "container_port": 8089
   },
@@ -2092,6 +2177,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8090,
     "container_port": 8090
   },
@@ -2114,6 +2200,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8305,
     "container_port": 8305
   },
@@ -2136,6 +2223,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 3,
     "trl_evidence": "JSON-LD/microdata extraction works; semantic normalization is the gap.",
     "trl_ceiling": 5,
@@ -2164,6 +2252,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 3413,
     "container_port": 3413
   },
@@ -2186,6 +2275,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 3401,
     "container_port": 3401
   },
@@ -2208,6 +2298,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Holiday/sale-language pattern matching.",
     "trl_ceiling": 7,
@@ -2236,6 +2327,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "Entropy + curated regex (AWS/Stripe/SendGrid/etc) on response bodies.",
     "trl_ceiling": 7,
@@ -2264,6 +2356,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8091,
     "container_port": 8091
   },
@@ -2286,6 +2379,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "RFC-aware CSP parsing, HSTS validation, score-based verdicts, cross-header isolation checks.",
     "trl_ceiling": null,
@@ -2314,6 +2408,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8167,
     "container_port": 8167
   },
@@ -2336,6 +2431,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8308,
     "container_port": 8308
   },
@@ -2357,7 +2453,8 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token"
   },
   {
     "id": "session-management",
@@ -2378,6 +2475,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8095,
     "container_port": 8095
   },
@@ -2400,6 +2498,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8310,
     "container_port": 8310
   },
@@ -2422,6 +2521,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8092,
     "container_port": 8092
   },
@@ -2444,6 +2544,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "Recursive sitemap-index chaser, gunzip, robots-aware, SSRF-guarded, lastmod-sorted output. Live-verified on stripe/google/nytimes/shopify.",
     "trl_ceiling": null,
@@ -2472,6 +2573,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8154,
     "container_port": 8154
   },
@@ -2494,6 +2596,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8312,
     "container_port": 8312
   },
@@ -2516,6 +2619,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "Map metadata parsing, source-path extraction.",
     "trl_ceiling": 8,
@@ -2544,6 +2648,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Free CT-log (crt.sh) lookups + DNS bruteforce.",
     "trl_ceiling": 6,
@@ -2572,6 +2677,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8223,
     "container_port": 8223
   },
@@ -2594,6 +2700,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "Metadata extraction, API scraping, post parsing.",
     "trl_ceiling": null,
@@ -2621,7 +2728,8 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token"
   },
   {
     "id": "swagger-finder",
@@ -2642,6 +2750,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 2,
     "trl_evidence": "Hardcoded path list. Superseded by api-extractor v1.2.2 which covers 31 OpenAPI paths plus AsyncAPI/gRPC-Web.",
     "trl_ceiling": 4,
@@ -2670,6 +2779,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8314,
     "container_port": 8314
   },
@@ -2692,6 +2802,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8162,
     "container_port": 8162
   },
@@ -2714,6 +2825,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8315,
     "container_port": 8315
   },
@@ -2736,6 +2848,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8086,
     "container_port": 8086
   },
@@ -2758,6 +2871,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Curated 30+ canonical paths for ToS/Privacy/DMCA/etc + freshness check.",
     "trl_ceiling": 7,
@@ -2786,6 +2900,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8317,
     "container_port": 8317
   },
@@ -2808,6 +2923,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Levenshtein + homoglyph + parking detection. dnstwist-grade.",
     "trl_ceiling": 6,
@@ -2836,6 +2952,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 5,
     "trl_evidence": "Review/comment signal extraction.",
     "trl_ceiling": 7,
@@ -2864,6 +2981,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8319,
     "container_port": 8319
   },
@@ -2886,6 +3004,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8320,
     "container_port": 8320
   },
@@ -2908,6 +3027,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8321,
     "container_port": 8321
   },
@@ -2930,6 +3050,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "Video schema parsing, platform detection (YouTube/Vimeo/Wistia embeds), autoplay + a11y scoring.",
     "trl_ceiling": 7,
@@ -2958,6 +3079,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 7,
     "trl_evidence": "CDX API integration, snapshot distribution analysis, historical HTTPS adoption trends.",
     "trl_ceiling": null,
@@ -2986,6 +3108,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8324,
     "container_port": 8324
   },
@@ -3008,6 +3131,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8334,
     "container_port": 8334
   },
@@ -3030,6 +3154,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
     "trl_evidence": "All RFC 8615 paths probed with response classification.",
     "trl_ceiling": 8,
@@ -3058,6 +3183,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8353,
     "container_port": 8353
   },
@@ -3080,6 +3206,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8270,
     "container_port": 8270
   },
@@ -3102,6 +3229,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8231,
     "container_port": 8231
   },
@@ -3124,6 +3252,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 3,
     "trl_evidence": "Reflected-payload regex pattern matching.",
     "trl_ceiling": 5,
@@ -3152,6 +3281,7 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "host_port": 8232,
     "container_port": 8232
   },
@@ -3174,6 +3304,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18003,
     "container_port": 3001
   },
@@ -3196,6 +3327,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18020,
     "container_port": 6003
   },
@@ -3217,6 +3349,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18009,
     "container_port": 3909
   },
@@ -3238,6 +3371,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18008,
     "container_port": 4902
   },
@@ -3259,6 +3393,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18010,
     "container_port": 4906
   },
@@ -3281,6 +3416,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 3002,
     "container_port": 3002
   },
@@ -3303,6 +3439,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
     "trl_evidence": "Internal-path/version/stack disclosure pattern matching.",
     "trl_ceiling": 7,
@@ -3331,6 +3468,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
     "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet.",
     "trl_ceiling": null,
@@ -3359,6 +3497,7 @@
       "type": "api_key",
       "query_param": "api_key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
     "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
     "trl_ceiling": null,
@@ -3387,6 +3526,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18002,
     "container_port": 3001
   },
@@ -3409,6 +3549,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18013,
     "container_port": 3401
   },
@@ -3431,6 +3572,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 8,
     "trl_evidence": "Vector DB, LLM integration, SQLite, Prometheus metrics, developer portal. Battle-tested.",
     "trl_ceiling": null,
@@ -3458,6 +3600,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
     "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass.",
     "trl_ceiling": null,
@@ -3487,6 +3630,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
     "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass.",
     "trl_ceiling": null,
@@ -3516,6 +3660,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
     "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
     "trl_ceiling": 7,
@@ -3543,6 +3688,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18017,
     "container_port": 4314
   },
@@ -3564,6 +3710,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18011,
     "container_port": 5302
   },
@@ -3586,6 +3733,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18007,
     "container_port": 3103
   },
@@ -3608,6 +3756,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18004,
     "container_port": 3003
   },
@@ -3630,6 +3779,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18016,
     "container_port": 3413
   },
@@ -3652,6 +3802,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18015,
     "container_port": 3403
   },
@@ -3673,6 +3824,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18012,
     "container_port": 5500
   },
@@ -3694,6 +3846,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18014,
     "container_port": 5500
   },
@@ -3717,6 +3870,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18027,
     "container_port": 8313
   },
@@ -3740,6 +3894,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
     "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass.",
     "trl_ceiling": 7,
@@ -3768,6 +3923,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18005,
     "container_port": 3002
   },
@@ -3789,6 +3945,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18019,
     "container_port": 3333
   },
@@ -3812,6 +3969,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
     "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
     "trl_ceiling": 7,
@@ -3839,6 +3997,7 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18018,
     "container_port": 5008
   },
@@ -3855,7 +4014,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "anon-conf-poll",
@@ -3870,7 +4030,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "audience-field-sculpture",
@@ -3885,7 +4046,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "audio-repair-lab",
@@ -3900,7 +4062,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "bilateral-memory-processing",
@@ -3915,7 +4078,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "castle-archive-memory-vault",
@@ -3930,7 +4094,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "complete-gardener-planner",
@@ -3945,7 +4110,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "cookiecutter-data-science",
@@ -3960,7 +4126,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "crystal-growth-simulator",
@@ -3975,7 +4142,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "cursorparty",
@@ -3990,7 +4158,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "deep-searcher",
@@ -4005,7 +4174,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "earthquake-wave-propagation",
@@ -4020,7 +4190,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "elder-care-coordinator",
@@ -4035,7 +4206,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "field-recording-mirror",
@@ -4050,7 +4222,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "gentle-adhd-flow",
@@ -4065,7 +4238,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "granular-physics-lab",
@@ -4080,7 +4254,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "group-theory-visualizer",
@@ -4095,7 +4270,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "highlight-recall",
@@ -4110,7 +4286,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "implemment-the-following-time-displaced-ears",
@@ -4125,7 +4302,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "little-voice-stories",
@@ -4140,7 +4318,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "local-proofreader",
@@ -4155,7 +4334,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "localhuman-mail",
@@ -4170,7 +4350,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "localingo",
@@ -4185,7 +4366,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-bench-archive",
@@ -4200,7 +4382,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-carpool-bingo",
@@ -4215,7 +4398,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-firefly-walk",
@@ -4230,7 +4414,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-lightning-flash",
@@ -4245,7 +4430,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-mafia",
@@ -4260,7 +4446,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-metronome",
@@ -4275,7 +4462,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-mirror",
@@ -4290,7 +4478,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-shared-window",
@@ -4305,7 +4494,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-silence-counter",
@@ -4320,7 +4510,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-tap-symphony",
@@ -4335,7 +4526,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "mesh-wave-canvas",
@@ -4350,7 +4542,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "newsletter-flow",
@@ -4365,7 +4558,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "numen",
@@ -4380,7 +4574,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "open-indie-studio",
@@ -4395,7 +4590,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "open-school-lab",
@@ -4410,7 +4606,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "openphoto-studio",
@@ -4425,7 +4622,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "osm-poster",
@@ -4440,7 +4638,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "parse-address",
@@ -4455,7 +4654,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "physical-kanban-sync",
@@ -4470,7 +4670,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "pockettalkie",
@@ -4485,7 +4686,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "polyglot-nlp-toolkit",
@@ -4500,7 +4702,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "project-bootstrap-meta",
@@ -4521,7 +4724,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "react-data-grid",
@@ -4536,7 +4740,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "read-later-curriculum",
@@ -4551,7 +4756,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "research-flow",
@@ -4566,7 +4772,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "roamless-notes",
@@ -4589,7 +4796,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "room-vj",
@@ -4610,7 +4818,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "schlieren-imaging-simulator",
@@ -4625,7 +4834,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "show-me-the-way",
@@ -4640,7 +4850,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "stellar-evolution-simulator",
@@ -4655,7 +4866,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "substance-sampler",
@@ -4670,7 +4882,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "tagboard",
@@ -4685,7 +4898,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "trust-no-one-anonymizer",
@@ -4706,7 +4920,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "universal-document-workbench",
@@ -4721,7 +4936,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "urban-farm-year",
@@ -4736,7 +4952,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "vagus-reset-coach",
@@ -4751,7 +4968,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "vcard-personal-portfolio",
@@ -4766,7 +4984,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "webcam-dither-lab",
@@ -4781,7 +5000,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "yq",
@@ -4796,7 +5016,8 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   },
   {
     "id": "z3-smt-game",
@@ -4811,6 +5032,7 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
+    },
+    "auth_help": "no auth"
   }
 ]

@@ -26,6 +26,10 @@
         "public_demo_token":  { "type": "string", "description": "auth=path_token: an intentionally-public demo token consumers may default to. NEVER include real secrets here." }
       }
     },
+    "auth_help": {
+      "type": "string",
+      "description": "Canonical short label for what auth a caller needs. Computed by generate.py from the auth object. UIs render verbatim — do NOT re-derive in JS/templates (that's what produced the historical 'No auth' bug on api_key services)."
+    },
     "port": { "type": "integer", "description": "DEPRECATED — ambiguous (host vs container). Use host_port / container_port instead." },
     "host_port": {
       "type": "integer", "minimum": 1, "maximum": 65535,

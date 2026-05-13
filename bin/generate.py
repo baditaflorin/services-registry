@@ -129,6 +129,26 @@ def load_slug_overrides() -> dict[str, str]:
 SLUG_OVERRIDES = load_slug_overrides()
 
 
+def auth_help_for(auth: dict) -> str:
+    """Canonical short label for what auth a caller needs. UIs render this
+    verbatim instead of re-implementing the if/else (which historically
+    drifts and produces "No auth" for services that actually require auth)."""
+    t = auth.get("type")
+    if t == "api_key":
+        qp = auth.get("query_param") or "api_key"
+        hdr = auth.get("header") or "X-API-Key"
+        return f"api_key required (header {hdr} or ?{qp}=)"
+    if t == "path_token":
+        demo = auth.get("public_demo_token")
+        tmpl = auth.get("path_template") or "/t/{token}/"
+        if demo:
+            return f"path token {tmpl} — public demo: {demo}"
+        return f"path token {tmpl} required"
+    if t == "none":
+        return "no auth"
+    return "auth: unknown"
+
+
 def slug_from_repo_name(name: str, mesh: str) -> str:
     """0crawl repos are named `go_xxxx` on GitHub but the service runs at
     `xxxx.0crawl.com`, so we strip the `go-` prefix for that mesh only. The
@@ -190,6 +210,11 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
         "repo_url":     repo["url"],
         "example_path": exp,
         "auth":         dict(auth),
+        # Single source of truth for the "what auth does this need" label
+        # rendered by every UI (catalog, hub, dashboard). UIs that derive
+        # their own label drift (see hub showing "No auth" for api_key
+        # services on 2026-05-13). Format: short imperative.
+        "auth_help":    auth_help_for(auth),
     }
 
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
