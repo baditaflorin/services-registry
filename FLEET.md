@@ -6,6 +6,47 @@ architecture, the IaC pipeline, slug rules, and gotchas — without naming
 SSH targets, IP blocks, or credential values. Operational topology and
 secrets are in the private `fleet-state/OPS.md`.
 
+## Ecosystem at a glance
+
+baditaflorin/* hosts ~220 service repos plus ~130 prototype/experiment
+repos (the `implemment-*` namespace). The 222 currently in the registry
+are the ones with `mesh-{0exec,0crawl,pages}` GitHub topics, and they
+form three distinct meshes (table below). For each service the registry
+captures: human-readable name, description, host_port, container_port,
+auth model, TRL (technology readiness level), and TRL ceiling (if any).
+
+| Repo                                | Role                                                            | Visibility |
+|-------------------------------------|-----------------------------------------------------------------|------------|
+| `services-registry`                 | canonical service catalog (this repo). Pure metadata, no live state. | PUBLIC |
+| `go-common`                         | shared Go library (HTTP client w/ SSRF guard, auth middleware, jsbundle recovery, ua builder). Every Go service imports this. | PUBLIC |
+| `go_fleet_runner`                   | CLI that operates the fleet: `health`, `smoke`, `state snapshot`, `whois`, `nginx-render`, `deploy`, `allocate-port`, `nginx-drift-audit`, `inject`, `push`. | PRIVATE |
+| `0crawl-platform`                   | nginx vhost templates + bootstrap scripts. Templates embedded in fleet-runner too. | PRIVATE |
+| `fleet-state`                       | live operational state: snapshots, session summaries, SSH topology, rotation playbooks. | PRIVATE |
+| `go-catalog-service` (catalog.0exec.com) | renders services.json into a public catalog table. | PRIVATE |
+| `hub_scrapetheworld_org` (hub.scrapetheworld.org) | dashboard/login UI consuming services.json. | PRIVATE |
+| `go_<thing>` (×~220)                | one repo per service. Examples: `go_smuggling_probe`, `go_biz_classifier`, `go_jwt_pentest`. Each ships its own Dockerfile + docker-compose.yml. | varies |
+
+## TRL — technology readiness level
+
+Every entry in `services.json` may carry a `trl` field 1-9. Convention:
+
+| TRL | Band         | Meaning                                                                       |
+|-----|--------------|-------------------------------------------------------------------------------|
+| 1-3 | **toy**      | single regex / no tests / one file. Don't depend on it.                       |
+| 4-5 | **developing** | curated lists or gazetteers, multi-step logic, partial tests.                 |
+| 6-7 | **real**     | RFC-compliant parsing, evidence trails, verdicts, real test coverage.         |
+| 8-9 | **production** | battle-tested with cross-checks, comprehensive. SLA-grade.                    |
+
+`trl_ceiling` flags services that **structurally cannot** advance further
+with CPU-only smart logic — for example, `xss-scanner` needs DOM canary
+injection (browser engine); `bucket-finder` needs paid threat intel feeds.
+A low ceiling is a deprecation signal: filter `select(trl_ceiling != null
+and trl_ceiling <= 5)` in services.json for candidates.
+
+`trl_assessed_at` should be ≤90 days for the data to be trustworthy. Older
+than that, treat as stale and re-audit. The catalog and hub UIs surface
+TRL as a colored pill so you don't have to open the JSON to see it.
+
 ## Architecture
 
 Two meshes share a single registry but have different auth models:
