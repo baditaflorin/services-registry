@@ -3542,5 +3542,136 @@
     "auth": {
       "type": "none"
     }
+  },
+  {
+    "id": "jsbundle-secrets",
+    "name": "JS Bundle Secret Scanner",
+    "description": "Recovers original JS source from .js.map sidecars and scans for AWS/Stripe/GitHub/SendGrid/Twilio/etc. credentials (gitleaks-derived ruleset).",
+    "category": "pentest",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "secrets",
+      "jsbundle"
+    ],
+    "url": "https://jsbundle-secrets.0exec.com",
+    "health_url": "https://jsbundle-secrets.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
+    "example_path": "/go_jsbundle_secrets?target=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    }
+  },
+  {
+    "id": "jsbundle-routes",
+    "name": "JS Bundle Route Extractor",
+    "description": "Recovers JS source and extracts React Router, Vue Router, Express, Next.js, and GraphQL route declarations. Flags routes not reachable from DOM navigation as unlinked.",
+    "category": "pentest",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "routes",
+      "jsbundle"
+    ],
+    "url": "https://jsbundle-routes.0exec.com",
+    "health_url": "https://jsbundle-routes.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
+    "example_path": "/go_jsbundle_route_extractor?target=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    }
+  },
+  {
+    "id": "postmessage-finder",
+    "name": "postMessage Listener Finder",
+    "description": "Static scan for window.postMessage listeners that don't validate event.origin. XS-Leak / postMessage-RCE class.",
+    "category": "pentest",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "postmessage",
+      "xs-leak"
+    ],
+    "url": "https://postmessage.0exec.com",
+    "health_url": "https://postmessage.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
+    "example_path": "/go_postmessage_listener_finder?target=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    }
+  },
+  {
+    "id": "proto-pollution",
+    "name": "Prototype Pollution Static Scanner",
+    "description": "Static scan for JavaScript prototype-pollution gadgets (lodash.merge, deepmerge, __proto__ literals, etc.). Safe-active probe on v0.2 roadmap.",
+    "category": "pentest",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "prototype-pollution"
+    ],
+    "url": "https://proto-pollution.0exec.com",
+    "health_url": "https://proto-pollution.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
+    "example_path": "/go_prototype_pollution_static?target=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    }
+  },
+  {
+    "id": "jwt-pentest",
+    "name": "JWT Pentest Battery",
+    "description": "Offline JWT pentest - alg=none forgery, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leak, HS/RS key-confusion.",
+    "category": "pentest",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "jwt",
+      "auth"
+    ],
+    "url": "https://jwt-pentest.0exec.com",
+    "health_url": "https://jwt-pentest.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
+    "example_path": "/go_jwt_pentest?jwt=<token>",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    }
+  },
+  {
+    "id": "session-fixation",
+    "name": "Session Fixation Probe",
+    "description": "Two-pass probe: GET captures pre-auth cookies, POST with literal sentinel invalid credentials checks whether session cookie persists across auth-state transition.",
+    "category": "pentest",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "session",
+      "auth"
+    ],
+    "url": "https://session-fixation.0exec.com",
+    "health_url": "https://session-fixation.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
+    "example_path": "/go_session_fixation?target=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    }
   }
 ]
