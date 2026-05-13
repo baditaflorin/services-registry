@@ -233,6 +233,28 @@ substitute a different command. If you can't involve the user
 section below — but mark in your output that you used the fallback so
 the user can verify nothing drifted.
 
+#### Even shorter: install the local shim
+
+On a fresh workstation, once SSH keys to the bastion are set up
+(target identities are in private `fleet-state/OPS.md`), install
+`fleet-runner-shim` as `/usr/local/bin/fleet-runner` and every recipe
+below works with the bare command (drop the
+`ssh "$FLEET_BASTION" 'pct exec "$FLEET_LXC" -- "$FLEET_REMOTE_BIN"'` prefix).
+One-liner:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/baditaflorin/services-registry/main/bin/fleet-runner-shim \
+  | sudo tee /usr/local/bin/fleet-runner >/dev/null \
+  && sudo chmod +x /usr/local/bin/fleet-runner
+fleet-runner --help            # smoke test — should print the remote binary's help
+```
+
+After install, the canonical examples shorten to e.g.
+`fleet-runner converge`, `fleet-runner allocate-port --count 1`,
+`fleet-runner deploy go_<repo>`. The shim is dumb — it just forwards
+argv over SSH to LXC 108 — so output, exit codes, and prompts behave
+exactly as on the LXC. Source: [`services-registry/bin/fleet-runner-shim`](bin/fleet-runner-shim).
+
 ### Recipe — Allocating a port for a new service (or resolving a conflict)
 
 **Canonical (preferred):**

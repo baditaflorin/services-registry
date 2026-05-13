@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# fleet-runner-shim — local wrapper that forwards to the canonical
+# `fleet-runner` binary on Builder LXC 108.
+#
+# Why: `fleet-runner` only exists on LXC 108 (a Proxmox container on
+# `0docker.com`). On a workstation, AI agents that try `fleet-runner`
+# directly get "command not found" and historically pivot to wrong
+# substitutes (local `git push`, naked `docker build`, etc.). With this
+# shim installed at /usr/local/bin/fleet-runner, the same prompts work
+# unchanged on any workstation that has SSH access to the bastion.
+#
+# Install (on a new MacBook, after SSH keys to 0docker.com are set up):
+#
+#   curl -fsSL https://raw.githubusercontent.com/baditaflorin/services-registry/main/bin/fleet-runner-shim \
+#     | sudo tee /usr/local/bin/fleet-runner >/dev/null \
+#     && sudo chmod +x /usr/local/bin/fleet-runner
+#
+# Verify:
+#
+#   fleet-runner --help          # should print the remote binary's help
+#   fleet-runner allocate-port --count 1
+#
+# Overrides (env vars):
+#   FLEET_BASTION      default: root@0docker.com
+#   FLEET_LXC          default: 108
+#   FLEET_REMOTE_BIN   default: /usr/local/bin/fleet-runner
+#
+# Requirements:
+#   - bash (uses `printf %q` for portable arg quoting).
+#   - SSH key access to $FLEET_BASTION. Test with `ssh $FLEET_BASTION true`.
+#
+# Caveats:
+#   - The remote binary's $PWD is LXC 108's home dir, not your local
+#     repo dir. Pass repo names as arguments (e.g. `fleet-runner deploy
+#     go_jwt_pentest`), not as implicit cwd. All canonical recipes in
+#     services-registry/CLAUDE.md already do this.
+#   - Long-running commands stream output back over the SSH channel.
+#     Ctrl-C closes the channel; the remote command may keep running.
+
+set -euo pipefail
+
+BASTION="${FLEET_BASTION:-root@0docker.com}"
+LXC="${FLEET_LXC:-108}"
+REMOTE_BIN="${FLEET_REMOTE_BIN:-/usr/local/bin/fleet-runner}"
+
+# Quote every arg for the remote shell. printf %q is bash-portable.
+remote_argv=""
+for a in "$@"; do
+  remote_argv+=" $(printf '%q' "$a")"
+done
+
+# Allocate a TTY only when interactive — keeps `... | grep` and other
+# pipelines clean.
+ssh_opts=()
+if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); fi
+
+exec ssh "${ssh_opts[@]}" "$BASTION" "pct exec $LXC -- $REMOTE_BIN$remote_argv"
