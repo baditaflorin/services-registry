@@ -194,6 +194,96 @@ Operational topology and credentials are in **private**
 `fleet-state/OPS.md` — never commit SSH targets, IPs, or tokens to
 service repos.
 
+## Operations playbook — canonical commands only (read this before deploying anything)
+
+**This is for any AI agent (Claude, Gemini, Haiku, GPT) that lands in
+this repo and is asked to deploy, bump versions, or fix port conflicts.
+The fleet has canonical tooling. Inventing alternatives creates drift
+that `fleet-runner converge` later has to clean up.**
+
+### Ports
+
+| Wrong                                                              | Right                                                          |
+|--------------------------------------------------------------------|----------------------------------------------------------------|
+| "Port 8313 is taken, I'll pick 8500 and edit `service.yaml`"        | `fleet-runner allocate-port --count 1` (picks from reserved range) |
+| Edit only `service.yaml` to change a port                          | Update `services.json` (registry) + service.yaml + Dockerfile + docker-compose.yml + deploy.yaml ALL together |
+| Silently squat on an unregistered port                             | Every running service must have an entry in `services-registry/services.json` with `host_port` set |
+
+If a port conflict shows up: the registry is the truth. Either the
+service squatting that port is unregistered (register it), or the
+allocate-port range is exhausted (raise it). **Never reassign a port
+unilaterally** — `fleet-runner converge` will flag the drift on the
+next pass and either way someone has to undo it.
+
+### Version bumps
+
+| Wrong                                                              | Right                                                          |
+|--------------------------------------------------------------------|----------------------------------------------------------------|
+| Manually edit `service.yaml` version + `git tag` + change Dockerfile | Coming: `fleet-runner bump-version <patch\|minor\|major>`     |
+| Bump in one file but forget the tag                                | Version must agree across: `service.yaml`, git tag (no `v` prefix), docker image tag, anywhere else it appears |
+
+Until the bump-version command lands, bumping versions is a deliberate
+manual operation — but you bump **all** sources or none. `converge`
+catches inconsistencies.
+
+### Deploying a service
+
+| Wrong                                                              | Right                                                          |
+|--------------------------------------------------------------------|----------------------------------------------------------------|
+| `docker build ... && scp ... && ssh ... docker run`                | `fleet-runner deploy <repo>` — handles DNS, build on AMD64 host, vhost, cert, smoke in one idempotent command |
+| "I'll SSH to dockerhost and run docker compose"                   | Same: `fleet-runner deploy <repo>` invokes the right path for you |
+| Deploy without first running `fleet-runner build-test` for the repo | Build-test first, then deploy. The CI is local. |
+
+If you don't have access to LXC 108 (where fleet-runner lives), **ask
+the user to run `fleet-runner deploy <repo>` for you**. Do NOT
+substitute another deploy path — the canonical path also updates
+gateway vhosts, certs, and the deployed-version metadata that the
+catalog UI reads.
+
+### Image builds
+
+| Wrong                                                              | Right                                                          |
+|--------------------------------------------------------------------|----------------------------------------------------------------|
+| `docker build` on an ARM Mac                                       | `docker buildx build --platform linux/amd64 --provenance=false -t ghcr.io/baditaflorin/<id>:<ver> --push .` (or just `fleet-runner deploy`) |
+| Push to Docker Hub                                                 | GHCR only: `ghcr.io/baditaflorin/<id>:<version>` |
+| Tag with a leading `v` (`v1.2.3`)                                  | No `v` prefix on docker tags or git tags: `1.2.3` |
+
+### Anti-patterns — observed in prior agent sessions
+
+1. **"I'll resolve the port conflict by picking an unused one."** No.
+   Use `fleet-runner allocate-port`. If the squatter is unregistered,
+   register it. Silent reassignment causes the registry to disagree
+   with reality.
+
+2. **"I bumped the version in service.yaml and pushed."** Did you also
+   tag git, update the docker image tag, and update the catalog meta?
+   If not, the catalog still shows the old version.
+
+3. **"All repos are pushed to origin/main."** Pushing code is not the
+   same as deploying. The container on the dockerhost is still on the
+   old image until `fleet-runner deploy <repo>` (or equivalent)
+   rebuilds and rolls it forward.
+
+4. **"I edited service.yaml port from 8313 to 8500 to avoid conflict."**
+   This is the worst kind of silent drift — the registry, the docker
+   compose, the nginx vhost, and the deployed container will all
+   diverge. `fleet-runner audit port-consistency` flags this; `converge`
+   surfaces it.
+
+5. **"I ran git tag X.Y.Z and pushed."** Did you also `git push origin
+   X.Y.Z` (tags aren't pushed by default)? If not, the tag is local-only.
+
+### Self-check before declaring "done"
+
+```
+fleet-runner converge                 # any drift signals?
+fleet-runner audit --all              # any failed invariants?
+fleet-runner state snapshot           # what's actually running on the fleet
+```
+
+If all three are clean and your change is in, you're done. If converge
+shows drift in the category you just touched, fix it before you stop.
+
 ## Fleet-wide changes — change `go-common`, not consumers
 
 The cardinal rule when you'd otherwise touch every service: **modify
