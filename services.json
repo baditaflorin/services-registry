@@ -134,6 +134,28 @@
     "container_port": 8335
   },
   {
+    "id": "analyze-headers",
+    "name": "Analyze Headers",
+    "description": "Microservice for Analyze Headers",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://analyze-headers.0crawl.com",
+    "health_url": "https://analyze-headers.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_analyze_headers",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8081,
+    "container_port": 8081
+  },
+  {
     "id": "api-extractor",
     "name": "Api Extractor",
     "description": "Microservice for Api Extractor",
@@ -634,6 +656,28 @@
     "container_port": 8141
   },
   {
+    "id": "crawl-web-application",
+    "name": "Crawl Web Application",
+    "description": "Microservice for Crawl Web Application",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://crawl-web-application.0crawl.com",
+    "health_url": "https://crawl-web-application.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_crawl_web_application",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8082,
+    "container_port": 8082
+  },
+  {
     "id": "crlf-tester",
     "name": "Crlf Tester",
     "description": "Microservice for Crlf Tester",
@@ -828,6 +872,50 @@
     "container_port": 8342
   },
   {
+    "id": "dns-record",
+    "name": "Dns Record",
+    "description": "Microservice for Dns Record",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "url": "https://dns-record.0crawl.com",
+    "health_url": "https://dns-record.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_dns_record",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8084,
+    "container_port": 8084
+  },
+  {
+    "id": "domain-details",
+    "name": "Domain Details",
+    "description": "Microservice for Domain Details",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "url": "https://domain-details.0crawl.com",
+    "health_url": "https://domain-details.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_details",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8085,
+    "container_port": 8085
+  },
+  {
     "id": "dtss",
     "name": "Dtss",
     "description": "Microservice for Dtss",
@@ -990,6 +1078,28 @@
     "container_port": 8164
   },
   {
+    "id": "file-inclusion",
+    "name": "File Inclusion",
+    "description": "Microservice for File Inclusion",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://file-inclusion.0crawl.com",
+    "health_url": "https://file-inclusion.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_file_inclusion",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8221,
+    "container_port": 8221
+  },
+  {
     "id": "founding-year",
     "name": "Founding Year",
     "description": "Microservice for Founding Year",
@@ -1057,7 +1167,31 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8291,
+    "container_port": 8291
+  },
+  {
+    "id": "google-taxonomy",
+    "name": "Google Taxonomy",
+    "description": "Microservice for Google Taxonomy",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://google-taxonomy.0crawl.com",
+    "health_url": "https://google-taxonomy.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_google_taxonomy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8096,
+    "container_port": 8096
   },
   {
     "id": "graphql-introspection",
@@ -1077,7 +1211,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8147,
+    "container_port": 8147
   },
   {
     "id": "hidden-fields",
@@ -1150,6 +1286,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8328,
     "container_port": 8328
+  },
+  {
+    "id": "http-method-tester",
+    "name": "Http Method Tester",
+    "description": "Microservice for Http Method Tester",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://http-method-tester.0crawl.com",
+    "health_url": "https://http-method-tester.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_http_method_tester",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8087,
+    "container_port": 8087
   },
   {
     "id": "http-protocol",
@@ -1457,7 +1615,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8330,
+    "container_port": 8330
   },
   {
     "id": "office-locations",
@@ -1477,7 +1637,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8295,
+    "container_port": 8295
   },
   {
     "id": "open-redirect",
@@ -1497,7 +1659,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8149,
+    "container_port": 8149
   },
   {
     "id": "outlink-graph",
@@ -1523,7 +1687,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8296,
+    "container_port": 8296
   },
   {
     "id": "page-load-metrics",
@@ -1864,6 +2030,72 @@
     "container_port": 8304
   },
   {
+    "id": "scan-port",
+    "name": "Scan Port",
+    "description": "Microservice for Scan Port",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "url": "https://scan-port.0crawl.com",
+    "health_url": "https://scan-port.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_scan_port",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8222,
+    "container_port": 8222
+  },
+  {
+    "id": "scan-port-banner",
+    "name": "Scan Port Banner",
+    "description": "Microservice for Scan Port Banner",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "url": "https://scan-port-banner.0crawl.com",
+    "health_url": "https://scan-port-banner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_scan_port_banner",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8089,
+    "container_port": 8089
+  },
+  {
+    "id": "scan-port-ssh",
+    "name": "Scan Port Ssh",
+    "description": "Microservice for Scan Port Ssh",
+    "category": "recon",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "url": "https://scan-port-ssh.0crawl.com",
+    "health_url": "https://scan-port-ssh.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_scan_port_ssh",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8090,
+    "container_port": 8090
+  },
+  {
     "id": "scc",
     "name": "Scc",
     "description": "Microservice for Scc",
@@ -1912,6 +2144,50 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8165,
     "container_port": 8165
+  },
+  {
+    "id": "search-bing-go",
+    "name": "Search Bing Go",
+    "description": "Microservice for Search Bing Go",
+    "category": "search",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "search"
+    ],
+    "url": "https://search-bing-go.0crawl.com",
+    "health_url": "https://search-bing-go.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-search-bing-go",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 3413,
+    "container_port": 3413
+  },
+  {
+    "id": "search-duck-go",
+    "name": "Search Duck Go",
+    "description": "Microservice for Search Duck Go",
+    "category": "search",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "search"
+    ],
+    "url": "https://search-duck-go.0crawl.com",
+    "health_url": "https://search-duck-go.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-search-duck-go",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 3401,
+    "container_port": 3401
   },
   {
     "id": "seasonal-detector",
@@ -1968,6 +2244,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8229,
     "container_port": 8229
+  },
+  {
+    "id": "security-header-analyzer",
+    "name": "Security Header Analyzer",
+    "description": "Microservice for Security Header Analyzer",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://security-header-analyzer.0crawl.com",
+    "health_url": "https://security-header-analyzer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_security_header_analyzer",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8091,
+    "container_port": 8091
   },
   {
     "id": "security-headers",
@@ -2062,6 +2360,28 @@
     }
   },
   {
+    "id": "session-management",
+    "name": "Session Management",
+    "description": "Microservice for Session Management",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://session-management.0crawl.com",
+    "health_url": "https://session-management.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_session_management",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8095,
+    "container_port": 8095
+  },
+  {
     "id": "shipping-regions",
     "name": "Shipping Regions",
     "description": "Microservice for Shipping Regions",
@@ -2082,6 +2402,28 @@
     },
     "host_port": 8310,
     "container_port": 8310
+  },
+  {
+    "id": "simulate-ddos",
+    "name": "Simulate Ddos",
+    "description": "Microservice for Simulate Ddos",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://simulate-ddos.0crawl.com",
+    "health_url": "https://simulate-ddos.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_simulate_ddos",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8092,
+    "container_port": 8092
   },
   {
     "id": "sitemap-finder",
@@ -2376,6 +2718,28 @@
     "container_port": 8315
   },
   {
+    "id": "telnet-banner",
+    "name": "Telnet Banner",
+    "description": "Microservice for Telnet Banner",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://telnet-banner.0crawl.com",
+    "health_url": "https://telnet-banner.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_telnet_banner",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8086,
+    "container_port": 8086
+  },
+  {
     "id": "tos-finder",
     "name": "Tos Finder",
     "description": "Microservice for Tos Finder",
@@ -2504,6 +2868,50 @@
     "container_port": 8319
   },
   {
+    "id": "url-shortener",
+    "name": "Url Shortener",
+    "description": "Microservice for Url Shortener",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://url-shortener.0crawl.com",
+    "health_url": "https://url-shortener.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_url_shortener",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8320,
+    "container_port": 8320
+  },
+  {
+    "id": "user-demographics",
+    "name": "User Demographics",
+    "description": "Microservice for User Demographics",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://user-demographics.0crawl.com",
+    "health_url": "https://user-demographics.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_user_demographics",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8321,
+    "container_port": 8321
+  },
+  {
     "id": "video-content",
     "name": "Video Content",
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
@@ -2558,6 +2966,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8351,
     "container_port": 8351
+  },
+  {
+    "id": "website-carbon",
+    "name": "Website Carbon",
+    "description": "Microservice for Website Carbon",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://website-carbon.0crawl.com",
+    "health_url": "https://website-carbon.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_website_carbon",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "host_port": 8324,
+    "container_port": 8324
   },
   {
     "id": "websocket-analyzer",
@@ -2831,6 +3261,28 @@
     },
     "host_port": 18010,
     "container_port": 4906
+  },
+  {
+    "id": "go-html-proxy",
+    "name": "Go Html Proxy",
+    "description": "Microservice for Go Html Proxy",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy"
+    ],
+    "url": "https://go-html-proxy.0exec.com",
+    "health_url": "https://go-html-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-html-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "host_port": 3002,
+    "container_port": 3002
   },
   {
     "id": "go-information-leakage",

@@ -52,6 +52,12 @@
     "host_port": 8335,
     "container_port": 8335
   },
+  "analyze-headers": {
+    "description": "Microservice for Analyze Headers",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8081,
+    "container_port": 8081
+  },
   "api-extractor": {
     "example_path": "/go_api_extractor?url=https://example.com",
     "description": "Microservice for Api Extractor",
@@ -232,6 +238,12 @@
     "host_port": 8141,
     "container_port": 8141
   },
+  "crawl-web-application": {
+    "description": "Microservice for Crawl Web Application",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8082,
+    "container_port": 8082
+  },
   "crlf-tester": {
     "example_path": "/go_crlf_tester?target=example.com",
     "description": "Microservice for Crlf Tester",
@@ -304,6 +316,18 @@
     "host_port": 8342,
     "container_port": 8342
   },
+  "dns-record": {
+    "description": "Microservice for Dns Record",
+    "example_path": "/?target=example.com",
+    "host_port": 8084,
+    "container_port": 8084
+  },
+  "domain-details": {
+    "description": "Microservice for Domain Details",
+    "example_path": "/?target=example.com",
+    "host_port": 8085,
+    "container_port": 8085
+  },
   "dtss": {
     "description": "Microservice for Dtss",
     "host_port": 8286,
@@ -368,6 +392,12 @@
     "host_port": 8164,
     "container_port": 8164
   },
+  "file-inclusion": {
+    "description": "Microservice for File Inclusion",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8221,
+    "container_port": 8221
+  },
   "founding-year": {
     "description": "Microservice for Founding Year",
     "host_port": 8289,
@@ -386,7 +416,9 @@
   },
   "gdpr-compliance": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Gdpr Compliance"
+    "description": "Microservice for Gdpr Compliance",
+    "host_port": 8291,
+    "container_port": 8291
   },
   "geo-geocode": {
     "name": "Geocoding (Node)",
@@ -399,6 +431,12 @@
     "description": "Place search and details (?query=)",
     "host_port": 18010,
     "container_port": 4906
+  },
+  "go-html-proxy": {
+    "description": "Microservice for Go Html Proxy",
+    "example_path": "/?url=https://example.com",
+    "host_port": 3002,
+    "container_port": 3002
   },
   "go-information-leakage": {
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
@@ -462,9 +500,17 @@
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13"
   },
+  "google-taxonomy": {
+    "description": "Microservice for Google Taxonomy",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8096,
+    "container_port": 8096
+  },
   "graphql-introspection": {
     "example_path": "/go_graphql_introspection?url=https://example.com",
-    "description": "Microservice for Graphql Introspection"
+    "description": "Microservice for Graphql Introspection",
+    "host_port": 8147,
+    "container_port": 8147
   },
   "hidden-fields": {
     "example_path": "/go_hidden_fields?url=https://example.com",
@@ -494,6 +540,12 @@
     "name": "HTTP Method Checker",
     "example_path": "/check?url=https://example.com",
     "description": "Checks allowed HTTP methods for a URL"
+  },
+  "http-method-tester": {
+    "description": "Microservice for Http Method Tester",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8087,
+    "container_port": 8087
   },
   "http-protocol": {
     "example_path": "/?url=https://example.com",
@@ -664,7 +716,9 @@
   },
   "oauth-mapper": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Oauth Mapper"
+    "description": "Microservice for Oauth Mapper",
+    "host_port": 8330,
+    "container_port": 8330
   },
   "ocr-pdf": {
     "name": "OCR / PDF",
@@ -679,11 +733,15 @@
     "container_port": 5500
   },
   "office-locations": {
-    "description": "Microservice for Office Locations"
+    "description": "Microservice for Office Locations",
+    "host_port": 8295,
+    "container_port": 8295
   },
   "open-redirect": {
     "example_path": "/go_open_redirect?target=example.com",
-    "description": "Microservice for Open Redirect"
+    "description": "Microservice for Open Redirect",
+    "host_port": 8149,
+    "container_port": 8149
   },
   "outlink-graph": {
     "description": "Microservice for Outlink Graph",
@@ -692,7 +750,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8296,
+    "container_port": 8296
   },
   "page-load-metrics": {
     "example_path": "/?url=https://example.com",
@@ -840,6 +900,24 @@
     "host_port": 8304,
     "container_port": 8304
   },
+  "scan-port": {
+    "description": "Microservice for Scan Port",
+    "example_path": "/?target=example.com",
+    "host_port": 8222,
+    "container_port": 8222
+  },
+  "scan-port-banner": {
+    "description": "Microservice for Scan Port Banner",
+    "example_path": "/?target=example.com",
+    "host_port": 8089,
+    "container_port": 8089
+  },
+  "scan-port-ssh": {
+    "description": "Microservice for Scan Port Ssh",
+    "example_path": "/?target=example.com",
+    "host_port": 8090,
+    "container_port": 8090
+  },
   "scc": {
     "description": "Microservice for Scc",
     "host_port": 8305,
@@ -856,6 +934,18 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8165,
     "container_port": 8165
+  },
+  "search-bing-go": {
+    "description": "Microservice for Search Bing Go",
+    "example_path": "/?query=anthropic+claude",
+    "host_port": 3413,
+    "container_port": 3413
+  },
+  "search-duck-go": {
+    "description": "Microservice for Search Duck Go",
+    "example_path": "/?query=anthropic+claude",
+    "host_port": 3401,
+    "container_port": 3401
   },
   "seasonal-detector": {
     "description": "Microservice for Seasonal Detector",
@@ -879,6 +969,12 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8229,
     "container_port": 8229
+  },
+  "security-header-analyzer": {
+    "description": "Microservice for Security Header Analyzer",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8091,
+    "container_port": 8091
   },
   "security-headers": {
     "example_path": "/?url=https://example.com",
@@ -920,10 +1016,22 @@
     "host_port": 18031,
     "container_port": 8316
   },
+  "session-management": {
+    "description": "Microservice for Session Management",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8095,
+    "container_port": 8095
+  },
   "shipping-regions": {
     "description": "Microservice for Shipping Regions",
     "host_port": 8310,
     "container_port": 8310
+  },
+  "simulate-ddos": {
+    "description": "Microservice for Simulate Ddos",
+    "example_path": "/?target=example.com",
+    "host_port": 8092,
+    "container_port": 8092
   },
   "sitemap-finder": {
     "example_path": "/?target=https://stripe.com",
@@ -1022,6 +1130,12 @@
     "host_port": 8315,
     "container_port": 8315
   },
+  "telnet-banner": {
+    "description": "Microservice for Telnet Banner",
+    "example_path": "/?target=example.com",
+    "host_port": 8086,
+    "container_port": 8086
+  },
   "tos-finder": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Tos Finder",
@@ -1067,6 +1181,18 @@
     "host_port": 8319,
     "container_port": 8319
   },
+  "url-shortener": {
+    "description": "Microservice for Url Shortener",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8320,
+    "container_port": 8320
+  },
+  "user-demographics": {
+    "description": "Microservice for User Demographics",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8321,
+    "container_port": 8321
+  },
   "utils-readcontent": {
     "name": "Read Content",
     "description": "Extract structured content from URL (?url=)",
@@ -1096,6 +1222,12 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8351,
     "container_port": 8351
+  },
+  "website-carbon": {
+    "description": "Microservice for Website Carbon",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8324,
+    "container_port": 8324
   },
   "websocket-analyzer": {
     "example_path": "/?url=https://example.com",
