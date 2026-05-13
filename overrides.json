@@ -1,6 +1,8 @@
 {
   "a11y-quick": {
-    "description": "Microservice for A11y Quick"
+    "description": "Microservice for A11y Quick",
+    "host_port": 8272,
+    "container_port": 8272
   },
   "accessibility-score": {
     "example_path": "/?url=https://example.com",
@@ -10,7 +12,9 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with WCAG 2.2 full corpus + CSS-derived contrast estimation.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8273,
+    "container_port": 8273
   },
   "ad-density": {
     "example_path": "/?url=https://example.com",
@@ -20,7 +24,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8274,
+    "container_port": 8274
   },
   "address-extractor": {
     "example_path": "/?url=https://example.com",
@@ -30,7 +36,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8275,
+    "container_port": 8275
   },
   "admin-finder": {
     "example_path": "/go_admin_finder?url=https://example.com",
@@ -40,7 +48,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Wordlist expansion is commodity; signal requires response-fingerprinting and context that's hard without active auth.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8335,
+    "container_port": 8335
   },
   "api-extractor": {
     "example_path": "/go_api_extractor?url=https://example.com",
@@ -50,10 +60,14 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8336,
+    "container_port": 8336
   },
   "api-first": {
-    "description": "Microservice for Api First"
+    "description": "Microservice for Api First",
+    "host_port": 8276,
+    "container_port": 8276
   },
   "apikey-scanner": {
     "example_path": "/go_apikey_scanner?url=https://example.com",
@@ -63,11 +77,15 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8230,
+    "container_port": 8230
   },
   "asn-lookup": {
     "example_path": "/go_asn_lookup?url=https://example.com",
-    "description": "Microservice for Asn Lookup"
+    "description": "Microservice for Asn Lookup",
+    "host_port": 8337,
+    "container_port": 8337
   },
   "biz-classifier": {
     "description": "Microservice for Biz Classifier",
@@ -76,7 +94,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8277,
+    "container_port": 8277
   },
   "blocklist-checker": {
     "example_path": "/go_blocklist_checker?url=https://example.com",
@@ -86,11 +106,15 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8338,
+    "container_port": 8338
   },
   "broken-links": {
     "example_path": "/go_broken_links?target=example.com",
-    "description": "Microservice for Broken Links"
+    "description": "Microservice for Broken Links",
+    "host_port": 8192,
+    "container_port": 8192
   },
   "bucket-finder": {
     "example_path": "/go_bucket_finder?url=https://example.com",
@@ -100,11 +124,15 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8339,
+    "container_port": 8339
   },
   "c-proxy": {
     "name": "Proxy (C)",
-    "description": "C proxy (?url=)"
+    "description": "C proxy (?url=)",
+    "host_port": 18003,
+    "container_port": 3001
   },
   "caa-checker": {
     "description": "Microservice for Caa Checker",
@@ -113,7 +141,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8325,
+    "container_port": 8325
   },
   "captcha-detector": {
     "example_path": "/go_captcha_detector?target=example.com",
@@ -126,7 +156,9 @@
     "trl_assessor": "claude-session-2026-05-13"
   },
   "cas": {
-    "description": "Microservice for Cas"
+    "description": "Microservice for Cas",
+    "host_port": 8279,
+    "container_port": 8279
   },
   "cdn-detector": {
     "example_path": "/?url=https://example.com",
@@ -136,14 +168,20 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8326,
+    "container_port": 8326
   },
   "clickjacking-tester": {
     "example_path": "/go_clickjacking_tester?target=example.com",
-    "description": "Microservice for Clickjacking Tester"
+    "description": "Microservice for Clickjacking Tester",
+    "host_port": 8225,
+    "container_port": 8225
   },
   "cognitive-load": {
-    "description": "Microservice for Cognitive Load"
+    "description": "Microservice for Cognitive Load",
+    "host_port": 8280,
+    "container_port": 8280
   },
   "comment-extractor": {
     "example_path": "/go_comment_extractor?url=https://example.com",
@@ -153,18 +191,26 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8340,
+    "container_port": 8340
   },
   "company-size": {
-    "description": "Microservice for Company Size"
+    "description": "Microservice for Company Size",
+    "host_port": 8281,
+    "container_port": 8281
   },
   "compression-tester": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Compression Tester"
+    "description": "Microservice for Compression Tester",
+    "host_port": 8327,
+    "container_port": 8327
   },
   "cookie-checker": {
     "example_path": "/go_cookie_checker?url=https://example.com",
-    "description": "Microservice for Cookie Checker"
+    "description": "Microservice for Cookie Checker",
+    "host_port": 8226,
+    "container_port": 8226
   },
   "cors-scanner": {
     "example_path": "/go_cors_scanner?target=example.com",
@@ -174,15 +220,21 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8239,
+    "container_port": 8239
   },
   "cors-tester": {
     "example_path": "/go_cors_tester?target=example.com",
-    "description": "Microservice for Cors Tester"
+    "description": "Microservice for Cors Tester",
+    "host_port": 8141,
+    "container_port": 8141
   },
   "crlf-tester": {
     "example_path": "/go_crlf_tester?target=example.com",
-    "description": "Microservice for Crlf Tester"
+    "description": "Microservice for Crlf Tester",
+    "host_port": 8142,
+    "container_port": 8142
   },
   "crypto-finder": {
     "example_path": "/go_crypto_finder?url=https://example.com",
@@ -192,7 +244,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8341,
+    "container_port": 8341
   },
   "currency-detector": {
     "description": "Microservice for Currency Detector",
@@ -201,17 +255,29 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8282,
+    "container_port": 8282
   },
   "customer-logos": {
-    "description": "Microservice for Customer Logos"
+    "description": "Microservice for Customer Logos",
+    "host_port": 8283,
+    "container_port": 8283
+  },
+  "d3-graph": {
+    "host_port": 18020,
+    "container_port": 6003
   },
   "data-inventory": {
-    "description": "Microservice for Data Inventory"
+    "description": "Microservice for Data Inventory",
+    "host_port": 8284,
+    "container_port": 8284
   },
   "db-geo-geocode": {
     "name": "Geocoding (Go / DB)",
-    "description": "City → lat/lon with local DB (?text=)"
+    "description": "City → lat/lon with local DB (?text=)",
+    "host_port": 18009,
+    "container_port": 3909
   },
   "debug-detector": {
     "example_path": "/go_debug_detector?url=https://example.com",
@@ -221,17 +287,25 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8227,
+    "container_port": 8227
   },
   "dependency-counter": {
-    "description": "Microservice for Dependency Counter"
+    "description": "Microservice for Dependency Counter",
+    "host_port": 8285,
+    "container_port": 8285
   },
   "dir-listing": {
     "example_path": "/go_dir_listing?url=https://example.com",
-    "description": "Microservice for Dir Listing"
+    "description": "Microservice for Dir Listing",
+    "host_port": 8342,
+    "container_port": 8342
   },
   "dtss": {
-    "description": "Microservice for Dtss"
+    "description": "Microservice for Dtss",
+    "host_port": 8286,
+    "container_port": 8286
   },
   "email-extractor": {
     "example_path": "/?url=https://example.com",
@@ -241,7 +315,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8287,
+    "container_port": 8287
   },
   "email-harvester": {
     "example_path": "/go_email_harvester?url=https://example.com",
@@ -251,7 +327,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8137,
+    "container_port": 8137
   },
   "emotional-tone": {
     "description": "Microservice for Emotional Tone",
@@ -260,7 +338,9 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8288,
+    "container_port": 8288
   },
   "env-finder": {
     "example_path": "/go_env_finder?url=https://example.com",
@@ -270,7 +350,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8344,
+    "container_port": 8344
   },
   "feed-finder": {
     "example_path": "/go_feed_finder?url=https://example.com",
@@ -280,10 +362,14 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Achievable with sitemap-finder pattern: probe canonical paths + parse autodiscovery links + RSS/Atom format detection. Needs implementation, not blocked technically.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8164,
+    "container_port": 8164
   },
   "founding-year": {
-    "description": "Microservice for Founding Year"
+    "description": "Microservice for Founding Year",
+    "host_port": 8289,
+    "container_port": 8289
   },
   "funding-detector": {
     "description": "Microservice for Funding Detector",
@@ -292,7 +378,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8290,
+    "container_port": 8290
   },
   "gdpr-compliance": {
     "example_path": "/?url=https://example.com",
@@ -300,11 +388,15 @@
   },
   "geo-geocode": {
     "name": "Geocoding (Node)",
-    "description": "City/address → lat/lon via TomTom (?text=)"
+    "description": "City/address → lat/lon via TomTom (?text=)",
+    "host_port": 18008,
+    "container_port": 4902
   },
   "geo-places": {
     "example_path": "/?query=coffee+Bucharest",
-    "description": "Place search and details (?query=)"
+    "description": "Place search and details (?query=)",
+    "host_port": 18010,
+    "container_port": 4906
   },
   "go-information-leakage": {
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
@@ -314,7 +406,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8083,
+    "container_port": 8083
   },
   "go-js-proxy": {
     "name": "Proxy (Go+JS)",
@@ -324,7 +418,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18006,
+    "container_port": 8080
   },
   "go-js-proxy-network": {
     "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
@@ -338,15 +434,21 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18024,
+    "container_port": 8500
   },
   "go-proxy": {
     "name": "Proxy (Go)",
-    "description": "HTTP proxy with rotation (?url=)"
+    "description": "HTTP proxy with rotation (?url=)",
+    "host_port": 18002,
+    "container_port": 3001
   },
   "go-search-duck": {
     "name": "Search DuckDuckGo (Go)",
-    "description": "DuckDuckGo SERP scraper in Go (?query=)"
+    "description": "DuckDuckGo SERP scraper in Go (?query=)",
+    "host_port": 18013,
+    "container_port": 3401
   },
   "go-url-categorizer-api": {
     "description": "URL categorization API combining vector search + LLM + curated taxonomies. Battle-tested with Prometheus metrics and developer portal.",
@@ -364,11 +466,15 @@
   },
   "hidden-fields": {
     "example_path": "/go_hidden_fields?url=https://example.com",
-    "description": "Microservice for Hidden Fields"
+    "description": "Microservice for Hidden Fields",
+    "host_port": 8345,
+    "container_port": 8345
   },
   "host-header": {
     "example_path": "/go_host_header?target=example.com",
-    "description": "Microservice for Host Header"
+    "description": "Microservice for Host Header",
+    "host_port": 8240,
+    "container_port": 8240
   },
   "hsts-checker": {
     "example_path": "/go_hsts_checker?url=https://example.com",
@@ -378,7 +484,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8328,
+    "container_port": 8328
   },
   "http-method-checker": {
     "name": "HTTP Method Checker",
@@ -387,7 +495,9 @@
   },
   "http-protocol": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Http Protocol"
+    "description": "Microservice for Http Protocol",
+    "host_port": 8241,
+    "container_port": 8241
   },
   "idor-finder": {
     "example_path": "/go_idor_finder?url=https://example.com",
@@ -397,7 +507,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Needs authenticated multi-step probing and sequential-ID tampering state machines. Unauthenticated baseline is noise-prone.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8242,
+    "container_port": 8242
   },
   "iframe-analyzer": {
     "example_path": "/go_iframe_analyzer?url=https://example.com",
@@ -407,7 +519,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8159,
+    "container_port": 8159
   },
   "ipv6-checker": {
     "description": "Microservice for Ipv6 Checker"
@@ -430,7 +544,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18025,
+    "container_port": 8311
   },
   "jsonp-finder": {
     "example_path": "/go_jsonp_finder?url=https://example.com",
@@ -440,11 +556,15 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8158,
+    "container_port": 8158
   },
   "jwt-debugger": {
     "example_path": "/go_jwt_debugger?url=https://example.com",
-    "description": "Microservice for Jwt Debugger"
+    "description": "Microservice for Jwt Debugger",
+    "host_port": 8202,
+    "container_port": 8202
   },
   "jwt-pentest": {
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
@@ -454,23 +574,33 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18029,
+    "container_port": 8315
   },
   "keyword-density": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Keyword Density"
+    "description": "Microservice for Keyword Density",
+    "host_port": 8292,
+    "container_port": 8292
   },
   "legal-entity": {
-    "description": "Microservice for Legal Entity"
+    "description": "Microservice for Legal Entity",
+    "host_port": 8293,
+    "container_port": 8293
   },
   "linkedin-attributes": {
     "name": "LinkedIn Attributes",
     "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
-    "description": "Scrape LinkedIn profile badge (?url=)"
+    "description": "Scrape LinkedIn profile badge (?url=)",
+    "host_port": 18017,
+    "container_port": 4314
   },
   "loadbalancer-detect": {
     "example_path": "/go_loadbalancer_detect?url=https://example.com",
-    "description": "Microservice for Loadbalancer Detect"
+    "description": "Microservice for Loadbalancer Detect",
+    "host_port": 8107,
+    "container_port": 8107
   },
   "login-analyzer": {
     "example_path": "/go_login_analyzer?url=https://example.com",
@@ -480,35 +610,51 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Real login analysis needs flow-tracing, CSRF/OAuth/SAML detection, which overlap with session-fixation + jwt-pentest. Better to fold into those.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8170,
+    "container_port": 8170
   },
   "mime-trap": {
     "example_path": "/go_mime_trap?url=https://example.com",
-    "description": "Microservice for Mime Trap"
+    "description": "Microservice for Mime Trap",
+    "host_port": 8145,
+    "container_port": 8145
   },
   "mobile-friendly": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Mobile Friendly"
+    "description": "Microservice for Mobile Friendly",
+    "host_port": 8294,
+    "container_port": 8294
   },
   "nlp-extractinfo": {
     "name": "NLP / Compromise",
-    "description": "NLP entity extraction from URL (?url=)"
+    "description": "NLP entity extraction from URL (?url=)",
+    "host_port": 18011,
+    "container_port": 5302
   },
   "node-js-proxy": {
     "name": "Proxy (Node+JS)",
-    "description": "Node JS-rendering proxy (?url=)"
+    "description": "Node JS-rendering proxy (?url=)",
+    "host_port": 18007,
+    "container_port": 3103
   },
   "node-proxy": {
     "name": "Proxy (Node)",
-    "description": "Node proxy (?url=)"
+    "description": "Node proxy (?url=)",
+    "host_port": 18004,
+    "container_port": 3003
   },
   "node-search-bing": {
     "name": "Search Bing (Node)",
-    "description": "Bing SERP scraper in Node (?query=)"
+    "description": "Bing SERP scraper in Node (?query=)",
+    "host_port": 18016,
+    "container_port": 3413
   },
   "node-search-duck": {
     "name": "Search DuckDuckGo (Node)",
-    "description": "DuckDuckGo SERP scraper in Node (?query=)"
+    "description": "DuckDuckGo SERP scraper in Node (?query=)",
+    "host_port": 18015,
+    "container_port": 3403
   },
   "oauth-mapper": {
     "example_path": "/?url=https://example.com",
@@ -516,11 +662,15 @@
   },
   "ocr-pdf": {
     "name": "OCR / PDF",
-    "description": "Extract text from PDFs — upload or URL"
+    "description": "Extract text from PDFs — upload or URL",
+    "host_port": 18012,
+    "container_port": 5500
   },
   "ocr-pdf-express": {
     "name": "OCR PDF Express",
-    "description": "Express-based OCR / PDF (?url=)"
+    "description": "Express-based OCR / PDF (?url=)",
+    "host_port": 18014,
+    "container_port": 5500
   },
   "office-locations": {
     "description": "Microservice for Office Locations"
@@ -540,7 +690,9 @@
   },
   "page-load-metrics": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Page Load Metrics"
+    "description": "Microservice for Page Load Metrics",
+    "host_port": 8297,
+    "container_port": 8297
   },
   "payment-detector": {
     "description": "Microservice for Payment Detector",
@@ -559,7 +711,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8139,
+    "container_port": 8139
   },
   "postmessage-finder": {
     "description": "Static scan of recovered JS for window.addEventListener('message') handlers without origin/source checks. XS-Leak / postMessage-RCE class.",
@@ -572,10 +726,14 @@
     "trl_assessor": "claude-session-2026-05-13"
   },
   "press-mentions": {
-    "description": "Microservice for Press Mentions"
+    "description": "Microservice for Press Mentions",
+    "host_port": 8300,
+    "container_port": 8300
   },
   "price-range": {
-    "description": "Microservice for Price Range"
+    "description": "Microservice for Price Range",
+    "host_port": 8301,
+    "container_port": 8301
   },
   "proto-pollution": {
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
@@ -589,22 +747,32 @@
   },
   "proxy-fingerprint": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Proxy Fingerprint"
+    "description": "Microservice for Proxy Fingerprint",
+    "host_port": 8331,
+    "container_port": 8331
   },
   "pwa-manifest": {
     "example_path": "/go_pwa_manifest?url=https://example.com",
-    "description": "Microservice for Pwa Manifest"
+    "description": "Microservice for Pwa Manifest",
+    "host_port": 8168,
+    "container_port": 8168
   },
   "python-proxy": {
     "name": "Proxy (Python)",
-    "description": "Python proxy (?url=)"
+    "description": "Python proxy (?url=)",
+    "host_port": 18005,
+    "container_port": 3002
   },
   "random-proxy": {
     "name": "Proxy (Random)",
-    "description": "Routes to a random proxy backend (?url=)"
+    "description": "Routes to a random proxy backend (?url=)",
+    "host_port": 18019,
+    "container_port": 3333
   },
   "ratelimit-tester": {
-    "description": "Microservice for Ratelimit Tester"
+    "description": "Microservice for Ratelimit Tester",
+    "host_port": 8156,
+    "container_port": 8156
   },
   "redirect-tracer": {
     "example_path": "/?url=https://example.com",
@@ -614,7 +782,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8332,
+    "container_port": 8332
   },
   "remote-detector": {
     "description": "Microservice for Remote Detector",
@@ -623,10 +793,14 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8302,
+    "container_port": 8302
   },
   "revenue-model": {
-    "description": "Microservice for Revenue Model"
+    "description": "Microservice for Revenue Model",
+    "host_port": 8303,
+    "container_port": 8303
   },
   "reverse-dns": {
     "example_path": "/?url=https://example.com",
@@ -644,10 +818,14 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8304,
+    "container_port": 8304
   },
   "scc": {
-    "description": "Microservice for Scc"
+    "description": "Microservice for Scc",
+    "host_port": 8305,
+    "container_port": 8305
   },
   "schema-extractor": {
     "example_path": "/go_schema_extractor?url=https://example.com",
@@ -657,7 +835,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Arbitrary schema.org type unification (Product/Service/SoftwareApplication overlaps, salary ranges, hours-as-strings) needs an ontology layer or ML model.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8165,
+    "container_port": 8165
   },
   "seasonal-detector": {
     "description": "Microservice for Seasonal Detector",
@@ -666,7 +846,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with per-country holiday gazetteer + urgency-language regex.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8306,
+    "container_port": 8306
   },
   "secrets-scanner": {
     "example_path": "/go_secrets_scanner?url=https://example.com",
@@ -676,7 +858,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8229,
+    "container_port": 8229
   },
   "security-headers": {
     "example_path": "/?url=https://example.com",
@@ -686,15 +870,21 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8307,
+    "container_port": 8307
   },
   "security-txt": {
     "example_path": "/go_security_txt?url=https://example.com",
-    "description": "Microservice for Security Txt"
+    "description": "Microservice for Security Txt",
+    "host_port": 8167,
+    "container_port": 8167
   },
   "seo-basics": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Seo Basics"
+    "description": "Microservice for Seo Basics",
+    "host_port": 8308,
+    "container_port": 8308
   },
   "services-dashboard": {
     "example_path": "/go_services_dashboard?url=https://example.com",
@@ -708,10 +898,14 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18031,
+    "container_port": 8316
   },
   "shipping-regions": {
-    "description": "Microservice for Shipping Regions"
+    "description": "Microservice for Shipping Regions",
+    "host_port": 8310,
+    "container_port": 8310
   },
   "sitemap-finder": {
     "example_path": "/?target=https://stripe.com",
@@ -721,15 +915,21 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8311,
+    "container_port": 8311
   },
   "smuggling-probe": {
     "example_path": "/go_smuggling_probe?target=example.com",
-    "description": "Microservice for Smuggling Probe"
+    "description": "Microservice for Smuggling Probe",
+    "host_port": 8154,
+    "container_port": 8154
   },
   "social-graph": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Social Graph"
+    "description": "Microservice for Social Graph",
+    "host_port": 8312,
+    "container_port": 8312
   },
   "sourcemap-finder": {
     "example_path": "/go_sourcemap_finder?url=https://example.com",
@@ -739,7 +939,9 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8347,
+    "container_port": 8347
   },
   "subdomain-finder": {
     "example_path": "/go_subdomain_finder?url=https://example.com",
@@ -749,7 +951,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "CT-log free tier rate-limits at ~100 subdomains/domain. Real upgrade needs paid CT mirror or DNSDB.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8348,
+    "container_port": 8348
   },
   "subdomain-takeover": {
     "example_path": "/go_subdomain_takeover?domain=example.com",
@@ -763,7 +967,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8236,
+    "container_port": 8236
   },
   "svi": {
     "description": "Microservice for Svi"
@@ -776,17 +982,25 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8349,
+    "container_port": 8349
   },
   "team-size": {
-    "description": "Microservice for Team Size"
+    "description": "Microservice for Team Size",
+    "host_port": 8314,
+    "container_port": 8314
   },
   "tech-stack": {
-    "description": "Microservice for Tech Stack"
+    "description": "Microservice for Tech Stack",
+    "host_port": 8162,
+    "container_port": 8162
   },
   "technology-stack": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Technology Stack"
+    "description": "Microservice for Technology Stack",
+    "host_port": 8315,
+    "container_port": 8315
   },
   "tos-finder": {
     "example_path": "/?url=https://example.com",
@@ -796,10 +1010,14 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8316,
+    "container_port": 8316
   },
   "trust-decay": {
-    "description": "Microservice for Trust Decay"
+    "description": "Microservice for Trust Decay",
+    "host_port": 8317,
+    "container_port": 8317
   },
   "typosquat-finder": {
     "example_path": "/go_typosquat_finder?url=https://example.com",
@@ -809,7 +1027,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8350,
+    "container_port": 8350
   },
   "ugc-detector": {
     "description": "Microservice for Ugc Detector",
@@ -818,14 +1038,20 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with schema.org Review parsing + moderation-system fingerprints.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8318,
+    "container_port": 8318
   },
   "update-frequency": {
-    "description": "Microservice for Update Frequency"
+    "description": "Microservice for Update Frequency",
+    "host_port": 8319,
+    "container_port": 8319
   },
   "utils-readcontent": {
     "name": "Read Content",
-    "description": "Extract structured content from URL (?url=)"
+    "description": "Extract structured content from URL (?url=)",
+    "host_port": 18018,
+    "container_port": 5008
   },
   "video-content": {
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
@@ -835,7 +1061,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8322,
+    "container_port": 8322
   },
   "wayback-checker": {
     "example_path": "/go_wayback_checker?url=https://example.com",
@@ -845,11 +1073,15 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8351,
+    "container_port": 8351
   },
   "websocket-analyzer": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Websocket Analyzer"
+    "description": "Microservice for Websocket Analyzer",
+    "host_port": 8334,
+    "container_port": 8334
   },
   "wellknown-scanner": {
     "example_path": "/go_wellknown_scanner?url=https://example.com",
@@ -859,18 +1091,26 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8352,
+    "container_port": 8352
   },
   "wp-plugins": {
     "example_path": "/go_wp_plugins?url=https://example.com",
-    "description": "Microservice for Wp Plugins"
+    "description": "Microservice for Wp Plugins",
+    "host_port": 8353,
+    "container_port": 8353
   },
   "wps": {
-    "description": "Microservice for Wps"
+    "description": "Microservice for Wps",
+    "host_port": 8270,
+    "container_port": 8270
   },
   "xss-payload": {
     "example_path": "/go_xss_payload?url=https://example.com",
-    "description": "Microservice for Xss Payload"
+    "description": "Microservice for Xss Payload",
+    "host_port": 8231,
+    "container_port": 8231
   },
   "xss-scanner": {
     "example_path": "/go_xss_scanner?url=https://example.com",
@@ -880,10 +1120,14 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real XSS confirmation requires DOM canary injection (headless browser). Reflection regex isn't real XSS.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8271,
+    "container_port": 8271
   },
   "zone-transfer": {
     "example_path": "/go_zone_transfer?domain=example.com",
-    "description": "Microservice for Zone Transfer"
+    "description": "Microservice for Zone Transfer",
+    "host_port": 8232,
+    "container_port": 8232
   }
 }

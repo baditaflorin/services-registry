@@ -188,7 +188,8 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
     }
 
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
-              "trl_assessed_at", "trl_assessor"):
+              "trl_assessed_at", "trl_assessor",
+              "host_port", "container_port", "port"):
         if k in ov:
             entry[k] = ov[k]
 

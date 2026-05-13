@@ -17,7 +17,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8272,
+    "container_port": 8272
   },
   {
     "id": "accessibility-score",
@@ -43,7 +45,9 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with WCAG 2.2 full corpus + CSS-derived contrast estimation.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8273,
+    "container_port": 8273
   },
   {
     "id": "ad-density",
@@ -69,7 +73,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8274,
+    "container_port": 8274
   },
   {
     "id": "address-extractor",
@@ -95,7 +101,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8275,
+    "container_port": 8275
   },
   {
     "id": "admin-finder",
@@ -121,7 +129,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Wordlist expansion is commodity; signal requires response-fingerprinting and context that's hard without active auth.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8335,
+    "container_port": 8335
   },
   {
     "id": "api-extractor",
@@ -147,7 +157,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8336,
+    "container_port": 8336
   },
   {
     "id": "api-first",
@@ -167,7 +179,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8276,
+    "container_port": 8276
   },
   {
     "id": "apikey-scanner",
@@ -193,7 +207,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8230,
+    "container_port": 8230
   },
   {
     "id": "asn-lookup",
@@ -213,7 +229,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8337,
+    "container_port": 8337
   },
   {
     "id": "biz-classifier",
@@ -239,7 +257,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8277,
+    "container_port": 8277
   },
   {
     "id": "blocklist-checker",
@@ -265,7 +285,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8338,
+    "container_port": 8338
   },
   {
     "id": "broken-links",
@@ -285,7 +307,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8192,
+    "container_port": 8192
   },
   {
     "id": "bucket-finder",
@@ -311,7 +335,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8339,
+    "container_port": 8339
   },
   {
     "id": "caa-checker",
@@ -337,7 +363,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8325,
+    "container_port": 8325
   },
   {
     "id": "captcha-detector",
@@ -383,7 +411,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8279,
+    "container_port": 8279
   },
   {
     "id": "cdn-detector",
@@ -409,7 +439,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8326,
+    "container_port": 8326
   },
   {
     "id": "clickjacking-tester",
@@ -429,7 +461,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8225,
+    "container_port": 8225
   },
   {
     "id": "cognitive-load",
@@ -449,7 +483,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8280,
+    "container_port": 8280
   },
   {
     "id": "comment-extractor",
@@ -475,7 +511,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8340,
+    "container_port": 8340
   },
   {
     "id": "company-size",
@@ -495,7 +533,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8281,
+    "container_port": 8281
   },
   {
     "id": "compression-tester",
@@ -515,7 +555,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8327,
+    "container_port": 8327
   },
   {
     "id": "cookie-checker",
@@ -535,7 +577,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8226,
+    "container_port": 8226
   },
   {
     "id": "cors-scanner",
@@ -561,7 +605,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8239,
+    "container_port": 8239
   },
   {
     "id": "cors-tester",
@@ -581,7 +627,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8141,
+    "container_port": 8141
   },
   {
     "id": "crlf-tester",
@@ -601,7 +649,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8142,
+    "container_port": 8142
   },
   {
     "id": "crypto-finder",
@@ -627,7 +677,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8341,
+    "container_port": 8341
   },
   {
     "id": "currency-detector",
@@ -653,7 +705,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8282,
+    "container_port": 8282
   },
   {
     "id": "customer-logos",
@@ -673,7 +727,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8283,
+    "container_port": 8283
   },
   {
     "id": "data-inventory",
@@ -693,7 +749,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8284,
+    "container_port": 8284
   },
   {
     "id": "debug-detector",
@@ -719,7 +777,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8227,
+    "container_port": 8227
   },
   {
     "id": "dependency-counter",
@@ -739,7 +799,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8285,
+    "container_port": 8285
   },
   {
     "id": "dir-listing",
@@ -759,7 +821,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8342,
+    "container_port": 8342
   },
   {
     "id": "dtss",
@@ -779,7 +843,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8286,
+    "container_port": 8286
   },
   {
     "id": "email-extractor",
@@ -805,7 +871,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8287,
+    "container_port": 8287
   },
   {
     "id": "email-harvester",
@@ -831,7 +899,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8137,
+    "container_port": 8137
   },
   {
     "id": "emotional-tone",
@@ -857,7 +927,9 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8288,
+    "container_port": 8288
   },
   {
     "id": "env-finder",
@@ -883,7 +955,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8344,
+    "container_port": 8344
   },
   {
     "id": "feed-finder",
@@ -909,7 +983,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Achievable with sitemap-finder pattern: probe canonical paths + parse autodiscovery links + RSS/Atom format detection. Needs implementation, not blocked technically.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8164,
+    "container_port": 8164
   },
   {
     "id": "founding-year",
@@ -929,7 +1005,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8289,
+    "container_port": 8289
   },
   {
     "id": "funding-detector",
@@ -955,7 +1033,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8290,
+    "container_port": 8290
   },
   {
     "id": "gdpr-compliance",
@@ -1015,7 +1095,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8345,
+    "container_port": 8345
   },
   {
     "id": "host-header",
@@ -1035,7 +1117,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8240,
+    "container_port": 8240
   },
   {
     "id": "hsts-checker",
@@ -1061,7 +1145,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8328,
+    "container_port": 8328
   },
   {
     "id": "http-protocol",
@@ -1081,7 +1167,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8241,
+    "container_port": 8241
   },
   {
     "id": "idor-finder",
@@ -1107,7 +1195,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Needs authenticated multi-step probing and sequential-ID tampering state machines. Unauthenticated baseline is noise-prone.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8242,
+    "container_port": 8242
   },
   {
     "id": "iframe-analyzer",
@@ -1133,7 +1223,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8159,
+    "container_port": 8159
   },
   {
     "id": "ipv6-checker",
@@ -1179,7 +1271,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8158,
+    "container_port": 8158
   },
   {
     "id": "jwt-debugger",
@@ -1199,7 +1293,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8202,
+    "container_port": 8202
   },
   {
     "id": "keyword-density",
@@ -1219,7 +1315,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8292,
+    "container_port": 8292
   },
   {
     "id": "legal-entity",
@@ -1239,7 +1337,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8293,
+    "container_port": 8293
   },
   {
     "id": "loadbalancer-detect",
@@ -1259,7 +1359,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8107,
+    "container_port": 8107
   },
   {
     "id": "login-analyzer",
@@ -1285,7 +1387,9 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Real login analysis needs flow-tracing, CSRF/OAuth/SAML detection, which overlap with session-fixation + jwt-pentest. Better to fold into those.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8170,
+    "container_port": 8170
   },
   {
     "id": "mime-trap",
@@ -1305,7 +1409,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8145,
+    "container_port": 8145
   },
   {
     "id": "mobile-friendly",
@@ -1325,7 +1431,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8294,
+    "container_port": 8294
   },
   {
     "id": "oauth-mapper",
@@ -1431,7 +1539,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8297,
+    "container_port": 8297
   },
   {
     "id": "payment-detector",
@@ -1483,7 +1593,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8139,
+    "container_port": 8139
   },
   {
     "id": "press-mentions",
@@ -1503,7 +1615,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8300,
+    "container_port": 8300
   },
   {
     "id": "price-range",
@@ -1523,7 +1637,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8301,
+    "container_port": 8301
   },
   {
     "id": "proxy-fingerprint",
@@ -1543,7 +1659,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8331,
+    "container_port": 8331
   },
   {
     "id": "pwa-manifest",
@@ -1563,7 +1681,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8168,
+    "container_port": 8168
   },
   {
     "id": "ratelimit-tester",
@@ -1583,7 +1703,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8156,
+    "container_port": 8156
   },
   {
     "id": "redirect-tracer",
@@ -1609,7 +1731,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8332,
+    "container_port": 8332
   },
   {
     "id": "remote-detector",
@@ -1635,7 +1759,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8302,
+    "container_port": 8302
   },
   {
     "id": "revenue-model",
@@ -1655,7 +1781,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8303,
+    "container_port": 8303
   },
   {
     "id": "reverse-dns",
@@ -1721,7 +1849,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8304,
+    "container_port": 8304
   },
   {
     "id": "scc",
@@ -1741,7 +1871,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8305,
+    "container_port": 8305
   },
   {
     "id": "schema-extractor",
@@ -1767,7 +1899,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Arbitrary schema.org type unification (Product/Service/SoftwareApplication overlaps, salary ranges, hours-as-strings) needs an ontology layer or ML model.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8165,
+    "container_port": 8165
   },
   {
     "id": "seasonal-detector",
@@ -1793,7 +1927,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with per-country holiday gazetteer + urgency-language regex.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8306,
+    "container_port": 8306
   },
   {
     "id": "secrets-scanner",
@@ -1819,7 +1955,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8229,
+    "container_port": 8229
   },
   {
     "id": "security-headers",
@@ -1845,7 +1983,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8307,
+    "container_port": 8307
   },
   {
     "id": "security-txt",
@@ -1865,7 +2005,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8167,
+    "container_port": 8167
   },
   {
     "id": "seo-basics",
@@ -1885,7 +2027,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8308,
+    "container_port": 8308
   },
   {
     "id": "services-dashboard",
@@ -1925,7 +2069,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8310,
+    "container_port": 8310
   },
   {
     "id": "sitemap-finder",
@@ -1951,7 +2097,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8311,
+    "container_port": 8311
   },
   {
     "id": "smuggling-probe",
@@ -1971,7 +2119,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8154,
+    "container_port": 8154
   },
   {
     "id": "social-graph",
@@ -1991,7 +2141,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8312,
+    "container_port": 8312
   },
   {
     "id": "sourcemap-finder",
@@ -2017,7 +2169,9 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8347,
+    "container_port": 8347
   },
   {
     "id": "subdomain-finder",
@@ -2043,7 +2197,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "CT-log free tier rate-limits at ~100 subdomains/domain. Real upgrade needs paid CT mirror or DNSDB.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8348,
+    "container_port": 8348
   },
   {
     "id": "subdomain-takeover",
@@ -2089,7 +2245,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8236,
+    "container_port": 8236
   },
   {
     "id": "svi",
@@ -2135,7 +2293,9 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8349,
+    "container_port": 8349
   },
   {
     "id": "team-size",
@@ -2155,7 +2315,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8314,
+    "container_port": 8314
   },
   {
     "id": "tech-stack",
@@ -2175,7 +2337,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8162,
+    "container_port": 8162
   },
   {
     "id": "technology-stack",
@@ -2195,7 +2359,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8315,
+    "container_port": 8315
   },
   {
     "id": "tos-finder",
@@ -2221,7 +2387,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8316,
+    "container_port": 8316
   },
   {
     "id": "trust-decay",
@@ -2241,7 +2409,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8317,
+    "container_port": 8317
   },
   {
     "id": "typosquat-finder",
@@ -2267,7 +2437,9 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8350,
+    "container_port": 8350
   },
   {
     "id": "ugc-detector",
@@ -2293,7 +2465,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with schema.org Review parsing + moderation-system fingerprints.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8318,
+    "container_port": 8318
   },
   {
     "id": "update-frequency",
@@ -2313,7 +2487,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8319,
+    "container_port": 8319
   },
   {
     "id": "video-content",
@@ -2339,7 +2515,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8322,
+    "container_port": 8322
   },
   {
     "id": "wayback-checker",
@@ -2365,7 +2543,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8351,
+    "container_port": 8351
   },
   {
     "id": "websocket-analyzer",
@@ -2385,7 +2565,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8334,
+    "container_port": 8334
   },
   {
     "id": "wellknown-scanner",
@@ -2411,7 +2593,9 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8352,
+    "container_port": 8352
   },
   {
     "id": "wp-plugins",
@@ -2431,7 +2615,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8353,
+    "container_port": 8353
   },
   {
     "id": "wps",
@@ -2451,7 +2637,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8270,
+    "container_port": 8270
   },
   {
     "id": "xss-payload",
@@ -2471,7 +2659,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8231,
+    "container_port": 8231
   },
   {
     "id": "xss-scanner",
@@ -2497,7 +2687,9 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real XSS confirmation requires DOM canary injection (headless browser). Reflection regex isn't real XSS.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8271,
+    "container_port": 8271
   },
   {
     "id": "zone-transfer",
@@ -2517,7 +2709,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8232,
+    "container_port": 8232
   },
   {
     "id": "c-proxy",
@@ -2537,7 +2731,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18003,
+    "container_port": 3001
   },
   {
     "id": "d3-graph",
@@ -2557,7 +2753,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18020,
+    "container_port": 6003
   },
   {
     "id": "db-geo-geocode",
@@ -2576,7 +2774,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18009,
+    "container_port": 3909
   },
   {
     "id": "geo-geocode",
@@ -2595,7 +2795,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18008,
+    "container_port": 4902
   },
   {
     "id": "geo-places",
@@ -2614,7 +2816,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18010,
+    "container_port": 4906
   },
   {
     "id": "go-information-leakage",
@@ -2640,7 +2844,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8083,
+    "container_port": 8083
   },
   {
     "id": "go-js-proxy",
@@ -2666,7 +2872,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18006,
+    "container_port": 8080
   },
   {
     "id": "go-js-proxy-network",
@@ -2692,7 +2900,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18024,
+    "container_port": 8500
   },
   {
     "id": "go-proxy",
@@ -2712,7 +2922,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18002,
+    "container_port": 3001
   },
   {
     "id": "go-search-duck",
@@ -2732,7 +2944,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18013,
+    "container_port": 3401
   },
   {
     "id": "go-url-categorizer-api",
@@ -2812,7 +3026,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18025,
+    "container_port": 8311
   },
   {
     "id": "jwt-pentest",
@@ -2839,7 +3055,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18029,
+    "container_port": 8315
   },
   {
     "id": "linkedin-attributes",
@@ -2858,7 +3076,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18017,
+    "container_port": 4314
   },
   {
     "id": "nlp-extractinfo",
@@ -2877,7 +3097,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18011,
+    "container_port": 5302
   },
   {
     "id": "node-js-proxy",
@@ -2897,7 +3119,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18007,
+    "container_port": 3103
   },
   {
     "id": "node-proxy",
@@ -2917,7 +3141,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18004,
+    "container_port": 3003
   },
   {
     "id": "node-search-bing",
@@ -2937,7 +3163,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18016,
+    "container_port": 3413
   },
   {
     "id": "node-search-duck",
@@ -2957,7 +3185,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18015,
+    "container_port": 3403
   },
   {
     "id": "ocr-pdf",
@@ -2976,7 +3206,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18012,
+    "container_port": 5500
   },
   {
     "id": "ocr-pdf-express",
@@ -2995,7 +3227,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18014,
+    "container_port": 5500
   },
   {
     "id": "postmessage",
@@ -3063,7 +3297,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18005,
+    "container_port": 3002
   },
   {
     "id": "random-proxy",
@@ -3082,7 +3318,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18019,
+    "container_port": 3333
   },
   {
     "id": "session-fixation",
@@ -3109,7 +3347,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18031,
+    "container_port": 8316
   },
   {
     "id": "utils-readcontent",
@@ -3128,7 +3368,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18018,
+    "container_port": 5008
   },
   {
     "id": "accent-coach",
