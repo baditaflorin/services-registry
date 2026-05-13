@@ -2297,6 +2297,28 @@
     }
   },
   {
+    "id": "js-proxy-network",
+    "name": "JS Proxy (Network Log)",
+    "description": "Render a target URL with a real browser and return DOM + full network request log + console + performance.",
+    "category": "infra",
+    "mesh": "0exec",
+    "tags": [
+      "infra",
+      "render",
+      "go",
+      "private"
+    ],
+    "url": "https://go-js-proxy-network.0exec.com",
+    "health_url": "https://go-js-proxy-network.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
+    "example_path": "/?url=https://example.com&api_key=...",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "public_demo_token": null
+    }
+  },
+  {
     "id": "go-proxy",
     "name": "Proxy (Go)",
     "description": "HTTP proxy with rotation (?url=)",
