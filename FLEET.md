@@ -120,6 +120,69 @@ require `X-Admin-Token: <token>`. Token is `ADMIN_TOKEN` env var on
 the keystore container; clients read it from `APIKEY_SERVICE_ADMIN_TOKEN`.
 **Token storage + rotation playbook**: private `fleet-state/OPS.md`.
 
+## Fleet-wide changes — modify 130 repos at once
+
+The fleet has ~130 service repos. The cardinal principle: **change
+the library, not the consumers.** When you need to touch every
+service, the right pattern is almost always a `go-common` change +
+a dep bump, not 130 PRs.
+
+`fleet-runner` ships the bulk primitives:
+
+| Command | What it does |
+|---|---|
+| `fleet-runner update-dep <mod@ver>` | `go get <mod@ver> && go mod tidy` in every repo |
+| `fleet-runner inject <src> <dest>` | copy a file (e.g. `FLEET.md`) into every repo |
+| `fleet-runner exec "<cmd>"` | run any shell command in every repo (sed, formatter, etc.) |
+| `fleet-runner build-test` | `go test ./...` across every repo — regression gate |
+| `fleet-runner push "<msg>"` | commit + push every dirty repo |
+
+### Worked example: migrate every 0exec service to keystore auth
+
+Today most services use `middleware.TokenAuth(staticList)`. To swap
+that for keystore-backed validation across all 130 repos:
+
+1. **One commit to `go-common`** — already done in v0.7.0:
+   ```go
+   // new in middleware/auth_keystore.go
+   middleware.TokenAuthKeystore(middleware.KeystoreOpts{
+       Verifier:    apikey.NewCache(apikey.New()),
+       LocalTokens: []string{"default_token", "fb_…"},
+   })
+   ```
+   This middleware trusts the gateway's `X-Auth-User` header, has a
+   local fast-path for the static fallback key, calls the keystore
+   for everything else with 15-min stale tolerance, and fails closed
+   on keystore outage.
+
+2. **One bulk dep bump** — bumps every fleet repo to `go-common@v0.7.0`:
+   ```bash
+   fleet-runner update-dep github.com/baditaflorin/go-common@v0.7.0
+   fleet-runner build-test          # verify nothing broke
+   fleet-runner push "deps: go-common v0.7.0 (keystore middleware available)"
+   ```
+
+3. **Per-service swap** is then a 3-line change in each service's
+   `main.go` — but **most services don't need it** because the gateway
+   sets `X-Auth-User` and the new middleware trusts that automatically.
+   Services that still use the legacy `middleware.TokenAuth` keep
+   working unchanged. Migrate the loud ones (high-traffic, security-
+   sensitive) first; let the long tail drain organically when each
+   repo next gets touched.
+
+The net effect: a library-level change scales to 130 repos without
+130 individual code reviews. `fleet-runner build-test` is the
+regression gate before `push`. `fleet-runner state snapshot --push`
+after deploys gives you fleet-wide health visibility.
+
+### Anti-pattern to avoid
+
+If you find yourself writing a sed-pipeline to mutate every service's
+`main.go` directly, **stop**. The codepath you're trying to change
+probably belongs in `go-common` (or `0crawl-platform`'s nginx templates).
+Changing it there is one PR + one dep bump; doing it per-repo is 130
+commits + 130 review cycles + 130 chances for drift.
+
 ## IaC pipeline
 
 ```
