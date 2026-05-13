@@ -306,11 +306,35 @@
     "example_path": "/?query=coffee+Bucharest",
     "description": "Place search and details (?query=)"
   },
+  "go-information-leakage": {
+    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
+    "example_path": "/?url=https://example.com",
+    "trl": 5,
+    "trl_evidence": "Internal-path/version/stack disclosure pattern matching.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
   "go-js-proxy": {
     "name": "Proxy (Go+JS)",
     "description": "JS-rendering proxy (?url=)",
     "trl": 7,
     "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
+  "go-js-proxy-network": {
+    "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key"
+    },
+    "trl": 7,
+    "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
@@ -323,6 +347,16 @@
   "go-search-duck": {
     "name": "Search DuckDuckGo (Go)",
     "description": "DuckDuckGo SERP scraper in Go (?query=)"
+  },
+  "go-url-categorizer-api": {
+    "description": "URL categorization API combining vector search + LLM + curated taxonomies. Battle-tested with Prometheus metrics and developer portal.",
+    "example_path": "/?url=https://example.com",
+    "trl": 8,
+    "trl_evidence": "Vector DB, LLM integration, SQLite, Prometheus metrics, developer portal. Battle-tested.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   "graphql-introspection": {
     "example_path": "/go_graphql_introspection?url=https://example.com",
@@ -375,32 +409,8 @@
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13"
   },
-  "information-leakage": {
-    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
-    "example_path": "/?url=https://example.com",
-    "trl": 5,
-    "trl_evidence": "Internal-path/version/stack disclosure pattern matching.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
-  },
   "ipv6-checker": {
     "description": "Microservice for Ipv6 Checker"
-  },
-  "js-proxy-network": {
-    "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key"
-    },
-    "trl": 7,
-    "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
   },
   "jsbundle-routes": {
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
@@ -812,16 +822,6 @@
   },
   "update-frequency": {
     "description": "Microservice for Update Frequency"
-  },
-  "url-categorizer-api": {
-    "description": "URL categorization API combining vector search + LLM + curated taxonomies. Battle-tested with Prometheus metrics and developer portal.",
-    "example_path": "/?url=https://example.com",
-    "trl": 8,
-    "trl_evidence": "Vector DB, LLM integration, SQLite, Prometheus metrics, developer portal. Battle-tested.",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
   },
   "utils-readcontent": {
     "name": "Read Content",

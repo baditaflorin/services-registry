@@ -110,10 +110,27 @@ def tags_of(topics: list[str]) -> list[str]:
 
 # ─── Per-repo → registry entry ─────────────────────────────────────────
 
+# Per-repo slug overrides. Used when the auto-derived slug doesn't match the
+# already-deployed FQDN (e.g. Agent B picked shorter names than the repo name
+# would auto-produce). Key = GitHub repo name. Value = canonical slug.
+# Never remove an entry once a service is live — the catalog URL depends on it.
+SLUG_OVERRIDES = {
+    "go_jsbundle_secrets":           "jsbundle-secrets",
+    "go_jsbundle_route_extractor":   "jsbundle-routes",
+    "go_postmessage_listener_finder":"postmessage",
+    "go_prototype_pollution_static": "proto-pollution",
+    "go_jwt_pentest":                "jwt-pentest",
+    "go_session_fixation":           "session-fixation",
+}
+
+
 def slug_from_repo_name(name: str, mesh: str) -> str:
     """0crawl repos are named `go_xxxx` on GitHub but the service runs at
     `xxxx.0crawl.com`, so we strip the `go-` prefix for that mesh only. The
-    0exec mesh keeps the prefix (`go-js-proxy.0exec.com` matches the repo)."""
+    0exec mesh keeps the prefix (`go-js-proxy.0exec.com` matches the repo).
+    Per-repo overrides above win over the auto-derivation."""
+    if name in SLUG_OVERRIDES:
+        return SLUG_OVERRIDES[name]
     s = name.replace("_", "-").lower()
     if mesh == "0crawl":
         s = s.removeprefix("go-")

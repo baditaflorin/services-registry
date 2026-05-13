@@ -2619,7 +2619,7 @@
   {
     "id": "go-information-leakage",
     "name": "Go Information Leakage",
-    "description": "",
+    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "category": "security",
     "mesh": "0exec",
     "tags": [
@@ -2629,12 +2629,18 @@
     "url": "https://go-information-leakage.0exec.com",
     "health_url": "https://go-information-leakage.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_information_leakage",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Internal-path/version/stack disclosure pattern matching.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "go-js-proxy",
@@ -2665,7 +2671,7 @@
   {
     "id": "go-js-proxy-network",
     "name": "Go Js Proxy Network",
-    "description": "JS-render proxy returning DOM + full network log + console + performance",
+    "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
     "category": "proxy",
     "mesh": "0exec",
     "tags": [
@@ -2679,114 +2685,14 @@
     "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
-  },
-  {
-    "id": "go-jsbundle-route-extractor",
-    "name": "Go Jsbundle Route Extractor",
-    "description": "Extract React Router, Vue Router, Next.js, Express routes from JS bundles + source maps",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://go-jsbundle-route-extractor.0exec.com",
-    "health_url": "https://go-jsbundle-route-extractor.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
-  },
-  {
-    "id": "go-jsbundle-secrets",
-    "name": "Go Jsbundle Secrets",
-    "description": "Scan recovered JS bundle source for AWS/Stripe/GitHub/etc. secrets (gitleaks ruleset)",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://go-jsbundle-secrets.0exec.com",
-    "health_url": "https://go-jsbundle-secrets.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
-  },
-  {
-    "id": "go-jwt-pentest",
-    "name": "Go Jwt Pentest",
-    "description": "JWT auth pentest: alg=none, weak-HMAC, kid traversal, jku/x5u SSRF, HS256/RS256 confusion",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://go-jwt-pentest.0exec.com",
-    "health_url": "https://go-jwt-pentest.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
-  },
-  {
-    "id": "go-postmessage-listener-finder",
-    "name": "Go Postmessage Listener Finder",
-    "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://go-postmessage-listener-finder.0exec.com",
-    "health_url": "https://go-postmessage-listener-finder.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
-  },
-  {
-    "id": "go-prototype-pollution-static",
-    "name": "Go Prototype Pollution Static",
-    "description": "Static + safe-active probe for JavaScript prototype-pollution sinks",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://go-prototype-pollution-static.0exec.com",
-    "health_url": "https://go-prototype-pollution-static.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
+      "query_param": "api_key"
+    },
+    "trl": 7,
+    "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "go-proxy",
@@ -2829,30 +2735,9 @@
     }
   },
   {
-    "id": "go-session-fixation",
-    "name": "Go Session Fixation",
-    "description": "Session-fixation probe: detect login flows that reuse pre-auth session cookies",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://go-session-fixation.0exec.com",
-    "health_url": "https://go-session-fixation.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    }
-  },
-  {
     "id": "go-url-categorizer-api",
     "name": "Go Url Categorizer Api",
-    "description": "",
+    "description": "URL categorization API combining vector search + LLM + curated taxonomies. Battle-tested with Prometheus metrics and developer portal.",
     "category": "nlp",
     "mesh": "0exec",
     "tags": [
@@ -2867,7 +2752,94 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "trl": 8,
+    "trl_evidence": "Vector DB, LLM integration, SQLite, Prometheus metrics, developer portal. Battle-tested.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
+  {
+    "id": "jsbundle-routes",
+    "name": "Jsbundle Routes",
+    "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://jsbundle-routes.0exec.com",
+    "health_url": "https://jsbundle-routes.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "trl": 6,
+    "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
+  {
+    "id": "jsbundle-secrets",
+    "name": "Jsbundle Secrets",
+    "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://jsbundle-secrets.0exec.com",
+    "health_url": "https://jsbundle-secrets.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "trl": 6,
+    "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
+  {
+    "id": "jwt-pentest",
+    "name": "Jwt Pentest",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://jwt-pentest.0exec.com",
+    "health_url": "https://jwt-pentest.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
+    "example_path": "/?jwt=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0In0.signature",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "trl": 6,
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "linkedin-attributes",
@@ -3026,6 +2998,54 @@
     }
   },
   {
+    "id": "postmessage",
+    "name": "Postmessage",
+    "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://postmessage.0exec.com",
+    "health_url": "https://postmessage.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "proto-pollution",
+    "name": "Proto Pollution",
+    "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://proto-pollution.0exec.com",
+    "health_url": "https://proto-pollution.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "trl": 6,
+    "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Static-only without endpoint discovery; reaches TRL 7 once wired to api-extractor for auto-probe targets.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
+  {
     "id": "python-proxy",
     "name": "Proxy (Python)",
     "description": "Python proxy (?url=)",
@@ -3063,6 +3083,33 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     }
+  },
+  {
+    "id": "session-fixation",
+    "name": "Session Fixation",
+    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://session-fixation.0exec.com",
+    "health_url": "https://session-fixation.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "trl": 6,
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "utils-readcontent",
