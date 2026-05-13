@@ -584,7 +584,7 @@
   },
   "jsbundle-routes": {
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_jsbundle_route_extractor?target=https://stripe.com",
     "trl": 6,
     "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass.",
     "trl_ceiling": null,
@@ -596,7 +596,7 @@
   },
   "jsbundle-secrets": {
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_jsbundle_secrets?target=https://stripe.com",
     "trl": 6,
     "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass.",
     "trl_ceiling": null,
@@ -626,7 +626,7 @@
   },
   "jwt-pentest": {
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
-    "example_path": "/?jwt=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0In0.signature",
+    "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
     "trl": 6,
     "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass.",
     "trl_ceiling": 7,
@@ -785,7 +785,8 @@
   },
   "postmessage": {
     "host_port": 18027,
-    "container_port": 8313
+    "container_port": 8313,
+    "example_path": "/go_postmessage_listener_finder?target=https://stripe.com"
   },
   "postmessage-finder": {
     "description": "Static scan of recovered JS for window.addEventListener('message') handlers without origin/source checks. XS-Leak / postMessage-RCE class.",
@@ -809,7 +810,7 @@
   },
   "proto-pollution": {
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_prototype_pollution_static?target=https://example.com",
     "trl": 6,
     "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass.",
     "trl_ceiling": 7,
@@ -1006,7 +1007,7 @@
   },
   "session-fixation": {
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_session_fixation?target=https://github.com",
     "trl": 6,
     "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
     "trl_ceiling": 7,

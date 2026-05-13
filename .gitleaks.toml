@@ -44,3 +44,10 @@ paths       = [
   '''README\.md''',
   '''sources/''',
 ]
+
+# JWT debugger example uses the RFC 7519 minimal test vector — a literal
+# unsigned alg=none token that's published in every JWT tutorial. Not a
+# real JWT, no signature. Allowed in example_path strings.
+[[allowlists]]
+description = "RFC 7519 alg=none example JWT (test vector, no signature)"
+regexes     = ['''eyJhbGciOiJub25lIn0\.eyJzdWIiOiJ0ZXN0In0\.''']

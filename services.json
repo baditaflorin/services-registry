@@ -3594,7 +3594,7 @@
     "url": "https://jsbundle-routes.0exec.com",
     "health_url": "https://jsbundle-routes.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_jsbundle_route_extractor?target=https://stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3624,7 +3624,7 @@
     "url": "https://jsbundle-secrets.0exec.com",
     "health_url": "https://jsbundle-secrets.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_jsbundle_secrets?target=https://stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3654,7 +3654,7 @@
     "url": "https://jwt-pentest.0exec.com",
     "health_url": "https://jwt-pentest.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
-    "example_path": "/?jwt=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0In0.signature",
+    "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3864,7 +3864,7 @@
     "url": "https://postmessage.0exec.com",
     "health_url": "https://postmessage.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
-    "example_path": "/?target=example.com",
+    "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3888,7 +3888,7 @@
     "url": "https://proto-pollution.0exec.com",
     "health_url": "https://proto-pollution.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_prototype_pollution_static?target=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3963,7 +3963,7 @@
     "url": "https://session-fixation.0exec.com",
     "health_url": "https://session-fixation.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go_session_fixation",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/go_session_fixation?target=https://github.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
