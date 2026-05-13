@@ -133,6 +133,19 @@ the new-service runbook (private `RUNBOOK.md`) requires a follow-up
 `dig <slug>.<domain> A` verification step. Lesson: trust dig over the API
 response when the SLA depends on it.
 
+### 5. Legacy Hetzner DNS Console API is sunset
+
+`dns.hetzner.com/api/v1/` (Hetzner DNS *Console* API, `Auth-API-Token` header)
+is **deprecated and unsupported**. Use only the Hetzner *Cloud* API at
+`api.hetzner.cloud/v1/zones/{id}/rrsets` with `Authorization: Bearer <token>`.
+On 2026-05-13 an agent shipped `deploy` against the legacy API and the
+zone-list call returned an empty result silently — a frustrating debug.
+**Fix**: `fleet-runner deploy` now uses only the Cloud API; the env var
+name is `HETZNER_TOKEN` (not `HETZNER_DNS_API_TOKEN`). Lesson: when a
+vendor sunsets an API path, the deprecated calls often degrade to
+*empty-success* rather than 404 — fail-loud requires explicit version
+checks at the boundary.
+
 ## No secrets policy
 
 Restating the [README](README.md): nothing sensitive belongs here.
