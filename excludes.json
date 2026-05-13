@@ -1,0 +1,10 @@
+{
+  "_doc": "Repos that NAME-COLLIDE with the baditaflorin fleet but are deliberately NOT part of it. fleet-runner reads this file and skips matching directories everywhere (classify, shape, sed, exec, push, update-dep). Each entry is the github repo name (last segment of repo_url).",
+  "_format_version": 1,
+  "excludes": [
+    {
+      "repo": "go-url-categorizer-api",
+      "reason": "separate project that happens to use the go- prefix; not part of the 0exec / 0crawl meshes. Removed from services.json. Do not auto-clone, do not run fleet-wide ops on it."
+    }
+  ]
+}

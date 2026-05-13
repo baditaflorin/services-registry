@@ -694,16 +694,6 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch"
   },
-  "go-url-categorizer-api": {
-    "description": "URL categorization API combining vector search + LLM + curated taxonomies. Battle-tested with Prometheus metrics and developer portal.",
-    "example_path": "/?url=https://example.com",
-    "trl": 1,
-    "trl_evidence": "URL categorization stub without full implementation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "haiku-backfill-2026-05-13"
-  },
   "google-taxonomy": {
     "description": "Microservice for Google Taxonomy",
     "example_path": "/?url=https://example.com",
