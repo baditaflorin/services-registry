@@ -1702,7 +1702,7 @@
   {
     "id": "sitemap-finder",
     "name": "Sitemap Finder",
-    "description": "Microservice for Sitemap Finder",
+    "description": "Discovers a site's sitemaps via robots.txt + common-path probes, follows sitemapindex chains, decompresses .gz, returns URL inventory sorted by lastmod with an evidence trail.",
     "category": "domains",
     "mesh": "0crawl",
     "tags": [
@@ -1712,7 +1712,7 @@
     "url": "https://sitemap-finder.0crawl.com",
     "health_url": "https://sitemap-finder.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_sitemap_finder",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?target=https://stripe.com",
     "auth": {
       "type": "path_token",
       "path_template": "/t/{token}",

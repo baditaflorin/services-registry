@@ -386,8 +386,8 @@
     "description": "Microservice for Shipping Regions"
   },
   "sitemap-finder": {
-    "example_path": "/?url=https://example.com",
-    "description": "Microservice for Sitemap Finder"
+    "example_path": "/?target=https://stripe.com",
+    "description": "Discovers a site's sitemaps via robots.txt + common-path probes, follows sitemapindex chains, decompresses .gz, returns URL inventory sorted by lastmod with an evidence trail."
   },
   "smuggling-probe": {
     "example_path": "/go_smuggling_probe?target=example.com",
