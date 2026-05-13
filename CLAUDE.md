@@ -13,6 +13,13 @@ the repo's own `service.yaml` + `deploy.yaml` + `README.md`. This file
 is intentionally generic — it explains the *fleet*, not any one
 service.
 
+**Building a new service?** See
+[`services-registry/SERVICE-TEMPLATE.md`](SERVICE-TEMPLATE.md) — the
+canonical per-service scaffold (file-by-file templates for `main.go`,
+`service.yaml`, `Dockerfile`, etc., plus a paste-ready cold-start
+prompt you can feed Claude / ChatGPT / Gemini). Propagated to every
+fleet repo next to this file.
+
 ## Fleet at a glance
 
 ~220 service repos under `github.com/baditaflorin/*`, organised into
@@ -194,95 +201,198 @@ Operational topology and credentials are in **private**
 `fleet-state/OPS.md` — never commit SSH targets, IPs, or tokens to
 service repos.
 
-## Operations playbook — canonical commands only (read this before deploying anything)
+## Operations playbook — teach yourself to fish
 
-**This is for any AI agent (Claude, Gemini, Haiku, GPT) that lands in
-this repo and is asked to deploy, bump versions, or fix port conflicts.
-The fleet has canonical tooling. Inventing alternatives creates drift
-that `fleet-runner converge` later has to clean up.**
+**For any AI agent (Claude, Gemini, Haiku, GPT-anything) that lands in
+this repo and is asked to bump versions, allocate ports, or deploy.
+The fleet has canonical tooling — your job is to learn to invoke it.
+This section gives you the exact commands plus the manual fallback
+when the canonical tool isn't reachable.**
 
-### Ports
+### How to invoke `fleet-runner` from anywhere
 
-| Wrong                                                              | Right                                                          |
-|--------------------------------------------------------------------|----------------------------------------------------------------|
-| "Port 8313 is taken, I'll pick 8500 and edit `service.yaml`"        | `fleet-runner allocate-port --count 1` (picks from reserved range) |
-| Edit only `service.yaml` to change a port                          | Update `services.json` (registry) + service.yaml + Dockerfile + docker-compose.yml + deploy.yaml ALL together |
-| Silently squat on an unregistered port                             | Every running service must have an entry in `services-registry/services.json` with `host_port` set |
+`fleet-runner` lives on **Builder LXC 108** at `/usr/local/bin/fleet-runner`.
+The LXC is a Proxmox container on `0docker.com`. From any host with SSH
+access to the bastion:
 
-If a port conflict shows up: the registry is the truth. Either the
-service squatting that port is unregistered (register it), or the
-allocate-port range is exhausted (raise it). **Never reassign a port
-unilaterally** — `fleet-runner converge` will flag the drift on the
-next pass and either way someone has to undo it.
+```bash
+# One-off invocation (works from your laptop, a CI runner, anywhere):
+ssh root@0docker.com "pct exec 108 -- /usr/local/bin/fleet-runner <subcommand> [args...]"
 
-### Version bumps
+# Examples:
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner converge'
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port --count 1'
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner audit --all'
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner bump-version go_<repo> patch --push'
+```
 
-| Wrong                                                              | Right                                                          |
-|--------------------------------------------------------------------|----------------------------------------------------------------|
-| Manually edit `service.yaml` version + `git tag` + change Dockerfile | Coming: `fleet-runner bump-version <patch\|minor\|major>`     |
-| Bump in one file but forget the tag                                | Version must agree across: `service.yaml`, git tag (no `v` prefix), docker image tag, anywhere else it appears |
+If you don't have SSH access to `0docker.com`, **stop and ask the user
+to run the command, copy-pasting the exact line above**. Do not
+substitute a different command. If you can't involve the user
+(autonomous run), drop down to the "manual fallback" recipe in each
+section below — but mark in your output that you used the fallback so
+the user can verify nothing drifted.
 
-Until the bump-version command lands, bumping versions is a deliberate
-manual operation — but you bump **all** sources or none. `converge`
-catches inconsistencies.
+### Recipe — Allocating a port for a new service (or resolving a conflict)
 
-### Deploying a service
+**Canonical (preferred):**
 
-| Wrong                                                              | Right                                                          |
-|--------------------------------------------------------------------|----------------------------------------------------------------|
-| `docker build ... && scp ... && ssh ... docker run`                | `fleet-runner deploy <repo>` — handles DNS, build on AMD64 host, vhost, cert, smoke in one idempotent command |
-| "I'll SSH to dockerhost and run docker compose"                   | Same: `fleet-runner deploy <repo>` invokes the right path for you |
-| Deploy without first running `fleet-runner build-test` for the repo | Build-test first, then deploy. The CI is local. |
+```bash
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port --count 1'
+# Output: a single integer like 18099 — that's your host_port
 
-If you don't have access to LXC 108 (where fleet-runner lives), **ask
-the user to run `fleet-runner deploy <repo>` for you**. Do NOT
-substitute another deploy path — the canonical path also updates
-gateway vhosts, certs, and the deployed-version metadata that the
-catalog UI reads.
+# Multiple at once:
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port --count 3'
+```
 
-### Image builds
+**Manual fallback (when canonical isn't reachable):**
 
-| Wrong                                                              | Right                                                          |
-|--------------------------------------------------------------------|----------------------------------------------------------------|
-| `docker build` on an ARM Mac                                       | `docker buildx build --platform linux/amd64 --provenance=false -t ghcr.io/baditaflorin/<id>:<ver> --push .` (or just `fleet-runner deploy`) |
-| Push to Docker Hub                                                 | GHCR only: `ghcr.io/baditaflorin/<id>:<version>` |
-| Tag with a leading `v` (`v1.2.3`)                                  | No `v` prefix on docker tags or git tags: `1.2.3` |
+1. Open `services-registry/services.json` and find the highest
+   `host_port` currently in use in the reserved range (default
+   `18100–18999`).
+2. Pick the next integer above the max.
+3. Add an entry to `services.json` with **both** `host_port` (e.g.
+   `18099`) and `container_port` (what the service binds inside its
+   docker container — usually `8xxx`).
+4. Verify no clash: `grep -E '"(host\|container)_port":\s*<your-pick>' services-registry/services.json` should return only your line.
+
+**When you hit "port X is already taken" — the case Gemini got wrong:**
+
+The registry is the truth, not the running container. Find the
+squatter:
+
+```bash
+# Anyone claiming this port in the registry?
+python3 -c "import json; d=json.load(open('services-registry/services.json')); print([e['id'] for e in d if e.get('container_port')==8313 or e.get('host_port')==8313])"
+
+# Services WITHOUT a registered host_port (likely silent squatters):
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner audit registry-host-port-set'
+```
+
+If the squatter has no registry entry, **add one for it** with
+`allocate-port`. Your service keeps its original port. Only reallocate
+your service's port if the squatter has a legitimate registered claim.
+
+### Recipe — Bumping a service version (atomically across all files)
+
+**Canonical:** `fleet-runner bump-version` updates `service.yaml`, any
+`const Version = "..."` in `main.go`/`version.go`, creates the git
+tag, and (with `--push`) pushes commit + tag together:
+
+```bash
+# Local bump (writes files, prints next steps for review)
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner bump-version go_<repo> patch'
+
+# Atomic bump + commit + tag + push (one-shot)
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner bump-version go_<repo> patch --push'
+
+# Variants:  minor  /  major  /  --set 2.0.0
+```
+
+After the bump lands, the **container is still running the OLD
+version** until you deploy. Pair with `fleet-runner deploy <repo>`.
+
+**Manual fallback:**
+
+```bash
+cd /path/to/<repo>
+# 1. service.yaml (preserve quoting — quoted stays quoted)
+sed -i.bak 's/^version: "1.2.3"/version: "1.2.4"/' service.yaml && rm service.yaml.bak
+
+# 2. main.go / version.go const, if present
+grep -l 'const Version' *.go
+sed -i.bak 's/const Version = "1.2.3"/const Version = "1.2.4"/' main.go && rm main.go.bak
+
+# 3. Commit, tag, push, push tag — ALL FOUR (Gemini forgot step 4)
+git add -A && git commit -m "chore: bump version to 1.2.4"
+git tag 1.2.4              # NO leading v
+git push
+git push origin 1.2.4      # tags don't ride `git push` by default
+```
+
+Tag *after* the commit, push *both*.
+
+### Recipe — Deploying a service
+
+**Canonical (only one right answer):**
+
+```bash
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner deploy go_<repo>'
+```
+
+`fleet-runner deploy` is idempotent end-to-end: DNS A record (Hetzner),
+image build on AMD64 host (no QEMU emulation), push to GHCR, deploy
+via `docker compose` on the dockerhost, ensure nginx vhost + Let's
+Encrypt cert exist, `/health` smoke check. It also writes the
+deployed-version metadata the catalog UI reads.
+
+**Manual fallback (when LXC 108 is unreachable):**
+
+If you must deploy manually, do **all** of these in order — do not skip
+any:
+
+```bash
+# 1. Build on an AMD64 host (NOT on an ARM Mac — binary won't run)
+docker buildx build --platform linux/amd64 --provenance=false \
+  -t ghcr.io/baditaflorin/go_<repo>:<version> --push .
+
+# 2. Roll the container forward on the dockerhost
+ssh -J root@0docker.com ubuntu_vm@10.10.10.20 '
+  cd /opt/services/go_<repo>/src
+  git pull origin main
+  sudo docker compose pull && sudo docker compose up -d
+'
+
+# 3. Update the gateway-served deployment metadata (catalog UI reads it)
+ssh -J root@0docker.com florin@10.10.10.10 '
+  echo "{\"sha\":\"$(git rev-parse HEAD)\",\"version\":\"<version>\",\"deployed_at\":\"$(date -u +%FT%TZ)\"}" \
+    | sudo tee /etc/nginx/deploy-meta/<slug>.0exec.com.json
+  sudo nginx -s reload
+'
+
+# 4. Smoke test
+curl -sSf https://<slug>.<mesh>.com/health
+```
+
+If step 3 or 4 fails, the deploy is incomplete even though the
+container is running. Don't declare done until both succeed.
+
+### Recipe — Self-check before declaring "done"
+
+Three commands. Run all three. If anything in the category you touched
+is flagged, fix it before stopping:
+
+```bash
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner converge'
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner audit --all'
+ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner state snapshot'
+```
 
 ### Anti-patterns — observed in prior agent sessions
 
-1. **"I'll resolve the port conflict by picking an unused one."** No.
-   Use `fleet-runner allocate-port`. If the squatter is unregistered,
-   register it. Silent reassignment causes the registry to disagree
-   with reality.
+1. **"Port 8313 is taken, I'll pick 8500 and edit `service.yaml`."** Use
+   `fleet-runner allocate-port` and register the squatter. See "Allocating
+   a port" above.
 
-2. **"I bumped the version in service.yaml and pushed."** Did you also
-   tag git, update the docker image tag, and update the catalog meta?
-   If not, the catalog still shows the old version.
+2. **"I bumped the version in `service.yaml` and pushed."** Did you tag
+   git AND push the tag AND update the docker image tag? Use
+   `fleet-runner bump-version --push`.
 
-3. **"All repos are pushed to origin/main."** Pushing code is not the
-   same as deploying. The container on the dockerhost is still on the
-   old image until `fleet-runner deploy <repo>` (or equivalent)
-   rebuilds and rolls it forward.
+3. **"All repos are pushed to origin/main."** Pushing code ≠ deploying.
+   The container is on the old image until `fleet-runner deploy`
+   (or the manual fallback) runs.
 
-4. **"I edited service.yaml port from 8313 to 8500 to avoid conflict."**
-   This is the worst kind of silent drift — the registry, the docker
-   compose, the nginx vhost, and the deployed container will all
-   diverge. `fleet-runner audit port-consistency` flags this; `converge`
-   surfaces it.
+4. **"I edited `service.yaml` port from 8313 to 8500 to avoid conflict."**
+   Silent multi-file drift. `fleet-runner audit port-matches-registry`
+   catches this. Don't.
 
-5. **"I ran git tag X.Y.Z and pushed."** Did you also `git push origin
-   X.Y.Z` (tags aren't pushed by default)? If not, the tag is local-only.
+5. **"I ran `git tag X.Y.Z`."** Did you `git push origin X.Y.Z`? Tags
+   don't ride `git push` by default.
 
-### Self-check before declaring "done"
-
-```
-fleet-runner converge                 # any drift signals?
-fleet-runner audit --all              # any failed invariants?
-fleet-runner state snapshot           # what's actually running on the fleet
-```
-
-If all three are clean and your change is in, you're done. If converge
-shows drift in the category you just touched, fix it before you stop.
+6. **"`fleet-runner` isn't working for me, I'll use a different deploy
+   path."** Stop. Either report the exact command + error to the user,
+   or use the manual fallback recipe above and **say so** in your
+   summary so the user can verify the catalog-meta step landed.
 
 ## Fleet-wide changes — change `go-common`, not consumers
 
