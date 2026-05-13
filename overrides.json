@@ -180,7 +180,13 @@
     "name": "Proxy (C)",
     "description": "C proxy (?url=)",
     "host_port": 18003,
-    "container_port": 3001
+    "container_port": 3001,
+    "trl": 4,
+    "trl_evidence": "C proxy, basic forwarding logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "caa-checker": {
     "description": "Microservice for Caa Checker",
@@ -382,7 +388,13 @@
   },
   "d3-graph": {
     "host_port": 18020,
-    "container_port": 6003
+    "container_port": 6003,
+    "trl": 6,
+    "trl_evidence": "visualization library, mature D3 binding, test coverage expected",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "data-inventory": {
     "description": "Microservice for Data Inventory",
@@ -399,7 +411,13 @@
     "name": "Geocoding (Go / DB)",
     "description": "City \u2192 lat/lon with local DB (?text=)",
     "host_port": 18009,
-    "container_port": 3909
+    "container_port": 3909,
+    "trl": 6,
+    "trl_evidence": "database + geo service, multi-step integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "debug-detector": {
     "example_path": "/go_debug_detector?url=https://example.com",
@@ -580,13 +598,25 @@
     "name": "Geocoding (Node)",
     "description": "City/address \u2192 lat/lon via TomTom (?text=)",
     "host_port": 18008,
-    "container_port": 4902
+    "container_port": 4902,
+    "trl": 6,
+    "trl_evidence": "geocoding service, RFC-compliant geo protocols",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "geo-places": {
     "example_path": "/?query=coffee+Bucharest",
     "description": "Place search and details (?query=)",
     "host_port": 18010,
-    "container_port": 4906
+    "container_port": 4906,
+    "trl": 6,
+    "trl_evidence": "geo service, place lookup and validation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "go-html-proxy": {
     "description": "Microservice for Go Html Proxy",
@@ -644,13 +674,25 @@
     "name": "Proxy (Go)",
     "description": "HTTP proxy with rotation (?url=)",
     "host_port": 18002,
-    "container_port": 3001
+    "container_port": 3001,
+    "trl": 5,
+    "trl_evidence": "Go proxy implementation, protocol handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "go-search-duck": {
     "name": "Search DuckDuckGo (Go)",
     "description": "DuckDuckGo SERP scraper in Go (?query=)",
     "host_port": 18013,
-    "container_port": 3401
+    "container_port": 3401,
+    "trl": 5,
+    "trl_evidence": "Go search wrapper, API integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "go-url-categorizer-api": {
     "description": "URL categorization API combining vector search + LLM + curated taxonomies. Battle-tested with Prometheus metrics and developer portal.",
@@ -874,7 +916,13 @@
     "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
     "description": "Scrape LinkedIn profile badge (?url=)",
     "host_port": 18017,
-    "container_port": 4314
+    "container_port": 4314,
+    "trl": 4,
+    "trl_evidence": "content extraction, pattern-based logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "loadbalancer-detect": {
     "example_path": "/go_loadbalancer_detect?url=https://example.com",
@@ -928,31 +976,61 @@
     "name": "NLP / Compromise",
     "description": "NLP entity extraction from URL (?url=)",
     "host_port": 18011,
-    "container_port": 5302
+    "container_port": 5302,
+    "trl": 6,
+    "trl_evidence": "NLP service, information extraction, multi-model logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "node-js-proxy": {
     "name": "Proxy (Node+JS)",
     "description": "Node JS-rendering proxy (?url=)",
     "host_port": 18007,
-    "container_port": 3103
+    "container_port": 3103,
+    "trl": 5,
+    "trl_evidence": "Node.js proxy, HTTP handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "node-proxy": {
     "name": "Proxy (Node)",
     "description": "Node proxy (?url=)",
     "host_port": 18004,
-    "container_port": 3003
+    "container_port": 3003,
+    "trl": 5,
+    "trl_evidence": "Node proxy service, request forwarding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "node-search-bing": {
     "name": "Search Bing (Node)",
     "description": "Bing SERP scraper in Node (?query=)",
     "host_port": 18016,
-    "container_port": 3413
+    "container_port": 3413,
+    "trl": 5,
+    "trl_evidence": "Node search integration, API wrapper",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "node-search-duck": {
     "name": "Search DuckDuckGo (Node)",
     "description": "DuckDuckGo SERP scraper in Node (?query=)",
     "host_port": 18015,
-    "container_port": 3403
+    "container_port": 3403,
+    "trl": 5,
+    "trl_evidence": "Node search wrapper, basic API integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "oauth-mapper": {
     "example_path": "/?url=https://example.com",
@@ -970,13 +1048,25 @@
     "name": "OCR / PDF",
     "description": "Extract text from PDFs \u2014 upload or URL",
     "host_port": 18012,
-    "container_port": 5500
+    "container_port": 5500,
+    "trl": 6,
+    "trl_evidence": "OCR service, document processing, multi-format support",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "ocr-pdf-express": {
     "name": "OCR PDF Express",
     "description": "Express-based OCR / PDF (?url=)",
     "host_port": 18014,
-    "container_port": 5500
+    "container_port": 5500,
+    "trl": 5,
+    "trl_evidence": "OCR Express variant, lighter integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "office-locations": {
     "description": "Microservice for Office Locations",
@@ -1050,7 +1140,13 @@
   "postmessage": {
     "host_port": 18027,
     "container_port": 8313,
-    "example_path": "/go_postmessage_listener_finder?target=https://stripe.com"
+    "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
+    "trl": 4,
+    "trl_evidence": "security tool, message validation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "postmessage-finder": {
     "description": "Static scan of recovered JS for window.addEventListener('message') handlers without origin/source checks. XS-Leak / postMessage-RCE class.",
@@ -1124,13 +1220,25 @@
     "name": "Proxy (Python)",
     "description": "Python proxy (?url=)",
     "host_port": 18005,
-    "container_port": 3002
+    "container_port": 3002,
+    "trl": 4,
+    "trl_evidence": "Python proxy, basic forwarding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "random-proxy": {
     "name": "Proxy (Random)",
     "description": "Routes to a random proxy backend (?url=)",
     "host_port": 18019,
-    "container_port": 3333
+    "container_port": 3333,
+    "trl": 3,
+    "trl_evidence": "proxy selection, minimal logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "ratelimit-tester": {
     "description": "Microservice for Ratelimit Tester",
@@ -1590,7 +1698,13 @@
   "trust-decay": {
     "description": "Microservice for Trust Decay",
     "host_port": 8317,
-    "container_port": 8317
+    "container_port": 8317,
+    "trl": 4,
+    "trl_evidence": "domain analysis tool, basic multi-step logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "typosquat-finder": {
     "example_path": "/go_typosquat_finder?url=https://example.com",
@@ -1618,7 +1732,13 @@
   "update-frequency": {
     "description": "Microservice for Update Frequency",
     "host_port": 8319,
-    "container_port": 8319
+    "container_port": 8319,
+    "trl": 4,
+    "trl_evidence": "domain monitoring, straightforward logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "url-shortener": {
     "description": "Microservice for Url Shortener",
@@ -1648,7 +1768,13 @@
     "name": "Read Content",
     "description": "Extract structured content from URL (?url=)",
     "host_port": 18018,
-    "container_port": 5008
+    "container_port": 5008,
+    "trl": 5,
+    "trl_evidence": "content utility, multi-format reading",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "video-content": {
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
@@ -1690,7 +1816,13 @@
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Websocket Analyzer",
     "host_port": 8334,
-    "container_port": 8334
+    "container_port": 8334,
+    "trl": 5,
+    "trl_evidence": "infrastructure tool, bidirectional protocol analysis",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "wellknown-scanner": {
     "example_path": "/go_wellknown_scanner?url=https://example.com",
@@ -1708,18 +1840,36 @@
     "example_path": "/go_wp_plugins?url=https://example.com",
     "description": "Microservice for Wp Plugins",
     "host_port": 8353,
-    "container_port": 8353
+    "container_port": 8353,
+    "trl": 4,
+    "trl_evidence": "WordPress recon, pattern matching",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "wps": {
     "description": "Microservice for Wps",
     "host_port": 8270,
-    "container_port": 8270
+    "container_port": 8270,
+    "trl": 4,
+    "trl_evidence": "domain service, basic enumeration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "xss-payload": {
     "example_path": "/go_xss_payload?url=https://example.com",
     "description": "Microservice for Xss Payload",
     "host_port": 8231,
-    "container_port": 8231
+    "container_port": 8231,
+    "trl": 5,
+    "trl_evidence": "security tooling, payload generation and validation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   "xss-scanner": {
     "example_path": "/go_xss_scanner?url=https://example.com",
@@ -1737,6 +1887,516 @@
     "example_path": "/go_zone_transfer?domain=example.com",
     "description": "Microservice for Zone Transfer",
     "host_port": 8232,
-    "container_port": 8232
+    "container_port": 8232,
+    "trl": 5,
+    "trl_evidence": "DNS security, RFC-aligned protocol",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "accent-coach": {
+    "trl": 4,
+    "trl_evidence": "wellness app, guided audio/coaching",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "anon-conf-poll": {
+    "trl": 3,
+    "trl_evidence": "polling app, basic UI and state",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "audience-field-sculpture": {
+    "trl": 3,
+    "trl_evidence": "creative app, field manipulation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "audio-repair-lab": {
+    "trl": 4,
+    "trl_evidence": "audio processing app, basic DSP",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "bilateral-memory-processing": {
+    "trl": 2,
+    "trl_evidence": "archive concept, foundational logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "castle-archive-memory-vault": {
+    "trl": 3,
+    "trl_evidence": "archive app, storage and retrieval",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "complete-gardener-planner": {
+    "trl": 3,
+    "trl_evidence": "planning app, calendar and checklist logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "cookiecutter-data-science": {
+    "trl": 4,
+    "trl_evidence": "data science template, multi-module scaffolding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "crystal-growth-simulator": {
+    "trl": 4,
+    "trl_evidence": "physics simulator, crystallography model",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "cursorparty": {
+    "trl": 3,
+    "trl_evidence": "collaborative app, cursor tracking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "deep-searcher": {
+    "trl": 4,
+    "trl_evidence": "search aggregator, multi-source query",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "earthquake-wave-propagation": {
+    "trl": 4,
+    "trl_evidence": "seismic simulator, wave physics",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "elder-care-coordinator": {
+    "trl": 4,
+    "trl_evidence": "care app, scheduling and notes",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "field-recording-mirror": {
+    "trl": 3,
+    "trl_evidence": "audio archive, recording sync",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "gentle-adhd-flow": {
+    "trl": 3,
+    "trl_evidence": "wellness app, task flow UI",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "granular-physics-lab": {
+    "trl": 4,
+    "trl_evidence": "physics simulator, particle dynamics",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "group-theory-visualizer": {
+    "trl": 4,
+    "trl_evidence": "math visualization, algebraic structures",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "highlight-recall": {
+    "trl": 3,
+    "trl_evidence": "learning app, highlight storage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "implemment-the-following-time-displaced-ears": {
+    "trl": 2,
+    "trl_evidence": "conceptual app, minimal implementation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "little-voice-stories": {
+    "trl": 3,
+    "trl_evidence": "storytelling app, voice recording",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "local-proofreader": {
+    "trl": 4,
+    "trl_evidence": "text tool, grammar and style checking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "localhuman-mail": {
+    "trl": 3,
+    "trl_evidence": "mail app, basic send/receive",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "localingo": {
+    "trl": 4,
+    "trl_evidence": "language app, learning path",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-bench-archive": {
+    "trl": 4,
+    "trl_evidence": "p2p archive, benchmarking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-carpool-bingo": {
+    "trl": 3,
+    "trl_evidence": "p2p game, location-based",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-firefly-walk": {
+    "trl": 3,
+    "trl_evidence": "p2p app, location tracking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-lightning-flash": {
+    "trl": 3,
+    "trl_evidence": "p2p messaging, latency-optimized",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-mafia": {
+    "trl": 3,
+    "trl_evidence": "p2p game, role-based logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-metronome": {
+    "trl": 4,
+    "trl_evidence": "p2p sync, distributed timing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-mirror": {
+    "trl": 4,
+    "trl_evidence": "p2p replication, state sync",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-shared-window": {
+    "trl": 4,
+    "trl_evidence": "p2p collaboration, canvas sharing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-silence-counter": {
+    "trl": 2,
+    "trl_evidence": "p2p minimal logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-tap-symphony": {
+    "trl": 3,
+    "trl_evidence": "p2p audio, tap-based interaction",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "mesh-wave-canvas": {
+    "trl": 3,
+    "trl_evidence": "p2p visualization, wave drawing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "newsletter-flow": {
+    "trl": 4,
+    "trl_evidence": "email app, newsletter pipeline",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "numen": {
+    "trl": 3,
+    "trl_evidence": "app, core concept implementation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "open-indie-studio": {
+    "trl": 3,
+    "trl_evidence": "studio framework, scaffolding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "open-school-lab": {
+    "trl": 3,
+    "trl_evidence": "educational app, course structure",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "openphoto-studio": {
+    "trl": 4,
+    "trl_evidence": "photo app, editing and filters",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "osm-poster": {
+    "trl": 4,
+    "trl_evidence": "map visualization, OSM integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "parse-address": {
+    "trl": 5,
+    "trl_evidence": "address parsing, RFC-aligned",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "physical-kanban-sync": {
+    "trl": 3,
+    "trl_evidence": "kanban app, board sync",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "pockettalkie": {
+    "trl": 3,
+    "trl_evidence": "messaging app, walkie-talkie mode",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "polyglot-nlp-toolkit": {
+    "trl": 5,
+    "trl_evidence": "NLP toolkit, multi-language support",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "project-bootstrap-meta": {
+    "trl": 2,
+    "trl_evidence": "bootstrapping tool, minimal logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "react-data-grid": {
+    "trl": 6,
+    "trl_evidence": "React component, mature data grid, comprehensive features",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "read-later-curriculum": {
+    "trl": 3,
+    "trl_evidence": "reading app, article curation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "research-flow": {
+    "trl": 4,
+    "trl_evidence": "research tool, workflow pipeline",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "roamless-notes": {
+    "trl": 3,
+    "trl_evidence": "note-taking app, basic linking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "room-vj": {
+    "trl": 3,
+    "trl_evidence": "VJ app, real-time visuals",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "schlieren-imaging-simulator": {
+    "trl": 4,
+    "trl_evidence": "physics simulator, optics model",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "show-me-the-way": {
+    "trl": 4,
+    "trl_evidence": "navigation app, routing logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "stellar-evolution-simulator": {
+    "trl": 4,
+    "trl_evidence": "astronomy simulator, stellar physics",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "substance-sampler": {
+    "trl": 3,
+    "trl_evidence": "sample/chemistry app, material properties",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "tagboard": {
+    "trl": 3,
+    "trl_evidence": "tag-based app, simple organization",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "trust-no-one-anonymizer": {
+    "trl": 4,
+    "trl_evidence": "privacy tool, anonymization logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "universal-document-workbench": {
+    "trl": 4,
+    "trl_evidence": "document editor, multi-format support",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "urban-farm-year": {
+    "trl": 3,
+    "trl_evidence": "farm planning app, seasonal calendar",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "vagus-reset-coach": {
+    "trl": 3,
+    "trl_evidence": "wellness app, guided exercises",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "vcard-personal-portfolio": {
+    "trl": 3,
+    "trl_evidence": "portfolio app, vCard format",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "webcam-dither-lab": {
+    "trl": 3,
+    "trl_evidence": "image processing app, dithering effects",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "yq": {
+    "trl": 5,
+    "trl_evidence": "YAML query tool, RFC-aligned parsing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "z3-smt-game": {
+    "trl": 4,
+    "trl_evidence": "logic game, SMT solver integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   }
 }
