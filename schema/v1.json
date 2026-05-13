@@ -29,7 +29,7 @@
     "port": { "type": "integer", "description": "DEPRECATED — ambiguous (host vs container). Use host_port / container_port instead." },
     "host_port": {
       "type": "integer", "minimum": 1, "maximum": 65535,
-      "description": "Port bound on the dockerhost (10.10.10.20). This is what the gateway nginx proxy_pass points at. Single source of truth for IaC rendering."
+      "description": "Port bound on the dockerhost. This is what the gateway nginx proxy_pass points at. Single source of truth for IaC rendering. See private fleet-state/OPS.md for the dockerhost address."
     },
     "container_port": {
       "type": "integer", "minimum": 1, "maximum": 65535,

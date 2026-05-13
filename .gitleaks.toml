@@ -1,0 +1,46 @@
+# gitleaks v8 config — services-registry is PUBLIC.
+# Goal: block any commit that would leak a fleet API key, a Hetzner token,
+# or a private 10.10.10.x IP. Built on the v8 default ruleset.
+
+title = "services-registry gitleaks config"
+
+[extend]
+useDefault = true
+
+# ─── Custom rules ──────────────────────────────────────────────────────
+
+[[rules]]
+id          = "fleet-api-key"
+description = "Fleet API key shape (fb_ + 32 hex)"
+regex       = '''\bfb_[a-f0-9]{32}\b'''
+tags        = ["fleet", "secret"]
+
+[[rules]]
+id          = "hetzner-token-contextual"
+description = "Long alnum token near a hetzner/hcloud marker"
+regex       = '''(?i)(?:hetzner|hcloud)[^\n]{0,40}['"= ]([a-zA-Z0-9]{60,})'''
+tags        = ["hetzner", "secret"]
+[[rules.allowlists]]
+description = "env var names are fine to mention"
+regexes     = ['''HETZNER_TOKEN''']
+
+[[rules]]
+id          = "private-lan-ip"
+description = "Private 10.10.10.x IP — leaks attack surface"
+regex       = '''10\.10\.10\.\d{1,3}'''
+tags        = ["topology"]
+
+[[rules]]
+id          = "ssh-root-0docker"
+description = "Bastion identity reference"
+regex       = '''ssh\s+(?:-J\s+)?root@0docker\.com'''
+tags        = ["topology"]
+
+# ─── Allowlist ─────────────────────────────────────────────────────────
+[[allowlists]]
+description = "Allow this gitleaks config itself + the no-secrets policy text"
+paths       = [
+  '''\.gitleaks\.toml''',
+  '''README\.md''',
+  '''sources/''',
+]
