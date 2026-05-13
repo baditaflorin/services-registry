@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Single source of truth for repo-name -> canonical-slug mappings. Read by bin/generate.py and bin/backfill-host-ports.py. Never remove an entry once a service is live: the catalog URL depends on the slug being stable.",
+  "overrides": {
+    "go_jsbundle_secrets": "jsbundle-secrets",
+    "go_jsbundle_route_extractor": "jsbundle-routes",
+    "go_postmessage_listener_finder": "postmessage",
+    "go_prototype_pollution_static": "proto-pollution",
+    "go_jwt_pentest": "jwt-pentest",
+    "go_session_fixation": "session-fixation"
+  },
+  "default_strategy": "kebab_strip_go_prefix_for_0crawl"
+}

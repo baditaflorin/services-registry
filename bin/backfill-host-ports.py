@@ -19,7 +19,9 @@ Read-only safe by default. Pass --apply to actually write overrides.json.
 Usage:
   bin/backfill-host-ports.py                 # dry-run, prints diff
   bin/backfill-host-ports.py --apply         # writes overrides.json
-  bin/backfill-host-ports.py --bastion root@0docker.com --dockerhost ubuntu_vm@10.10.10.20
+  bin/backfill-host-ports.py --bastion "$SSH_BASTION" --dockerhost "$SSH_DOCKERHOST"
+
+SSH addresses live in private env (~/.zshenv) — see fleet-state/OPS.md.
 """
 from __future__ import annotations
 
@@ -34,6 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SERVICES_JSON = ROOT / "services.json"
 OVERRIDES_JSON = ROOT / "overrides.json"
+SLUG_JSON = ROOT / "slug.json"
 
 PORT_RX = re.compile(r"(?:(?:[\d.]+):)?(\d+)->(\d+)/tcp")
 SS_LISTEN_RX = re.compile(
@@ -93,17 +96,22 @@ def native_listeners(bastion: str, dockerhost: str) -> dict[str, int]:
     return result
 
 
-# Mirror of SLUG_OVERRIDES in bin/generate.py — Python doesn't see the Go map,
-# so keep these in lockstep. Any name here is the canonical slug the registry
-# uses (not the auto-derivation from repo name).
-SLUG_OVERRIDES = {
-    "go_jsbundle_secrets":           "jsbundle-secrets",
-    "go_jsbundle_route_extractor":   "jsbundle-routes",
-    "go_postmessage_listener_finder":"postmessage",
-    "go_prototype_pollution_static": "proto-pollution",
-    "go_jwt_pentest":                "jwt-pentest",
-    "go_session_fixation":           "session-fixation",
-}
+# SLUG_OVERRIDES is loaded from slug.json (single source of truth, shared with
+# bin/generate.py). Any name in the map is the canonical slug the registry uses
+# (not the auto-derivation from repo name).
+def load_slug_overrides() -> dict:
+    if not SLUG_JSON.exists():
+        sys.exit(f"ERROR: {SLUG_JSON} not found (single source of truth for slug map)")
+    data = json.loads(SLUG_JSON.read_text())
+    if not isinstance(data, dict) or "overrides" not in data:
+        sys.exit(f"ERROR: {SLUG_JSON} must be a JSON object with an 'overrides' key")
+    ov = data["overrides"]
+    if not isinstance(ov, dict):
+        sys.exit(f"ERROR: {SLUG_JSON} 'overrides' must be a JSON object")
+    return ov
+
+
+SLUG_OVERRIDES = load_slug_overrides()
 
 
 def slug_candidates(container_name: str) -> list[str]:
@@ -127,11 +135,18 @@ def slug_candidates(container_name: str) -> list[str]:
 
 
 def main():
+    import os
     ap = argparse.ArgumentParser()
-    ap.add_argument("--bastion", default="root@0docker.com")
-    ap.add_argument("--dockerhost", default="ubuntu_vm@10.10.10.20")
+    ap.add_argument("--bastion", default=os.environ.get("SSH_BASTION", ""),
+                    help="bastion ssh target; default $SSH_BASTION (see fleet-state/OPS.md)")
+    ap.add_argument("--dockerhost", default=os.environ.get("SSH_DOCKERHOST", ""),
+                    help="dockerhost ssh target; default $SSH_DOCKERHOST (see fleet-state/OPS.md)")
     ap.add_argument("--apply", action="store_true", help="write overrides.json (default: dry-run)")
     args = ap.parse_args()
+
+    if not args.dockerhost:
+        sys.exit("ERROR: --dockerhost required (or set SSH_DOCKERHOST env var). See fleet-state/OPS.md.")
+    # --bastion may legitimately be empty (no jump host).
 
     if not SERVICES_JSON.exists():
         print(f"ERROR: {SERVICES_JSON} not found", file=sys.stderr)

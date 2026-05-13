@@ -28,6 +28,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SERVICES_JSON   = ROOT / "services.json"
 OVERRIDES_JSON  = ROOT / "overrides.json"
+SLUG_JSON       = ROOT / "slug.json"
 SUMMARY_TXT     = ROOT / "services.summary.txt"
 
 MESHES = ("0exec", "0crawl", "pages")
@@ -110,18 +111,22 @@ def tags_of(topics: list[str]) -> list[str]:
 
 # ─── Per-repo → registry entry ─────────────────────────────────────────
 
-# Per-repo slug overrides. Used when the auto-derived slug doesn't match the
-# already-deployed FQDN (e.g. Agent B picked shorter names than the repo name
-# would auto-produce). Key = GitHub repo name. Value = canonical slug.
-# Never remove an entry once a service is live — the catalog URL depends on it.
-SLUG_OVERRIDES = {
-    "go_jsbundle_secrets":           "jsbundle-secrets",
-    "go_jsbundle_route_extractor":   "jsbundle-routes",
-    "go_postmessage_listener_finder":"postmessage",
-    "go_prototype_pollution_static": "proto-pollution",
-    "go_jwt_pentest":                "jwt-pentest",
-    "go_session_fixation":           "session-fixation",
-}
+# Per-repo slug overrides live in slug.json (single source of truth, shared
+# with bin/backfill-host-ports.py). Loaded lazily so a missing or malformed
+# file gives a clear error instead of an import-time crash.
+def load_slug_overrides() -> dict[str, str]:
+    if not SLUG_JSON.exists():
+        sys.exit(f"ERROR: {SLUG_JSON} not found (single source of truth for slug map)")
+    data = json.loads(SLUG_JSON.read_text())
+    if not isinstance(data, dict) or "overrides" not in data:
+        sys.exit(f"ERROR: {SLUG_JSON} must be a JSON object with an 'overrides' key")
+    ov = data["overrides"]
+    if not isinstance(ov, dict):
+        sys.exit(f"ERROR: {SLUG_JSON} 'overrides' must be a JSON object")
+    return ov
+
+
+SLUG_OVERRIDES = load_slug_overrides()
 
 
 def slug_from_repo_name(name: str, mesh: str) -> str:
