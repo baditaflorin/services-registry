@@ -20,6 +20,11 @@
       "enum": ["go", "node", "python", "rust", "c", "html", "wasm", "other"],
       "description": "Primary implementation language. For kind=container this drives bulk-operation filters (e.g. 'update-dep' only touches go services). For kind=static it is informational. Default for legacy 0exec/0crawl entries is 'go'; default for pages is 'html'."
     },
+    "runtime": {
+      "type": "string",
+      "enum": ["compose", "systemd", "binary", "k8s", "github-pages", "external"],
+      "description": "How the service is started/managed. Orthogonal to kind and language — gates deploy logic (compose: `docker compose up -d`; systemd: `systemctl restart`; github-pages: trigger Pages rebuild). Default for kind=container is 'compose'; default for kind=static is 'github-pages'. Adding a new runtime is how the fleet absorbs deployment shapes without forking every audit."
+    },
     "tags":         { "type": "array", "items": { "type": "string" } },
     "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },
     "health_url":   { "type": "string", "format": "uri" },

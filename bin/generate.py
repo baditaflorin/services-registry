@@ -70,6 +70,18 @@ LANG_DEFAULTS = {
     "pages":  "html",
 }
 
+# Runtime defaults — how the service is started/managed. Orthogonal to
+# language: a Go service may run under compose, systemd, or as a static
+# binary; a Python service under compose or systemd; etc. Default for
+# kind=container is compose (every service is docker-compose today);
+# default for kind=static is github-pages.
+RUNTIME_DEFAULTS_BY_KIND = {
+    "container": "compose",
+    "static":    "github-pages",
+}
+
+RUNTIME_VALUES = {"compose", "systemd", "binary", "k8s", "github-pages", "external"}
+
 # Known language values (must match schema enum).
 LANG_VALUES = {"go", "node", "python", "rust", "c", "html", "wasm", "other"}
 
@@ -262,13 +274,29 @@ def health_url(base: str, mesh: str) -> str:
     return f"{base}/health" if mesh == "0crawl" else f"{base}/_gw_health"
 
 
-def make_entry(repo: dict, overrides: dict) -> dict | None:
+def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     topics = normalize_topics(repo.get("repositoryTopics") or [])
     mesh = mesh_of(topics)
     if mesh is None:
         return None
     slug = slug_from_repo_name(repo["name"], mesh)
-    ov = overrides.get(slug, {})
+
+    # Resolve overrides in two phases so rules can match on mesh/kind/
+    # language/runtime (derived from topics) before per-slug patches
+    # apply. Phase 1: build a probe entry with just the derivable axes
+    # so rules can match on them. Phase 2: collect rule patches + the
+    # per-slug patch into a single `ov` dict the rest of the function
+    # consumes verbatim. Per-slug wins over rules.
+    kind = KIND_BY_MESH[mesh]
+    probe = {
+        "id":       slug,
+        "mesh":     mesh,
+        "kind":     kind,
+        "language": language_of(topics, mesh),
+        "runtime":  RUNTIME_DEFAULTS_BY_KIND[kind],
+        "category": category_of(topics),
+    }
+    ov, _ = resolved_overrides_for(probe, by_slug, rules)
 
     cat   = ov.get("category") or category_of(topics)
     base  = service_url(slug, mesh, repo)
@@ -279,8 +307,8 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
     exp   = ov.get("example_path",
                    DEFAULT_EXAMPLES.get(cat, DEFAULT_EXAMPLES["uncategorized"]))
 
-    kind = KIND_BY_MESH[mesh]
     lang = ov.get("language") or language_of(topics, mesh)
+    runtime = ov.get("runtime") or RUNTIME_DEFAULTS_BY_KIND[kind]
 
     entry = {
         "id":           slug,
@@ -298,6 +326,13 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
         # narrows to language=go; a Node lockfile audit narrows to
         # language=node. UIs render it as a small badge.
         "language":     lang,
+        # `runtime` is the deploy-dispatch axis. A `compose` runtime
+        # rolls forward via `docker compose pull && up -d`; a `systemd`
+        # runtime via `systemctl restart`; a `github-pages` runtime
+        # via a Pages CI trigger. Today every container service is
+        # compose, but the field is load-bearing for future shapes
+        # without re-classifying mesh or language.
+        "runtime":      runtime,
         "tags":         sorted(set(tags)),
         "url":          base,
         "health_url":   health_url(base, mesh),
@@ -320,7 +355,12 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
 
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
-              "host_port", "container_port", "port"):
+              "host_port", "container_port", "port",
+              # Render-time vhost knobs (consumed by fleet-runner
+              # nginx-render). Per-service patches via overrides.json
+              # or via $rules; not derived from any other source.
+              "static_fallback_key", "cert_domain", "rewrite_token_path",
+              "vhost"):
         if k in ov:
             entry[k] = ov[k]
 
@@ -339,6 +379,34 @@ def assert_no_secrets(entries: list[dict]) -> None:
 
 
 def load_overrides() -> dict:
+    """Load overrides.json.
+
+    Backward-compat shape: top-level keys are slug names; values are
+    patch dicts merged into the rendered registry entry for that slug.
+
+    Extended (2026-05-14): keys starting with `$` are reserved metadata,
+    NOT slugs. The only metadata key today is `$rules`, a list of
+    bulk-override rules of the form:
+
+        {
+          "name": "phone-extractor-san-cert",
+          "match": {                         # any-of within a field, all-of across fields
+            "ids":      ["a11y-quick", …],   # explicit slug list, OR
+            "mesh":     "0crawl",            # mesh filter, OR
+            "category": "domains",           # category filter, OR
+            "language": "go",                # language filter, OR
+            "kind":     "container"          # kind filter
+          },
+          "patch": { "cert_domain": "phone-extractor.0crawl.com" },
+          "why":   "46 vhosts share phone-extractor's SAN cert; SAN list is the actual covered set"
+        }
+
+    Rules apply in declaration order; the per-slug entry (if any) wins
+    over rules. Use `fleet-runner overrides list / explain / audit` to
+    see the resolved patch per service. This shape lets you encode "46
+    services have the same cert_domain" as one rule instead of 46
+    near-identical per-slug entries.
+    """
     if not OVERRIDES_JSON.exists():
         return {}
     data = json.loads(OVERRIDES_JSON.read_text())
@@ -347,11 +415,56 @@ def load_overrides() -> dict:
     return data
 
 
+def split_overrides(raw: dict) -> tuple[dict, list[dict]]:
+    """Separate per-slug patches from `$rules` metadata."""
+    rules = raw.get("$rules") or []
+    if not isinstance(rules, list):
+        sys.exit(f"ERROR: $rules in {OVERRIDES_JSON} must be an array of rule objects")
+    by_slug = {k: v for k, v in raw.items() if not k.startswith("$")}
+    return by_slug, rules
+
+
+def rule_matches(rule: dict, entry: dict) -> bool:
+    """Return True iff `entry` satisfies all of `rule.match`'s clauses.
+
+    Each clause is "any-of": `ids: [a, b]` matches if entry.id is a OR b.
+    Different fields are "all-of": id must match AND mesh must match,
+    etc. An empty match clause matches nothing (defensive: a rule with
+    no criteria would fan out to every service, which is almost
+    certainly a typo)."""
+    m = rule.get("match") or {}
+    if not m:
+        return False
+    if "ids" in m and entry["id"] not in m["ids"]:
+        return False
+    for k in ("mesh", "kind", "language", "runtime", "category"):
+        if k in m and entry.get(k) != m[k]:
+            return False
+    return True
+
+
+def resolved_overrides_for(entry: dict, by_slug: dict, rules: list[dict]) -> tuple[dict, list[str]]:
+    """Return (resolved_patch, applied_rule_names) for one entry.
+
+    Resolution: rules first (in declaration order), per-slug last.
+    Patches are shallow-merged — later writes overwrite earlier."""
+    out: dict = {}
+    applied: list[str] = []
+    for r in rules:
+        if rule_matches(r, entry):
+            out.update(r.get("patch") or {})
+            applied.append(r.get("name") or "<unnamed>")
+    if entry["id"] in by_slug:
+        out.update(by_slug[entry["id"]])
+    return out, applied
+
+
 def build(overrides: dict) -> list[dict]:
+    by_slug, rules = split_overrides(overrides)
     seen: dict[str, dict] = {}
     for mesh in MESHES:
         for repo in gh_repos_with_topic(f"mesh-{mesh}"):
-            entry = make_entry(repo, overrides)
+            entry = make_entry(repo, by_slug, rules)
             if entry is None:
                 continue
             if entry["id"] in seen:

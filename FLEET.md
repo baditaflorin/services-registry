@@ -19,6 +19,7 @@ auth model, TRL, ceiling):
 |------------|-----------------------------------------|--------------------------------------------------------------|
 | `kind`     | `container`, `static`                   | which fleet-runner operations apply (deploy / health / bump only run on `container`) |
 | `mesh`     | `0exec`, `0crawl`, `pages`              | which network + auth domain the service lives in             |
+| `runtime`  | `compose`, `systemd`, `binary`, `k8s`, `github-pages`, `external` | which deploy mechanism applies (orthogonal to language) |
 | `language` | `go`, `node`, `python`, `c`, `rust`, `html`, `wasm`, `other` | bulk-op filters (dep bumps, lockfile audits, etc.) |
 
 Today's snapshot:
@@ -27,6 +28,8 @@ Today's snapshot:
 |-------------|-------|---------------------------------|---------------------------------------------------|
 | `container` | 160   | 0exec 29, 0crawl 131            | go 154, node 4, python 1, c 1                     |
 | `static`    | 63    | pages 63                        | html 63                                           |
+
+By `runtime`: 160 `compose`, 63 `github-pages`. The other runtime values are reserved for future expansion (a Go binary registered as `runtime: systemd` could deploy via `systemctl restart` instead of `docker compose`; nothing in the fleet uses them today).
 
 **`kind` is the load-bearing field for tooling.** When you write a new
 audit, a new bulk operation, or a new agent prompt, gate on `kind`,

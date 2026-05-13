@@ -56,7 +56,20 @@ section below). One revoke = killed everywhere. The 0crawl path-token
 shape is preserved as a backwards-compat alias and feeds into the
 same `auth_request` flow on the nginx side.
 
-### Axis 3 — `language` (primary implementation)
+### Axis 3 — `runtime` (how it's started)
+
+| `runtime`     | What it means                                             |
+|---------------|-----------------------------------------------------------|
+| `compose`     | Default for `kind: container`. Docker-compose on the dockerhost; deploy = `docker compose pull && up -d` |
+| `systemd`     | Reserved — a service unit on a host; deploy = `systemctl restart` |
+| `binary`      | Reserved — a static binary run by hand or by a launcher    |
+| `k8s`         | Reserved — managed by a kube manifest                      |
+| `github-pages`| Default for `kind: static`. Built and served by GitHub Pages CI |
+| `external`    | Reserved — runs outside the fleet, included for reference only |
+
+`runtime` is orthogonal to `language`. A Go service might be `runtime: compose` today and `runtime: systemd` tomorrow without re-classifying it as a different language or kind. `fleet-runner deploy` dispatches on `runtime`.
+
+### Axis 4 — `language` (primary implementation)
 
 | `language` | When to use it                                                 |
 |------------|----------------------------------------------------------------|
@@ -209,6 +222,50 @@ u, err := safehttp.NormalizeURL(rawInput)
 - **service.yaml** must keep: `id`, `name`, `version`, `port`,
   `category`, `health` block, `test` block.
 
+## `overrides.json` — per-service patches and bulk rules
+
+The catalog is `services.json` (auto-derived). Per-service hand-curated
+patches live in `services-registry/overrides.json`. Two shapes coexist:
+
+**Per-slug patches** (current shape, unchanged):
+```json
+{
+  "python-proxy": { "proxy_read_timeout": "300s", "trl": 6 },
+  "node-search-bing": { "vhost": { "proxy_buffering": "off" } }
+}
+```
+
+**Bulk rules** (new, via reserved `$rules` key):
+```json
+{
+  "$rules": [
+    {
+      "name": "phone-extractor-san-cert",
+      "match": { "mesh": "0crawl", "ids": ["a11y-quick", "broken-links", "…"] },
+      "patch": { "cert_domain": "phone-extractor.0crawl.com" },
+      "why":   "46 vhosts share phone-extractor's SAN cert"
+    }
+  ]
+}
+```
+
+Match clauses: any of `ids` (explicit list), `mesh`, `kind`, `language`,
+`runtime`, `category` — combined with all-of semantics. Rules apply in
+declaration order; per-slug entries win. Use rules to encode "47 services
+share this cert_domain" as one line instead of 47.
+
+**Audit surface** — never grep overrides by hand:
+
+```
+fleet-runner overrides list   [--filter mesh=0crawl] [--key cert_domain]
+fleet-runner overrides explain <slug>      # full breakdown per key + source
+fleet-runner overrides audit                # stale slugs, unused rules, key adoption counts
+```
+
+`fleet-runner converge` also surfaces overrides drift (stale per-slug
+entries that reference removed services; rules with no matching
+service).
+
 ## fleet-runner
 
 Binary at `/usr/local/bin/fleet-runner` on **Builder LXC 108**. From
@@ -226,6 +283,9 @@ fleet-runner push   "<msg>"                  # commit+push all dirty repos
 fleet-runner nginx-render                    # regenerate vhosts from templates
 fleet-runner rotate-default-token <value>    # gateway-only rotation, zero repo edits
 fleet-runner default-token                   # print the current gateway default token
+fleet-runner overrides list                  # per service, which override keys apply (and via which rule)
+fleet-runner overrides explain <slug>        # one service: every override key and its source (slug vs rule)
+fleet-runner overrides audit                 # stale per-slug entries, unused rules, per-key adoption counts
 fleet-runner new-service <name> <port> [cat] # scaffold new service
 fleet-runner stats                           # audit log + token usage summary
 ```
