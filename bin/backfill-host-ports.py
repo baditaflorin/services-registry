@@ -122,7 +122,7 @@ def slug_candidates(container_name: str) -> list[str]:
         if repo in SLUG_OVERRIDES:
             out.append(SLUG_OVERRIDES[repo])
     kebab = s.replace("_", "-")
-    out.extend([kebab, kebab.lstrip("go-")])
+    out.extend([kebab, kebab.removeprefix("go-")])
     return list(dict.fromkeys(out))
 
 
