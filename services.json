@@ -29,6 +29,28 @@
     "container_port": 8272
   },
   {
+    "id": "accent-coach",
+    "name": "Accent Coach",
+    "description": "Private browser-based accent coach that analyzes speech and drills phoneme-level pronunciation.",
+    "category": "wellness",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/accent-coach/",
+    "health_url": "https://baditaflorin.github.io/accent-coach/",
+    "repo_url": "https://github.com/baditaflorin/accent-coach",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "wellness app, guided audio/coaching",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "accessibility-score",
     "name": "Accessibility Score",
     "description": "Microservice for Accessibility Score",
@@ -174,6 +196,28 @@
     "container_port": 8081
   },
   {
+    "id": "anon-conf-poll",
+    "name": "Anon Conf Poll",
+    "description": "Static, anonymous live polling with CRDT sync, zk one-vote proofs, and local analytics.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/anon-conf-poll/",
+    "health_url": "https://baditaflorin.github.io/anon-conf-poll/",
+    "repo_url": "https://github.com/baditaflorin/anon-conf-poll",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "polling app, basic UI and state",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "api-extractor",
     "name": "Api Extractor",
     "description": "Microservice for Api Extractor",
@@ -261,6 +305,36 @@
     "container_port": 8230
   },
   {
+    "id": "apikey-service",
+    "name": "Apikey Service",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "tags": [
+      "apikey",
+      "go",
+      "keystore"
+    ],
+    "url": "https://apikey-service.0exec.com",
+    "health_url": "https://apikey-service.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-apikey-service",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Working keystore w/ SQLite + admin auth + WAL. 2026-05-13 added constant-time admin compare + method enforcement + max body size. Still: keys plaintext at rest, no rate-limit, no audit log, no tests.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18021,
+    "container_port": 8080
+  },
+  {
     "id": "asn-lookup",
     "name": "Asn Lookup",
     "description": "Microservice for Asn Lookup",
@@ -288,6 +362,72 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8337,
     "container_port": 8337
+  },
+  {
+    "id": "audience-field-sculpture",
+    "name": "Audience Field Sculpture",
+    "description": "A privacy-preserving browser artwork \u2014 phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/audience-field-sculpture/",
+    "health_url": "https://baditaflorin.github.io/audience-field-sculpture/",
+    "repo_url": "https://github.com/baditaflorin/audience-field-sculpture",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "creative app, field manipulation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "audio-repair-lab",
+    "name": "Audio Repair Lab",
+    "description": "Browser-based audio repair toolkit for noise removal, vocal isolation, and quick podcast/music cleanup.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/audio-repair-lab/",
+    "health_url": "https://baditaflorin.github.io/audio-repair-lab/",
+    "repo_url": "https://github.com/baditaflorin/audio-repair-lab",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "audio processing app, basic DSP",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "bilateral-memory-processing",
+    "name": "Bilateral Memory Processing",
+    "description": "Private browser-based EMDR-inspired audio journaling with local transcription, reflection prompts, and no trauma uploads.",
+    "category": "archive",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/bilateral-memory-processing/",
+    "health_url": "https://baditaflorin.github.io/bilateral-memory-processing/",
+    "repo_url": "https://github.com/baditaflorin/bilateral-memory-processing",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 2,
+    "trl_evidence": "archive concept, foundational logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "biz-classifier",
@@ -406,6 +546,35 @@
     "container_port": 8339
   },
   {
+    "id": "c-proxy",
+    "name": "Proxy (C)",
+    "description": "C proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "c",
+      "proxy"
+    ],
+    "url": "https://c-proxy.0exec.com",
+    "health_url": "https://c-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/c-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "C proxy, basic forwarding logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18003,
+    "container_port": 3001
+  },
+  {
     "id": "caa-checker",
     "name": "Caa Checker",
     "description": "Microservice for Caa Checker",
@@ -491,6 +660,28 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8279,
     "container_port": 8279
+  },
+  {
+    "id": "castle-archive-memory-vault",
+    "name": "Castle Archive Memory Vault",
+    "description": "Private, local-first voice reflection vault for retreats. Whisper + sentence-transformers + age + DuckDB + Markdown export, all in the browser.",
+    "category": "archive",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
+    "health_url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
+    "repo_url": "https://github.com/baditaflorin/castle-archive-memory-vault",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "archive app, storage and retrieval",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "cdn-detector",
@@ -638,6 +829,28 @@
     "container_port": 8281
   },
   {
+    "id": "complete-gardener-planner",
+    "name": "Complete Gardener Planner",
+    "description": "Static-first planner for plant ID, crop rotation, sun, soil, watering, frost, and harvest forecasts.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/complete-gardener-planner/",
+    "health_url": "https://baditaflorin.github.io/complete-gardener-planner/",
+    "repo_url": "https://github.com/baditaflorin/complete-gardener-planner",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "planning app, calendar and checklist logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "compression-tester",
     "name": "Compression Tester",
     "description": "Microservice for Compression Tester",
@@ -694,6 +907,28 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8226,
     "container_port": 8226
+  },
+  {
+    "id": "cookiecutter-data-science",
+    "name": "Cookiecutter Data Science",
+    "description": "A logical, reasonably standardized, but flexible project structure for doing and sharing data science work.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "http://drivendata.github.io/cookiecutter-data-science/",
+    "health_url": "http://drivendata.github.io/cookiecutter-data-science/",
+    "repo_url": "https://github.com/baditaflorin/cookiecutter-data-science",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "data science template, multi-module scaffolding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "cors-scanner",
@@ -841,6 +1076,28 @@
     "container_port": 8341
   },
   {
+    "id": "crystal-growth-simulator",
+    "name": "Crystal Growth Simulator",
+    "description": "Live browser simulator for snowflake, dendrite, and coral-like crystal growth with WebGPU visuals and sonified physics.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/crystal-growth-simulator/",
+    "health_url": "https://baditaflorin.github.io/crystal-growth-simulator/",
+    "repo_url": "https://github.com/baditaflorin/crystal-growth-simulator",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "physics simulator, crystallography model",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "currency-detector",
     "name": "Currency Detector",
     "description": "Microservice for Currency Detector",
@@ -868,6 +1125,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8282,
     "container_port": 8282
+  },
+  {
+    "id": "cursorparty",
+    "name": "Cursorparty",
+    "description": "Shared cursors and sticky notes on an infinite canvas. P2P over a self-hosted WebRTC mesh. GitHub-Pages-only, no backend.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/cursorparty/",
+    "health_url": "https://baditaflorin.github.io/cursorparty/",
+    "repo_url": "https://github.com/baditaflorin/cursorparty",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "collaborative app, cursor tracking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "customer-logos",
@@ -899,6 +1178,35 @@
     "container_port": 8283
   },
   {
+    "id": "d3-graph",
+    "name": "D3 Graph",
+    "description": "d3-graph \u2014 d3-graph.0exec.com",
+    "category": "visualization",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "visualization"
+    ],
+    "url": "https://d3-graph.0exec.com",
+    "health_url": "https://d3-graph.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/d3-graph",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "visualization library, mature D3 binding, test coverage expected",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18020,
+    "container_port": 6003
+  },
+  {
     "id": "data-inventory",
     "name": "Data Inventory",
     "description": "Microservice for Data Inventory",
@@ -928,6 +1236,34 @@
     "container_port": 8284
   },
   {
+    "id": "db-geo-geocode",
+    "name": "Geocoding (Go / DB)",
+    "description": "City \u2192 lat/lon with local DB (?text=)",
+    "category": "geo",
+    "mesh": "0exec",
+    "tags": [
+      "geo"
+    ],
+    "url": "https://db-geo-geocode.0exec.com",
+    "health_url": "https://db-geo-geocode.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/db-geo-geocode",
+    "example_path": "/?text=Bucharest",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "database + geo service, multi-step integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18009,
+    "container_port": 3909
+  },
+  {
     "id": "debug-detector",
     "name": "Debug Detector",
     "description": "Microservice for Debug Detector",
@@ -955,6 +1291,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8227,
     "container_port": 8227
+  },
+  {
+    "id": "deep-searcher",
+    "name": "Deep Searcher",
+    "description": "Open Source Deep Research Alternative to Reason and Search on Private Data. Written in Python.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://zilliztech.github.io/deep-searcher/",
+    "health_url": "https://zilliztech.github.io/deep-searcher/",
+    "repo_url": "https://github.com/baditaflorin/deep-searcher",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "search aggregator, multi-source query",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "dependency-counter",
@@ -1102,6 +1460,50 @@
     "container_port": 8286
   },
   {
+    "id": "earthquake-wave-propagation",
+    "name": "Earthquake Wave Propagation",
+    "description": "Interactive WebGPU demo: click a fault to see and hear P-waves and S-waves propagate across terrain.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
+    "health_url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
+    "repo_url": "https://github.com/baditaflorin/earthquake-wave-propagation",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "seismic simulator, wave physics",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "elder-care-coordinator",
+    "name": "Elder Care Coordinator",
+    "description": "Local-first elder care coordination for meds, appointments, insurance drafts, and emergency packets.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/elder-care-coordinator/",
+    "health_url": "https://baditaflorin.github.io/elder-care-coordinator/",
+    "repo_url": "https://github.com/baditaflorin/elder-care-coordinator",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "care app, scheduling and notes",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "email-extractor",
     "name": "Email Extractor",
     "description": "Microservice for Email Extractor",
@@ -1247,6 +1649,28 @@
     "container_port": 8164
   },
   {
+    "id": "field-recording-mirror",
+    "name": "Field Recording Mirror",
+    "description": "A private browser instrument that records 30 seconds of now and replays it as a subtly altered sonic mirror.",
+    "category": "archive",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/field-recording-mirror/",
+    "health_url": "https://baditaflorin.github.io/field-recording-mirror/",
+    "repo_url": "https://github.com/baditaflorin/field-recording-mirror",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "audio archive, recording sync",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "file-inclusion",
     "name": "File Inclusion",
     "description": "Microservice for File Inclusion",
@@ -1363,6 +1787,258 @@
     "container_port": 8291
   },
   {
+    "id": "gentle-adhd-flow",
+    "name": "Gentle Adhd Flow",
+    "description": "Local-first ADHD self-management: voice brain-dumps become tasks, focus sessions, habits, and gentle planning.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/gentle-adhd-flow/",
+    "health_url": "https://baditaflorin.github.io/gentle-adhd-flow/",
+    "repo_url": "https://github.com/baditaflorin/gentle-adhd-flow",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "wellness app, task flow UI",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "geo-geocode",
+    "name": "Geocoding (Node)",
+    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
+    "category": "geo",
+    "mesh": "0exec",
+    "tags": [
+      "geo"
+    ],
+    "url": "https://geo-geocode.0exec.com",
+    "health_url": "https://geo-geocode.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/geo-geocode",
+    "example_path": "/?text=Bucharest",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "geocoding service, RFC-compliant geo protocols",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18008,
+    "container_port": 4902
+  },
+  {
+    "id": "geo-places",
+    "name": "Geo Places",
+    "description": "Place search and details (?query=)",
+    "category": "geo",
+    "mesh": "0exec",
+    "tags": [
+      "geo"
+    ],
+    "url": "https://geo-places.0exec.com",
+    "health_url": "https://geo-places.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/geo-places",
+    "example_path": "/?query=coffee+Bucharest",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "geo service, place lookup and validation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18010,
+    "container_port": 4906
+  },
+  {
+    "id": "go-html-proxy",
+    "name": "Go Html Proxy",
+    "description": "Microservice for Go Html Proxy",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy"
+    ],
+    "url": "https://go-html-proxy.0exec.com",
+    "health_url": "https://go-html-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-html-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 1,
+    "trl_evidence": "HTML proxy scaffold without substantive handler logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
+    "host_port": 3002,
+    "container_port": 3002
+  },
+  {
+    "id": "go-information-leakage",
+    "name": "Go Information Leakage",
+    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "infoleak"
+    ],
+    "url": "https://go-information-leakage.0exec.com",
+    "health_url": "https://go-information-leakage.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_information_leakage",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 3,
+    "trl_evidence": "Leakage detection with SSRF protection and multi-fetch, no test coverage",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
+    "host_port": 8083,
+    "container_port": 8083
+  },
+  {
+    "id": "go-js-proxy",
+    "name": "Proxy (Go+JS)",
+    "description": "JS-rendering proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy"
+    ],
+    "url": "https://go-js-proxy.0exec.com",
+    "health_url": "https://go-js-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-js-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 7,
+    "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18006,
+    "container_port": 8080
+  },
+  {
+    "id": "go-js-proxy-network",
+    "name": "Go Js Proxy Network",
+    "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy",
+      "render"
+    ],
+    "url": "https://go-js-proxy-network.0exec.com",
+    "health_url": "https://go-js-proxy-network.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 7,
+    "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18024,
+    "container_port": 8500
+  },
+  {
+    "id": "go-proxy",
+    "name": "Proxy (Go)",
+    "description": "HTTP proxy with rotation (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "proxy"
+    ],
+    "url": "https://go-proxy.0exec.com",
+    "health_url": "https://go-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Go proxy implementation, protocol handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18002,
+    "container_port": 3001
+  },
+  {
+    "id": "go-search-duck",
+    "name": "Search DuckDuckGo (Go)",
+    "description": "DuckDuckGo SERP scraper in Go (?query=)",
+    "category": "search",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "search"
+    ],
+    "url": "https://go-search-duck.0exec.com",
+    "health_url": "https://go-search-duck.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-search-duck",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Go search wrapper, API integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18013,
+    "container_port": 3401
+  },
+  {
     "id": "google-taxonomy",
     "name": "Google Taxonomy",
     "description": "Microservice for Google Taxonomy",
@@ -1390,6 +2066,28 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8096,
     "container_port": 8096
+  },
+  {
+    "id": "granular-physics-lab",
+    "name": "Granular Physics Lab",
+    "description": "Browser-based granular sandbox for teaching sand, gravel, and snow behavior with WASM physics and WebGPU visuals.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/granular-physics-lab/",
+    "health_url": "https://baditaflorin.github.io/granular-physics-lab/",
+    "repo_url": "https://github.com/baditaflorin/granular-physics-lab",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "physics simulator, particle dynamics",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "graphql-introspection",
@@ -1421,6 +2119,28 @@
     "container_port": 8147
   },
   {
+    "id": "group-theory-visualizer",
+    "name": "Group Theory Visualizer",
+    "description": "Interactive finite-group and symmetry explorer using WASM math, Three.js, and graph visualization.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/group-theory-visualizer/",
+    "health_url": "https://baditaflorin.github.io/group-theory-visualizer/",
+    "repo_url": "https://github.com/baditaflorin/group-theory-visualizer",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "math visualization, algebraic structures",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "hidden-fields",
     "name": "Hidden Fields",
     "description": "Microservice for Hidden Fields",
@@ -1448,6 +2168,28 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8345,
     "container_port": 8345
+  },
+  {
+    "id": "highlight-recall",
+    "name": "Highlight Recall",
+    "description": "Local-first EPUB/PDF highlight review with semantic search and spaced repetition.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/highlight-recall/",
+    "health_url": "https://baditaflorin.github.io/highlight-recall/",
+    "repo_url": "https://github.com/baditaflorin/highlight-recall",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "learning app, highlight storage",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "host-header",
@@ -1624,6 +2366,28 @@
     "container_port": 8159
   },
   {
+    "id": "implemment-the-following-time-displaced-ears",
+    "name": "Implemment The Following Time Displaced Ears",
+    "description": "A browser audio lab for hearing live microphone input delayed, pitch-shifted, and spectrally transformed.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
+    "health_url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
+    "repo_url": "https://github.com/baditaflorin/implemment-the-following-time-displaced-ears",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 2,
+    "trl_evidence": "conceptual app, minimal implementation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "ipv6-checker",
     "name": "Ipv6 Checker",
     "description": "Microservice for Ipv6 Checker",
@@ -1651,6 +2415,66 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8244,
     "container_port": 8244
+  },
+  {
+    "id": "jsbundle-routes",
+    "name": "Jsbundle Routes",
+    "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://jsbundle-routes.0exec.com",
+    "health_url": "https://jsbundle-routes.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
+    "example_path": "/go_jsbundle_route_extractor?target=https://stripe.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18026,
+    "container_port": 8312
+  },
+  {
+    "id": "jsbundle-secrets",
+    "name": "Jsbundle Secrets",
+    "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://jsbundle-secrets.0exec.com",
+    "health_url": "https://jsbundle-secrets.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
+    "example_path": "/go_jsbundle_secrets?target=https://stripe.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18025,
+    "container_port": 8311
   },
   {
     "id": "jsonp-finder",
@@ -1711,6 +2535,36 @@
     "container_port": 8202
   },
   {
+    "id": "jwt-pentest",
+    "name": "Jwt Pentest",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://jwt-pentest.0exec.com",
+    "health_url": "https://jwt-pentest.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
+    "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18029,
+    "container_port": 8315
+  },
+  {
     "id": "keyword-density",
     "name": "Keyword Density",
     "description": "Microservice for Keyword Density",
@@ -1769,6 +2623,56 @@
     "container_port": 8293
   },
   {
+    "id": "linkedin-attributes",
+    "name": "LinkedIn Attributes",
+    "description": "Scrape LinkedIn profile badge (?url=)",
+    "category": "content",
+    "mesh": "0exec",
+    "tags": [
+      "content"
+    ],
+    "url": "https://linkedin-attributes.0exec.com",
+    "health_url": "https://linkedin-attributes.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/linkedin-attributes",
+    "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "content extraction, pattern-based logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18017,
+    "container_port": 4314
+  },
+  {
+    "id": "little-voice-stories",
+    "name": "Little Voice Stories",
+    "description": "Turn a kid\u2019s drawing into a bedtime story narrated in a parent\u2019s voice, entirely in the browser.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/little-voice-stories",
+    "health_url": "https://baditaflorin.github.io/little-voice-stories",
+    "repo_url": "https://github.com/baditaflorin/little-voice-stories",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "storytelling app, voice recording",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "loadbalancer-detect",
     "name": "Loadbalancer Detect",
     "description": "Microservice for Loadbalancer Detect",
@@ -1798,6 +2702,72 @@
     "container_port": 8107
   },
   {
+    "id": "local-proofreader",
+    "name": "Local Proofreader",
+    "description": "Local-first grammar, spelling, style, and rewrite assistant for the browser with no draft data sent to servers.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/local-proofreader/",
+    "health_url": "https://baditaflorin.github.io/local-proofreader/",
+    "repo_url": "https://github.com/baditaflorin/local-proofreader",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "text tool, grammar and style checking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "localhuman-mail",
+    "name": "Localhuman Mail",
+    "description": "Privacy-first AI email client with local mailbox indexing, semantic search, and assistive drafting.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/localhuman-mail/",
+    "health_url": "https://baditaflorin.github.io/localhuman-mail/",
+    "repo_url": "https://github.com/baditaflorin/localhuman-mail",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "mail app, basic send/receive",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "localingo",
+    "name": "Localingo",
+    "description": "A private, gamified language tutor with local speech, review, grammar, and lesson generation.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/localingo/",
+    "health_url": "https://baditaflorin.github.io/localingo/",
+    "repo_url": "https://github.com/baditaflorin/localingo",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "language app, learning path",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "login-analyzer",
     "name": "Login Analyzer",
     "description": "Microservice for Login Analyzer",
@@ -1825,6 +2795,248 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8170,
     "container_port": 8170
+  },
+  {
+    "id": "mesh-bench-archive",
+    "name": "Mesh Bench Archive",
+    "description": "Peer-to-peer mesh: voice notes tied to a place. Scan a QR sticker on a bench, hear the last visitors. Audio lives only in browsers that have scanned.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-bench-archive/",
+    "health_url": "https://baditaflorin.github.io/mesh-bench-archive/",
+    "repo_url": "https://github.com/baditaflorin/mesh-bench-archive",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "p2p archive, benchmarking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-carpool-bingo",
+    "name": "Mesh Carpool Bingo",
+    "description": "Peer-to-peer mesh: road-trip bingo. Per-phone unique 5x5 cards, shared claim space across the car. First to a line wins.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
+    "health_url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
+    "repo_url": "https://github.com/baditaflorin/mesh-carpool-bingo",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "p2p game, location-based",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-firefly-walk",
+    "name": "Mesh Firefly Walk",
+    "description": "Peer-to-peer mesh: phones pulse soft yellow in clock-synced unison for a swarm-of-fireflies effect on a night walk.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-firefly-walk/",
+    "health_url": "https://baditaflorin.github.io/mesh-firefly-walk/",
+    "repo_url": "https://github.com/baditaflorin/mesh-firefly-walk",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "p2p app, location tracking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-lightning-flash",
+    "name": "Mesh Lightning Flash",
+    "description": "Peer-to-peer mesh: all phone flashlights strobe in single-millisecond sync to light a group photo from many angles at once.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-lightning-flash/",
+    "health_url": "https://baditaflorin.github.io/mesh-lightning-flash/",
+    "repo_url": "https://github.com/baditaflorin/mesh-lightning-flash",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "p2p messaging, latency-optimized",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-mafia",
+    "name": "Mesh Mafia",
+    "description": "Peer-to-peer Werewolf: phones are role cards assigned via cryptographic commit-reveal; no server ever learns who's the wolf.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-mafia/",
+    "health_url": "https://baditaflorin.github.io/mesh-mafia/",
+    "repo_url": "https://github.com/baditaflorin/mesh-mafia",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "p2p game, role-based logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-metronome",
+    "name": "Mesh Metronome",
+    "description": "Peer-to-peer mesh: 4 phones become a polyrhythm grid, each playing a clock-synced subdivision of the same BPM.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-metronome/",
+    "health_url": "https://baditaflorin.github.io/mesh-metronome/",
+    "repo_url": "https://github.com/baditaflorin/mesh-metronome",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "p2p sync, distributed timing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-mirror",
+    "name": "Mesh Mirror",
+    "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed \u2014 phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-mirror/",
+    "health_url": "https://baditaflorin.github.io/mesh-mirror/",
+    "repo_url": "https://github.com/baditaflorin/mesh-mirror",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "p2p replication, state sync",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-shared-window",
+    "name": "Mesh Shared Window",
+    "description": "Peer-to-peer mesh: 2-4 friends in different homes each point their camera at a view they like; every phone tiles all the others' feeds into one composite.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-shared-window/",
+    "health_url": "https://baditaflorin.github.io/mesh-shared-window/",
+    "repo_url": "https://github.com/baditaflorin/mesh-shared-window",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "p2p collaboration, canvas sharing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-silence-counter",
+    "name": "Mesh Silence Counter",
+    "description": "Peer-to-peer mesh: group meditation timer. Phones detect stillness via accelerometer and aggregate the count anonymously.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-silence-counter/",
+    "health_url": "https://baditaflorin.github.io/mesh-silence-counter/",
+    "repo_url": "https://github.com/baditaflorin/mesh-silence-counter",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 2,
+    "trl_evidence": "p2p minimal logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-tap-symphony",
+    "name": "Mesh Tap Symphony",
+    "description": "Peer-to-peer mesh: each phone is one drum; 30 seconds of taps records a synced loop that replays on every phone.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-tap-symphony/",
+    "health_url": "https://baditaflorin.github.io/mesh-tap-symphony/",
+    "repo_url": "https://github.com/baditaflorin/mesh-tap-symphony",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "p2p audio, tap-based interaction",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "mesh-wave-canvas",
+    "name": "Mesh Wave Canvas",
+    "description": "Peer-to-peer mesh: arrange phones in a row; tap one and a ripple expands across all phones as if they were one continuous canvas.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/mesh-wave-canvas/",
+    "health_url": "https://baditaflorin.github.io/mesh-wave-canvas/",
+    "repo_url": "https://github.com/baditaflorin/mesh-wave-canvas",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "p2p visualization, wave drawing",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "mime-trap",
@@ -1885,6 +3097,194 @@
     "container_port": 8294
   },
   {
+    "id": "newsletter-flow",
+    "name": "Newsletter Flow",
+    "description": "Local-first writing desk for researching, drafting, polishing, and repurposing newsletters without SaaS bloat.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/newsletter-flow/",
+    "health_url": "https://baditaflorin.github.io/newsletter-flow/",
+    "repo_url": "https://github.com/baditaflorin/newsletter-flow",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "email app, newsletter pipeline",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "nlp-extractinfo",
+    "name": "NLP / Compromise",
+    "description": "NLP entity extraction from URL (?url=)",
+    "category": "nlp",
+    "mesh": "0exec",
+    "tags": [
+      "nlp"
+    ],
+    "url": "https://nlp-extractinfo.0exec.com",
+    "health_url": "https://nlp-extractinfo.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/nlp-extractinfo",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NLP service, information extraction, multi-model logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18011,
+    "container_port": 5302
+  },
+  {
+    "id": "node-js-proxy",
+    "name": "Proxy (Node+JS)",
+    "description": "Node JS-rendering proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "proxy"
+    ],
+    "url": "https://node-js-proxy.0exec.com",
+    "health_url": "https://node-js-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-js-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Node.js proxy, HTTP handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18007,
+    "container_port": 3103
+  },
+  {
+    "id": "node-proxy",
+    "name": "Proxy (Node)",
+    "description": "Node proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "proxy"
+    ],
+    "url": "https://node-proxy.0exec.com",
+    "health_url": "https://node-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Node proxy service, request forwarding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18004,
+    "container_port": 3003
+  },
+  {
+    "id": "node-search-bing",
+    "name": "Search Bing (Node)",
+    "description": "Bing SERP scraper in Node (?query=)",
+    "category": "search",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "search"
+    ],
+    "url": "https://node-search-bing.0exec.com",
+    "health_url": "https://node-search-bing.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-search-bing",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Node search integration, API wrapper",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18016,
+    "container_port": 3413
+  },
+  {
+    "id": "node-search-duck",
+    "name": "Search DuckDuckGo (Node)",
+    "description": "DuckDuckGo SERP scraper in Node (?query=)",
+    "category": "search",
+    "mesh": "0exec",
+    "tags": [
+      "node",
+      "search"
+    ],
+    "url": "https://node-search-duck.0exec.com",
+    "health_url": "https://node-search-duck.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/node-search-duck",
+    "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Node search wrapper, basic API integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18015,
+    "container_port": 3403
+  },
+  {
+    "id": "numen",
+    "name": "Numen",
+    "description": "Static-first academic writing platform for drafting, citations, literature review, figures, and submission-ready PDFs.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/numen/",
+    "health_url": "https://baditaflorin.github.io/numen/",
+    "repo_url": "https://github.com/baditaflorin/numen",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "app, core concept implementation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "oauth-mapper",
     "name": "Oauth Mapper",
     "description": "Microservice for Oauth Mapper",
@@ -1912,6 +3312,62 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8330,
     "container_port": 8330
+  },
+  {
+    "id": "ocr-pdf",
+    "name": "OCR / PDF",
+    "description": "Extract text from PDFs \u2014 upload or URL",
+    "category": "ocr",
+    "mesh": "0exec",
+    "tags": [
+      "ocr"
+    ],
+    "url": "https://ocr-pdf.0exec.com",
+    "health_url": "https://ocr-pdf.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/ocr-pdf",
+    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "OCR service, document processing, multi-format support",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18012,
+    "container_port": 5500
+  },
+  {
+    "id": "ocr-pdf-express",
+    "name": "OCR PDF Express",
+    "description": "Express-based OCR / PDF (?url=)",
+    "category": "ocr",
+    "mesh": "0exec",
+    "tags": [
+      "ocr"
+    ],
+    "url": "https://ocr-pdf-express.0exec.com",
+    "health_url": "https://ocr-pdf-express.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/ocr-pdf-express",
+    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "OCR Express variant, lighter integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18014,
+    "container_port": 5500
   },
   {
     "id": "office-locations",
@@ -1943,6 +3399,28 @@
     "container_port": 8295
   },
   {
+    "id": "open-indie-studio",
+    "name": "Open Indie Studio",
+    "description": "Browser-based toolkit for making, testing, packaging, and documenting small 2D/casual indie games.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/open-indie-studio/",
+    "health_url": "https://baditaflorin.github.io/open-indie-studio/",
+    "repo_url": "https://github.com/baditaflorin/open-indie-studio",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "studio framework, scaffolding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "open-redirect",
     "name": "Open Redirect",
     "description": "Microservice for Open Redirect",
@@ -1970,6 +3448,72 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8149,
     "container_port": 8149
+  },
+  {
+    "id": "open-school-lab",
+    "name": "Open School Lab",
+    "description": "Browser-based science, math, and engineering labs for classrooms without physical equipment.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/open-school-lab/",
+    "health_url": "https://baditaflorin.github.io/open-school-lab/",
+    "repo_url": "https://github.com/baditaflorin/open-school-lab",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "educational app, course structure",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "openphoto-studio",
+    "name": "Openphoto Studio",
+    "description": "Browser-based photo editor with WASM imaging tools and local WebGPU AI features.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/openphoto-studio/",
+    "health_url": "https://baditaflorin.github.io/openphoto-studio/",
+    "repo_url": "https://github.com/baditaflorin/openphoto-studio",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "photo app, editing and filters",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "osm-poster",
+    "name": "Osm Poster",
+    "description": "Beautiful map posters from OpenStreetMap, generated in your browser. No backend, no API keys.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/osm-poster/",
+    "health_url": "https://baditaflorin.github.io/osm-poster/",
+    "repo_url": "https://github.com/baditaflorin/osm-poster",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "map visualization, OSM integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "outlink-graph",
@@ -2030,6 +3574,28 @@
     "container_port": 8297
   },
   {
+    "id": "parse-address",
+    "name": "Parse Address",
+    "description": "US Street Address Parser",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "http://hassansin.github.io/parse-address/",
+    "health_url": "http://hassansin.github.io/parse-address/",
+    "repo_url": "https://github.com/baditaflorin/parse-address",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 5,
+    "trl_evidence": "address parsing, RFC-aligned",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "payment-detector",
     "name": "Payment Detector",
     "description": "Microservice for Payment Detector",
@@ -2086,6 +3652,102 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8139,
     "container_port": 8139
+  },
+  {
+    "id": "physical-kanban-sync",
+    "name": "Physical Kanban Sync",
+    "description": "Browser-first physical sticky-note Kanban that scans AprilTags and syncs board state to collaborators.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/physical-kanban-sync/",
+    "health_url": "https://baditaflorin.github.io/physical-kanban-sync/",
+    "repo_url": "https://github.com/baditaflorin/physical-kanban-sync",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "kanban app, board sync",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "pockettalkie",
+    "name": "Pockettalkie",
+    "description": "Encrypted push-to-talk rooms in the browser. P2P audio mesh over a self-hosted WebRTC stack. GitHub-Pages-only, no backend.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/pockettalkie/",
+    "health_url": "https://baditaflorin.github.io/pockettalkie/",
+    "repo_url": "https://github.com/baditaflorin/pockettalkie",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "messaging app, walkie-talkie mode",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "polyglot-nlp-toolkit",
+    "name": "Polyglot Nlp Toolkit",
+    "description": "Multilingual NLP pipeline for corpus analysis: tokenize, tag, parse, NER, embed, and cluster text.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
+    "health_url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
+    "repo_url": "https://github.com/baditaflorin/polyglot-nlp-toolkit",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 5,
+    "trl_evidence": "NLP toolkit, multi-language support",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "postmessage",
+    "name": "Postmessage",
+    "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://postmessage.0exec.com",
+    "health_url": "https://postmessage.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
+    "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "security tool, message validation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18027,
+    "container_port": 8313
   },
   {
     "id": "press-mentions",
@@ -2146,6 +3808,64 @@
     "container_port": 8301
   },
   {
+    "id": "project-bootstrap-meta",
+    "name": "Project Bootstrap Meta",
+    "description": "A GitHub Pages-first bootstrap map for disciplined project setup.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [
+      "adr",
+      "github-pages",
+      "project-bootstrap",
+      "react",
+      "vite"
+    ],
+    "url": "https://baditaflorin.github.io/project-bootstrap-meta/",
+    "health_url": "https://baditaflorin.github.io/project-bootstrap-meta/",
+    "repo_url": "https://github.com/baditaflorin/project-bootstrap-meta",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 2,
+    "trl_evidence": "bootstrapping tool, minimal logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "proto-pollution",
+    "name": "Proto Pollution",
+    "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://proto-pollution.0exec.com",
+    "health_url": "https://proto-pollution.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
+    "example_path": "/go_prototype_pollution_static?target=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Static-only without endpoint discovery; reaches TRL 7 once wired to api-extractor for auto-probe targets.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18028,
+    "container_port": 8314
+  },
+  {
     "id": "proxy-fingerprint",
     "name": "Proxy Fingerprint",
     "description": "Microservice for Proxy Fingerprint",
@@ -2204,6 +3924,63 @@
     "container_port": 8168
   },
   {
+    "id": "python-proxy",
+    "name": "Proxy (Python)",
+    "description": "Python proxy (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "proxy",
+      "python"
+    ],
+    "url": "https://python-proxy.0exec.com",
+    "health_url": "https://python-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/python-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "Python proxy, basic forwarding",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18005,
+    "container_port": 3002
+  },
+  {
+    "id": "random-proxy",
+    "name": "Proxy (Random)",
+    "description": "Routes to a random proxy backend (?url=)",
+    "category": "proxy",
+    "mesh": "0exec",
+    "tags": [
+      "proxy"
+    ],
+    "url": "https://random-proxy.0exec.com",
+    "health_url": "https://random-proxy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/random-proxy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 3,
+    "trl_evidence": "proxy selection, minimal logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18019,
+    "container_port": 3333
+  },
+  {
     "id": "ratelimit-tester",
     "name": "Ratelimit Tester",
     "description": "Microservice for Ratelimit Tester",
@@ -2231,6 +4008,50 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8156,
     "container_port": 8156
+  },
+  {
+    "id": "react-data-grid",
+    "name": "React Data Grid",
+    "description": "Feature-rich and customizable data grid React component",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://adazzle.github.io/react-data-grid/",
+    "health_url": "https://adazzle.github.io/react-data-grid/",
+    "repo_url": "https://github.com/baditaflorin/react-data-grid",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 6,
+    "trl_evidence": "React component, mature data grid, comprehensive features",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "read-later-curriculum",
+    "name": "Read Later Curriculum",
+    "description": "A local-first read-later app that turns saved articles into a dependency-ordered reading curriculum.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/read-later-curriculum/",
+    "health_url": "https://baditaflorin.github.io/read-later-curriculum/",
+    "repo_url": "https://github.com/baditaflorin/read-later-curriculum",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "reading app, article curation",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "redirect-tracer",
@@ -2291,6 +4112,28 @@
     "container_port": 8302
   },
   {
+    "id": "research-flow",
+    "name": "Research Flow",
+    "description": "Private browser research workspace for clustering papers, finding gaps, drafting outlines, and exporting cited Word/LaTeX.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/research-flow/",
+    "health_url": "https://baditaflorin.github.io/research-flow/",
+    "repo_url": "https://github.com/baditaflorin/research-flow",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "research tool, workflow pipeline",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "revenue-model",
     "name": "Revenue Model",
     "description": "Microservice for Revenue Model",
@@ -2349,6 +4192,36 @@
     "container_port": 8333
   },
   {
+    "id": "roamless-notes",
+    "name": "Roamless Notes",
+    "description": "Local-first outliner with backlinks, graph search, semantic recall, and optional peer-to-peer sync.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [
+      "crdt",
+      "duckdb",
+      "github-pages",
+      "knowledge-graph",
+      "local-first",
+      "notes",
+      "yjs"
+    ],
+    "url": "https://baditaflorin.github.io/roamless-notes/",
+    "health_url": "https://baditaflorin.github.io/roamless-notes/",
+    "repo_url": "https://github.com/baditaflorin/roamless-notes",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "note-taking app, basic linking",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "robots-analyzer",
     "name": "Robots Analyzer",
     "description": "Microservice for Robots Analyzer",
@@ -2405,6 +4278,34 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8304,
     "container_port": 8304
+  },
+  {
+    "id": "room-vj",
+    "name": "Room Vj",
+    "description": "Browser-based live room visuals that react to music, people, and synced nearby devices.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [
+      "audio-reactive",
+      "mediapipe",
+      "threejs",
+      "webgpu",
+      "webrtc"
+    ],
+    "url": "https://baditaflorin.github.io/room-vj/",
+    "health_url": "https://baditaflorin.github.io/room-vj/",
+    "repo_url": "https://github.com/baditaflorin/room-vj",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "VJ app, real-time visuals",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "scan-port",
@@ -2550,6 +4451,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8165,
     "container_port": 8165
+  },
+  {
+    "id": "schlieren-imaging-simulator",
+    "name": "Schlieren Imaging Simulator",
+    "description": "Browser-based Schlieren simulator for visualizing heat, sound, and gas density gradients with WebGPU and Three.js.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
+    "health_url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
+    "repo_url": "https://github.com/baditaflorin/schlieren-imaging-simulator",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "physics simulator, optics model",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "search-bing-go",
@@ -2811,6 +4734,36 @@
     "trl_assessor": "claude-haiku-trl-batch"
   },
   {
+    "id": "session-fixation",
+    "name": "Session Fixation",
+    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://session-fixation.0exec.com",
+    "health_url": "https://session-fixation.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
+    "example_path": "/go_session_fixation?target=https://github.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18031,
+    "container_port": 8316
+  },
+  {
     "id": "session-management",
     "name": "Session Management",
     "description": "Microservice for Session Management",
@@ -2867,6 +4820,28 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8310,
     "container_port": 8310
+  },
+  {
+    "id": "show-me-the-way",
+    "name": "Show Me The Way",
+    "description": "See OSM edits happen in real time.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "http://osmlab.github.io/show-me-the-way/",
+    "health_url": "http://osmlab.github.io/show-me-the-way/",
+    "repo_url": "https://github.com/baditaflorin/show-me-the-way",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "navigation app, routing logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "simulate-ddos",
@@ -3014,6 +4989,28 @@
     "container_port": 8347
   },
   {
+    "id": "stellar-evolution-simulator",
+    "name": "Stellar Evolution Simulator",
+    "description": "Browser-based stellar lifecycle simulator using Pyodide, Plotly, and a MESA-inspired model subset.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
+    "health_url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
+    "repo_url": "https://github.com/baditaflorin/stellar-evolution-simulator",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "astronomy simulator, stellar physics",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "subdomain-finder",
     "name": "Subdomain Finder",
     "description": "Microservice for Subdomain Finder",
@@ -3101,6 +5098,28 @@
     "container_port": 8236
   },
   {
+    "id": "substance-sampler",
+    "name": "Substance Sampler",
+    "description": "Browser-based photo-to-PBR texture creation for indie game and 3D artists, powered by WebGPU and WASM.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/substance-sampler/",
+    "health_url": "https://baditaflorin.github.io/substance-sampler/",
+    "repo_url": "https://github.com/baditaflorin/substance-sampler",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "sample/chemistry app, material properties",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "svi",
     "name": "Svi",
     "description": "Microservice for Svi",
@@ -3155,6 +5174,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8349,
     "container_port": 8349
+  },
+  {
+    "id": "tagboard",
+    "name": "Tagboard",
+    "description": "AprilTag-anchored AR sticky notes. Print a marker, point your camera, shared notes appear. P2P over a self-hosted WebRTC mesh. No backend.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/tagboard/",
+    "health_url": "https://baditaflorin.github.io/tagboard/",
+    "repo_url": "https://github.com/baditaflorin/tagboard",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "tag-based app, simple organization",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "team-size",
@@ -3331,6 +5372,34 @@
     "container_port": 8317
   },
   {
+    "id": "trust-no-one-anonymizer",
+    "name": "Trust No One Anonymizer",
+    "description": "Client-side face and voice anonymizer for private browser-based video calls.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [
+      "mediapipe",
+      "privacy",
+      "static-site",
+      "webaudio",
+      "webrtc"
+    ],
+    "url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
+    "health_url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
+    "repo_url": "https://github.com/baditaflorin/trust-no-one-anonymizer",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "privacy tool, anonymization logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "typosquat-finder",
     "name": "Typosquat Finder",
     "description": "Microservice for Typosquat Finder",
@@ -3389,6 +5458,28 @@
     "container_port": 8318
   },
   {
+    "id": "universal-document-workbench",
+    "name": "Universal Document Workbench",
+    "description": "Drop documents in, extract text and metadata, OCR scans, detect entities, and convert outputs to Markdown, DOCX, or EPUB.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/universal-document-workbench/",
+    "health_url": "https://baditaflorin.github.io/universal-document-workbench/",
+    "repo_url": "https://github.com/baditaflorin/universal-document-workbench",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 4,
+    "trl_evidence": "document editor, multi-format support",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "update-frequency",
     "name": "Update Frequency",
     "description": "Microservice for Update Frequency",
@@ -3416,6 +5507,28 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8319,
     "container_port": 8319
+  },
+  {
+    "id": "urban-farm-year",
+    "name": "Urban Farm Year",
+    "description": "A static, offline-friendly planner for garden calendars, daily care, harvest logs, and next-year growing decisions.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/urban-farm-year/",
+    "health_url": "https://baditaflorin.github.io/urban-farm-year/",
+    "repo_url": "https://github.com/baditaflorin/urban-farm-year",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "farm planning app, seasonal calendar",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "url-shortener",
@@ -3476,6 +5589,78 @@
     "container_port": 8321
   },
   {
+    "id": "utils-readcontent",
+    "name": "Read Content",
+    "description": "Extract structured content from URL (?url=)",
+    "category": "content",
+    "mesh": "0exec",
+    "tags": [
+      "content"
+    ],
+    "url": "https://utils-readcontent.0exec.com",
+    "health_url": "https://utils-readcontent.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/utils-readcontent",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "content utility, multi-format reading",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18018,
+    "container_port": 5008
+  },
+  {
+    "id": "vagus-reset-coach",
+    "name": "Vagus Reset Coach",
+    "description": "A private browser-based 2-minute breath coach using webcam rPPG and local HRV logging.",
+    "category": "wellness",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/vagus-reset-coach/",
+    "health_url": "https://baditaflorin.github.io/vagus-reset-coach/",
+    "repo_url": "https://github.com/baditaflorin/vagus-reset-coach",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "wellness app, guided exercises",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "vcard-personal-portfolio",
+    "name": "Vcard Personal Portfolio",
+    "description": "vCard is a fully responsive personal portfolio website, responsive for all devices.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
+    "health_url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
+    "repo_url": "https://github.com/baditaflorin/vcard-personal-portfolio",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "portfolio app, vCard format",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
     "id": "video-content",
     "name": "Video Content",
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
@@ -3505,6 +5690,30 @@
     "container_port": 8322
   },
   {
+    "id": "voice-search",
+    "name": "Voice Search SEO Audit",
+    "description": "Audits a URL for voice-search SEO readiness (schema.org markup, conversational queries, page load).",
+    "category": "seo",
+    "mesh": "0crawl",
+    "tags": [
+      "seo",
+      "go",
+      "voice-search"
+    ],
+    "url": "https://voice-search.0crawl.com",
+    "health_url": "https://voice-search.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_voice_search",
+    "example_path": "/t/default_token/?target=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "host_port": 8323,
+    "container_port": 8323
+  },
+  {
     "id": "wayback-checker",
     "name": "Wayback Checker",
     "description": "Microservice for Wayback Checker",
@@ -3532,6 +5741,28 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8351,
     "container_port": 8351
+  },
+  {
+    "id": "webcam-dither-lab",
+    "name": "Webcam Dither Lab",
+    "description": "Live webcam dithering and filter comparison lab with auto best-detail scoring.",
+    "category": "app",
+    "mesh": "pages",
+    "tags": [],
+    "url": "https://baditaflorin.github.io/webcam-dither-lab/",
+    "health_url": "https://baditaflorin.github.io/webcam-dither-lab/",
+    "repo_url": "https://github.com/baditaflorin/webcam-dither-lab",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "image processing app, dithering effects",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch"
   },
   {
     "id": "website-carbon",
@@ -3737,2242 +5968,6 @@
     "container_port": 8271
   },
   {
-    "id": "zone-transfer",
-    "name": "Zone Transfer",
-    "description": "Microservice for Zone Transfer",
-    "category": "security",
-    "mesh": "0crawl",
-    "tags": [
-      "go",
-      "security"
-    ],
-    "url": "https://zone-transfer.0crawl.com",
-    "health_url": "https://zone-transfer.0crawl.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_zone_transfer",
-    "example_path": "/go_zone_transfer?domain=example.com",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
-    "trl": 5,
-    "trl_evidence": "DNS security, RFC-aligned protocol",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 8232,
-    "container_port": 8232
-  },
-  {
-    "id": "apikey-service",
-    "name": "Apikey Service",
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "tags": [
-      "apikey",
-      "go",
-      "keystore"
-    ],
-    "url": "https://apikey-service.0exec.com",
-    "health_url": "https://apikey-service.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go-apikey-service",
-    "example_path": "/health",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Working keystore w/ SQLite + admin auth + WAL. 2026-05-13 added constant-time admin compare + method enforcement + max body size. Still: keys plaintext at rest, no rate-limit, no audit log, no tests.",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18021,
-    "container_port": 8080
-  },
-  {
-    "id": "c-proxy",
-    "name": "Proxy (C)",
-    "description": "C proxy (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "c",
-      "proxy"
-    ],
-    "url": "https://c-proxy.0exec.com",
-    "health_url": "https://c-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/c-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 4,
-    "trl_evidence": "C proxy, basic forwarding logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18003,
-    "container_port": 3001
-  },
-  {
-    "id": "d3-graph",
-    "name": "D3 Graph",
-    "description": "d3-graph \u2014 d3-graph.0exec.com",
-    "category": "visualization",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "visualization"
-    ],
-    "url": "https://d3-graph.0exec.com",
-    "health_url": "https://d3-graph.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/d3-graph",
-    "example_path": "/",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "visualization library, mature D3 binding, test coverage expected",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18020,
-    "container_port": 6003
-  },
-  {
-    "id": "db-geo-geocode",
-    "name": "Geocoding (Go / DB)",
-    "description": "City \u2192 lat/lon with local DB (?text=)",
-    "category": "geo",
-    "mesh": "0exec",
-    "tags": [
-      "geo"
-    ],
-    "url": "https://db-geo-geocode.0exec.com",
-    "health_url": "https://db-geo-geocode.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/db-geo-geocode",
-    "example_path": "/?text=Bucharest",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "database + geo service, multi-step integration",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18009,
-    "container_port": 3909
-  },
-  {
-    "id": "geo-geocode",
-    "name": "Geocoding (Node)",
-    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
-    "category": "geo",
-    "mesh": "0exec",
-    "tags": [
-      "geo"
-    ],
-    "url": "https://geo-geocode.0exec.com",
-    "health_url": "https://geo-geocode.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/geo-geocode",
-    "example_path": "/?text=Bucharest",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "geocoding service, RFC-compliant geo protocols",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18008,
-    "container_port": 4902
-  },
-  {
-    "id": "geo-places",
-    "name": "Geo Places",
-    "description": "Place search and details (?query=)",
-    "category": "geo",
-    "mesh": "0exec",
-    "tags": [
-      "geo"
-    ],
-    "url": "https://geo-places.0exec.com",
-    "health_url": "https://geo-places.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/geo-places",
-    "example_path": "/?query=coffee+Bucharest",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "geo service, place lookup and validation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18010,
-    "container_port": 4906
-  },
-  {
-    "id": "go-html-proxy",
-    "name": "Go Html Proxy",
-    "description": "Microservice for Go Html Proxy",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "proxy"
-    ],
-    "url": "https://go-html-proxy.0exec.com",
-    "health_url": "https://go-html-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go-html-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 1,
-    "trl_evidence": "HTML proxy scaffold without substantive handler logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "haiku-backfill-2026-05-13",
-    "host_port": 3002,
-    "container_port": 3002
-  },
-  {
-    "id": "go-information-leakage",
-    "name": "Go Information Leakage",
-    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "infoleak"
-    ],
-    "url": "https://go-information-leakage.0exec.com",
-    "health_url": "https://go-information-leakage.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_information_leakage",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 3,
-    "trl_evidence": "Leakage detection with SSRF protection and multi-fetch, no test coverage",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "haiku-backfill-2026-05-13",
-    "host_port": 8083,
-    "container_port": 8083
-  },
-  {
-    "id": "go-js-proxy",
-    "name": "Proxy (Go+JS)",
-    "description": "JS-rendering proxy (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "proxy"
-    ],
-    "url": "https://go-js-proxy.0exec.com",
-    "health_url": "https://go-js-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go-js-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 7,
-    "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet.",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18006,
-    "container_port": 8080
-  },
-  {
-    "id": "go-js-proxy-network",
-    "name": "Go Js Proxy Network",
-    "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "proxy",
-      "render"
-    ],
-    "url": "https://go-js-proxy-network.0exec.com",
-    "health_url": "https://go-js-proxy-network.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 7,
-    "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18024,
-    "container_port": 8500
-  },
-  {
-    "id": "go-proxy",
-    "name": "Proxy (Go)",
-    "description": "HTTP proxy with rotation (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "proxy"
-    ],
-    "url": "https://go-proxy.0exec.com",
-    "health_url": "https://go-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Go proxy implementation, protocol handling",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18002,
-    "container_port": 3001
-  },
-  {
-    "id": "go-search-duck",
-    "name": "Search DuckDuckGo (Go)",
-    "description": "DuckDuckGo SERP scraper in Go (?query=)",
-    "category": "search",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "search"
-    ],
-    "url": "https://go-search-duck.0exec.com",
-    "health_url": "https://go-search-duck.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go-search-duck",
-    "example_path": "/?query=anthropic+claude",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Go search wrapper, API integration",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18013,
-    "container_port": 3401
-  },
-  {
-    "id": "jsbundle-routes",
-    "name": "Jsbundle Routes",
-    "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://jsbundle-routes.0exec.com",
-    "health_url": "https://jsbundle-routes.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
-    "example_path": "/go_jsbundle_route_extractor?target=https://stripe.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass.",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18026,
-    "container_port": 8312
-  },
-  {
-    "id": "jsbundle-secrets",
-    "name": "Jsbundle Secrets",
-    "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://jsbundle-secrets.0exec.com",
-    "health_url": "https://jsbundle-secrets.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
-    "example_path": "/go_jsbundle_secrets?target=https://stripe.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass.",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18025,
-    "container_port": 8311
-  },
-  {
-    "id": "jwt-pentest",
-    "name": "Jwt Pentest",
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://jwt-pentest.0exec.com",
-    "health_url": "https://jwt-pentest.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
-    "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18029,
-    "container_port": 8315
-  },
-  {
-    "id": "linkedin-attributes",
-    "name": "LinkedIn Attributes",
-    "description": "Scrape LinkedIn profile badge (?url=)",
-    "category": "content",
-    "mesh": "0exec",
-    "tags": [
-      "content"
-    ],
-    "url": "https://linkedin-attributes.0exec.com",
-    "health_url": "https://linkedin-attributes.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/linkedin-attributes",
-    "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 4,
-    "trl_evidence": "content extraction, pattern-based logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18017,
-    "container_port": 4314
-  },
-  {
-    "id": "nlp-extractinfo",
-    "name": "NLP / Compromise",
-    "description": "NLP entity extraction from URL (?url=)",
-    "category": "nlp",
-    "mesh": "0exec",
-    "tags": [
-      "nlp"
-    ],
-    "url": "https://nlp-extractinfo.0exec.com",
-    "health_url": "https://nlp-extractinfo.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/nlp-extractinfo",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "NLP service, information extraction, multi-model logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18011,
-    "container_port": 5302
-  },
-  {
-    "id": "node-js-proxy",
-    "name": "Proxy (Node+JS)",
-    "description": "Node JS-rendering proxy (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "node",
-      "proxy"
-    ],
-    "url": "https://node-js-proxy.0exec.com",
-    "health_url": "https://node-js-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/node-js-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Node.js proxy, HTTP handling",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18007,
-    "container_port": 3103
-  },
-  {
-    "id": "node-proxy",
-    "name": "Proxy (Node)",
-    "description": "Node proxy (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "node",
-      "proxy"
-    ],
-    "url": "https://node-proxy.0exec.com",
-    "health_url": "https://node-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/node-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Node proxy service, request forwarding",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18004,
-    "container_port": 3003
-  },
-  {
-    "id": "node-search-bing",
-    "name": "Search Bing (Node)",
-    "description": "Bing SERP scraper in Node (?query=)",
-    "category": "search",
-    "mesh": "0exec",
-    "tags": [
-      "node",
-      "search"
-    ],
-    "url": "https://node-search-bing.0exec.com",
-    "health_url": "https://node-search-bing.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/node-search-bing",
-    "example_path": "/?query=anthropic+claude",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Node search integration, API wrapper",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18016,
-    "container_port": 3413
-  },
-  {
-    "id": "node-search-duck",
-    "name": "Search DuckDuckGo (Node)",
-    "description": "DuckDuckGo SERP scraper in Node (?query=)",
-    "category": "search",
-    "mesh": "0exec",
-    "tags": [
-      "node",
-      "search"
-    ],
-    "url": "https://node-search-duck.0exec.com",
-    "health_url": "https://node-search-duck.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/node-search-duck",
-    "example_path": "/?query=anthropic+claude",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Node search wrapper, basic API integration",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18015,
-    "container_port": 3403
-  },
-  {
-    "id": "ocr-pdf",
-    "name": "OCR / PDF",
-    "description": "Extract text from PDFs \u2014 upload or URL",
-    "category": "ocr",
-    "mesh": "0exec",
-    "tags": [
-      "ocr"
-    ],
-    "url": "https://ocr-pdf.0exec.com",
-    "health_url": "https://ocr-pdf.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/ocr-pdf",
-    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "OCR service, document processing, multi-format support",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18012,
-    "container_port": 5500
-  },
-  {
-    "id": "ocr-pdf-express",
-    "name": "OCR PDF Express",
-    "description": "Express-based OCR / PDF (?url=)",
-    "category": "ocr",
-    "mesh": "0exec",
-    "tags": [
-      "ocr"
-    ],
-    "url": "https://ocr-pdf-express.0exec.com",
-    "health_url": "https://ocr-pdf-express.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/ocr-pdf-express",
-    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "OCR Express variant, lighter integration",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18014,
-    "container_port": 5500
-  },
-  {
-    "id": "postmessage",
-    "name": "Postmessage",
-    "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://postmessage.0exec.com",
-    "health_url": "https://postmessage.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
-    "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 4,
-    "trl_evidence": "security tool, message validation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18027,
-    "container_port": 8313
-  },
-  {
-    "id": "proto-pollution",
-    "name": "Proto Pollution",
-    "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://proto-pollution.0exec.com",
-    "health_url": "https://proto-pollution.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
-    "example_path": "/go_prototype_pollution_static?target=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Static-only without endpoint discovery; reaches TRL 7 once wired to api-extractor for auto-probe targets.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18028,
-    "container_port": 8314
-  },
-  {
-    "id": "python-proxy",
-    "name": "Proxy (Python)",
-    "description": "Python proxy (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "proxy",
-      "python"
-    ],
-    "url": "https://python-proxy.0exec.com",
-    "health_url": "https://python-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/python-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 4,
-    "trl_evidence": "Python proxy, basic forwarding",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18005,
-    "container_port": 3002
-  },
-  {
-    "id": "random-proxy",
-    "name": "Proxy (Random)",
-    "description": "Routes to a random proxy backend (?url=)",
-    "category": "proxy",
-    "mesh": "0exec",
-    "tags": [
-      "proxy"
-    ],
-    "url": "https://random-proxy.0exec.com",
-    "health_url": "https://random-proxy.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/random-proxy",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 3,
-    "trl_evidence": "proxy selection, minimal logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18019,
-    "container_port": 3333
-  },
-  {
-    "id": "session-fixation",
-    "name": "Session Fixation",
-    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
-    "category": "security",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://session-fixation.0exec.com",
-    "health_url": "https://session-fixation.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
-    "example_path": "/go_session_fixation?target=https://github.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18031,
-    "container_port": 8316
-  },
-  {
-    "id": "utils-readcontent",
-    "name": "Read Content",
-    "description": "Extract structured content from URL (?url=)",
-    "category": "content",
-    "mesh": "0exec",
-    "tags": [
-      "content"
-    ],
-    "url": "https://utils-readcontent.0exec.com",
-    "health_url": "https://utils-readcontent.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/utils-readcontent",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "content utility, multi-format reading",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "host_port": 18018,
-    "container_port": 5008
-  },
-  {
-    "id": "accent-coach",
-    "name": "Accent Coach",
-    "description": "Private browser-based accent coach that analyzes speech and drills phoneme-level pronunciation.",
-    "category": "wellness",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/accent-coach/",
-    "health_url": "https://baditaflorin.github.io/accent-coach/",
-    "repo_url": "https://github.com/baditaflorin/accent-coach",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "wellness app, guided audio/coaching",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "anon-conf-poll",
-    "name": "Anon Conf Poll",
-    "description": "Static, anonymous live polling with CRDT sync, zk one-vote proofs, and local analytics.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/anon-conf-poll/",
-    "health_url": "https://baditaflorin.github.io/anon-conf-poll/",
-    "repo_url": "https://github.com/baditaflorin/anon-conf-poll",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "polling app, basic UI and state",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "audience-field-sculpture",
-    "name": "Audience Field Sculpture",
-    "description": "A privacy-preserving browser artwork \u2014 phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/audience-field-sculpture/",
-    "health_url": "https://baditaflorin.github.io/audience-field-sculpture/",
-    "repo_url": "https://github.com/baditaflorin/audience-field-sculpture",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "creative app, field manipulation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "audio-repair-lab",
-    "name": "Audio Repair Lab",
-    "description": "Browser-based audio repair toolkit for noise removal, vocal isolation, and quick podcast/music cleanup.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/audio-repair-lab/",
-    "health_url": "https://baditaflorin.github.io/audio-repair-lab/",
-    "repo_url": "https://github.com/baditaflorin/audio-repair-lab",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "audio processing app, basic DSP",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "bilateral-memory-processing",
-    "name": "Bilateral Memory Processing",
-    "description": "Private browser-based EMDR-inspired audio journaling with local transcription, reflection prompts, and no trauma uploads.",
-    "category": "archive",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/bilateral-memory-processing/",
-    "health_url": "https://baditaflorin.github.io/bilateral-memory-processing/",
-    "repo_url": "https://github.com/baditaflorin/bilateral-memory-processing",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 2,
-    "trl_evidence": "archive concept, foundational logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "castle-archive-memory-vault",
-    "name": "Castle Archive Memory Vault",
-    "description": "Private, local-first voice reflection vault for retreats. Whisper + sentence-transformers + age + DuckDB + Markdown export, all in the browser.",
-    "category": "archive",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
-    "health_url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
-    "repo_url": "https://github.com/baditaflorin/castle-archive-memory-vault",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "archive app, storage and retrieval",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "complete-gardener-planner",
-    "name": "Complete Gardener Planner",
-    "description": "Static-first planner for plant ID, crop rotation, sun, soil, watering, frost, and harvest forecasts.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/complete-gardener-planner/",
-    "health_url": "https://baditaflorin.github.io/complete-gardener-planner/",
-    "repo_url": "https://github.com/baditaflorin/complete-gardener-planner",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "planning app, calendar and checklist logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "cookiecutter-data-science",
-    "name": "Cookiecutter Data Science",
-    "description": "A logical, reasonably standardized, but flexible project structure for doing and sharing data science work.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "http://drivendata.github.io/cookiecutter-data-science/",
-    "health_url": "http://drivendata.github.io/cookiecutter-data-science/",
-    "repo_url": "https://github.com/baditaflorin/cookiecutter-data-science",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "data science template, multi-module scaffolding",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "crystal-growth-simulator",
-    "name": "Crystal Growth Simulator",
-    "description": "Live browser simulator for snowflake, dendrite, and coral-like crystal growth with WebGPU visuals and sonified physics.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/crystal-growth-simulator/",
-    "health_url": "https://baditaflorin.github.io/crystal-growth-simulator/",
-    "repo_url": "https://github.com/baditaflorin/crystal-growth-simulator",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "physics simulator, crystallography model",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "cursorparty",
-    "name": "Cursorparty",
-    "description": "Shared cursors and sticky notes on an infinite canvas. P2P over a self-hosted WebRTC mesh. GitHub-Pages-only, no backend.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/cursorparty/",
-    "health_url": "https://baditaflorin.github.io/cursorparty/",
-    "repo_url": "https://github.com/baditaflorin/cursorparty",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "collaborative app, cursor tracking",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "deep-searcher",
-    "name": "Deep Searcher",
-    "description": "Open Source Deep Research Alternative to Reason and Search on Private Data. Written in Python.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://zilliztech.github.io/deep-searcher/",
-    "health_url": "https://zilliztech.github.io/deep-searcher/",
-    "repo_url": "https://github.com/baditaflorin/deep-searcher",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "search aggregator, multi-source query",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "earthquake-wave-propagation",
-    "name": "Earthquake Wave Propagation",
-    "description": "Interactive WebGPU demo: click a fault to see and hear P-waves and S-waves propagate across terrain.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
-    "health_url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
-    "repo_url": "https://github.com/baditaflorin/earthquake-wave-propagation",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "seismic simulator, wave physics",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "elder-care-coordinator",
-    "name": "Elder Care Coordinator",
-    "description": "Local-first elder care coordination for meds, appointments, insurance drafts, and emergency packets.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/elder-care-coordinator/",
-    "health_url": "https://baditaflorin.github.io/elder-care-coordinator/",
-    "repo_url": "https://github.com/baditaflorin/elder-care-coordinator",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "care app, scheduling and notes",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "field-recording-mirror",
-    "name": "Field Recording Mirror",
-    "description": "A private browser instrument that records 30 seconds of now and replays it as a subtly altered sonic mirror.",
-    "category": "archive",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/field-recording-mirror/",
-    "health_url": "https://baditaflorin.github.io/field-recording-mirror/",
-    "repo_url": "https://github.com/baditaflorin/field-recording-mirror",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "audio archive, recording sync",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "gentle-adhd-flow",
-    "name": "Gentle Adhd Flow",
-    "description": "Local-first ADHD self-management: voice brain-dumps become tasks, focus sessions, habits, and gentle planning.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/gentle-adhd-flow/",
-    "health_url": "https://baditaflorin.github.io/gentle-adhd-flow/",
-    "repo_url": "https://github.com/baditaflorin/gentle-adhd-flow",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "wellness app, task flow UI",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "granular-physics-lab",
-    "name": "Granular Physics Lab",
-    "description": "Browser-based granular sandbox for teaching sand, gravel, and snow behavior with WASM physics and WebGPU visuals.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/granular-physics-lab/",
-    "health_url": "https://baditaflorin.github.io/granular-physics-lab/",
-    "repo_url": "https://github.com/baditaflorin/granular-physics-lab",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "physics simulator, particle dynamics",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "group-theory-visualizer",
-    "name": "Group Theory Visualizer",
-    "description": "Interactive finite-group and symmetry explorer using WASM math, Three.js, and graph visualization.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/group-theory-visualizer/",
-    "health_url": "https://baditaflorin.github.io/group-theory-visualizer/",
-    "repo_url": "https://github.com/baditaflorin/group-theory-visualizer",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "math visualization, algebraic structures",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "highlight-recall",
-    "name": "Highlight Recall",
-    "description": "Local-first EPUB/PDF highlight review with semantic search and spaced repetition.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/highlight-recall/",
-    "health_url": "https://baditaflorin.github.io/highlight-recall/",
-    "repo_url": "https://github.com/baditaflorin/highlight-recall",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "learning app, highlight storage",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "implemment-the-following-time-displaced-ears",
-    "name": "Implemment The Following Time Displaced Ears",
-    "description": "A browser audio lab for hearing live microphone input delayed, pitch-shifted, and spectrally transformed.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
-    "health_url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
-    "repo_url": "https://github.com/baditaflorin/implemment-the-following-time-displaced-ears",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 2,
-    "trl_evidence": "conceptual app, minimal implementation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "little-voice-stories",
-    "name": "Little Voice Stories",
-    "description": "Turn a kid\u2019s drawing into a bedtime story narrated in a parent\u2019s voice, entirely in the browser.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/little-voice-stories",
-    "health_url": "https://baditaflorin.github.io/little-voice-stories",
-    "repo_url": "https://github.com/baditaflorin/little-voice-stories",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "storytelling app, voice recording",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "local-proofreader",
-    "name": "Local Proofreader",
-    "description": "Local-first grammar, spelling, style, and rewrite assistant for the browser with no draft data sent to servers.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/local-proofreader/",
-    "health_url": "https://baditaflorin.github.io/local-proofreader/",
-    "repo_url": "https://github.com/baditaflorin/local-proofreader",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "text tool, grammar and style checking",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "localhuman-mail",
-    "name": "Localhuman Mail",
-    "description": "Privacy-first AI email client with local mailbox indexing, semantic search, and assistive drafting.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/localhuman-mail/",
-    "health_url": "https://baditaflorin.github.io/localhuman-mail/",
-    "repo_url": "https://github.com/baditaflorin/localhuman-mail",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "mail app, basic send/receive",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "localingo",
-    "name": "Localingo",
-    "description": "A private, gamified language tutor with local speech, review, grammar, and lesson generation.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/localingo/",
-    "health_url": "https://baditaflorin.github.io/localingo/",
-    "repo_url": "https://github.com/baditaflorin/localingo",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "language app, learning path",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-bench-archive",
-    "name": "Mesh Bench Archive",
-    "description": "Peer-to-peer mesh: voice notes tied to a place. Scan a QR sticker on a bench, hear the last visitors. Audio lives only in browsers that have scanned.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-bench-archive/",
-    "health_url": "https://baditaflorin.github.io/mesh-bench-archive/",
-    "repo_url": "https://github.com/baditaflorin/mesh-bench-archive",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "p2p archive, benchmarking",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-carpool-bingo",
-    "name": "Mesh Carpool Bingo",
-    "description": "Peer-to-peer mesh: road-trip bingo. Per-phone unique 5x5 cards, shared claim space across the car. First to a line wins.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
-    "health_url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
-    "repo_url": "https://github.com/baditaflorin/mesh-carpool-bingo",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "p2p game, location-based",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-firefly-walk",
-    "name": "Mesh Firefly Walk",
-    "description": "Peer-to-peer mesh: phones pulse soft yellow in clock-synced unison for a swarm-of-fireflies effect on a night walk.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-firefly-walk/",
-    "health_url": "https://baditaflorin.github.io/mesh-firefly-walk/",
-    "repo_url": "https://github.com/baditaflorin/mesh-firefly-walk",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "p2p app, location tracking",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-lightning-flash",
-    "name": "Mesh Lightning Flash",
-    "description": "Peer-to-peer mesh: all phone flashlights strobe in single-millisecond sync to light a group photo from many angles at once.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-lightning-flash/",
-    "health_url": "https://baditaflorin.github.io/mesh-lightning-flash/",
-    "repo_url": "https://github.com/baditaflorin/mesh-lightning-flash",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "p2p messaging, latency-optimized",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-mafia",
-    "name": "Mesh Mafia",
-    "description": "Peer-to-peer Werewolf: phones are role cards assigned via cryptographic commit-reveal; no server ever learns who's the wolf.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-mafia/",
-    "health_url": "https://baditaflorin.github.io/mesh-mafia/",
-    "repo_url": "https://github.com/baditaflorin/mesh-mafia",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "p2p game, role-based logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-metronome",
-    "name": "Mesh Metronome",
-    "description": "Peer-to-peer mesh: 4 phones become a polyrhythm grid, each playing a clock-synced subdivision of the same BPM.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-metronome/",
-    "health_url": "https://baditaflorin.github.io/mesh-metronome/",
-    "repo_url": "https://github.com/baditaflorin/mesh-metronome",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "p2p sync, distributed timing",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-mirror",
-    "name": "Mesh Mirror",
-    "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed \u2014 phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-mirror/",
-    "health_url": "https://baditaflorin.github.io/mesh-mirror/",
-    "repo_url": "https://github.com/baditaflorin/mesh-mirror",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "p2p replication, state sync",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-shared-window",
-    "name": "Mesh Shared Window",
-    "description": "Peer-to-peer mesh: 2-4 friends in different homes each point their camera at a view they like; every phone tiles all the others' feeds into one composite.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-shared-window/",
-    "health_url": "https://baditaflorin.github.io/mesh-shared-window/",
-    "repo_url": "https://github.com/baditaflorin/mesh-shared-window",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "p2p collaboration, canvas sharing",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-silence-counter",
-    "name": "Mesh Silence Counter",
-    "description": "Peer-to-peer mesh: group meditation timer. Phones detect stillness via accelerometer and aggregate the count anonymously.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-silence-counter/",
-    "health_url": "https://baditaflorin.github.io/mesh-silence-counter/",
-    "repo_url": "https://github.com/baditaflorin/mesh-silence-counter",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 2,
-    "trl_evidence": "p2p minimal logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-tap-symphony",
-    "name": "Mesh Tap Symphony",
-    "description": "Peer-to-peer mesh: each phone is one drum; 30 seconds of taps records a synced loop that replays on every phone.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-tap-symphony/",
-    "health_url": "https://baditaflorin.github.io/mesh-tap-symphony/",
-    "repo_url": "https://github.com/baditaflorin/mesh-tap-symphony",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "p2p audio, tap-based interaction",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "mesh-wave-canvas",
-    "name": "Mesh Wave Canvas",
-    "description": "Peer-to-peer mesh: arrange phones in a row; tap one and a ripple expands across all phones as if they were one continuous canvas.",
-    "category": "peer_to_peer",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/mesh-wave-canvas/",
-    "health_url": "https://baditaflorin.github.io/mesh-wave-canvas/",
-    "repo_url": "https://github.com/baditaflorin/mesh-wave-canvas",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "p2p visualization, wave drawing",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "newsletter-flow",
-    "name": "Newsletter Flow",
-    "description": "Local-first writing desk for researching, drafting, polishing, and repurposing newsletters without SaaS bloat.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/newsletter-flow/",
-    "health_url": "https://baditaflorin.github.io/newsletter-flow/",
-    "repo_url": "https://github.com/baditaflorin/newsletter-flow",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "email app, newsletter pipeline",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "numen",
-    "name": "Numen",
-    "description": "Static-first academic writing platform for drafting, citations, literature review, figures, and submission-ready PDFs.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/numen/",
-    "health_url": "https://baditaflorin.github.io/numen/",
-    "repo_url": "https://github.com/baditaflorin/numen",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "app, core concept implementation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "open-indie-studio",
-    "name": "Open Indie Studio",
-    "description": "Browser-based toolkit for making, testing, packaging, and documenting small 2D/casual indie games.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/open-indie-studio/",
-    "health_url": "https://baditaflorin.github.io/open-indie-studio/",
-    "repo_url": "https://github.com/baditaflorin/open-indie-studio",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "studio framework, scaffolding",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "open-school-lab",
-    "name": "Open School Lab",
-    "description": "Browser-based science, math, and engineering labs for classrooms without physical equipment.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/open-school-lab/",
-    "health_url": "https://baditaflorin.github.io/open-school-lab/",
-    "repo_url": "https://github.com/baditaflorin/open-school-lab",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "educational app, course structure",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "openphoto-studio",
-    "name": "Openphoto Studio",
-    "description": "Browser-based photo editor with WASM imaging tools and local WebGPU AI features.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/openphoto-studio/",
-    "health_url": "https://baditaflorin.github.io/openphoto-studio/",
-    "repo_url": "https://github.com/baditaflorin/openphoto-studio",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "photo app, editing and filters",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "osm-poster",
-    "name": "Osm Poster",
-    "description": "Beautiful map posters from OpenStreetMap, generated in your browser. No backend, no API keys.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/osm-poster/",
-    "health_url": "https://baditaflorin.github.io/osm-poster/",
-    "repo_url": "https://github.com/baditaflorin/osm-poster",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "map visualization, OSM integration",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "parse-address",
-    "name": "Parse Address",
-    "description": "US Street Address Parser",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "http://hassansin.github.io/parse-address/",
-    "health_url": "http://hassansin.github.io/parse-address/",
-    "repo_url": "https://github.com/baditaflorin/parse-address",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 5,
-    "trl_evidence": "address parsing, RFC-aligned",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "physical-kanban-sync",
-    "name": "Physical Kanban Sync",
-    "description": "Browser-first physical sticky-note Kanban that scans AprilTags and syncs board state to collaborators.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/physical-kanban-sync/",
-    "health_url": "https://baditaflorin.github.io/physical-kanban-sync/",
-    "repo_url": "https://github.com/baditaflorin/physical-kanban-sync",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "kanban app, board sync",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "pockettalkie",
-    "name": "Pockettalkie",
-    "description": "Encrypted push-to-talk rooms in the browser. P2P audio mesh over a self-hosted WebRTC stack. GitHub-Pages-only, no backend.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/pockettalkie/",
-    "health_url": "https://baditaflorin.github.io/pockettalkie/",
-    "repo_url": "https://github.com/baditaflorin/pockettalkie",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "messaging app, walkie-talkie mode",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "polyglot-nlp-toolkit",
-    "name": "Polyglot Nlp Toolkit",
-    "description": "Multilingual NLP pipeline for corpus analysis: tokenize, tag, parse, NER, embed, and cluster text.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
-    "health_url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
-    "repo_url": "https://github.com/baditaflorin/polyglot-nlp-toolkit",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 5,
-    "trl_evidence": "NLP toolkit, multi-language support",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "project-bootstrap-meta",
-    "name": "Project Bootstrap Meta",
-    "description": "A GitHub Pages-first bootstrap map for disciplined project setup.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [
-      "adr",
-      "github-pages",
-      "project-bootstrap",
-      "react",
-      "vite"
-    ],
-    "url": "https://baditaflorin.github.io/project-bootstrap-meta/",
-    "health_url": "https://baditaflorin.github.io/project-bootstrap-meta/",
-    "repo_url": "https://github.com/baditaflorin/project-bootstrap-meta",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 2,
-    "trl_evidence": "bootstrapping tool, minimal logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "react-data-grid",
-    "name": "React Data Grid",
-    "description": "Feature-rich and customizable data grid React component",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://adazzle.github.io/react-data-grid/",
-    "health_url": "https://adazzle.github.io/react-data-grid/",
-    "repo_url": "https://github.com/baditaflorin/react-data-grid",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 6,
-    "trl_evidence": "React component, mature data grid, comprehensive features",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "read-later-curriculum",
-    "name": "Read Later Curriculum",
-    "description": "A local-first read-later app that turns saved articles into a dependency-ordered reading curriculum.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/read-later-curriculum/",
-    "health_url": "https://baditaflorin.github.io/read-later-curriculum/",
-    "repo_url": "https://github.com/baditaflorin/read-later-curriculum",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "reading app, article curation",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "research-flow",
-    "name": "Research Flow",
-    "description": "Private browser research workspace for clustering papers, finding gaps, drafting outlines, and exporting cited Word/LaTeX.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/research-flow/",
-    "health_url": "https://baditaflorin.github.io/research-flow/",
-    "repo_url": "https://github.com/baditaflorin/research-flow",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "research tool, workflow pipeline",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "roamless-notes",
-    "name": "Roamless Notes",
-    "description": "Local-first outliner with backlinks, graph search, semantic recall, and optional peer-to-peer sync.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [
-      "crdt",
-      "duckdb",
-      "github-pages",
-      "knowledge-graph",
-      "local-first",
-      "notes",
-      "yjs"
-    ],
-    "url": "https://baditaflorin.github.io/roamless-notes/",
-    "health_url": "https://baditaflorin.github.io/roamless-notes/",
-    "repo_url": "https://github.com/baditaflorin/roamless-notes",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "note-taking app, basic linking",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "room-vj",
-    "name": "Room Vj",
-    "description": "Browser-based live room visuals that react to music, people, and synced nearby devices.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [
-      "audio-reactive",
-      "mediapipe",
-      "threejs",
-      "webgpu",
-      "webrtc"
-    ],
-    "url": "https://baditaflorin.github.io/room-vj/",
-    "health_url": "https://baditaflorin.github.io/room-vj/",
-    "repo_url": "https://github.com/baditaflorin/room-vj",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "VJ app, real-time visuals",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "schlieren-imaging-simulator",
-    "name": "Schlieren Imaging Simulator",
-    "description": "Browser-based Schlieren simulator for visualizing heat, sound, and gas density gradients with WebGPU and Three.js.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
-    "health_url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
-    "repo_url": "https://github.com/baditaflorin/schlieren-imaging-simulator",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "physics simulator, optics model",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "show-me-the-way",
-    "name": "Show Me The Way",
-    "description": "See OSM edits happen in real time.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "http://osmlab.github.io/show-me-the-way/",
-    "health_url": "http://osmlab.github.io/show-me-the-way/",
-    "repo_url": "https://github.com/baditaflorin/show-me-the-way",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "navigation app, routing logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "stellar-evolution-simulator",
-    "name": "Stellar Evolution Simulator",
-    "description": "Browser-based stellar lifecycle simulator using Pyodide, Plotly, and a MESA-inspired model subset.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
-    "health_url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
-    "repo_url": "https://github.com/baditaflorin/stellar-evolution-simulator",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "astronomy simulator, stellar physics",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "substance-sampler",
-    "name": "Substance Sampler",
-    "description": "Browser-based photo-to-PBR texture creation for indie game and 3D artists, powered by WebGPU and WASM.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/substance-sampler/",
-    "health_url": "https://baditaflorin.github.io/substance-sampler/",
-    "repo_url": "https://github.com/baditaflorin/substance-sampler",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "sample/chemistry app, material properties",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "tagboard",
-    "name": "Tagboard",
-    "description": "AprilTag-anchored AR sticky notes. Print a marker, point your camera, shared notes appear. P2P over a self-hosted WebRTC mesh. No backend.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/tagboard/",
-    "health_url": "https://baditaflorin.github.io/tagboard/",
-    "repo_url": "https://github.com/baditaflorin/tagboard",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "tag-based app, simple organization",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "trust-no-one-anonymizer",
-    "name": "Trust No One Anonymizer",
-    "description": "Client-side face and voice anonymizer for private browser-based video calls.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [
-      "mediapipe",
-      "privacy",
-      "static-site",
-      "webaudio",
-      "webrtc"
-    ],
-    "url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
-    "health_url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
-    "repo_url": "https://github.com/baditaflorin/trust-no-one-anonymizer",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "privacy tool, anonymization logic",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "universal-document-workbench",
-    "name": "Universal Document Workbench",
-    "description": "Drop documents in, extract text and metadata, OCR scans, detect entities, and convert outputs to Markdown, DOCX, or EPUB.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/universal-document-workbench/",
-    "health_url": "https://baditaflorin.github.io/universal-document-workbench/",
-    "repo_url": "https://github.com/baditaflorin/universal-document-workbench",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 4,
-    "trl_evidence": "document editor, multi-format support",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "urban-farm-year",
-    "name": "Urban Farm Year",
-    "description": "A static, offline-friendly planner for garden calendars, daily care, harvest logs, and next-year growing decisions.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/urban-farm-year/",
-    "health_url": "https://baditaflorin.github.io/urban-farm-year/",
-    "repo_url": "https://github.com/baditaflorin/urban-farm-year",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "farm planning app, seasonal calendar",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "vagus-reset-coach",
-    "name": "Vagus Reset Coach",
-    "description": "A private browser-based 2-minute breath coach using webcam rPPG and local HRV logging.",
-    "category": "wellness",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/vagus-reset-coach/",
-    "health_url": "https://baditaflorin.github.io/vagus-reset-coach/",
-    "repo_url": "https://github.com/baditaflorin/vagus-reset-coach",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "wellness app, guided exercises",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "vcard-personal-portfolio",
-    "name": "Vcard Personal Portfolio",
-    "description": "vCard is a fully responsive personal portfolio website, responsive for all devices.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
-    "health_url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
-    "repo_url": "https://github.com/baditaflorin/vcard-personal-portfolio",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "portfolio app, vCard format",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
-    "id": "webcam-dither-lab",
-    "name": "Webcam Dither Lab",
-    "description": "Live webcam dithering and filter comparison lab with auto best-detail scoring.",
-    "category": "app",
-    "mesh": "pages",
-    "tags": [],
-    "url": "https://baditaflorin.github.io/webcam-dither-lab/",
-    "health_url": "https://baditaflorin.github.io/webcam-dither-lab/",
-    "repo_url": "https://github.com/baditaflorin/webcam-dither-lab",
-    "example_path": "/",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "trl": 3,
-    "trl_evidence": "image processing app, dithering effects",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
-  },
-  {
     "id": "yq",
     "name": "Yq",
     "description": "Command-line YAML and XML processor - jq wrapper for YAML/XML documents",
@@ -6015,5 +6010,34 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "zone-transfer",
+    "name": "Zone Transfer",
+    "description": "Microservice for Zone Transfer",
+    "category": "security",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "security"
+    ],
+    "url": "https://zone-transfer.0crawl.com",
+    "health_url": "https://zone-transfer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_zone_transfer",
+    "example_path": "/go_zone_transfer?domain=example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 5,
+    "trl_evidence": "DNS security, RFC-aligned protocol",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 8232,
+    "container_port": 8232
   }
 ]
