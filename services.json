@@ -391,7 +391,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8209,
+    "container_port": 8209
   },
   {
     "id": "cas",
@@ -1245,7 +1247,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8244,
+    "container_port": 8244
   },
   {
     "id": "jsonp-finder",
@@ -1567,7 +1571,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8298,
+    "container_port": 8298
   },
   {
     "id": "phone-extractor",
@@ -1803,7 +1809,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8333,
+    "container_port": 8333
   },
   {
     "id": "robots-analyzer",
@@ -1823,7 +1831,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8161,
+    "container_port": 8161
   },
   {
     "id": "robots-parser",
@@ -2219,7 +2229,9 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "host_port": 8223,
+    "container_port": 8223
   },
   {
     "id": "substack-scraper",
@@ -2999,7 +3011,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18026,
+    "container_port": 8312
   },
   {
     "id": "jsbundle-secrets",
@@ -3250,7 +3264,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "host_port": 18027,
+    "container_port": 8313
   },
   {
     "id": "proto-pollution",
@@ -3277,7 +3293,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Static-only without endpoint discovery; reaches TRL 7 once wired to api-extractor for auto-probe targets.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18028,
+    "container_port": 8314
   },
   {
     "id": "python-proxy",

@@ -36,6 +36,9 @@ SERVICES_JSON = ROOT / "services.json"
 OVERRIDES_JSON = ROOT / "overrides.json"
 
 PORT_RX = re.compile(r"(?:(?:[\d.]+):)?(\d+)->(\d+)/tcp")
+SS_LISTEN_RX = re.compile(
+    r'LISTEN\s+\d+\s+\d+\s+[^\s]*:(\d+)\s+[^\s]+\s+users:\(\("([^"]+)"',
+)
 
 
 def ssh(bastion: str, target: str, cmd: str) -> str:
@@ -47,7 +50,8 @@ def ssh(bastion: str, target: str, cmd: str) -> str:
 
 
 def docker_ports(bastion: str, dockerhost: str) -> dict[str, tuple[int, int]]:
-    """Returns {container_name: (host_port, container_port)} for each container."""
+    """Returns {container_name: (host_port, container_port)} for each docker
+    container with a published host port mapping."""
     out = ssh(bastion, dockerhost,
               r"docker ps --format '{{.Names}}|{{.Ports}}' 2>/dev/null")
     result = {}
@@ -64,15 +68,61 @@ def docker_ports(bastion: str, dockerhost: str) -> dict[str, tuple[int, int]]:
     return result
 
 
+def native_listeners(bastion: str, dockerhost: str) -> dict[str, int]:
+    """Returns {process_name: host_port} for native (non-docker) processes
+    listening on TCP on the dockerhost. Catches host-network containers and
+    binaries running outside docker, which `docker ps` misses.
+
+    Agent F flagged this gap on 2026-05-13: 7 of 14 'broken' services were
+    actually serving fine via native processes; the audit only saw docker.
+    """
+    # -tnlp: TCP, numeric, listening, with-process. Requires sudo for full info.
+    out = ssh(bastion, dockerhost, "sudo ss -tlnp 2>/dev/null || ss -tlnp 2>/dev/null")
+    result: dict[str, int] = {}
+    for line in out.splitlines():
+        m = SS_LISTEN_RX.search(line)
+        if not m:
+            continue
+        port = int(m.group(1))
+        proc = m.group(2).strip()
+        # Process names from ss are truncated to 15 chars on linux. Keep
+        # whichever first-seen entry; subsequent listens on the same name
+        # are usually IPv6 echoes.
+        if proc not in result:
+            result[proc] = port
+    return result
+
+
+# Mirror of SLUG_OVERRIDES in bin/generate.py — Python doesn't see the Go map,
+# so keep these in lockstep. Any name here is the canonical slug the registry
+# uses (not the auto-derivation from repo name).
+SLUG_OVERRIDES = {
+    "go_jsbundle_secrets":           "jsbundle-secrets",
+    "go_jsbundle_route_extractor":   "jsbundle-routes",
+    "go_postmessage_listener_finder":"postmessage",
+    "go_prototype_pollution_static": "proto-pollution",
+    "go_jwt_pentest":                "jwt-pentest",
+    "go_session_fixation":           "session-fixation",
+}
+
+
 def slug_candidates(container_name: str) -> list[str]:
     """A container is typically named go_<repo>-app-1 or go-<repo>-app-1.
-    Strip docker-compose suffixes and prefix variants, normalize to kebab-case."""
+    Strip docker-compose suffixes and prefix variants. Return canonical
+    candidates including any SLUG_OVERRIDES that match the underlying repo
+    name."""
     s = container_name
     s = re.sub(r"-app-\d+$", "", s)
     s = re.sub(r"-\d+$", "", s)
     s = re.sub(r"_\d+$", "", s)
-    s = s.replace("_", "-")
-    out = [s, s.lstrip("go-")]
+    # Possible repo names: as-stripped (with underscores) or kebab.
+    repo_candidates = {s, s.replace("-", "_")}
+    out = []
+    for repo in repo_candidates:
+        if repo in SLUG_OVERRIDES:
+            out.append(SLUG_OVERRIDES[repo])
+    kebab = s.replace("_", "-")
+    out.extend([kebab, kebab.lstrip("go-")])
     return list(dict.fromkeys(out))
 
 
@@ -92,17 +142,26 @@ def main():
     # Build slug → service map
     slug_to_service = {s["id"]: s for s in services}
 
-    print(f"Probing dockerhost {args.dockerhost}…", file=sys.stderr)
+    print(f"Probing dockerhost {args.dockerhost} (docker ps + ss -tlnp)…", file=sys.stderr)
     try:
         ports = docker_ports(args.bastion, args.dockerhost)
+        natives = native_listeners(args.bastion, args.dockerhost)
     except subprocess.CalledProcessError as e:
         print(f"ssh failed: {e}", file=sys.stderr)
         return 2
-    print(f"Found {len(ports)} containers with host port bindings.", file=sys.stderr)
+    print(f"  docker ps: {len(ports)} containers with published ports", file=sys.stderr)
+    print(f"  ss -tlnp:  {len(natives)} native TCP listeners", file=sys.stderr)
 
-    added = updated = matched = unmatched = 0
+    # Synthesize a unified view: docker first (richer container_port info),
+    # then native fillers for what docker missed.
+    # Native proc name is truncated to 15 chars (linux comm limit), so we
+    # match against slug + repo-name candidates fuzzily.
+    used_native_procs: set[str] = set()
+
+    added = updated = matched = unmatched = native_added = 0
     diffs: list[str] = []
     unmatched_containers: list[str] = []
+    matched_slugs: set[str] = set()
     for cname, (hp, cp) in ports.items():
         candidates = slug_candidates(cname)
         found_slug = next((c for c in candidates if c in slug_to_service), None)
@@ -111,6 +170,7 @@ def main():
             unmatched_containers.append(f"{cname} → {candidates[0]} (no service)")
             continue
         matched += 1
+        matched_slugs.add(found_slug)
         cur = slug_to_service[found_slug]
         cur_hp = cur.get("host_port")
         cur_cp = cur.get("container_port")
@@ -122,13 +182,45 @@ def main():
         overrides[found_slug]["container_port"] = cp
         if cur_hp is None:
             added += 1
-            diffs.append(f"  + {found_slug}: host_port={hp} container_port={cp}  (container={cname})")
+            diffs.append(f"  + {found_slug}: host_port={hp} container_port={cp}  (docker={cname})")
         else:
             updated += 1
             diffs.append(f"  ~ {found_slug}: host_port {cur_hp}→{hp}  container_port {cur_cp}→{cp}")
 
-    print(f"\nResult: matched {matched}, unmatched {unmatched}")
-    print(f"  added: {added}, updated: {updated}, unchanged: {matched - added - updated}")
+    # Pass 2: fill in native processes for services docker didn't cover.
+    # Process names are truncated to 15 chars (e.g. go_captcha_dete for
+    # go_captcha_detector). Match against the slug's underscored form and
+    # accept a prefix match.
+    for proc, port in natives.items():
+        # Build the canonical "go_<slug_with_underscores>" form for matching.
+        # ss may report short names, so we match by prefix.
+        for slug, svc in slug_to_service.items():
+            if slug in matched_slugs:
+                continue
+            if svc.get("host_port") == port:
+                continue  # already known
+            expected = "go_" + slug.replace("-", "_")
+            # Prefix-match either way (ss is truncated, slug may be shorter).
+            if proc.startswith(expected[:15]) or expected.startswith(proc):
+                if slug not in overrides:
+                    overrides[slug] = OrderedDict()
+                cur_hp = svc.get("host_port")
+                overrides[slug]["host_port"] = port
+                # container_port unknown for native; only set if absent.
+                if "container_port" not in overrides[slug] and svc.get("container_port") is None:
+                    overrides[slug]["container_port"] = port
+                if cur_hp is None:
+                    native_added += 1
+                    diffs.append(f"  + {slug}: host_port={port}  (NATIVE proc={proc})")
+                elif cur_hp != port:
+                    updated += 1
+                    diffs.append(f"  ~ {slug}: host_port {cur_hp}→{port}  (NATIVE proc={proc})")
+                matched_slugs.add(slug)
+                used_native_procs.add(proc)
+                break
+
+    print(f"\nResult: matched {matched} via docker + {native_added} via native ss -tlnp; unmatched docker {unmatched}")
+    print(f"  added: {added + native_added}, updated: {updated}, unchanged: ~{matched - added - updated}")
     if diffs:
         print("\nProposed changes:")
         for d in diffs[:40]:

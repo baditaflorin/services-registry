@@ -153,7 +153,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8209,
+    "container_port": 8209
   },
   "cas": {
     "description": "Microservice for Cas",
@@ -524,7 +526,9 @@
     "container_port": 8159
   },
   "ipv6-checker": {
-    "description": "Microservice for Ipv6 Checker"
+    "description": "Microservice for Ipv6 Checker",
+    "host_port": 8244,
+    "container_port": 8244
   },
   "jsbundle-routes": {
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
@@ -534,7 +538,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18026,
+    "container_port": 8312
   },
   "jsbundle-secrets": {
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
@@ -701,7 +707,9 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 8298,
+    "container_port": 8298
   },
   "phone-extractor": {
     "example_path": "/?url=https://example.com",
@@ -714,6 +722,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8139,
     "container_port": 8139
+  },
+  "postmessage": {
+    "host_port": 18027,
+    "container_port": 8313
   },
   "postmessage-finder": {
     "description": "Static scan of recovered JS for window.addEventListener('message') handlers without origin/source checks. XS-Leak / postMessage-RCE class.",
@@ -743,7 +755,9 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Static-only without endpoint discovery; reaches TRL 7 once wired to api-extractor for auto-probe targets.",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18028,
+    "container_port": 8314
   },
   "proxy-fingerprint": {
     "example_path": "/?url=https://example.com",
@@ -804,11 +818,15 @@
   },
   "reverse-dns": {
     "example_path": "/?url=https://example.com",
-    "description": "Microservice for Reverse Dns"
+    "description": "Microservice for Reverse Dns",
+    "host_port": 8333,
+    "container_port": 8333
   },
   "robots-analyzer": {
     "example_path": "/go_robots_analyzer?target=example.com",
-    "description": "Microservice for Robots Analyzer"
+    "description": "Microservice for Robots Analyzer",
+    "host_port": 8161,
+    "container_port": 8161
   },
   "robots-parser": {
     "example_path": "/?url=https://example.com",
@@ -957,7 +975,9 @@
   },
   "subdomain-takeover": {
     "example_path": "/go_subdomain_takeover?domain=example.com",
-    "description": "Microservice for Subdomain Takeover"
+    "description": "Microservice for Subdomain Takeover",
+    "host_port": 8223,
+    "container_port": 8223
   },
   "substack-scraper": {
     "description": "Public-metadata scraper for Substack publications: posts, cadence, recommendations, authors.",
