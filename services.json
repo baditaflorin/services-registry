@@ -37,7 +37,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "WCAG rule corpus, heading structure, image alt sampling.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with WCAG 2.2 full corpus + CSS-derived contrast estimation.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "ad-density",
@@ -57,7 +63,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Ad-slot detection by class/id patterns, network call counting.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "address-extractor",
@@ -77,7 +89,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 2,
+    "trl_evidence": "Regex + small gazetteer. Toy for the multi-country general case.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "admin-finder",
@@ -97,7 +115,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 3,
+    "trl_evidence": "Wordlist enumeration of admin paths.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Wordlist expansion is commodity; signal requires response-fingerprinting and context that's hard without active auth.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "api-extractor",
@@ -117,7 +141,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "31 canonical OpenAPI paths across stacks, AsyncAPI detection, gRPC-Web fingerprint, GraphQL introspection, auth-scheme inference.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "api-first",
@@ -157,7 +187,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "Entropy-based + pattern-matched API key detection in HTML+JS.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "asn-lookup",
@@ -197,7 +233,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "blocklist-checker",
@@ -217,7 +259,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Wrapper around external DNSBL/feeds.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "broken-links",
@@ -257,7 +305,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 4,
+    "trl_evidence": "URL-pattern detection for S3/GCS/Azure buckets.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "caa-checker",
@@ -277,7 +331,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "captcha-detector",
@@ -297,7 +357,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "cas",
@@ -337,7 +403,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 8,
+    "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "clickjacking-tester",
@@ -397,7 +469,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "HTML/JS comment extraction with multi-page crawl. 50KB.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "company-size",
@@ -477,7 +555,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "Endpoint discovery, CORS preflight testing, credential+wildcard checks, risk categorization.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "cors-tester",
@@ -537,7 +621,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 4,
+    "trl_evidence": "Wallet-address regex + crypto-library fingerprinting.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "currency-detector",
@@ -557,7 +647,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "Symbol regex + locale patterns + currency-switcher heuristics.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "customer-logos",
@@ -617,7 +713,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Stack-trace and debug-banner detection in error pages.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "dependency-counter",
@@ -697,7 +799,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "RFC-light parser, 5444-domain disposable gazetteer, opt-in MX validation, multi-page crawl with frontier, Cloudflare/obfuscation decoder.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "email-harvester",
@@ -717,7 +825,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Multi-page email extraction with role classification. 45KB of code.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "emotional-tone",
@@ -737,7 +851,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 3,
+    "trl_evidence": "Keyword-bag sentiment lexicon.",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "env-finder",
@@ -757,7 +877,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": ".env / config file probing at common locations.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "feed-finder",
@@ -777,7 +903,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 1,
+    "trl_evidence": "Pure shell skeleton.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Achievable with sitemap-finder pattern: probe canonical paths + parse autodiscovery links + RSS/Atom format detection. Needs implementation, not blocked technically.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "founding-year",
@@ -817,7 +949,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "189-investor gazetteer (top global VCs/angels), 11-currency regex with Asian numbering, round/year context windows, evidence trails.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "gdpr-compliance",
@@ -917,7 +1055,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "Full HSTS spec, apex+www dual testing, preload-list lookup, max-age validation.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "http-protocol",
@@ -957,7 +1101,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 3,
+    "trl_evidence": "Baseline-response comparison heuristics.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Needs authenticated multi-step probing and sequential-ID tampering state machines. Unauthenticated baseline is noise-prone.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "iframe-analyzer",
@@ -977,7 +1127,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Sandbox/allow attribute analysis, cross-origin frame inventory.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "ipv6-checker",
@@ -1017,7 +1173,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Callback-parameter discovery + JSONP-response detection. Real but narrow.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "jwt-debugger",
@@ -1117,7 +1279,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 2,
+    "trl_evidence": "Toy: naive form-detection only.",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "Real login analysis needs flow-tracing, CSRF/OAuth/SAML detection, which overlap with session-fixation + jwt-pentest. Better to fold into those.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "mime-trap",
@@ -1237,7 +1405,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "page-load-metrics",
@@ -1277,7 +1451,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "27 gateways with Stripe/PayPal variant resolution (Checkout vs Elements vs Connect), BNPL, regional (PIX/UPI/iDEAL), crypto.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "phone-extractor",
@@ -1297,7 +1477,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "press-mentions",
@@ -1417,7 +1603,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "Redirect-chain tracing with loop detection, header validation.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "remote-detector",
@@ -1437,7 +1629,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 4,
+    "trl_evidence": "Job-board keyword matching for remote-friendliness.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "revenue-model",
@@ -1517,7 +1715,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "RFC 9309 compliant: longest-match, wildcards, crawl-delay, Sitemap discovery. 10-case test suite.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "scc",
@@ -1557,7 +1761,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 3,
+    "trl_evidence": "JSON-LD/microdata extraction works; semantic normalization is the gap.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Arbitrary schema.org type unification (Product/Service/SoftwareApplication overlaps, salary ranges, hours-as-strings) needs an ontology layer or ML model.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "seasonal-detector",
@@ -1577,7 +1787,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Holiday/sale-language pattern matching.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with per-country holiday gazetteer + urgency-language regex.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "secrets-scanner",
@@ -1597,7 +1813,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "Entropy + curated regex (AWS/Stripe/SendGrid/etc) on response bodies.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "security-headers",
@@ -1617,7 +1839,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "RFC-aware CSP parsing, HSTS validation, score-based verdicts, cross-header isolation checks.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "security-txt",
@@ -1717,7 +1945,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "Recursive sitemap-index chaser, gunzip, robots-aware, SSRF-guarded, lastmod-sorted output. Live-verified on stripe/google/nytimes/shopify.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "smuggling-probe",
@@ -1777,7 +2011,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "Map metadata parsing, source-path extraction.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "subdomain-finder",
@@ -1797,7 +2037,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Free CT-log (crt.sh) lookups + DNS bruteforce.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "CT-log free tier rate-limits at ~100 subdomains/domain. Real upgrade needs paid CT mirror or DNSDB.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "subdomain-takeover",
@@ -1818,6 +2064,32 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     }
+  },
+  {
+    "id": "substack-scraper",
+    "name": "Substack Scraper",
+    "description": "Public-metadata scraper for Substack publications: posts, cadence, recommendations, authors.",
+    "category": "content",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "substack"
+    ],
+    "url": "https://substack-scraper.0crawl.com",
+    "health_url": "https://substack-scraper.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_substack_scraper",
+    "example_path": "/?url=https://example.substack.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "trl": 7,
+    "trl_evidence": "Metadata extraction, API scraping, post parsing.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "svi",
@@ -1857,7 +2129,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 2,
+    "trl_evidence": "Hardcoded path list. Superseded by api-extractor v1.2.2 which covers 31 OpenAPI paths plus AsyncAPI/gRPC-Web.",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "team-size",
@@ -1937,7 +2215,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Curated 30+ canonical paths for ToS/Privacy/DMCA/etc + freshness check.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "trust-decay",
@@ -1977,7 +2261,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Levenshtein + homoglyph + parking detection. dnstwist-grade.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "ugc-detector",
@@ -1997,7 +2287,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 5,
+    "trl_evidence": "Review/comment signal extraction.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with schema.org Review parsing + moderation-system fingerprints.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "update-frequency",
@@ -2020,6 +2316,32 @@
     }
   },
   {
+    "id": "video-content",
+    "name": "Video Content",
+    "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
+    "category": "domains",
+    "mesh": "0crawl",
+    "tags": [
+      "go",
+      "video"
+    ],
+    "url": "https://video-content.0crawl.com",
+    "health_url": "https://video-content.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_video_content",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "path_token",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "trl": 6,
+    "trl_evidence": "Video schema parsing, platform detection (YouTube/Vimeo/Wistia embeds), autoplay + a11y scoring.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
+  },
+  {
     "id": "wayback-checker",
     "name": "Wayback Checker",
     "description": "Microservice for Wayback Checker",
@@ -2037,7 +2359,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "CDX API integration, snapshot distribution analysis, historical HTTPS adoption trends.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "websocket-analyzer",
@@ -2077,7 +2405,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 6,
+    "trl_evidence": "All RFC 8615 paths probed with response classification.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "wp-plugins",
@@ -2157,7 +2491,13 @@
       "type": "path_token",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
-    }
+    },
+    "trl": 3,
+    "trl_evidence": "Reflected-payload regex pattern matching.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Real XSS confirmation requires DOM canary injection (headless browser). Reflection regex isn't real XSS.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
     "id": "zone-transfer",
@@ -2277,6 +2617,26 @@
     }
   },
   {
+    "id": "go-information-leakage",
+    "name": "Go Information Leakage",
+    "description": "",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "infoleak"
+    ],
+    "url": "https://go-information-leakage.0exec.com",
+    "health_url": "https://go-information-leakage.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_information_leakage",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
     "id": "go-js-proxy",
     "name": "Proxy (Go+JS)",
     "description": "JS-rendering proxy (?url=)",
@@ -2294,28 +2654,138 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
-    }
+    },
+    "trl": 7,
+    "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13"
   },
   {
-    "id": "js-proxy-network",
-    "name": "JS Proxy (Network Log)",
-    "description": "Render a target URL with a real browser and return DOM + full network request log + console + performance.",
-    "category": "infra",
+    "id": "go-js-proxy-network",
+    "name": "Go Js Proxy Network",
+    "description": "JS-render proxy returning DOM + full network log + console + performance",
+    "category": "proxy",
     "mesh": "0exec",
     "tags": [
-      "infra",
-      "render",
       "go",
-      "private"
+      "proxy",
+      "render"
     ],
     "url": "https://go-js-proxy-network.0exec.com",
-    "health_url": "https://go-js-proxy-network.0exec.com/health",
+    "health_url": "https://go-js-proxy-network.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
-    "example_path": "/?url=https://example.com&api_key=...",
+    "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "public_demo_token": null
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-jsbundle-route-extractor",
+    "name": "Go Jsbundle Route Extractor",
+    "description": "Extract React Router, Vue Router, Next.js, Express routes from JS bundles + source maps",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-jsbundle-route-extractor.0exec.com",
+    "health_url": "https://go-jsbundle-route-extractor.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-jsbundle-secrets",
+    "name": "Go Jsbundle Secrets",
+    "description": "Scan recovered JS bundle source for AWS/Stripe/GitHub/etc. secrets (gitleaks ruleset)",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-jsbundle-secrets.0exec.com",
+    "health_url": "https://go-jsbundle-secrets.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-jwt-pentest",
+    "name": "Go Jwt Pentest",
+    "description": "JWT auth pentest: alg=none, weak-HMAC, kid traversal, jku/x5u SSRF, HS256/RS256 confusion",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-jwt-pentest.0exec.com",
+    "health_url": "https://go-jwt-pentest.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-postmessage-listener-finder",
+    "name": "Go Postmessage Listener Finder",
+    "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-postmessage-listener-finder.0exec.com",
+    "health_url": "https://go-postmessage-listener-finder.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-prototype-pollution-static",
+    "name": "Go Prototype Pollution Static",
+    "description": "Static + safe-active probe for JavaScript prototype-pollution sinks",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-prototype-pollution-static.0exec.com",
+    "health_url": "https://go-prototype-pollution-static.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
     }
   },
   {
@@ -2352,6 +2822,47 @@
     "health_url": "https://go-search-duck.0exec.com/_gw_health",
     "repo_url": "https://github.com/baditaflorin/go-search-duck",
     "example_path": "/?query=anthropic+claude",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-session-fixation",
+    "name": "Go Session Fixation",
+    "description": "Session-fixation probe: detect login flows that reuse pre-auth session cookies",
+    "category": "security",
+    "mesh": "0exec",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-session-fixation.0exec.com",
+    "health_url": "https://go-session-fixation.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    }
+  },
+  {
+    "id": "go-url-categorizer-api",
+    "name": "Go Url Categorizer Api",
+    "description": "",
+    "category": "nlp",
+    "mesh": "0exec",
+    "tags": [
+      "categorization",
+      "go"
+    ],
+    "url": "https://go-url-categorizer-api.0exec.com",
+    "health_url": "https://go-url-categorizer-api.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-url-categorizer-api",
+    "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3541,137 +4052,6 @@
     "example_path": "/",
     "auth": {
       "type": "none"
-    }
-  },
-  {
-    "id": "jsbundle-secrets",
-    "name": "JS Bundle Secret Scanner",
-    "description": "Recovers original JS source from .js.map sidecars and scans for AWS/Stripe/GitHub/SendGrid/Twilio/etc. credentials (gitleaks-derived ruleset).",
-    "category": "pentest",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "secrets",
-      "jsbundle"
-    ],
-    "url": "https://jsbundle-secrets.0exec.com",
-    "health_url": "https://jsbundle-secrets.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_jsbundle_secrets",
-    "example_path": "/go_jsbundle_secrets?target=https://example.com",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    }
-  },
-  {
-    "id": "jsbundle-routes",
-    "name": "JS Bundle Route Extractor",
-    "description": "Recovers JS source and extracts React Router, Vue Router, Express, Next.js, and GraphQL route declarations. Flags routes not reachable from DOM navigation as unlinked.",
-    "category": "pentest",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "routes",
-      "jsbundle"
-    ],
-    "url": "https://jsbundle-routes.0exec.com",
-    "health_url": "https://jsbundle-routes.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_jsbundle_route_extractor",
-    "example_path": "/go_jsbundle_route_extractor?target=https://example.com",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    }
-  },
-  {
-    "id": "postmessage-finder",
-    "name": "postMessage Listener Finder",
-    "description": "Static scan for window.postMessage listeners that don't validate event.origin. XS-Leak / postMessage-RCE class.",
-    "category": "pentest",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "postmessage",
-      "xs-leak"
-    ],
-    "url": "https://postmessage.0exec.com",
-    "health_url": "https://postmessage.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_postmessage_listener_finder",
-    "example_path": "/go_postmessage_listener_finder?target=https://example.com",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    }
-  },
-  {
-    "id": "proto-pollution",
-    "name": "Prototype Pollution Static Scanner",
-    "description": "Static scan for JavaScript prototype-pollution gadgets (lodash.merge, deepmerge, __proto__ literals, etc.). Safe-active probe on v0.2 roadmap.",
-    "category": "pentest",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "prototype-pollution"
-    ],
-    "url": "https://proto-pollution.0exec.com",
-    "health_url": "https://proto-pollution.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_prototype_pollution_static",
-    "example_path": "/go_prototype_pollution_static?target=https://example.com",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    }
-  },
-  {
-    "id": "jwt-pentest",
-    "name": "JWT Pentest Battery",
-    "description": "Offline JWT pentest - alg=none forgery, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leak, HS/RS key-confusion.",
-    "category": "pentest",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "jwt",
-      "auth"
-    ],
-    "url": "https://jwt-pentest.0exec.com",
-    "health_url": "https://jwt-pentest.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
-    "example_path": "/go_jwt_pentest?jwt=<token>",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    }
-  },
-  {
-    "id": "session-fixation",
-    "name": "Session Fixation Probe",
-    "description": "Two-pass probe: GET captures pre-auth cookies, POST with literal sentinel invalid credentials checks whether session cookie persists across auth-state transition.",
-    "category": "pentest",
-    "mesh": "0exec",
-    "tags": [
-      "go",
-      "pentest",
-      "session",
-      "auth"
-    ],
-    "url": "https://session-fixation.0exec.com",
-    "health_url": "https://session-fixation.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
-    "example_path": "/go_session_fixation?target=https://example.com",
-    "auth": {
-      "type": "path_token",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
     }
   }
 ]

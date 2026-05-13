@@ -156,7 +156,7 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
     exp   = ov.get("example_path",
                    DEFAULT_EXAMPLES.get(cat, DEFAULT_EXAMPLES["uncategorized"]))
 
-    return {
+    entry = {
         "id":           slug,
         "name":         name,
         "description":  desc,
@@ -169,6 +169,13 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
         "example_path": exp,
         "auth":         dict(auth),
     }
+
+    for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
+              "trl_assessed_at", "trl_assessor"):
+        if k in ov:
+            entry[k] = ov[k]
+
+    return entry
 
 
 # ─── Build + safety checks ─────────────────────────────────────────────

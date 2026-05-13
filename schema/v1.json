@@ -26,7 +26,31 @@
         "public_demo_token":  { "type": "string", "description": "auth=path_token: an intentionally-public demo token consumers may default to. NEVER include real secrets here." }
       }
     },
-    "port": { "type": "integer", "description": "Internal docker port; informational only" }
+    "port": { "type": "integer", "description": "Internal docker port; informational only" },
+    "trl": {
+      "type": "integer", "minimum": 1, "maximum": 9,
+      "description": "Technology Readiness Level achieved. 1-3 toy, 4-5 developing, 6-7 real, 8-9 production. Optional; absence means not yet assessed."
+    },
+    "trl_evidence": {
+      "type": "string",
+      "description": "One-line justification for the TRL number (what concretely makes it that level)."
+    },
+    "trl_ceiling": {
+      "type": ["integer", "null"], "minimum": 1, "maximum": 9,
+      "description": "Maximum TRL realistically achievable with CPU-only smart logic + free public data. Null means no known ceiling. Repos with low ceilings are deprecation candidates."
+    },
+    "trl_ceiling_reason": {
+      "type": ["string", "null"],
+      "description": "One-line reason for the ceiling (e.g. 'needs libpostal trained data', 'requires DOM canary injection', 'wraps paid threat intel feeds')."
+    },
+    "trl_assessed_at": {
+      "type": "string", "format": "date",
+      "description": "ISO date the TRL was last evaluated. Re-assess if older than ~90 days."
+    },
+    "trl_assessor": {
+      "type": "string",
+      "description": "Who/what assessed: 'claude-session-YYYY-MM-DD' for AI-assisted, 'human' for manual review."
+    }
   },
   "additionalProperties": false
 }
