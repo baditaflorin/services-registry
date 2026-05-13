@@ -9,11 +9,30 @@ secrets are in the private `fleet-state/OPS.md`.
 ## Ecosystem at a glance
 
 baditaflorin/* hosts ~220 service repos plus ~130 prototype/experiment
-repos (the `implemment-*` namespace). The 222 currently in the registry
-are the ones with `mesh-{0exec,0crawl,pages}` GitHub topics, and they
-form three distinct meshes (table below). For each service the registry
-captures: human-readable name, description, host_port, container_port,
-auth model, TRL (technology readiness level), and TRL ceiling (if any).
+repos (the `implemment-*` namespace). The 223 currently in the registry
+are the ones with `mesh-{0exec,0crawl,pages}` GitHub topics. For each
+service the registry captures three orthogonal classifying axes plus
+the usual metadata (name, description, host_port, container_port,
+auth model, TRL, ceiling):
+
+| Axis       | Values                                  | Drives                                                       |
+|------------|-----------------------------------------|--------------------------------------------------------------|
+| `kind`     | `container`, `static`                   | which fleet-runner operations apply (deploy / health / bump only run on `container`) |
+| `mesh`     | `0exec`, `0crawl`, `pages`              | which network + auth domain the service lives in             |
+| `language` | `go`, `node`, `python`, `c`, `rust`, `html`, `wasm`, `other` | bulk-op filters (dep bumps, lockfile audits, etc.) |
+
+Today's snapshot:
+
+| `kind`      | count | `mesh` breakdown                | `language` breakdown                              |
+|-------------|-------|---------------------------------|---------------------------------------------------|
+| `container` | 160   | 0exec 29, 0crawl 131            | go 154, node 4, python 1, c 1                     |
+| `static`    | 63    | pages 63                        | html 63                                           |
+
+**`kind` is the load-bearing field for tooling.** When you write a new
+audit, a new bulk operation, or a new agent prompt, gate on `kind`,
+not on `mesh`. New deployable shapes (serverless, cdn-only,
+external-api) will be added as new `kind` values without touching
+mesh semantics.
 
 | Repo                                | Role                                                            | Visibility |
 |-------------------------------------|-----------------------------------------------------------------|------------|
@@ -49,37 +68,74 @@ TRL as a colored pill so you don't have to open the JSON to see it.
 
 ## Architecture
 
-Two meshes share a single registry but have different auth models:
+The three meshes share a single registry and (for the two container
+meshes) a single auth backend — the keystore:
 
-| Mesh         | Domain pattern              | Auth                                       | Used for                                     |
-|--------------|-----------------------------|--------------------------------------------|----------------------------------------------|
-| `mesh-0exec` | `<slug>.0exec.com`          | api_key in `?api_key=` or `X-API-Key`      | proxy, search, ocr, security, infrastructure |
-| `mesh-0crawl`| `<slug>.0crawl.com`         | path token `/t/<token>/...`                | domains, recon, web-analysis                 |
-| `mesh-pages` | varies (homepage or *.github.io) | none                                  | static dashboards, catalogs                  |
+| Mesh         | `kind`     | Domain pattern              | Auth                                                          | Used for                                     |
+|--------------|------------|-----------------------------|---------------------------------------------------------------|----------------------------------------------|
+| `mesh-0exec` | container  | `<slug>.0exec.com`          | api_key in `?api_key=` or `X-API-Key` — keystore-gated         | proxy, search, ocr, security, infrastructure |
+| `mesh-0crawl`| container  | `<slug>.0crawl.com`         | **api_key OR legacy `/t/<token>/…`** — both keystore-gated     | domains, recon, web-analysis                 |
+| `mesh-pages` | static     | varies (homepage or *.github.io) | none                                                     | static dashboards, browser-only WASM apps    |
 
-Mesh is declared per repo via the GitHub topic `mesh-0exec` / `mesh-0crawl` /
-`mesh-pages`. Category is declared via `category-<x>`. `bin/generate.py`
-discovers repos by querying topics on `github.com/baditaflorin/*`.
+Both container meshes flow through the **same** `auth_request` →
+`go-apikey-service` pipeline. One revocation in the keystore kills a
+key on every container service across both domains. Per-service token
+constants on 0crawl are dead code — kept around as harmless dead
+constants until each repo is next touched.
+
+Mesh is declared per repo via the GitHub topic `mesh-0exec` /
+`mesh-0crawl` / `mesh-pages`; `kind` is derived from mesh by
+`bin/generate.py` (`pages` → `static`, else `container`). Language
+is derived from the explicit topic `lang-<x>` (preferred) or the
+legacy tag-soup (`node`, `c`, …). Category is declared via
+`category-<x>`.
 
 ## Authentication: the keystore (`go-apikey-service`)
 
-**This is the fleet's single point of compromise.** Treat it like a CA
-root. Every 0exec service trusts whatever it says.
+**This is the fleet's single point of compromise.** Treat it like a
+CA root. Every **container** service — both 0exec and 0crawl — trusts
+whatever the keystore says.
 
 - **What it is**: a Go HTTP service (`baditaflorin/go-apikey-service`)
   backed by SQLite. Issues, verifies, revokes, lists keys. Runs on the
   dockerhost, internal-only (not internet-reachable).
 - **How keys flow**:
-  1. Caller hits `https://<slug>.0exec.com/...?api_key=<key>`
-  2. nginx auth_request → `_verify_key` location
-  3. Static fallback first: if key matches the universal demo key
-     hardcoded in the vhost (e.g. `fb_05dea…`), accept immediately.
+  1. Caller hits one of:
+     - `https://<slug>.0exec.com/...?api_key=<key>`
+     - `https://<slug>.0crawl.com/...?api_key=<key>` (new shape)
+     - `https://<slug>.0crawl.com/t/<key>/...` (legacy shape, kept working)
+  2. nginx extracts the candidate key from query / header / path
+     and runs `auth_request` → `_verify_key` location.
+  3. Static fallback first: if the candidate matches the universal
+     demo key `$default_token` (sourced from `/etc/nginx/conf.d/_default_token.conf`
+     on the gateway, NOT from any repo), accept immediately and set
+     `X-Auth-User: demo`. The demo path is rate-limited to 1 req/s
+     and ~60 req/h per IP at the gateway.
   4. Otherwise POST `X-Verify-Key=<key>` to `/verify` on the keystore.
   5. Keystore checks SQLite → returns 200 + `X-Auth-User`/`X-Auth-Scope`,
      or 401.
 - **Why two layers**: the static fallback means a brief keystore
   outage doesn't kill the public demo path. Real per-user keys still
   flow through the dynamic check.
+- **Rotating the default token without touching repos**: see the
+  "Default-token rotation" section below.
+
+### Default-token rotation
+
+The universal demo key is **never** committed to a public repo. The
+canonical store is `/etc/nginx/conf.d/_default_token.conf` on the
+webgateway, included by every container-mesh vhost. To rotate:
+
+```bash
+fleet-runner rotate-default-token "<new-value>"   # gateway-only, instant
+fleet-runner default-token                        # prints current value
+```
+
+The hub (`hub_scrapetheworld_org`) and catalog (`go-catalog-service`)
+fetch the current value at boot from the **private**
+`fleet-state/secrets/default_token.txt`; the rotation command updates
+both atomically (gateway file + private secret). No public commit, no
+per-repo edit, no service restart required.
 
 ### Clients MUST use `go-common/apikey`, not handroll HTTP calls
 
@@ -122,10 +178,24 @@ the keystore container; clients read it from `APIKEY_SERVICE_ADMIN_TOKEN`.
 
 ## Fleet-wide changes — modify 130 repos at once
 
-The fleet has ~130 service repos. The cardinal principle: **change
-the library, not the consumers.** When you need to touch every
-service, the right pattern is almost always a `go-common` change +
-a dep bump, not 130 PRs.
+The fleet has ~160 container repos (Go-heavy) plus 63 static Pages.
+The cardinal principle: **change the library or the gateway template,
+not the consumers.** When you need to touch every service, the right
+pattern is almost always a `go-common` change + a dep bump, or a
+0exec / 0crawl nginx template change + `nginx-render --push --reload`
+— not N PRs.
+
+**Always scope bulk operations with filters.** A Go dep bump should
+not even attempt to touch a Node, Python, C, or static service:
+
+```bash
+fleet-runner update-dep github.com/baditaflorin/go-common@v0.9.0 \
+  --filter kind=container,language=go
+```
+
+The filter is enforced before any clone/edit happens, so non-Go
+repos are never opened. Same pattern for `build-test`, `astedit`,
+`exec`, `inject`, etc.
 
 `fleet-runner` ships the bulk primitives:
 

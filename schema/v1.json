@@ -3,13 +3,23 @@
   "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/v1.json",
   "title": "Service Registry Entry v1",
   "type": "object",
-  "required": ["id", "name", "category", "mesh", "url", "health_url", "repo_url", "auth"],
+  "required": ["id", "name", "category", "mesh", "kind", "url", "health_url", "repo_url", "auth"],
   "properties": {
     "id":           { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "Stable slug; kebab-case; unique across all meshes" },
     "name":         { "type": "string", "description": "Human display name" },
     "description":  { "type": "string", "description": "One-line summary" },
     "category":     { "type": "string", "description": "One of: proxy, search, ocr, geo, nlp, content, domains, security, recon, infrastructure, web_analysis, visualization, registry, dashboard" },
-    "mesh":         { "type": "string", "enum": ["0exec", "0crawl"], "description": "Which service mesh / domain root" },
+    "mesh":         { "type": "string", "enum": ["0exec", "0crawl", "pages"], "description": "Which service mesh / domain root" },
+    "kind": {
+      "type": "string",
+      "enum": ["container", "static"],
+      "description": "What kind of deployable this is. Orthogonal to mesh. 'container' = runs as a Docker service on the dockerhost (has host_port, container_port, /health, Dockerfile, deploy.yaml, LXC workspace). 'static' = static GitHub Pages site (no port, no container, no workspace, no /health). fleet-runner gates kind-specific operations on this field — kind=static is skipped by health/smoke/deploy/clone-missing/audit-port/bump-version/update-dep."
+    },
+    "language": {
+      "type": "string",
+      "enum": ["go", "node", "python", "rust", "c", "html", "wasm", "other"],
+      "description": "Primary implementation language. For kind=container this drives bulk-operation filters (e.g. 'update-dep' only touches go services). For kind=static it is informational. Default for legacy 0exec/0crawl entries is 'go'; default for pages is 'html'."
+    },
     "tags":         { "type": "array", "items": { "type": "string" } },
     "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },
     "health_url":   { "type": "string", "format": "uri" },
@@ -29,6 +39,14 @@
     "auth_help": {
       "type": "string",
       "description": "Canonical short label for what auth a caller needs. Computed by generate.py from the auth object. UIs render verbatim — do NOT re-derive in JS/templates (that's what produced the historical 'No auth' bug on api_key services)."
+    },
+    "pages_url": {
+      "type": "string", "format": "uri",
+      "description": "kind=static only. Canonical GitHub Pages URL. For kind=container this field MUST NOT be set."
+    },
+    "pages_source_branch": {
+      "type": "string",
+      "description": "kind=static only. Branch the Pages build is served from (typically 'main' or 'gh-pages'). Informational for the catalog UI."
     },
     "port": { "type": "integer", "description": "DEPRECATED — ambiguous (host vs container). Use host_port / container_port instead." },
     "host_port": {

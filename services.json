@@ -5,6 +5,8 @@
     "description": "Microservice for A11y Quick",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -14,11 +16,13 @@
     "repo_url": "https://github.com/baditaflorin/go_a11y_quick",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": 6,
@@ -34,8 +38,11 @@
     "description": "Private browser-based accent coach that analyzes speech and drills phoneme-level pronunciation.",
     "category": "wellness",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/accent-coach/",
+    "pages_url": "https://baditaflorin.github.io/accent-coach/",
     "health_url": "https://baditaflorin.github.io/accent-coach/",
     "repo_url": "https://github.com/baditaflorin/accent-coach",
     "example_path": "/",
@@ -56,6 +63,8 @@
     "description": "Microservice for Accessibility Score",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -65,11 +74,13 @@
     "repo_url": "https://github.com/baditaflorin/go_accessibility_score",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "WCAG rule corpus, heading structure, image alt sampling.",
     "trl_ceiling": 8,
@@ -85,6 +96,8 @@
     "description": "Microservice for Ad Density",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -94,11 +107,13 @@
     "repo_url": "https://github.com/baditaflorin/go_ad_density",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Ad-slot detection by class/id patterns, network call counting.",
     "trl_ceiling": 7,
@@ -114,6 +129,8 @@
     "description": "Microservice for Address Extractor",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -123,11 +140,13 @@
     "repo_url": "https://github.com/baditaflorin/go_address_extractor",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Regex + small gazetteer. Toy for the multi-country general case.",
     "trl_ceiling": 5,
@@ -143,6 +162,8 @@
     "description": "Microservice for Admin Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -152,11 +173,13 @@
     "repo_url": "https://github.com/baditaflorin/go_admin_finder",
     "example_path": "/go_admin_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Wordlist enumeration of admin paths.",
     "trl_ceiling": 5,
@@ -172,6 +195,8 @@
     "description": "Microservice for Analyze Headers",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -181,11 +206,13 @@
     "repo_url": "https://github.com/baditaflorin/go_analyze_headers",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -201,8 +228,11 @@
     "description": "Static, anonymous live polling with CRDT sync, zk one-vote proofs, and local analytics.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/anon-conf-poll/",
+    "pages_url": "https://baditaflorin.github.io/anon-conf-poll/",
     "health_url": "https://baditaflorin.github.io/anon-conf-poll/",
     "repo_url": "https://github.com/baditaflorin/anon-conf-poll",
     "example_path": "/",
@@ -223,6 +253,8 @@
     "description": "Microservice for Api Extractor",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -232,11 +264,13 @@
     "repo_url": "https://github.com/baditaflorin/go_api_extractor",
     "example_path": "/go_api_extractor?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "31 canonical OpenAPI paths across stacks, AsyncAPI detection, gRPC-Web fingerprint, GraphQL introspection, auth-scheme inference.",
     "trl_ceiling": null,
@@ -252,6 +286,8 @@
     "description": "Microservice for Api First",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -261,11 +297,13 @@
     "repo_url": "https://github.com/baditaflorin/go_api_first",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Multi-function service with basic error handling",
     "trl_ceiling": null,
@@ -281,6 +319,8 @@
     "description": "Microservice for Apikey Scanner",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -290,11 +330,13 @@
     "repo_url": "https://github.com/baditaflorin/go_apikey_scanner",
     "example_path": "/go_apikey_scanner?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Entropy-based + pattern-matched API key detection in HTML+JS.",
     "trl_ceiling": 7,
@@ -310,6 +352,8 @@
     "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "category": "infrastructure",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "apikey",
       "go",
@@ -340,6 +384,8 @@
     "description": "Microservice for Asn Lookup",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -349,11 +395,13 @@
     "repo_url": "https://github.com/baditaflorin/go_asn_lookup",
     "example_path": "/go_asn_lookup?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -369,8 +417,11 @@
     "description": "A privacy-preserving browser artwork \u2014 phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/audience-field-sculpture/",
+    "pages_url": "https://baditaflorin.github.io/audience-field-sculpture/",
     "health_url": "https://baditaflorin.github.io/audience-field-sculpture/",
     "repo_url": "https://github.com/baditaflorin/audience-field-sculpture",
     "example_path": "/",
@@ -391,8 +442,11 @@
     "description": "Browser-based audio repair toolkit for noise removal, vocal isolation, and quick podcast/music cleanup.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/audio-repair-lab/",
+    "pages_url": "https://baditaflorin.github.io/audio-repair-lab/",
     "health_url": "https://baditaflorin.github.io/audio-repair-lab/",
     "repo_url": "https://github.com/baditaflorin/audio-repair-lab",
     "example_path": "/",
@@ -413,8 +467,11 @@
     "description": "Private browser-based EMDR-inspired audio journaling with local transcription, reflection prompts, and no trauma uploads.",
     "category": "archive",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/bilateral-memory-processing/",
+    "pages_url": "https://baditaflorin.github.io/bilateral-memory-processing/",
     "health_url": "https://baditaflorin.github.io/bilateral-memory-processing/",
     "repo_url": "https://github.com/baditaflorin/bilateral-memory-processing",
     "example_path": "/",
@@ -435,6 +492,8 @@
     "description": "Microservice for Biz Classifier",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -444,11 +503,13 @@
     "repo_url": "https://github.com/baditaflorin/go_biz_classifier",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict.",
     "trl_ceiling": null,
@@ -464,6 +525,8 @@
     "description": "Microservice for Blocklist Checker",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -473,11 +536,13 @@
     "repo_url": "https://github.com/baditaflorin/go_blocklist_checker",
     "example_path": "/go_blocklist_checker?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Wrapper around external DNSBL/feeds.",
     "trl_ceiling": 5,
@@ -493,6 +558,8 @@
     "description": "Microservice for Broken Links",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -502,11 +569,13 @@
     "repo_url": "https://github.com/baditaflorin/go_broken_links",
     "example_path": "/go_broken_links?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -522,6 +591,8 @@
     "description": "Microservice for Bucket Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -531,11 +602,13 @@
     "repo_url": "https://github.com/baditaflorin/go_bucket_finder",
     "example_path": "/go_bucket_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "URL-pattern detection for S3/GCS/Azure buckets.",
     "trl_ceiling": 5,
@@ -551,6 +624,8 @@
     "description": "C proxy (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "c",
     "tags": [
       "c",
       "proxy"
@@ -580,6 +655,8 @@
     "description": "Microservice for Caa Checker",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -589,11 +666,13 @@
     "repo_url": "https://github.com/baditaflorin/go_caa_checker",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation.",
     "trl_ceiling": null,
@@ -609,6 +688,8 @@
     "description": "Microservice for Captcha Detector",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -618,11 +699,13 @@
     "repo_url": "https://github.com/baditaflorin/go_captcha_detector",
     "example_path": "/go_captcha_detector?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
     "trl_ceiling": 7,
@@ -638,6 +721,8 @@
     "description": "Microservice for Cas",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -647,11 +732,13 @@
     "repo_url": "https://github.com/baditaflorin/go_cas",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -667,8 +754,11 @@
     "description": "Private, local-first voice reflection vault for retreats. Whisper + sentence-transformers + age + DuckDB + Markdown export, all in the browser.",
     "category": "archive",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
+    "pages_url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
     "health_url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
     "repo_url": "https://github.com/baditaflorin/castle-archive-memory-vault",
     "example_path": "/",
@@ -689,6 +779,8 @@
     "description": "Microservice for Cdn Detector",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -698,11 +790,13 @@
     "repo_url": "https://github.com/baditaflorin/go_cdn_detector",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 8,
     "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring.",
     "trl_ceiling": null,
@@ -718,6 +812,8 @@
     "description": "Microservice for Clickjacking Tester",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -727,11 +823,13 @@
     "repo_url": "https://github.com/baditaflorin/go_clickjacking_tester",
     "example_path": "/go_clickjacking_tester?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -747,6 +845,8 @@
     "description": "Microservice for Cognitive Load",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -756,11 +856,13 @@
     "repo_url": "https://github.com/baditaflorin/go_cognitive_load",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -776,6 +878,8 @@
     "description": "Microservice for Comment Extractor",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -785,11 +889,13 @@
     "repo_url": "https://github.com/baditaflorin/go_comment_extractor",
     "example_path": "/go_comment_extractor?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "HTML/JS comment extraction with multi-page crawl. 50KB.",
     "trl_ceiling": 7,
@@ -805,6 +911,8 @@
     "description": "Microservice for Company Size",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -814,11 +922,13 @@
     "repo_url": "https://github.com/baditaflorin/go_company_size",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -834,8 +944,11 @@
     "description": "Static-first planner for plant ID, crop rotation, sun, soil, watering, frost, and harvest forecasts.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/complete-gardener-planner/",
+    "pages_url": "https://baditaflorin.github.io/complete-gardener-planner/",
     "health_url": "https://baditaflorin.github.io/complete-gardener-planner/",
     "repo_url": "https://github.com/baditaflorin/complete-gardener-planner",
     "example_path": "/",
@@ -856,6 +969,8 @@
     "description": "Microservice for Compression Tester",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -865,11 +980,13 @@
     "repo_url": "https://github.com/baditaflorin/go_compression_tester",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -885,6 +1002,8 @@
     "description": "Microservice for Cookie Checker",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -894,11 +1013,13 @@
     "repo_url": "https://github.com/baditaflorin/go_cookie_checker",
     "example_path": "/go_cookie_checker?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -914,8 +1035,11 @@
     "description": "A logical, reasonably standardized, but flexible project structure for doing and sharing data science work.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "http://drivendata.github.io/cookiecutter-data-science/",
+    "pages_url": "http://drivendata.github.io/cookiecutter-data-science/",
     "health_url": "http://drivendata.github.io/cookiecutter-data-science/",
     "repo_url": "https://github.com/baditaflorin/cookiecutter-data-science",
     "example_path": "/",
@@ -936,6 +1060,8 @@
     "description": "Microservice for Cors Scanner",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -945,11 +1071,13 @@
     "repo_url": "https://github.com/baditaflorin/go_cors_scanner",
     "example_path": "/go_cors_scanner?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "Endpoint discovery, CORS preflight testing, credential+wildcard checks, risk categorization.",
     "trl_ceiling": null,
@@ -965,6 +1093,8 @@
     "description": "Microservice for Cors Tester",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -974,11 +1104,13 @@
     "repo_url": "https://github.com/baditaflorin/go_cors_tester",
     "example_path": "/go_cors_tester?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -994,6 +1126,8 @@
     "description": "Microservice for Crawl Web Application",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1003,11 +1137,13 @@
     "repo_url": "https://github.com/baditaflorin/go_crawl_web_application",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1023,6 +1159,8 @@
     "description": "Microservice for Crlf Tester",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -1032,11 +1170,13 @@
     "repo_url": "https://github.com/baditaflorin/go_crlf_tester",
     "example_path": "/go_crlf_tester?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -1052,6 +1192,8 @@
     "description": "Microservice for Crypto Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -1061,11 +1203,13 @@
     "repo_url": "https://github.com/baditaflorin/go_crypto_finder",
     "example_path": "/go_crypto_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Wallet-address regex + crypto-library fingerprinting.",
     "trl_ceiling": 6,
@@ -1081,8 +1225,11 @@
     "description": "Live browser simulator for snowflake, dendrite, and coral-like crystal growth with WebGPU visuals and sonified physics.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/crystal-growth-simulator/",
+    "pages_url": "https://baditaflorin.github.io/crystal-growth-simulator/",
     "health_url": "https://baditaflorin.github.io/crystal-growth-simulator/",
     "repo_url": "https://github.com/baditaflorin/crystal-growth-simulator",
     "example_path": "/",
@@ -1103,6 +1250,8 @@
     "description": "Microservice for Currency Detector",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1112,11 +1261,13 @@
     "repo_url": "https://github.com/baditaflorin/go_currency_detector",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Symbol regex + locale patterns + currency-switcher heuristics.",
     "trl_ceiling": 7,
@@ -1132,8 +1283,11 @@
     "description": "Shared cursors and sticky notes on an infinite canvas. P2P over a self-hosted WebRTC mesh. GitHub-Pages-only, no backend.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/cursorparty/",
+    "pages_url": "https://baditaflorin.github.io/cursorparty/",
     "health_url": "https://baditaflorin.github.io/cursorparty/",
     "repo_url": "https://github.com/baditaflorin/cursorparty",
     "example_path": "/",
@@ -1154,6 +1308,8 @@
     "description": "Microservice for Customer Logos",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1163,11 +1319,13 @@
     "repo_url": "https://github.com/baditaflorin/go_customer_logos",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1183,6 +1341,8 @@
     "description": "d3-graph \u2014 d3-graph.0exec.com",
     "category": "visualization",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "visualization"
@@ -1212,6 +1372,8 @@
     "description": "Microservice for Data Inventory",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1221,11 +1383,13 @@
     "repo_url": "https://github.com/baditaflorin/go_data_inventory",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1241,6 +1405,8 @@
     "description": "City \u2192 lat/lon with local DB (?text=)",
     "category": "geo",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "geo"
     ],
@@ -1269,6 +1435,8 @@
     "description": "Microservice for Debug Detector",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -1278,11 +1446,13 @@
     "repo_url": "https://github.com/baditaflorin/go_debug_detector",
     "example_path": "/go_debug_detector?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Stack-trace and debug-banner detection in error pages.",
     "trl_ceiling": 6,
@@ -1298,8 +1468,11 @@
     "description": "Open Source Deep Research Alternative to Reason and Search on Private Data. Written in Python.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://zilliztech.github.io/deep-searcher/",
+    "pages_url": "https://zilliztech.github.io/deep-searcher/",
     "health_url": "https://zilliztech.github.io/deep-searcher/",
     "repo_url": "https://github.com/baditaflorin/deep-searcher",
     "example_path": "/",
@@ -1320,6 +1493,8 @@
     "description": "Microservice for Dependency Counter",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1329,11 +1504,13 @@
     "repo_url": "https://github.com/baditaflorin/go_dependency_counter",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Multi-function service with basic error handling",
     "trl_ceiling": null,
@@ -1349,6 +1526,8 @@
     "description": "Microservice for Dir Listing",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -1358,11 +1537,13 @@
     "repo_url": "https://github.com/baditaflorin/go_dir_listing",
     "example_path": "/go_dir_listing?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "RFC-compliant directory listing parser with SSRF guards, tests, and verdict structure",
     "trl_ceiling": null,
@@ -1378,6 +1559,8 @@
     "description": "Microservice for Dns Record",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -1387,11 +1570,13 @@
     "repo_url": "https://github.com/baditaflorin/go_dns_record",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1407,6 +1592,8 @@
     "description": "Microservice for Domain Details",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -1416,11 +1603,13 @@
     "repo_url": "https://github.com/baditaflorin/go_domain_details",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1436,6 +1625,8 @@
     "description": "Microservice for Dtss",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1445,11 +1636,13 @@
     "repo_url": "https://github.com/baditaflorin/go_dtss",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1465,8 +1658,11 @@
     "description": "Interactive WebGPU demo: click a fault to see and hear P-waves and S-waves propagate across terrain.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
+    "pages_url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
     "health_url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
     "repo_url": "https://github.com/baditaflorin/earthquake-wave-propagation",
     "example_path": "/",
@@ -1487,8 +1683,11 @@
     "description": "Local-first elder care coordination for meds, appointments, insurance drafts, and emergency packets.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/elder-care-coordinator/",
+    "pages_url": "https://baditaflorin.github.io/elder-care-coordinator/",
     "health_url": "https://baditaflorin.github.io/elder-care-coordinator/",
     "repo_url": "https://github.com/baditaflorin/elder-care-coordinator",
     "example_path": "/",
@@ -1509,6 +1708,8 @@
     "description": "Microservice for Email Extractor",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1518,11 +1719,13 @@
     "repo_url": "https://github.com/baditaflorin/go_email_extractor",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "RFC-light parser, 5444-domain disposable gazetteer, opt-in MX validation, multi-page crawl with frontier, Cloudflare/obfuscation decoder.",
     "trl_ceiling": null,
@@ -1538,6 +1741,8 @@
     "description": "Microservice for Email Harvester",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -1547,11 +1752,13 @@
     "repo_url": "https://github.com/baditaflorin/go_email_harvester",
     "example_path": "/go_email_harvester?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Multi-page email extraction with role classification. 45KB of code.",
     "trl_ceiling": 7,
@@ -1567,6 +1774,8 @@
     "description": "Microservice for Emotional Tone",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1576,11 +1785,13 @@
     "repo_url": "https://github.com/baditaflorin/go_emotional_tone",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Keyword-bag sentiment lexicon.",
     "trl_ceiling": 4,
@@ -1596,6 +1807,8 @@
     "description": "Microservice for Env Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -1605,11 +1818,13 @@
     "repo_url": "https://github.com/baditaflorin/go_env_finder",
     "example_path": "/go_env_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": ".env / config file probing at common locations.",
     "trl_ceiling": 6,
@@ -1625,6 +1840,8 @@
     "description": "Microservice for Feed Finder",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -1634,11 +1851,13 @@
     "repo_url": "https://github.com/baditaflorin/go_feed_finder",
     "example_path": "/go_feed_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 1,
     "trl_evidence": "Pure shell skeleton.",
     "trl_ceiling": 5,
@@ -1654,8 +1873,11 @@
     "description": "A private browser instrument that records 30 seconds of now and replays it as a subtly altered sonic mirror.",
     "category": "archive",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/field-recording-mirror/",
+    "pages_url": "https://baditaflorin.github.io/field-recording-mirror/",
     "health_url": "https://baditaflorin.github.io/field-recording-mirror/",
     "repo_url": "https://github.com/baditaflorin/field-recording-mirror",
     "example_path": "/",
@@ -1676,6 +1898,8 @@
     "description": "Microservice for File Inclusion",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -1685,11 +1909,13 @@
     "repo_url": "https://github.com/baditaflorin/go_file_inclusion",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Hardcoded LFI payloads, basic fuzzing, no SSRF guards",
     "trl_ceiling": 5,
@@ -1705,6 +1931,8 @@
     "description": "Microservice for Founding Year",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1714,11 +1942,13 @@
     "repo_url": "https://github.com/baditaflorin/go_founding_year",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1734,6 +1964,8 @@
     "description": "Microservice for Funding Detector",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1743,11 +1975,13 @@
     "repo_url": "https://github.com/baditaflorin/go_funding_detector",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "189-investor gazetteer (top global VCs/angels), 11-currency regex with Asian numbering, round/year context windows, evidence trails.",
     "trl_ceiling": null,
@@ -1763,6 +1997,8 @@
     "description": "Microservice for Gdpr Compliance",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -1772,11 +2008,13 @@
     "repo_url": "https://github.com/baditaflorin/go_gdpr_compliance",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1792,8 +2030,11 @@
     "description": "Local-first ADHD self-management: voice brain-dumps become tasks, focus sessions, habits, and gentle planning.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/gentle-adhd-flow/",
+    "pages_url": "https://baditaflorin.github.io/gentle-adhd-flow/",
     "health_url": "https://baditaflorin.github.io/gentle-adhd-flow/",
     "repo_url": "https://github.com/baditaflorin/gentle-adhd-flow",
     "example_path": "/",
@@ -1814,6 +2055,8 @@
     "description": "City/address \u2192 lat/lon via TomTom (?text=)",
     "category": "geo",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "geo"
     ],
@@ -1842,6 +2085,8 @@
     "description": "Place search and details (?query=)",
     "category": "geo",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "geo"
     ],
@@ -1870,6 +2115,8 @@
     "description": "Microservice for Go Html Proxy",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "proxy"
@@ -1899,6 +2146,8 @@
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infoleak"
@@ -1928,6 +2177,8 @@
     "description": "JS-rendering proxy (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "proxy"
@@ -1957,6 +2208,8 @@
     "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "proxy",
@@ -1986,6 +2239,8 @@
     "description": "HTTP proxy with rotation (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "proxy"
@@ -2015,6 +2270,8 @@
     "description": "DuckDuckGo SERP scraper in Go (?query=)",
     "category": "search",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "search"
@@ -2044,6 +2301,8 @@
     "description": "Microservice for Google Taxonomy",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -2053,11 +2312,13 @@
     "repo_url": "https://github.com/baditaflorin/go_google_taxonomy",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 1,
     "trl_evidence": "Minimal function count, no parsing or validation logic",
     "trl_ceiling": null,
@@ -2073,8 +2334,11 @@
     "description": "Browser-based granular sandbox for teaching sand, gravel, and snow behavior with WASM physics and WebGPU visuals.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/granular-physics-lab/",
+    "pages_url": "https://baditaflorin.github.io/granular-physics-lab/",
     "health_url": "https://baditaflorin.github.io/granular-physics-lab/",
     "repo_url": "https://github.com/baditaflorin/granular-physics-lab",
     "example_path": "/",
@@ -2095,6 +2359,8 @@
     "description": "Microservice for Graphql Introspection",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -2104,11 +2370,13 @@
     "repo_url": "https://github.com/baditaflorin/go_graphql_introspection",
     "example_path": "/go_graphql_introspection?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2124,8 +2392,11 @@
     "description": "Interactive finite-group and symmetry explorer using WASM math, Three.js, and graph visualization.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/group-theory-visualizer/",
+    "pages_url": "https://baditaflorin.github.io/group-theory-visualizer/",
     "health_url": "https://baditaflorin.github.io/group-theory-visualizer/",
     "repo_url": "https://github.com/baditaflorin/group-theory-visualizer",
     "example_path": "/",
@@ -2146,6 +2417,8 @@
     "description": "Microservice for Hidden Fields",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -2155,11 +2428,13 @@
     "repo_url": "https://github.com/baditaflorin/go_hidden_fields",
     "example_path": "/go_hidden_fields?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2175,8 +2450,11 @@
     "description": "Local-first EPUB/PDF highlight review with semantic search and spaced repetition.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/highlight-recall/",
+    "pages_url": "https://baditaflorin.github.io/highlight-recall/",
     "health_url": "https://baditaflorin.github.io/highlight-recall/",
     "repo_url": "https://github.com/baditaflorin/highlight-recall",
     "example_path": "/",
@@ -2197,6 +2475,8 @@
     "description": "Microservice for Host Header",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -2206,11 +2486,13 @@
     "repo_url": "https://github.com/baditaflorin/go_host_header",
     "example_path": "/go_host_header?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2226,6 +2508,8 @@
     "description": "Microservice for Hsts Checker",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -2235,11 +2519,13 @@
     "repo_url": "https://github.com/baditaflorin/go_hsts_checker",
     "example_path": "/go_hsts_checker?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "HSTS validation with tests and SSRF protection, lightweight verdict logic",
     "trl_ceiling": 5,
@@ -2255,6 +2541,8 @@
     "description": "Microservice for Http Method Tester",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -2264,11 +2552,13 @@
     "repo_url": "https://github.com/baditaflorin/go_http_method_tester",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2284,6 +2574,8 @@
     "description": "Microservice for Http Protocol",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -2293,11 +2585,13 @@
     "repo_url": "https://github.com/baditaflorin/go_http_protocol",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2313,6 +2607,8 @@
     "description": "Microservice for Idor Finder",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -2322,11 +2618,13 @@
     "repo_url": "https://github.com/baditaflorin/go_idor_finder",
     "example_path": "/go_idor_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Baseline-response comparison heuristics.",
     "trl_ceiling": 5,
@@ -2342,6 +2640,8 @@
     "description": "Microservice for Iframe Analyzer",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -2351,11 +2651,13 @@
     "repo_url": "https://github.com/baditaflorin/go_iframe_analyzer",
     "example_path": "/go_iframe_analyzer?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Sandbox/allow attribute analysis, cross-origin frame inventory.",
     "trl_ceiling": 7,
@@ -2371,8 +2673,11 @@
     "description": "A browser audio lab for hearing live microphone input delayed, pitch-shifted, and spectrally transformed.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
+    "pages_url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
     "health_url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
     "repo_url": "https://github.com/baditaflorin/implemment-the-following-time-displaced-ears",
     "example_path": "/",
@@ -2393,6 +2698,8 @@
     "description": "Microservice for Ipv6 Checker",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -2402,11 +2709,13 @@
     "repo_url": "https://github.com/baditaflorin/go_ipv6_checker",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2422,6 +2731,8 @@
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "pentest",
@@ -2452,6 +2763,8 @@
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "pentest",
@@ -2482,6 +2795,8 @@
     "description": "Microservice for Jsonp Finder",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -2491,11 +2806,13 @@
     "repo_url": "https://github.com/baditaflorin/go_jsonp_finder",
     "example_path": "/go_jsonp_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Callback-parameter discovery + JSONP-response detection. Real but narrow.",
     "trl_ceiling": 6,
@@ -2511,6 +2828,8 @@
     "description": "Microservice for Jwt Debugger",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -2520,11 +2839,13 @@
     "repo_url": "https://github.com/baditaflorin/go_jwt_debugger",
     "example_path": "/go_jwt_debugger?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2540,6 +2861,8 @@
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "pentest",
@@ -2570,6 +2893,8 @@
     "description": "Microservice for Keyword Density",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -2579,11 +2904,13 @@
     "repo_url": "https://github.com/baditaflorin/go_keyword_density",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2599,6 +2926,8 @@
     "description": "Microservice for Legal Entity",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -2608,11 +2937,13 @@
     "repo_url": "https://github.com/baditaflorin/go_legal_entity",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2628,6 +2959,8 @@
     "description": "Scrape LinkedIn profile badge (?url=)",
     "category": "content",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "content"
     ],
@@ -2656,8 +2989,11 @@
     "description": "Turn a kid\u2019s drawing into a bedtime story narrated in a parent\u2019s voice, entirely in the browser.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/little-voice-stories",
+    "pages_url": "https://baditaflorin.github.io/little-voice-stories",
     "health_url": "https://baditaflorin.github.io/little-voice-stories",
     "repo_url": "https://github.com/baditaflorin/little-voice-stories",
     "example_path": "/",
@@ -2678,6 +3014,8 @@
     "description": "Microservice for Loadbalancer Detect",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -2687,11 +3025,13 @@
     "repo_url": "https://github.com/baditaflorin/go_loadbalancer_detect",
     "example_path": "/go_loadbalancer_detect?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2707,8 +3047,11 @@
     "description": "Local-first grammar, spelling, style, and rewrite assistant for the browser with no draft data sent to servers.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/local-proofreader/",
+    "pages_url": "https://baditaflorin.github.io/local-proofreader/",
     "health_url": "https://baditaflorin.github.io/local-proofreader/",
     "repo_url": "https://github.com/baditaflorin/local-proofreader",
     "example_path": "/",
@@ -2729,8 +3072,11 @@
     "description": "Privacy-first AI email client with local mailbox indexing, semantic search, and assistive drafting.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/localhuman-mail/",
+    "pages_url": "https://baditaflorin.github.io/localhuman-mail/",
     "health_url": "https://baditaflorin.github.io/localhuman-mail/",
     "repo_url": "https://github.com/baditaflorin/localhuman-mail",
     "example_path": "/",
@@ -2751,8 +3097,11 @@
     "description": "A private, gamified language tutor with local speech, review, grammar, and lesson generation.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/localingo/",
+    "pages_url": "https://baditaflorin.github.io/localingo/",
     "health_url": "https://baditaflorin.github.io/localingo/",
     "repo_url": "https://github.com/baditaflorin/localingo",
     "example_path": "/",
@@ -2773,6 +3122,8 @@
     "description": "Microservice for Login Analyzer",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -2782,11 +3133,13 @@
     "repo_url": "https://github.com/baditaflorin/go_login_analyzer",
     "example_path": "/go_login_analyzer?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Toy: naive form-detection only.",
     "trl_ceiling": 4,
@@ -2802,8 +3155,11 @@
     "description": "Peer-to-peer mesh: voice notes tied to a place. Scan a QR sticker on a bench, hear the last visitors. Audio lives only in browsers that have scanned.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-bench-archive/",
+    "pages_url": "https://baditaflorin.github.io/mesh-bench-archive/",
     "health_url": "https://baditaflorin.github.io/mesh-bench-archive/",
     "repo_url": "https://github.com/baditaflorin/mesh-bench-archive",
     "example_path": "/",
@@ -2824,8 +3180,11 @@
     "description": "Peer-to-peer mesh: road-trip bingo. Per-phone unique 5x5 cards, shared claim space across the car. First to a line wins.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
+    "pages_url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
     "health_url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
     "repo_url": "https://github.com/baditaflorin/mesh-carpool-bingo",
     "example_path": "/",
@@ -2846,8 +3205,11 @@
     "description": "Peer-to-peer mesh: phones pulse soft yellow in clock-synced unison for a swarm-of-fireflies effect on a night walk.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-firefly-walk/",
+    "pages_url": "https://baditaflorin.github.io/mesh-firefly-walk/",
     "health_url": "https://baditaflorin.github.io/mesh-firefly-walk/",
     "repo_url": "https://github.com/baditaflorin/mesh-firefly-walk",
     "example_path": "/",
@@ -2868,8 +3230,11 @@
     "description": "Peer-to-peer mesh: all phone flashlights strobe in single-millisecond sync to light a group photo from many angles at once.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-lightning-flash/",
+    "pages_url": "https://baditaflorin.github.io/mesh-lightning-flash/",
     "health_url": "https://baditaflorin.github.io/mesh-lightning-flash/",
     "repo_url": "https://github.com/baditaflorin/mesh-lightning-flash",
     "example_path": "/",
@@ -2890,8 +3255,11 @@
     "description": "Peer-to-peer Werewolf: phones are role cards assigned via cryptographic commit-reveal; no server ever learns who's the wolf.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-mafia/",
+    "pages_url": "https://baditaflorin.github.io/mesh-mafia/",
     "health_url": "https://baditaflorin.github.io/mesh-mafia/",
     "repo_url": "https://github.com/baditaflorin/mesh-mafia",
     "example_path": "/",
@@ -2912,8 +3280,11 @@
     "description": "Peer-to-peer mesh: 4 phones become a polyrhythm grid, each playing a clock-synced subdivision of the same BPM.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-metronome/",
+    "pages_url": "https://baditaflorin.github.io/mesh-metronome/",
     "health_url": "https://baditaflorin.github.io/mesh-metronome/",
     "repo_url": "https://github.com/baditaflorin/mesh-metronome",
     "example_path": "/",
@@ -2934,8 +3305,11 @@
     "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed \u2014 phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-mirror/",
+    "pages_url": "https://baditaflorin.github.io/mesh-mirror/",
     "health_url": "https://baditaflorin.github.io/mesh-mirror/",
     "repo_url": "https://github.com/baditaflorin/mesh-mirror",
     "example_path": "/",
@@ -2956,8 +3330,11 @@
     "description": "Peer-to-peer mesh: 2-4 friends in different homes each point their camera at a view they like; every phone tiles all the others' feeds into one composite.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-shared-window/",
+    "pages_url": "https://baditaflorin.github.io/mesh-shared-window/",
     "health_url": "https://baditaflorin.github.io/mesh-shared-window/",
     "repo_url": "https://github.com/baditaflorin/mesh-shared-window",
     "example_path": "/",
@@ -2978,8 +3355,11 @@
     "description": "Peer-to-peer mesh: group meditation timer. Phones detect stillness via accelerometer and aggregate the count anonymously.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-silence-counter/",
+    "pages_url": "https://baditaflorin.github.io/mesh-silence-counter/",
     "health_url": "https://baditaflorin.github.io/mesh-silence-counter/",
     "repo_url": "https://github.com/baditaflorin/mesh-silence-counter",
     "example_path": "/",
@@ -3000,8 +3380,11 @@
     "description": "Peer-to-peer mesh: each phone is one drum; 30 seconds of taps records a synced loop that replays on every phone.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-tap-symphony/",
+    "pages_url": "https://baditaflorin.github.io/mesh-tap-symphony/",
     "health_url": "https://baditaflorin.github.io/mesh-tap-symphony/",
     "repo_url": "https://github.com/baditaflorin/mesh-tap-symphony",
     "example_path": "/",
@@ -3022,8 +3405,11 @@
     "description": "Peer-to-peer mesh: arrange phones in a row; tap one and a ripple expands across all phones as if they were one continuous canvas.",
     "category": "peer_to_peer",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/mesh-wave-canvas/",
+    "pages_url": "https://baditaflorin.github.io/mesh-wave-canvas/",
     "health_url": "https://baditaflorin.github.io/mesh-wave-canvas/",
     "repo_url": "https://github.com/baditaflorin/mesh-wave-canvas",
     "example_path": "/",
@@ -3044,6 +3430,8 @@
     "description": "Microservice for Mime Trap",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -3053,11 +3441,13 @@
     "repo_url": "https://github.com/baditaflorin/go_mime_trap",
     "example_path": "/go_mime_trap?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -3073,6 +3463,8 @@
     "description": "Microservice for Mobile Friendly",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3082,11 +3474,13 @@
     "repo_url": "https://github.com/baditaflorin/go_mobile_friendly",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": 6,
@@ -3102,8 +3496,11 @@
     "description": "Local-first writing desk for researching, drafting, polishing, and repurposing newsletters without SaaS bloat.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/newsletter-flow/",
+    "pages_url": "https://baditaflorin.github.io/newsletter-flow/",
     "health_url": "https://baditaflorin.github.io/newsletter-flow/",
     "repo_url": "https://github.com/baditaflorin/newsletter-flow",
     "example_path": "/",
@@ -3124,6 +3521,8 @@
     "description": "NLP entity extraction from URL (?url=)",
     "category": "nlp",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "nlp"
     ],
@@ -3152,6 +3551,8 @@
     "description": "Node JS-rendering proxy (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "node",
     "tags": [
       "node",
       "proxy"
@@ -3181,6 +3582,8 @@
     "description": "Node proxy (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "node",
     "tags": [
       "node",
       "proxy"
@@ -3210,6 +3613,8 @@
     "description": "Bing SERP scraper in Node (?query=)",
     "category": "search",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "node",
     "tags": [
       "node",
       "search"
@@ -3239,6 +3644,8 @@
     "description": "DuckDuckGo SERP scraper in Node (?query=)",
     "category": "search",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "node",
     "tags": [
       "node",
       "search"
@@ -3268,8 +3675,11 @@
     "description": "Static-first academic writing platform for drafting, citations, literature review, figures, and submission-ready PDFs.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/numen/",
+    "pages_url": "https://baditaflorin.github.io/numen/",
     "health_url": "https://baditaflorin.github.io/numen/",
     "repo_url": "https://github.com/baditaflorin/numen",
     "example_path": "/",
@@ -3290,6 +3700,8 @@
     "description": "Microservice for Oauth Mapper",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -3299,11 +3711,13 @@
     "repo_url": "https://github.com/baditaflorin/go_oauth_mapper",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -3319,6 +3733,8 @@
     "description": "Extract text from PDFs \u2014 upload or URL",
     "category": "ocr",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "ocr"
     ],
@@ -3347,6 +3763,8 @@
     "description": "Express-based OCR / PDF (?url=)",
     "category": "ocr",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "ocr"
     ],
@@ -3375,6 +3793,8 @@
     "description": "Microservice for Office Locations",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3384,11 +3804,13 @@
     "repo_url": "https://github.com/baditaflorin/go_office_locations",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -3404,8 +3826,11 @@
     "description": "Browser-based toolkit for making, testing, packaging, and documenting small 2D/casual indie games.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/open-indie-studio/",
+    "pages_url": "https://baditaflorin.github.io/open-indie-studio/",
     "health_url": "https://baditaflorin.github.io/open-indie-studio/",
     "repo_url": "https://github.com/baditaflorin/open-indie-studio",
     "example_path": "/",
@@ -3426,6 +3851,8 @@
     "description": "Microservice for Open Redirect",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -3435,11 +3862,13 @@
     "repo_url": "https://github.com/baditaflorin/go_open_redirect",
     "example_path": "/go_open_redirect?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -3455,8 +3884,11 @@
     "description": "Browser-based science, math, and engineering labs for classrooms without physical equipment.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/open-school-lab/",
+    "pages_url": "https://baditaflorin.github.io/open-school-lab/",
     "health_url": "https://baditaflorin.github.io/open-school-lab/",
     "repo_url": "https://github.com/baditaflorin/open-school-lab",
     "example_path": "/",
@@ -3477,8 +3909,11 @@
     "description": "Browser-based photo editor with WASM imaging tools and local WebGPU AI features.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/openphoto-studio/",
+    "pages_url": "https://baditaflorin.github.io/openphoto-studio/",
     "health_url": "https://baditaflorin.github.io/openphoto-studio/",
     "repo_url": "https://github.com/baditaflorin/openphoto-studio",
     "example_path": "/",
@@ -3499,8 +3934,11 @@
     "description": "Beautiful map posters from OpenStreetMap, generated in your browser. No backend, no API keys.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/osm-poster/",
+    "pages_url": "https://baditaflorin.github.io/osm-poster/",
     "health_url": "https://baditaflorin.github.io/osm-poster/",
     "repo_url": "https://github.com/baditaflorin/osm-poster",
     "example_path": "/",
@@ -3521,6 +3959,8 @@
     "description": "Microservice for Outlink Graph",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3530,11 +3970,13 @@
     "repo_url": "https://github.com/baditaflorin/go_outlink_graph",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails.",
     "trl_ceiling": null,
@@ -3550,6 +3992,8 @@
     "description": "Microservice for Page Load Metrics",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3559,11 +4003,13 @@
     "repo_url": "https://github.com/baditaflorin/go_page_load_metrics",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": 6,
@@ -3579,8 +4025,11 @@
     "description": "US Street Address Parser",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "http://hassansin.github.io/parse-address/",
+    "pages_url": "http://hassansin.github.io/parse-address/",
     "health_url": "http://hassansin.github.io/parse-address/",
     "repo_url": "https://github.com/baditaflorin/parse-address",
     "example_path": "/",
@@ -3601,6 +4050,8 @@
     "description": "Microservice for Payment Detector",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3610,11 +4061,13 @@
     "repo_url": "https://github.com/baditaflorin/go_payment_detector",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "27 gateways with Stripe/PayPal variant resolution (Checkout vs Elements vs Connect), BNPL, regional (PIX/UPI/iDEAL), crypto.",
     "trl_ceiling": null,
@@ -3630,6 +4083,8 @@
     "description": "Microservice for Phone Extractor",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -3639,11 +4094,13 @@
     "repo_url": "https://github.com/baditaflorin/go_phone_extractor",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic.",
     "trl_ceiling": null,
@@ -3659,8 +4116,11 @@
     "description": "Browser-first physical sticky-note Kanban that scans AprilTags and syncs board state to collaborators.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/physical-kanban-sync/",
+    "pages_url": "https://baditaflorin.github.io/physical-kanban-sync/",
     "health_url": "https://baditaflorin.github.io/physical-kanban-sync/",
     "repo_url": "https://github.com/baditaflorin/physical-kanban-sync",
     "example_path": "/",
@@ -3681,8 +4141,11 @@
     "description": "Encrypted push-to-talk rooms in the browser. P2P audio mesh over a self-hosted WebRTC stack. GitHub-Pages-only, no backend.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/pockettalkie/",
+    "pages_url": "https://baditaflorin.github.io/pockettalkie/",
     "health_url": "https://baditaflorin.github.io/pockettalkie/",
     "repo_url": "https://github.com/baditaflorin/pockettalkie",
     "example_path": "/",
@@ -3703,8 +4166,11 @@
     "description": "Multilingual NLP pipeline for corpus analysis: tokenize, tag, parse, NER, embed, and cluster text.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
+    "pages_url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
     "health_url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
     "repo_url": "https://github.com/baditaflorin/polyglot-nlp-toolkit",
     "example_path": "/",
@@ -3725,6 +4191,8 @@
     "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "pentest",
@@ -3755,6 +4223,8 @@
     "description": "Microservice for Press Mentions",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3764,11 +4234,13 @@
     "repo_url": "https://github.com/baditaflorin/go_press_mentions",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -3784,6 +4256,8 @@
     "description": "Microservice for Price Range",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -3793,11 +4267,13 @@
     "repo_url": "https://github.com/baditaflorin/go_price_range",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -3813,6 +4289,8 @@
     "description": "A GitHub Pages-first bootstrap map for disciplined project setup.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [
       "adr",
       "github-pages",
@@ -3821,6 +4299,7 @@
       "vite"
     ],
     "url": "https://baditaflorin.github.io/project-bootstrap-meta/",
+    "pages_url": "https://baditaflorin.github.io/project-bootstrap-meta/",
     "health_url": "https://baditaflorin.github.io/project-bootstrap-meta/",
     "repo_url": "https://github.com/baditaflorin/project-bootstrap-meta",
     "example_path": "/",
@@ -3841,6 +4320,8 @@
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "pentest",
@@ -3871,6 +4352,8 @@
     "description": "Microservice for Proxy Fingerprint",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -3880,11 +4363,13 @@
     "repo_url": "https://github.com/baditaflorin/go_proxy_fingerprint",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -3900,6 +4385,8 @@
     "description": "Microservice for Pwa Manifest",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -3909,11 +4396,13 @@
     "repo_url": "https://github.com/baditaflorin/go_pwa_manifest",
     "example_path": "/go_pwa_manifest?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -3929,6 +4418,8 @@
     "description": "Python proxy (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "python",
     "tags": [
       "proxy",
       "python"
@@ -3958,6 +4449,8 @@
     "description": "Routes to a random proxy backend (?url=)",
     "category": "proxy",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "proxy"
     ],
@@ -3986,6 +4479,8 @@
     "description": "Microservice for Ratelimit Tester",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -3995,11 +4490,13 @@
     "repo_url": "https://github.com/baditaflorin/go_ratelimit_tester",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -4015,8 +4512,11 @@
     "description": "Feature-rich and customizable data grid React component",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://adazzle.github.io/react-data-grid/",
+    "pages_url": "https://adazzle.github.io/react-data-grid/",
     "health_url": "https://adazzle.github.io/react-data-grid/",
     "repo_url": "https://github.com/baditaflorin/react-data-grid",
     "example_path": "/",
@@ -4037,8 +4537,11 @@
     "description": "A local-first read-later app that turns saved articles into a dependency-ordered reading curriculum.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/read-later-curriculum/",
+    "pages_url": "https://baditaflorin.github.io/read-later-curriculum/",
     "health_url": "https://baditaflorin.github.io/read-later-curriculum/",
     "repo_url": "https://github.com/baditaflorin/read-later-curriculum",
     "example_path": "/",
@@ -4059,6 +4562,8 @@
     "description": "Microservice for Redirect Tracer",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -4068,11 +4573,13 @@
     "repo_url": "https://github.com/baditaflorin/go_redirect_tracer",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "Redirect-chain tracing with loop detection, header validation.",
     "trl_ceiling": null,
@@ -4088,6 +4595,8 @@
     "description": "Microservice for Remote Detector",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4097,11 +4606,13 @@
     "repo_url": "https://github.com/baditaflorin/go_remote_detector",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Job-board keyword matching for remote-friendliness.",
     "trl_ceiling": 6,
@@ -4117,8 +4628,11 @@
     "description": "Private browser research workspace for clustering papers, finding gaps, drafting outlines, and exporting cited Word/LaTeX.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/research-flow/",
+    "pages_url": "https://baditaflorin.github.io/research-flow/",
     "health_url": "https://baditaflorin.github.io/research-flow/",
     "repo_url": "https://github.com/baditaflorin/research-flow",
     "example_path": "/",
@@ -4139,6 +4653,8 @@
     "description": "Microservice for Revenue Model",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4148,11 +4664,13 @@
     "repo_url": "https://github.com/baditaflorin/go_revenue_model",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Evidence+verdict+confidence system with test coverage",
     "trl_ceiling": null,
@@ -4168,6 +4686,8 @@
     "description": "Microservice for Reverse Dns",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -4177,11 +4697,13 @@
     "repo_url": "https://github.com/baditaflorin/go_reverse_dns",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 15 response fields",
     "trl_ceiling": null,
@@ -4197,6 +4719,8 @@
     "description": "Local-first outliner with backlinks, graph search, semantic recall, and optional peer-to-peer sync.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [
       "crdt",
       "duckdb",
@@ -4207,6 +4731,7 @@
       "yjs"
     ],
     "url": "https://baditaflorin.github.io/roamless-notes/",
+    "pages_url": "https://baditaflorin.github.io/roamless-notes/",
     "health_url": "https://baditaflorin.github.io/roamless-notes/",
     "repo_url": "https://github.com/baditaflorin/roamless-notes",
     "example_path": "/",
@@ -4227,6 +4752,8 @@
     "description": "Microservice for Robots Analyzer",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -4236,11 +4763,13 @@
     "repo_url": "https://github.com/baditaflorin/go_robots_analyzer",
     "example_path": "/go_robots_analyzer?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-capability (2) analysis, 16 fields, tested",
     "trl_ceiling": null,
@@ -4256,6 +4785,8 @@
     "description": "Microservice for Robots Parser",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4265,11 +4796,13 @@
     "repo_url": "https://github.com/baditaflorin/go_robots_parser",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "RFC 9309 compliant: longest-match, wildcards, crawl-delay, Sitemap discovery. 10-case test suite.",
     "trl_ceiling": null,
@@ -4285,6 +4818,8 @@
     "description": "Browser-based live room visuals that react to music, people, and synced nearby devices.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [
       "audio-reactive",
       "mediapipe",
@@ -4293,6 +4828,7 @@
       "webrtc"
     ],
     "url": "https://baditaflorin.github.io/room-vj/",
+    "pages_url": "https://baditaflorin.github.io/room-vj/",
     "health_url": "https://baditaflorin.github.io/room-vj/",
     "repo_url": "https://github.com/baditaflorin/room-vj",
     "example_path": "/",
@@ -4313,6 +4849,8 @@
     "description": "Microservice for Scan Port",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -4322,11 +4860,13 @@
     "repo_url": "https://github.com/baditaflorin/go_scan_port",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 5 response fields",
     "trl_ceiling": null,
@@ -4342,6 +4882,8 @@
     "description": "Microservice for Scan Port Banner",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -4351,11 +4893,13 @@
     "repo_url": "https://github.com/baditaflorin/go_scan_port_banner",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 8 response fields",
     "trl_ceiling": null,
@@ -4371,6 +4915,8 @@
     "description": "Microservice for Scan Port Ssh",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -4380,11 +4926,13 @@
     "repo_url": "https://github.com/baditaflorin/go_scan_port_ssh",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -4400,6 +4948,8 @@
     "description": "Microservice for Scc",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4409,11 +4959,13 @@
     "repo_url": "https://github.com/baditaflorin/go_scc",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 9 response fields",
     "trl_ceiling": null,
@@ -4429,6 +4981,8 @@
     "description": "Microservice for Schema Extractor",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -4438,11 +4992,13 @@
     "repo_url": "https://github.com/baditaflorin/go_schema_extractor",
     "example_path": "/go_schema_extractor?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "JSON-LD/microdata extraction works; semantic normalization is the gap.",
     "trl_ceiling": 5,
@@ -4458,8 +5014,11 @@
     "description": "Browser-based Schlieren simulator for visualizing heat, sound, and gas density gradients with WebGPU and Three.js.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
+    "pages_url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
     "health_url": "https://baditaflorin.github.io/schlieren-imaging-simulator/",
     "repo_url": "https://github.com/baditaflorin/schlieren-imaging-simulator",
     "example_path": "/",
@@ -4480,6 +5039,8 @@
     "description": "Microservice for Search Bing Go",
     "category": "search",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "search"
@@ -4489,11 +5050,13 @@
     "repo_url": "https://github.com/baditaflorin/go-search-bing-go",
     "example_path": "/?query=anthropic+claude",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "External API abstraction with gazetteers, no independent detection logic",
     "trl_ceiling": 5,
@@ -4509,6 +5072,8 @@
     "description": "Microservice for Search Duck Go",
     "category": "search",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "search"
@@ -4518,11 +5083,13 @@
     "repo_url": "https://github.com/baditaflorin/go-search-duck-go",
     "example_path": "/?query=anthropic+claude",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 1,
     "trl_evidence": "Minimal scaffolding, no substantive handler code",
     "trl_ceiling": null,
@@ -4538,6 +5105,8 @@
     "description": "Microservice for Seasonal Detector",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4547,11 +5116,13 @@
     "repo_url": "https://github.com/baditaflorin/go_seasonal_detector",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Holiday/sale-language pattern matching.",
     "trl_ceiling": 7,
@@ -4567,6 +5138,8 @@
     "description": "Microservice for Secrets Scanner",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -4576,11 +5149,13 @@
     "repo_url": "https://github.com/baditaflorin/go_secrets_scanner",
     "example_path": "/go_secrets_scanner?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Entropy + curated regex (AWS/Stripe/SendGrid/etc) on response bodies.",
     "trl_ceiling": 7,
@@ -4596,6 +5171,8 @@
     "description": "Microservice for Security Header Analyzer",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -4605,11 +5182,13 @@
     "repo_url": "https://github.com/baditaflorin/go_security_header_analyzer",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Structured detection with 19 response fields",
     "trl_ceiling": null,
@@ -4625,6 +5204,8 @@
     "description": "Microservice for Security Headers",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4634,11 +5215,13 @@
     "repo_url": "https://github.com/baditaflorin/go_security_headers",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "RFC-aware CSP parsing, HSTS validation, score-based verdicts, cross-header isolation checks.",
     "trl_ceiling": null,
@@ -4654,6 +5237,8 @@
     "description": "Microservice for Security Txt",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -4663,11 +5248,13 @@
     "repo_url": "https://github.com/baditaflorin/go_security_txt",
     "example_path": "/go_security_txt?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Structured detection with 12 response fields",
     "trl_ceiling": null,
@@ -4683,6 +5270,8 @@
     "description": "Microservice for Seo Basics",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4692,11 +5281,13 @@
     "repo_url": "https://github.com/baditaflorin/go_seo_basics",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-capability (2) analysis, 25 fields, tested",
     "trl_ceiling": null,
@@ -4712,6 +5303,8 @@
     "description": "Microservice for Services Dashboard",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4721,11 +5314,13 @@
     "repo_url": "https://github.com/baditaflorin/go_services_dashboard",
     "example_path": "/go_services_dashboard?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -4740,6 +5335,8 @@
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
     "category": "security",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "pentest",
@@ -4770,6 +5367,8 @@
     "description": "Microservice for Session Management",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -4779,11 +5378,13 @@
     "repo_url": "https://github.com/baditaflorin/go_session_management",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Session inference with gazetteers but no evidence structure",
     "trl_ceiling": 5,
@@ -4799,6 +5400,8 @@
     "description": "Microservice for Shipping Regions",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4808,11 +5411,13 @@
     "repo_url": "https://github.com/baditaflorin/go_shipping_regions",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-capability (3) analysis, 18 fields, tested",
     "trl_ceiling": null,
@@ -4828,8 +5433,11 @@
     "description": "See OSM edits happen in real time.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "http://osmlab.github.io/show-me-the-way/",
+    "pages_url": "http://osmlab.github.io/show-me-the-way/",
     "health_url": "http://osmlab.github.io/show-me-the-way/",
     "repo_url": "https://github.com/baditaflorin/show-me-the-way",
     "example_path": "/",
@@ -4850,6 +5458,8 @@
     "description": "Microservice for Simulate Ddos",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -4859,11 +5469,13 @@
     "repo_url": "https://github.com/baditaflorin/go_simulate_ddos",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "DDoS simulation logic present but policy-blocked from public deployment",
     "trl_ceiling": 4,
@@ -4879,6 +5491,8 @@
     "description": "Discovers a site's sitemaps via robots.txt + common-path probes, follows sitemapindex chains, decompresses .gz, returns URL inventory sorted by lastmod with an evidence trail.",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4888,11 +5502,13 @@
     "repo_url": "https://github.com/baditaflorin/go_sitemap_finder",
     "example_path": "/?target=https://stripe.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "Recursive sitemap-index chaser, gunzip, robots-aware, SSRF-guarded, lastmod-sorted output. Live-verified on stripe/google/nytimes/shopify.",
     "trl_ceiling": null,
@@ -4908,6 +5524,8 @@
     "description": "Microservice for Smuggling Probe",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -4917,11 +5535,13 @@
     "repo_url": "https://github.com/baditaflorin/go_smuggling_probe",
     "example_path": "/go_smuggling_probe?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Structured detection with 20 response fields",
     "trl_ceiling": null,
@@ -4937,6 +5557,8 @@
     "description": "Microservice for Social Graph",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -4946,11 +5568,13 @@
     "repo_url": "https://github.com/baditaflorin/go_social_graph",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-capability (4) analysis, 19 fields, tested",
     "trl_ceiling": null,
@@ -4966,6 +5590,8 @@
     "description": "Microservice for Sourcemap Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -4975,11 +5601,13 @@
     "repo_url": "https://github.com/baditaflorin/go_sourcemap_finder",
     "example_path": "/go_sourcemap_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Map metadata parsing, source-path extraction.",
     "trl_ceiling": 8,
@@ -4995,8 +5623,11 @@
     "description": "Browser-based stellar lifecycle simulator using Pyodide, Plotly, and a MESA-inspired model subset.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
+    "pages_url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
     "health_url": "https://baditaflorin.github.io/stellar-evolution-simulator/",
     "repo_url": "https://github.com/baditaflorin/stellar-evolution-simulator",
     "example_path": "/",
@@ -5017,6 +5648,8 @@
     "description": "Microservice for Subdomain Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -5026,11 +5659,13 @@
     "repo_url": "https://github.com/baditaflorin/go_subdomain_finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Free CT-log (crt.sh) lookups + DNS bruteforce.",
     "trl_ceiling": 6,
@@ -5046,6 +5681,8 @@
     "description": "Microservice for Subdomain Takeover",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -5055,11 +5692,13 @@
     "repo_url": "https://github.com/baditaflorin/go_subdomain_takeover",
     "example_path": "/go_subdomain_takeover?domain=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-capability (2) analysis, 15 fields, tested",
     "trl_ceiling": null,
@@ -5075,6 +5714,8 @@
     "description": "Public-metadata scraper for Substack publications: posts, cadence, recommendations, authors.",
     "category": "content",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "substack"
@@ -5084,11 +5725,13 @@
     "repo_url": "https://github.com/baditaflorin/go_substack_scraper",
     "example_path": "/?url=https://example.substack.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "Metadata extraction, API scraping, post parsing.",
     "trl_ceiling": null,
@@ -5104,8 +5747,11 @@
     "description": "Browser-based photo-to-PBR texture creation for indie game and 3D artists, powered by WebGPU and WASM.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/substance-sampler/",
+    "pages_url": "https://baditaflorin.github.io/substance-sampler/",
     "health_url": "https://baditaflorin.github.io/substance-sampler/",
     "repo_url": "https://github.com/baditaflorin/substance-sampler",
     "example_path": "/",
@@ -5126,6 +5772,8 @@
     "description": "Microservice for Svi",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5135,11 +5783,13 @@
     "repo_url": "https://github.com/baditaflorin/go_svi",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 5 response fields",
     "trl_ceiling": null,
@@ -5154,6 +5804,8 @@
     "description": "Microservice for Swagger Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -5163,11 +5815,13 @@
     "repo_url": "https://github.com/baditaflorin/go_swagger_finder",
     "example_path": "/go_swagger_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Hardcoded path list. Superseded by api-extractor v1.2.2 which covers 31 OpenAPI paths plus AsyncAPI/gRPC-Web.",
     "trl_ceiling": 4,
@@ -5183,8 +5837,11 @@
     "description": "AprilTag-anchored AR sticky notes. Print a marker, point your camera, shared notes appear. P2P over a self-hosted WebRTC mesh. No backend.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/tagboard/",
+    "pages_url": "https://baditaflorin.github.io/tagboard/",
     "health_url": "https://baditaflorin.github.io/tagboard/",
     "repo_url": "https://github.com/baditaflorin/tagboard",
     "example_path": "/",
@@ -5205,6 +5862,8 @@
     "description": "Microservice for Team Size",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5214,11 +5873,13 @@
     "repo_url": "https://github.com/baditaflorin/go_team_size",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Multi-capability (2) analysis, 17 fields, tested",
     "trl_ceiling": null,
@@ -5234,6 +5895,8 @@
     "description": "Microservice for Tech Stack",
     "category": "web_analysis",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "web-analysis"
@@ -5243,11 +5906,13 @@
     "repo_url": "https://github.com/baditaflorin/go_tech_stack",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 5 response fields",
     "trl_ceiling": null,
@@ -5263,6 +5928,8 @@
     "description": "Microservice for Technology Stack",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5272,11 +5939,13 @@
     "repo_url": "https://github.com/baditaflorin/go_technology_stack",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -5292,6 +5961,8 @@
     "description": "Microservice for Telnet Banner",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -5301,11 +5972,13 @@
     "repo_url": "https://github.com/baditaflorin/go_telnet_banner",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -5321,6 +5994,8 @@
     "description": "Microservice for Tos Finder",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5330,11 +6005,13 @@
     "repo_url": "https://github.com/baditaflorin/go_tos_finder",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Curated 30+ canonical paths for ToS/Privacy/DMCA/etc + freshness check.",
     "trl_ceiling": 7,
@@ -5350,6 +6027,8 @@
     "description": "Microservice for Trust Decay",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5359,11 +6038,13 @@
     "repo_url": "https://github.com/baditaflorin/go_trust_decay",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "domain analysis tool, basic multi-step logic",
     "trl_ceiling": null,
@@ -5379,6 +6060,8 @@
     "description": "Client-side face and voice anonymizer for private browser-based video calls.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [
       "mediapipe",
       "privacy",
@@ -5387,6 +6070,7 @@
       "webrtc"
     ],
     "url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
+    "pages_url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
     "health_url": "https://baditaflorin.github.io/trust-no-one-anonymizer/",
     "repo_url": "https://github.com/baditaflorin/trust-no-one-anonymizer",
     "example_path": "/",
@@ -5407,6 +6091,8 @@
     "description": "Microservice for Typosquat Finder",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -5416,11 +6102,13 @@
     "repo_url": "https://github.com/baditaflorin/go_typosquat_finder",
     "example_path": "/go_typosquat_finder?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Levenshtein + homoglyph + parking detection. dnstwist-grade.",
     "trl_ceiling": 6,
@@ -5436,6 +6124,8 @@
     "description": "Microservice for Ugc Detector",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5445,11 +6135,13 @@
     "repo_url": "https://github.com/baditaflorin/go_ugc_detector",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Review/comment signal extraction.",
     "trl_ceiling": 7,
@@ -5465,8 +6157,11 @@
     "description": "Drop documents in, extract text and metadata, OCR scans, detect entities, and convert outputs to Markdown, DOCX, or EPUB.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/universal-document-workbench/",
+    "pages_url": "https://baditaflorin.github.io/universal-document-workbench/",
     "health_url": "https://baditaflorin.github.io/universal-document-workbench/",
     "repo_url": "https://github.com/baditaflorin/universal-document-workbench",
     "example_path": "/",
@@ -5487,6 +6182,8 @@
     "description": "Microservice for Update Frequency",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5496,11 +6193,13 @@
     "repo_url": "https://github.com/baditaflorin/go_update_frequency",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "domain monitoring, straightforward logic",
     "trl_ceiling": null,
@@ -5516,8 +6215,11 @@
     "description": "A static, offline-friendly planner for garden calendars, daily care, harvest logs, and next-year growing decisions.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/urban-farm-year/",
+    "pages_url": "https://baditaflorin.github.io/urban-farm-year/",
     "health_url": "https://baditaflorin.github.io/urban-farm-year/",
     "repo_url": "https://github.com/baditaflorin/urban-farm-year",
     "example_path": "/",
@@ -5538,6 +6240,8 @@
     "description": "Microservice for Url Shortener",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5547,11 +6251,13 @@
     "repo_url": "https://github.com/baditaflorin/go_url_shortener",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "Multi-step detection with tests, SSRF guards, verdict structure",
     "trl_ceiling": 5,
@@ -5567,6 +6273,8 @@
     "description": "Microservice for User Demographics",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5576,11 +6284,13 @@
     "repo_url": "https://github.com/baditaflorin/go_user_demographics",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "Comprehensive inference with tests, SSRF protection, multi-fetch logic",
     "trl_ceiling": 5,
@@ -5596,6 +6306,8 @@
     "description": "Extract structured content from URL (?url=)",
     "category": "content",
     "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "content"
     ],
@@ -5624,8 +6336,11 @@
     "description": "A private browser-based 2-minute breath coach using webcam rPPG and local HRV logging.",
     "category": "wellness",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/vagus-reset-coach/",
+    "pages_url": "https://baditaflorin.github.io/vagus-reset-coach/",
     "health_url": "https://baditaflorin.github.io/vagus-reset-coach/",
     "repo_url": "https://github.com/baditaflorin/vagus-reset-coach",
     "example_path": "/",
@@ -5646,8 +6361,11 @@
     "description": "vCard is a fully responsive personal portfolio website, responsive for all devices.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
+    "pages_url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
     "health_url": "https://codewithsadee.github.io/vcard-personal-portfolio/",
     "repo_url": "https://github.com/baditaflorin/vcard-personal-portfolio",
     "example_path": "/",
@@ -5668,6 +6386,8 @@
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "video"
@@ -5677,11 +6397,13 @@
     "repo_url": "https://github.com/baditaflorin/go_video_content",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "RFC-compliant video detection with tests, SSRF guards, verdict structure",
     "trl_ceiling": 5,
@@ -5697,6 +6419,8 @@
     "description": "Audits a URL for voice-search SEO readiness (schema.org markup, conversational queries, page load).",
     "category": "seo",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "seo",
       "go",
@@ -5707,11 +6431,13 @@
     "repo_url": "https://github.com/baditaflorin/go_voice_search",
     "example_path": "/t/default_token/?target=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "host_port": 8323,
     "container_port": 8323
   },
@@ -5721,6 +6447,8 @@
     "description": "Microservice for Wayback Checker",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -5730,11 +6458,13 @@
     "repo_url": "https://github.com/baditaflorin/go_wayback_checker",
     "example_path": "/go_wayback_checker?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 7,
     "trl_evidence": "CDX API integration, snapshot distribution analysis, historical HTTPS adoption trends.",
     "trl_ceiling": null,
@@ -5750,8 +6480,11 @@
     "description": "Live webcam dithering and filter comparison lab with auto best-detail scoring.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/webcam-dither-lab/",
+    "pages_url": "https://baditaflorin.github.io/webcam-dither-lab/",
     "health_url": "https://baditaflorin.github.io/webcam-dither-lab/",
     "repo_url": "https://github.com/baditaflorin/webcam-dither-lab",
     "example_path": "/",
@@ -5772,6 +6505,8 @@
     "description": "Microservice for Website Carbon",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5781,11 +6516,13 @@
     "repo_url": "https://github.com/baditaflorin/go_website_carbon",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "Carbon calculation with verdict logic but limited test coverage",
     "trl_ceiling": 5,
@@ -5801,6 +6538,8 @@
     "description": "Microservice for Websocket Analyzer",
     "category": "infrastructure",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "infrastructure"
@@ -5810,11 +6549,13 @@
     "repo_url": "https://github.com/baditaflorin/go_websocket_analyzer",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "infrastructure tool, bidirectional protocol analysis",
     "trl_ceiling": null,
@@ -5830,6 +6571,8 @@
     "description": "Microservice for Wellknown Scanner",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -5839,11 +6582,13 @@
     "repo_url": "https://github.com/baditaflorin/go_wellknown_scanner",
     "example_path": "/go_wellknown_scanner?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 6,
     "trl_evidence": "All RFC 8615 paths probed with response classification.",
     "trl_ceiling": 8,
@@ -5859,6 +6604,8 @@
     "description": "Microservice for Wp Plugins",
     "category": "recon",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "recon"
@@ -5868,11 +6615,13 @@
     "repo_url": "https://github.com/baditaflorin/go_wp_plugins",
     "example_path": "/go_wp_plugins?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "WordPress recon, pattern matching",
     "trl_ceiling": null,
@@ -5888,6 +6637,8 @@
     "description": "Microservice for Wps",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5897,11 +6648,13 @@
     "repo_url": "https://github.com/baditaflorin/go_wps",
     "example_path": "/?target=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 4,
     "trl_evidence": "domain service, basic enumeration",
     "trl_ceiling": null,
@@ -5917,6 +6670,8 @@
     "description": "Microservice for Xss Payload",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -5926,11 +6681,13 @@
     "repo_url": "https://github.com/baditaflorin/go_xss_payload",
     "example_path": "/go_xss_payload?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "security tooling, payload generation and validation",
     "trl_ceiling": null,
@@ -5946,6 +6703,8 @@
     "description": "Microservice for Xss Scanner",
     "category": "domains",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "domains",
       "go"
@@ -5955,11 +6714,13 @@
     "repo_url": "https://github.com/baditaflorin/go_xss_scanner",
     "example_path": "/go_xss_scanner?url=https://example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 3,
     "trl_evidence": "Reflected-payload regex pattern matching.",
     "trl_ceiling": 5,
@@ -5975,8 +6736,11 @@
     "description": "Command-line YAML and XML processor - jq wrapper for YAML/XML documents",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://kislyuk.github.io/yq/",
+    "pages_url": "https://kislyuk.github.io/yq/",
     "health_url": "https://kislyuk.github.io/yq/",
     "repo_url": "https://github.com/baditaflorin/yq",
     "example_path": "/",
@@ -5997,8 +6761,11 @@
     "description": "A browser puzzle lab where Z3-WASM solves logic games and a local LLM explains the constraints.",
     "category": "app",
     "mesh": "pages",
+    "kind": "static",
+    "language": "html",
     "tags": [],
     "url": "https://baditaflorin.github.io/z3-smt-game/",
+    "pages_url": "https://baditaflorin.github.io/z3-smt-game/",
     "health_url": "https://baditaflorin.github.io/z3-smt-game/",
     "repo_url": "https://github.com/baditaflorin/z3-smt-game",
     "example_path": "/",
@@ -6019,6 +6786,8 @@
     "description": "Microservice for Zone Transfer",
     "category": "security",
     "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
     "tags": [
       "go",
       "security"
@@ -6028,11 +6797,13 @@
     "repo_url": "https://github.com/baditaflorin/go_zone_transfer",
     "example_path": "/go_zone_transfer?domain=example.com",
     "auth": {
-      "type": "path_token",
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
     "trl": 5,
     "trl_evidence": "DNS security, RFC-aligned protocol",
     "trl_ceiling": null,

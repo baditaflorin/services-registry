@@ -22,21 +22,58 @@ fleet repo next to this file.
 
 ## Fleet at a glance
 
-~220 service repos under `github.com/baditaflorin/*`, organised into
-three meshes. Each repo declares its mesh via a GitHub topic
-(`mesh-0exec` / `mesh-0crawl` / `mesh-pages`) and its category via
-`category-<x>`. The canonical catalog is
-`services-registry/services.json`; the canonical conventions doc is
-`services-registry/FLEET.md` — **read it first** for any fleet-wide
-task.
+~220 service repos under `github.com/baditaflorin/*`. The canonical
+catalog is `services-registry/services.json`; the canonical
+conventions doc is `services-registry/FLEET.md` — **read it first**
+for any fleet-wide task.
 
-| Mesh         | Domain pattern         | Auth                                       | Used for                              |
-|--------------|------------------------|--------------------------------------------|---------------------------------------|
-| `mesh-0exec` | `<slug>.0exec.com`     | `?api_key=…` or `X-API-Key` header         | proxy, search, ocr, security          |
-| `mesh-0crawl`| `<slug>.0crawl.com`    | path token `/t/<token>/…`                  | domains, recon, web-analysis          |
-| `mesh-pages` | static / *.github.io   | none                                       | dashboards, catalogs                  |
+Every entry in the registry has three orthogonal classifying axes.
+Don't conflate them — agent tooling gates behavior on `kind`, not on
+mesh.
 
-Look at `service.yaml` in this repo to see which mesh applies.
+### Axis 1 — `kind` (what shape of deployable)
+
+| `kind`      | What it is                                  | Has port? | `/health`? | Workspace on LXC? | Bumpable version? | Counted in `fleet-runner health` / `smoke` / `deploy`? |
+|-------------|---------------------------------------------|-----------|------------|-------------------|--------------------|--------------------------------------------------------|
+| `container` | Docker service on the dockerhost            | yes       | yes        | yes               | yes                | yes                                                    |
+| `static`    | Static GitHub Pages site                    | no        | no         | no                | no                 | **no** — has its own `fleet-runner pages-audit`        |
+
+If this repo's `service.yaml` (or registry entry) says `kind: static`,
+**stop looking for a Dockerfile, a port, or Go code**. Pages services
+are HTML/CSS/JS published by GitHub Pages CI — there is no container
+to deploy and no `/health` to probe.
+
+### Axis 2 — `mesh` (which network + auth domain)
+
+| `mesh`       | Domain pattern         | Auth                                                                       | Typical contents                       |
+|--------------|------------------------|----------------------------------------------------------------------------|----------------------------------------|
+| `mesh-0exec` | `<slug>.0exec.com`     | `?api_key=…` or `X-API-Key` header — keystore-gated                        | proxy, search, ocr, security           |
+| `mesh-0crawl`| `<slug>.0crawl.com`    | **either** `?api_key=` / `X-API-Key` **or** legacy `/t/<token>/…` — keystore-gated | domains, recon, web-analysis           |
+| `mesh-pages` | `*.github.io` / custom | none (static)                                                              | dashboards, catalogs, browser-only WASM apps |
+
+Both container meshes are gated by the **same** keystore (see auth
+section below). One revoke = killed everywhere. The 0crawl path-token
+shape is preserved as a backwards-compat alias and feeds into the
+same `auth_request` flow on the nginx side.
+
+### Axis 3 — `language` (primary implementation)
+
+| `language` | When to use it                                                 |
+|------------|----------------------------------------------------------------|
+| `go`       | Default for `kind: container` in this fleet                    |
+| `node`     | Node.js services (a handful of proxies + Bing/Duck SERP scrapers) |
+| `python`   | Python services (currently 1: `python-proxy`)                  |
+| `c`        | C services (currently 1: `c-proxy`)                            |
+| `rust`     | Reserved for future use                                        |
+| `html`     | Default for `kind: static` — plain HTML/CSS/JS Pages sites     |
+| `wasm`     | Static Pages site whose primary payload is a WASM binary       |
+| `other`    | Anything that doesn't fit                                      |
+
+`fleet-runner --filter language=go converge` (or `--filter
+kind=container,language=go update-dep …`) narrows bulk operations so
+a Go-only dep bump never touches a Node, Python, or static service.
+
+Look at `service.yaml` in this repo to see which axes apply.
 
 ## TRL — technology readiness level
 
@@ -65,24 +102,34 @@ further (e.g. needs a browser engine, needs paid threat intel).
 | `0crawl-platform`     | nginx vhost templates (also embedded in fleet-runner)                          | PRIVATE    |
 | `fleet-state`         | live operational state, runbooks, SSH topology                                 | PRIVATE    |
 
-## Auth — how `mesh-0exec` actually authenticates (`go-apikey-service`)
+## Auth — both container meshes use the **same** keystore (`go-apikey-service`)
 
 **The keystore is the fleet's single point of compromise.** Treat it
-like a CA root: every `0exec` service trusts whatever it says. If
-this repo is on `mesh-0crawl` or `mesh-pages`, the keystore does not
-apply — skip this section.
+like a CA root: every `0exec` and `0crawl` service trusts whatever it
+says. If this repo is on `mesh-pages` (i.e. `kind: static`), the
+keystore does not apply — skip this section.
 
-Request flow when a caller hits `https://<slug>.0exec.com/...?api_key=<k>`:
+Request flow when a caller hits `https://<slug>.0exec.com/...?api_key=<k>`
+**or** `https://<slug>.0crawl.com/...?api_key=<k>`
+**or** `https://<slug>.0crawl.com/t/<token>/...` (legacy 0crawl shape):
 
-1. **nginx vhost** runs an `auth_request` to its `_verify_key` location.
-2. **Static fallback** — if `<k>` matches the universal demo key
-   hardcoded into the vhost, accept immediately. Survives keystore
-   outages for the public demo path.
-3. Otherwise nginx POSTs `X-Verify-Key: <k>` to the keystore's `/verify`.
+1. **nginx vhost** extracts the candidate key from query / header /
+   `/t/<token>/...` path prefix and stashes it as `$candidate_key`.
+2. **Static fallback** — if `$candidate_key` matches the universal
+   demo key (`$default_token`, included from
+   `/etc/nginx/conf.d/_default_token.conf` on the gateway), accept
+   immediately and set `X-Auth-User: demo`. Survives keystore outages
+   for the public demo path. The default token is rate-limited to
+   1 req/s and ~60 req/h per IP at this layer.
+3. Otherwise nginx POSTs `X-Verify-Key: $candidate_key` to the
+   keystore's `/verify` via `auth_request`.
 4. Keystore checks SQLite → returns 200 + `X-Auth-User` / `X-Auth-Scope`,
    or 401.
 5. On 200, nginx forwards the original request to the service
-   container, with `X-Auth-*` headers populated.
+   container with `X-Auth-*` headers populated. For 0crawl, the
+   `/t/<token>/...` prefix is stripped before proxy_pass so the
+   service receives the same path shape regardless of which auth
+   form the caller used.
 
 **Services do not call the keystore themselves** — nginx already gated
 the request. Trust the gateway-injected `X-Auth-*` headers. If you
@@ -113,11 +160,15 @@ The admin token (`X-Admin-Token` on `/issue`, `/revoke`, `/list`,
 read by clients from `APIKEY_SERVICE_ADMIN_TOKEN`. Rotation playbook:
 private `fleet-state/OPS.md`.
 
-## Auth — how `mesh-0crawl` authenticates
+## Auth — `mesh-0crawl` legacy path-token shape
 
-`/t/<token>/...` path tokens. Token validation is per-service, not
-centralised. Check the repo's handler code — typically a constant
-`default_token` plus a list of legitimate tokens loaded from env.
+`/t/<token>/...` is the **backwards-compat shape**. Real validation
+happens at the gateway via the same keystore flow as 0exec (above) —
+nginx extracts the token from the path and verifies it through the
+keystore. Services do **not** validate tokens themselves anymore;
+trust the gateway-injected `X-Auth-*` headers. Existing per-service
+`const default_token = "default_token"` constants are dead code and
+will be reaped as repos are touched.
 
 ## `go-common` packages — use these, don't reinvent
 
@@ -164,19 +215,26 @@ Binary at `/usr/local/bin/fleet-runner` on **Builder LXC 108**. From
 any workspace dir on that LXC:
 
 ```
-fleet-runner health [--insecure]             # /health on all live services
-fleet-runner smoke  [--insecure]             # GET example_url on all services
-fleet-runner build-test                      # go test ./... in every workspace
-fleet-runner update-dep <mod@ver>            # bump dep across all repos
-fleet-runner inject <src> <dest>             # copy a file into every repo
-fleet-runner exec   "<cmd>"                  # shell command in every repo
+fleet-runner health [--insecure]             # /health on all live container services (skips kind=static)
+fleet-runner smoke  [--insecure]             # GET example_url on all container services
+fleet-runner pages-audit                     # verify pages_url 200s for every kind=static entry
+fleet-runner build-test                      # go test ./... in every kind=container,language=go workspace
+fleet-runner update-dep <mod@ver>            # bump dep across all language=go repos
+fleet-runner inject <src> <dest>             # copy a file into every repo (still all kinds, on purpose)
+fleet-runner exec   "<cmd>"                  # shell command in every repo (filterable)
 fleet-runner push   "<msg>"                  # commit+push all dirty repos
 fleet-runner nginx-render                    # regenerate vhosts from templates
+fleet-runner rotate-default-token <value>    # gateway-only rotation, zero repo edits
+fleet-runner default-token                   # print the current gateway default token
 fleet-runner new-service <name> <port> [cat] # scaffold new service
 fleet-runner stats                           # audit log + token usage summary
 ```
 
-All commands accept `--tokens-used N --model NAME` for LLM accounting.
+All commands accept `--filter kind=container,language=go` (and so on)
+to narrow the set. All commands accept `--tokens-used N --model NAME`
+for LLM accounting. **`kind: static` entries are skipped by default
+on every container-shaped operation** — don't try to deploy or health-
+check a static Pages site.
 
 ## Infrastructure topology
 

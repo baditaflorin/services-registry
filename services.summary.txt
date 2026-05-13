@@ -1,10 +1,21 @@
 # Registry summary
 total: 223
 
+## by kind
+  160  container
+   63  static
+
 ## by mesh
-  130  0crawl
+  131  0crawl
    63  pages
-   30  0exec
+   29  0exec
+
+## by language
+  154  go
+   63  html
+    4  node
+    1  c
+    1  python
 
 ## by category
    55  domains
@@ -16,10 +27,11 @@ total: 223
    10  web_analysis
     9  proxy
     5  search
-    3  content
-    3  geo
     3  archive
-    2  nlp
-    2  ocr
+    3  geo
+    3  content
     2  wellness
+    2  ocr
     1  visualization
+    1  nlp
+    1  seo

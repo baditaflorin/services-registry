@@ -33,11 +33,57 @@ SUMMARY_TXT     = ROOT / "services.summary.txt"
 
 MESHES = ("0exec", "0crawl", "pages")
 
+# kind = what kind of deployable this is (orthogonal to mesh).
+#   container = runs as a Docker service (port, /health, Dockerfile, workspace).
+#   static    = static GitHub Pages site (no port, no container, no workspace).
+# fleet-runner gates kind-specific operations on this field — kind=static is
+# skipped by health/smoke/deploy/clone-missing/audit-port/bump-version.
+KIND_BY_MESH = {
+    "0exec":  "container",
+    "0crawl": "container",
+    "pages":  "static",
+}
+
 # Auth defaults per mesh — overridable per-entry in overrides.json.
+# 0crawl accepts BOTH a path-token (legacy callers) AND an api_key (new
+# universal shape, keystore-gated). The nginx vhost decides which one
+# the caller used; both flow through the same auth_request to the
+# keystore. The path_template stays advertised so existing /t/<token>/...
+# callers keep working unchanged.
 AUTH_DEFAULTS = {
     "0exec":  {"type": "api_key",    "query_param": "api_key", "header": "X-API-Key"},
-    "0crawl": {"type": "path_token", "path_template": "/t/{token}", "public_demo_token": "default_token"},
+    "0crawl": {
+        "type": "api_key",
+        "query_param": "api_key",
+        "header": "X-API-Key",
+        "path_template": "/t/{token}",
+        "public_demo_token": "default_token",
+    },
     "pages":  {"type": "none"},
+}
+
+# Language defaults per mesh when no explicit lang-<x> topic is present.
+# Container services in baditaflorin/* are overwhelmingly Go; pages are HTML.
+LANG_DEFAULTS = {
+    "0exec":  "go",
+    "0crawl": "go",
+    "pages":  "html",
+}
+
+# Known language values (must match schema enum).
+LANG_VALUES = {"go", "node", "python", "rust", "c", "html", "wasm", "other"}
+
+# Topic shortcuts that imply a language when no explicit lang-<x> topic exists.
+# Mirrors the historical tag soup ("node", "c") used before lang-* topics
+# were introduced.
+LANG_FROM_TAG = {
+    "node":   "node",
+    "nodejs": "node",
+    "python": "python",
+    "rust":   "rust",
+    "c":      "c",
+    "wasm":   "wasm",
+    "go":     "go",
 }
 
 # Default example query strings by category. Anything more specific should
@@ -105,8 +151,32 @@ def category_of(topics: list[str]) -> str:
 
 def tags_of(topics: list[str]) -> list[str]:
     return sorted({t for t in topics
-                   if not t.startswith(("mesh-", "category-"))
+                   if not t.startswith(("mesh-", "category-", "lang-"))
                    and t != "microservice"})
+
+
+def language_of(topics: list[str], mesh: str) -> str:
+    """Derive primary language for the service.
+
+    Precedence:
+      1. Explicit `lang-<x>` topic (e.g. `lang-go`, `lang-node`).
+      2. Tag-soup fallback for legacy repos that signal language via a
+         category-style topic ("node", "c", etc.).
+      3. Mesh default (container meshes → "go"; pages → "html").
+
+    fleet-runner uses this for filters like `--language=go` so a Go
+    dep-bump doesn't touch a Node or Python service. UIs use it to badge
+    the catalog row.
+    """
+    for t in topics:
+        if t.startswith("lang-"):
+            v = t[len("lang-"):]
+            if v in LANG_VALUES:
+                return v
+    for t in topics:
+        if t in LANG_FROM_TAG:
+            return LANG_FROM_TAG[t]
+    return LANG_DEFAULTS[mesh]
 
 
 # ─── Per-repo → registry entry ─────────────────────────────────────────
@@ -132,12 +202,23 @@ SLUG_OVERRIDES = load_slug_overrides()
 def auth_help_for(auth: dict) -> str:
     """Canonical short label for what auth a caller needs. UIs render this
     verbatim instead of re-implementing the if/else (which historically
-    drifts and produces "No auth" for services that actually require auth)."""
+    drifts and produces "No auth" for services that actually require auth).
+
+    On 0crawl after the keystore migration, the auth object carries BOTH
+    api_key fields and the legacy `path_template` — the label advertises
+    api_key as primary, with the path-token shape mentioned as also-supported.
+    """
     t = auth.get("type")
     if t == "api_key":
         qp = auth.get("query_param") or "api_key"
         hdr = auth.get("header") or "X-API-Key"
-        return f"api_key required (header {hdr} or ?{qp}=)"
+        base = f"api_key required (header {hdr} or ?{qp}=)"
+        tmpl = auth.get("path_template")
+        if tmpl:
+            demo = auth.get("public_demo_token")
+            extra = f"; legacy path token {tmpl}" + (f" (demo: {demo})" if demo else "")
+            return base + extra
+        return base
     if t == "path_token":
         demo = auth.get("public_demo_token")
         tmpl = auth.get("path_template") or "/t/{token}/"
@@ -198,12 +279,25 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
     exp   = ov.get("example_path",
                    DEFAULT_EXAMPLES.get(cat, DEFAULT_EXAMPLES["uncategorized"]))
 
+    kind = KIND_BY_MESH[mesh]
+    lang = ov.get("language") or language_of(topics, mesh)
+
     entry = {
         "id":           slug,
         "name":         name,
         "description":  desc,
         "category":     cat,
         "mesh":         mesh,
+        # `kind` is the deployment shape (container vs static). Orthogonal
+        # to mesh and to auth — gate kind-specific tooling on this field,
+        # never on mesh. Adding a new "kind" (serverless, cdn-only, …) is
+        # how the fleet absorbs new deployable shapes without rewriting
+        # every audit.
+        "kind":         kind,
+        # `language` drives bulk-operation filters. A Go-only dep bump
+        # narrows to language=go; a Node lockfile audit narrows to
+        # language=node. UIs render it as a small badge.
+        "language":     lang,
         "tags":         sorted(set(tags)),
         "url":          base,
         "health_url":   health_url(base, mesh),
@@ -216,6 +310,13 @@ def make_entry(repo: dict, overrides: dict) -> dict | None:
         # services on 2026-05-13). Format: short imperative.
         "auth_help":    auth_help_for(auth),
     }
+
+    # kind=static carries a `pages_url` for the catalog UI; container
+    # entries must NOT carry this field (schema enforces).
+    if kind == "static":
+        entry["pages_url"] = base
+        if ov.get("pages_source_branch"):
+            entry["pages_source_branch"] = ov["pages_source_branch"]
 
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
@@ -263,9 +364,15 @@ def build(overrides: dict) -> list[dict]:
 def write_summary(entries: list[dict]) -> str:
     from collections import Counter
     by_mesh = Counter(e["mesh"] for e in entries)
+    by_kind = Counter(e["kind"] for e in entries)
+    by_lang = Counter(e["language"] for e in entries)
     by_cat  = Counter(e["category"] for e in entries)
-    lines = ["# Registry summary", f"total: {len(entries)}", "", "## by mesh"]
+    lines = ["# Registry summary", f"total: {len(entries)}", "", "## by kind"]
+    lines += [f"  {n:3d}  {k}" for k, n in by_kind.most_common()]
+    lines += ["", "## by mesh"]
     lines += [f"  {n:3d}  {m}" for m, n in by_mesh.most_common()]
+    lines += ["", "## by language"]
+    lines += [f"  {n:3d}  {l}" for l, n in by_lang.most_common()]
     lines += ["", "## by category"]
     lines += [f"  {n:3d}  {c}" for c, n in by_cat.most_common()]
     txt = "\n".join(lines) + "\n"
