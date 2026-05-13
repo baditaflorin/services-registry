@@ -903,6 +903,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 6,
+    "trl_evidence": "RFC-compliant directory listing parser with SSRF guards, tests, and verdict structure",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8342,
     "container_port": 8342
   },
@@ -1140,6 +1146,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 2,
+    "trl_evidence": "Hardcoded LFI payloads, basic fuzzing, no SSRF guards",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs auth state for deeper testing",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8221,
     "container_port": 8221
   },
@@ -1330,12 +1342,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
-    "trl": 7,
-    "trl_evidence": "Full HSTS spec, apex+www dual testing, preload-list lookup, max-age validation.",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 4,
+    "trl_evidence": "HSTS validation with tests and SSRF protection, lightweight verdict logic",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs real browser DOM for verification",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8328,
     "container_port": 8328
   },
@@ -2253,6 +2265,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 3,
+    "trl_evidence": "External API abstraction with gazetteers, no independent detection logic",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "depends on paid API or browser crawling",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 3413,
     "container_port": 3413
   },
@@ -2276,6 +2294,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 1,
+    "trl_evidence": "Minimal scaffolding, no substantive handler code",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 3401,
     "container_port": 3401
   },
@@ -2476,6 +2500,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 3,
+    "trl_evidence": "Session inference with gazetteers but no evidence structure",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs authenticated session state for full testing",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8095,
     "container_port": 8095
   },
@@ -2522,6 +2552,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 2,
+    "trl_evidence": "DDoS simulation logic present but policy-blocked from public deployment",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "policy-blocked from public deployment",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8092,
     "container_port": 8092
   },
@@ -3005,6 +3041,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 5,
+    "trl_evidence": "Multi-step detection with tests, SSRF guards, verdict structure",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs real browser DOM for URL preview",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8320,
     "container_port": 8320
   },
@@ -3028,6 +3070,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 6,
+    "trl_evidence": "Comprehensive inference with tests, SSRF protection, multi-fetch logic",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs ML model for accuracy beyond basic heuristics",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8321,
     "container_port": 8321
   },
@@ -3052,11 +3100,11 @@
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
     "trl": 6,
-    "trl_evidence": "Video schema parsing, platform detection (YouTube/Vimeo/Wistia embeds), autoplay + a11y scoring.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": null,
+    "trl_evidence": "RFC-compliant video detection with tests, SSRF guards, verdict structure",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs ML model for codec and bitrate inference",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8322,
     "container_port": 8322
   },
@@ -3109,6 +3157,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "path token /t/{token} \u2014 public demo: default_token",
+    "trl": 4,
+    "trl_evidence": "Carbon calculation with verdict logic but limited test coverage",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs authenticated session for extended carbon source data",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8324,
     "container_port": 8324
   },
@@ -3417,6 +3471,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 1,
+    "trl_evidence": "HTML proxy scaffold without substantive handler logic",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 3002,
     "container_port": 3002
   },
@@ -3440,12 +3500,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "Internal-path/version/stack disclosure pattern matching.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": null,
+    "trl": 3,
+    "trl_evidence": "Leakage detection with SSRF protection and multi-fetch, no test coverage",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessor": "haiku-backfill-2026-05-13",
     "host_port": 8083,
     "container_port": 8083
   },
@@ -3573,12 +3633,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 8,
-    "trl_evidence": "Vector DB, LLM integration, SQLite, Prometheus metrics, developer portal. Battle-tested.",
+    "trl": 1,
+    "trl_evidence": "URL categorization stub without full implementation",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13"
+    "trl_assessor": "haiku-backfill-2026-05-13"
   },
   {
     "id": "jsbundle-routes",
