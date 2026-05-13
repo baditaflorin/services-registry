@@ -1,0 +1,16 @@
+# Canonical Dockerfile for baditaflorin Go fleet services.
+# Rendered by `fleet-runner template Dockerfile`. To opt out of fleet-wide
+# template rendering for THIS repo, add the line `# fleet-skip` near the top.
+
+FROM golang:1.24-alpine AS build
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags='-s -w' -o /out/{{.Repo}} ./...
+
+FROM alpine:3.20
+RUN apk add --no-cache ca-certificates tzdata
+COPY --from=build /out/{{.Repo}} /usr/local/bin/{{.Repo}}
+EXPOSE {{.Port}}
+ENTRYPOINT ["/usr/local/bin/{{.Repo}}"]
