@@ -4804,6 +4804,66 @@
     "container_port": 8500
   },
   {
+    "id": "go-pentest-asset-scope-resolver",
+    "name": "Go Pentest Asset Scope Resolver",
+    "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-asset-scope-resolver.0exec.com",
+    "health_url": "https://go-pentest-asset-scope-resolver.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-asset-scope-resolver",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Fans out to cert-transparency + subfinder in parallel, filters via scope-guard with 16-worker pool. Depends on 3 other fleet services.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18126,
+    "container_port": 18126
+  },
+  {
+    "id": "go-pentest-audit-log",
+    "name": "Go Pentest Audit Log",
+    "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-audit-log.0exec.com",
+    "health_url": "https://go-pentest-audit-log.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-audit-log",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18119,
+    "container_port": 18119
+  },
+  {
     "id": "go-pentest-bounty-scope-checker",
     "name": "Go Pentest Bounty Scope Checker",
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
@@ -4866,6 +4926,66 @@
     "container_port": 18109
   },
   {
+    "id": "go-pentest-codec",
+    "name": "Go Pentest Codec",
+    "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-codec.0exec.com",
+    "health_url": "https://go-pentest-codec.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-codec",
+    "example_path": "/encode?algo=base64&input=hello",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 8,
+    "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs.",
+    "trl_ceiling": 9,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18118,
+    "container_port": 18118
+  },
+  {
+    "id": "go-pentest-cors-misconfig-prober",
+    "name": "Go Pentest Cors Misconfig Prober",
+    "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-cors-misconfig-prober.0exec.com",
+    "health_url": "https://go-pentest-cors-misconfig-prober.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-cors-misconfig-prober",
+    "example_path": "/probe?url=https%3A%2F%2Fexample.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "5 active probes, reflection+credentials high-sev detection, suffix-confusion + pre-subdomain bypass, case-fold. Tested positive (high) + negative.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18124,
+    "container_port": 18124
+  },
+  {
     "id": "go-pentest-cvss",
     "name": "Go Pentest Cvss",
     "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
@@ -4897,6 +5017,37 @@
     "container_port": 18107
   },
   {
+    "id": "go-pentest-dependency-cve",
+    "name": "Go Pentest Dependency Cve",
+    "description": "CPE -> NVD JSON 2.0 + CISA KEV cross-flag. Per-request fetch (no local cache yet). Composes with go-pentest-httpx tech detection.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-dependency-cve.0exec.com",
+    "health_url": "https://go-pentest-dependency-cve.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-dependency-cve",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "NVD JSON 2.0 + CISA KEV cross-flag. Per-request fetch (no local CVE DB cache yet). Free, no API key.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "TRL 7 with local CVE feed primitive caching NVD/GHSA delta-updates.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18125,
+    "container_port": 18125
+  },
+  {
     "id": "go-pentest-disclosure-policy-finder",
     "name": "Go Pentest Disclosure Policy Finder",
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
@@ -4926,6 +5077,36 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18111,
     "container_port": 18111
+  },
+  {
+    "id": "go-pentest-favicon-hash",
+    "name": "Go Pentest Favicon Hash",
+    "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-favicon-hash.0exec.com",
+    "health_url": "https://go-pentest-favicon-hash.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-favicon-hash",
+    "example_path": "/lookup?hash=-1996286744",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 7,
+    "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity.",
+    "trl_ceiling": 9,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18117,
+    "container_port": 18117
   },
   {
     "id": "go-pentest-findings-store",
@@ -5176,6 +5357,37 @@
     "container_port": 18105
   },
   {
+    "id": "go-pentest-secrets-scanner",
+    "name": "Go Pentest Secrets Scanner",
+    "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-secrets-scanner.0exec.com",
+    "health_url": "https://go-pentest-secrets-scanner.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-secrets-scanner",
+    "example_path": "/rules",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "~30 vendor rules, Shannon-entropy gate via math.Log2, line+context+redaction. Tested vs real-looking fixtures.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "TRL 8 with verified-secret feature (call vendor API to confirm key is live).",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18122,
+    "container_port": 18122
+  },
+  {
     "id": "go-pentest-subfinder",
     "name": "Go Pentest Subfinder",
     "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
@@ -5207,6 +5419,66 @@
     "container_port": 18112
   },
   {
+    "id": "go-pentest-takeover-checker",
+    "name": "Go Pentest Takeover Checker",
+    "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-takeover-checker.0exec.com",
+    "health_url": "https://go-pentest-takeover-checker.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-takeover-checker",
+    "example_path": "/check?host=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "CNAME + HTTP probe + signature match. Severity scoring combines CNAME-known-vendor + body match. Confirmed tier (vendor registration check) deferred.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18121,
+    "container_port": 18121
+  },
+  {
+    "id": "go-pentest-takeover-fingerprints",
+    "name": "Go Pentest Takeover Fingerprints",
+    "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-takeover-fingerprints.0exec.com",
+    "health_url": "https://go-pentest-takeover-fingerprints.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-takeover-fingerprints",
+    "example_path": "/fingerprints",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "17 curated signatures from can-i-take-over-xyz + in-the-wild. CNAME+status+body multi-signal match. Tested positive (S3) + negative cases.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18116,
+    "container_port": 18116
+  },
+  {
     "id": "go-pentest-target-normalizer",
     "name": "Go Pentest Target Normalizer",
     "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR). Returns kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls before doing anything else.",
@@ -5236,6 +5508,36 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18102,
     "container_port": 18102
+  },
+  {
+    "id": "go-pentest-wayback-urls",
+    "name": "Go Pentest Wayback Urls",
+    "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-wayback-urls.0exec.com",
+    "health_url": "https://go-pentest-wayback-urls.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-wayback-urls",
+    "example_path": "/urls?domain=example.com&limit=5",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 7,
+    "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump).",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18127,
+    "container_port": 18127
   },
   {
     "id": "go-pentest-wordlists",
