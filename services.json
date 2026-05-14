@@ -4867,7 +4867,7 @@
   {
     "id": "go-pentest-bounty-scope-checker",
     "name": "Go Pentest Bounty Scope Checker",
-    "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
+    "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed (~10 programs). Pluggable datasources: EXTRA_PROGRAMS_FILE (file), CHAOS_ENABLED=1 (chaos.projectdiscovery.io integration), or POST /programs (runtime).",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -4887,13 +4887,15 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
-    "trl_evidence": "Bug-bounty scope matcher uses curated program seed data, regex caching, payout sorting, structured matches, and tests.",
+    "trl_evidence": "Pluggable datasource factory pattern with embedded, file, and chaos datasources. Curated program seed, suffix-confusion defense, regex caching, payout sorting, full test coverage.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Production freshness depends on continuously updated program feeds.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "codex-session-2026-05-14",
     "host_port": 18110,
-    "container_port": 18110
+    "container_port": 18110,
+    "version": "0.2.0",
+    "trl_updated_at": "2026-05-15"
   },
   {
     "id": "go-pentest-cert-transparency",
