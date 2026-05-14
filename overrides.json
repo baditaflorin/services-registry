@@ -2388,5 +2388,65 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch"
+  },
+  "go-pentest-target-normalizer": {
+    "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR). Returns kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls before doing anything else.",
+    "host_port": 18102,
+    "container_port": 18102,
+    "example_path": "/?q=https://EXAMPLE.com/path",
+    "trl": 5,
+    "trl_evidence": "Stdlib net/url + golang.org/x/net/{idna,publicsuffix}; pure CPU; full test coverage on URL/host/IP/CIDR/IDN/private-IP paths.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling is whatever publicsuffix list covers; no external deps to break.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14"
+  },
+  "go-pentest-findings-store": {
+    "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed (pure Go modernc); collapses same finding from multiple scanners via dedup_key with seen_count.",
+    "host_port": 18103,
+    "container_port": 18103,
+    "example_path": "/findings?limit=1",
+    "trl": 5,
+    "trl_evidence": "modernc.org/sqlite (pure-Go SQLite); upsert+dedup via ON CONFLICT RETURNING; tested for insert/dedup/list/filter/stats/status.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite is fine until ~1M findings; horizontal shard or Postgres later.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14"
+  },
+  "go-pentest-rate-coordinator": {
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
+    "host_port": 18104,
+    "container_port": 18104,
+    "example_path": "/stats",
+    "trl": 5,
+    "trl_evidence": "golang.org/x/time/rate (stdlib-blessed) buckets per host; tested burst, deny, distinct hosts, policy override, wait+context cancel.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14"
+  },
+  "go-pentest-scope-guard": {
+    "description": "Hard scope check before any active prober fires. POST /check {target, program_id} -> {allowed, reason, matched_by}. Matches hostname/wildcard/CIDR/regex; exclusions always win. Legal floor of the pentest fleet.",
+    "host_port": 18105,
+    "container_port": 18105,
+    "example_path": "/programs",
+    "trl": 5,
+    "trl_evidence": "In-memory store, hostname/wildcard/CIDR/regex matchers with anchored regex cache; exclusion-wins logic; suffix-confusion regression test.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14"
+  },
+  "go-pentest-oob-collector": {
+    "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
+    "host_port": 18106,
+    "container_port": 18106,
+    "example_path": "/sessions?limit=1",
+    "trl": 4,
+    "trl_evidence": "HTTP-callback path tested end-to-end (create session -> fire /c/{token} -> poll hits). XFF-aware client IP capture. DNS exfil pending v0.2.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14"
   }
 }
