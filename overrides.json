@@ -255,12 +255,12 @@
     "description": "Microservice for Broken Links",
     "example_path": "/go_broken_links?target=example.com",
     "host_port": 8192,
-    "trl": 5,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_evidence": "10/10 corpus PASS including Cloudflare-fronted sites and Stripe SaaS. 379 LOC handler uses safehttp + classifies broken links by status."
   },
   "bucket-finder": {
     "container_port": 8339,
@@ -368,12 +368,12 @@
     "description": "Microservice for Comment Extractor",
     "example_path": "/go_comment_extractor?url=https://example.com",
     "host_port": 8340,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 6,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "HTML/JS comment extraction with multi-page crawl. 50KB."
+    "trl_evidence": "10/10 corpus PASS: extracts inline comments + correctly reports decisive-zero for minified SPAs (HN/Stripe/Notion verified to have no <!-- --> markers in raw HTML). Returns html_comments + js_comments + css_comments + total_found + truncated."
   },
   "company-size": {
     "container_port": 8281,
@@ -411,12 +411,12 @@
     "description": "Microservice for Cookie Checker",
     "example_path": "/go_cookie_checker?url=https://example.com",
     "host_port": 8226,
-    "trl": 5,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_evidence": "10/10 corpus PASS. Per-cookie analysis with security_grade composite + summary. Handles real-world Set-Cookie variety (NYT, Notion, Stripe)."
   },
   "cookiecutter-data-science": {
     "trl": 4,
@@ -757,12 +757,12 @@
     "description": "Microservice for Gdpr Compliance",
     "example_path": "/?url=https://example.com",
     "host_port": 8291,
-    "trl": 5,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_evidence": "10/10 corpus PASS including CMP-heavy sites (NYT, Allbirds). Returns cookie_banner detection, privacy_policy + cookie_policy URL discovery, dpo_contact, lawful_basis_disclosed."
   },
   "gentle-adhd-flow": {
     "trl": 3,
@@ -1295,12 +1295,12 @@
     "description": "Microservice for Iframe Analyzer",
     "example_path": "/go_iframe_analyzer?url=https://example.com",
     "host_port": 8243,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 6,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Sandbox/allow attribute analysis, cross-origin frame inventory."
+    "trl_evidence": "10/10 corpus PASS post port-drift fix (vhost was pointing to 8159, container on 8243). Cross-origin iframe inventory + sandbox/allow attribute analysis. Returns iframes[], summary{total,by_origin,hidden,with_sandbox}, overall_risk."
   },
   "implemment-the-following-time-displaced-ears": {
     "trl": 2,
@@ -1386,12 +1386,12 @@
     "description": "Microservice for Keyword Density",
     "example_path": "/?url=https://example.com",
     "host_port": 8292,
-    "trl": 4,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Multi-function structure, limited error handling and tests"
+    "trl_evidence": "10/10 corpus PASS. Multi-language stopwords, n-gram (uni/bi/tri) with density %, title_keyword_overlap, verdict. Handles JS-heavy SPA (Notion), Cloudflare-fronted, slow multi-redirect (AWS)."
   },
   "legal-entity": {
     "container_port": 8293,
@@ -2035,12 +2035,12 @@
     "description": "Microservice for Robots Analyzer",
     "example_path": "/go_robots_analyzer?target=example.com",
     "host_port": 8184,
-    "trl": 4,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Multi-capability (2) analysis, 16 fields, tested"
+    "trl_evidence": "9/10 corpus PASS (1 BROKEN: allbirds upstream 429 \u2014 out of our hands). Returns verdict {missing,sane,fully_open,...}, user_agents, rules_per_ua, sitemaps, sensitive_paths_revealed, interesting_comments. Distinguishes 'no robots.txt' (verdict=missing) from 'comments-only robots.txt' (verdict=sane) cleanly. Tests: parse_test.go + classify_test.go + handler_test.go."
   },
   "robots-parser": {
     "container_port": 8304,
@@ -2217,12 +2217,12 @@
     "description": "Microservice for Seo Basics",
     "example_path": "/?url=https://example.com",
     "host_port": 8308,
-    "trl": 4,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Multi-capability (2) analysis, 25 fields, tested"
+    "trl_evidence": "10/10 corpus PASS. 25 fields across title, meta_description, open_graph, twitter_card, canonical, headings, html_lang, images. 324 LOC handler using safehttp."
   },
   "services-dashboard": {
     "description": "Microservice for Services Dashboard",
@@ -2350,12 +2350,12 @@
     "description": "Microservice for Subdomain Finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
     "host_port": 8348,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "trl_ceiling": 6,
-    "trl_ceiling_reason": "CT-log free tier rate-limits at ~100 subdomains/domain. Real upgrade needs paid CT mirror or DNSDB.",
-    "trl_evidence": "Free CT-log (crt.sh) lookups + DNS bruteforce."
+    "trl": 6,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "CT-log free tiers rate-limit aggressively; reaching TRL 8 would need a paid CT mirror (DNSDB) or self-hosted CT replica.",
+    "trl_evidence": "Bumped 1.4.0\u21921.4.1 with URL-input coercion (was rejecting full URLs as 'must be bare hostname'). 10/10 corpus PASS post-fix. Multi-source: crt.sh + hackertarget + homepage_scrape + opt-in wayback. Per-source result_count + error trail."
   },
   "subdomain-takeover": {
     "container_port": 8223,
@@ -2574,12 +2574,12 @@
     "description": "Extract structured content from URL (?url=)",
     "host_port": 18018,
     "name": "Read Content",
-    "trl": 5,
+    "trl": 6,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "content utility, multi-format reading"
+    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 \u2014 pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs."
   },
   "vagus-reset-coach": {
     "trl": 3,
