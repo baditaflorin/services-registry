@@ -895,6 +895,18 @@
     "trl_ceiling_reason": "Add Censys + Google CT in parallel for redundancy.",
     "trl_evidence": "crt.sh fetcher + SQLite cache (modernc) + wildcard-skip + SAN-suffix filter; tested for normalization, cache hits, subdomain filter."
   },
+  "go-pentest-chaos-sync": {
+    "container_port": 18128,
+    "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
+    "example_path": "/sync/status",
+    "host_port": 18128,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
+    "trl_evidence": "Downloads + parses Chaos public-bug-bounty index; SQLite WAL + bulk-tx upserts; 4-way concurrent zip fetch; daily refresh cron; trigger rate-limited to 10min; lookup tested in-memory."
+  },
   "go-pentest-codec": {
     "container_port": 18118,
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
@@ -976,6 +988,18 @@
     "trl_ceiling_reason": "Single-node SQLite is fine until ~1M findings; horizontal shard or Postgres later.",
     "trl_evidence": "modernc.org/sqlite (pure-Go SQLite); upsert+dedup via ON CONFLICT RETURNING; tested for insert/dedup/list/filter/stats/status."
   },
+  "go-pentest-github-dorks": {
+    "container_port": 18123,
+    "description": "GitHub Search API dorking for leaked credentials: 31 curated patterns (AWS keys, .env, private keys, Slack/Stripe/PAT tokens, kubeconfig, npm/Docker creds). Rate-limit aware; pairs with go-pentest-trufflehog for verification.",
+    "example_path": "/dorks",
+    "host_port": 18123,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "GitHub Search has no regex; semantic dedup + verifier-loop integration cap the climb at 6.",
+    "trl_evidence": "31 dorks across credentials/private-keys/internal/config; uses google/go-github v66; reads X-RateLimit-Remaining and backs off; catalog-hygiene + missing-token + missing-scope tests."
+  },
   "go-pentest-httpx": {
     "container_port": 18113,
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
@@ -999,6 +1023,18 @@
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
     "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks."
+  },
+  "go-pentest-nuclei": {
+    "container_port": 18115,
+    "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
+    "example_path": "/templates",
+    "host_port": 18115,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Pinned-binary wrapping; templates refresh cadence + concurrency stress-testing gate the climb to 7.",
+    "trl_evidence": "Wraps nuclei binary; scope-guard pre-flight (fail-closed); -jsonl streaming parser; best-effort findings forwarding via safehttp; 5 unit tests covering 400/405/scope-empty/templates/JSONL-parse."
   },
   "go-pentest-oob-collector": {
     "container_port": 18106,
@@ -1117,6 +1153,18 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling is whatever publicsuffix list covers; no external deps to break.",
     "trl_evidence": "Stdlib net/url + golang.org/x/net/{idna,publicsuffix}; pure CPU; full test coverage on URL/host/IP/CIDR/IDN/private-IP paths."
+  },
+  "go-pentest-trufflehog": {
+    "container_port": 18120,
+    "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). 700+ detectors live-tested against providers. Upgrades go-pentest-secrets-scanner with verification.",
+    "example_path": "/",
+    "host_port": 18120,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
+    "trl_evidence": "Wraps trufflehog binary in --only-verified; supports git/github/filesystem sources; argv-injection guards; path-escape guards; 6 unit tests including TestScan_filesystemEscape."
   },
   "go-pentest-wayback-urls": {
     "container_port": 18127,
