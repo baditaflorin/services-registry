@@ -2448,5 +2448,63 @@
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14"
-  }
+  },
+  "$rules": [
+    {
+      "name": "phone-extractor-san-cert",
+      "match": {
+        "ids": [
+          "a11y-quick",
+          "accessibility-score",
+          "ad-density",
+          "address-extractor",
+          "api-first",
+          "biz-classifier",
+          "broken-links",
+          "cas",
+          "cognitive-load",
+          "company-size",
+          "currency-detector",
+          "customer-logos",
+          "data-inventory",
+          "dependency-counter",
+          "dtss",
+          "email-extractor",
+          "emotional-tone",
+          "founding-year",
+          "funding-detector",
+          "gdpr-compliance",
+          "keyword-density",
+          "legal-entity",
+          "mobile-friendly",
+          "office-locations",
+          "outlink-graph",
+          "page-load-metrics",
+          "press-mentions",
+          "price-range",
+          "remote-detector",
+          "revenue-model",
+          "robots-parser",
+          "scc",
+          "seasonal-detector",
+          "security-headers",
+          "seo-basics",
+          "shipping-regions",
+          "sitemap-finder",
+          "social-graph",
+          "svi",
+          "team-size",
+          "technology-stack",
+          "trust-decay",
+          "ugc-detector",
+          "update-frequency",
+          "wps"
+        ]
+      },
+      "patch": {
+        "cert_domain": "phone-extractor.0crawl.com"
+      },
+      "why": "45 0crawl vhosts share phone-extractor.0crawl.com's SAN cert. Tracked explicitly so fleet-runner cert reissue can target them one-by-one (target state: each gets its own cert)."
+    }
+  ]
 }
