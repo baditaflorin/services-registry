@@ -82,33 +82,45 @@ Filenames are exact. `<id>` = repo name (e.g. `go_jwt_pentest`); `<port>`
 ```go
 package main
 
-import (
-    "github.com/baditaflorin/go-common/config"
-    "github.com/baditaflorin/go-common/server"
-)
+import "github.com/baditaflorin/go-common/server"
 
 // Set at build time; keep in sync with service.yaml.version and git tag.
 const version = "0.1.0"
 
 func main() {
+    server.Run("<id>", version, Handler)
+}
+```
+
+`server.Run` (go-common ≥ v0.9.0) is the canonical entrypoint for both
+0crawl and 0exec services. It loads config, mounts `/health`,
+`/version`, `/metrics`, wraps the mux with `TokenAuthKeystore` (gateway
+X-Auth-User fast path + keystore fallback + `default_token` local
+fallback), and binds `/`, `/<id>`, and the public kebab alias to
+`Handler`. Don't open-code any of that.
+
+Need extra routes or extra middleware? Drop down to the explicit form:
+
+```go
+import (
+    "github.com/baditaflorin/go-common/config"
+    "github.com/baditaflorin/go-common/server"
+)
+
+func main() {
     cfg := config.Load("<id>", version)
-
-    // mesh-0exec: gateway sets X-Auth-User; middleware trusts that header
-    // and falls back to the keystore for direct hits.
     srv := server.New(cfg, server.WithKeystoreAuth("default_token"))
-
-    // mesh-0crawl: path-token; route both shapes that nginx may forward.
-    // srv := server.New(cfg)
-    // srv.Mux.HandleFunc("/t/", Handler)
-    // srv.Mux.HandleFunc("/<id>", Handler)
-
     srv.Mux.HandleFunc("/", Handler)
+    srv.Mux.HandleFunc("/<id>", Handler)
+    srv.Mux.HandleFunc("/extra-thing", ExtraHandler)
     srv.Start()
 }
 ```
 
-`server.New` already wires `/health`, `/version`, `/metrics`, RequestID,
-Logging, Metrics middleware. Don't re-implement them.
+The fleet rule is: **change the library, not 130 main.go files.** If
+you find yourself wanting to add the same line to every service, push
+it into `go-common/server` and bump the dep instead — see the
+cardinal rule in CLAUDE.md.
 
 ### `handler.go`
 
