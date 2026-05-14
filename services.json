@@ -20,10 +20,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": 6,
@@ -55,10 +54,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "WCAG rule corpus, heading structure, image alt sampling.",
     "trl_ceiling": 8,
@@ -90,10 +88,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Ad-slot detection by class/id patterns, network call counting.",
     "trl_ceiling": 7,
@@ -125,10 +122,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Regex + small gazetteer. Toy for the multi-country general case.",
     "trl_ceiling": 5,
@@ -160,10 +156,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Expanded admin path corpus with HEAD/GET fallback, status-to-signal triage, confidence verdicts, SSRF guard, and tests.",
     "trl_ceiling": 6,
@@ -194,10 +189,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -228,10 +222,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "31 canonical OpenAPI paths across stacks, AsyncAPI detection, gRPC-Web fingerprint, GraphQL introspection, auth-scheme inference.",
     "trl_ceiling": null,
@@ -262,10 +255,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Multi-function service with basic error handling",
     "trl_ceiling": null,
@@ -297,10 +289,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Entropy-based + pattern-matched API key detection in HTML+JS.",
     "trl_ceiling": 7,
@@ -331,10 +322,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -365,10 +355,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict.",
     "trl_ceiling": null,
@@ -400,10 +389,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Wrapper around external DNSBL/feeds.",
     "trl_ceiling": 5,
@@ -434,10 +422,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS including Cloudflare-fronted sites and Stripe SaaS. 379 LOC handler uses safehttp + classifies broken links by status.",
     "trl_ceiling": null,
@@ -469,10 +456,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "URL-pattern detection for S3/GCS/Azure buckets.",
     "trl_ceiling": 5,
@@ -503,10 +489,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation.",
     "trl_ceiling": null,
@@ -537,10 +522,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
     "trl_ceiling": 7,
@@ -571,10 +555,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -606,10 +589,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 8,
     "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring.",
     "trl_ceiling": null,
@@ -640,10 +622,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Classifies X-Frame-Options, CSP frame-ancestors, iframe embeddability risk, parser edge cases, and tests.",
     "trl_ceiling": 6,
@@ -674,10 +655,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -709,10 +689,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS: extracts inline comments + correctly reports decisive-zero for minified SPAs (HN/Stripe/Notion verified to have no <!-- --> markers in raw HTML). Returns html_comments + js_comments + css_comments + total_found + truncated.",
     "trl_ceiling": 7,
@@ -743,10 +722,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -778,10 +756,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -812,10 +789,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS. Per-cookie analysis with security_grade composite + summary. Handles real-world Set-Cookie variety (NYT, Notion, Stripe).",
     "trl_ceiling": null,
@@ -846,10 +822,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "Endpoint discovery, CORS preflight testing, credential+wildcard checks, risk categorization.",
     "trl_ceiling": null,
@@ -880,10 +855,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -914,10 +888,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -948,10 +921,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -982,10 +954,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Wallet-address regex + crypto-library fingerprinting.",
     "trl_ceiling": 6,
@@ -1016,10 +987,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Symbol regex + locale patterns + currency-switcher heuristics.",
     "trl_ceiling": 7,
@@ -1051,10 +1021,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1086,10 +1055,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1121,10 +1089,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Stack-trace and debug-banner detection in error pages.",
     "trl_ceiling": 6,
@@ -1155,10 +1122,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Multi-function service with basic error handling",
     "trl_ceiling": null,
@@ -1190,10 +1156,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "RFC-compliant directory listing parser with SSRF guards, tests, and verdict structure",
     "trl_ceiling": null,
@@ -1224,10 +1189,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1258,10 +1222,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1292,10 +1255,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1327,10 +1289,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "RFC-light parser, 5444-domain disposable gazetteer, opt-in MX validation, multi-page crawl with frontier, Cloudflare/obfuscation decoder.",
     "trl_ceiling": null,
@@ -1362,10 +1323,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Same-domain contact/about/legal discovery, email extraction with found_on evidence, dedupe, SSRF guard, and tests.",
     "trl_ceiling": 7,
@@ -1396,14 +1356,13 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Keyword-bag sentiment lexicon.",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8288,
@@ -1431,10 +1390,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": ".env / config file probing at common locations.",
     "trl_ceiling": 6,
@@ -1465,10 +1423,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "RSS/Atom/JSON autodiscovery, conventional feed probes, WordPress JSON hinting, feed parsing, source/confidence output, and unit tests.",
     "trl_ceiling": 7,
@@ -1499,10 +1456,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Hardcoded LFI payloads, basic fuzzing, no SSRF guards",
     "trl_ceiling": 5,
@@ -1533,10 +1489,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -1568,10 +1523,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "189-investor gazetteer (top global VCs/angels), 11-currency regex with Asian numbering, round/year context windows, evidence trails.",
     "trl_ceiling": null,
@@ -1603,10 +1557,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS including CMP-heavy sites (NYT, Allbirds). Returns cookie_banner detection, privacy_policy + cookie_policy URL discovery, dpo_contact, lawful_basis_disclosed.",
     "trl_ceiling": null,
@@ -1638,10 +1591,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 1,
     "trl_evidence": "Minimal function count, no parsing or validation logic",
     "trl_ceiling": null,
@@ -1672,10 +1624,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "GraphQL endpoint probing and introspection checks with structured responses, SSRF safety, and tests.",
     "trl_ceiling": 6,
@@ -1706,10 +1657,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -1740,10 +1690,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -1774,10 +1723,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "HSTS validation with tests and SSRF protection, lightweight verdict logic",
     "trl_ceiling": 5,
@@ -1808,10 +1756,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1842,10 +1789,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -1876,10 +1822,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Finds numeric/UUID IDs in path/query, generates tampered variants, compares status/body hashes, classifies auth guards, and tests.",
     "trl_ceiling": 6,
@@ -1910,10 +1855,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS post port-drift fix (vhost was pointing to 8159, container on 8243). Cross-origin iframe inventory + sandbox/allow attribute analysis. Returns iframes[], summary{total,by_origin,hidden,with_sandbox}, overall_risk.",
     "trl_ceiling": 7,
@@ -1944,10 +1888,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -1978,10 +1921,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Callback-parameter discovery + JSONP-response detection. Real but narrow.",
     "trl_ceiling": 6,
@@ -2012,10 +1954,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2046,10 +1987,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS. Multi-language stopwords, n-gram (uni/bi/tri) with density %, title_keyword_overlap, verdict. Handles JS-heavy SPA (Notion), Cloudflare-fronted, slow multi-redirect (AWS).",
     "trl_ceiling": null,
@@ -2081,10 +2021,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Legal extraction returns entity names, jurisdiction hints, addresses, VAT/company identifiers, source evidence, and tests.",
     "trl_ceiling": 7,
@@ -2116,10 +2055,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2150,10 +2088,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Toy: naive form-detection only.",
     "trl_ceiling": 4,
@@ -2184,10 +2121,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2218,10 +2154,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": 6,
@@ -2253,10 +2188,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
     "trl_ceiling": 7,
@@ -2287,10 +2221,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -2322,10 +2255,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2356,10 +2288,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails.",
     "trl_ceiling": null,
@@ -2391,10 +2322,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": 6,
@@ -2426,10 +2356,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "27 gateways with Stripe/PayPal variant resolution (Checkout vs Elements vs Connect), BNPL, regional (PIX/UPI/iDEAL), crypto.",
     "trl_ceiling": null,
@@ -2460,10 +2389,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic.",
     "trl_ceiling": null,
@@ -2494,10 +2422,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated validation logic, error handling, some test coverage",
     "trl_ceiling": null,
@@ -2529,10 +2456,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2564,10 +2490,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2598,10 +2523,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-function structure, limited error handling and tests",
     "trl_ceiling": null,
@@ -2632,10 +2556,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Basic multi-step logic without test coverage",
     "trl_ceiling": null,
@@ -2666,10 +2589,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "Redirect-chain tracing with loop detection, header validation.",
     "trl_ceiling": null,
@@ -2700,10 +2622,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Job-board keyword matching for remote-friendliness.",
     "trl_ceiling": 6,
@@ -2735,10 +2656,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Evidence+verdict+confidence system with test coverage",
     "trl_ceiling": null,
@@ -2770,10 +2690,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 15 response fields",
     "trl_ceiling": null,
@@ -2804,12 +2723,11 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
-    "trl_evidence": "9/10 corpus PASS (1 BROKEN: allbirds upstream 429 \u2014 out of our hands). Returns verdict {missing,sane,fully_open,...}, user_agents, rules_per_ua, sitemaps, sensitive_paths_revealed, interesting_comments. Distinguishes 'no robots.txt' (verdict=missing) from 'comments-only robots.txt' (verdict=sane) cleanly. Tests: parse_test.go + classify_test.go + handler_test.go.",
+    "trl_evidence": "9/10 corpus PASS (1 BROKEN: allbirds upstream 429 — out of our hands). Returns verdict {missing,sane,fully_open,...}, user_agents, rules_per_ua, sitemaps, sensitive_paths_revealed, interesting_comments. Distinguishes 'no robots.txt' (verdict=missing) from 'comments-only robots.txt' (verdict=sane) cleanly. Tests: parse_test.go + classify_test.go + handler_test.go.",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
@@ -2838,10 +2756,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "RFC 9309 compliant: longest-match, wildcards, crawl-delay, Sitemap discovery. 10-case test suite.",
     "trl_ceiling": null,
@@ -2873,10 +2790,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 5 response fields",
     "trl_ceiling": null,
@@ -2907,10 +2823,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 8 response fields",
     "trl_ceiling": null,
@@ -2941,10 +2856,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -2975,10 +2889,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Structural complexity scoring parses DOM/resource counts, third-party domains, gzip estimate, stable scoring labels, and tests.",
     "trl_ceiling": 6,
@@ -3010,10 +2923,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Extracts JSON-LD, Microdata, RDFa, rich-result type summaries, caps oversized blocks, SSRF guard, and unit tests.",
     "trl_ceiling": 7,
@@ -3044,10 +2956,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "External API abstraction with gazetteers, no independent detection logic",
     "trl_ceiling": 5,
@@ -3078,10 +2989,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 1,
     "trl_evidence": "Minimal scaffolding, no substantive handler code",
     "trl_ceiling": null,
@@ -3112,10 +3022,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Holiday/sale-language pattern matching.",
     "trl_ceiling": 7,
@@ -3147,10 +3056,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Entropy + curated regex (AWS/Stripe/SendGrid/etc) on response bodies.",
     "trl_ceiling": 7,
@@ -3181,10 +3089,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Structured detection with 19 response fields",
     "trl_ceiling": null,
@@ -3215,10 +3122,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "RFC-aware CSP parsing, HSTS validation, score-based verdicts, cross-header isolation checks.",
     "trl_ceiling": null,
@@ -3250,10 +3156,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Structured detection with 12 response fields",
     "trl_ceiling": null,
@@ -3284,10 +3189,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "10/10 corpus PASS. 25 fields across title, meta_description, open_graph, twitter_card, canonical, headings, html_lang, images. 324 LOC handler using safehttp.",
     "trl_ceiling": null,
@@ -3319,10 +3223,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -3351,10 +3254,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Session inference with gazetteers but no evidence structure",
     "trl_ceiling": 5,
@@ -3385,10 +3287,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-capability (3) analysis, 18 fields, tested",
     "trl_ceiling": null,
@@ -3420,10 +3321,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "DDoS simulation logic present but policy-blocked from public deployment",
     "trl_ceiling": 4,
@@ -3454,10 +3354,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "Recursive sitemap-index chaser, gunzip, robots-aware, SSRF-guarded, lastmod-sorted output. Live-verified on stripe/google/nytimes/shopify.",
     "trl_ceiling": null,
@@ -3489,10 +3388,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Raw TCP/TLS request-boundary probes cover CL.TE, TE.CL, TE.TE, duplicate CL, SSRF-sticky resolution, deltas, and tests.",
     "trl_ceiling": 6,
@@ -3523,10 +3421,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-capability (4) analysis, 19 fields, tested",
     "trl_ceiling": null,
@@ -3558,10 +3455,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Map metadata parsing, source-path extraction.",
     "trl_ceiling": 8,
@@ -3592,12 +3488,11 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
-    "trl_evidence": "Bumped 1.4.0\u21921.4.1 with URL-input coercion (was rejecting full URLs as 'must be bare hostname'). 10/10 corpus PASS post-fix. Multi-source: crt.sh + hackertarget + homepage_scrape + opt-in wayback. Per-source result_count + error trail.",
+    "trl_evidence": "Bumped 1.4.0→1.4.1 with URL-input coercion (was rejecting full URLs as 'must be bare hostname'). 10/10 corpus PASS post-fix. Multi-source: crt.sh + hackertarget + homepage_scrape + opt-in wayback. Per-source result_count + error trail.",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "CT-log free tiers rate-limit aggressively; reaching TRL 8 would need a paid CT mirror (DNSDB) or self-hosted CT replica.",
     "trl_assessed_at": "2026-05-14",
@@ -3626,10 +3521,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-capability (2) analysis, 15 fields, tested",
     "trl_ceiling": null,
@@ -3660,10 +3554,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "Metadata extraction, API scraping, post parsing.",
     "trl_ceiling": null,
@@ -3694,10 +3587,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Multi-struct analyzer, 5 response fields",
     "trl_ceiling": null,
@@ -3727,10 +3619,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Hardcoded path list. Superseded by api-extractor v1.2.2 which covers 31 OpenAPI paths plus AsyncAPI/gRPC-Web.",
     "trl_ceiling": 4,
@@ -3761,10 +3652,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Multi-capability (2) analysis, 17 fields, tested",
     "trl_ceiling": null,
@@ -3796,10 +3686,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Frontend/backend technology fingerprints across frameworks, CSS, CMS, analytics, CDN, server headers, versions, JSON API shape, and tests.",
     "trl_ceiling": 7,
@@ -3830,10 +3719,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Infrastructure fingerprints cover headers, cookies, hosting/CDN, CMS, runtime, JS/CSS vendors, analytics, payments, confidence, and tests.",
     "trl_ceiling": 7,
@@ -3865,10 +3753,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 2,
     "trl_evidence": "Simple single-purpose analyzer",
     "trl_ceiling": null,
@@ -3899,10 +3786,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Curated 30+ canonical paths for ToS/Privacy/DMCA/etc + freshness check.",
     "trl_ceiling": 7,
@@ -3933,10 +3819,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "domain analysis tool, basic multi-step logic",
     "trl_ceiling": null,
@@ -3968,10 +3853,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Levenshtein + homoglyph + parking detection. dnstwist-grade.",
     "trl_ceiling": 6,
@@ -4002,10 +3886,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Review/comment signal extraction.",
     "trl_ceiling": 7,
@@ -4037,10 +3920,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "domain monitoring, straightforward logic",
     "trl_ceiling": null,
@@ -4072,10 +3954,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "Multi-step detection with tests, SSRF guards, verdict structure",
     "trl_ceiling": 5,
@@ -4106,10 +3987,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Comprehensive inference with tests, SSRF protection, multi-fetch logic",
     "trl_ceiling": 5,
@@ -4140,10 +4020,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "RFC-compliant video detection with tests, SSRF guards, verdict structure",
     "trl_ceiling": 5,
@@ -4173,10 +4052,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)"
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token"
   },
   {
     "id": "wayback-checker",
@@ -4199,10 +4077,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 7,
     "trl_evidence": "CDX API integration, snapshot distribution analysis, historical HTTPS adoption trends.",
     "trl_ceiling": null,
@@ -4233,10 +4110,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 4,
     "trl_evidence": "Carbon calculation with verdict logic but limited test coverage",
     "trl_ceiling": 5,
@@ -4267,10 +4143,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "infrastructure tool, bidirectional protocol analysis",
     "trl_ceiling": null,
@@ -4301,10 +4176,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "All RFC 8615 paths probed with response classification.",
     "trl_ceiling": 8,
@@ -4335,10 +4209,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "WordPress fingerprinting covers generator/header/assets, plugin/theme versions, endpoint exposure, confidence scoring, and unit tests.",
     "trl_ceiling": 7,
@@ -4369,10 +4242,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 6,
     "trl_evidence": "Performance score combines transport, compression, render blockers, image formats, cache headers, resource hints, asset sampling, and tests.",
     "trl_ceiling": 7,
@@ -4404,10 +4276,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "security tooling, payload generation and validation",
     "trl_ceiling": null,
@@ -4438,10 +4309,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 3,
     "trl_evidence": "Reflected-payload regex pattern matching.",
     "trl_ceiling": 5,
@@ -4472,10 +4342,9 @@
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key",
-      "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "auth_help": "api_key required: header `Authorization: Bearer <key>` (canonical) or `X-API-Key: <key>` or `?api_key=<key>` (demo). Demo key: default_token",
     "trl": 5,
     "trl_evidence": "DNS security, RFC-aligned protocol",
     "trl_ceiling": null,
@@ -4488,7 +4357,7 @@
   {
     "id": "apikey-service",
     "name": "Apikey Service",
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -4506,7 +4375,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -4538,7 +4408,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 4,
@@ -4553,7 +4424,7 @@
   {
     "id": "d3-graph",
     "name": "D3 Graph",
-    "description": "d3-graph \u2014 d3-graph.0exec.com",
+    "description": "d3-graph — d3-graph.0exec.com",
     "category": "visualization",
     "mesh": "0exec",
     "kind": "container",
@@ -4570,7 +4441,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4585,7 +4457,7 @@
   {
     "id": "db-geo-geocode",
     "name": "Geocoding (Go / DB)",
-    "description": "City \u2192 lat/lon with local DB (?text=)",
+    "description": "City → lat/lon with local DB (?text=)",
     "category": "geo",
     "mesh": "0exec",
     "kind": "container",
@@ -4601,7 +4473,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4616,7 +4489,7 @@
   {
     "id": "geo-geocode",
     "name": "Geocoding (Node)",
-    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
+    "description": "City/address → lat/lon via TomTom (?text=)",
     "category": "geo",
     "mesh": "0exec",
     "kind": "container",
@@ -4632,7 +4505,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4663,7 +4537,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4695,7 +4570,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 1,
@@ -4727,7 +4603,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 3,
@@ -4759,7 +4636,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -4791,7 +4669,8 @@
     "example_path": "/?url=https://example.com",
     "auth": {
       "query_param": "api_key",
-      "type": "api_key"
+      "type": "api_key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -4822,7 +4701,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4853,7 +4733,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4883,7 +4764,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4914,7 +4796,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -4945,7 +4828,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 8,
@@ -4975,7 +4859,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5005,7 +4890,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 8,
@@ -5036,7 +4922,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5067,7 +4954,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5098,7 +4986,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -5128,7 +5017,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5159,7 +5049,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -5190,7 +5081,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -5221,7 +5113,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 4,
@@ -5252,7 +5145,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5267,7 +5161,7 @@
   {
     "id": "go-pentest-rate-coordinator",
     "name": "Go Pentest Rate Coordinator",
-    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5283,13 +5177,14 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
     "trl_evidence": "golang.org/x/time/rate (stdlib-blessed) buckets per host; tested burst, deny, distinct hosts, policy override, wait+context cancel.",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18104,
@@ -5314,7 +5209,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -5345,13 +5241,14 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
     "trl_evidence": "In-memory store, hostname/wildcard/CIDR/regex matchers with anchored regex cache; exclusion-wins logic; suffix-confusion regression test.",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18105,
@@ -5376,7 +5273,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5407,7 +5305,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5438,7 +5337,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5468,7 +5368,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5498,7 +5399,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5529,7 +5431,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -5559,7 +5462,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5591,7 +5495,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5623,7 +5528,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5655,7 +5561,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)"
   },
@@ -5680,7 +5587,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5713,7 +5621,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5728,7 +5637,7 @@
   {
     "id": "jwt-pentest",
     "name": "Jwt Pentest",
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -5746,11 +5655,12 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass.",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "trl_assessed_at": "2026-05-13",
@@ -5777,7 +5687,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 4,
@@ -5808,7 +5719,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5840,7 +5752,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5872,7 +5785,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5904,7 +5818,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5936,7 +5851,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -5951,7 +5867,7 @@
   {
     "id": "ocr-pdf",
     "name": "OCR / PDF",
-    "description": "Extract text from PDFs \u2014 upload or URL",
+    "description": "Extract text from PDFs — upload or URL",
     "category": "ocr",
     "mesh": "0exec",
     "kind": "container",
@@ -5967,7 +5883,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -5998,7 +5915,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
@@ -6031,7 +5949,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 4,
@@ -6064,7 +5983,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -6096,7 +6016,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 4,
@@ -6127,7 +6048,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 3,
@@ -6160,7 +6082,8 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
@@ -6191,11 +6114,12 @@
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
-    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 \u2014 pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs.",
+    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 — pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs.",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
@@ -6258,7 +6182,7 @@
   {
     "id": "audience-field-sculpture",
     "name": "Audience Field Sculpture",
-    "description": "A privacy-preserving browser artwork \u2014 phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
+    "description": "A privacy-preserving browser artwork — phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
     "category": "app",
     "mesh": "pages",
     "kind": "static",
@@ -6700,7 +6624,7 @@
   {
     "id": "little-voice-stories",
     "name": "Little Voice Stories",
-    "description": "Turn a kid\u2019s drawing into a bedtime story narrated in a parent\u2019s voice, entirely in the browser.",
+    "description": "Turn a kid’s drawing into a bedtime story narrated in a parent’s voice, entirely in the browser.",
     "category": "app",
     "mesh": "pages",
     "kind": "static",
@@ -6960,7 +6884,7 @@
   {
     "id": "mesh-mirror",
     "name": "Mesh Mirror",
-    "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed \u2014 phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
+    "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed — phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
     "category": "peer_to_peer",
     "mesh": "pages",
     "kind": "static",

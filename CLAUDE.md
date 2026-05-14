@@ -48,7 +48,7 @@ to deploy and no `/health` to probe.
 | `mesh`       | Domain pattern         | Auth                                                                       | Typical contents                       |
 |--------------|------------------------|----------------------------------------------------------------------------|----------------------------------------|
 | `mesh-0exec` | `<slug>.0exec.com`     | `?api_key=…` or `X-API-Key` header — keystore-gated                        | proxy, search, ocr, security           |
-| `mesh-0crawl`| `<slug>.0crawl.com`    | **either** `?api_key=` / `X-API-Key` **or** legacy `/t/<token>/…` — keystore-gated | domains, recon, web-analysis           |
+| `mesh-0crawl`| `<slug>.0crawl.com`    | `Authorization: Bearer` / `X-API-Key` / `?api_key=…` — keystore-gated (same auth surface as 0exec) | domains, recon, web-analysis           |
 | `mesh-pages` | `*.github.io` / custom | none (static)                                                              | dashboards, catalogs, browser-only WASM apps |
 
 Both container meshes are gated by the **same** keystore (see auth
@@ -122,27 +122,35 @@ like a CA root: every `0exec` and `0crawl` service trusts whatever it
 says. If this repo is on `mesh-pages` (i.e. `kind: static`), the
 keystore does not apply — skip this section.
 
-Request flow when a caller hits `https://<slug>.0exec.com/...?api_key=<k>`
-**or** `https://<slug>.0crawl.com/...?api_key=<k>`
-**or** `https://<slug>.0crawl.com/t/<token>/...` (legacy 0crawl shape):
+Three canonical request shapes (every mesh, every service):
 
-1. **nginx vhost** extracts the candidate key from query / header /
-   `/t/<token>/...` path prefix and stashes it as `$candidate_key`.
-2. **Static fallback** — if `$candidate_key` matches the universal
-   demo key (`$default_token`, included from
-   `/etc/nginx/conf.d/_default_token.conf` on the gateway), accept
-   immediately and set `X-Auth-User: demo`. Survives keystore outages
-   for the public demo path. The default token is rate-limited to
-   1 req/s and ~60 req/h per IP at this layer.
-3. Otherwise nginx POSTs `X-Verify-Key: $candidate_key` to the
-   keystore's `/verify` via `auth_request`.
+  1. `Authorization: Bearer <key>` — production canonical, what every SDK uses.
+  2. `X-API-Key: <key>` — legacy header alias, same handler.
+  3. `?api_key=<key>` — demo / browser-playground only (key leaks in logs).
+
+A fourth legacy shape, `https://<slug>.0crawl.com/t/<token>/...`, **was
+deprecated on 2026-05-14**. The gateway returns **410 Gone** with
+`Location: /<rest>?api_key=<token>` and a `Deprecation` header for any
+caller still using it. After one deprecation cycle (~2026-06-14) the
+410 block will be removed; `/t/<anything>` will return plain 404.
+
+Request flow at the gateway:
+
+1. **nginx vhost** captures the key into `$api_key_in` (Bearer regex →
+   X-API-Key header → ?api_key query, in that order).
+2. **Static fallback** — if `$api_key_in` matches the universal demo
+   key (`$default_token`, from `/etc/nginx/conf.d/_default_token.conf`),
+   accept immediately and set `X-Auth-User: demo`. Survives keystore
+   outages for the public demo path. The default token is rate-limited
+   to 1 req/s and ~60 req/h per IP at this layer.
+3. Otherwise nginx POSTs `X-Verify-Key: $api_key_in` to the keystore's
+   `/verify` via `auth_request`.
 4. Keystore checks SQLite → returns 200 + `X-Auth-User` / `X-Auth-Scope`,
    or 401.
-5. On 200, nginx forwards the original request to the service
-   container with `X-Auth-*` headers populated. For 0crawl, the
-   `/t/<token>/...` prefix is stripped before proxy_pass so the
-   service receives the same path shape regardless of which auth
-   form the caller used.
+5. On 200, nginx forwards the original request to the service container
+   with `X-Auth-*` headers AND `X-API-Key: $api_key_in` populated, so
+   the upstream `middleware.TokenAuthKeystore` sees a positive auth
+   signal regardless of which gateway auth path was taken.
 
 **Services do not call the keystore themselves** — nginx already gated
 the request. Trust the gateway-injected `X-Auth-*` headers. If you
@@ -173,15 +181,20 @@ The admin token (`X-Admin-Token` on `/issue`, `/revoke`, `/list`,
 read by clients from `APIKEY_SERVICE_ADMIN_TOKEN`. Rotation playbook:
 private `fleet-state/OPS.md`.
 
-## Auth — `mesh-0crawl` legacy path-token shape
+## Auth — `mesh-0crawl` legacy `/t/<token>/` shape (DEPRECATED)
 
-`/t/<token>/...` is the **backwards-compat shape**. Real validation
-happens at the gateway via the same keystore flow as 0exec (above) —
-nginx extracts the token from the path and verifies it through the
-keystore. Services do **not** validate tokens themselves anymore;
-trust the gateway-injected `X-Auth-*` headers. Existing per-service
-`const default_token = "default_token"` constants are dead code and
-will be reaped as repos are touched.
+Sunset on 2026-05-14. The gateway returns **410 Gone** with
+`Location: /<rest>?api_key=<token>` and `Deprecation: version="v1"`.
+Any SDK or client still using `/t/<token>/...` should follow the
+`Location` header to the canonical shape. The 410 block itself will
+be removed in the following deprecation cycle; after that
+`/t/<anything>` returns 404.
+
+Defense in depth: `go-common/middleware` v0.11.0 dropped path-token
+extraction from `extractToken`, so even a caller bypassing the gateway
+and hitting an upstream container directly with `/t/<token>/...` will
+not be authenticated. The only paths that work are the three canonical
+auth shapes documented above.
 
 ## `go-common` packages — use these, don't reinvent
 
