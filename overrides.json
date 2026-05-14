@@ -49,12 +49,12 @@
   "admin-finder": {
     "example_path": "/go_admin_finder?url=https://example.com",
     "description": "Microservice for Admin Finder",
-    "trl": 3,
-    "trl_evidence": "Wordlist enumeration of admin paths.",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "Wordlist expansion is commodity; signal requires response-fingerprinting and context that's hard without active auth.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 5,
+    "trl_evidence": "Expanded admin path corpus with HEAD/GET fallback, status-to-signal triage, confidence verdicts, SSRF guard, and tests.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Authenticated admin discovery requires site-specific credentials or session state.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8335,
     "container_port": 8335
   },
@@ -106,7 +106,7 @@
     "container_port": 8230
   },
   "apikey-service": {
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
     "host_port": 18021,
     "container_port": 8080,
@@ -239,12 +239,12 @@
     "description": "Microservice for Clickjacking Tester",
     "host_port": 8225,
     "container_port": 8225,
-    "trl": 4,
-    "trl_evidence": "Multi-function structure, limited error handling and tests",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 5,
+    "trl_evidence": "Classifies X-Frame-Options, CSP frame-ancestors, iframe embeddability risk, parser edge cases, and tests.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Browser-level frame behavior needs real rendering for unusual CSP/sandbox cases.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "cognitive-load": {
     "description": "Microservice for Cognitive Load",
@@ -409,7 +409,7 @@
   },
   "db-geo-geocode": {
     "name": "Geocoding (Go / DB)",
-    "description": "City \u2192 lat/lon with local DB (?text=)",
+    "description": "City → lat/lon with local DB (?text=)",
     "host_port": 18009,
     "container_port": 3909,
     "trl": 6,
@@ -504,12 +504,12 @@
   "email-harvester": {
     "example_path": "/go_email_harvester?url=https://example.com",
     "description": "Microservice for Email Harvester",
-    "trl": 5,
-    "trl_evidence": "Multi-page email extraction with role classification. 45KB of code.",
+    "trl": 6,
+    "trl_evidence": "Same-domain contact/about/legal discovery, email extraction with found_on evidence, dedupe, SSRF guard, and tests.",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8137,
     "container_port": 8137
   },
@@ -518,7 +518,7 @@
     "trl": 3,
     "trl_evidence": "Keyword-bag sentiment lexicon.",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8288,
@@ -539,12 +539,12 @@
   "feed-finder": {
     "example_path": "/go_feed_finder?url=https://example.com",
     "description": "Microservice for Feed Finder",
-    "trl": 1,
-    "trl_evidence": "Pure shell skeleton.",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "Achievable with sitemap-finder pattern: probe canonical paths + parse autodiscovery links + RSS/Atom format detection. Needs implementation, not blocked technically.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 6,
+    "trl_evidence": "RSS/Atom/JSON autodiscovery, conventional feed probes, WordPress JSON hinting, feed parsing, source/confidence output, and unit tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Dynamic feed links hidden behind JavaScript need headless rendering for full coverage.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8164,
     "container_port": 8164
   },
@@ -596,7 +596,7 @@
   },
   "geo-geocode": {
     "name": "Geocoding (Node)",
-    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
+    "description": "City/address → lat/lon via TomTom (?text=)",
     "host_port": 18008,
     "container_port": 4902,
     "trl": 6,
@@ -711,12 +711,12 @@
     "description": "Microservice for Graphql Introspection",
     "host_port": 8147,
     "container_port": 8147,
-    "trl": 4,
-    "trl_evidence": "Multi-function structure, limited error handling and tests",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 5,
+    "trl_evidence": "GraphQL endpoint probing and introspection checks with structured responses, SSRF safety, and tests.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Authenticated GraphQL schemas need user-supplied tokens and role-aware probing.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "hidden-fields": {
     "example_path": "/go_hidden_fields?url=https://example.com",
@@ -786,12 +786,12 @@
   "idor-finder": {
     "example_path": "/go_idor_finder?url=https://example.com",
     "description": "Microservice for Idor Finder",
-    "trl": 3,
-    "trl_evidence": "Baseline-response comparison heuristics.",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "Needs authenticated multi-step probing and sequential-ID tampering state machines. Unauthenticated baseline is noise-prone.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 5,
+    "trl_evidence": "Finds numeric/UUID IDs in path/query, generates tampered variants, compares status/body hashes, classifies auth guards, and tests.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "True IDOR proof requires authenticated sessions and object ownership context.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8242,
     "container_port": 8242
   },
@@ -867,10 +867,10 @@
     "trl_assessor": "claude-haiku-trl-batch"
   },
   "jwt-pentest": {
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
     "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
     "trl": 6,
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass.",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "trl_assessed_at": "2026-05-13",
@@ -894,12 +894,12 @@
     "description": "Microservice for Legal Entity",
     "host_port": 8293,
     "container_port": 8293,
-    "trl": 4,
-    "trl_evidence": "Multi-function structure, limited error handling and tests",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 6,
+    "trl_evidence": "Legal extraction returns entity names, jurisdiction hints, addresses, VAT/company identifiers, source evidence, and tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative validation requires jurisdiction-specific registries or paid company data.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "linkedin-attributes": {
     "name": "LinkedIn Attributes",
@@ -1027,16 +1027,16 @@
     "description": "Microservice for Oauth Mapper",
     "host_port": 8330,
     "container_port": 8330,
-    "trl": 3,
-    "trl_evidence": "Basic multi-step logic without test coverage",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 6,
+    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "ocr-pdf": {
     "name": "OCR / PDF",
-    "description": "Extract text from PDFs \u2014 upload or URL",
+    "description": "Extract text from PDFs — upload or URL",
     "host_port": 18012,
     "container_port": 5500,
     "trl": 6,
@@ -1351,22 +1351,22 @@
     "description": "Microservice for Scc",
     "host_port": 8305,
     "container_port": 8305,
-    "trl": 3,
-    "trl_evidence": "Multi-struct analyzer, 9 response fields",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 5,
+    "trl_evidence": "Structural complexity scoring parses DOM/resource counts, third-party domains, gzip estimate, stable scoring labels, and tests.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Full complexity for SPAs needs post-JS DOM rendering.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "schema-extractor": {
     "example_path": "/go_schema_extractor?url=https://example.com",
     "description": "Microservice for Schema Extractor",
-    "trl": 3,
-    "trl_evidence": "JSON-LD/microdata extraction works; semantic normalization is the gap.",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "Arbitrary schema.org type unification (Product/Service/SoftwareApplication overlaps, salary ranges, hours-as-strings) needs an ontology layer or ML model.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 6,
+    "trl_evidence": "Extracts JSON-LD, Microdata, RDFa, rich-result type summaries, caps oversized blocks, SSRF guard, and unit tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Schema injected only after client-side rendering needs a JS DOM fetcher.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8165,
     "container_port": 8165
   },
@@ -1539,12 +1539,12 @@
     "description": "Microservice for Smuggling Probe",
     "host_port": 8154,
     "container_port": 8154,
-    "trl": 3,
-    "trl_evidence": "Structured detection with 20 response fields",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 5,
+    "trl_evidence": "Raw TCP/TLS request-boundary probes cover CL.TE, TE.CL, TE.TE, duplicate CL, SSRF-sticky resolution, deltas, and tests.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Timing-only request smuggling signals require manual confirmation to avoid false positives.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "social-graph": {
     "example_path": "/?url=https://example.com",
@@ -1642,24 +1642,24 @@
     "description": "Microservice for Tech Stack",
     "host_port": 8162,
     "container_port": 8162,
-    "trl": 3,
-    "trl_evidence": "Multi-struct analyzer, 5 response fields",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 6,
+    "trl_evidence": "Frontend/backend technology fingerprints across frameworks, CSS, CMS, analytics, CDN, server headers, versions, JSON API shape, and tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Dynamic-only framework evidence requires JS rendering for full coverage.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "technology-stack": {
     "example_path": "/?url=https://example.com",
     "description": "Microservice for Technology Stack",
     "host_port": 8315,
     "container_port": 8315,
-    "trl": 2,
-    "trl_evidence": "Simple single-purpose analyzer",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 6,
+    "trl_evidence": "Infrastructure fingerprints cover headers, cookies, hosting/CDN, CMS, runtime, JS/CSS vendors, analytics, payments, confidence, and tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Dynamic-only or authenticated stack signals need JS rendering and session context.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "telnet-banner": {
     "description": "Microservice for Telnet Banner",
@@ -1831,23 +1831,23 @@
     "description": "Microservice for Wp Plugins",
     "host_port": 8353,
     "container_port": 8353,
-    "trl": 4,
-    "trl_evidence": "WordPress recon, pattern matching",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 6,
+    "trl_evidence": "WordPress fingerprinting covers generator/header/assets, plugin/theme versions, endpoint exposure, confidence scoring, and unit tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Vulnerability enrichment needs a maintained plugin CVE/WPScan-style dataset.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "wps": {
     "description": "Microservice for Wps",
     "host_port": 8270,
     "container_port": 8270,
-    "trl": 4,
-    "trl_evidence": "domain service, basic enumeration",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 6,
+    "trl_evidence": "Performance score combines transport, compression, render blockers, image formats, cache headers, resource hints, asset sampling, and tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Lab-grade Core Web Vitals require real browser timings rather than static analysis.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "xss-payload": {
     "example_path": "/go_xss_payload?url=https://example.com",
@@ -2414,14 +2414,14 @@
     "trl_assessor": "claude-session-2026-05-14"
   },
   "go-pentest-rate-coordinator": {
-    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
     "host_port": 18104,
     "container_port": 18104,
     "example_path": "/stats",
     "trl": 5,
     "trl_evidence": "golang.org/x/time/rate (stdlib-blessed) buckets per host; tested burst, deny, distinct hosts, policy override, wait+context cancel.",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14"
   },
@@ -2433,7 +2433,7 @@
     "trl": 5,
     "trl_evidence": "In-memory store, hostname/wildcard/CIDR/regex matchers with anchored regex cache; exclusion-wins logic; suffix-confusion regression test.",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14"
   },
@@ -2586,7 +2586,7 @@
       "patch": {
         "rewrite_token_path": false
       },
-      "why": "71 0crawl services have upstreams designed for the legacy /t/<token>/<path> shape \u2014 their handlers are bound to /t/default_token/... literally. Default C2 rewrite (strip prefix) would 404 every request. Determined by inspecting pre-push vhost backups for the rewrite directive."
+      "why": "71 0crawl services have upstreams designed for the legacy /t/<token>/<path> shape — their handlers are bound to /t/default_token/... literally. Default C2 rewrite (strip prefix) would 404 every request. Determined by inspecting pre-push vhost backups for the rewrite directive."
     }
   ],
   "go-pentest-wordlists": {
@@ -2654,12 +2654,12 @@
     "host_port": 18110,
     "container_port": 18110,
     "example_path": "/check?target=api.github.com",
-    "trl": 5,
-    "trl_evidence": "Embedded seed of 10 real programs with hostname/wildcard/cidr/regex matchers, suffix-confusion defense, exclusion-wins, has_money flag.",
+    "trl": 6,
+    "trl_evidence": "Bug-bounty scope matcher uses curated program seed data, regex caching, payout sorting, structured matches, and tests.",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Real-time inventory needs go-pentest-bounty-program-aggregator scraper feed.",
+    "trl_ceiling_reason": "Production freshness depends on continuously updated program feeds.",
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14"
+    "trl_assessor": "codex-session-2026-05-14"
   },
   "go-pentest-disclosure-policy-finder": {
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
@@ -2792,11 +2792,12 @@
     "host_port": 18126,
     "container_port": 18126,
     "example_path": "/",
-    "trl": 5,
-    "trl_evidence": "Fans out to cert-transparency + subfinder in parallel, filters via scope-guard with 16-worker pool. Depends on 3 other fleet services.",
+    "trl": 6,
+    "trl_evidence": "Parallel CT/subfinder fanout, apex-bounded host normalization, scope-guard filtering, API-key forwarding, merge behavior tests.",
     "trl_ceiling": 8,
     "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14"
+    "trl_assessor": "codex-session-2026-05-14",
+    "trl_ceiling_reason": "Depends on upstream fleet services and live program scope data quality."
   },
   "go-pentest-takeover-checker": {
     "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
