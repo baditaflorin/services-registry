@@ -547,8 +547,8 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 8169,
-    "container_port": 8169
+    "host_port": 8209,
+    "container_port": 8209
   },
   {
     "id": "cas",
@@ -1372,8 +1372,8 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "codex-session-2026-05-14",
-    "host_port": 8343,
-    "container_port": 8343
+    "host_port": 8137,
+    "container_port": 8137
   },
   {
     "id": "emotional-tone",
@@ -1403,7 +1403,7 @@
     "trl": 3,
     "trl_evidence": "Keyword-bag sentiment lexicon.",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8288,
@@ -3704,9 +3704,7 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch",
-    "cert_domain": "phone-extractor.0crawl.com",
-    "host_port": 8313,
-    "container_port": 8313
+    "cert_domain": "phone-extractor.0crawl.com"
   },
   {
     "id": "swagger-finder",
@@ -4490,7 +4488,7 @@
   {
     "id": "apikey-service",
     "name": "Apikey Service",
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -4555,7 +4553,7 @@
   {
     "id": "d3-graph",
     "name": "D3 Graph",
-    "description": "d3-graph — d3-graph.0exec.com",
+    "description": "d3-graph \u2014 d3-graph.0exec.com",
     "category": "visualization",
     "mesh": "0exec",
     "kind": "container",
@@ -4587,7 +4585,7 @@
   {
     "id": "db-geo-geocode",
     "name": "Geocoding (Go / DB)",
-    "description": "City → lat/lon with local DB (?text=)",
+    "description": "City \u2192 lat/lon with local DB (?text=)",
     "category": "geo",
     "mesh": "0exec",
     "kind": "container",
@@ -4618,7 +4616,7 @@
   {
     "id": "geo-geocode",
     "name": "Geocoding (Node)",
-    "description": "City/address → lat/lon via TomTom (?text=)",
+    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
     "category": "geo",
     "mesh": "0exec",
     "kind": "container",
@@ -4792,8 +4790,8 @@
     "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "api_key",
-      "query_param": "api_key"
+      "query_param": "api_key",
+      "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 7,
@@ -4830,11 +4828,11 @@
     "trl": 6,
     "trl_evidence": "Parallel CT/subfinder fanout, apex-bounded host normalization, scope-guard filtering, API-key forwarding, merge behavior tests.",
     "trl_ceiling": 8,
+    "trl_ceiling_reason": "Depends on upstream fleet services and live program scope data quality.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "codex-session-2026-05-14",
     "host_port": 18126,
-    "container_port": 18126,
-    "trl_ceiling_reason": "Depends on upstream fleet services and live program scope data quality."
+    "container_port": 18126
   },
   {
     "id": "go-pentest-audit-log",
@@ -5269,7 +5267,7 @@
   {
     "id": "go-pentest-rate-coordinator",
     "name": "Go Pentest Rate Coordinator",
-    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5291,7 +5289,7 @@
     "trl": 5,
     "trl_evidence": "golang.org/x/time/rate (stdlib-blessed) buckets per host; tested burst, deny, distinct hosts, policy override, wait+context cancel.",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18104,
@@ -5353,7 +5351,7 @@
     "trl": 5,
     "trl_evidence": "In-memory store, hostname/wildcard/CIDR/regex matchers with anchored regex cache; exclusion-wins logic; suffix-confusion regression test.",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18105,
@@ -5638,6 +5636,30 @@
     "container_port": 3401
   },
   {
+    "id": "go-url-categorizer-api",
+    "name": "Go Url Categorizer Api",
+    "description": "",
+    "category": "nlp",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "categorization",
+      "go"
+    ],
+    "url": "https://go-url-categorizer-api.0exec.com",
+    "health_url": "https://go-url-categorizer-api.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-url-categorizer-api",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+  },
+  {
     "id": "jsbundle-routes",
     "name": "Jsbundle Routes",
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
@@ -5706,7 +5728,7 @@
   {
     "id": "jwt-pentest",
     "name": "Jwt Pentest",
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -5728,7 +5750,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 6,
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass.",
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "trl_assessed_at": "2026-05-13",
@@ -5929,7 +5951,7 @@
   {
     "id": "ocr-pdf",
     "name": "OCR / PDF",
-    "description": "Extract text from PDFs — upload or URL",
+    "description": "Extract text from PDFs \u2014 upload or URL",
     "category": "ocr",
     "mesh": "0exec",
     "kind": "container",
@@ -6236,7 +6258,7 @@
   {
     "id": "audience-field-sculpture",
     "name": "Audience Field Sculpture",
-    "description": "A privacy-preserving browser artwork — phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
+    "description": "A privacy-preserving browser artwork \u2014 phones read a sculpture tag and shift visuals/audio from local viewing patterns. No surveillance.",
     "category": "app",
     "mesh": "pages",
     "kind": "static",
@@ -6678,7 +6700,7 @@
   {
     "id": "little-voice-stories",
     "name": "Little Voice Stories",
-    "description": "Turn a kid’s drawing into a bedtime story narrated in a parent’s voice, entirely in the browser.",
+    "description": "Turn a kid\u2019s drawing into a bedtime story narrated in a parent\u2019s voice, entirely in the browser.",
     "category": "app",
     "mesh": "pages",
     "kind": "static",
@@ -6938,7 +6960,7 @@
   {
     "id": "mesh-mirror",
     "name": "Mesh Mirror",
-    "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed — phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
+    "description": "Peer-to-peer mesh: phones in a ring show each other's live camera feed \u2014 phone N's screen shows phone (N+1)'s view, creating a low-fi infinite mirror.",
     "category": "peer_to_peer",
     "mesh": "pages",
     "kind": "static",
