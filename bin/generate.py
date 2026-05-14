@@ -31,6 +31,51 @@ OVERRIDES_JSON  = ROOT / "overrides.json"
 SLUG_JSON       = ROOT / "slug.json"
 SUMMARY_TXT     = ROOT / "services.summary.txt"
 
+# Sliced projections of services.json — sibling files emitted next to the
+# full registry so AI consumers (and dashboards) can fetch just the fields
+# they need instead of paying for the ~280 KB full blob. Each slice is a
+# stable URL at raw.githubusercontent.com/baditaflorin/services-registry/main/<file>.
+# Slices are derived (never hand-edited); rebuild via `bin/generate.py` or
+# `bin/generate.py --slices-only`.
+#
+# Adding a new slice: add one entry below — value is either a callable
+# (entry -> any) for non-dict shapes like the bare-id list, or a list of
+# keys for the common "pick these fields, drop entries missing all of them"
+# case. Slices are written compact (no indent) — they exist to minimize
+# transferred bytes / tokens; the human-readable view is `services.json`.
+def _pick(keys: list[str]):
+    """Return entries projected to `keys`. Keys absent on an entry are
+    omitted (not nulled) so the slice stays small. Entries that have none
+    of the keys beyond `id` are dropped — e.g. `services.ports.json`
+    excludes kind=static entries that have no host_port at all."""
+    non_id = [k for k in keys if k != "id"]
+    def f(e: dict) -> dict | None:
+        if non_id and not any(k in e for k in non_id):
+            return None
+        return {k: e[k] for k in keys if k in e}
+    return f
+
+PROJECTIONS = {
+    # Bare slug list — smallest possible "what services exist?" answer.
+    "services.ids.json":     lambda e: e["id"],
+    # Picker / menu rendering.
+    "services.names.json":   _pick(["id", "name"]),
+    # Catalog overview — enough to render a row without auth/port detail.
+    "services.minimal.json": _pick(["id", "name", "mesh", "kind", "category",
+                                    "language", "trl", "url"]),
+    # "Build an Open link" — URLs + auth hint, no TRL / deploy fields.
+    "services.urls.json":    _pick(["id", "url", "health_url", "example_path",
+                                    "auth_help"]),
+    # TRL audits — claude-haiku-trl-batch and friends only need these.
+    "services.trl.json":     _pick(["id", "trl", "trl_ceiling",
+                                    "trl_assessed_at", "trl_assessor"]),
+    # Port allocation — kind=static entries fall out (no host_port).
+    "services.ports.json":   _pick(["id", "host_port", "container_port"]),
+    # fleet-runner deploy targeting.
+    "services.deploy.json":  _pick(["id", "mesh", "kind", "runtime",
+                                    "language", "repo_url"]),
+}
+
 MESHES = ("0exec", "0crawl", "pages")
 
 # kind = what kind of deployable this is (orthogonal to mesh).
@@ -493,10 +538,36 @@ def write_summary(entries: list[dict]) -> str:
     return txt
 
 
+def write_slices(entries: list[dict]) -> list[tuple[str, int, int]]:
+    """Emit every projection in PROJECTIONS as a compact JSON file next to
+    services.json. Returns (filename, entry_count, byte_size) per slice
+    so main() can print a summary. Slices are pure derivatives — never
+    hand-edit; rerun `bin/generate.py [--slices-only]` to rebuild."""
+    out = []
+    for fname, proj in PROJECTIONS.items():
+        sliced = [v for v in (proj(e) for e in entries) if v is not None]
+        blob = json.dumps(sliced, separators=(",", ":")) + "\n"
+        (ROOT / fname).write_text(blob)
+        out.append((fname, len(sliced), len(blob)))
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="print diff, don't write")
+    ap.add_argument("--slices-only", action="store_true",
+                    help="rebuild only the sliced projection files from the "
+                         "existing services.json (skips the GitHub fetch)")
     args = ap.parse_args()
+
+    if args.slices_only:
+        if not SERVICES_JSON.exists():
+            sys.exit(f"ERROR: {SERVICES_JSON} does not exist — run without "
+                     f"--slices-only first to build the full registry")
+        entries = json.loads(SERVICES_JSON.read_text())
+        for fname, n, sz in write_slices(entries):
+            print(f"  {fname:28s}  {n:4d} entries  {sz:7d} bytes")
+        return 0
 
     overrides = load_overrides()
     entries = build(overrides)
@@ -518,6 +589,9 @@ def main() -> int:
 
     SERVICES_JSON.write_text(new_blob)
     print(write_summary(entries))
+    print("\n## slices")
+    for fname, n, sz in write_slices(entries):
+        print(f"  {fname:28s}  {n:4d} entries  {sz:7d} bytes")
     return 0
 
 

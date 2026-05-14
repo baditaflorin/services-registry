@@ -271,9 +271,17 @@ overrides.json (host_port, descriptions)         slug.json (slug map)
 
 1. Edit `overrides.json` (per-slug patches) or add topics to a repo.
 2. `python3 bin/generate.py` rebuilds `services.json` from GitHub topics + overrides.
-3. Commit `services.json` + `overrides.json` (+ `services.summary.txt`).
+3. Commit `services.json` + every `services.*.json` slice + `overrides.json` (+ `services.summary.txt`).
 4. `bin/notify-consumers.sh` pings the dashboards to refresh.
 5. `fleet-runner nginx-render --push --reload` renders + ships gateway vhosts.
+
+`bin/generate.py` writes seven sibling projection files
+(`services.ids.json`, `services.names.json`, `services.minimal.json`,
+`services.urls.json`, `services.trl.json`, `services.ports.json`,
+`services.deploy.json`) so token-constrained consumers (AI agents,
+small dashboards) can fetch a 5-60 KB slice instead of the full
+~280 KB blob. See `README.md` → "Sliced URLs". Slices are derived;
+rebuild without re-querying GitHub via `python3 bin/generate.py --slices-only`.
 
 For SSH hosts and credentials, see private `fleet-state/OPS.md`.
 

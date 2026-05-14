@@ -27,6 +27,30 @@ catalog is `services-registry/services.json`; the canonical
 conventions doc is `services-registry/FLEET.md` — **read it first**
 for any fleet-wide task.
 
+### Reading the registry — fetch a slice, not the full blob
+
+`services.json` is ~280 KB / ~250 entries / ~26 fields each. If you
+only need IDs, names, ports, TRL, or URLs, **fetch a slice instead**
+— it's the same `raw.githubusercontent.com` path with a different
+filename. Sized for AI agents on a token budget.
+
+| URL suffix                | shape                                                    | size  | use when |
+|---------------------------|----------------------------------------------------------|-------|----------|
+| `services.ids.json`       | `["a11y-quick", …]`                                      | ~5 KB | "what services exist?" |
+| `services.names.json`     | `[{id, name}]`                                           | ~13 KB | pickers / menus |
+| `services.minimal.json`   | `[{id, name, mesh, kind, category, language, trl, url}]`| ~44 KB | catalog overview |
+| `services.urls.json`      | `[{id, url, health_url, example_path, auth_help}]`      | ~63 KB | building Open / smoke links |
+| `services.trl.json`       | `[{id, trl, trl_ceiling, trl_assessed_at, …}]`          | ~31 KB | TRL audits |
+| `services.ports.json`     | `[{id, host_port, container_port}]`                     | ~12 KB | port allocation / conflict checks |
+| `services.deploy.json`    | `[{id, mesh, kind, runtime, language, repo_url}]`       | ~40 KB | fleet-runner deploy targeting |
+
+Base URL: `https://raw.githubusercontent.com/baditaflorin/services-registry/main/<file>`.
+
+Only fall back to the full `services.json` when you need fields the
+slices don't carry (auth surface details, vhost knobs, descriptions).
+Slices are derived — never edit them; edit `services.json` /
+`overrides.json` and run `python3 bin/generate.py`.
+
 Every entry in the registry has three orthogonal classifying axes.
 Don't conflate them — agent tooling gates behavior on `kind`, not on
 mesh.

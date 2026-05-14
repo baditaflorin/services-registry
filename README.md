@@ -13,14 +13,44 @@ Adding or changing a service = one PR to one file.
 https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.json
 ```
 
+### Sliced URLs — fetch less when you only need part of the registry
+
+`services.json` is ~280 KB, ~250 entries, ~26 fields each. For most
+consumers (especially AI agents on a token budget) that's wildly more
+than needed. The generator emits seven sibling projection files,
+each a stable URL at the same path:
+
+| URL suffix                | shape                                                       | size  | use when |
+|---------------------------|-------------------------------------------------------------|-------|----------|
+| `services.ids.json`       | `["a11y-quick", "accessibility-score", …]`                 | ~5 KB | "what services exist?" |
+| `services.names.json`     | `[{id, name}]`                                              | ~13 KB | rendering a picker or menu |
+| `services.minimal.json`   | `[{id, name, mesh, kind, category, language, trl, url}]`   | ~44 KB | catalog overview, list views |
+| `services.urls.json`      | `[{id, url, health_url, example_path, auth_help}]`         | ~63 KB | building Open links / smoke targets |
+| `services.trl.json`       | `[{id, trl, trl_ceiling, trl_assessed_at, trl_assessor}]`  | ~31 KB | TRL audits, re-scoring runs |
+| `services.ports.json`     | `[{id, host_port, container_port}]`                        | ~12 KB | port allocation, conflict checks |
+| `services.deploy.json`    | `[{id, mesh, kind, runtime, language, repo_url}]`          | ~40 KB | fleet-runner deploy targeting |
+
+Slices are **derived** from `services.json` — never hand-edit them. They
+are written compact (single line) on purpose: the human-readable view is
+`services.json`; slices exist to minimize transferred bytes / tokens.
+Rebuild without re-querying GitHub:
+
+```bash
+python3 bin/generate.py --slices-only
+```
+
+`bin/generate.py` (the normal full run) rebuilds them automatically
+after writing `services.json`.
+
 ## What's in here
 
 | file                       | purpose                                                            |
 |----------------------------|--------------------------------------------------------------------|
 | `services.json`            | the registry (array of entries)                                    |
+| `services.<slice>.json`    | seven projection files (see "Sliced URLs" above) — auto-derived    |
 | `schema/v1.json`           | JSON Schema for an entry                                           |
 | `services.summary.txt`     | counts by mesh + category, rebuilt by `bin/build.py`               |
-| `bin/generate.py`          | rebuild `services.json` from GitHub topics + `overrides.json`      |
+| `bin/generate.py`          | rebuild `services.json` + slices from GitHub topics + `overrides.json` |
 | `bin/notify-consumers.sh`  | tell the catalog + hub to re-fetch (run after `git push`)          |
 | `overrides.json`           | per-slug patches (curated names, descriptions, custom example URLs)|
 | `bin/sync.sh`              | (legacy) snapshot the previous three sources                       |
@@ -116,7 +146,7 @@ The registry is regenerated from GitHub topics on every run of
 4. Regenerate and push:
    ```bash
    python3 bin/generate.py
-   git add services.json overrides.json services.summary.txt
+   git add services.json services.*.json overrides.json services.summary.txt
    git commit -m "feat: add <slug>"
    git push
    bin/notify-consumers.sh    # tells the live dashboards to re-fetch
