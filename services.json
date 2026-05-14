@@ -4927,6 +4927,37 @@
     "container_port": 18109
   },
   {
+    "id": "go-pentest-chaos-sync",
+    "name": "Go Pentest Chaos Sync",
+    "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "pentest"
+    ],
+    "url": "https://go-pentest-chaos-sync.0exec.com",
+    "health_url": "https://go-pentest-chaos-sync.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-chaos-sync",
+    "example_path": "/sync/status",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "Downloads + parses Chaos public-bug-bounty index; SQLite WAL + bulk-tx upserts; 4-way concurrent zip fetch; daily refresh cron; trigger rate-limited to 10min; lookup tested in-memory.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18128,
+    "container_port": 18128
+  },
+  {
     "id": "go-pentest-codec",
     "name": "Go Pentest Codec",
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
