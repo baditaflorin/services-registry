@@ -81,6 +81,47 @@ after writing `services.json`.
 
 See [`schema/v1.json`](schema/v1.json) for the full contract.
 
+## Bootstrap a new builder / ops machine
+
+Everything an operator needs to set up a fresh Builder LXC (or any
+new machine that wants to run `fleet-runner deploy`) lives in
+[`scripts/`](scripts/). One command brings the box from zero to
+fully-working:
+
+```bash
+# As root on the new machine, after SSH keys to github.com are set up:
+curl -fsSL https://raw.githubusercontent.com/baditaflorin/services-registry/main/scripts/lxc-bootstrap.sh | bash
+```
+
+What it does (idempotent — re-run anytime to refresh):
+
+1. apt-install `git`, `python3`, `golang`, `docker.io`, `docker-buildx`, `jq`, `curl`.
+2. Clone (or pull) `services-registry`, `go_fleet_runner`, `go-common` into `/root/workspace/`.
+3. Build `fleet-runner` from source and install to `/usr/local/bin/`.
+4. Run `scripts/gen-etc-hosts.sh` to write the split-horizon `/etc/hosts` block — every fleet FQDN → the internal gateway IP (`10.10.10.10`). Bypasses the NAT-hairpin issue where the LXC can't reach the bastion's public IP cleanly from inside the mesh.
+5. Generate an `ed25519` SSH key (if absent), print the public key, and tell the operator exactly which hosts (bastion / gateway / dockerhost) need it in their `authorized_keys`.
+6. Run `fleet-runner clone-missing` so every service workspace is pulled.
+
+No secrets are written by this script. The SSH private key never leaves the box; the public key is printed to stdout for manual install at the three fleet hops (whose own `authorized_keys` files are the only thing that matters for trust).
+
+After install:
+
+```bash
+fleet-runner converge          # full drift report
+fleet-runner state snapshot    # live fleet state
+fleet-runner deploy <repo>     # idempotent end-to-end deploy
+```
+
+The `/etc/hosts` block alone can be re-applied:
+
+```bash
+sudo ./scripts/gen-etc-hosts.sh                          # local services.json
+sudo ./scripts/gen-etc-hosts.sh --registry-url <url>     # from the public copy
+sudo ./scripts/gen-etc-hosts.sh --dry-run                # preview only
+```
+
+The block is delimited by `# BEGIN fleet-split-horizon` / `# END fleet-split-horizon`; outside the block is untouched. Counter:current FQDNs as of last sync = 186.
+
 ## No secrets policy
 
 The registry is **public**. It must never contain real API keys, signed tokens,
