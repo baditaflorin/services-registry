@@ -411,7 +411,60 @@ vendor sunsets an API path, the deprecated calls often degrade to
 *empty-success* rather than 404 — fail-loud requires explicit version
 checks at the boundary.
 
-### 6. Stale Docker embedded-DNS forwarders after a dockerd restart
+### 6. Active-scanner egress must route through the residential proxy
+
+**Hetzner is a bullseye for DC-abuse complaints when scanners hit
+bug-bounty targets.** German hosting providers escalate quickly: a
+single complaint can pull the dockerhost IP. We use Webshare
+rotating residential proxies for every scanner that actively probes
+external (non-fleet) targets. The pattern:
+
+1. Webshare creds live in `/opt/_shared/proxy.env` on the dockerhost
+   (chmod 600, root-owned). Single source of truth — never duplicate
+   into per-service `.env` files in service repos.
+2. Each active-scanner repo's `docker-compose.yml` declares (in the
+   `environment:` block):
+   ```yaml
+   - HTTP_PROXY=${EXTERNAL_PROXY_URL:-}
+   - HTTPS_PROXY=${EXTERNAL_PROXY_URL:-}
+   - NO_PROXY=${NO_PROXY:-localhost,127.0.0.1,.0exec.com,.0crawl.com}
+   ```
+   The `:-` default = direct egress, so an unconfigured workstation
+   doesn't accidentally route through a missing proxy.
+3. On the dockerhost, the per-service compose dir gets an `.env`
+   that's a copy of `/opt/_shared/proxy.env` (or a bootstrap script
+   that merges it). docker-compose reads `.env` adjacent to the
+   compose file by default, populating `${EXTERNAL_PROXY_URL}`.
+4. **Go services use safehttp ≥ go-common v0.14.3.** That release
+   added `Proxy: http.ProxyFromEnvironment` to the safehttp
+   transport — pre-v0.14.3 the env vars were silently bypassed.
+
+**Verification recipe:**
+
+```
+# inside the container
+env | grep -E '^HTTPS_PROXY=' # must show http://...:...@p.webshare.io:80
+
+# end-to-end through the gateway
+curl -s 'https://<scanner>.0exec.com/probe?url=https://httpbin.org/ip&api_key=default_token'
+# → "origin": some Webshare residential IP, NOT 176.x.x.x (Hetzner)
+```
+
+**Which services need this:** any service that actively probes
+*external bug-bounty targets* (httpx, takeover-checker, screenshot,
+http-replay, exploit-verifier, nuclei wrappers, etc.). Services that
+only hit *public APIs* (subfinder calling crt.sh / hackertarget /
+anubis / wayback) DO NOT need the proxy — those endpoints are
+designed to be hit and don't generate abuse complaints. Services
+that only do *internal* fleet calls (orchestrators, queue workers,
+findings-store, etc.) also don't need it.
+
+**Lesson:** when an entire fleet egresses from one DC IP, the
+egress-routing decision is a fleet-level invariant, not a per-call
+choice. Wire it in compose + go-common defaults, not in each
+scanner's HTTP-client construction code.
+
+### 7. Stale Docker embedded-DNS forwarders after a dockerd restart
 
 When `dockerd` restarts on the dockerhost while user-defined-network
 (compose-created) containers are still running, those containers keep
