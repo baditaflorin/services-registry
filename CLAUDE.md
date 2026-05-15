@@ -386,6 +386,37 @@ Operational topology and credentials are in **private**
 `fleet-state/OPS.md` — never commit SSH targets, IPs, or tokens to
 service repos.
 
+## Unattended automation — secrets, DNS, preflight (read RUNBOOK-UNATTENDED.md)
+
+**Three primitives let any agent ship a brand-new service from "local
+code" to "live with DNS + scope + secrets" without operator intervention:**
+
+| Service | Role | Port |
+|---------|------|------|
+| [`go-fleet-secrets`](https://github.com/baditaflorin/go-fleet-secrets) | Encrypted vault for tokens (Hetzner, GitHub PAT, SMTP, platform API keys) | 18140 |
+| [`go-fleet-dns-sync`](https://github.com/baditaflorin/go-fleet-dns-sync) | Registry → Hetzner Cloud DNS reconciler (30-min ticker) | 18141 |
+| [`go-fleet-preflight`](https://github.com/baditaflorin/go-fleet-preflight) | Pre-deploy checklist (registry + DNS + port + secrets) | 18142 |
+
+The full operational playbook — bootstrap, secret rotation, "how to add
+a new service unattended", agent anti-patterns — lives in
+[`RUNBOOK-UNATTENDED.md`](RUNBOOK-UNATTENDED.md). **Read that before
+asking the user for tokens or where things live.**
+
+Key facts an agent needs to know:
+
+- **DNS API**: `https://api.hetzner.cloud/v1` (Bearer auth). The older
+  `dns.hetzner.com` Console API is **deprecated** — don't use it.
+- **Zone**: `0exec.com` is Hetzner Cloud zone id `1285812`.
+- **Gateway IP**: `176.9.123.221` — every fleet A record points here;
+  nginx terminates TLS and routes to the right upstream port.
+- **Token env name**: `HCLOUD_TOKEN` (canonical, matches hcloud-cli +
+  official Go SDK). `HETZNER_TOKEN` kept as back-compat alias.
+- **Secrets**: live in `go-fleet-secrets`, NEVER in env on dockerhost,
+  NEVER in service repos, NEVER in services.json / overrides.json.
+  Each secret has a `consumers` allowlist (`X-Auth-User` scope).
+- **Before any deploy**: call preflight; expect 200 (green) or 424 with
+  a detailed checklist of what's red.
+
 ## Operations playbook — teach yourself to fish
 
 **For any AI agent (Claude, Gemini, Haiku, GPT-anything) that lands in
