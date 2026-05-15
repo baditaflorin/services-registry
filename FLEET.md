@@ -411,6 +411,80 @@ vendor sunsets an API path, the deprecated calls often degrade to
 *empty-success* rather than 404 — fail-loud requires explicit version
 checks at the boundary.
 
+### 6. Stale Docker embedded-DNS forwarders after a dockerd restart
+
+When `dockerd` restarts on the dockerhost while user-defined-network
+(compose-created) containers are still running, those containers keep
+the embedded DNS forwarder upstream config they cached at *their own*
+container-start time. Docker never re-reads `/etc/resolv.conf` for
+existing containers. If the host's resolv.conf changed in the meantime
+(e.g. systemd-resolved was replaced by dnsmasq, or the daemon
+transiently saw an empty resolv.conf during the restart), the
+container's `/etc/resolv.conf` ends up with one of:
+
+```
+# ExtServers: [invalid IP invalid IP invalid IP]
+# ExtServers: [host(127.0.0.53)]   # systemd-resolved no longer up
+```
+
+Result: every external DNS query inside that container `SERVFAIL`s
+(`server misbehaving`). The dockerd `dns:` setting is *not* re-read —
+the embedded forwarder has its own snapshot.
+
+**Fleet symptom (observed 2026-05-15):** every recon scanner
+(subfinder, takeover-checker, httpx, cert-transparency) returned
+empty/zero hits for ~24 hours. Subfinder showed `count: 0` per
+source, takeover-checker returned `severity: none` for 129/129 hosts.
+At first glance both responses *looked* clean — that's the
+false-negative class.
+
+**Detection:**
+
+```
+fleet-runner audit dns-forwarders-stale --workdir /root/workspace
+```
+
+The check is anchored on `services-registry`; `pass=1 fail=0
+skip=N` means the fleet is healthy. A `fail` row lists up to 5
+broken container names plus the canonical fix command.
+
+**Recovery:**
+
+```
+fleet-runner dns-heal           # dry-run report
+fleet-runner dns-heal --apply   # restart every broken container (~10s each)
+```
+
+`dns-heal` SSHes to the dockerhost, parses each running container's
+ExtServers annotation, and `docker restart -t 5`s any whose upstream
+list doesn't match the dockerd `dns:` config (the fleet's internal
+DNS triple — full topology in private `fleet-state/OPS.md`). Restart
+forces Docker to re-read the host's current resolv.conf and rewrite
+the forwarder upstream.
+
+**Defense in depth — service-level detection.** Every recon scanner
+that depends on outbound DNS now exposes `GET /selftest`, which
+resolves a known control hostname (`example.com`) and returns `503`
+when the local resolver is broken. External monitors can hit
+`/selftest` to detect the false-negative-producing condition without
+needing to interpret a "0 hits" run as either "clean negative" or
+"resolver dead".
+
+Affected scanners with `/selftest` shipped 2026-05-16: `go-pentest-
+takeover-checker` (v0.2+), `go-pentest-subfinder` (v0.2+). Pattern
+to propagate when adding a new outbound-DNS service: implement
+`/selftest` against `example.com`, and emit a distinct `severity` /
+top-level flag (`error`, `all_errored: true`, etc.) for resolver
+failures so callers cannot silently absorb them as "no findings".
+
+**Lesson:** when an external dependency can break silently in a way
+that mimics a clean negative response, the contract has to surface
+the difference. The fix is in three layers: (a) per-service `/selftest`
+control probes; (b) per-service response shape distinguishes "no
+signal" from "couldn't probe"; (c) fleet-wide `audit dns-forwarders-
+stale` + `dns-heal --apply` so an operator catches the underlying
+condition before scans rely on it.
+
 ## No secrets policy
 
 Restating the [README](README.md): nothing sensitive belongs here.
