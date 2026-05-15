@@ -4672,7 +4672,7 @@
   {
     "id": "go-fleet-dns-sync",
     "name": "Go Fleet Dns Sync",
-    "description": "Hetzner DNS reconciler. Reads services-registry/services.json, diffs against actual Hetzner zone state, applies the delta (creates missing A records, fixes wrong-IP records). Pulls Hetzner API token from go-fleet-secrets (env fallback for bootstrap). 30-min background ticker. Extras never auto-deleted.",
+    "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -4692,7 +4692,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 5,
-    "trl_evidence": "Hetzner v1 API client + registry parser + 3-way diff (missing/wrong-ip/extra) + idempotent apply. Tests cover diff/create/update/dry-run/extras-never-deleted/non-mesh-ignored.",
+    "trl_evidence": "Hetzner Cloud API client (api.hetzner.cloud/v1, Bearer auth) + RRSet-flattening on read + single-record RRSets on write + registry parser + 3-way diff + idempotent apply + paginated rrset listing. 13 tests cover diff/create/update/dry-run/extras-never-deleted/non-mesh-ignored.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
     "trl_assessed_at": "2026-05-15",
