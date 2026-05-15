@@ -1,1 +1,1 @@
-[{"id":"go-fleet-graph","depends_on":["go-apikey-service"]},{"id":"go-fleet-visualizer","depends_on":["go-fleet-graph","go-apikey-service"]}]
+[{"id":"go-catalog-service","depends_on":[]},{"id":"go-fleet-graph","depends_on":["go-apikey-service"]},{"id":"go-fleet-visualizer","depends_on":["go-fleet-graph","go-apikey-service"]}]

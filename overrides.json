@@ -2971,5 +2971,16 @@
     "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
     "trl_assessed_at": "2026-05-15",
     "trl_assessor": "claude-session-2026-05-15"
+  },
+  "go-catalog-service": {
+    "container_port": 18022,
+    "host_port": 18022,
+    "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
+    "example_path": "/",
+    "depends_on": [],
+    "trl": 6,
+    "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15"
   }
 }

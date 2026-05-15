@@ -4670,6 +4670,34 @@
     "container_port": 4906
   },
   {
+    "id": "go-catalog-service",
+    "name": "Go Catalog Service",
+    "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
+    "category": "visualization",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://go-catalog-service.0exec.com",
+    "health_url": "https://go-catalog-service.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-catalog-service",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18022,
+    "container_port": 18022,
+    "depends_on": []
+  },
+  {
     "id": "go-fleet-dns-sync",
     "name": "Go Fleet Dns Sync",
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
