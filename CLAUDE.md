@@ -571,8 +571,30 @@ ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner deploy go_<rep
 `fleet-runner deploy` is idempotent end-to-end: DNS A record (Hetzner),
 image build on AMD64 host (no QEMU emulation), push to GHCR, deploy
 via `docker compose` on the dockerhost, ensure nginx vhost + Let's
-Encrypt cert exist, `/health` smoke check. It also writes the
-deployed-version metadata the catalog UI reads.
+Encrypt cert exist, then a real post-deploy gate. The pipeline:
+
+1. **DNS / vhost / cert** — idempotent shape checks (unchanged).
+2. **Drift detection** — compares the repo's `service.yaml` `version`
+   against the live `GET /version` response. If they differ (or
+   `/version` is unreachable), rebuild + roll. No drift = no rebuild.
+3. **Build path** — `git worktree` of `origin/main` on Builder LXC 108,
+   `docker buildx --platform linux/amd64 --push` to GHCR tagged both
+   `:<version>` and `:latest`, then `docker compose pull && up -d`
+   on the dockerhost.
+4. **Smoke gate** — `GET /health` (must be 200) AND `GET /selftest`
+   (200 = ok, 404 = service didn't implement it, 503/other = FAIL).
+   `/selftest` is the cross-service-call gate; `/health` alone only
+   proves the binary booted.
+5. **Rollback on smoke fail** — captures the previous image digest
+   before the roll; on smoke failure, retags that digest as `:latest`
+   on the dockerhost and `compose up -d` (no GHCR roundtrip), then
+   re-smokes. The new image is pushed but **not kept in place**.
+
+Flags: `--force-build` (rebuild even when versions match — for same-
+version code-only changes during incident response), `--skip-build`
+(assume the image is already in GHCR), `--skip-smoke` (offline DR),
+`--no-rollback` (leave the new image in place even when smoke fails —
+useful when you'd rather fix forward).
 
 **Manual fallback (when LXC 108 is unreachable):**
 
