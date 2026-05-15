@@ -181,7 +181,7 @@
   },
   "apikey-service": {
     "container_port": 8080,
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
     "host_port": 18021,
     "trl": 5,
@@ -547,7 +547,7 @@
   },
   "db-geo-geocode": {
     "container_port": 3909,
-    "description": "City → lat/lon with local DB (?text=)",
+    "description": "City \u2192 lat/lon with local DB (?text=)",
     "host_port": 18009,
     "name": "Geocoding (Go / DB)",
     "trl": 6,
@@ -683,7 +683,7 @@
     "trl_assessed_at": "2026-05-13",
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_evidence": "Keyword-bag sentiment lexicon."
   },
   "env-finder": {
@@ -762,7 +762,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high≥3 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline)."
+    "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high\u22653 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline)."
   },
   "gentle-adhd-flow": {
     "trl": 3,
@@ -774,7 +774,7 @@
   },
   "geo-geocode": {
     "container_port": 4902,
-    "description": "City/address → lat/lon via TomTom (?text=)",
+    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
     "host_port": 18008,
     "name": "Geocoding (Node)",
     "trl": 6,
@@ -795,6 +795,42 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "geo service, place lookup and validation"
+  },
+  "go-fleet-dns-sync": {
+    "container_port": 18141,
+    "description": "Hetzner DNS reconciler. Reads services-registry/services.json, diffs against actual Hetzner zone state, applies the delta (creates missing A records, fixes wrong-IP records). Pulls Hetzner API token from go-fleet-secrets (env fallback for bootstrap). 30-min background ticker. Extras never auto-deleted.",
+    "example_path": "/stats",
+    "host_port": 18141,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
+    "trl_evidence": "Hetzner v1 API client + registry parser + 3-way diff (missing/wrong-ip/extra) + idempotent apply. Tests cover diff/create/update/dry-run/extras-never-deleted/non-mesh-ignored."
+  },
+  "go-fleet-preflight": {
+    "container_port": 18142,
+    "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
+    "example_path": "/checks",
+    "host_port": 18142,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Each new check is one goroutine. Lift bound is breadth of checks.",
+    "trl_evidence": "4 checks (registry, dns, port, per-secret); fan-out parallel; 424 Failed Dependency for red. Tests cover missing-registry/port-collision/vault-404/full-success/empty-repo."
+  },
+  "go-fleet-secrets": {
+    "container_port": 18140,
+    "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
+    "example_path": "/",
+    "host_port": 18140,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
+    "trl_evidence": "NaCl secretbox (XSalsa20-Poly1305) per-secret nonce; master key from env (fail-fast on missing); constant-time admin compare; metadata-only list; audit log every access. 16 tests pass."
   },
   "go-html-proxy": {
     "container_port": 3002,
@@ -847,6 +883,18 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254)."
+  },
+  "go-pentest-asset-inventory": {
+    "container_port": 18131,
+    "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
+    "example_path": "/stats",
+    "host_port": 18131,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine until ~1M assets per program; sharding by program or Postgres later.",
+    "trl_evidence": "SQLite (modernc.org); transactional upsert with tag-union + tech-overwrite; /assets/diff returns new/updated/removed for continuous-monitor; tests pass."
   },
   "go-pentest-asset-scope-resolver": {
     "container_port": 18126,
@@ -918,6 +966,18 @@
     "trl_ceiling": 9,
     "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs."
   },
+  "go-pentest-continuous-monitor": {
+    "container_port": 18134,
+    "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription \u2014 money compounds with the asset universe, not manpower.",
+    "example_path": "/stats",
+    "host_port": 18134,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by job-queue throughput. Sequential per-program scheduler keeps the reasoning simple.",
+    "trl_evidence": "Programs CRUD + DueProgramsAsOf scheduler + RunOnce composing diff + fan-out with scanner\u00d7kind applicability filter; 19 tests pass stubbed against asset-inventory + job-queue."
+  },
   "go-pentest-cors-misconfig-prober": {
     "container_port": 18124,
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
@@ -940,6 +1000,18 @@
     "trl_ceiling": 9,
     "trl_ceiling_reason": "CVSS 4.0 support pushes to 9.",
     "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only."
+  },
+  "go-pentest-dedup-fingerprint": {
+    "container_port": 18132,
+    "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
+    "example_path": "/stats",
+    "host_port": 18132,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
+    "trl_evidence": "6 normalization rules with table tests (param-order, UUID-in-path, numeric IDs, timestamps, whitespace, vuln-class/host invariance); 18 tests pass; TTL reaper for expiring fingerprints."
   },
   "go-pentest-dependency-cve": {
     "container_port": 18125,
@@ -965,6 +1037,18 @@
     "trl_ceiling_reason": "Add /security anchor crawl + submit-button scraping.",
     "trl_evidence": "12 probe paths, RFC 9116 parser, 9 bounty-platform regexes, 4 safe-harbor regexes, class-priority resolver. Extends fleet security-txt with VDP-vs-bounty classification."
   },
+  "go-pentest-exploit-verifier": {
+    "container_port": 18137,
+    "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
+    "example_path": "/capabilities",
+    "host_port": 18137,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Each verifier is a thin recipe \u2014 lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
+    "trl_evidence": "7 verifier classes (ssrf-blind/-cloud-metadata, xss-reflected/-dom, idor, jwt-alg-none, open-redirect, subdomain-takeover, default). All upstream deps stubbed in 24 tests. Scope-guard fail-closed."
+  },
   "go-pentest-favicon-hash": {
     "container_port": 18117,
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
@@ -975,6 +1059,18 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
     "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity."
+  },
+  "go-pentest-finding-triage": {
+    "container_port": 18135,
+    "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
+    "example_path": "/rules",
+    "host_port": 18135,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
+    "trl_evidence": "Pure-rule engine (8 rules) with table-driven isolated tests + integration tests stubbing scope-guard and dedup-fingerprint. Dependency-error policy: neutral with logged reason."
   },
   "go-pentest-findings-store": {
     "container_port": 18103,
@@ -1000,6 +1096,18 @@
     "trl_ceiling_reason": "GitHub Search has no regex; semantic dedup + verifier-loop integration cap the climb at 6.",
     "trl_evidence": "31 dorks across credentials/private-keys/internal/config; uses google/go-github v66; reads X-RateLimit-Remaining and backs off; catalog-hygiene + missing-token + missing-scope tests."
   },
+  "go-pentest-http-replay": {
+    "container_port": 18130,
+    "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
+    "example_path": "/stats",
+    "host_port": 18130,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine for evidence retention at typical bug-bounty scale; lifts when paired with object storage for large bodies.",
+    "trl_evidence": "go-common safehttp client; 256KB response cap; sha256 body-hash for rerun diff; 19 tests pass including curl-builder edge cases."
+  },
   "go-pentest-httpx": {
     "container_port": 18113,
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
@@ -1011,6 +1119,18 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Wrap wappalyzergo for full 3000+ fingerprint DB.",
     "trl_evidence": "Single+batch probes, parallel with worker cap, TLS extract, ~25 tech-detection signatures (CDNs, frameworks, CMS, front-end libs). safehttp-protected. Tested."
+  },
+  "go-pentest-job-queue": {
+    "container_port": 18133,
+    "description": "Durable workflow queue. POST jobs, workers /claim \u2192 /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
+    "example_path": "/stats",
+    "host_port": 18133,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
+    "trl_evidence": "Atomic claim via tx (SELECT-pending \u2192 UPDATE-running); lease-expiry reaper goroutine; exp-backoff retry. Full coverage on enqueue/claim/complete/fail/retry/reap/stats."
   },
   "go-pentest-notify": {
     "container_port": 18108,
@@ -1048,6 +1168,18 @@
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_evidence": "HTTP-callback path tested end-to-end (create session -> fire /c/{token} -> poll hits). XFF-aware client IP capture. DNS exfil pending v0.2."
   },
+  "go-pentest-orchestrator": {
+    "container_port": 18138,
+    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
+    "example_path": "/stats",
+    "host_port": 18138,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
+    "trl_evidence": "SQLite state machine; idempotent per-state advance; append-only event log; 30s ticker; 16 tests pass with every fleet dep stubbed (httptest mux)."
+  },
   "go-pentest-payloads": {
     "container_port": 18101,
     "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
@@ -1062,14 +1194,14 @@
   },
   "go-pentest-rate-coordinator": {
     "container_port": 18104,
-    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
     "example_path": "/stats",
     "host_port": 18104,
     "trl": 5,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_evidence": "golang.org/x/time/rate (stdlib-blessed) buckets per host; tested burst, deny, distinct hosts, policy override, wait+context cancel."
   },
   "go-pentest-report-templater": {
@@ -1093,8 +1225,20 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_evidence": "In-memory store, hostname/wildcard/CIDR/regex matchers with anchored regex cache; exclusion-wins logic; suffix-confusion regression test."
+  },
+  "go-pentest-screenshot": {
+    "container_port": 18129,
+    "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} \u2192 PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
+    "example_path": "/shot?url=https://example.com",
+    "host_port": 18129,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by Chromium-headless RAM (1 GiB shm) and the fact that one container is one Chromium instance.",
+    "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build)."
   },
   "go-pentest-secrets-scanner": {
     "container_port": 18122,
@@ -1119,6 +1263,18 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Add Shodan/Censys/Chaos/SecurityTrails when keys configured.",
     "trl_evidence": "4 passive sources fanned out in parallel with per-source timing + error capture, merged with dedup + suffix filter. No paid keys required."
+  },
+  "go-pentest-submit-bot": {
+    "container_port": 18136,
+    "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
+    "example_path": "/quota",
+    "host_port": 18136,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
+    "trl_evidence": "4 platform adapters (H1/BC/Intigriti/email) with stubbed-creds + rate-limit + daily-cap. 23 tests pass via httptest. NOT yet round-tripped against real platform APIs \u2014 TRL stays at 4 until verified end-to-end."
   },
   "go-pentest-takeover-checker": {
     "container_port": 18121,
@@ -1165,6 +1321,18 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
     "trl_evidence": "Wraps trufflehog binary in --only-verified; supports git/github/filesystem sources; argv-injection guards; path-escape guards; 6 unit tests including TestScan_filesystemEscape."
+  },
+  "go-pentest-walkthrough": {
+    "container_port": 18139,
+    "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
+    "example_path": "/preflight",
+    "host_port": 18139,
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Same ceiling as orchestrator \u2014 bounded by submit-bot end-to-end verification.",
+    "trl_evidence": "Same idempotent state-machine shape as orchestrator + manual-override hooks (decide, pause, advance). 22 tests pass over stub fleet endpoints."
   },
   "go-pentest-wayback-urls": {
     "container_port": 18127,
@@ -1343,7 +1511,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: real CSP3 §6.7.7.7 frame-ancestors source-list parser (none/self/wildcard/scheme/host with port/path/wildcard kinds); X-Frame-Options parser (DENY/SAMEORIGIN/ALLOW-FROM with deprecation flag); ComputeFramingPosture cross-check returning {deny,sameorigin,explicit,open}+Conflicts; client.Fetch. 10/10 corpus PASS; verified: Cloudflare correctly flagged with verdict=deny + conflict 'CSP says deny, XFO disagrees: sameorigin'."
+    "trl_evidence": "1.3.1: real CSP3 \u00a76.7.7.7 frame-ancestors source-list parser (none/self/wildcard/scheme/host with port/path/wildcard kinds); X-Frame-Options parser (DENY/SAMEORIGIN/ALLOW-FROM with deprecation flag); ComputeFramingPosture cross-check returning {deny,sameorigin,explicit,open}+Conflicts; client.Fetch. 10/10 corpus PASS; verified: Cloudflare correctly flagged with verdict=deny + conflict 'CSP says deny, XFO disagrees: sameorigin'."
   },
   "implemment-the-following-time-displaced-ears": {
     "trl": 2,
@@ -1414,7 +1582,7 @@
   },
   "jwt-pentest": {
     "container_port": 8315,
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
     "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
     "host_port": 18029,
     "trl": 6,
@@ -1422,7 +1590,7 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass."
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass."
   },
   "keyword-density": {
     "container_port": 8292,
@@ -1718,7 +1886,7 @@
   },
   "ocr-pdf": {
     "container_port": 5500,
-    "description": "Extract text from PDFs — upload or URL",
+    "description": "Extract text from PDFs \u2014 upload or URL",
     "host_port": 18012,
     "name": "OCR / PDF",
     "trl": 6,
@@ -2073,7 +2241,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: RFC 9309 §2.2.2 path matching with $ end-anchor and * wildcards; §2.3 precedence (specific UA > wildcard, longest-match wins, Allow beats Disallow on ties); Request-rate + Visit-time directive parsing; CrawlabilityMatrix evaluates 7 probe paths × {*, Googlebot, top-3 site UAs}. 10/10 corpus PASS; verified evidence: HN matrix shows /login disallowed for both * and Googlebot."
+    "trl_evidence": "1.3.1: RFC 9309 \u00a72.2.2 path matching with $ end-anchor and * wildcards; \u00a72.3 precedence (specific UA > wildcard, longest-match wins, Allow beats Disallow on ties); Request-rate + Visit-time directive parsing; CrawlabilityMatrix evaluates 7 probe paths \u00d7 {*, Googlebot, top-3 site UAs}. 10/10 corpus PASS; verified evidence: HN matrix shows /login disallowed for both * and Googlebot."
   },
   "robots-parser": {
     "container_port": 8304,
@@ -2255,7 +2423,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: multi-sitemap parsing (RFC 9309 §2.2.4 allows multiple Sitemap: directives) with per-sitemap reachability/Content-Type probe; canonical reachability probe (status + same-host + self-reference); pathsEqualish handles trailing-slash equivalence. 9/10 corpus PASS."
+    "trl_evidence": "1.3.1: multi-sitemap parsing (RFC 9309 \u00a72.2.4 allows multiple Sitemap: directives) with per-sitemap reachability/Content-Type probe; canonical reachability probe (status + same-host + self-reference); pathsEqualish handles trailing-slash equivalence. 9/10 corpus PASS."
   },
   "session-fixation": {
     "container_port": 8316,
@@ -2602,7 +2770,7 @@
     "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 — pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs."
+    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 \u2014 pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs."
   },
   "vagus-reset-coach": {
     "trl": 3,
@@ -2762,137 +2930,5 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
-  },
-  "go-pentest-screenshot": {
-    "container_port": 18129,
-    "host_port": 18129,
-    "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} → PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
-    "example_path": "/shot?url=https://example.com",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Bounded by Chromium-headless RAM (1 GiB shm) and the fact that one container is one Chromium instance.",
-    "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build)."
-  },
-  "go-pentest-http-replay": {
-    "container_port": 18130,
-    "host_port": 18130,
-    "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
-    "example_path": "/stats",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Single-node SQLite. Fine for evidence retention at typical bug-bounty scale; lifts when paired with object storage for large bodies.",
-    "trl_evidence": "go-common safehttp client; 256KB response cap; sha256 body-hash for rerun diff; 19 tests pass including curl-builder edge cases."
-  },
-  "go-pentest-asset-inventory": {
-    "container_port": 18131,
-    "host_port": 18131,
-    "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
-    "example_path": "/stats",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Single-node SQLite. Fine until ~1M assets per program; sharding by program or Postgres later.",
-    "trl_evidence": "SQLite (modernc.org); transactional upsert with tag-union + tech-overwrite; /assets/diff returns new/updated/removed for continuous-monitor; tests pass."
-  },
-  "go-pentest-dedup-fingerprint": {
-    "container_port": 18132,
-    "host_port": 18132,
-    "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
-    "example_path": "/stats",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
-    "trl_evidence": "6 normalization rules with table tests (param-order, UUID-in-path, numeric IDs, timestamps, whitespace, vuln-class/host invariance); 18 tests pass; TTL reaper for expiring fingerprints."
-  },
-  "go-pentest-job-queue": {
-    "container_port": 18133,
-    "host_port": 18133,
-    "description": "Durable workflow queue. POST jobs, workers /claim → /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
-    "example_path": "/stats",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
-    "trl_evidence": "Atomic claim via tx (SELECT-pending → UPDATE-running); lease-expiry reaper goroutine; exp-backoff retry. Full coverage on enqueue/claim/complete/fail/retry/reap/stats."
-  },
-  "go-pentest-continuous-monitor": {
-    "container_port": 18134,
-    "host_port": 18134,
-    "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription — money compounds with the asset universe, not manpower.",
-    "example_path": "/stats",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Bounded by job-queue throughput. Sequential per-program scheduler keeps the reasoning simple.",
-    "trl_evidence": "Programs CRUD + DueProgramsAsOf scheduler + RunOnce composing diff + fan-out with scanner×kind applicability filter; 19 tests pass stubbed against asset-inventory + job-queue."
-  },
-  "go-pentest-finding-triage": {
-    "container_port": 18135,
-    "host_port": 18135,
-    "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
-    "example_path": "/rules",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
-    "trl_evidence": "Pure-rule engine (8 rules) with table-driven isolated tests + integration tests stubbing scope-guard and dedup-fingerprint. Dependency-error policy: neutral with logged reason."
-  },
-  "go-pentest-submit-bot": {
-    "container_port": 18136,
-    "host_port": 18136,
-    "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
-    "example_path": "/quota",
-    "trl": 4,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
-    "trl_evidence": "4 platform adapters (H1/BC/Intigriti/email) with stubbed-creds + rate-limit + daily-cap. 23 tests pass via httptest. NOT yet round-tripped against real platform APIs — TRL stays at 4 until verified end-to-end."
-  },
-  "go-pentest-exploit-verifier": {
-    "container_port": 18137,
-    "host_port": 18137,
-    "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
-    "example_path": "/capabilities",
-    "trl": 4,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Each verifier is a thin recipe — lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
-    "trl_evidence": "7 verifier classes (ssrf-blind/-cloud-metadata, xss-reflected/-dom, idor, jwt-alg-none, open-redirect, subdomain-takeover, default). All upstream deps stubbed in 24 tests. Scope-guard fail-closed."
-  },
-  "go-pentest-orchestrator": {
-    "container_port": 18138,
-    "host_port": 18138,
-    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope→recon→scan→triage→verify→submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default — the unattended money loop.",
-    "example_path": "/stats",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
-    "trl_evidence": "SQLite state machine; idempotent per-state advance; append-only event log; 30s ticker; 16 tests pass with every fleet dep stubbed (httptest mux)."
-  },
-  "go-pentest-walkthrough": {
-    "container_port": 18139,
-    "host_port": 18139,
-    "description": "HTTP equivalent of go-pentest-cli — single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
-    "example_path": "/preflight",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Same ceiling as orchestrator — bounded by submit-bot end-to-end verification.",
-    "trl_evidence": "Same idempotent state-machine shape as orchestrator + manual-override hooks (decide, pause, advance). 22 tests pass over stub fleet endpoints."
   }
 }
