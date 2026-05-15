@@ -796,6 +796,17 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "geo service, place lookup and validation"
   },
+  "go-catalog-service": {
+    "container_port": 18022,
+    "host_port": 18022,
+    "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
+    "example_path": "/",
+    "depends_on": [],
+    "trl": 6,
+    "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15"
+  },
   "go-fleet-dns-sync": {
     "container_port": 18141,
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
@@ -807,6 +818,21 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
     "trl_evidence": "Hetzner Cloud API client (api.hetzner.cloud/v1, Bearer auth) + RRSet-flattening on read + single-record RRSets on write + registry parser + 3-way diff + idempotent apply + paginated rrset listing. 13 tests cover diff/create/update/dry-run/extras-never-deleted/non-mesh-ignored."
+  },
+  "go-fleet-graph": {
+    "container_port": 18143,
+    "host_port": 18143,
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
+    "example_path": "/summary?since=1h",
+    "depends_on": [
+      "go-apikey-service"
+    ],
+    "trl": 5,
+    "trl_evidence": "Two-sided observation (outbound RoundTripper + inbound middleware), schema-versioned wire format, drop-oldest ring buffer with bounded memory, fail-open if collector unreachable. SQLite WAL with /1m/1h/1d retention. Recursion guard prevents observing self-POSTs. Unit tests in collector + go-common.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15"
   },
   "go-fleet-preflight": {
     "container_port": 18142,
@@ -831,6 +857,22 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "NaCl secretbox (XSalsa20-Poly1305) per-secret nonce; master key from env (fail-fast on missing); constant-time admin compare; metadata-only list; audit log every access. 16 tests pass."
+  },
+  "go-fleet-visualizer": {
+    "container_port": 18144,
+    "host_port": 18144,
+    "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
+    "example_path": "/public",
+    "depends_on": [
+      "go-fleet-graph",
+      "go-apikey-service"
+    ],
+    "trl": 4,
+    "trl_evidence": "Two-surface auth split via selective middleware. Proxies to collector for all queries. Auto-refresh every 30s. SRI hash on CDN vis-network bundle. Path templating-aware drill-down. No tests yet \u2014 first iteration.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15"
   },
   "go-html-proxy": {
     "container_port": 3002,
@@ -1141,6 +1183,18 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
     "trl_evidence": "Atomic claim via tx (SELECT-pending \u2192 UPDATE-running); lease-expiry reaper goroutine; exp-backoff retry. Full coverage on enqueue/claim/complete/fail/retry/reap/stats."
+  },
+  "go-pentest-leak-bounty-policy": {
+    "container_port": 18145,
+    "host_port": 18145,
+    "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
+    "example_path": "/search?token=sk_live_xxx",
+    "trl": 5,
+    "trl_evidence": "25 hand-curated programs with per-program LeakPolicy across 4 leak classes (own_employee/shared_secret/customer_cred/canary) and credential_prefixes for token classification. 7 unit tests pin: registry parses, slugs unique, prefixes unique, sk_live_ -> Stripe + canary in_scope, shpat_ -> Shopify + customer_cred out_of_scope, >=3 canary-paying programs.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-session-2026-05-16-build"
   },
   "go-pentest-notify": {
     "container_port": 18108,
@@ -2940,47 +2994,5 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
-  },
-  "go-fleet-graph": {
-    "container_port": 18143,
-    "host_port": 18143,
-    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
-    "example_path": "/summary?since=1h",
-    "depends_on": [
-      "go-apikey-service"
-    ],
-    "trl": 5,
-    "trl_evidence": "Two-sided observation (outbound RoundTripper + inbound middleware), schema-versioned wire format, drop-oldest ring buffer with bounded memory, fail-open if collector unreachable. SQLite WAL with /1m/1h/1d retention. Recursion guard prevents observing self-POSTs. Unit tests in collector + go-common.",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15"
-  },
-  "go-fleet-visualizer": {
-    "container_port": 18144,
-    "host_port": 18144,
-    "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
-    "example_path": "/public",
-    "depends_on": [
-      "go-fleet-graph",
-      "go-apikey-service"
-    ],
-    "trl": 4,
-    "trl_evidence": "Two-surface auth split via selective middleware. Proxies to collector for all queries. Auto-refresh every 30s. SRI hash on CDN vis-network bundle. Path templating-aware drill-down. No tests yet \u2014 first iteration.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15"
-  },
-  "go-catalog-service": {
-    "container_port": 18022,
-    "host_port": 18022,
-    "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
-    "example_path": "/",
-    "depends_on": [],
-    "trl": 6,
-    "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15"
   }
 }

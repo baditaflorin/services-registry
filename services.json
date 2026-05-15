@@ -5631,6 +5631,37 @@
     "container_port": 18133
   },
   {
+    "id": "go-pentest-leak-bounty-policy",
+    "name": "Go Pentest Leak Bounty Policy",
+    "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-leak-bounty-policy.0exec.com",
+    "health_url": "https://go-pentest-leak-bounty-policy.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-leak-bounty-policy",
+    "example_path": "/search?token=sk_live_xxx",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "25 hand-curated programs with per-program LeakPolicy across 4 leak classes (own_employee/shared_secret/customer_cred/canary) and credential_prefixes for token classification. 7 unit tests pin: registry parses, slugs unique, prefixes unique, sk_live_ -> Stripe + canary in_scope, shpat_ -> Shopify + customer_cred out_of_scope, >=3 canary-paying programs.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-session-2026-05-16-build",
+    "host_port": 18145,
+    "container_port": 18145
+  },
+  {
     "id": "go-pentest-notify",
     "name": "Go Pentest Notify",
     "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
