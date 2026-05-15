@@ -343,8 +343,38 @@ check a static Pages site.
 | Webgateway      | `ssh -J root@0docker.com florin@10.10.10.10`                   |
 
 - **Builder LXC 108** is a Proxmox container on `0docker.com`. Hosts
-  per-service build workspaces at `/root/workspace/go_*/` and the
+  per-service build workspaces at `/root/workspace/<repo>/` and the
   `fleet-runner` binary.
+
+  **AI-agent rule — always use a git worktree, never the shared
+  workspace directly.** Multiple AI sessions (or a session + a human)
+  routinely target the same repo concurrently; sharing
+  `/root/workspace/<repo>/` produces silent races (one session's
+  `git checkout`/`reset --hard` clobbers the other's working tree
+  mid-build, image tags get pushed in the wrong order, deploys flip
+  to the loser's commit). Each session must isolate its checkout:
+
+  ```
+  cd /root/workspace/<repo>
+  git fetch origin
+  git worktree add /root/wt/<repo>-<short-purpose> origin/<branch>
+  cd /root/wt/<repo>-<short-purpose>
+  # do work, build, push, then:
+  git worktree remove /root/wt/<repo>-<short-purpose>
+  ```
+
+  Worktrees share the same `.git` (cheap; no extra clone), but each
+  has its own `HEAD`, working tree, and `git status`. The shared
+  `/root/workspace/<repo>/` stays as the canonical "long-lived
+  upstream tracker" — operate on it only for read-only inspection
+  (`git log`, `git diff`); never `checkout` / `reset` there.
+
+  Build images from inside the worktree with the same
+  `docker buildx build --platform linux/amd64 --provenance=false …`
+  command; tag with a short purpose suffix (e.g.
+  `1.6.172-postmerge`, `1.6.171-traits-pr9c`) so concurrent builds
+  don't trample one canonical tag. Remove the worktree on exit so
+  Builder LXC disk doesn't accumulate stale checkouts.
 - **Dockerhost VM** runs the service containers. Compose dirs:
   `/opt/services/<repo>/`, `/opt/security/<repo>/`,
   `/home/ubuntu_vm/pentest/<repo>/`.
