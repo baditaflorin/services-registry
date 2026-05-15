@@ -4701,6 +4701,38 @@
     "container_port": 18141
   },
   {
+    "id": "go-fleet-graph",
+    "name": "Go Fleet Graph",
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://go-fleet-graph.0exec.com",
+    "health_url": "https://go-fleet-graph.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-graph",
+    "example_path": "/summary?since=1h",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Two-sided observation (outbound RoundTripper + inbound middleware), schema-versioned wire format, drop-oldest ring buffer with bounded memory, fail-open if collector unreachable. SQLite WAL with /1m/1h/1d retention. Recursion guard prevents observing self-POSTs. Unit tests in collector + go-common.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18143,
+    "container_port": 18143,
+    "depends_on": [
+      "go-apikey-service"
+    ]
+  },
+  {
     "id": "go-fleet-preflight",
     "name": "Go Fleet Preflight",
     "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
@@ -4761,6 +4793,39 @@
     "trl_assessor": "claude-session-2026-05-15",
     "host_port": 18140,
     "container_port": 18140
+  },
+  {
+    "id": "go-fleet-visualizer",
+    "name": "Go Fleet Visualizer",
+    "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
+    "category": "visualization",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://go-fleet-visualizer.0exec.com",
+    "health_url": "https://go-fleet-visualizer.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-visualizer",
+    "example_path": "/public",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "Two-surface auth split via selective middleware. Proxies to collector for all queries. Auto-refresh every 30s. SRI hash on CDN vis-network bundle. Path templating-aware drill-down. No tests yet \u2014 first iteration.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18144,
+    "container_port": 18144,
+    "depends_on": [
+      "go-fleet-graph",
+      "go-apikey-service"
+    ]
   },
   {
     "id": "go-html-proxy",

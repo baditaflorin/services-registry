@@ -85,6 +85,12 @@
     "trl_assessor": {
       "type": "string",
       "description": "Who/what assessed: 'claude-session-YYYY-MM-DD' for AI-assisted, 'human' for manual review."
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+      "uniqueItems": true,
+      "description": "Declared service-to-service dependencies (slugs). Static counterpart to the live edges in go-fleet-graph. fleet-runner audit-graph diffs declared vs observed: declared-not-observed = dead dep (remove) or broken caller; observed-not-declared = undeclared coupling (add or refactor). Optional; absence means 'no declared deps yet'. Edges to non-fleet hosts go in tags, not here."
     }
   },
   "additionalProperties": false

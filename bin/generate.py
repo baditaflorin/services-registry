@@ -74,6 +74,10 @@ PROJECTIONS = {
     # fleet-runner deploy targeting.
     "services.deploy.json":  _pick(["id", "mesh", "kind", "runtime",
                                     "language", "repo_url"]),
+    # Declared dependency edges — tiny slice consumed by go-fleet-visualizer
+    # and fleet-runner audit-graph. Entries without depends_on are dropped
+    # by _pick (since "depends_on" is the only non-id key requested).
+    "services.depends.json": _pick(["id", "depends_on"]),
 }
 
 MESHES = ("0exec", "0crawl", "pages")
@@ -401,6 +405,11 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
               "host_port", "container_port", "port",
+              # Declared service-to-service dependency edges. Static
+              # counterpart to the live graph in go-fleet-graph. Set
+              # via overrides.json; fleet-runner audit-graph diffs
+              # declared vs observed.
+              "depends_on",
               # Render-time vhost knobs (consumed by fleet-runner
               # nginx-render). Per-service patches via overrides.json
               # or via $rules; not derived from any other source.
