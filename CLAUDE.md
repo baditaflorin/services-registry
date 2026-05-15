@@ -568,33 +568,47 @@ Tag *after* the commit, push *both*.
 ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner deploy go_<repo>'
 ```
 
-`fleet-runner deploy` is idempotent end-to-end: DNS A record (Hetzner),
-image build on AMD64 host (no QEMU emulation), push to GHCR, deploy
-via `docker compose` on the dockerhost, ensure nginx vhost + Let's
-Encrypt cert exist, then a real post-deploy gate. The pipeline:
+`fleet-runner deploy` is idempotent end-to-end. The pipeline is built
+to fail fast BEFORE touching prod, and to refuse to declare success
+unless every check confirms the new image actually carries the new
+code AND the cross-service-call gate is green:
 
-1. **DNS / vhost / cert** — idempotent shape checks (unchanged).
-2. **Drift detection** — compares the repo's `service.yaml` `version`
-   against the live `GET /version` response. If they differ (or
-   `/version` is unreachable), rebuild + roll. No drift = no rebuild.
-3. **Build path** — `git worktree` of `origin/main` on Builder LXC 108,
-   `docker buildx --platform linux/amd64 --push` to GHCR tagged both
-   `:<version>` and `:latest`, then `docker compose pull && up -d`
-   on the dockerhost.
-4. **Smoke gate** — `GET /health` (must be 200) AND `GET /selftest`
-   (200 = ok, 404 = service didn't implement it, 503/other = FAIL).
-   `/selftest` is the cross-service-call gate; `/health` alone only
-   proves the binary booted.
-5. **Rollback on smoke fail** — captures the previous image digest
+1. **DNS / vhost / cert** — idempotent shape checks.
+2. **Drift detection** — reads `service.yaml` `version` from
+   `origin/main` via `git show` (NOT the long-lived workspace tree,
+   which is shared and routinely stale) and compares to the live
+   `GET /version`. If they match, the deploy is an idempotent no-op.
+3. **Pre-flight** (Go repos) — in a fresh `git worktree add origin/main`
+   on Builder LXC 108, run `go build ./...` and `go test ./...`.
+   Failure aborts here; prod is not touched.
+4. **Build + push** — `docker buildx build --platform linux/amd64
+   --provenance=false --push` tagging both `:<version>` and
+   `:latest`.
+5. **Pull + digest assertion** — `docker compose pull` on dockerhost,
+   then `docker inspect` the new `:latest` digest. If it equals the
+   previously-running digest, the deploy fails: the new manifest
+   didn't propagate (GHCR auth scope, tag cache, platform mismatch),
+   and rolling forward would be a no-op masquerading as a deploy.
+6. **Roll** — `docker compose up -d` recreates the container.
+7. **Health-wait** — poll `docker inspect …{{.State.Health.Status}}`
+   until "healthy" (up to 90s). "unhealthy" fails immediately;
+   "starting" keeps polling; empty = no HEALTHCHECK directive,
+   trust the container and proceed.
+8. **Smoke gate** — three probes: `GET /health` must be 200, `GET
+   /selftest` must be 200 (or 404 = "service didn't implement it,
+   skip"); 503 is the codified "internal sources errored" signal and
+   fails the gate. `GET /version` must match the version we just
+   pushed — catches "container restarted but the image didn't roll".
+9. **Rollback on smoke fail** — captures the previous image digest
    before the roll; on smoke failure, retags that digest as `:latest`
-   on the dockerhost and `compose up -d` (no GHCR roundtrip), then
-   re-smokes. The new image is pushed but **not kept in place**.
+   on the dockerhost (no GHCR roundtrip) and `compose up -d`, waits
+   for HEALTHCHECK, re-smokes. The new image stays in GHCR but is
+   NOT kept running.
 
-Flags: `--force-build` (rebuild even when versions match — for same-
-version code-only changes during incident response), `--skip-build`
-(assume the image is already in GHCR), `--skip-smoke` (offline DR),
-`--no-rollback` (leave the new image in place even when smoke fails —
-useful when you'd rather fix forward).
+Flags: `--force-build` (rebuild + roll even when versions match),
+`--skip-build` (assume the image is already in GHCR), `--skip-smoke`
+(offline DR), `--no-rollback` (leave the new image in place on smoke
+fail — for fix-forward scenarios).
 
 **Manual fallback (when LXC 108 is unreachable):**
 
