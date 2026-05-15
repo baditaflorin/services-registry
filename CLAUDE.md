@@ -386,6 +386,16 @@ Operational topology and credentials are in **private**
 `fleet-state/OPS.md` — never commit SSH targets, IPs, or tokens to
 service repos.
 
+## Session continuity — handing off to a fresh agent
+
+When a session gets long enough that context feels tight, hand off to a
+new Claude with [`RESUME-PROMPT.md`](RESUME-PROMPT.md). It's a copy-paste
+first-message that carries forward what's been built, what's deployed,
+what's blocked, and where to pick up — so the user doesn't have to repeat
+themselves. The prompt stays public (no topology / IPs / tokens); it
+references this CLAUDE.md, RUNBOOK-UNATTENDED.md, and private OPS.md
+for the rest.
+
 ## Unattended automation — secrets, DNS, preflight (read RUNBOOK-UNATTENDED.md)
 
 **Three primitives let any agent ship a brand-new service from "local
