@@ -4804,6 +4804,37 @@
     "container_port": 8500
   },
   {
+    "id": "go-pentest-asset-inventory",
+    "name": "Go Pentest Asset Inventory",
+    "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-asset-inventory.0exec.com",
+    "health_url": "https://go-pentest-asset-inventory.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-asset-inventory",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "SQLite (modernc.org); transactional upsert with tag-union + tech-overwrite; /assets/diff returns new/updated/removed for continuous-monitor; tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine until ~1M assets per program; sharding by program or Postgres later.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18131,
+    "container_port": 18131
+  },
+  {
     "id": "go-pentest-asset-scope-resolver",
     "name": "Go Pentest Asset Scope Resolver",
     "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
@@ -4988,6 +5019,37 @@
     "container_port": 18118
   },
   {
+    "id": "go-pentest-continuous-monitor",
+    "name": "Go Pentest Continuous Monitor",
+    "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription \u2014 money compounds with the asset universe, not manpower.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-continuous-monitor.0exec.com",
+    "health_url": "https://go-pentest-continuous-monitor.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-continuous-monitor",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Programs CRUD + DueProgramsAsOf scheduler + RunOnce composing diff + fan-out with scanner\u00d7kind applicability filter; 19 tests pass stubbed against asset-inventory + job-queue.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by job-queue throughput. Sequential per-program scheduler keeps the reasoning simple.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18134,
+    "container_port": 18134
+  },
+  {
     "id": "go-pentest-cors-misconfig-prober",
     "name": "Go Pentest Cors Misconfig Prober",
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
@@ -5047,6 +5109,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18107,
     "container_port": 18107
+  },
+  {
+    "id": "go-pentest-dedup-fingerprint",
+    "name": "Go Pentest Dedup Fingerprint",
+    "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-dedup-fingerprint.0exec.com",
+    "health_url": "https://go-pentest-dedup-fingerprint.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-dedup-fingerprint",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "6 normalization rules with table tests (param-order, UUID-in-path, numeric IDs, timestamps, whitespace, vuln-class/host invariance); 18 tests pass; TTL reaper for expiring fingerprints.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18132,
+    "container_port": 18132
   },
   {
     "id": "go-pentest-dependency-cve",
@@ -5111,6 +5204,37 @@
     "container_port": 18111
   },
   {
+    "id": "go-pentest-exploit-verifier",
+    "name": "Go Pentest Exploit Verifier",
+    "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-exploit-verifier.0exec.com",
+    "health_url": "https://go-pentest-exploit-verifier.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-exploit-verifier",
+    "example_path": "/capabilities",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "7 verifier classes (ssrf-blind/-cloud-metadata, xss-reflected/-dom, idor, jwt-alg-none, open-redirect, subdomain-takeover, default). All upstream deps stubbed in 24 tests. Scope-guard fail-closed.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Each verifier is a thin recipe \u2014 lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18137,
+    "container_port": 18137
+  },
+  {
     "id": "go-pentest-favicon-hash",
     "name": "Go Pentest Favicon Hash",
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
@@ -5139,6 +5263,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18117,
     "container_port": 18117
+  },
+  {
+    "id": "go-pentest-finding-triage",
+    "name": "Go Pentest Finding Triage",
+    "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-finding-triage.0exec.com",
+    "health_url": "https://go-pentest-finding-triage.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-finding-triage",
+    "example_path": "/rules",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Pure-rule engine (8 rules) with table-driven isolated tests + integration tests stubbing scope-guard and dedup-fingerprint. Dependency-error policy: neutral with logged reason.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18135,
+    "container_port": 18135
   },
   {
     "id": "go-pentest-findings-store",
@@ -5203,6 +5358,37 @@
     "container_port": 18123
   },
   {
+    "id": "go-pentest-http-replay",
+    "name": "Go Pentest Http Replay",
+    "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-http-replay.0exec.com",
+    "health_url": "https://go-pentest-http-replay.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-http-replay",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "go-common safehttp client; 256KB response cap; sha256 body-hash for rerun diff; 19 tests pass including curl-builder edge cases.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine for evidence retention at typical bug-bounty scale; lifts when paired with object storage for large bodies.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18130,
+    "container_port": 18130
+  },
+  {
     "id": "go-pentest-httpx",
     "name": "Go Pentest Httpx",
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
@@ -5232,6 +5418,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18113,
     "container_port": 18113
+  },
+  {
+    "id": "go-pentest-job-queue",
+    "name": "Go Pentest Job Queue",
+    "description": "Durable workflow queue. POST jobs, workers /claim \u2192 /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-job-queue.0exec.com",
+    "health_url": "https://go-pentest-job-queue.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-job-queue",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Atomic claim via tx (SELECT-pending \u2192 UPDATE-running); lease-expiry reaper goroutine; exp-backoff retry. Full coverage on enqueue/claim/complete/fail/retry/reap/stats.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18133,
+    "container_port": 18133
   },
   {
     "id": "go-pentest-notify",
@@ -5325,6 +5542,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18106,
     "container_port": 18106
+  },
+  {
+    "id": "go-pentest-orchestrator",
+    "name": "Go Pentest Orchestrator",
+    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-orchestrator.0exec.com",
+    "health_url": "https://go-pentest-orchestrator.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-orchestrator",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "SQLite state machine; idempotent per-state advance; append-only event log; 30s ticker; 16 tests pass with every fleet dep stubbed (httptest mux).",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18138,
+    "container_port": 18138
   },
   {
     "id": "go-pentest-payloads",
@@ -5451,6 +5699,37 @@
     "container_port": 18105
   },
   {
+    "id": "go-pentest-screenshot",
+    "name": "Go Pentest Screenshot",
+    "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} \u2192 PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-screenshot.0exec.com",
+    "health_url": "https://go-pentest-screenshot.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-screenshot",
+    "example_path": "/shot?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build).",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by Chromium-headless RAM (1 GiB shm) and the fact that one container is one Chromium instance.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18129,
+    "container_port": 18129
+  },
+  {
     "id": "go-pentest-secrets-scanner",
     "name": "Go Pentest Secrets Scanner",
     "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
@@ -5511,6 +5790,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18112,
     "container_port": 18112
+  },
+  {
+    "id": "go-pentest-submit-bot",
+    "name": "Go Pentest Submit Bot",
+    "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-submit-bot.0exec.com",
+    "health_url": "https://go-pentest-submit-bot.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-submit-bot",
+    "example_path": "/quota",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "4 platform adapters (H1/BC/Intigriti/email) with stubbed-creds + rate-limit + daily-cap. 23 tests pass via httptest. NOT yet round-tripped against real platform APIs \u2014 TRL stays at 4 until verified end-to-end.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18136,
+    "container_port": 18136
   },
   {
     "id": "go-pentest-takeover-checker",
@@ -5633,6 +5943,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18120,
     "container_port": 18120
+  },
+  {
+    "id": "go-pentest-walkthrough",
+    "name": "Go Pentest Walkthrough",
+    "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-walkthrough.0exec.com",
+    "health_url": "https://go-pentest-walkthrough.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-walkthrough",
+    "example_path": "/preflight",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "Same idempotent state-machine shape as orchestrator + manual-override hooks (decide, pause, advance). 22 tests pass over stub fleet endpoints.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Same ceiling as orchestrator \u2014 bounded by submit-bot end-to-end verification.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18139,
+    "container_port": 18139
   },
   {
     "id": "go-pentest-wayback-urls",
