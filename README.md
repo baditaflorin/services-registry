@@ -193,6 +193,47 @@ The registry is regenerated from GitHub topics on every run of
    bin/notify-consumers.sh    # tells the live dashboards to re-fetch
    ```
 
+## Propagating CLAUDE.md / SERVICE-TEMPLATE.md after a change here
+
+`CLAUDE.md` and `SERVICE-TEMPLATE.md` in this repo are the **canonical**
+copies; per-repo copies in the ~274 fleet workspaces are propagated
+snapshots, not independent edits. After merging a change to either file
+**you must re-run propagation** — there is no automation today (see
+[issue #2](https://github.com/baditaflorin/services-registry/issues/2)).
+
+From any machine with SSH to the bastion:
+
+```bash
+ssh root@0docker.com 'pct exec 108 -- bash -lc "
+  cd /root/workspace/services-registry &&
+  git pull --ff-only &&
+  /usr/local/bin/fleet-runner inject services-registry/CLAUDE.md CLAUDE.md &&
+  /usr/local/bin/fleet-runner push \"docs(CLAUDE.md): propagate from services-registry\"
+"'
+```
+
+Repeat with `SERVICE-TEMPLATE.md` if that file changed. The
+`fleet-runner push` step uses `git add -A` per workspace — confirm all
+workspaces are clean first with:
+
+```bash
+ssh root@0docker.com 'pct exec 108 -- bash -lc "
+  cd /root/workspace && for d in */; do [ -d \$d/.git ] || continue;
+  out=\$(cd \$d && git status --porcelain); [ -n \"\$out\" ] && echo \"DIRTY: \$d\"; done
+"'
+```
+
+If any workspace shows dirty output unrelated to your propagation,
+resolve it before running push (otherwise the sweep commits unrelated
+files into that repo). Empty output = safe to propagate.
+
+**Why this is manual:** [issue #2](https://github.com/baditaflorin/services-registry/issues/2)
+tracks options to automate (GitHub Action on merge, daily cron, etc.).
+The current consensus is that the cost of forgetting is low — per-repo
+copies are ~99% identical to canonical even when stale, and AI agents
+read whichever version they get at session start — so a documented
+manual step beats fleet-wide auto-push for now.
+
 ## Topic conventions
 
 | topic              | meaning                                                     |
