@@ -1001,6 +1001,16 @@
     "trl_ceiling_reason": "CVSS 4.0 support pushes to 9.",
     "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only."
   },
+  "go-pentest-dashboard": {
+    "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
+    "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
+    "trl": 5,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by what the fleet exposes; active probing tools need auth + deploy before they can be surfaced safely.",
+    "trl_evidence": "Single index.html, no build step, CORS-permissive fleet endpoints. 6 tabs covering recon \u2192 scan \u2192 triage \u2192 render."
+  },
   "go-pentest-dedup-fingerprint": {
     "container_port": 18132,
     "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",

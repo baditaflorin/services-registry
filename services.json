@@ -7146,6 +7146,34 @@
     "trl_assessor": "claude-haiku-trl-batch"
   },
   {
+    "id": "go-pentest-dashboard",
+    "name": "Go Pentest Dashboard",
+    "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
+    "category": "visualization",
+    "mesh": "pages",
+    "kind": "static",
+    "language": "html",
+    "runtime": "github-pages",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://baditaflorin.github.io/go-pentest-dashboard/",
+    "health_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-dashboard",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
+    "trl": 5,
+    "trl_evidence": "Single index.html, no build step, CORS-permissive fleet endpoints. 6 tabs covering recon \u2192 scan \u2192 triage \u2192 render.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by what the fleet exposes; active probing tools need auth + deploy before they can be surfaced safely.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15"
+  },
+  {
     "id": "granular-physics-lab",
     "name": "Granular Physics Lab",
     "description": "Browser-based granular sandbox for teaching sand, gravel, and snow behavior with WASM physics and WebGPU visuals.",
