@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/host-conventions.v1.json",
+  "title": "Host Conventions v1",
+  "description": "Fleet-wide docker-compose primitives. Source of truth for cross-cutting compose config that `fleet-runner render-compose` applies to every container service before rendering its docker-compose.yml.",
+  "type": "object",
+  "required": ["version", "container_defaults"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version. Bump only on breaking changes; fleet-runner will refuse unknown versions."
+    },
+    "container_defaults": {
+      "$ref": "#/$defs/composeOverlay",
+      "description": "Applied to every service with kind=container."
+    },
+    "mesh_defaults": {
+      "type": "object",
+      "description": "Per-mesh layers applied on top of container_defaults. Key is the mesh slug.",
+      "patternProperties": {
+        "^(0exec|0crawl|pages)$": { "$ref": "#/$defs/composeOverlay" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "composeOverlay": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A subset of docker-compose service-level keys that fleet-runner knows how to merge. Anything not in this schema is intentionally unsupported here — declare it per-service via overrides.json instead.",
+      "properties": {
+        "extra_hosts": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[^:]+:[^:]+$" },
+          "description": "compose `extra_hosts` entries, e.g. `host.docker.internal:host-gateway`. Each entry is `hostname:address` — Docker's reserved magic strings (host-gateway) are allowed."
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Environment variables. String values may reference fleet secrets via `${secret:<name>}` (resolved at render time from go-fleet-secrets) — NOT YET IMPLEMENTED in the v1 renderer; reserved syntax."
+        },
+        "restart": {
+          "type": "string",
+          "enum": ["no", "on-failure", "always", "unless-stopped"],
+          "description": "compose `restart` policy."
+        },
+        "networks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "External networks the container joins. Each must be bootstrapped on the dockerhost (`docker network create <name>`) before `compose up`."
+        }
+      }
+    }
+  }
+}

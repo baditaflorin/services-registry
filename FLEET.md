@@ -258,22 +258,43 @@ commits + 130 review cycles + 130 chances for drift.
 
 ## IaC pipeline
 
+Two parallel render targets — gateway nginx vhosts AND dockerhost docker-compose files — both driven from this registry. Neither lives as hand-edited state on the target host.
+
 ```
-overrides.json (host_port, descriptions)         slug.json (slug map)
-                |                                       |
-                v                                       v
-              bin/generate.py  --reads-->  services.json (canonical, committed)
-                                                      |
-              fleet-runner nginx-render <-------------+
-                                                      |
-                                       gateway sites-available/, sites-enabled/
+overrides.json (per-slug + $rules)     slug.json (slug map)
+       │                                       │
+       └──────────┐                  ┌─────────┘
+                  v                  v
+              bin/generate.py  ─reads─>  services.json (canonical)
+                  │                          │
+                  │                          ├──> fleet-runner nginx-render --push --reload
+                  │                          │       gateway: sites-available/ + sites-enabled/
+                  │                          │
+                  │                          ├──> fleet-runner render-compose --push --restart
+host-conventions.yaml ─────────────────────> │       dockerhost: /opt/<area>/<service>/docker-compose.yml
+       (extra_hosts, env defaults, restart,  │
+        networks for every container)        │
+                                             └──> fleet-runner inject  (CLAUDE.md to every repo)
 ```
 
-1. Edit `overrides.json` (per-slug patches) or add topics to a repo.
+1. Edit `overrides.json` (per-slug patches or bulk `$rules`) or add topics to a repo.
 2. `python3 bin/generate.py` rebuilds `services.json` from GitHub topics + overrides.
 3. Commit `services.json` + every `services.*.json` slice + `overrides.json` (+ `services.summary.txt`).
 4. `bin/notify-consumers.sh` pings the dashboards to refresh.
 5. `fleet-runner nginx-render --push --reload` renders + ships gateway vhosts.
+6. `fleet-runner render-compose --push --restart` renders + ships per-service docker-compose.yml to every dockerhost. (Same diff/push/reload pattern as nginx-render; mesh changes that need every service's compose updated land here.)
+
+### host-conventions.yaml — the compose-side analogue of nginx templates
+
+[`host-conventions.yaml`](host-conventions.yaml) declares fleet-wide compose primitives that apply to every container service unless explicitly overridden. Today: `extra_hosts: host.docker.internal:host-gateway`, default `APIKEY_SERVICE_URL`, default `LOG_LEVEL`, default networks. Adding a new fleet-wide compose key (e.g. a log driver, a new env var every service reads) is ONE PR here + `fleet-runner render-compose --push --restart --all` instead of SSH-editing N dockerhost composes.
+
+Precedence (declaration order):
+1. `container_defaults` — every container
+2. `mesh_defaults.<mesh>` — per-mesh layer
+3. `overrides.json` `$rules` — match by `mesh`/`kind`/`ids` etc., patch any compose field
+4. `overrides.json` per-slug entry — wins over everything else
+
+Schema: [`schema/host-conventions.v1.json`](schema/host-conventions.v1.json). The renderer refuses unknown top-level keys, so adding a new primitive requires updating the schema in the same PR (loud-by-design).
 
 `bin/generate.py` writes seven sibling projection files
 (`services.ids.json`, `services.names.json`, `services.minimal.json`,

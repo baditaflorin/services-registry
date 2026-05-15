@@ -1,0 +1,88 @@
+# host-conventions.yaml — fleet-wide docker-compose primitives.
+#
+# This file is the SINGLE SOURCE OF TRUTH for cross-cutting compose
+# config that every container service should apply unless it
+# explicitly opts out. It's the compose-side analogue of
+# `services-registry/templates/nginx/` for vhosts.
+#
+# `fleet-runner render-compose` reads this file + services.json +
+# overrides.json + an embedded compose template, and emits a fresh
+# `docker-compose.yml` per service. Operators run
+# `fleet-runner render-compose --diff` to preview drift, then
+# `--push` to apply via SSH.
+#
+# Why this exists: before host-conventions.yaml, fleet-wide compose
+# changes (e.g. "add `extra_hosts: host.docker.internal:host-gateway`
+# to every container so they can reach the keystore") required N
+# manual SSH edits across `/opt/<area>/<repo>/docker-compose.yml`
+# files on every dockerhost. That drift was invisible to the registry
+# and impossible to roll forward atomically. Now: one PR here +
+# `fleet-runner render-compose --push --all` does it.
+#
+# Precedence (declaration order):
+#   1. `container_defaults`   — applied to every container service
+#   2. `mesh_defaults.<mesh>` — applied to services in that mesh
+#   3. overrides.json $rules  — applied per-rule match (mesh, kind, ids)
+#   4. overrides.json per-slug — wins over everything
+#
+# Schema: schema/host-conventions.v1.json
+# Owner:  this file is propagated to no other repo. fleet-runner
+#         reads it via the same raw.githubusercontent.com path as
+#         services.json.
+
+version: 1
+
+container_defaults:
+  # Make the dockerhost's gateway IP resolvable from inside the
+  # container as `host.docker.internal`. Required by every service
+  # whose middleware needs to reach the keystore at
+  # APIKEY_SERVICE_URL (post-fix for the 2026-05-15 incident where
+  # services defaulted to `localhost:18021` inside their own
+  # container and 503'd every verify).
+  #
+  # `host-gateway` is Docker's reserved magic string for "the host
+  # bridge gateway IP"; Docker 20.10+ resolves it at compose-up
+  # time. No hardcoded IP — works on whatever dockerhost we land on,
+  # and survives VM migration / re-IP without any compose edit.
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+  # Fleet-wide environment defaults. Per-service overrides via
+  # services-registry/overrides.json win.
+  env:
+    # The keystore (go-apikey-service) listens on the dockerhost
+    # at port 18021. Every container reaches it via the
+    # host.docker.internal alias above.
+    APIKEY_SERVICE_URL: "http://host.docker.internal:18021"
+    # Default log level. Per-service overrides via overrides.json.
+    LOG_LEVEL: "info"
+
+  # Always restart unless the operator stops the container.
+  restart: "always"
+
+  # External docker network every container joins. The network is
+  # bootstrapped by `fleet-runner setup-dockerhost` (separate concern).
+  networks:
+    - pentest_network
+
+# Per-mesh defaults can layer on top of container_defaults.
+# 0crawl services lean heavy on outbound HTTP; give them more headroom.
+mesh_defaults:
+  0crawl:
+    env:
+      # Many 0crawl tools do parallel HTTP fetches; raise the per-host
+      # outbound conn cap inside the container.
+      GOMAXPROCS: ""  # let Go pick from cgroup limits
+  0exec:
+    env: {}
+
+# Reserved for future expansion. Document here, don't shoehorn into
+# container_defaults:
+#
+#   - `secrets`: refs into go-fleet-secrets, resolved at render time
+#                e.g. FLEET_API_KEY: "${secret:fleet-api-key}"
+#   - `volumes`: per-service mount points (currently each service
+#                declares its own volumes in its repo's compose; we'll
+#                centralise the common patterns like /var/log/<svc>).
+#   - `logging`: log driver + options once we standardise (today
+#                services rely on the docker daemon default).
