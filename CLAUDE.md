@@ -324,8 +324,25 @@ fleet-runner overrides list                  # per service, which override keys 
 fleet-runner overrides explain <slug>        # one service: every override key and its source (slug vs rule)
 fleet-runner overrides audit                 # stale per-slug entries, unused rules, per-key adoption counts
 fleet-runner new-service <name> <port> [cat] # scaffold new service
+fleet-runner scaffold-compose <repo>...      # write canonical docker-compose.yml from registry (--apply [--commit --push] | --missing for every container repo lacking one)
+fleet-runner scaffold-service-yaml <repo>... # write canonical service.yaml from registry
+fleet-runner render-compose <repo>           # print canonical docker-compose.yml to stdout (no write — read-only preview)
+fleet-runner audit compose-drift             # surface compose files diverging from the canonical fleet shape
+fleet-runner audit registry-host-port-set    # services without a registered host_port (silent squatter discovery)
 fleet-runner stats                           # audit log + token usage summary
 ```
+
+**Bootstrap a service that's missing its compose at HEAD** — the canonical
+two-liner (replaces hand-rolled `cat > docker-compose.yml` heredocs that
+got the shape wrong in the past):
+
+```bash
+fleet-runner scaffold-compose <repo> --apply --commit --push
+fleet-runner deploy <repo> --bootstrap --force-build --skip-smoke
+```
+
+`scaffold-compose --missing` will find every container repo without a
+compose at HEAD and render one for each in a single pass.
 
 All commands accept `--filter kind=container,language=go` (and so on)
 to narrow the set. All commands accept `--tokens-used N --model NAME`
