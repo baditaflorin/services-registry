@@ -1618,6 +1618,41 @@
     "cert_domain": "phone-extractor.0crawl.com"
   },
   {
+    "id": "go-oauth-mapper",
+    "name": "Go Oauth Mapper",
+    "description": "Microservice for Oauth Mapper",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "infrastructure"
+    ],
+    "url": "https://go-oauth-mapper.0crawl.com",
+    "health_url": "https://go-oauth-mapper.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_oauth_mapper",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "trl": 6,
+    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
+    "host_port": 8330,
+    "container_port": 8330,
+    "cert_domain": "oauth-mapper.0crawl.com"
+  },
+  {
     "id": "google-taxonomy",
     "name": "Google Taxonomy",
     "description": "Microservice for Google Taxonomy",
@@ -2231,40 +2266,6 @@
     "host_port": 8294,
     "container_port": 8294,
     "cert_domain": "phone-extractor.0crawl.com"
-  },
-  {
-    "id": "oauth-mapper",
-    "name": "Oauth Mapper",
-    "description": "Microservice for Oauth Mapper",
-    "category": "infrastructure",
-    "mesh": "0crawl",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "go",
-      "infrastructure"
-    ],
-    "url": "https://oauth-mapper.0crawl.com",
-    "health_url": "https://oauth-mapper.0crawl.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_oauth_mapper",
-    "example_path": "/?url=https://example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key",
-      "path_template": "/t/{token}",
-      "public_demo_token": "default_token"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
-    "trl": 6,
-    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
-    "host_port": 8330,
-    "container_port": 8330
   },
   {
     "id": "office-locations",
@@ -6524,6 +6525,40 @@
     "container_port": 3401
   },
   {
+    "id": "go-session-fixation",
+    "name": "Go Session Fixation",
+    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "pentest",
+      "security"
+    ],
+    "url": "https://go-session-fixation.0exec.com",
+    "health_url": "https://go-session-fixation.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
+    "example_path": "/go_session_fixation?target=https://github.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18031,
+    "container_port": 8316,
+    "cert_domain": "session-fixation.0exec.com"
+  },
+  {
     "id": "go-url-categorizer-api",
     "name": "Go Url Categorizer Api",
     "description": "",
@@ -7026,39 +7061,6 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 18019,
     "container_port": 3333
-  },
-  {
-    "id": "session-fixation",
-    "name": "Session Fixation",
-    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
-    "category": "security",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "go",
-      "pentest",
-      "security"
-    ],
-    "url": "https://session-fixation.0exec.com",
-    "health_url": "https://session-fixation.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_session_fixation",
-    "example_path": "/go_session_fixation?target=https://github.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "host_port": 18031,
-    "container_port": 8316
   },
   {
     "id": "utils-readcontent",

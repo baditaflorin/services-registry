@@ -2069,20 +2069,6 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "app, core concept implementation"
   },
-  "oauth-mapper": {
-    "container_port": 8330,
-    "description": "Microservice for Oauth Mapper",
-    "example_path": "/?url=https://example.com",
-    "host_port": 8330,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
-    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
-    "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
-    "deploy_quirk_resolved_at": "2026-05-16"
-  },
   "ocr-pdf": {
     "container_port": 5500,
     "description": "Extract text from PDFs \u2014 upload or URL",
@@ -2640,18 +2626,6 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "1.3.1: multi-sitemap parsing (RFC 9309 \u00a72.2.4 allows multiple Sitemap: directives) with per-sitemap reachability/Content-Type probe; canonical reachability probe (status + same-host + self-reference); pathsEqualish handles trailing-slash equivalence. 9/10 corpus PASS."
   },
-  "session-fixation": {
-    "container_port": 8316,
-    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
-    "example_path": "/go_session_fixation?target=https://github.com",
-    "host_port": 18031,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass."
-  },
   "session-management": {
     "container_port": 8095,
     "description": "Microservice for Session Management",
@@ -3158,5 +3132,33 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
+  },
+  "go-oauth-mapper": {
+    "container_port": 8330,
+    "description": "Microservice for Oauth Mapper",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8330,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
+    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
+    "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
+    "deploy_quirk_resolved_at": "2026-05-16",
+    "cert_domain": "oauth-mapper.0crawl.com"
+  },
+  "go-session-fixation": {
+    "container_port": 8316,
+    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
+    "example_path": "/go_session_fixation?target=https://github.com",
+    "host_port": 18031,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
+    "cert_domain": "session-fixation.0exec.com"
   }
 }
