@@ -3145,8 +3145,7 @@
     "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
     "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
     "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
-    "deploy_quirk_resolved_at": "2026-05-16",
-    "cert_domain": "oauth-mapper.0crawl.com"
+    "deploy_quirk_resolved_at": "2026-05-16"
   },
   "go-session-fixation": {
     "container_port": 8316,
@@ -3158,7 +3157,6 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
-    "cert_domain": "session-fixation.0exec.com"
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass."
   }
 }
