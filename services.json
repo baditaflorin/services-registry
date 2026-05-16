@@ -5139,6 +5139,29 @@
     "container_port": 18119
   },
   {
+    "id": "go-pentest-authz-matrix",
+    "name": "Go Pentest Authz Matrix",
+    "description": "Pentest fleet service",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-authz-matrix.0exec.com",
+    "health_url": "https://go-pentest-authz-matrix.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-authz-matrix",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+  },
+  {
     "id": "go-pentest-bounty-scope-checker",
     "name": "Go Pentest Bounty Scope Checker",
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
@@ -6064,6 +6087,52 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18122,
     "container_port": 18122
+  },
+  {
+    "id": "go-pentest-session-state",
+    "name": "Go Pentest Session State",
+    "description": "Pentest fleet service",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-session-state.0exec.com",
+    "health_url": "https://go-pentest-session-state.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-session-state",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+  },
+  {
+    "id": "go-pentest-ssrf-prober",
+    "name": "Go Pentest Ssrf Prober",
+    "description": "Pentest fleet service",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-ssrf-prober.0exec.com",
+    "health_url": "https://go-pentest-ssrf-prober.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-ssrf-prober",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
   },
   {
     "id": "go-pentest-subfinder",
