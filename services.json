@@ -1642,6 +1642,14 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "aliases": [
+      "oauth-mapper"
+    ],
+    "alias_urls": [
+      "oauth-mapper.0crawl.com"
+    ],
+    "rename_status": "redirect",
+    "rename_retire_at": "2026-06-15",
     "trl": 6,
     "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
     "trl_ceiling": 7,
@@ -6548,6 +6556,14 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "aliases": [
+      "session-fixation"
+    ],
+    "alias_urls": [
+      "session-fixation.0exec.com"
+    ],
+    "rename_status": "redirect",
+    "rename_retire_at": "2026-06-15",
     "trl": 6,
     "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
     "trl_ceiling": 7,

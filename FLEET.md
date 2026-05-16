@@ -322,6 +322,66 @@ would yield. Those overrides live in [`slug.json`](slug.json), shared by
 Never remove an entry from `slug.json` once a service is live — the catalog
 URL stability depends on the slug.
 
+## Renames — `renames.json`
+
+When a service's canonical id (and therefore its URL) has to change —
+operator preference, vendor mark, a typo we slept on, a `go-` prefix added
+for consistency — write a row to [`renames.json`](renames.json) instead of
+just editing `slug.json` silently. Schema:
+[`schema/renames.v1.json`](schema/renames.v1.json).
+
+Why bother:
+
+- **No surprise 404s.** The new entry in `services.json` auto-carries
+  `aliases` (old slugs) and `alias_urls` (old hostnames). Any consumer that
+  searched `services.ids.json` for the old name finds it via `aliases` and
+  resolves to the new id.
+- **Graceful URL deprecation.** `fleet-runner nginx-render` reads the log
+  and emits a 301-redirect vhost from each `alias_url` → `url` for the
+  lifetime of the rename (`status: redirect`, `retire_at: <date>`). Bookmarks
+  keep working until the retirement date passes.
+- **Caller-aware retirement.** `fleet-runner audit-callers --include-aliases`
+  surfaces any service still hitting an `alias_url` during the redirect
+  window — so by `retire_at` you've patched every internal caller off the
+  old URL, and the 301 vhost can be torn down safely.
+- **Audit trail.** `reason` + `renamed_by` + `renamed_at` survive in git
+  history, so six months from now nobody has to reconstruct *why* a service
+  is at `go-foo.0exec.com` when the GH repo is `go_foo`.
+
+Workflow:
+
+```
+1. Decide new id. Update slug.json:
+     "go_oauth_mapper": "go-oauth-mapper"
+2. Append to renames.json: { from_id, to_id, from_url, to_url,
+     renamed_at, retire_at (default +30d), reason, status: "redirect" }.
+3. Run bin/generate.py — services.json now carries `aliases`/`alias_urls`
+     on the new entry.
+4. Commit + push registry. Live state is still on the old URL — nothing
+     broke yet.
+5. fleet-runner deploy <new-id> --bootstrap   (mints new DNS + cert,
+     creates new container/dir, leaves old serving until step 6).
+6. fleet-runner nginx-render                  (rewrites old vhost as a
+     301 redirect to the new URL; new vhost serves the live container).
+7. After retire_at: fleet-runner audit renames-active flags entries
+     whose retire_at is past. Confirm no callers via audit-callers,
+     then PR to renames.json: status: "retired" (the 301 vhost is
+     re-rendered to a 410 Gone, then dropped on the next nginx-render).
+```
+
+Status semantics in `renames.json`:
+
+| `status`   | What nginx-render emits for `from_url`                          |
+|------------|-----------------------------------------------------------------|
+| `redirect` | 301 → `to_url`, preserving path + query. Cert auto-renewed.      |
+| `retired`  | 410 Gone + `Deprecation` header. Cert still served (until DNS removed). |
+| `blocked`  | 410 Gone + no redirect (use this when the old hostname is now hostile, e.g. compromised). |
+
+Chained renames (A → B → C) get **two** rows, not one flattened entry —
+generate.py walks the chain so the C entry carries `aliases: [A, B]` and
+`alias_urls: [A_url, B_url]`. Don't fold the chain manually; the per-step
+record carries `renamed_at` / `reason` for each hop.
+
 ## fleet-runner commands (reference)
 
 The runner binary is private; this is a public-safe pointer list.

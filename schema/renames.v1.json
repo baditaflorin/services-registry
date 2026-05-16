@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/renames.v1.json",
+  "title": "Fleet rename log v1",
+  "description": "Canonical log of service-id and URL renames. Read by bin/generate.py (to emit `aliases`/`alias_urls` on the new entry), by fleet-runner nginx-render (to emit 301-redirect vhosts from the old hostname to the new one until retire_at), by fleet-runner audit-callers (to alert when a still-live caller hits an old URL), and by fleet-runner audit renames-active (to flag entries whose retire_at has passed so the redirect vhost can be torn down). One entry per discrete rename event; chains (A -> B -> C) are written as two entries (A->B and B->C), not flattened.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["renames"],
+  "properties": {
+    "renames": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Rename" }
+    }
+  },
+  "$defs": {
+    "Rename": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from_id", "to_id", "from_url", "to_url", "renamed_at", "reason", "status"],
+      "properties": {
+        "from_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$",
+          "description": "Pre-rename registry id (slug). The new entry's `aliases` field will include this value so by-id lookups don't 404."
+        },
+        "to_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]*$",
+          "description": "Post-rename registry id. Must currently exist in services.json."
+        },
+        "from_url": {
+          "type": "string",
+          "format": "hostname",
+          "description": "Pre-rename public hostname. Used by nginx-render to emit the 301-redirect vhost."
+        },
+        "to_url": {
+          "type": "string",
+          "format": "hostname",
+          "description": "Post-rename public hostname."
+        },
+        "renamed_at": {
+          "type": "string",
+          "format": "date",
+          "description": "When the rename committed (YYYY-MM-DD)."
+        },
+        "retire_at": {
+          "type": "string",
+          "format": "date",
+          "description": "When the 301-redirect vhost should be torn down. Optional — when absent the redirect lives indefinitely. Convention: 30 days from renamed_at unless a stakeholder request bumps it."
+        },
+        "reason": {
+          "type": "string",
+          "description": "One-line why. Future maintainers should read this and understand whether the rename can be reversed."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["redirect", "retired", "blocked"],
+          "description": "redirect=301 vhost active; retired=old vhost removed (returns 404); blocked=old hostname intentionally returns 410 Gone (e.g. compromised key, abandon URL)."
+        },
+        "broke_callers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Slug list of services that hard-coded the old URL and needed source patches when the rename happened. Empty when go-fleet-graph + grep confirmed no callers."
+        },
+        "renamed_by": {
+          "type": "string",
+          "description": "Free-form attribution (operator name, AI session, automation tag)."
+        }
+      }
+    }
+  }
+}

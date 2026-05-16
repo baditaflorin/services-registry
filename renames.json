@@ -1,0 +1,29 @@
+{
+  "$schema": "schema/renames.v1.json",
+  "renames": [
+    {
+      "from_id": "oauth-mapper",
+      "to_id": "go-oauth-mapper",
+      "from_url": "oauth-mapper.0crawl.com",
+      "to_url": "go-oauth-mapper.0crawl.com",
+      "renamed_at": "2026-05-16",
+      "retire_at": "2026-06-15",
+      "reason": "Preserve the 'go-' prefix in the canonical id (user preference 2026-05-16). Dash form chosen because Let's Encrypt refuses certs for hostnames containing '_'.",
+      "status": "redirect",
+      "broke_callers": [],
+      "renamed_by": "claude-opus-4-7-session-2026-05-16"
+    },
+    {
+      "from_id": "session-fixation",
+      "to_id": "go-session-fixation",
+      "from_url": "session-fixation.0exec.com",
+      "to_url": "go-session-fixation.0exec.com",
+      "renamed_at": "2026-05-16",
+      "retire_at": "2026-06-15",
+      "reason": "Preserve the 'go-' prefix in the canonical id (user preference 2026-05-16). Same rationale as oauth-mapper.",
+      "status": "redirect",
+      "broke_callers": [],
+      "renamed_by": "claude-opus-4-7-session-2026-05-16"
+    }
+  ]
+}

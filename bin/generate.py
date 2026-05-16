@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SERVICES_JSON   = ROOT / "services.json"
 OVERRIDES_JSON  = ROOT / "overrides.json"
 SLUG_JSON       = ROOT / "slug.json"
+RENAMES_JSON    = ROOT / "renames.json"
 SUMMARY_TXT     = ROOT / "services.summary.txt"
 
 # Sliced projections of services.json — sibling files emitted next to the
@@ -260,6 +261,40 @@ def load_slug_overrides() -> dict[str, str]:
 SLUG_OVERRIDES = load_slug_overrides()
 
 
+def load_renames() -> dict[str, dict]:
+    """Load renames.json and return {to_id: rename_record}. Missing file is
+    not an error — most fleets don't have renames pending. Schema is
+    services-registry/schema/renames.v1.json.
+
+    The returned map is keyed by `to_id` (the new slug) so make_entry can
+    look up "what alias should this entry advertise?" in O(1)."""
+    if not RENAMES_JSON.exists():
+        return {}
+    data = json.loads(RENAMES_JSON.read_text())
+    if not isinstance(data, dict) or "renames" not in data:
+        sys.exit(f"ERROR: {RENAMES_JSON} must be a JSON object with a 'renames' key")
+    out: dict[str, dict] = {}
+    for r in data.get("renames", []):
+        to_id = r.get("to_id")
+        if not to_id:
+            continue
+        # Multiple renames pointing at the same to_id (rare; chained renames
+        # collapse here): accumulate aliases.
+        if to_id in out:
+            out[to_id]["_aliases"].append(r["from_id"])
+            out[to_id]["_alias_urls"].append(r["from_url"])
+        else:
+            out[to_id] = {
+                **r,
+                "_aliases":    [r["from_id"]],
+                "_alias_urls": [r["from_url"]],
+            }
+    return out
+
+
+RENAMES = load_renames()
+
+
 def auth_help_for(auth: dict) -> str:
     """Canonical short label for what auth a caller needs. UIs render this
     verbatim instead of re-implementing the if/else (which historically
@@ -401,6 +436,20 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
         entry["pages_url"] = base
         if ov.get("pages_source_branch"):
             entry["pages_source_branch"] = ov["pages_source_branch"]
+
+    # Rename log — if this entry is the to_id of one or more renames, emit
+    # `aliases` (old slugs) and `alias_urls` (old hostnames) so by-id lookups
+    # in older tooling still resolve. fleet-runner nginx-render reads these
+    # to emit 301-redirect vhosts from each alias_url -> url. The canonical
+    # log lives in renames.json (schema: schema/renames.v1.json).
+    if entry["id"] in RENAMES:
+        r = RENAMES[entry["id"]]
+        entry["aliases"]    = sorted(set(r["_aliases"]))
+        entry["alias_urls"] = sorted(set(r["_alias_urls"]))
+        if r.get("status"):
+            entry["rename_status"] = r["status"]
+        if r.get("retire_at"):
+            entry["rename_retire_at"] = r["retire_at"]
 
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
