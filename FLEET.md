@@ -538,6 +538,33 @@ signal" from "couldn't probe"; (c) fleet-wide `audit dns-forwarders-
 stale` + `dns-heal --apply` so an operator catches the underlying
 condition before scans rely on it.
 
+### 8. Capability gaps belong in a findings JSON, not chat history
+
+When a session-running agent notices a fleet service is missing a
+needed capability, the discovery is worthless if it lives only in
+the chat transcript. Pattern:
+
+  1. Append a `fleet_gap` record to a findings JSON (any path; the
+     tools take a path argument).
+  2. If the fix is mechanical and you can write the
+     `patch_unified_diff`, set `auto_apply: true` and let
+     `bin/autofix.py --apply` ship it (clone → apply → tests →
+     push → deploy → /selftest → rollback on fail).
+  3. If the fix is design-needed (no patch, or feature-sized), let
+     `bin/disclose.py --apply` file the issue on the right repo —
+     the next agent picks it up cold.
+
+Both tools live in
+[`baditaflorin/go-pentest-leak-bounty-policy/bin/`](https://github.com/baditaflorin/go-pentest-leak-bounty-policy/tree/main/bin)
+and run on any workstation with `gh` authed. Full recipe in the
+canonical CLAUDE.md propagated to every fleet repo
+("Recipe — Closing a capability gap").
+
+**Lesson:** undisclosed gaps re-rediscover themselves a month later
+in a different session. The cost of the autofix/disclose loop is
+~30 lines per gap; the cost of re-discovery is hours of confused
+spelunking. Always file before moving on.
+
 ## No secrets policy
 
 Restating the [README](README.md): nothing sensitive belongs here.

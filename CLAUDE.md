@@ -652,6 +652,83 @@ ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner audit --all'
 ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner state snapshot'
 ```
 
+### Recipe — Closing a capability gap (gap → fix loop)
+
+**When you notice during a real engagement that a fleet service is
+missing a capability** (didn't return needed signal, doesn't handle
+a class of input, response is silent on a real failure), don't lose
+the discovery. Capture it, then route through the right tool:
+
+```
+real engagement
+     │
+     v
+gap noticed  ───>  add a record to a findings JSON
+     │             (kind, repo, request, expected, suggested_fix,
+     │              [optional] auto_apply + patch_unified_diff)
+     v
+bin/autofix.py findings.json [--apply]
+     │
+     ├── auto_apply: true + fleet repo + clean patch ──> CLONE + APPLY
+     │      + TEST + PUSH + DEPLOY + /selftest [+ rollback on fail]
+     │
+     └── anything else ────────────────────────────────> bin/disclose.py
+            files the gap as an issue on the right repo (either fleet
+            repo for fleet_gap; merchant repo for external_leak)
+```
+
+Both tools live in
+[`baditaflorin/go-pentest-leak-bounty-policy/bin/`](https://github.com/baditaflorin/go-pentest-leak-bounty-policy/tree/main/bin).
+Run from any workstation with `gh auth status` green.
+
+**`bin/autofix.py`** lands mechanical fixes unattended. Hard safety
+rails — every gate is a clearly-named abort, never silent:
+
+- `skip_not_fleet` — repo not under `baditaflorin/`. Third-party
+  repos can never be auto-modified, period.
+- `skip_no_auto_apply` — finding must opt in with `auto_apply: true`.
+- `skip_no_patch` — must include a `patch_unified_diff`.
+- `git apply --check` — patch applies cleanly to a fresh clone before
+  any state mutation.
+- Test gate — `go test ./...` (or `npm test`) must pass.
+- `/selftest` gate — post-deploy, the service's `/selftest` must
+  return 200. `/health` only proves the binary booted; `/selftest`
+  exercises the patched code path.
+- **Auto-rollback** — on `/selftest` fail, force-push origin back to
+  the pre-fix SHA AND redeploy the previous image.
+
+**`bin/disclose.py`** files an issue when the fix isn't mechanical
+(or the repo is third-party). `external_leak` redacts the token to
+the prefix shape only — never re-publicizes the secret.
+
+**Findings file shape** (single JSON, `findings: [...]`). One record:
+
+```json
+{
+  "id": "gap-7",
+  "kind": "fleet_gap",
+  "repo": "baditaflorin/go-pentest-<svc>",
+  "auto_apply": true,
+  "gap_summary": "...",
+  "patch_unified_diff": "--- a/file\n+++ b/file\n@@ ...\n",
+  "suggested_fix": "...",
+  "session_context": "..."
+}
+```
+
+See
+[`bin/findings-fleet-gaps-example.json`](https://github.com/baditaflorin/go-pentest-leak-bounty-policy/blob/main/bin/findings-fleet-gaps-example.json)
+for every dispatch path's shape.
+
+**Why this matters for THIS repo:** every service that exposes a
+public API should ship a `/selftest` endpoint that exercises its
+real dependencies (resolver, upstream API, embedded data). Without
+it, the autofix `/selftest` gate has nothing to verify against and
+defaults to a weaker `/health` probe — which only proves the binary
+booted, not that the patched code path works. See
+`go-pentest-takeover-checker` and `go-pentest-subfinder` (v0.2+)
+for the canonical pattern.
+
 ### Anti-patterns — observed in prior agent sessions
 
 1. **"Port 8313 is taken, I'll pick 8500 and edit `service.yaml`."** Use
