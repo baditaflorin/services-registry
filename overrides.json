@@ -2535,7 +2535,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "x/crypto/ssh full algo capture, weak-algo detection (KEX/cipher/MAC/host_key), findings-store wire with sha256-of-algos dedup, /selftest against in-process ssh.NewServerConn with planted weak algos (12 invariants)",
-    "version": "0.2.0"
+    "version": "0.2.2"
   },
   "scc": {
     "container_port": 8305,
@@ -2815,7 +2815,9 @@
     "trl_evidence": "sample/chemistry app, material properties"
   },
   "svi": {
+    "container_port": 8313,
     "description": "Microservice for Svi",
+    "host_port": 8313,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
