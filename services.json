@@ -5077,6 +5077,38 @@
     "container_port": 18126
   },
   {
+    "id": "go-pentest-attack-chainer",
+    "name": "Go Pentest Attack Chainer",
+    "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
+    "category": "uncategorized",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "chain-validation",
+      "cors",
+      "pentest"
+    ],
+    "url": "https://go-pentest-attack-chainer.0exec.com",
+    "health_url": "https://go-pentest-attack-chainer.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-attack-chainer",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_evidence": "4/4 unit tests passing (base-domain inference, severity matrix, PoC rendering with/without chain). Verified end-to-end against accommodations.booking.com: 30 siblings + 12 endpoint probes in 1.2s, correctly downgrades prober high -> informational.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18149,
+    "container_port": 18149
+  },
+  {
     "id": "go-pentest-audit-log",
     "name": "Go Pentest Audit Log",
     "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
