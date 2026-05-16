@@ -834,6 +834,72 @@
     "trl_assessor": "claude-session-2026-05-15",
     "trl_evidence": "Live for months, serves catalog.0exec.com production traffic"
   },
+  "go-fleet-backoff-coordinator": {
+    "container_port": 18163,
+    "description": "response-driven backoff coordinator",
+    "host_port": 18163,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). response-driven backoff coordinator. /selftest + INTEGRATIONS.md shipped. ADR-0013. See services-registry/docs/adr/0013-fleet-backoff-coordinator.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-body-redactor": {
+    "container_port": 18154,
+    "description": "canonical sensitive-data redactor",
+    "host_port": 18154,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). canonical sensitive-data redactor. /selftest + INTEGRATIONS.md shipped. ADR-0004. See services-registry/docs/adr/0004-fleet-body-redactor.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-budget-tracker": {
+    "container_port": 18164,
+    "description": "per-program scan-cost cap (atomic check-and-insert)",
+    "host_port": 18164,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-call-tracer": {
+    "container_port": 18161,
+    "description": "per-request call trace collector (Speedscope flamegraph output)",
+    "host_port": 18161,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-request call trace collector (Speedscope flamegraph output). /selftest + INTEGRATIONS.md shipped. ADR-0011. See services-registry/docs/adr/0011-fleet-call-tracer.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-content-normalizer": {
+    "container_port": 18172,
+    "description": "MIME/charset/encoding normalizer (5MB cap)",
+    "host_port": 18172,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). MIME/charset/encoding normalizer (5MB cap). /selftest + INTEGRATIONS.md shipped. ADR-0022. See services-registry/docs/adr/0022-fleet-content-normalizer.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-diff-engine": {
+    "container_port": 18160,
+    "description": "structured diff: http_response|json|html|asset_set|text",
+    "host_port": 18160,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). structured diff: http_response|json|html|asset_set|text. /selftest + INTEGRATIONS.md shipped. ADR-0010. See services-registry/docs/adr/0010-fleet-diff-engine.md.",
+    "version": "0.1.0"
+  },
   "go-fleet-dns-sync": {
     "container_port": 18141,
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
@@ -846,6 +912,28 @@
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
     "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
     "version": "0.2.0"
+  },
+  "go-fleet-engagement-timeline": {
+    "container_port": 18162,
+    "description": "per-program event timeline aggregator (6 siblings)",
+    "host_port": 18162,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program event timeline aggregator (6 siblings). /selftest + INTEGRATIONS.md shipped. ADR-0012. See services-registry/docs/adr/0012-fleet-engagement-timeline.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-fingerprint-cache": {
+    "container_port": 18153,
+    "description": "WAF/soft-404/CDN-noise classifier",
+    "host_port": 18153,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). WAF/soft-404/CDN-noise classifier. /selftest + INTEGRATIONS.md shipped. ADR-0003. See services-registry/docs/adr/0003-fleet-fingerprint-cache.md.",
+    "version": "0.1.0"
   },
   "go-fleet-graph": {
     "container_port": 18143,
@@ -863,6 +951,39 @@
     "trl_evidence": "Retention rollup goroutine (minute->hour->drop, env-tuned), drift webhook on new_edge or silent_dep>1h with 1h dedup, /selftest round-trip",
     "version": "0.2.0"
   },
+  "go-fleet-har-builder": {
+    "container_port": 18157,
+    "description": "HAR 1.2 evidence formatter",
+    "host_port": 18157,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). HAR 1.2 evidence formatter. /selftest + INTEGRATIONS.md shipped. ADR-0007. See services-registry/docs/adr/0007-fleet-har-builder.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-payload-corpus": {
+    "container_port": 18156,
+    "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
+    "host_port": 18156,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). versioned attack-payload corpus (125 payloads, 12 classes). /selftest + INTEGRATIONS.md shipped. ADR-0006. See services-registry/docs/adr/0006-fleet-payload-corpus.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-poc-curl": {
+    "container_port": 18158,
+    "description": "redacted PoC curl emitter (bash -n parse-gated)",
+    "host_port": 18158,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). redacted PoC curl emitter (bash -n parse-gated). /selftest + INTEGRATIONS.md shipped. ADR-0008. See services-registry/docs/adr/0008-fleet-poc-curl.md.",
+    "version": "0.1.0"
+  },
   "go-fleet-preflight": {
     "container_port": 18142,
     "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
@@ -876,6 +997,50 @@
     "trl_evidence": "check:image (crane HEAD ghcr.io), check:nginx (HTTPS+TLS expiry warn at 30d), 60s ETag-aware registry cache, /selftest against embedded service.yaml fixture with stubbed crane+DNS+HTTPS",
     "version": "0.2.0"
   },
+  "go-fleet-priority-queue": {
+    "container_port": 18169,
+    "description": "composite-scored findings priority ranker",
+    "host_port": 18169,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite-scored findings priority ranker. /selftest + INTEGRATIONS.md shipped. ADR-0019. See services-registry/docs/adr/0019-fleet-priority-queue.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-resolver-quorum": {
+    "container_port": 18155,
+    "description": "2-of-3 DNS resolver quorum",
+    "host_port": 18155,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). 2-of-3 DNS resolver quorum. /selftest + INTEGRATIONS.md shipped. ADR-0005. See services-registry/docs/adr/0005-fleet-resolver-quorum.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-sandbox-targets": {
+    "container_port": 18168,
+    "description": "internal-only sandbox vulnerable apps (10 endpoints)",
+    "host_port": 18168,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). internal-only sandbox vulnerable apps (10 endpoints). /selftest + INTEGRATIONS.md shipped. ADR-0018. See services-registry/docs/adr/0018-fleet-sandbox-targets.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-schema-validator": {
+    "container_port": 18166,
+    "description": "JSON Schema catalog + validator (8 baseline schemas)",
+    "host_port": 18166,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). JSON Schema catalog + validator (8 baseline schemas). /selftest + INTEGRATIONS.md shipped. ADR-0016. See services-registry/docs/adr/0016-fleet-schema-validator.md.",
+    "version": "0.1.0"
+  },
   "go-fleet-secrets": {
     "container_port": 18140,
     "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
@@ -888,6 +1053,50 @@
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "audit_log with prefix-only redaction (no full tokens), consumer ACL test, rotate-returns-old-once, concurrent rotate (1 winner asserted), /selftest",
     "version": "0.2.0"
+  },
+  "go-fleet-selftest-aggregator": {
+    "container_port": 18165,
+    "description": "/selftest poll-and-render aggregator",
+    "host_port": 18165,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). /selftest poll-and-render aggregator. /selftest + INTEGRATIONS.md shipped. ADR-0015. See services-registry/docs/adr/0015-fleet-selftest-aggregator.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-target-reputation": {
+    "container_port": 18171,
+    "description": "target reputation lookup (5 sources)",
+    "host_port": 18171,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). target reputation lookup (5 sources). /selftest + INTEGRATIONS.md shipped. ADR-0021. See services-registry/docs/adr/0021-fleet-target-reputation.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-tech-inferrer": {
+    "container_port": 18159,
+    "description": "composite tech-stack inferrer (83 signals)",
+    "host_port": 18159,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite tech-stack inferrer (83 signals). /selftest + INTEGRATIONS.md shipped. ADR-0009. See services-registry/docs/adr/0009-fleet-tech-inferrer.md.",
+    "version": "0.1.0"
+  },
+  "go-fleet-vendor-disclosure-tracker": {
+    "container_port": 18167,
+    "description": "vendor disclosure history tracker (PII-redacted)",
+    "host_port": 18167,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). vendor disclosure history tracker (PII-redacted). /selftest + INTEGRATIONS.md shipped. ADR-0017. See services-registry/docs/adr/0017-fleet-vendor-disclosure-tracker.md.",
+    "version": "0.1.0"
   },
   "go-fleet-visualizer": {
     "container_port": 18144,
@@ -905,6 +1114,17 @@
     "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
     "trl_evidence": "ETag/304 fetch cache (60s TTL), /graph.dot Graphviz DOT, /trl-heatmap SSR with html-escape proof, /selftest exercises all 3 renderers against embedded 5-service fixture",
     "version": "0.2.0"
+  },
+  "go-fleet-webhook-verifier": {
+    "container_port": 18170,
+    "description": "inbound webhook signature verifier (6 platforms)",
+    "host_port": 18170,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "trl_ceiling": 8,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). inbound webhook signature verifier (6 platforms). /selftest + INTEGRATIONS.md shipped. ADR-0020. See services-registry/docs/adr/0020-fleet-webhook-verifier.md.",
+    "version": "0.1.0"
   },
   "go-html-proxy": {
     "container_port": 3002,

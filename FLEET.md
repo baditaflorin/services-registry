@@ -47,6 +47,43 @@ mesh semantics.
 | `go-catalog-service` (catalog.0exec.com) | renders services.json into a public catalog table. | PRIVATE |
 | `hub_scrapetheworld_org` (hub.scrapetheworld.org) | dashboard/login UI consuming services.json. | PRIVATE |
 | `go_<thing>` (×~220)                | one repo per service. Examples: `go_smuggling_probe`, `go_biz_classifier`, `go_jwt_pentest`. Each ships its own Dockerfile + docker-compose.yml. | varies |
+| `go-fleet-<name>` (×24)             | **fleet primitives** — shared infra services consumed by other fleet services. Examples: `go-fleet-fingerprint-cache`, `go-fleet-body-redactor`, `go-fleet-resolver-quorum`, `go-fleet-payload-corpus`. Distinct from `go_<thing>` (offensive/recon) by the `go-fleet-` prefix. **Read [`docs/adr/`](docs/adr/) for each primitive's API + migration contract.** | PRIVATE |
+
+## Fleet primitives (added 2026-05-16)
+
+The fleet now has a dedicated **primitives tier** — 24 `go-fleet-<name>` services that exist to be *composed with* rather than re-implemented in each detection/recon service. Adding a new detection scanner should mean reaching for these first.
+
+| Primitive | Port | ADR | What it solves (duplication-it-removes) |
+|---|---|---|---|
+| `go-fleet-fingerprint-cache` | 18153 | [0003](docs/adr/0003-fleet-fingerprint-cache.md) | WAF/soft-404/CDN classification — was duplicated in 5+ scanners |
+| `go-fleet-body-redactor`     | 18154 | [0004](docs/adr/0004-fleet-body-redactor.md) | sensitive-header/body redaction — was duplicated in 4 evidence services |
+| `go-fleet-resolver-quorum`   | 18155 | [0005](docs/adr/0005-resolver-quorum.md) | 2-of-3 multi-DNS-resolver consensus — was duplicated in takeover-checker + others |
+| `go-fleet-payload-corpus`    | 18156 | [0006](docs/adr/0006-fleet-payload-corpus.md) | versioned attack-payload corpus (125 payloads, 12 classes) |
+| `go-fleet-har-builder`       | 18157 | [0007](docs/adr/0007-canonical-har-emitter.md) | HAR 1.2 evidence format for external (Burp/ZAP) interop |
+| `go-fleet-poc-curl`          | 18158 | [0008](docs/adr/0008-fleet-poc-curl.md) | bash -n-parse-gated PoC curl emitter (redacted by default) |
+| `go-fleet-tech-inferrer`     | 18159 | [0009](docs/adr/0009-fleet-tech-inferrer-composes-signal-services.md) | composite tech-stack inference (83 signals × favicon-hash + headers + cookies) |
+| `go-fleet-diff-engine`       | 18160 | [0010](docs/adr/0010-structured-diff-engine.md) | structured diff (http_response/json/html/asset_set/text) |
+| `go-fleet-call-tracer`       | 18161 | [0011](docs/adr/0011-fleet-call-tracer.md) | per-request call trace collector (Speedscope flamegraph export) |
+| `go-fleet-engagement-timeline` | 18162 | [0012](docs/adr/0012-engagement-timeline-aggregator.md) | per-program event timeline (aggregates 6 sibling services) |
+| `go-fleet-backoff-coordinator` | 18163 | [0013](docs/adr/0013-response-driven-backoff-primitive.md) | response-driven backoff (429-Retry-After / 5xx / circuit-break) |
+| `go-fleet-budget-tracker`    | 18164 | [0014](docs/adr/0014-per-program-scan-budget-cap.md) | atomic per-program scan-cost cap (race-free check-and-insert) |
+| `go-fleet-selftest-aggregator` | 18165 | [0015](docs/adr/0015-fleet-selftest-aggregator.md) | hourly poll of every fleet service's `/selftest` |
+| `go-fleet-schema-validator`  | 18166 | [0016](docs/adr/0016-fleet-schema-validator.md) | JSON Schema catalog + validator (8 baseline schemas seeded) |
+| `go-fleet-vendor-disclosure-tracker` | 18167 | [0017](docs/adr/0017-vendor-disclosure-history-tracker.md) | vendor disclosure history (PII-redacted) — pairs with leak-bounty-policy |
+| `go-fleet-sandbox-targets`   | 18168 | [0018](docs/adr/0018-fleet-sandbox-targets.md) | **INTERNAL-ONLY** deliberately-vulnerable apps for scanner integration tests |
+| `go-fleet-priority-queue`    | 18169 | [0019](docs/adr/0019-fleet-priority-queue.md) | composite-scored findings ranker (severity × payoff × age × dedup) |
+| `go-fleet-webhook-verifier`  | 18170 | [0020](docs/adr/0020-fleet-webhook-verifier.md) | inbound webhook signature verifier (6 platforms, constant-time compare) |
+| `go-fleet-target-reputation` | 18171 | [0021](docs/adr/0021-fleet-target-reputation.md) | target reputation lookup (5 sources, local-flag short-circuit) |
+| `go-fleet-content-normalizer` | 18172 | [0022](docs/adr/0022-fleet-content-normalizer.md) | MIME/charset/gzip/brotli normalizer (5MB cap, gzip-bomb defense) |
+
+**Conventions for primitives**:
+- Mesh `0exec`, kind `container`, language `go`, runtime `compose`.
+- TRL 6 at ship, ceiling 7 or 8 (see per-ADR `Decision` section).
+- Every primitive ships with `/selftest` + `INTEGRATIONS.md` (consumer-side guidance).
+- Composition pattern: caller reads `<PRIMITIVE>_URL` env var, fails open with `degraded: ["<primitive>-down"]` in response on outage.
+- When adding a 21st primitive: write the ADR FIRST (`docs/adr/00XX-<slug>.md`), get sign-off, then build. See ADR-0001 and ADR-0002 for the process.
+
+For decisions older than the primitives tier (BEGIN IMMEDIATE pattern, /metrics middleware short-circuit, compose-tag pinning, etc.), grep this file's "Lessons & gotchas" section + commit history. Future decisions go in ADRs.
 
 ## TRL — technology readiness level
 

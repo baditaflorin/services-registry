@@ -4709,6 +4709,186 @@
     "depends_on": []
   },
   {
+    "id": "go-fleet-backoff-coordinator",
+    "name": "Go Fleet Backoff Coordinator",
+    "description": "response-driven backoff coordinator",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-backoff-coordinator.0exec.com",
+    "health_url": "https://go-fleet-backoff-coordinator.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-backoff-coordinator",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). response-driven backoff coordinator. /selftest + INTEGRATIONS.md shipped. ADR-0013. See services-registry/docs/adr/0013-fleet-backoff-coordinator.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18163,
+    "container_port": 18163
+  },
+  {
+    "id": "go-fleet-body-redactor",
+    "name": "Go Fleet Body Redactor",
+    "description": "canonical sensitive-data redactor",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-body-redactor.0exec.com",
+    "health_url": "https://go-fleet-body-redactor.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-body-redactor",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). canonical sensitive-data redactor. /selftest + INTEGRATIONS.md shipped. ADR-0004. See services-registry/docs/adr/0004-fleet-body-redactor.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18154,
+    "container_port": 18154
+  },
+  {
+    "id": "go-fleet-budget-tracker",
+    "name": "Go Fleet Budget Tracker",
+    "description": "per-program scan-cost cap (atomic check-and-insert)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-budget-tracker.0exec.com",
+    "health_url": "https://go-fleet-budget-tracker.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-budget-tracker",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18164,
+    "container_port": 18164
+  },
+  {
+    "id": "go-fleet-call-tracer",
+    "name": "Go Fleet Call Tracer",
+    "description": "per-request call trace collector (Speedscope flamegraph output)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-call-tracer.0exec.com",
+    "health_url": "https://go-fleet-call-tracer.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-call-tracer",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-request call trace collector (Speedscope flamegraph output). /selftest + INTEGRATIONS.md shipped. ADR-0011. See services-registry/docs/adr/0011-fleet-call-tracer.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18161,
+    "container_port": 18161
+  },
+  {
+    "id": "go-fleet-content-normalizer",
+    "name": "Go Fleet Content Normalizer",
+    "description": "MIME/charset/encoding normalizer (5MB cap)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-content-normalizer.0exec.com",
+    "health_url": "https://go-fleet-content-normalizer.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-content-normalizer",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). MIME/charset/encoding normalizer (5MB cap). /selftest + INTEGRATIONS.md shipped. ADR-0022. See services-registry/docs/adr/0022-fleet-content-normalizer.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18172,
+    "container_port": 18172
+  },
+  {
+    "id": "go-fleet-diff-engine",
+    "name": "Go Fleet Diff Engine",
+    "description": "structured diff: http_response|json|html|asset_set|text",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-diff-engine.0exec.com",
+    "health_url": "https://go-fleet-diff-engine.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-diff-engine",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). structured diff: http_response|json|html|asset_set|text. /selftest + INTEGRATIONS.md shipped. ADR-0010. See services-registry/docs/adr/0010-fleet-diff-engine.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18160,
+    "container_port": 18160
+  },
+  {
     "id": "go-fleet-dns-sync",
     "name": "Go Fleet Dns Sync",
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
@@ -4738,6 +4918,66 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "host_port": 18141,
     "container_port": 18141
+  },
+  {
+    "id": "go-fleet-engagement-timeline",
+    "name": "Go Fleet Engagement Timeline",
+    "description": "per-program event timeline aggregator (6 siblings)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-engagement-timeline.0exec.com",
+    "health_url": "https://go-fleet-engagement-timeline.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-engagement-timeline",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program event timeline aggregator (6 siblings). /selftest + INTEGRATIONS.md shipped. ADR-0012. See services-registry/docs/adr/0012-fleet-engagement-timeline.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18162,
+    "container_port": 18162
+  },
+  {
+    "id": "go-fleet-fingerprint-cache",
+    "name": "Go Fleet Fingerprint Cache",
+    "description": "WAF/soft-404/CDN-noise classifier",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-fingerprint-cache.0exec.com",
+    "health_url": "https://go-fleet-fingerprint-cache.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-fingerprint-cache",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). WAF/soft-404/CDN-noise classifier. /selftest + INTEGRATIONS.md shipped. ADR-0003. See services-registry/docs/adr/0003-fleet-fingerprint-cache.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18153,
+    "container_port": 18153
   },
   {
     "id": "go-fleet-graph",
@@ -4772,6 +5012,97 @@
     ]
   },
   {
+    "id": "go-fleet-har-builder",
+    "name": "Go Fleet Har Builder",
+    "description": "HAR 1.2 evidence formatter",
+    "category": "fleet_evidence",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-har-builder.0exec.com",
+    "health_url": "https://go-fleet-har-builder.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-har-builder",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). HAR 1.2 evidence formatter. /selftest + INTEGRATIONS.md shipped. ADR-0007. See services-registry/docs/adr/0007-fleet-har-builder.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18157,
+    "container_port": 18157
+  },
+  {
+    "id": "go-fleet-payload-corpus",
+    "name": "Go Fleet Payload Corpus",
+    "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-payload-corpus.0exec.com",
+    "health_url": "https://go-fleet-payload-corpus.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-payload-corpus",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). versioned attack-payload corpus (125 payloads, 12 classes). /selftest + INTEGRATIONS.md shipped. ADR-0006. See services-registry/docs/adr/0006-fleet-payload-corpus.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18156,
+    "container_port": 18156
+  },
+  {
+    "id": "go-fleet-poc-curl",
+    "name": "Go Fleet Poc Curl",
+    "description": "redacted PoC curl emitter (bash -n parse-gated)",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-evidence",
+      "kind-container"
+    ],
+    "url": "https://go-fleet-poc-curl.0exec.com",
+    "health_url": "https://go-fleet-poc-curl.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-poc-curl",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). redacted PoC curl emitter (bash -n parse-gated). /selftest + INTEGRATIONS.md shipped. ADR-0008. See services-registry/docs/adr/0008-fleet-poc-curl.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18158,
+    "container_port": 18158
+  },
+  {
     "id": "go-fleet-preflight",
     "name": "Go Fleet Preflight",
     "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
@@ -4801,6 +5132,126 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 18142,
     "container_port": 18142
+  },
+  {
+    "id": "go-fleet-priority-queue",
+    "name": "Go Fleet Priority Queue",
+    "description": "composite-scored findings priority ranker",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-priority-queue.0exec.com",
+    "health_url": "https://go-fleet-priority-queue.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-priority-queue",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite-scored findings priority ranker. /selftest + INTEGRATIONS.md shipped. ADR-0019. See services-registry/docs/adr/0019-fleet-priority-queue.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18169,
+    "container_port": 18169
+  },
+  {
+    "id": "go-fleet-resolver-quorum",
+    "name": "Go Fleet Resolver Quorum",
+    "description": "2-of-3 DNS resolver quorum",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-resolver-quorum.0exec.com",
+    "health_url": "https://go-fleet-resolver-quorum.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-resolver-quorum",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). 2-of-3 DNS resolver quorum. /selftest + INTEGRATIONS.md shipped. ADR-0005. See services-registry/docs/adr/0005-fleet-resolver-quorum.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18155,
+    "container_port": 18155
+  },
+  {
+    "id": "go-fleet-sandbox-targets",
+    "name": "Go Fleet Sandbox Targets",
+    "description": "internal-only sandbox vulnerable apps (10 endpoints)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-sandbox-targets.0exec.com",
+    "health_url": "https://go-fleet-sandbox-targets.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-sandbox-targets",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). internal-only sandbox vulnerable apps (10 endpoints). /selftest + INTEGRATIONS.md shipped. ADR-0018. See services-registry/docs/adr/0018-fleet-sandbox-targets.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18168,
+    "container_port": 18168
+  },
+  {
+    "id": "go-fleet-schema-validator",
+    "name": "Go Fleet Schema Validator",
+    "description": "JSON Schema catalog + validator (8 baseline schemas)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-schema-validator.0exec.com",
+    "health_url": "https://go-fleet-schema-validator.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-schema-validator",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). JSON Schema catalog + validator (8 baseline schemas). /selftest + INTEGRATIONS.md shipped. ADR-0016. See services-registry/docs/adr/0016-fleet-schema-validator.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18166,
+    "container_port": 18166
   },
   {
     "id": "go-fleet-secrets",
@@ -4834,6 +5285,126 @@
     "container_port": 18140
   },
   {
+    "id": "go-fleet-selftest-aggregator",
+    "name": "Go Fleet Selftest Aggregator",
+    "description": "/selftest poll-and-render aggregator",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-selftest-aggregator.0exec.com",
+    "health_url": "https://go-fleet-selftest-aggregator.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-selftest-aggregator",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). /selftest poll-and-render aggregator. /selftest + INTEGRATIONS.md shipped. ADR-0015. See services-registry/docs/adr/0015-fleet-selftest-aggregator.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18165,
+    "container_port": 18165
+  },
+  {
+    "id": "go-fleet-target-reputation",
+    "name": "Go Fleet Target Reputation",
+    "description": "target reputation lookup (5 sources)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-target-reputation.0exec.com",
+    "health_url": "https://go-fleet-target-reputation.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-target-reputation",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). target reputation lookup (5 sources). /selftest + INTEGRATIONS.md shipped. ADR-0021. See services-registry/docs/adr/0021-fleet-target-reputation.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18171,
+    "container_port": 18171
+  },
+  {
+    "id": "go-fleet-tech-inferrer",
+    "name": "Go Fleet Tech Inferrer",
+    "description": "composite tech-stack inferrer (83 signals)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-tech-inferrer.0exec.com",
+    "health_url": "https://go-fleet-tech-inferrer.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-tech-inferrer",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite tech-stack inferrer (83 signals). /selftest + INTEGRATIONS.md shipped. ADR-0009. See services-registry/docs/adr/0009-fleet-tech-inferrer.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18159,
+    "container_port": 18159
+  },
+  {
+    "id": "go-fleet-vendor-disclosure-tracker",
+    "name": "Go Fleet Vendor Disclosure Tracker",
+    "description": "vendor disclosure history tracker (PII-redacted)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-vendor-disclosure-tracker.0exec.com",
+    "health_url": "https://go-fleet-vendor-disclosure-tracker.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-vendor-disclosure-tracker",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). vendor disclosure history tracker (PII-redacted). /selftest + INTEGRATIONS.md shipped. ADR-0017. See services-registry/docs/adr/0017-fleet-vendor-disclosure-tracker.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18167,
+    "container_port": 18167
+  },
+  {
     "id": "go-fleet-visualizer",
     "name": "Go Fleet Visualizer",
     "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
@@ -4865,6 +5436,36 @@
       "go-fleet-graph",
       "go-apikey-service"
     ]
+  },
+  {
+    "id": "go-fleet-webhook-verifier",
+    "name": "Go Fleet Webhook Verifier",
+    "description": "inbound webhook signature verifier (6 platforms)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container"
+    ],
+    "url": "https://go-fleet-webhook-verifier.0exec.com",
+    "health_url": "https://go-fleet-webhook-verifier.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-webhook-verifier",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). inbound webhook signature verifier (6 platforms). /selftest + INTEGRATIONS.md shipped. ADR-0020. See services-registry/docs/adr/0020-fleet-webhook-verifier.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18170,
+    "container_port": 18170
   },
   {
     "id": "go-html-proxy",
