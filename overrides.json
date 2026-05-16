@@ -839,12 +839,13 @@
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "example_path": "/stats",
     "host_port": 18141,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
-    "trl_evidence": "Hetzner Cloud API client (api.hetzner.cloud/v1, Bearer auth) + RRSet-flattening on read + single-record RRSets on write + registry parser + 3-way diff + idempotent apply + paginated rrset listing. 13 tests cover diff/create/update/dry-run/extras-never-deleted/non-mesh-ignored."
+    "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
+    "version": "0.2.0"
   },
   "go-fleet-graph": {
     "container_port": 18143,
@@ -880,12 +881,13 @@
     "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
     "example_path": "/",
     "host_port": 18140,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
-    "trl_evidence": "NaCl secretbox (XSalsa20-Poly1305) per-secret nonce; master key from env (fail-fast on missing); constant-time admin compare; metadata-only list; audit log every access. 16 tests pass."
+    "trl_evidence": "audit_log with prefix-only redaction (no full tokens), consumer ACL test, rotate-returns-old-once, concurrent rotate (1 winner asserted), /selftest",
+    "version": "0.2.0"
   },
   "go-fleet-visualizer": {
     "container_port": 18144,
@@ -896,12 +898,13 @@
     "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
     "example_path": "/public",
     "host_port": 18144,
-    "trl": 4,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
-    "trl_evidence": "Two-surface auth split via selective middleware. Proxies to collector for all queries. Auto-refresh every 30s. SRI hash on CDN vis-network bundle. Path templating-aware drill-down. No tests yet \u2014 first iteration."
+    "trl_evidence": "ETag/304 fetch cache (60s TTL), /graph.dot Graphviz DOT, /trl-heatmap SSR with html-escape proof, /selftest exercises all 3 renderers against embedded 5-service fixture",
+    "version": "0.2.0"
   },
   "go-html-proxy": {
     "container_port": 3002,
@@ -957,17 +960,33 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254)."
   },
+  "go-oauth-mapper": {
+    "cert_domain": "go-oauth-mapper.0crawl.com",
+    "container_port": 8330,
+    "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
+    "deploy_quirk_resolved_at": "2026-05-16",
+    "description": "Microservice for Oauth Mapper",
+    "example_path": "/?url=https://example.com",
+    "host_port": 8330,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
+    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests."
+  },
   "go-pentest-agent-state": {
     "container_port": 18146,
     "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
     "example_path": "/stats",
     "host_port": 18146,
-    "trl": 4,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling lifts once orchestrator + payoff-tracker route through it end-to-end and the loop has survived a week of unattended operation.",
-    "trl_evidence": "Pure-Go SQLite (WAL), monotonic per-agent snapshot version, append-only journal, history retention, unit tests for crosstalk + version increment + filter + invalid-JSON rejection. CPU-only."
+    "trl_evidence": "optimistic-lock state with version history, lease primitive with TestLease_Concurrent50Goroutines (BEGIN IMMEDIATE pattern), /selftest with 409 stale-write + lease exclusivity",
+    "version": "0.2.0"
   },
   "go-pentest-asset-inventory": {
     "container_port": 18131,
@@ -1019,10 +1038,12 @@
   "go-pentest-authz-matrix": {
     "container_port": 18152,
     "host_port": 18152,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": 8
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 8,
+    "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
+    "version": "0.2.0"
   },
   "go-pentest-bounty-scope-checker": {
     "container_port": 18110,
@@ -1111,12 +1132,13 @@
   "go-pentest-dashboard": {
     "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
     "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Bounded by what the fleet exposes; active probing tools need auth + deploy before they can be surfaced safely.",
-    "trl_evidence": "Single index.html, no build step, CORS-permissive fleet endpoints. 6 tabs covering recon \u2192 scan \u2192 triage \u2192 render."
+    "trl_evidence": "sibling fan-out aggregator with 30s TTL cache, /overview HTML with html/template auto-escape (asserted by test), /selftest with 4 sibling stubs, sibling-down does not crash (degraded[] flag)",
+    "version": "0.2.0"
   },
   "go-pentest-dedup-fingerprint": {
     "container_port": 18132,
@@ -1161,12 +1183,12 @@
     "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
     "example_path": "/capabilities",
     "host_port": 18137,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Each verifier is a thin recipe \u2014 lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
-    "trl_evidence": "TRL-5 uplift 2026-05-16: introduced explicit confirmation taxonomy (verdict: confirmed|not_confirmed|inconclusive) downstream services gate on; per-verifier 10s + total 30s budgets; SSRF verifier emits TRL-5 evidence shape (callback_recorded, callback_at, raw_request) and polls oob-collector up to 5s; XSS marker matcher accepts raw + HTML-entity + URL-escaped echoes; JWT-alg-none, open-redirect, IDOR, takeover all set explicit verdicts; scope-guard fail-closed yields verdict:inconclusive (never confirmed). SQLite migration adds verdict column + idx_ver_verdict, backfills from confirmed. Tests: 12 stubbed-dependency cases incl. verdict-classification, per-verifier timeout, malformed-JWT inconclusive, encoded-XSS marker reflection. ADR docs/adr/0001-trl-uplift-to-5.md captures composition decisions. Real fleet integration (oob-collector + takeover-fingerprints + findings-store wired end-to-end) still pending.",
+    "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
     "version": "0.2.0"
   },
   "go-pentest-favicon-hash": {
@@ -1261,12 +1283,13 @@
     "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
     "example_path": "/search?token=sk_live_xxx",
     "host_port": 18145,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-session-2026-05-16-build",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
-    "trl_evidence": "25 hand-curated programs with per-program LeakPolicy across 4 leak classes (own_employee/shared_secret/customer_cred/canary) and credential_prefixes for token classification. 7 unit tests pin: registry parses, slugs unique, prefixes unique, sk_live_ -> Stripe + canary in_scope, shpat_ -> Shopify + customer_cred out_of_scope, >=3 canary-paying programs."
+    "trl_evidence": "30-row vendor policy seed (AWS/GitHub/Slack/Stripe/OpenAI/Anthropic/Twilio/Mailgun/GCP/Azure/etc.), BEGIN IMMEDIATE on both seed and ledger, secret-prefix-only persistence (TestLedger_NoSecretInRows enforces), /selftest",
+    "version": "0.2.0"
   },
   "go-pentest-notify": {
     "container_port": 18108,
@@ -1285,24 +1308,25 @@
     "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
     "example_path": "/templates",
     "host_port": 18115,
-    "trl": 4,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Pinned-binary wrapping; templates refresh cadence + concurrency stress-testing gate the climb to 7.",
-    "trl_evidence": "Wraps nuclei binary; scope-guard pre-flight (fail-closed); -jsonl streaming parser; best-effort findings forwarding via safehttp; 5 unit tests covering 400/405/scope-empty/templates/JSONL-parse."
+    "trl_evidence": "scope-guard preflight (fail-closed -> 503), rate-coordinator per-host acquire (fail-open), findings-store wire on severity>=medium, /selftest round-trips all 3 sibling stubs + runner",
+    "version": "0.2.0"
   },
   "go-pentest-oob-collector": {
     "container_port": 18106,
     "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
     "example_path": "/sessions?limit=1",
     "host_port": 18106,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
-    "trl_evidence": "v0.2 uplift: UUID-v4 token allocation (POST /alloc) with TTL clamp (60s..7d), public catch endpoint (/c/<token>) with 10KiB body cap + Referer capture, cursor-paginated poll (GET /poll/<token>?since=N), SSE long-poll (/poll/<token>/stream) with replay-on-reconnect, admin-gated revoke (DELETE /token/<token>), aggregate /stats. Per-token poll bucket (1 rps, burst 2). SQLite WAL mode for concurrent writer (catch) + reader (poll). 20 tests across alloc / catch / poll / stream / revoke / stats / body-cap / expired-token / rate-limit / cursor-delta \u2014 race-clean. Designed-for-fleet hookups (xss-scanner / file-inclusion canary / crlf-tester / findings-store) documented in docs/adr/0001.",
+    "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
     "version": "0.2.0"
   },
   "go-pentest-orchestrator": {
@@ -1310,12 +1334,13 @@
     "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
     "example_path": "/stats",
     "host_port": 18138,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
-    "trl_evidence": "SQLite state machine; idempotent per-state advance; append-only event log; 30s ticker; 16 tests pass with every fleet dep stubbed (httptest mux)."
+    "trl_evidence": "campaign state machine, transitions + campaign_artifacts tables, idempotency_key returns 201/200 same as job-queue pattern, /selftest drives scope->recon->scan against httptest stubs",
+    "version": "0.2.0"
   },
   "go-pentest-payloads": {
     "container_port": 18101,
@@ -1334,12 +1359,13 @@
     "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
     "example_path": "/stats",
     "host_port": 18148,
-    "trl": 4,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling lifts once at least ~20 real submissions have flowed through and /calibration is non-empty.",
-    "trl_evidence": "Pure-Go SQLite, upsert prediction + outcome keyed on finding_id, LEFT JOIN-backed findings list, per-rule precision (paid / (paid+dropped)), per-program $/paid + hit-rate. Sync endpoint pulls watches from triager-listener. Unit tests cover join semantics + multi-rule firing + program-level ROI math."
+    "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE ingest, amount_cents as INTEGER (no float for money), /stats with percentiles, /scoreboard ordered by payout, /selftest",
+    "version": "0.2.0"
   },
   "go-pentest-rate-coordinator": {
     "container_port": 18104,
@@ -1436,12 +1462,13 @@
     "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
     "example_path": "/quota",
     "host_port": 18136,
-    "trl": 4,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
-    "trl_evidence": "4 platform adapters (H1/BC/Intigriti/email) with stubbed-creds + rate-limit + daily-cap. 23 tests pass via httptest. NOT yet round-tripped against real platform APIs \u2014 TRL stays at 4 until verified end-to-end."
+    "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE on *sql.Conn (canonical pattern), idempotency_key (50-goroutine race test asserts 1 platform call), dry_run mode, /selftest with stubbed platform API",
+    "version": "0.2.0"
   },
   "go-pentest-takeover-checker": {
     "container_port": 18121,
@@ -1509,12 +1536,13 @@
     "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
     "example_path": "/preflight",
     "host_port": 18139,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-15",
-    "trl_assessor": "claude-session-2026-05-15",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Same ceiling as orchestrator \u2014 bounded by submit-bot end-to-end verification.",
-    "trl_evidence": "Same idempotent state-machine shape as orchestrator + manual-override hooks (decide, pause, advance). 22 tests pass over stub fleet endpoints."
+    "trl_evidence": "4 baked-in markdown templates (ssrf/xss/sqli/idor) via //go:embed, sensitive-header redaction (Cookie/Authorization/X-API-Key -> prefix-only), /selftest exercises all 4 templates",
+    "version": "0.2.0"
   },
   "go-pentest-wayback-urls": {
     "container_port": 18127,
@@ -1562,6 +1590,19 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Go search wrapper, API integration"
+  },
+  "go-session-fixation": {
+    "cert_domain": "go-session-fixation.0exec.com",
+    "container_port": 8316,
+    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
+    "example_path": "/go_session_fixation?target=https://github.com",
+    "host_port": 18031,
+    "trl": 6,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass."
   },
   "google-taxonomy": {
     "container_port": 8096,
@@ -1657,13 +1698,13 @@
     "description": "Microservice for Http Method Tester",
     "example_path": "/?url=https://example.com",
     "host_port": 8087,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Multi-stage probe (OPTIONS preflight \u2192 15-verb sweep \u2192 method-override\nprobe) with structured findings for verb tampering, TRACE/XST, and\nhonored override headers. SSRF-guarded transport via\ngo-common/safehttp. Per-request 4s and total 30s deadlines, parallel\nfan-out capped at 4. Code split into methods.go / probe.go /\ndetect.go / handler.go. Fixture-based unit tests\n(probe_test.go + handler_test.go, \u22654 cases: clean GET-only origin,\npermissive PUT, TRACE echo XST, anything-goes verb tampering, plus\nlegacy-shape and context-cancel checks). Backwards-compat 1.2.0 wire\nshape preserved (`tool`, `target`, `methods_allowed`, `total_found`).\nDetection rationale and consumer hookup documented in\ndocs/adr/0001-trl-uplift-to-5.md.",
-    "version": "1.3.0"
+    "trl_evidence": "full method+override+CORS matrix, 7 finding classes (xst-vulnerable/method-override-bypass/unrestricted-write/allow-header-misconfigured/cors-override/cors-wildcard), /selftest with in-process vulnerable target",
+    "version": "1.4.0"
   },
   "http-protocol": {
     "container_port": 8241,
@@ -2337,13 +2378,13 @@
     "container_port": 8156,
     "description": "Microservice for Ratelimit Tester",
     "host_port": 8156,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": ">-",
-    "version": "1.2.0"
+    "trl_evidence": "classifier matrix (none/fixed-window/token-bucket/sliding/indeterminate), 7 bypass vectors with rate-normalized decision, hard caps (100 req / 50 RPS), /selftest with strict+weak httptest fixtures",
+    "version": "0.2.0"
   },
   "react-data-grid": {
     "trl": 6,
@@ -2488,12 +2529,12 @@
     "description": "Microservice for Scan Port Ssh",
     "example_path": "/?target=example.com",
     "host_port": 8090,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "TRL5 uplift 2026-05-16: pure-Go SSH probe (no shell-out), RFC4253 banner parse + KEXINIT capture, curated weak-algo taxonomy (kex/hostkey/cipher/MAC/compression), curated 11-entry OpenSSH CVE hint map, ALLOW_PRIVATE SSRF guard, 8s/15s timeout pair, in-process SSH server tests covering modern banner, weak-algo set, refused connection, and banner-only honeypot. See docs/adr/0001-trl-uplift-to-5.md.",
+    "trl_evidence": "x/crypto/ssh full algo capture, weak-algo detection (KEX/cipher/MAC/host_key), findings-store wire with sha256-of-algos dedup, /selftest against in-process ssh.NewServerConn with planted weak algos (12 invariants)",
     "version": "0.2.0"
   },
   "scc": {
@@ -2775,13 +2816,13 @@
   },
   "svi": {
     "description": "Microservice for Svi",
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM walker (golang.org/x/net/html) covering meta/og/twitter/JSON-LD/headings/links/alt; robots + sitemap parsers; HTTPS/viewport/hreflang signals; bounded internal-link probe with 4xx/5xx penalty (capped at -10); fleet composition hooks for sitemap-finder + robots-parser; 25+ tests across signals/score/handler with httptest.Server integration; CGO-free; per-fetch 5s + total 30s budget.",
-    "version": "2.0.0"
+    "trl_evidence": "Site Visibility Index \u2014 13 weighted SEO/crawl signals computed CPU-only, embedded fixture for /selftest, selftestPassthrough middleware bypasses keystore auth, evidence trail (SignalEvidence struct surfaces raw harvested inputs)",
+    "version": "2.1.0"
   },
   "swagger-finder": {
     "container_port": 8349,
@@ -2844,13 +2885,13 @@
     "description": "Microservice for Telnet Banner",
     "example_path": "/?target=example.com",
     "host_port": 8086,
-    "trl": 5,
+    "trl": 7,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "- RFC 854 IAC parser: handles 3-byte commands, IAC SB ... IAC SE blocks,\n  escaped 0xFF, and truncated trailing bytes (telnet_test.go covers all four).\n- Fingerprint table: Cisco IOS / IOS-XR, Juniper JUNOS, MikroTik RouterOS,\n  Microsoft Telnet, HP iLO, Dell DRAC, QNAP, Synology, Linux getty \u2014\n  rule-ordered with version regexes (fingerprint_test.go covers 7 cases).\n- End-to-end handler tests spin up an in-process TCP listener that emits\n  canned banners (Cisco, Linux getty, Microsoft Telnet w/ IAC negotiation,\n  raw-mode passthrough) \u2014 handler_test.go, 8 cases.\n- Scope guard: refuses RFC1918 / loopback / link-local / IPv6 ULA targets\n  unless ALLOW_PRIVATE=1; documented in ADR 0001.\n- Code split into dial.go / telnet.go / fingerprint.go / handler.go for\n  auditable per-concern review.",
-    "version": "1.1.0"
+    "trl_evidence": "30-row fingerprint table (Mikrotik/Cisco/Juniper/OpenBSD/Solaris-CVE-2007-0882/IoT cameras/BusyBox-Mirai/etc.), IAC-WONT negotiation, in-process TCP listener for /selftest, hex-safe banner storage",
+    "version": "0.2.0"
   },
   "tos-finder": {
     "container_port": 8316,
@@ -3038,12 +3079,13 @@
     "description": "Microservice for Websocket Analyzer",
     "example_path": "/?url=https://example.com",
     "host_port": 8334,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
-    "trl_ceiling": null,
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "infrastructure tool, bidirectional protocol analysis"
+    "trl_evidence": "4 probes (origin/auth/subprotocol/framesize) with hard 1MiB cap, in-process WS fixtures for /selftest, safehttpAllowLoopback() toggle for test-time SSRF guard",
+    "version": "0.2.0"
   },
   "wellknown-scanner": {
     "container_port": 8352,
@@ -3132,33 +3174,5 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
-  },
-  "go-oauth-mapper": {
-    "container_port": 8330,
-    "description": "Microservice for Oauth Mapper",
-    "example_path": "/?url=https://example.com",
-    "host_port": 8330,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
-    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
-    "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
-    "deploy_quirk_resolved_at": "2026-05-16",
-    "cert_domain": "go-oauth-mapper.0crawl.com"
-  },
-  "go-session-fixation": {
-    "container_port": 8316,
-    "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
-    "example_path": "/go_session_fixation?target=https://github.com",
-    "host_port": 18031,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
-    "cert_domain": "go-session-fixation.0exec.com"
   }
 }
