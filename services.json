@@ -1880,12 +1880,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
-    "trl": 6,
-    "trl_evidence": "TRL 6 (2026-05-16). Detects four ID shapes (integer, UUID,\nMongoDB ObjectId, base64); per-shape variant strategies (sequential\n\u00b1N, UUID segment rotation, ObjectId counter flip, base64 last-byte\nflip); auth-strip + auth-swap probes promote auth-bypass to a\nseparate severity track; user-data sniffer (email, name, role,\nphone, SSN, credit card, address, token) drives the high-vs-medium\nseverity split. Verdict aggregator collapses probe-level signals\ninto one of {clean, suspicious, likely_idor, critical, inconclusive}.\nScope-guard via SCOPE_GUARD_URL; second-opinion via VERIFIER_URL \u2192\ngo-pentest-exploit-verifier. 32-test suite covers ID detection,\nvariant generators, classifier, plus end-to-end fixtures (vulnerable,\nauth-guarded, 404, generic-page).",
-    "trl_ceiling": 6,
+    "trl": 7,
+    "trl_evidence": "A/B pair-probe via go-pentest-session-state. With ?session_id=, scanner runs cross-session ownership probe (URL with primary owned ID fired with secondary session \u2014 2xx body = critical idor-confirmed-pair).",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "True IDOR proof requires authenticated sessions and object ownership context.",
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 8242,
     "container_port": 8242
   },
@@ -2257,12 +2257,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
-    "trl": 6,
-    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
-    "trl_ceiling": 7,
+    "trl": 7,
+    "trl_evidence": "Active hardening probes via go-pentest-session-state. Three new probes: evil-redirect_uri, missing-state, missing-pkce.",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 8330,
     "container_port": 8330
   },
@@ -3349,12 +3349,12 @@
       "public_demo_token": "default_token"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
-    "trl": 5,
-    "trl_evidence": "RFC6265bis prefix validation (__Secure-/__Host-), curated session-cookie list (~25 platforms), Shannon-entropy weak-token detector, two-pass fixation probe behind ?probe_fixation=1, \u226518 unit + httptest cases (entropy_test.go + validate_test.go + handler_test.go) all green; safehttp client with no auto-jar so cookies aren't replayed across analyses.",
-    "trl_ceiling": 5,
+    "trl": 7,
+    "trl_evidence": "Authenticated probe via go-pentest-session-state ?session_id=. Entropy / prefix / fixation now run against the AUTHENTICATED Set-Cookie response. Lifts prior TRL-5 hard ceiling.",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "needs authenticated session state for full testing",
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 8095,
     "container_port": 8095
   },
@@ -5497,12 +5497,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "TRL-5 uplift 2026-05-16: introduced explicit confirmation taxonomy (verdict: confirmed|not_confirmed|inconclusive) downstream services gate on; per-verifier 10s + total 30s budgets; SSRF verifier emits TRL-5 evidence shape (callback_recorded, callback_at, raw_request) and polls oob-collector up to 5s; XSS marker matcher accepts raw + HTML-entity + URL-escaped echoes; JWT-alg-none, open-redirect, IDOR, takeover all set explicit verdicts; scope-guard fail-closed yields verdict:inconclusive (never confirmed). SQLite migration adds verdict column + idx_ver_verdict, backfills from confirmed. Tests: 12 stubbed-dependency cases incl. verdict-classification, per-verifier timeout, malformed-JWT inconclusive, encoded-XSS marker reflection. ADR docs/adr/0001-trl-uplift-to-5.md captures composition decisions. Real fleet integration (oob-collector + takeover-fingerprints + findings-store wired end-to-end) still pending.",
+    "trl": 6,
+    "trl_evidence": "go-pentest-ssrf-prober now hands confirmed findings off via /verify (vuln_class=ssrf-blind). The \"verifier is gate-only with no upstream feeding it confirmed candidates\" gap is closed.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Each verifier is a thin recipe \u2014 lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 18137,
     "container_port": 18137
   },
@@ -5837,12 +5837,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 5,
-    "trl_evidence": "v0.2 uplift: UUID-v4 token allocation (POST /alloc) with TTL clamp (60s..7d), public catch endpoint (/c/<token>) with 10KiB body cap + Referer capture, cursor-paginated poll (GET /poll/<token>?since=N), SSE long-poll (/poll/<token>/stream) with replay-on-reconnect, admin-gated revoke (DELETE /token/<token>), aggregate /stats. Per-token poll bucket (1 rps, burst 2). SQLite WAL mode for concurrent writer (catch) + reader (poll). 20 tests across alloc / catch / poll / stream / revoke / stats / body-cap / expired-token / rate-limit / cursor-delta \u2014 race-clean. Designed-for-fleet hookups (xss-scanner / file-inclusion canary / crlf-tester / findings-store) documented in docs/adr/0001.",
+    "trl": 6,
+    "trl_evidence": "go-pentest-ssrf-prober is now an active consumer driving real traffic against the v0.2 /alloc + /poll cursor APIs. The \"no active consumer\" gap is closed.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 18106,
     "container_port": 18106
   },
@@ -6119,9 +6119,10 @@
     "trl": 7,
     "trl_ceiling": 8,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 18151,
-    "container_port": 18151
+    "container_port": 18151,
+    "trl_evidence": "New service: central AuthContext store. Enables authenticated probing across 4 consumer services."
   },
   {
     "id": "go-pentest-ssrf-prober",
@@ -6148,9 +6149,10 @@
     "trl": 7,
     "trl_ceiling": 8,
     "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 18150,
-    "container_port": 18150
+    "container_port": 18150,
+    "trl_evidence": "New service: active SSRF prober. Closes the \"no active prober\" gap that pinned oob-collector + exploit-verifier at TRL 5."
   },
   {
     "id": "go-pentest-subfinder",
@@ -6637,12 +6639,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass.",
-    "trl_ceiling": 7,
+    "trl": 7,
+    "trl_evidence": "v0.2 token-harvest path. With ?target=, harvests JWTs from Set-Cookie / response headers / HTML/JS body, runs full six-probe battery against each.",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 18029,
     "container_port": 8315
   },
@@ -7051,12 +7053,12 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "trl": 6,
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
-    "trl_ceiling": 7,
+    "trl": 7,
+    "trl_evidence": "SPA/JSON login support. When LoginFlow.kind=json, drives full CSRF-aware JSON POST flow + two-pass fixation classification.",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-trl-uplift-bundle",
     "host_port": 18031,
     "container_port": 8316
   },
