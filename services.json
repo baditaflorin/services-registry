@@ -5159,7 +5159,13 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 5,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18152,
+    "container_port": 18152
   },
   {
     "id": "go-pentest-bounty-scope-checker",
@@ -6109,7 +6115,13 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18151,
+    "container_port": 18151
   },
   {
     "id": "go-pentest-ssrf-prober",
@@ -6132,7 +6144,13 @@
       "query_param": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18150,
+    "container_port": 18150
   },
   {
     "id": "go-pentest-subfinder",

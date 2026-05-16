@@ -3117,5 +3117,29 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
+  },
+  "go-pentest-ssrf-prober": {
+    "host_port": 18150,
+    "container_port": 18150,
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16"
+  },
+  "go-pentest-session-state": {
+    "host_port": 18151,
+    "container_port": 18151,
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16"
+  },
+  "go-pentest-authz-matrix": {
+    "host_port": 18152,
+    "container_port": 18152,
+    "trl": 5,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16"
   }
 }
