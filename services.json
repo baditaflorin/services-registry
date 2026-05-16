@@ -4984,6 +4984,37 @@
     "container_port": 8500
   },
   {
+    "id": "go-pentest-agent-state",
+    "name": "Go Pentest Agent State",
+    "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-agent-state.0exec.com",
+    "health_url": "https://go-pentest-agent-state.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-agent-state",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "Pure-Go SQLite (WAL), monotonic per-agent snapshot version, append-only journal, history retention, unit tests for crosstalk + version increment + filter + invalid-JSON rejection. CPU-only.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling lifts once orchestrator + payoff-tracker route through it end-to-end and the loop has survived a week of unattended operation.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-session-2026-05-16",
+    "host_port": 18146,
+    "container_port": 18146
+  },
+  {
     "id": "go-pentest-asset-inventory",
     "name": "Go Pentest Asset Inventory",
     "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
@@ -5817,6 +5848,37 @@
     "container_port": 18101
   },
   {
+    "id": "go-pentest-payoff-tracker",
+    "name": "Go Pentest Payoff Tracker",
+    "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-payoff-tracker.0exec.com",
+    "health_url": "https://go-pentest-payoff-tracker.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-payoff-tracker",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "Pure-Go SQLite, upsert prediction + outcome keyed on finding_id, LEFT JOIN-backed findings list, per-rule precision (paid / (paid+dropped)), per-program $/paid + hit-rate. Sync endpoint pulls watches from triager-listener. Unit tests cover join semantics + multi-rule firing + program-level ROI math.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling lifts once at least ~20 real submissions have flowed through and /calibration is non-empty.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-session-2026-05-16",
+    "host_port": 18148,
+    "container_port": 18148
+  },
+  {
     "id": "go-pentest-rate-coordinator",
     "name": "Go Pentest Rate Coordinator",
     "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
@@ -6123,6 +6185,37 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18102,
     "container_port": 18102
+  },
+  {
+    "id": "go-pentest-triager-listener",
+    "name": "Go Pentest Triager Listener",
+    "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "url": "https://go-pentest-triager-listener.0exec.com",
+    "health_url": "https://go-pentest-triager-listener.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-triager-listener",
+    "example_path": "/stats",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "SQLite-backed, idempotent on (platform, external_id), terminal-state poll skipping, state-change journal, normalized status enum across 3 platform shapes. Adapter stubs for H1/BC/Intigriti return ErrNotConfigured cleanly when tokens absent.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Bounded by platform API stability \u2014 H1/BC/Intigriti reshape attributes regularly and there's no signed contract.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-session-2026-05-16",
+    "host_port": 18147,
+    "container_port": 18147
   },
   {
     "id": "go-pentest-trufflehog",
