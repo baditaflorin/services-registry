@@ -2079,7 +2079,9 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
-    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests."
+    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
+    "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
+    "deploy_quirk_resolved_at": "2026-05-16"
   },
   "ocr-pdf": {
     "container_port": 5500,
