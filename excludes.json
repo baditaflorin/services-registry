@@ -5,6 +5,10 @@
     {
       "repo": "go-url-categorizer-api",
       "reason": "separate project that happens to use the go- prefix; not part of the 0exec / 0crawl meshes. Removed from services.json. Do not auto-clone, do not run fleet-wide ops on it."
+    },
+    {
+      "repo": "go_go_pentest_attack_chainer",
+      "reason": "orphan workspace on builder LXC with double \"go_go_pentest_\" prefix (likely typo of \"go_pentest_attack_chainer\"); no remote, no registry entry. Excluded until reclaimed or removed."
     }
   ]
 }
