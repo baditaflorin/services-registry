@@ -3498,5 +3498,37 @@
   "domain-email-deliverability-score": {
     "host_port": 18181,
     "container_port": 18181
+  },
+  "domain-passive-dns-history": {
+    "host_port": 18183,
+    "container_port": 18183
+  },
+  "domain-ct-log-watcher": {
+    "host_port": 18184,
+    "container_port": 18184
+  },
+  "domain-third-party-fetch-map": {
+    "host_port": 18185,
+    "container_port": 18185
+  },
+  "domain-tech-eol-flagger": {
+    "host_port": 18186,
+    "container_port": 18186
+  },
+  "domain-mobile-app-resolver": {
+    "host_port": 18187,
+    "container_port": 18187
+  },
+  "domain-structured-data-rollup": {
+    "host_port": 18188,
+    "container_port": 18188
+  },
+  "domain-abuse-contact-rollup": {
+    "host_port": 18189,
+    "container_port": 18189
+  },
+  "domain-rbl-reputation": {
+    "host_port": 18182,
+    "container_port": 18182
   }
 }

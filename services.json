@@ -4833,6 +4833,58 @@
     "container_port": 3909
   },
   {
+    "id": "domain-abuse-contact-rollup",
+    "name": "Domain Abuse Contact Rollup",
+    "description": "Unified abuse contact rollup (RDAP+security.txt+convention+scrape) for the domainscope enricher pipeline",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-abuse-contact-rollup.0exec.com",
+    "health_url": "https://domain-abuse-contact-rollup.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_abuse_contact_rollup",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18189,
+    "container_port": 18189
+  },
+  {
+    "id": "domain-ct-log-watcher",
+    "name": "Domain Ct Log Watcher",
+    "description": "Certificate Transparency log inventory (crt.sh) for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-ct-log-watcher.0exec.com",
+    "health_url": "https://domain-ct-log-watcher.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ct_log_watcher",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18184,
+    "container_port": 18184
+  },
+  {
     "id": "domain-dnssec-validator",
     "name": "Domain Dnssec Validator",
     "description": "DNSSEC validator (DS/DNSKEY/AD-bit) for the domainscope enricher pipeline",
@@ -4883,6 +4935,162 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18181,
     "container_port": 18181
+  },
+  {
+    "id": "domain-mobile-app-resolver",
+    "name": "Domain Mobile App Resolver",
+    "description": "iOS/Android mobile app linkage resolver for the domainscope enricher pipeline",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-mobile-app-resolver.0exec.com",
+    "health_url": "https://domain-mobile-app-resolver.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_mobile_app_resolver",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18187,
+    "container_port": 18187
+  },
+  {
+    "id": "domain-passive-dns-history",
+    "name": "Domain Passive Dns History",
+    "description": "Historical passive-DNS observations for the domainscope enricher pipeline",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-passive-dns-history.0exec.com",
+    "health_url": "https://domain-passive-dns-history.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_passive_dns_history",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18183,
+    "container_port": 18183
+  },
+  {
+    "id": "domain-rbl-reputation",
+    "name": "Domain Rbl Reputation",
+    "description": "RBL reputation check across 8 public blocklists for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-rbl-reputation.0exec.com",
+    "health_url": "https://domain-rbl-reputation.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_rbl_reputation",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18182,
+    "container_port": 18182
+  },
+  {
+    "id": "domain-structured-data-rollup",
+    "name": "Domain Structured Data Rollup",
+    "description": "JSON-LD/OG/Twitter/microdata rollup for the domainscope enricher pipeline",
+    "category": "content",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-structured-data-rollup.0exec.com",
+    "health_url": "https://domain-structured-data-rollup.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_structured_data_rollup",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18188,
+    "container_port": 18188
+  },
+  {
+    "id": "domain-tech-eol-flagger",
+    "name": "Domain Tech Eol Flagger",
+    "description": "Tech-stack end-of-life flagger (endoflife.date) for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-tech-eol-flagger.0exec.com",
+    "health_url": "https://domain-tech-eol-flagger.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_tech_eol_flagger",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18186,
+    "container_port": 18186
+  },
+  {
+    "id": "domain-third-party-fetch-map",
+    "name": "Domain Third Party Fetch Map",
+    "description": "Homepage third-party fetch bucketing for the domainscope enricher pipeline",
+    "category": "web_analysis",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-third-party-fetch-map.0exec.com",
+    "health_url": "https://domain-third-party-fetch-map.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_third_party_fetch_map",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18185,
+    "container_port": 18185
   },
   {
     "id": "geo-geocode",

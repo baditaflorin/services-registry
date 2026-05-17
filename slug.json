@@ -11,7 +11,15 @@
     "go-apikey-service": "apikey-service",
     "go_oauth_mapper": "go-oauth-mapper",
     "go_domain_dnssec_validator": "domain-dnssec-validator",
-    "go_domain_email_deliverability_score": "domain-email-deliverability-score"
+    "go_domain_email_deliverability_score": "domain-email-deliverability-score",
+    "go_domain_passive_dns_history": "domain-passive-dns-history",
+    "go_domain_ct_log_watcher": "domain-ct-log-watcher",
+    "go_domain_third_party_fetch_map": "domain-third-party-fetch-map",
+    "go_domain_tech_eol_flagger": "domain-tech-eol-flagger",
+    "go_domain_mobile_app_resolver": "domain-mobile-app-resolver",
+    "go_domain_structured_data_rollup": "domain-structured-data-rollup",
+    "go_domain_abuse_contact_rollup": "domain-abuse-contact-rollup",
+    "go_domain_rbl_reputation": "domain-rbl-reputation"
   },
   "default_strategy": "kebab_strip_go_prefix_for_0crawl"
 }
