@@ -3397,5 +3397,60 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
+  },
+  "pentest-waf-detect": {
+    "host_port": 18173,
+    "container_port": 18173,
+    "description": "Fingerprint WAF/CDN challenge interstitials (14 vendors, 18 signatures). Used by reflection-hunter and bounty pipeline to drop interstitial false positives.",
+    "example_path": "/?url=https://example.com&api_key=default_token",
+    "trl": 5,
+    "trl_assessed_at": "2026-05-17",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-17",
+    "trl_evidence": "14 vendor signatures, 10 unit tests covering CF managed-challenge / Akamai / F5 / Imperva / PerimeterX / DataDome / ModSecurity / no-WAF baseline.",
+    "version": "0.1.0"
+  },
+  "pentest-cookie-pwn": {
+    "host_port": 18174,
+    "container_port": 18174,
+    "description": "Parse Set-Cookie, classify cookies (session/Keycloak/F5/CSRF/tracker), flag missing flags, probe session-bearing endpoints, emit runnable PoC tar.gz.",
+    "example_path": "/?url=https://example.com&test_session=1&api_key=default_token",
+    "trl": 5,
+    "trl_assessed_at": "2026-05-17",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-17",
+    "trl_evidence": "5 cookie classes + 2 fallbacks, 9 severity-coded issue codes, 9 session-probe endpoints, PoC bundle generator with 4 embedded templates. 7 unit tests with real CyberGhost/Thuringer fixtures.",
+    "version": "0.1.0"
+  },
+  "pentest-reflection-hunter": {
+    "host_port": 18175,
+    "container_port": 18175,
+    "description": "Brute-fuzz ~40 standard params, classify reflection context (js-string/html-attr/json/url), escalate with composite breakout payloads. Filters WAF-challenge interstitials before classification.",
+    "example_path": "/?url=https://example.com&params=q,promo&escalate=1&api_key=default_token",
+    "trl": 5,
+    "trl_assessed_at": "2026-05-17",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-17",
+    "trl_evidence": "6 reflection contexts + per-context escalation, 11 inline WAF signatures (vendored from go-pentest-waf-detect), 6 integration tests covering vulnerable/safe/WAF-masked/no-reflection/skip-WAF.",
+    "version": "0.1.0"
+  },
+  "pentest-ywh-sync": {
+    "host_port": 18176,
+    "container_port": 18176,
+    "description": "Pull YWH public program list + scopes from api.yeswehack.com, filter by min-bounty / max-reports / verified, emit bounty-scope-checker seed entries.",
+    "example_path": "/programs?api_key=default_token",
+    "trl": 4,
+    "trl_assessed_at": "2026-05-17",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-17",
+    "trl_evidence": "YWH API client with pagination, 1h in-memory cache, criteria-based filter, /programs/seed for direct ingestion into bounty-scope-checker. 5 unit tests with real DataDome fixture.",
+    "version": "0.1.0"
+  },
+  "pentest-js-bundle-scanner": {
+    "host_port": 18178,
+    "container_port": 18178,
+    "description": "Fetch URL, recurse script src tags, scan 21 secret-pattern classes (AWS/Stripe/GitHub/Google/Anthropic/RSA-PEM/etc.), extract endpoints, classify sourcemaps as first vs third party (eTLD+1).",
+    "example_path": "/?target=https://example.com&api_key=default_token",
+    "trl": 5,
+    "trl_assessed_at": "2026-05-17",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-17",
+    "trl_evidence": "21 secret-pattern classes (private RSA requires full PEM block to avoid jsencrypt FP). Static-asset filtering. First-vs-third-party sourcemap classifier. 7 unit tests with realistic SPA fixture.",
+    "version": "0.1.0"
   }
 }
