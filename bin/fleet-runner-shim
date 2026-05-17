@@ -49,9 +49,24 @@ for a in "$@"; do
   remote_argv+=" $(printf '%q' "$a")"
 done
 
+# Forward tokens the remote fleet-runner needs (Hetzner Cloud DNS for
+# bootstrap deploys, etc.). pct exec doesn't inherit env vars across
+# the LXC boundary, so we prepend `env VAR=value …` inside the pct
+# exec line so /usr/bin/env injects them before exec'ing the binary.
+# Add to this list if you discover another env var the remote binary
+# expects but doesn't have set inside LXC 108.
+remote_env=""
+for v in HCLOUD_TOKEN HETZNER_TOKEN GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN; do
+  if [ -n "${!v:-}" ]; then
+    remote_env+=" $v=$(printf '%q' "${!v}")"
+  fi
+done
+env_prefix=""
+[ -n "$remote_env" ] && env_prefix="env$remote_env"
+
 # Allocate a TTY only when interactive — keeps `... | grep` and other
 # pipelines clean.
 ssh_opts=()
 if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); fi
 
-exec ssh "${ssh_opts[@]}" "$BASTION" "pct exec $LXC -- $REMOTE_BIN$remote_argv"
+exec ssh "${ssh_opts[@]}" "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN$remote_argv"
