@@ -238,10 +238,34 @@ import (
 client := safehttp.NewClient(
     safehttp.WithTimeout(10*time.Second),
     safehttp.WithUserAgent(ua.Build(ServiceID, Version)),
+    // v0.16.0+ : auto-emit traces, auto-consult backoff, auto-tag degraded[]
+    safehttp.WithTraceCollector(os.Getenv("CALL_TRACER_URL")),
+    safehttp.WithBackoffCoordinator(os.Getenv("BACKOFF_COORDINATOR_URL")),
+    safehttp.WithDegradedSink(&degraded),
 )
 // Errors: safehttp.ErrBlocked, safehttp.ErrInvalidScheme, safehttp.ErrMissingHost
 u, err := safehttp.NormalizeURL(rawInput)
 ```
+
+**safehttp is for OUTBOUND (public-internet) HTTP only.** Calls to sibling
+fleet services on the private docker mesh (`http://go-fleet-*:<port>` /
+`http://<slug>:<port>`) MUST use a plain `net/http.Client`, NOT safehttp
+— the SSRF guard correctly rejects private IPs and will return
+`safehttp.ErrBlocked` immediately. Use a short timeout (1-3s),
+fail-open semantics, and append `"<primitive>-down"` to a per-request
+`degraded []string` slice on env-unset / timeout / 5xx. Surface
+`degraded[]` in the response JSON envelope. Confirmed pattern across
+every Phase 3 consumer migration (2026-05-17, ADR-0024) — every agent
+that tried safehttp for intra-mesh calls hit ErrBlocked and pivoted to
+plain `http.Client`.
+
+**Selftest and policy rule engines also live in `go-common`** (v0.17.0+ /
+v0.18.0+):
+
+| Package    | Import path                                      | Purpose                                                |
+|------------|--------------------------------------------------|--------------------------------------------------------|
+| selftest   | `github.com/baditaflorin/go-common/selftest`     | Canonical `/selftest` suite consumed by go-fleet-selftest-aggregator |
+| policyeval | `github.com/baditaflorin/go-common/policyeval`   | Small in-Go rule DSL: `(fact, []Rule) -> decision + explanation` — replaces ~5 custom rule engines |
 
 ## Service conventions (required for fleet-runner compatibility)
 
@@ -437,7 +461,12 @@ check a static Pages site.
   `/opt/services/<repo>/`, `/opt/security/<repo>/`,
   `/home/ubuntu_vm/pentest/<repo>/`.
 - **Webgateway** runs nginx (the public TLS terminator) and the
-  keystore-aware `auth_request` flow.
+  keystore-aware `auth_request` flow. vhosts live as **regular files**
+  in `/etc/nginx/sites-enabled/<host>.{http,https}.conf` (NOT symlinks
+  to sites-available — `sites-available/` is unused). Edit
+  `sites-enabled/` directly for one-offs, or re-render via
+  `fleet-runner nginx-render --push`. Surprised an agent for ~10min
+  in the 2026-05-17 batch (ADR-0023 gap 5).
 - Build + push: `docker buildx build --platform linux/amd64 --provenance=false -t ghcr.io/baditaflorin/<id>:<ver> --push .`
 
 Operational topology and credentials are in **private**
