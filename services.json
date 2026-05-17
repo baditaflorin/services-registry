@@ -4859,6 +4859,32 @@
     "container_port": 18180
   },
   {
+    "id": "domain-email-deliverability-score",
+    "name": "Domain Email Deliverability Score",
+    "description": "Composite email-deliverability grader for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-email-deliverability-score.0exec.com",
+    "health_url": "https://domain-email-deliverability-score.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_email_deliverability_score",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18181,
+    "container_port": 18181
+  },
+  {
     "id": "geo-geocode",
     "name": "Geocoding (Node)",
     "description": "City/address \u2192 lat/lon via TomTom (?text=)",
