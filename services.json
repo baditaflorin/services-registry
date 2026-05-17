@@ -2449,6 +2449,41 @@
     "container_port": 8298
   },
   {
+    "id": "pentest-bounty-pilot",
+    "name": "Pentest Bounty Pilot",
+    "description": "Bounty-hunt orchestrator: POST /hunt drives waf-detect \u2192 cookie-pwn \u2192 js-bundle-scanner \u2192 wayback-urls \u2192 reflection-hunter against given targets, returns consolidated triage JSON.",
+    "category": "security",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container",
+      "language-go",
+      "runtime-compose",
+      "security"
+    ],
+    "url": "https://pentest-bounty-pilot.0crawl.com",
+    "health_url": "https://pentest-bounty-pilot.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-bounty-pilot",
+    "example_path": "/?api_key=default_token",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key",
+      "path_template": "/t/{token}",
+      "public_demo_token": "default_token"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "trl": 4,
+    "trl_evidence": "Wraps 6 fleet primitives. Per-host worker pool, WAF pre-filter, triage rollup. 5 integration tests with fixture upstreams.",
+    "trl_assessed_at": "2026-05-17",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-17",
+    "host_port": 18179,
+    "container_port": 18179
+  },
+  {
     "id": "pentest-cookie-pwn",
     "name": "Pentest Cookie Pwn",
     "description": "Parse Set-Cookie, classify cookies (session/Keycloak/F5/CSRF/tracker), flag missing flags, probe session-bearing endpoints, emit runnable PoC tar.gz.",
