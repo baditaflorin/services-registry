@@ -813,6 +813,25 @@ for the canonical pattern.
    or use the manual fallback recipe above and **say so** in your
    summary so the user can verify the catalog-meta step landed.
 
+7. **"`fleet-runner audit <check> --json` says unknown check `--json`."**
+   Go's `flag` package stops parsing at the first non-flag argument, so
+   `audit feature-without-bump --json` reads `--json` as a positional
+   check name. Put `--json` **before** the check name:
+   `fleet-runner audit --json feature-without-bump`. Same rule for
+   `--severity`, `--filter`. Subcommands with their own FlagSet
+   (`audit compose-drift`, `audit compose-image-drift`,
+   `audit vhost-drift`) accept flags in any order because they parse
+   their own args list.
+
+8. **`bump-version` against a stale workspace.** Bug fixed in 2026-05-17
+   afternoon: `fleet-runner bump-version` now `git fetch origin --tags`
+   first and refuses to bump if origin/main is ahead. The historical
+   failure shape was: bump created a tag pointing at the wrong SHA,
+   `git push` rejected with "would clobber existing tag", recovery
+   required manual `git tag -d <ver>`. If you hit that on an older
+   binary, the recovery is still: `git -C /root/workspace/<repo>
+   tag -d <ver>` then re-run bump-version.
+
 ## Fleet-wide changes — change `go-common`, not consumers
 
 The cardinal rule when you'd otherwise touch every service: **modify
