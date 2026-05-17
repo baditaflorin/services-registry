@@ -463,7 +463,12 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # nginx-render). Per-service patches via overrides.json
               # or via $rules; not derived from any other source.
               "static_fallback_key", "cert_domain", "rewrite_token_path",
-              "vhost"):
+              "vhost",
+              # `scope: internal-only` flips the nginx-render template
+              # to emit an allow/deny block restricting the https vhost
+              # to the internal mesh (ADR-0018 + ADR-0023 gap 4).
+              # Sole consumer today: go-fleet-sandbox-targets.
+              "scope"):
         if k in ov:
             entry[k] = ov[k]
 
