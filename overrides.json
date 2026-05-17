@@ -3452,5 +3452,13 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "21 secret-pattern classes (private RSA requires full PEM block to avoid jsencrypt FP). Static-asset filtering. First-vs-third-party sourcemap classifier. 7 unit tests with realistic SPA fixture.",
     "version": "0.1.0"
+  },
+  "services-dashboard": {
+    "host_port": 18173,
+    "container_port": 18173
+  },
+  "voice-search": {
+    "host_port": 18174,
+    "container_port": 18174
   }
 }

@@ -3506,7 +3506,9 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)"
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "host_port": 18173,
+    "container_port": 18173
   },
   {
     "id": "session-management",
@@ -4356,7 +4358,9 @@
       "path_template": "/t/{token}",
       "public_demo_token": "default_token"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)"
+    "auth_help": "api_key required (header X-API-Key or ?api_key=); legacy path token /t/{token} (demo: default_token)",
+    "host_port": 18174,
+    "container_port": 18174
   },
   {
     "id": "wayback-checker",
