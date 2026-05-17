@@ -4833,6 +4833,30 @@
     "container_port": 3909
   },
   {
+    "id": "domain-dnssec-validator",
+    "name": "Domain Dnssec Validator",
+    "description": "DNSSEC validator (DS/DNSKEY/AD-bit) for the domainscope enricher pipeline",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-dnssec-validator.0exec.com",
+    "health_url": "https://domain-dnssec-validator.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_dnssec_validator",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
+  },
+  {
     "id": "geo-geocode",
     "name": "Geocoding (Node)",
     "description": "City/address \u2192 lat/lon via TomTom (?text=)",
@@ -4921,30 +4945,6 @@
     "host_port": 18022,
     "container_port": 18022,
     "depends_on": []
-  },
-  {
-    "id": "go-domain-dnssec-validator",
-    "name": "Go Domain Dnssec Validator",
-    "description": "DNSSEC validator (DS/DNSKEY/AD-bit) for the domainscope enricher pipeline",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "domainscope",
-      "go-domain"
-    ],
-    "url": "https://go-domain-dnssec-validator.0exec.com",
-    "health_url": "https://go-domain-dnssec-validator.0exec.com/_gw_health",
-    "repo_url": "https://github.com/baditaflorin/go_domain_dnssec_validator",
-    "example_path": "/?target=example.com",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)"
   },
   {
     "id": "go-fleet-backoff-coordinator",
