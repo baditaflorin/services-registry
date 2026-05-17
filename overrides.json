@@ -55,6 +55,24 @@
         "cert_domain": "phone-extractor.0crawl.com"
       },
       "why": "45 0crawl vhosts share phone-extractor.0crawl.com's SAN cert. Tracked explicitly so fleet-runner cert reissue can target them one-by-one (target state: each gets its own cert)."
+    },
+    {
+      "name": "pentest-detectors-corpus-wiring",
+      "match": {
+        "ids": [
+          "pentest-cookie-pwn",
+          "pentest-js-bundle-scanner",
+          "pentest-reflection-hunter",
+          "go-pentest-wayback-urls"
+        ]
+      },
+      "patch": {
+        "env": {
+          "FINDINGS_STORE_URL": "https://go-pentest-findings-store.0exec.com",
+          "DEFAULT_TOKEN": "default_token"
+        }
+      },
+      "why": "Detector /selftest replays the labeled corpus from findings-store; without these env vars it is a no-op and fleet-runner's smoke gate cannot catch verifier regressions (ADR-pending, 2026-05-17)."
     }
   ],
   "a11y-quick": {
@@ -1774,7 +1792,8 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
-    "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump)."
+    "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump).",
+    "proxy_read_timeout": "300s"
   },
   "go-pentest-wordlists": {
     "container_port": 18100,
