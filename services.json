@@ -4860,6 +4860,60 @@
     "cert_domain": "domain-email-deliverability-score.0exec.com"
   },
   {
+    "id": "domain-ai-bot-policy-scanner",
+    "name": "Domain Ai Bot Policy Scanner",
+    "description": "AI-training opt-out posture scanner for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-ai-bot-policy-scanner.0exec.com",
+    "health_url": "https://domain-ai-bot-policy-scanner.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ai_bot_policy_scanner",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18195,
+    "container_port": 18195,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
+  },
+  {
+    "id": "domain-compliance-claim-scanner",
+    "name": "Domain Compliance Claim Scanner",
+    "description": "Compliance claim scanner for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-compliance-claim-scanner.0exec.com",
+    "health_url": "https://domain-compliance-claim-scanner.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_compliance_claim_scanner",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18198,
+    "container_port": 18198,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
+  },
+  {
     "id": "domain-ct-log-watcher",
     "name": "Domain Ct Log Watcher",
     "description": "Certificate Transparency log inventory (crt.sh) for the domainscope enricher pipeline",
@@ -4913,6 +4967,33 @@
     "container_port": 18180
   },
   {
+    "id": "domain-documentation-platform-detector",
+    "name": "Domain Documentation Platform Detector",
+    "description": "Docs platform detector for the domainscope enricher pipeline",
+    "category": "content",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-documentation-platform-detector.0exec.com",
+    "health_url": "https://domain-documentation-platform-detector.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_documentation_platform_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18197,
+    "container_port": 18197,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
+  },
+  {
     "id": "domain-email-deliverability-score",
     "name": "Domain Email Deliverability Score",
     "description": "Composite email-deliverability grader for the domainscope enricher pipeline",
@@ -4937,6 +5018,33 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18181,
     "container_port": 18181
+  },
+  {
+    "id": "domain-http3-quic-detector",
+    "name": "Domain Http3 Quic Detector",
+    "description": "HTTP/3 + QUIC handshake probe for the domainscope enricher pipeline",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-http3-quic-detector.0exec.com",
+    "health_url": "https://domain-http3-quic-detector.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_http3_quic_detector",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18190,
+    "container_port": 18190,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
   },
   {
     "id": "domain-mobile-app-resolver",
@@ -4964,6 +5072,60 @@
     "host_port": 18187,
     "container_port": 18187,
     "cert_domain": "domain-email-deliverability-score.0exec.com"
+  },
+  {
+    "id": "domain-newsletter-platform-detector",
+    "name": "Domain Newsletter Platform Detector",
+    "description": "Newsletter platform detector for the domainscope enricher pipeline",
+    "category": "web_analysis",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-newsletter-platform-detector.0exec.com",
+    "health_url": "https://domain-newsletter-platform-detector.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_newsletter_platform_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18193,
+    "container_port": 18193,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
+  },
+  {
+    "id": "domain-open-source-presence",
+    "name": "Domain Open Source Presence",
+    "description": "Linked source orgs + OSS score for the domainscope enricher pipeline",
+    "category": "recon",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-open-source-presence.0exec.com",
+    "health_url": "https://domain-open-source-presence.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_open_source_presence",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18196,
+    "container_port": 18196,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
   },
   {
     "id": "domain-passive-dns-history",
@@ -5020,6 +5182,33 @@
     "cert_domain": "domain-email-deliverability-score.0exec.com"
   },
   {
+    "id": "domain-saas-host-mapper",
+    "name": "Domain Saas Host Mapper",
+    "description": "SaaS hosting platform detector for the domainscope enricher pipeline",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-saas-host-mapper.0exec.com",
+    "health_url": "https://domain-saas-host-mapper.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_saas_host_mapper",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18191,
+    "container_port": 18191,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
+  },
+  {
     "id": "domain-structured-data-rollup",
     "name": "Domain Structured Data Rollup",
     "description": "JSON-LD/OG/Twitter/microdata rollup for the domainscope enricher pipeline",
@@ -5045,6 +5234,33 @@
     "host_port": 18188,
     "container_port": 18188,
     "cert_domain": "domain-email-deliverability-score.0exec.com"
+  },
+  {
+    "id": "domain-support-stack-detector",
+    "name": "Domain Support Stack Detector",
+    "description": "Help desk / live-chat platform detector for the domainscope enricher pipeline",
+    "category": "web_analysis",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-support-stack-detector.0exec.com",
+    "health_url": "https://domain-support-stack-detector.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_support_stack_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18192,
+    "container_port": 18192,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
   },
   {
     "id": "domain-tech-eol-flagger",
@@ -5099,6 +5315,59 @@
     "host_port": 18185,
     "container_port": 18185,
     "cert_domain": "domain-email-deliverability-score.0exec.com"
+  },
+  {
+    "id": "domain-trust-composite-grader",
+    "name": "Domain Trust Composite Grader",
+    "description": "Composite 0-100 trust score for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-trust-composite-grader.0exec.com",
+    "health_url": "https://domain-trust-composite-grader.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_trust_composite_grader",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18199,
+    "container_port": 18199
+  },
+  {
+    "id": "domain-well-known-catalog",
+    "name": "Domain Well Known Catalog",
+    "description": "/.well-known/ coverage scanner for the domainscope enricher pipeline",
+    "category": "security",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go-domain"
+    ],
+    "url": "https://domain-well-known-catalog.0exec.com",
+    "health_url": "https://domain-well-known-catalog.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_well_known_catalog",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "host_port": 18194,
+    "container_port": 18194,
+    "cert_domain": "domain-trust-composite-grader.0exec.com"
   },
   {
     "id": "geo-geocode",
