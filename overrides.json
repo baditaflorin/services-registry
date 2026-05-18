@@ -1,6 +1,21 @@
 {
   "$rules": [
     {
+      "name": "proxy-egress-by-category",
+      "match": {
+        "categories": [
+          "security",
+          "recon",
+          "web_analysis",
+          "search"
+        ]
+      },
+      "patch": {
+        "proxy_egress": true
+      },
+      "why": "Active scanners + scrapers must egress via Webshare (FLEET.md \u00a76). Replaces 116 per-service.yaml proxy_egress: true lines."
+    },
+    {
       "name": "wildcard-cert-0exec",
       "match": {
         "mesh": "0exec"
