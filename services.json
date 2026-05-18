@@ -6465,6 +6465,8 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "trl": 4,
     "trl_evidence": "v0.1 ships singleflight + 60s TTL + zstd-compressed Redis storage + SSRF-safe upstream via safehttp. Negative caching for 5xx (5s), no-cache for 4xx and truncated bodies. Redis-unavailable falls back to direct fetch. Lacks: conditional refresh (If-Modified-Since), per-caller metrics, response-shape contract test vs producers.",
+    "host_port": 18201,
+    "container_port": 18201,
     "cert_domain": "wildcard.0exec.com"
   },
   {
