@@ -3074,7 +3074,8 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8303,
     "container_port": 8303,
-    "cert_domain": "wildcard.0crawl.com"
+    "cert_domain": "wildcard.0crawl.com",
+    "proxy_egress": true
   },
   {
     "id": "reverse-dns",
