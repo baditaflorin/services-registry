@@ -224,6 +224,20 @@ in `main.go`. The binary fail-fast-exits if `FLEET_API_KEY` is
 empty, `default_token`, or has an unknown prefix — surfaces what
 would otherwise be a silent run-time 401.
 
+### Image tagging — every build pushes `:<short-sha>` + `:<version>` + `:latest`
+
+`fleet-runner deploy` pins the dockerhost compose to
+`ghcr.io/baditaflorin/<repo>:<short-sha>` (the git short sha of the
+commit the binary was built from). `:<version>` and `:latest` still
+get pushed for human-readable discoverability but production traffic
+only touches `:<sha>`. Drift detection reduces to "does the pin
+match origin/main HEAD" — see
+**[ADR-0028 — Image tagging + version-bump policy](docs/adr/0028-image-tagging-and-version-bump-policy.md)**.
+
+Legacy `:latest` / `:<semver>` pins on the dockerhost are auto-migrated
+to `:<sha>` on the next `fleet-runner deploy <slug>` invocation, so
+existing services flip over organically as they get touched.
+
 ## Auth — `mesh-0crawl` legacy `/t/<token>/` shape (DEPRECATED)
 
 Sunset on 2026-05-14. The gateway returns **410 Gone** with

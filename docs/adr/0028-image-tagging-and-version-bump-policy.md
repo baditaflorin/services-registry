@@ -1,6 +1,6 @@
 # ADR-0028 — Image tagging + version-bump policy
 
-* **Status**: Proposed
+* **Status**: Accepted (implemented 2026-05-18, go_fleet_runner@8a029a7)
 * **Date**: 2026-05-18
 * **Authors**: fleet-agent, baditaflorin
 * **Tags**: fleet-runner, deploy, ci, gitops
@@ -37,6 +37,61 @@ None solve the underlying ambiguity: the deployed artifact's identity
 is its content (git sha + build inputs), but the registry references
 it by a tag that's allowed to be reused. Tag-reuse is a feature of OCI
 registries that GitOps best practice tells us not to lean on.
+
+## Implementation
+
+Landed in `go_fleet_runner@8a029a7` on 2026-05-18. Three files touched
+(~145 net additions):
+
+* `deploy_sha_pin.go` (new) — helpers: `worktreeShortSha`,
+  `repoOriginShortSha`, `currentComposePinTag`, `isShaPin`.
+* `deploy_helpers.go` — `rebuildAndRoll` and `bootstrapFirstTime` both
+  compute the worktree short sha after `git worktree add origin/main`,
+  push it as a third buildx tag, and rewrite the dockerhost compose
+  pin to `:<short-sha>` instead of `:latest`. The post-pull digest
+  probe inspects `:<short-sha>` (the canonical pin) instead of
+  `:latest`.
+* `deploy.go` — drift detection pre-empts the version-compare with a
+  sha-compare. Legacy pins (`:latest`, `:<semver>`, `:rollback`) fail
+  `isShaPin()` and force a rebuild that migrates to ADR-0028 layout.
+
+The phased rollout described under "Migration path" turned out to be
+unnecessary in practice: the same code path that handles fresh-sha
+drift also handles legacy-pin migration (it just prints a slightly
+different log line). New services land on the sha pin from
+`bootstrapFirstTime`; existing services migrate the first time
+`fleet-runner deploy <slug>` runs against them. No fleet-wide backfill
+or `--pin-mode={latest|sha}` flag was needed.
+
+Verified end-to-end on `go-fleet-dns-sync`:
+
+```
+$ fleet-runner deploy go-fleet-dns-sync --dry-run
+  ! container legacy pin "latest" (not a sha) — ADR-0028 migration → rebuild + roll
+  + container would rebuild go-fleet-dns-sync @ b6c617f + re-pin compose to :b6c617f (dry-run)
+
+$ fleet-runner deploy go-fleet-dns-sync
+    > docker buildx build + push (tags: b6c617f, 0.3.1, latest)
+    > re-pinned compose image to ghcr.io/baditaflorin/go-fleet-dns-sync:b6c617f
+  + container rolled forward
+  ✓ deploy complete
+
+$ fleet-runner deploy go-fleet-dns-sync                    # idempotent re-run
+  = container running go-fleet-dns-sync-app-1 @ 0.3.1 sha=b6c617f (no drift)
+  ✓ all checkpoints already correct (idempotent re-run)
+```
+
+Backfill strategy: organic. Every existing service migrates on its
+next `fleet-runner deploy <slug>` invocation. Operators wanting to
+flip the entire fleet at once can run
+
+```
+for slug in $(fleet-runner select); do fleet-runner deploy "$slug"; done
+```
+
+which rebuilds + re-pins every service (~3 minutes per repo at
+present cluster sizing). No new sweep verb was added — `select` plus
+`deploy` covers it.
 
 ## Decision
 
