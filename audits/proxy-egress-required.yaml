@@ -15,6 +15,6 @@ severity: error
 filter:
   category: security|recon|web_analysis|search
   proxy-egress: "false"
-type: file-missing
+type: file-match
 file: service.yaml
 pattern: "^proxy_egress:\\s*true\\s*$"
