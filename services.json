@@ -5956,7 +5956,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "host_port": 18141,
     "container_port": 18141,
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "proxy_egress": true
   },
   {
     "id": "go-fleet-engagement-timeline",
@@ -8133,7 +8134,8 @@
     "trl_assessor": "claude-session-2026-05-16",
     "host_port": 18147,
     "container_port": 18147,
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "proxy_egress": true
   },
   {
     "id": "go-pentest-trufflehog",
