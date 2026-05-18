@@ -5810,6 +5810,30 @@
     "cert_domain": "wildcard.0exec.com"
   },
   {
+    "id": "go-fleet-fetch-cache",
+    "name": "Fleet Fetch Cache",
+    "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://go-fleet-fetch-cache.0exec.com",
+    "health_url": "https://go-fleet-fetch-cache.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go_fleet_fetch_cache",
+    "example_path": "/fetch?url=https://example.com/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "trl": 4,
+    "trl_evidence": "v0.1 ships singleflight + 60s TTL + zstd-compressed Redis storage + SSRF-safe upstream via safehttp. Negative caching for 5xx (5s), no-cache for 4xx and truncated bodies. Redis-unavailable falls back to direct fetch. Lacks: conditional refresh (If-Modified-Since), per-caller metrics, response-shape contract test vs producers.",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
     "id": "go-fleet-fingerprint-cache",
     "name": "Go Fleet Fingerprint Cache",
     "description": "WAF/soft-404/CDN-noise classifier",
