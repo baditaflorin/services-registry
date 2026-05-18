@@ -1,60 +1,24 @@
 {
   "$rules": [
     {
+      "name": "wildcard-cert-0exec",
       "match": {
-        "ids": [
-          "a11y-quick",
-          "accessibility-score",
-          "ad-density",
-          "address-extractor",
-          "api-first",
-          "biz-classifier",
-          "broken-links",
-          "cas",
-          "cognitive-load",
-          "company-size",
-          "currency-detector",
-          "customer-logos",
-          "data-inventory",
-          "dependency-counter",
-          "dtss",
-          "email-extractor",
-          "emotional-tone",
-          "founding-year",
-          "funding-detector",
-          "gdpr-compliance",
-          "keyword-density",
-          "legal-entity",
-          "mobile-friendly",
-          "office-locations",
-          "outlink-graph",
-          "page-load-metrics",
-          "press-mentions",
-          "price-range",
-          "remote-detector",
-          "revenue-model",
-          "robots-parser",
-          "scc",
-          "seasonal-detector",
-          "security-headers",
-          "seo-basics",
-          "shipping-regions",
-          "sitemap-finder",
-          "social-graph",
-          "svi",
-          "team-size",
-          "technology-stack",
-          "trust-decay",
-          "ugc-detector",
-          "update-frequency",
-          "wps"
-        ]
+        "mesh": "0exec"
       },
-      "name": "phone-extractor-san-cert",
       "patch": {
-        "cert_domain": "phone-extractor.0crawl.com"
+        "cert_domain": "wildcard.0exec.com"
       },
-      "why": "45 0crawl vhosts share phone-extractor.0crawl.com's SAN cert. Tracked explicitly so fleet-runner cert reissue can target them one-by-one (target state: each gets its own cert)."
+      "why": "All *.0exec.com vhosts share /etc/letsencrypt/live/wildcard.0exec.com/. Issued via Hetzner DNS-01; renewed by certbot timer."
+    },
+    {
+      "name": "wildcard-cert-0crawl",
+      "match": {
+        "mesh": "0crawl"
+      },
+      "patch": {
+        "cert_domain": "wildcard.0crawl.com"
+      },
+      "why": "All *.0crawl.com vhosts share /etc/letsencrypt/live/wildcard.0crawl.com/. Issued via Hetzner DNS-01 on 2026-05-18; renewed by certbot timer."
     },
     {
       "name": "pentest-detectors-corpus-wiring",
@@ -1200,7 +1164,6 @@
     "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254)."
   },
   "go-oauth-mapper": {
-    "cert_domain": "go-oauth-mapper.0crawl.com",
     "container_port": 8330,
     "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
     "deploy_quirk_resolved_at": "2026-05-16",
@@ -1832,7 +1795,6 @@
     "trl_evidence": "Go search wrapper, API integration"
   },
   "go-session-fixation": {
-    "cert_domain": "go-session-fixation.0exec.com",
     "container_port": 8316,
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
     "example_path": "/go_session_fixation?target=https://github.com",
@@ -3501,88 +3463,71 @@
   },
   "domain-passive-dns-history": {
     "host_port": 18183,
-    "container_port": 18183,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18183
   },
   "domain-ct-log-watcher": {
     "host_port": 18184,
-    "container_port": 18184,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18184
   },
   "domain-third-party-fetch-map": {
     "host_port": 18185,
-    "container_port": 18185,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18185
   },
   "domain-tech-eol-flagger": {
     "host_port": 18186,
-    "container_port": 18186,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18186
   },
   "domain-mobile-app-resolver": {
     "host_port": 18187,
-    "container_port": 18187,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18187
   },
   "domain-structured-data-rollup": {
     "host_port": 18188,
-    "container_port": 18188,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18188
   },
   "domain-abuse-contact-rollup": {
     "host_port": 18189,
-    "container_port": 18189,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18189
   },
   "domain-rbl-reputation": {
     "host_port": 18182,
-    "container_port": 18182,
-    "cert_domain": "domain-email-deliverability-score.0exec.com"
+    "container_port": 18182
   },
   "domain-http3-quic-detector": {
     "host_port": 18190,
-    "container_port": 18190,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18190
   },
   "domain-saas-host-mapper": {
     "host_port": 18191,
-    "container_port": 18191,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18191
   },
   "domain-support-stack-detector": {
     "host_port": 18192,
-    "container_port": 18192,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18192
   },
   "domain-newsletter-platform-detector": {
     "host_port": 18193,
-    "container_port": 18193,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18193
   },
   "domain-well-known-catalog": {
     "host_port": 18194,
-    "container_port": 18194,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18194
   },
   "domain-ai-bot-policy-scanner": {
     "host_port": 18195,
-    "container_port": 18195,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18195
   },
   "domain-open-source-presence": {
     "host_port": 18196,
-    "container_port": 18196,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18196
   },
   "domain-documentation-platform-detector": {
     "host_port": 18197,
-    "container_port": 18197,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18197
   },
   "domain-compliance-claim-scanner": {
     "host_port": 18198,
-    "container_port": 18198,
-    "cert_domain": "domain-trust-composite-grader.0exec.com"
+    "container_port": 18198
   },
   "domain-trust-composite-grader": {
     "host_port": 18199,
