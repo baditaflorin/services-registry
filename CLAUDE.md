@@ -205,6 +205,25 @@ The admin token (`X-Admin-Token` on `/issue`, `/revoke`, `/list`,
 read by clients from `APIKEY_SERVICE_ADMIN_TOKEN`. Rotation playbook:
 private `fleet-state/OPS.md`.
 
+### Outbound auth — service-to-service calls
+
+The section above covers INBOUND keystore auth (how a service
+authenticates its callers). For OUTBOUND auth — how a service
+identifies itself when calling another fleet service — see
+**[ADR-0027 — Fleet authentication canonical flow](docs/adr/0027-fleet-auth-canonical-flow.md)**.
+
+In one line: the canonical bootstrap is
+`fleet-runner key provision <slug>` (atomic: issue keystore key +
+write `/opt/services/<slug>/.env` on dockerhost + `docker compose up -d`).
+Audit at rest with `fleet-runner audit fleet-auth-scope` —
+flags services on `default_token` (will silently 401 against vault).
+
+Code-side guard: every service that does outbound calls to a fleet
+sibling MUST use `apikey.MustResolveCritical(slug, "FLEET_API_KEY")`
+in `main.go`. The binary fail-fast-exits if `FLEET_API_KEY` is
+empty, `default_token`, or has an unknown prefix — surfaces what
+would otherwise be a silent run-time 401.
+
 ## Auth — `mesh-0crawl` legacy `/t/<token>/` shape (DEPRECATED)
 
 Sunset on 2026-05-14. The gateway returns **410 Gone** with
