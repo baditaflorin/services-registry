@@ -54,6 +54,58 @@
       "why": "Detector /selftest replays the labeled corpus from findings-store; without these env vars it is a no-op and fleet-runner's smoke gate cannot catch verifier regressions (ADR-pending, 2026-05-17)."
     }
   ],
+  "$expand": [
+    {
+      "name": "go-fleet-metrics-hub-children",
+      "parent_repo": "go-fleet-metrics-hub",
+      "replace_parent": true,
+      "why": "go-fleet-metrics-hub is a compose project shipping three independently-addressable services (discovery http_sd, prometheus, grafana). Each gets its own slug + host_port + *.0exec.com domain today; if the children later split into separate repos they keep the same slugs and only repo_url changes. Triggered by a real port-allocation collision on 2026-05-18 (fleet-discovery had claimed 18201 on the dockerhost but was not in the registry, so allocate-port re-handed it out).",
+      "children": [
+        {
+          "id": "fleet-discovery",
+          "name": "Fleet Discovery",
+          "description": "Prometheus http_sd endpoint emitting one target per fleet container service. Refreshes services.json every 60s and probes /metrics via host.docker.internal.",
+          "category": "observability",
+          "host_port": 18201,
+          "container_port": 8080,
+          "example_path": "/sd",
+          "trl": 4,
+          "trl_evidence": "0.1.0 first deploy 2026-05-18; refresh + probe loop working, no automated tests yet.",
+          "trl_ceiling": 7,
+          "trl_assessed_at": "2026-05-19",
+          "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub"
+        },
+        {
+          "id": "fleet-grafana",
+          "name": "Fleet Grafana",
+          "description": "Grafana dashboards for the fleet metrics hub. Anonymous viewer-only; admin/signup disabled; keystore-gated at the gateway.",
+          "category": "observability",
+          "host_port": 18202,
+          "container_port": 3000,
+          "example_path": "/",
+          "trl": 4,
+          "trl_evidence": "Vendored grafana/grafana:11.3.0; first deploy 2026-05-18.",
+          "trl_ceiling": 8,
+          "trl_assessed_at": "2026-05-19",
+          "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub"
+        },
+        {
+          "id": "fleet-prometheus",
+          "name": "Fleet Prometheus",
+          "description": "Prometheus instance scraping each fleet container host_port/metrics via the fleet-discovery http_sd endpoint. Runs in host network mode, --web.listen-address=:18203.",
+          "category": "observability",
+          "host_port": 18203,
+          "container_port": 18203,
+          "example_path": "/-/healthy",
+          "trl": 4,
+          "trl_evidence": "Vendored prom/prometheus:v3.6.0; first deploy 2026-05-18.",
+          "trl_ceiling": 8,
+          "trl_assessed_at": "2026-05-19",
+          "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub"
+        }
+      ]
+    }
+  ],
   "a11y-quick": {
     "container_port": 8272,
     "description": "Microservice for A11y Quick",
