@@ -293,6 +293,43 @@ probably belongs in `go-common` (or `0crawl-platform`'s nginx templates).
 Changing it there is one PR + one dep bump; doing it per-repo is 130
 commits + 130 review cycles + 130 chances for drift.
 
+### Deploy verbs (design note, not yet implemented)
+
+`fleet-runner deploy <repo>` is intentionally per-service: a single
+fleet-wide `deploy --all` verb is too coarse for the blast radius
+involved. The replacement, when one is needed, is **three smaller
+verbs that each name their own danger** rather than one big one:
+
+| Verb              | Shape                                                         | Use when                                                                 |
+|-------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
+| `canary <repo>`   | one service + bake + structured verdict (health, latency Δ)   | high-risk change first touch — `safehttp`, `middleware`, auth, gateway   |
+| `roll <filter>`   | wave-of-N + bake + halt-on-fail + resumable plan              | "deploy everything that drifts" — the normal post-bump fleet rollout     |
+| `converge-deploy` | declarative; only deploys repos whose live state ≠ registry   | catch-up / idempotent re-runs ("did I actually deploy everything?")      |
+
+All three should:
+- Require `--filter` (even `--filter all=true`); no implicit "all".
+- Default-print a plan, require `--apply` to roll.
+- Per-wave audit entries to `fleet-state` for postmortem timelines.
+- A 5-second "about to deploy N services across M meshes, ^C to abort" preamble.
+
+Background to this design: the **2026-05-18 go-common v0.25.x egress
+observability rollout** validated the canary→batch flow by hand
+(deploy go_url_shortener → verify safehttp_egress_* on real traffic
+→ deploy 4 more → observe). Two real go-common bugs surfaced during
+the canary that would have hit every service: package-level var
+`safehttp.NewClient()` sites missed the late-installed default
+observer (fixed in v0.25.1), and the 6 services with hand-rolled
+`/metrics` would have panicked on next deploy (also fixed in v0.25.1
+via Start-time wrap). Without a canary verb, those bugs would have
+landed simultaneously across the fleet. The codified verbs above
+make that pattern repeatable instead of ad-hoc.
+
+**Status:** design only as of 2026-05-18. When the next real
+fleet-wide rollout needs the bake/halt/resume machinery, implement
+`canary` first (smallest scope, immediate value), then `roll`. Do
+**not** implement a generic `deploy --all` — the lack of one is a
+feature, not an omission.
+
 ## IaC pipeline
 
 Two parallel render targets — gateway nginx vhosts AND dockerhost docker-compose files — both driven from this registry. Neither lives as hand-edited state on the target host.
