@@ -601,6 +601,15 @@ After install, the canonical examples shorten to e.g.
 argv over SSH to LXC 108 — so output, exit codes, and prompts behave
 exactly as on the LXC. Source: [`services-registry/bin/fleet-runner-shim`](bin/fleet-runner-shim).
 
+Some verbs need env vars sourced (notably the `key …` and
+`audit fleet-auth-scope` family — they need `APIKEY_SERVICE_URL`
+pointing at the dockerhost host_port + `APIKEY_SERVICE_ADMIN_TOKEN`
+from `fleet-state/OPS.md`). Drop
+[`bin/fleet-runner.env.example`](bin/fleet-runner.env.example) into
+`~/.fleet-runner.env`, fill in the admin tokens, then
+`source ~/.fleet-runner.env` from your shell rc. Without it, every
+admin op errors with `keystore unavailable: dial localhost:18021`.
+
 ### Recipe — Allocating a port for a new service (or resolving a conflict)
 
 **Canonical (preferred):**
