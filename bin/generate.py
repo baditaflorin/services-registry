@@ -464,6 +464,12 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # or via $rules; not derived from any other source.
               "static_fallback_key", "cert_domain", "rewrite_token_path",
               "vhost",
+              # Additional server_name aliases (rendered into nginx vhost
+              # alongside the canonical Domain). E.g. pixel.0exec.com as
+              # an alias for go-fleet-pixel.0exec.com. Wildcard cert
+              # `*.<root>` already covers any subdomain, so no per-alias
+              # cert is needed; DNS A records must be created separately.
+              "extra_server_names",
               # `scope: internal-only` flips the nginx-render template
               # to emit an allow/deny block restricting the https vhost
               # to the internal mesh (ADR-0018 + ADR-0023 gap 4).
