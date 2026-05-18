@@ -217,10 +217,16 @@ images are renamed.
 **Negative**
 
 * Image registry storage grows faster — one extra tag per build. GHCR
-  pricing is per-storage so non-trivial over time. Mitigation: GHCR's
-  per-package retention rules can prune `sha-` tagged images older than
-  N days while keeping `:<version>` + `:latest`. Set retention via
-  the GitHub API at the org level once.
+  pricing is per-storage so non-trivial over time. Mitigation:
+  [`bin/ghcr-prune-sha-tags.sh`](../../bin/ghcr-prune-sha-tags.sh)
+  iterates org packages, lists sha-tagged versions, and DELETEs any
+  beyond `KEEP_LAST_N` newest **AND** older than `MIN_AGE_DAYS`.
+  Defaults to dry-run; pass `--apply` to actually delete. Protects
+  `:<semver>` + `:latest` + `:rollback` (the discoverability tags
+  ADR-0028 keeps alongside the sha pin). GHCR's org-level retention
+  policies aren't API-settable, so per-version DELETE via the GitHub
+  API is the only path. Run it from cron or as a periodic
+  `fleet-runner` schedule once the policy is dialed in.
 * Compose files on the dockerhost mutate on every deploy. They
   shouldn't be in version control (they aren't currently — the
   dockerhost-side `/opt/services/<slug>/docker-compose.yml` is a
