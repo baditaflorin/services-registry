@@ -56,7 +56,7 @@ done
 # Add to this list if you discover another env var the remote binary
 # expects but doesn't have set inside LXC 108.
 remote_env=""
-for v in HCLOUD_TOKEN HETZNER_TOKEN GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN FLEET_SECRETS_ADMIN_TOKEN; do
+for v in HCLOUD_TOKEN HETZNER_TOKEN GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN FLEET_SECRETS_ADMIN_TOKEN APIKEY_SERVICE_URL FLEET_BASTION FLEET_DOCKERHOST; do
   if [ -n "${!v:-}" ]; then
     remote_env+=" $v=$(printf '%q' "${!v}")"
   fi
