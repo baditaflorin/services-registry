@@ -5120,7 +5120,8 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18184,
     "container_port": 18184,
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "proxy_egress": true
   },
   {
     "id": "domain-dnssec-validator",
@@ -5336,7 +5337,8 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "host_port": 18183,
     "container_port": 18183,
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "proxy_egress": true
   },
   {
     "id": "domain-rbl-reputation",
