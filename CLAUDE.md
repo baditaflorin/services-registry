@@ -348,6 +348,34 @@ Match clauses: any of `ids` (explicit list), `mesh`, `kind`, `language`,
 declaration order; per-slug entries win. Use rules to encode "47 services
 share this cert_domain" as one line instead of 47.
 
+**Multi-service repos** (via reserved `$expand` key) — one GitHub repo
+emits N catalog entries when a compose project ships multiple
+independently-addressable services (different host_ports, different
+`*.<mesh>.com` hostnames) inside one repo. Each child gets its own
+slug + url + host_port; `$rules` and per-slug overrides re-apply on
+top. The parent's topic-derived entry is dropped iff
+`replace_parent: true`. When the children later split into their own
+repos with their own `mesh-*` topics, drop the `$expand` entry and
+the per-repo topic-derived entries take over with the same slugs.
+
+```json
+{
+  "$expand": [
+    {
+      "name": "go-fleet-metrics-hub-children",
+      "parent_repo": "go-fleet-metrics-hub",
+      "replace_parent": true,
+      "children": [
+        { "id": "fleet-discovery",  "host_port": 18201, "container_port": 8080,  "category": "observability" },
+        { "id": "fleet-grafana",    "host_port": 18202, "container_port": 3000,  "category": "observability" },
+        { "id": "fleet-prometheus", "host_port": 18203, "container_port": 18203, "category": "observability" }
+      ],
+      "why": "one compose project, three host_ports — register all so allocate-port sees them"
+    }
+  ]
+}
+```
+
 **Audit surface** — never grep overrides by hand:
 
 ```

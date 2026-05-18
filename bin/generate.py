@@ -530,12 +530,15 @@ def load_overrides() -> dict:
 
 
 def split_overrides(raw: dict) -> tuple[dict, list[dict]]:
-    """Separate per-slug patches from `$rules` metadata."""
+    """Separate per-slug patches from `$rules` / `$expand` metadata."""
     rules = raw.get("$rules") or []
     if not isinstance(rules, list):
         sys.exit(f"ERROR: $rules in {OVERRIDES_JSON} must be an array of rule objects")
+    expansions = raw.get("$expand") or []
+    if not isinstance(expansions, list):
+        sys.exit(f"ERROR: $expand in {OVERRIDES_JSON} must be an array of expansion specs")
     by_slug = {k: v for k, v in raw.items() if not k.startswith("$")}
-    return by_slug, rules
+    return by_slug, rules, expansions
 
 
 def rule_matches(rule: dict, entry: dict) -> bool:
@@ -573,8 +576,44 @@ def resolved_overrides_for(entry: dict, by_slug: dict, rules: list[dict]) -> tup
     return out, applied
 
 
+def expand_entry(parent: dict, spec: dict, by_slug: dict, rules: list[dict]) -> list[dict]:
+    """Generate N child entries from one parent + an `$expand` spec.
+
+    A child inherits the parent's derived axes (mesh, kind, language,
+    runtime, repo_url, auth, …) and overlays per-child patches. Each
+    child has its own slug → its own url + health_url + host_port, so
+    `allocate-port` and `audit registry-host-port-set` see them as
+    distinct services. Per-slug overrides and `$rules` are re-applied
+    on top so the normal patch flow (wildcard cert, proxy_egress, …)
+    still works.
+    """
+    children = spec.get("children") or []
+    out: list[dict] = []
+    for patch in children:
+        if "id" not in patch:
+            sys.exit(f"ERROR: $expand spec '{spec.get('name','?')}' child is missing 'id'")
+        child = dict(parent)
+        child.update(patch)
+        slug = child["id"]
+        mesh = child["mesh"]
+        synth_repo = {
+            "name":        parent.get("repo_url", "").rsplit("/", 1)[-1],
+            "url":         parent.get("repo_url", ""),
+            "homepageUrl": parent.get("url"),
+        }
+        base = service_url(slug, mesh, synth_repo)
+        child["url"]        = base
+        child["health_url"] = health_url(base, mesh)
+        child["name"]       = patch.get("name") or humanize(slug)
+        ov, _ = resolved_overrides_for(child, by_slug, rules)
+        for k, v in ov.items():
+            child[k] = v
+        out.append(child)
+    return out
+
+
 def build(overrides: dict) -> list[dict]:
-    by_slug, rules = split_overrides(overrides)
+    by_slug, rules, expansions = split_overrides(overrides)
     seen: dict[str, dict] = {}
     for mesh in MESHES:
         for repo in gh_repos_with_topic(f"mesh-{mesh}"):
@@ -585,6 +624,38 @@ def build(overrides: dict) -> list[dict]:
                 print(f"WARN: duplicate slug {entry['id']} (kept first)", file=sys.stderr)
                 continue
             seen[entry["id"]] = entry
+
+    # $expand — one GitHub repo emits N catalog entries. Use this when a
+    # compose project ships multiple independently-addressable services
+    # (different host_ports, different *.<mesh>.com hostnames) inside one
+    # repo. Classic case: go-fleet-metrics-hub → fleet-discovery +
+    # fleet-grafana + fleet-prometheus. When the children later split
+    # into their own repos with their own mesh-* topic, drop the
+    # expansion entry and the per-repo topic-derived entries take over.
+    for spec in expansions:
+        parent_repo = spec.get("parent_repo")
+        if not parent_repo:
+            sys.exit(f"ERROR: $expand spec missing parent_repo: {spec}")
+        parent = None
+        for e in seen.values():
+            if e.get("repo_url", "").rsplit("/", 1)[-1] == parent_repo:
+                parent = e
+                break
+        if parent is None:
+            print(f"WARN: $expand spec '{spec.get('name','?')}' parent_repo "
+                  f"'{parent_repo}' not found — add the mesh-* topic to that "
+                  f"repo so the generator picks it up, then rerun.",
+                  file=sys.stderr)
+            continue
+        for child in expand_entry(parent, spec, by_slug, rules):
+            if child["id"] in seen:
+                print(f"WARN: $expand child slug {child['id']} duplicates an "
+                      f"existing entry (kept original)", file=sys.stderr)
+                continue
+            seen[child["id"]] = child
+        if spec.get("replace_parent"):
+            seen.pop(parent["id"], None)
+
     return sorted(seen.values(), key=lambda e: (e["mesh"], e["id"]))
 
 
