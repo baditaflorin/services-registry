@@ -630,13 +630,22 @@ argv over SSH to LXC 108 — so output, exit codes, and prompts behave
 exactly as on the LXC. Source: [`services-registry/bin/fleet-runner-shim`](bin/fleet-runner-shim).
 
 Some verbs need env vars sourced (notably the `key …` and
-`audit fleet-auth-scope` family — they need `APIKEY_SERVICE_URL`
-pointing at the dockerhost host_port + `APIKEY_SERVICE_ADMIN_TOKEN`
-from `fleet-state/OPS.md`). Drop
+`audit fleet-auth-scope` family need `APIKEY_SERVICE_URL` +
+`APIKEY_SERVICE_ADMIN_TOKEN`; `deploy` needs `HETZNER_TOKEN` for the
+DNS step — all from `fleet-state/OPS.md`). Drop
 [`bin/fleet-runner.env.example`](bin/fleet-runner.env.example) into
 `~/.fleet-runner.env`, fill in the admin tokens, then
 `source ~/.fleet-runner.env` from your shell rc. Without it, every
-admin op errors with `keystore unavailable: dial localhost:18021`.
+admin op errors with `keystore unavailable: dial localhost:18021`
+and every `deploy` skips the DNS step with `$HETZNER_TOKEN not set`.
+
+**Env-file MUST use `export KEY=VAL` lines, not bare `KEY=VAL`** —
+otherwise `source` populates the current shell but the vars don't
+propagate to child processes (the `fleet-runner` binary). The
+template in `bin/fleet-runner.env.example` is already in the right
+shape; copy it verbatim. The LXC 108 copy at `/root/.fleet-runner.env`
+was migrated to `export` form on 2026-05-19. If you maintain another
+copy elsewhere, mirror the same shape.
 
 ### Recipe — Allocating a port for a new service (or resolving a conflict)
 
