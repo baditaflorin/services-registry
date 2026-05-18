@@ -3547,5 +3547,22 @@
   "domain-trust-composite-grader": {
     "host_port": 18199,
     "container_port": 18199
+  },
+  "go-fleet-pixel": {
+    "category": "fleet_infra",
+    "host_port": 18200,
+    "container_port": 18200,
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "public endpoint (no keystore) \u2014 beacon-only",
+    "url": "https://pixel.0exec.com",
+    "health_url": "https://pixel.0exec.com/health",
+    "example_path": "/pix.gif?app=mesh-test&event=pv",
+    "trl": 3,
+    "trl_ceiling": 6,
+    "trl_assessed_at": "2026-05-18",
+    "trl_evidence": "NEW fleet primitive (2026-05-18). 1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet. /selftest covers GIF roundtrip + DNT suppression + IP truncation. Optional Plausible self-host upstream.",
+    "trl_assessor": "claude-session-2026-05-18-pixel"
   }
 }

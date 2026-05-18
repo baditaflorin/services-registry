@@ -5936,6 +5936,35 @@
     "cert_domain": "wildcard.0exec.com"
   },
   {
+    "id": "go-fleet-pixel",
+    "name": "Go Fleet Pixel",
+    "description": "1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://go-fleet-pixel.0exec.com",
+    "health_url": "https://go-fleet-pixel.0exec.com/_gw_health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-pixel",
+    "example_path": "/pix.gif?app=mesh-test&event=pv",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "trl": 3,
+    "trl_evidence": "NEW fleet primitive (2026-05-18). 1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet. /selftest covers GIF roundtrip + DNT suppression + IP truncation. Optional Plausible self-host upstream.",
+    "trl_ceiling": 6,
+    "trl_assessed_at": "2026-05-18",
+    "trl_assessor": "claude-session-2026-05-18-pixel",
+    "host_port": 18200,
+    "container_port": 18200,
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
     "id": "go-fleet-poc-curl",
     "name": "Go Fleet Poc Curl",
     "description": "redacted PoC curl emitter (bash -n parse-gated)",
