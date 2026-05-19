@@ -5151,6 +5151,31 @@
     "url": "https://fleet-payload-corpus.0exec.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet \u2014 L2 tier of fleetPersona in mesh-common",
+    "example_path": "/v1/health",
+    "health_url": "https://fleet-persona.0exec.com/health",
+    "id": "fleet-persona",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Persona",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-persona",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-persona",
+    "trl_ceiling": 7,
+    "url": "https://fleet-persona.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-pixel.0exec.com"
     ],

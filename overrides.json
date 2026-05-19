@@ -1084,6 +1084,28 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). versioned attack-payload corpus (125 payloads, 12 classes). /selftest + INTEGRATIONS.md shipped. ADR-0006. See services-registry/docs/adr/0006-fleet-payload-corpus.md.",
     "version": "0.1.0"
   },
+  "fleet-persona": {
+    "category": "fleet_infra",
+    "container_port": 18204,
+    "host_port": 18204,
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth on read (anonId is the read-secret); writes require client-held argon2id-hashed writeToken in body (not keystore-gated)",
+    "url": "https://persona.0exec.com",
+    "health_url": "https://persona.0exec.com/v1/health",
+    "example_path": "/v1/health",
+    "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet — L2 tier of fleetPersona in mesh-common",
+    "extra_server_names": [
+      "persona.0exec.com"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-persona",
+    "trl_ceiling": 7,
+    "trl_evidence": "NEW fleet primitive (2026-05-19). Pairs with mesh-common's fleetPersona (39 vitest tests). Server: 21 Go unit + handler tests covering validation, argon2id verify, fixed-window rate-limit, CORS preflight, read-only kill switch, oversized body. testing/smoke.sh runs the full lifecycle end-to-end against a running container. Strict-ASCII allowlist mirrors the client. Pure-Go SQLite (modernc.org/sqlite), CGO_ENABLED=0.",
+    "version": "0.1.0"
+  },
   "fleet-poc-curl": {
     "container_port": 18158,
     "description": "redacted PoC curl emitter (bash -n parse-gated)",

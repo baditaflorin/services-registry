@@ -5995,6 +5995,38 @@
     "container_port": 18156
   },
   {
+    "id": "fleet-persona",
+    "name": "Fleet Persona",
+    "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet \u2014 L2 tier of fleetPersona in mesh-common",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-persona.0exec.com",
+    "health_url": "https://fleet-persona.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-persona",
+    "example_path": "/v1/health",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "NEW fleet primitive (2026-05-19). Pairs with mesh-common's fleetPersona (39 vitest tests). Server: 21 Go unit + handler tests covering validation, argon2id verify, fixed-window rate-limit, CORS preflight, read-only kill switch, oversized body. testing/smoke.sh runs the full lifecycle end-to-end against a running container. Strict-ASCII allowlist mirrors the client. Pure-Go SQLite (modernc.org/sqlite), CGO_ENABLED=0.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-persona",
+    "host_port": 18204,
+    "container_port": 18204,
+    "extra_server_names": [
+      "persona.0exec.com"
+    ]
+  },
+  {
     "id": "fleet-pixel",
     "name": "Fleet Pixel",
     "description": "1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet",
