@@ -95,20 +95,14 @@ KIND_BY_MESH = {
 }
 
 # Auth defaults per mesh — overridable per-entry in overrides.json.
-# 0crawl accepts BOTH a path-token (legacy callers) AND an api_key (new
-# universal shape, keystore-gated). The nginx vhost decides which one
-# the caller used; both flow through the same auth_request to the
-# keystore. The path_template stays advertised so existing /t/<token>/...
-# callers keep working unchanged.
+# Both container meshes share the SAME auth surface (Bearer / X-API-Key /
+# ?api_key=), gated by the same keystore. The legacy 0crawl `/t/<token>/`
+# path was 410'd on 2026-05-14 and is no longer advertised here — the
+# nginx template's transitional 410 block (removed 2026-05-19) carried
+# the deprecation; clients have had a deprecation cycle to migrate.
 AUTH_DEFAULTS = {
-    "0exec":  {"type": "api_key",    "query_param": "api_key", "header": "X-API-Key"},
-    "0crawl": {
-        "type": "api_key",
-        "query_param": "api_key",
-        "header": "X-API-Key",
-        "path_template": "/t/{token}",
-        "public_demo_token": "default_token",
-    },
+    "0exec":  {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
+    "0crawl": {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
     "pages":  {"type": "none"},
 }
 
@@ -298,29 +292,12 @@ RENAMES = load_renames()
 def auth_help_for(auth: dict) -> str:
     """Canonical short label for what auth a caller needs. UIs render this
     verbatim instead of re-implementing the if/else (which historically
-    drifts and produces "No auth" for services that actually require auth).
-
-    On 0crawl after the keystore migration, the auth object carries BOTH
-    api_key fields and the legacy `path_template` — the label advertises
-    api_key as primary, with the path-token shape mentioned as also-supported.
-    """
+    drifts and produces "No auth" for services that actually require auth)."""
     t = auth.get("type")
     if t == "api_key":
         qp = auth.get("query_param") or "api_key"
         hdr = auth.get("header") or "X-API-Key"
-        base = f"api_key required (header {hdr} or ?{qp}=)"
-        tmpl = auth.get("path_template")
-        if tmpl:
-            demo = auth.get("public_demo_token")
-            extra = f"; legacy path token {tmpl}" + (f" (demo: {demo})" if demo else "")
-            return base + extra
-        return base
-    if t == "path_token":
-        demo = auth.get("public_demo_token")
-        tmpl = auth.get("path_template") or "/t/{token}/"
-        if demo:
-            return f"path token {tmpl} — public demo: {demo}"
-        return f"path token {tmpl} required"
+        return f"api_key required (header {hdr} or ?{qp}=)"
     if t == "none":
         return "no auth"
     return "auth: unknown"
@@ -355,7 +332,31 @@ def service_url(slug: str, mesh: str, repo: dict) -> str:
 def health_url(base: str, mesh: str) -> str:
     if mesh == "pages":
         return base  # static sites have no /health
-    return f"{base}/health" if mesh == "0crawl" else f"{base}/_gw_health"
+    # Both container meshes advertise the same canonical health path; this
+    # is what SERVICE-TEMPLATE.md says every container exposes. The
+    # gateway-served `/_gw_health` (no upstream dependency, used by
+    # `fleet-runner state snapshot`) stays in the nginx template — but
+    # it's not what the registry advertises as the service health probe.
+    return f"{base}/health"
+
+
+# Apex hostname per container mesh — drives both the public URL and the
+# wildcard cert directory on the gateway. Centralized so other helpers
+# (cert path, future per-apex tweaks) read the same value.
+APEX_FOR_MESH = {
+    "0exec":  "0exec.com",
+    "0crawl": "0crawl.com",
+}
+
+
+def wildcard_cert_domain(mesh: str) -> str:
+    """Cert directory name on the gateway for container services in this
+    mesh. Convention: `wildcard.<apex>` matches the existing fleet-runner
+    audit code (`audit_cert_invariants.go`) and the partial helper in
+    `wildcard_helper.go`. One wildcard cert per apex covers every service
+    on that mesh; deploy time no longer needs per-FQDN issuance."""
+    apex = APEX_FOR_MESH.get(mesh)
+    return f"wildcard.{apex}" if apex else ""
 
 
 def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
@@ -436,6 +437,14 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
         entry["pages_url"] = base
         if ov.get("pages_source_branch"):
             entry["pages_source_branch"] = ov["pages_source_branch"]
+    else:
+        # Container entries carry `cert_domain` pointing at the per-apex
+        # wildcard cert directory. fleet-runner reads this verbatim into
+        # the nginx vhost's `ssl_certificate /etc/letsencrypt/live/<x>/`
+        # path. Overridable per-slug or via $rules as an escape hatch
+        # for any future SAN-bundle holdout, but the default derivation
+        # is what every service on the apex should use.
+        entry["cert_domain"] = wildcard_cert_domain(mesh)
 
     # Rename log — if this entry is the to_id of one or more renames, emit
     # `aliases` (old slugs) and `alias_urls` (old hostnames) so by-id lookups
@@ -470,6 +479,18 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # `*.<root>` already covers any subdomain, so no per-alias
               # cert is needed; DNS A records must be created separately.
               "extra_server_names",
+              # Egress routing — `proxy_egress: true` flags services that
+              # must route outbound HTTP via the Webshare residential
+              # proxy (FLEET.md §6 — active scanners hitting bug-bounty
+              # targets). Driven by the `proxy-egress-by-category` $rule
+              # in overrides.json so adding a new scanner is one category
+              # tag, not a per-service.yaml line.
+              "proxy_egress",
+              # SPA dashboards with websocket panels (e.g. fleet-grafana)
+              # set `ui_cookie_bridge: true` to opt into the cookie-based
+              # auth fallback + Upgrade/Connection headers in the nginx
+              # template. Per-slug or expand-child override only.
+              "ui_cookie_bridge",
               # `scope: internal-only` flips the nginx-render template
               # to emit an allow/deny block restricting the https vhost
               # to the internal mesh (ADR-0018 + ADR-0023 gap 4).
@@ -544,15 +565,25 @@ def split_overrides(raw: dict) -> tuple[dict, list[dict]]:
 def rule_matches(rule: dict, entry: dict) -> bool:
     """Return True iff `entry` satisfies all of `rule.match`'s clauses.
 
-    Each clause is "any-of": `ids: [a, b]` matches if entry.id is a OR b.
+    Each clause is "any-of": `ids: [a, b]` matches if entry.id is a OR b;
+    `categories: [a, b]` matches if entry.category is a OR b.
     Different fields are "all-of": id must match AND mesh must match,
-    etc. An empty match clause matches nothing (defensive: a rule with
-    no criteria would fan out to every service, which is almost
-    certainly a typo)."""
+    etc.
+
+    Defensive: a match clause whose ONLY keys are unrecognized would
+    silently match every entry (the all-of loop has nothing to fail
+    on) — almost certainly a typo (`categories` vs `category`, etc.).
+    We require at least one recognized key, otherwise refuse to match.
+    An empty match clause also matches nothing for the same reason."""
     m = rule.get("match") or {}
     if not m:
         return False
+    KNOWN = {"ids", "mesh", "kind", "language", "runtime", "category", "categories"}
+    if not (set(m) & KNOWN):
+        return False
     if "ids" in m and entry["id"] not in m["ids"]:
+        return False
+    if "categories" in m and entry.get("category") not in m["categories"]:
         return False
     for k in ("mesh", "kind", "language", "runtime", "category"):
         if k in m and entry.get(k) != m[k]:
