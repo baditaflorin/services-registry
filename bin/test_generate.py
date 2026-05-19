@@ -140,5 +140,101 @@ class TestExpandEntry(unittest.TestCase):
             generate.expand_entry(PARENT_FIXTURE, bad_spec, by_slug={}, rules=[])
 
 
+class TestPublicMirror(unittest.TestCase):
+    """G3: services-public.json sanitization. Allowlist-only — these tests
+    guard the public surface from accidental widening when new fields get
+    added to services.json."""
+
+    FULL_ENTRY = {
+        "id": "example-svc",
+        "name": "Example Svc",
+        "description": "Example microservice",
+        "category": "domains",
+        "mesh": "0crawl",
+        "kind": "container",
+        "language": "go",
+        "runtime": "compose",
+        "tags": ["go", "domains"],
+        "url": "https://example-svc.0crawl.com",
+        "health_url": "https://example-svc.0crawl.com/health",
+        "repo_url": "https://github.com/baditaflorin/go_example",
+        "example_path": "/?target=example.com",
+        "auth": {
+            "type": "api_key",
+            "query_param": "api_key",
+            "header": "X-API-Key",
+            "public_demo_token": "demo-token-must-be-stripped",
+        },
+        "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+        # Internal / disclosure-risk fields — must be dropped:
+        "host_port": 18999,
+        "container_port": 8999,
+        "cert_domain": "wildcard.0crawl.com",
+        "proxy_egress": True,
+        "ui_cookie_bridge": True,
+        "scope": "internal-only",
+        "extra_server_names": ["alt.0crawl.com"],
+        "vhost": {"proxy_buffering": "off"},
+        "depends_on": ["other-svc"],
+        "trl_evidence": "long internal commentary referencing ADR-0018",
+        "trl": 6,
+        "trl_ceiling": 7,
+        "trl_ceiling_reason": "needs paid threat intel",
+        "trl_assessed_at": "2026-05-16",
+        "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    }
+
+    def test_drops_all_internal_fields(self):
+        pub = generate.to_public_entry(self.FULL_ENTRY)
+        for forbidden in ("host_port", "container_port", "cert_domain",
+                          "proxy_egress", "ui_cookie_bridge", "scope",
+                          "extra_server_names", "vhost", "depends_on",
+                          "trl_evidence"):
+            self.assertNotIn(forbidden, pub,
+                f"public mirror leaked internal field {forbidden!r}")
+
+    def test_keeps_canonical_public_fields(self):
+        pub = generate.to_public_entry(self.FULL_ENTRY)
+        for required in ("id", "name", "description", "category",
+                         "mesh", "kind", "language", "runtime",
+                         "url", "health_url", "repo_url",
+                         "auth", "auth_help", "trl"):
+            self.assertIn(required, pub,
+                f"public mirror dropped canonical field {required!r}")
+
+    def test_strips_auth_public_demo_token(self):
+        """public_demo_token in the schema is labeled `intentionally public`
+        but we fail-closed: drop it from the mirror until an operator
+        explicitly lifts the restriction. Auth `type`/`query_param`/`header`
+        survive."""
+        pub = generate.to_public_entry(self.FULL_ENTRY)
+        self.assertEqual(pub["auth"], {
+            "type": "api_key",
+            "query_param": "api_key",
+            "header": "X-API-Key",
+        })
+
+    def test_unknown_future_field_is_dropped(self):
+        """Allowlist-only: a brand-new field in services.json must NOT
+        appear in services-public.json until someone explicitly extends
+        PUBLIC_FIELDS. Guards against silent public-surface widening."""
+        entry = dict(self.FULL_ENTRY, mystery_new_field="oops")
+        pub = generate.to_public_entry(entry)
+        self.assertNotIn("mystery_new_field", pub)
+
+    def test_rename_fields_are_public(self):
+        """Old hostnames are already in public DNS as 301 redirect targets
+        — exposing the alias map lets external bookmark-followers resolve
+        old slugs."""
+        entry = dict(self.FULL_ENTRY,
+                     aliases=["go-example"],
+                     alias_urls=["go-example.0crawl.com"],
+                     rename_status="redirect",
+                     rename_retire_at="2026-06-18")
+        pub = generate.to_public_entry(entry)
+        for k in ("aliases", "alias_urls", "rename_status", "rename_retire_at"):
+            self.assertIn(k, pub)
+
+
 if __name__ == "__main__":
     unittest.main()
