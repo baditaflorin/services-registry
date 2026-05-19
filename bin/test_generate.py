@@ -67,17 +67,30 @@ class TestSplitOverrides(unittest.TestCase):
             "a11y-quick":  {"trl": 6},
             "node-search": {"vhost": {"proxy_buffering": "off"}},
         }
-        by_slug, rules, expansions = generate.split_overrides(raw)
+        by_slug, rules, expansions, externals = generate.split_overrides(raw)
         self.assertEqual(set(by_slug.keys()), {"a11y-quick", "node-search"})
         self.assertEqual(len(rules), 1)
         self.assertEqual(len(expansions), 1)
         self.assertEqual(expansions[0]["parent_repo"], "go-fleet-metrics-hub")
+        self.assertEqual(externals, [])
 
     def test_missing_metadata_keys_are_empty(self):
-        by_slug, rules, expansions = generate.split_overrides({"a11y-quick": {"trl": 6}})
+        by_slug, rules, expansions, externals = generate.split_overrides({"a11y-quick": {"trl": 6}})
         self.assertEqual(rules, [])
         self.assertEqual(expansions, [])
+        self.assertEqual(externals, [])
         self.assertEqual(by_slug, {"a11y-quick": {"trl": 6}})
+
+    def test_external_separated_from_slugs(self):
+        raw = {
+            "$external": [{"id": "plausible", "host_port": 18204,
+                           "repo_url": "https://github.com/plausible/community-edition"}],
+            "a11y-quick":  {"trl": 6},
+        }
+        by_slug, rules, expansions, externals = generate.split_overrides(raw)
+        self.assertEqual(set(by_slug.keys()), {"a11y-quick"})
+        self.assertEqual(len(externals), 1)
+        self.assertEqual(externals[0]["id"], "plausible")
 
 
 class TestExpandEntry(unittest.TestCase):
@@ -138,6 +151,65 @@ class TestExpandEntry(unittest.TestCase):
                     "children": [{"host_port": 18999}]}  # no id
         with self.assertRaises(SystemExit):
             generate.expand_entry(PARENT_FIXTURE, bad_spec, by_slug={}, rules=[])
+
+
+class TestExternalEntry(unittest.TestCase):
+    """$external is the registry's hook for third-party / upstream
+    containers that run on the dockerhost but aren't in the fleet repo
+    set (e.g. plausible). One row makes their host_port visible to
+    allocate-port — see ADR-0031."""
+
+    def test_minimal_spec_produces_complete_entry(self):
+        e = generate.make_external_entry({
+            "id": "plausible",
+            "host_port": 18204,
+            "repo_url": "https://github.com/plausible/community-edition",
+        })
+        self.assertEqual(e["id"], "plausible")
+        self.assertEqual(e["host_port"], 18204)
+        self.assertEqual(e["runtime"], "external")
+        self.assertEqual(e["kind"], "container")
+        self.assertEqual(e["auth"]["type"], "none")
+        self.assertEqual(e["auth_help"], "no auth")
+        self.assertEqual(e["name"], "Plausible")  # humanize(slug)
+
+    def test_missing_host_port_is_hard_error(self):
+        with self.assertRaises(SystemExit):
+            generate.make_external_entry({
+                "id": "plausible",
+                "repo_url": "https://github.com/plausible/community-edition",
+            })
+
+    def test_missing_id_is_hard_error(self):
+        with self.assertRaises(SystemExit):
+            generate.make_external_entry({
+                "host_port": 18204,
+                "repo_url": "https://github.com/plausible/community-edition",
+            })
+
+    def test_missing_repo_url_is_hard_error(self):
+        with self.assertRaises(SystemExit):
+            generate.make_external_entry({"id": "plausible", "host_port": 18204})
+
+    def test_explicit_fields_win_over_defaults(self):
+        e = generate.make_external_entry({
+            "id": "plausible",
+            "name": "Plausible Analytics",
+            "host_port": 18204,
+            "container_port": 8000,
+            "repo_url": "https://github.com/plausible/community-edition",
+            "category": "observability",
+            "url": "http://dockerhost.invalid:18204",
+            "health_url": "http://dockerhost.invalid:18204/api/health",
+            "external_compose_dir": "/opt/services/plausible/",
+            "external_image": "ghcr.io/plausible/community-edition:v3.2.1",
+        })
+        self.assertEqual(e["name"], "Plausible Analytics")
+        self.assertEqual(e["category"], "observability")
+        self.assertEqual(e["container_port"], 8000)
+        self.assertEqual(e["url"], "http://dockerhost.invalid:18204")
+        self.assertEqual(e["external_compose_dir"], "/opt/services/plausible/")
+        self.assertEqual(e["external_image"], "ghcr.io/plausible/community-edition:v3.2.1")
 
 
 class TestPublicMirror(unittest.TestCase):

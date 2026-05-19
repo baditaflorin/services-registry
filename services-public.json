@@ -8001,6 +8001,29 @@
   },
   {
     "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "Self-hosted Plausible Analytics (ghcr.io/plausible/community-edition). Third-party upstream container \u2014 its own docker-compose lives at /opt/services/plausible/ and is managed by hand (NOT by fleet-runner). Registered here so allocate-port and audit-port know host_port 18204 is claimed.",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18204/api/health",
+    "id": "plausible",
+    "kind": "container",
+    "language": "other",
+    "mesh": "0exec",
+    "name": "Plausible Analytics",
+    "repo_url": "https://github.com/plausible/community-edition",
+    "runtime": "external",
+    "tags": [
+      "analytics",
+      "external",
+      "third-party"
+    ],
+    "url": "http://dockerhost:18204"
+  },
+  {
+    "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
       "type": "api_key"

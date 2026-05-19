@@ -654,16 +654,19 @@ def load_overrides() -> dict:
     return data
 
 
-def split_overrides(raw: dict) -> tuple[dict, list[dict]]:
-    """Separate per-slug patches from `$rules` / `$expand` metadata."""
+def split_overrides(raw: dict) -> tuple[dict, list[dict], list[dict], list[dict]]:
+    """Separate per-slug patches from `$rules` / `$expand` / `$external` metadata."""
     rules = raw.get("$rules") or []
     if not isinstance(rules, list):
         sys.exit(f"ERROR: $rules in {OVERRIDES_JSON} must be an array of rule objects")
     expansions = raw.get("$expand") or []
     if not isinstance(expansions, list):
         sys.exit(f"ERROR: $expand in {OVERRIDES_JSON} must be an array of expansion specs")
+    externals = raw.get("$external") or []
+    if not isinstance(externals, list):
+        sys.exit(f"ERROR: $external in {OVERRIDES_JSON} must be an array of external-entry specs")
     by_slug = {k: v for k, v in raw.items() if not k.startswith("$")}
-    return by_slug, rules, expansions
+    return by_slug, rules, expansions, externals
 
 
 def rule_matches(rule: dict, entry: dict) -> bool:
@@ -747,8 +750,81 @@ def expand_entry(parent: dict, spec: dict, by_slug: dict, rules: list[dict]) -> 
     return out
 
 
+def make_external_entry(spec: dict) -> dict:
+    """Build a standalone registry entry from an `$external` spec.
+
+    External entries register third-party / upstream containers that run
+    on the dockerhost but are NOT part of the fleet repo set (no
+    `mesh-*` GitHub topic, no fleet-runner ownership of the compose
+    file). Classic case: `ghcr.io/plausible/community-edition` mounted
+    by hand at `/opt/services/plausible/` and listening on a host port.
+
+    Why register them at all: `fleet-runner allocate-port` and `audit
+    registry-host-port-set` derive the in-use port set from the
+    registry. A live container without a registry entry is a silent
+    squatter — the allocator re-hands-out its port and the next deploy
+    clobbers the compose file (the 2026-05-19 plausible/fleet-persona
+    incident). One row here is the difference between "the allocator
+    knows" and "the allocator lies."
+
+    Required fields: `id`, `host_port`, `repo_url` (upstream source).
+    Sensible defaults filled in for the rest. `runtime` defaults to
+    `external` — the documented "runs outside the fleet, included for
+    reference only" runtime that gates deploy/build tooling off.
+    `$rules` are NOT applied to external entries: cert_domain /
+    proxy_egress / etc. are fleet-managed knobs that have no meaning
+    for an upstream-managed third-party container.
+    """
+    if not isinstance(spec, dict):
+        sys.exit(f"ERROR: $external entry must be an object: {spec!r}")
+    if "id" not in spec:
+        sys.exit(f"ERROR: $external entry missing 'id': {spec}")
+    if "host_port" not in spec:
+        sys.exit(f"ERROR: $external entry '{spec['id']}' missing 'host_port' "
+                 f"— the whole point of $external is to claim a host port "
+                 f"so allocate-port knows it's taken.")
+    if "repo_url" not in spec:
+        sys.exit(f"ERROR: $external entry '{spec['id']}' missing 'repo_url' "
+                 f"(upstream source — e.g. https://github.com/plausible/community-edition).")
+
+    slug = spec["id"]
+    auth = spec.get("auth") or {"type": "none"}
+    name = spec.get("name") or humanize(slug)
+    host_port = spec["host_port"]
+    url = spec.get("url") or f"http://dockerhost:{host_port}"
+    health = spec.get("health_url") or f"{url.rstrip('/')}/health"
+
+    entry: dict = {
+        "id":           slug,
+        "name":         name,
+        "description":  spec.get("description", ""),
+        "category":     spec.get("category", "infrastructure"),
+        "mesh":         spec.get("mesh", "0exec"),
+        "kind":         spec.get("kind", "container"),
+        "language":     spec.get("language", "other"),
+        "runtime":      spec.get("runtime", "external"),
+        "tags":         sorted(set(spec.get("tags") or ["external"])),
+        "url":          url,
+        "health_url":   health,
+        "repo_url":     spec["repo_url"],
+        "example_path": spec.get("example_path", "/"),
+        "auth":         dict(auth),
+        "auth_help":    auth_help_for(auth),
+        "host_port":    host_port,
+    }
+    if "container_port" in spec:
+        entry["container_port"] = spec["container_port"]
+    for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
+              "trl_assessed_at", "trl_assessor",
+              "external_compose_dir", "external_image",
+              "depends_on", "scope"):
+        if k in spec:
+            entry[k] = spec[k]
+    return entry
+
+
 def build(overrides: dict) -> list[dict]:
-    by_slug, rules, expansions = split_overrides(overrides)
+    by_slug, rules, expansions, externals = split_overrides(overrides)
     seen: dict[str, dict] = {}
     for mesh in MESHES:
         for repo in gh_repos_with_topic(f"mesh-{mesh}"):
@@ -790,6 +866,19 @@ def build(overrides: dict) -> list[dict]:
             seen[child["id"]] = child
         if spec.get("replace_parent"):
             seen.pop(parent["id"], None)
+
+    # $external — third-party containers (Plausible, …) that run on the
+    # dockerhost outside the fleet repo set. They have no mesh-* topic
+    # so make_entry() never sees them; without a registry row, their
+    # host_port is invisible to allocate-port. One row here keeps the
+    # allocator honest. See ADR-0031.
+    for spec in externals:
+        entry = make_external_entry(spec)
+        if entry["id"] in seen:
+            print(f"WARN: $external entry slug {entry['id']} duplicates an "
+                  f"existing entry (kept original)", file=sys.stderr)
+            continue
+        seen[entry["id"]] = entry
 
     return sorted(seen.values(), key=lambda e: (e["mesh"], e["id"]))
 

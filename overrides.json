@@ -129,6 +129,29 @@
       ]
     }
   ],
+  "$external": [
+    {
+      "id": "plausible",
+      "name": "Plausible Analytics",
+      "description": "Self-hosted Plausible Analytics (ghcr.io/plausible/community-edition). Third-party upstream container — its own docker-compose lives at /opt/services/plausible/ and is managed by hand (NOT by fleet-runner). Registered here so allocate-port and audit-port know host_port 18204 is claimed.",
+      "category": "infrastructure",
+      "mesh": "0exec",
+      "kind": "container",
+      "language": "other",
+      "runtime": "external",
+      "host_port": 18204,
+      "container_port": 8000,
+      "url": "http://dockerhost:18204",
+      "health_url": "http://dockerhost:18204/api/health",
+      "repo_url": "https://github.com/plausible/community-edition",
+      "auth": { "type": "none" },
+      "tags": ["external", "third-party", "analytics"],
+      "external_compose_dir": "/opt/services/plausible/",
+      "external_image": "ghcr.io/plausible/community-edition:v3.2.1",
+      "scope": "internal-only",
+      "why": "Plausible is fleet-pixel's optional upstream (see overrides.json: fleet-pixel). Running unregistered on 2026-05-19 caused fleet-runner allocate-port to re-hand-out 18204; the subsequent fleet-persona deploy clobbered /opt/services/plausible/docker-compose.yml. Registering it is the metadata fix — runtime: external keeps fleet-runner deploy/build off the compose dir."
+    }
+  ],
   "a11y-quick": {
     "container_port": 8272,
     "description": "Microservice for A11y Quick",

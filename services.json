@@ -9228,6 +9228,34 @@
     "proxy_egress": true
   },
   {
+    "id": "plausible",
+    "name": "Plausible Analytics",
+    "description": "Self-hosted Plausible Analytics (ghcr.io/plausible/community-edition). Third-party upstream container \u2014 its own docker-compose lives at /opt/services/plausible/ and is managed by hand (NOT by fleet-runner). Registered here so allocate-port and audit-port know host_port 18204 is claimed.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "other",
+    "runtime": "external",
+    "tags": [
+      "analytics",
+      "external",
+      "third-party"
+    ],
+    "url": "http://dockerhost:18204",
+    "health_url": "http://dockerhost:18204/api/health",
+    "repo_url": "https://github.com/plausible/community-edition",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18204,
+    "container_port": 8000,
+    "external_compose_dir": "/opt/services/plausible/",
+    "external_image": "ghcr.io/plausible/community-edition:v3.2.1",
+    "scope": "internal-only"
+  },
+  {
     "id": "postmessage",
     "name": "Postmessage",
     "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
