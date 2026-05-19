@@ -5531,6 +5531,35 @@
     "container_port": 18161
   },
   {
+    "id": "fleet-capabilities",
+    "name": "Fleet Capabilities",
+    "description": "G9 fleet capability aggregator. Walks the catalog and probes /openapi + /health + /version + /selftest on every kind=container entry in parallel; surfaces one aggregate at /capabilities.json (5-min in-process TTL, served stale during refresh). Plain net/http outbound (ADR-0024). Failed sub-probes recorded in errors[]; we never drop a service silently. Summary rollup (container_reachable, openapi_published, selftest_green/red/not_implemented) for one-glance fleet status.",
+    "category": "observability",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-capabilities.0exec.com",
+    "health_url": "https://fleet-capabilities.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-capabilities",
+    "example_path": "/capabilities.json",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "NEW fleet primitive (G9, 2026-05-19). /selftest exercises the full aggregator path against an in-process httptest fleet. Unit-tested: container-only filter, per-service-error-no-drop, selftest 200/503/404 each counted, worker pool ceiling honoured, summary counts internally consistent, /refresh admin-gated, /capabilities.json served with Cache-Control max-age=300.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-g9",
+    "host_port": 18206,
+    "container_port": 18206
+  },
+  {
     "id": "fleet-content-normalizer",
     "name": "Fleet Content Normalizer",
     "description": "MIME/charset/encoding normalizer (5MB cap)",
@@ -5865,6 +5894,28 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "host_port": 18157,
     "container_port": 18157
+  },
+  {
+    "id": "fleet-host-guard",
+    "name": "Fleet Host Guard",
+    "description": "F7+F9: dockerhost disk pressure eviction + memory leak detector",
+    "category": "uncategorized",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-host-guard.0exec.com",
+    "health_url": "https://fleet-host-guard.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-host-guard",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
   },
   {
     "id": "fleet-payload-corpus",
