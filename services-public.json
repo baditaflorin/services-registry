@@ -4639,6 +4639,32 @@
     "url": "https://fleet-backoff-coordinator.0exec.com"
   },
   {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "observability",
+    "description": "F6 fleet backup orchestrator. Every 6h snapshots configured sources (SQLite, git, files, directories), encrypts with age (multiple recipients for key rotation), pushes to URI-shaped destination (initial: local:///opt/backups; future: storage-box:// rsync over SSH). Verifies every write by decrypt+tar-diff round-trip; mismatch = FAILED run, retention prune skipped. Per-instance SQLite audit log enforces \"never delete what we didn't create\" invariant. 7-daily / 4-weekly / 12-monthly retention. POST /restore always dry-run; actual restore is operator-driven with offline age identity (daemon never holds the decrypting key).",
+    "example_path": "/",
+    "health_url": "https://fleet-backup.0exec.com/health",
+    "id": "fleet-backup",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Backup",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-backup",
+    "runtime": "compose",
+    "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-backup-scaffold",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Verify-after-write in production is byte-equality on the encrypted blob (daemon holds no decrypting identity, by design). Full encrypt+decrypt+tar-diff verify only runs in tests + when an operator opts a verifying identity into the daemon. Lift to 7+ would either issue the daemon a dedicated verify-only identity or require every restore retrieval to verify before exposing bytes.",
+    "url": "https://fleet-backup.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-body-redactor.0exec.com"
     ],
