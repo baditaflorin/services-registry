@@ -26,11 +26,114 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SERVICES_JSON   = ROOT / "services.json"
-OVERRIDES_JSON  = ROOT / "overrides.json"
-SLUG_JSON       = ROOT / "slug.json"
-RENAMES_JSON    = ROOT / "renames.json"
-SUMMARY_TXT     = ROOT / "services.summary.txt"
+SERVICES_JSON        = ROOT / "services.json"
+SERVICES_PUBLIC_JSON = ROOT / "services-public.json"
+OVERRIDES_JSON       = ROOT / "overrides.json"
+SLUG_JSON            = ROOT / "slug.json"
+RENAMES_JSON         = ROOT / "renames.json"
+SUMMARY_TXT          = ROOT / "services.summary.txt"
+
+# ─── G3: sanitized public mirror ───────────────────────────────────────
+#
+# `services-public.json` is a sanitized projection of `services.json` for
+# untrusted external consumers (catalog UI, third-party readers, future
+# cross-fleet federation). Same top-level shape as services.json (a list
+# of entry dicts) so it's a drop-in replacement for tools that only need
+# the public surface — they swap the URL suffix, nothing else changes.
+#
+# Policy: allowlist-only. Any field NOT in PUBLIC_FIELDS is dropped.
+# Fail-closed on disclosure: a new field added to services.json defaults
+# to "not exposed" until someone explicitly adds it to PUBLIC_FIELDS.
+# This way schema growth never silently widens the public surface.
+#
+# Specifically dropped from the public mirror (and why):
+#   host_port, container_port, port       — internal port allocation; an
+#                                           attacker mapping the host is
+#                                           not a public benefit
+#   cert_domain                           — gateway cert-directory naming
+#                                           detail; leaks SAN-bundle
+#                                           grouping
+#   proxy_egress                          — internal egress-routing flag
+#                                           (Webshare residential proxy);
+#                                           security-relevant op detail
+#   ui_cookie_bridge                      — nginx-render knob; internal
+#   scope                                 — `internal-only` is itself an
+#                                           attack signal (advertises
+#                                           the box is firewalled, names
+#                                           it, invites probing)
+#   extra_server_names                    — gateway-side aliasing; an
+#                                           internal nginx vhost knob
+#   vhost                                 — render-time vhost knobs
+#                                           (proxy_buffering, etc.)
+#   static_fallback_key,                  — gateway template knobs
+#   rewrite_token_path
+#   depends_on                            — internal coupling map; useful
+#                                           for fleet-graph audits, not
+#                                           for external consumers
+#   trl_evidence                          — multi-line internal review
+#                                           commentary citing ADR paths,
+#                                           session ids, internal infra
+#   auth.public_demo_token                — even labeled "intentionally
+#                                           public" demo tokens are
+#                                           dropped fail-closed; if any
+#                                           future entry actually wants
+#                                           to advertise one, lift this
+#                                           after operator review
+PUBLIC_FIELDS: frozenset[str] = frozenset({
+    "id", "name", "description", "category",
+    "mesh", "kind", "language", "runtime",
+    "tags",
+    "url", "health_url", "repo_url",
+    "example_path",
+    "auth", "auth_help",
+    "pages_url", "pages_source_branch",
+    "trl", "trl_ceiling", "trl_ceiling_reason",
+    "trl_assessed_at", "trl_assessor",
+    # Rename records — old hostnames are already in public DNS as 301
+    # redirect targets, so exposing the alias map is informational not
+    # disclosure. Lets external bookmark-followers resolve old slugs.
+    "aliases", "alias_urls", "rename_status", "rename_retire_at",
+})
+
+# auth sub-fields kept in the public mirror. `public_demo_token` is
+# intentionally NOT in this set even though the schema labels it as
+# "intentionally-public" — fail-closed on disclosure (operator follow-up
+# to lift this if a real consumer ever needs it).
+PUBLIC_AUTH_FIELDS: frozenset[str] = frozenset({
+    "type", "query_param", "header", "path_template",
+})
+
+
+def to_public_entry(entry: dict) -> dict:
+    """Sanitize one full registry entry into its public projection.
+
+    Allowlist-only: keys not in PUBLIC_FIELDS are dropped. The `auth`
+    sub-object is filtered separately by PUBLIC_AUTH_FIELDS so internal
+    keystore-side knobs (or future hand-curated demo tokens) don't leak
+    through the nested object. Output ordering matches PUBLIC_FIELDS
+    insertion order isn't relied on — `write_public_mirror` sorts keys
+    on serialization for deterministic diffs.
+    """
+    out: dict = {}
+    for k, v in entry.items():
+        if k not in PUBLIC_FIELDS:
+            continue
+        if k == "auth" and isinstance(v, dict):
+            out[k] = {ak: av for ak, av in v.items() if ak in PUBLIC_AUTH_FIELDS}
+        else:
+            out[k] = v
+    return out
+
+
+def write_public_mirror(entries: list[dict]) -> tuple[int, int]:
+    """Emit services-public.json: sanitized list, 2-space indent, sorted
+    keys for diff-stability. Returns (entry_count, byte_size) for the
+    main() summary line."""
+    sanitized = [to_public_entry(e) for e in entries]
+    blob = json.dumps(sanitized, indent=2, sort_keys=True) + "\n"
+    SERVICES_PUBLIC_JSON.write_text(blob)
+    return len(sanitized), len(blob)
+
 
 # Sliced projections of services.json — sibling files emitted next to the
 # full registry so AI consumers (and dashboards) can fetch just the fields
@@ -739,6 +842,8 @@ def main() -> int:
         entries = json.loads(SERVICES_JSON.read_text())
         for fname, n, sz in write_slices(entries):
             print(f"  {fname:28s}  {n:4d} entries  {sz:7d} bytes")
+        n, sz = write_public_mirror(entries)
+        print(f"  {'services-public.json':28s}  {n:4d} entries  {sz:7d} bytes")
         return 0
 
     overrides = load_overrides()
@@ -764,6 +869,8 @@ def main() -> int:
     print("\n## slices")
     for fname, n, sz in write_slices(entries):
         print(f"  {fname:28s}  {n:4d} entries  {sz:7d} bytes")
+    n, sz = write_public_mirror(entries)
+    print(f"  {'services-public.json':28s}  {n:4d} entries  {sz:7d} bytes")
     return 0
 
 
