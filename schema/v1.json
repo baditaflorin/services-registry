@@ -91,6 +91,16 @@
       "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
       "uniqueItems": true,
       "description": "Declared service-to-service dependencies (slugs). Static counterpart to the live edges in go-fleet-graph. fleet-runner audit-graph diffs declared vs observed: declared-not-observed = dead dep (remove) or broken caller; observed-not-declared = undeclared coupling (add or refactor). Optional; absence means 'no declared deps yet'. Edges to non-fleet hosts go in tags, not here."
+    },
+    "owner": {
+      "type": "object",
+      "description": "Who is responsible for this service. F4 phase 1 — OPTIONAL while the fleet backfills organically; track compliance via 'fleet-runner audit service-yaml-schema --field owner'. INTERNAL ONLY: not exposed in services-public.json (not added to PUBLIC_FIELDS).",
+      "required": ["name", "contact"],
+      "properties": {
+        "name":    { "type": "string", "description": "Individual or team name. Free-form (e.g. 'Florin', 'platform-team')." },
+        "contact": { "type": "string", "description": "Canonical contact — email, slack handle, mailing list." },
+        "github":  { "type": "string", "description": "Optional GitHub login used as default assignee for issues / PRs auto-filed against this service." }
+      }
     }
   },
   "additionalProperties": false

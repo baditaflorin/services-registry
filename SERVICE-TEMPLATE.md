@@ -192,6 +192,10 @@ category: <enum value from schema/v1.json>
 version: "0.1.0"
 port: <host_port>           # must match docker-compose, Dockerfile, deploy.yaml
 description: One-line summary of what this service does.
+owner:
+  name: "Florin"                      # individual or team name
+  contact: "baditaflorin@gmail.com"   # canonical contact (email / slack handle)
+  github: "baditaflorin"              # optional; default assignee for issues / PRs
 api:
   endpoint: /                # or /t/{token}/ for mesh-0crawl
   method: GET
@@ -227,6 +231,42 @@ server:
 nginx:
   subdomain: <slug>.0exec.com   # or .0crawl.com
 ```
+
+#### `owner:` — who to ping when this service breaks
+
+`owner:` is an **optional** block in `service.yaml` (F4 phase 1, added
+2026-05-19). It declares the human or team responsible for the service
+so on-call rotations and auto-filed issues land on the right person
+instead of getting lost.
+
+```yaml
+owner:
+  name: "Florin"                      # individual or team name
+  contact: "baditaflorin@gmail.com"   # canonical contact (email or @slack-handle)
+  github: "baditaflorin"              # optional; default GitHub assignee
+```
+
+| Field            | Required | Notes                                                                 |
+|------------------|----------|-----------------------------------------------------------------------|
+| `owner.name`     | yes      | Free-form. "Florin", "platform-team", "infra".                         |
+| `owner.contact`  | yes      | Canonical contact — email, slack handle, mailing list, etc.            |
+| `owner.github`   | no       | GitHub login for assignee defaults. Falls back to `baditaflorin` if absent. |
+
+**Scope**: internal-only. `owner:` is NOT exposed in the public
+`services-public.json` mirror (the `PUBLIC_FIELDS` allowlist in
+`bin/generate.py` does not include it) — keeps human contact details
+out of the public catalog.
+
+**Compliance**: the field is optional today so existing service.yamls
+don't all need backfilling in one go. Audit current compliance with:
+
+```bash
+fleet-runner audit service-yaml-schema --field owner [--missing-only] [--json]
+```
+
+After fleet-wide adoption reaches ~80% the field will be promoted to
+required in `schema/v1.json` and downstream verbs will start gating on
+it.
 
 ### `deploy.yaml`
 
