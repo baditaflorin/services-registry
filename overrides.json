@@ -893,7 +893,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "geo service, place lookup and validation"
   },
-  "go-catalog-service": {
+  "catalog-service": {
     "container_port": 18022,
     "depends_on": [],
     "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
@@ -904,7 +904,7 @@
     "trl_assessor": "claude-session-2026-05-15",
     "trl_evidence": "Live for months, serves catalog.0exec.com production traffic"
   },
-  "go-fleet-backoff-coordinator": {
+  "fleet-backoff-coordinator": {
     "container_port": 18163,
     "description": "response-driven backoff coordinator",
     "host_port": 18163,
@@ -915,7 +915,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). response-driven backoff coordinator. /selftest + INTEGRATIONS.md shipped. ADR-0013. See services-registry/docs/adr/0013-fleet-backoff-coordinator.md.",
     "version": "0.1.0"
   },
-  "go-fleet-body-redactor": {
+  "fleet-body-redactor": {
     "container_port": 18154,
     "description": "canonical sensitive-data redactor",
     "host_port": 18154,
@@ -926,7 +926,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). canonical sensitive-data redactor. /selftest + INTEGRATIONS.md shipped. ADR-0004. See services-registry/docs/adr/0004-fleet-body-redactor.md.",
     "version": "0.1.0"
   },
-  "go-fleet-budget-tracker": {
+  "fleet-budget-tracker": {
     "container_port": 18164,
     "description": "per-program scan-cost cap (atomic check-and-insert)",
     "host_port": 18164,
@@ -937,7 +937,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
     "version": "0.1.0"
   },
-  "go-fleet-call-tracer": {
+  "fleet-call-tracer": {
     "container_port": 18161,
     "description": "per-request call trace collector (Speedscope flamegraph output)",
     "host_port": 18161,
@@ -948,7 +948,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-request call trace collector (Speedscope flamegraph output). /selftest + INTEGRATIONS.md shipped. ADR-0011. See services-registry/docs/adr/0011-fleet-call-tracer.md.",
     "version": "0.1.0"
   },
-  "go-fleet-content-normalizer": {
+  "fleet-content-normalizer": {
     "container_port": 18172,
     "description": "MIME/charset/encoding normalizer (5MB cap)",
     "host_port": 18172,
@@ -959,7 +959,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). MIME/charset/encoding normalizer (5MB cap). /selftest + INTEGRATIONS.md shipped. ADR-0022. See services-registry/docs/adr/0022-fleet-content-normalizer.md.",
     "version": "0.1.0"
   },
-  "go-fleet-diff-engine": {
+  "fleet-diff-engine": {
     "container_port": 18160,
     "description": "structured diff: http_response|json|html|asset_set|text",
     "host_port": 18160,
@@ -970,7 +970,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). structured diff: http_response|json|html|asset_set|text. /selftest + INTEGRATIONS.md shipped. ADR-0010. See services-registry/docs/adr/0010-fleet-diff-engine.md.",
     "version": "0.1.0"
   },
-  "go-fleet-dns-sync": {
+  "fleet-dns-sync": {
     "container_port": 18141,
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "example_path": "/stats",
@@ -983,7 +983,7 @@
     "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
     "version": "0.2.0"
   },
-  "go-fleet-engagement-timeline": {
+  "fleet-engagement-timeline": {
     "container_port": 18162,
     "description": "per-program event timeline aggregator (6 siblings)",
     "host_port": 18162,
@@ -994,7 +994,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program event timeline aggregator (6 siblings). /selftest + INTEGRATIONS.md shipped. ADR-0012. See services-registry/docs/adr/0012-fleet-engagement-timeline.md.",
     "version": "0.1.0"
   },
-  "go-fleet-fingerprint-cache": {
+  "fleet-fingerprint-cache": {
     "container_port": 18153,
     "description": "WAF/soft-404/CDN-noise classifier",
     "host_port": 18153,
@@ -1005,7 +1005,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). WAF/soft-404/CDN-noise classifier. /selftest + INTEGRATIONS.md shipped. ADR-0003. See services-registry/docs/adr/0003-fleet-fingerprint-cache.md.",
     "version": "0.1.0"
   },
-  "go-fleet-graph": {
+  "fleet-graph": {
     "container_port": 18143,
     "depends_on": [
       "go-apikey-service"
@@ -1021,7 +1021,7 @@
     "trl_evidence": "Retention rollup goroutine (minute->hour->drop, env-tuned), drift webhook on new_edge or silent_dep>1h with 1h dedup, /selftest round-trip",
     "version": "0.2.0"
   },
-  "go-fleet-har-builder": {
+  "fleet-har-builder": {
     "container_port": 18157,
     "description": "HAR 1.2 evidence formatter",
     "host_port": 18157,
@@ -1032,7 +1032,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). HAR 1.2 evidence formatter. /selftest + INTEGRATIONS.md shipped. ADR-0007. See services-registry/docs/adr/0007-fleet-har-builder.md.",
     "version": "0.1.0"
   },
-  "go-fleet-payload-corpus": {
+  "fleet-payload-corpus": {
     "container_port": 18156,
     "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
     "host_port": 18156,
@@ -1043,7 +1043,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). versioned attack-payload corpus (125 payloads, 12 classes). /selftest + INTEGRATIONS.md shipped. ADR-0006. See services-registry/docs/adr/0006-fleet-payload-corpus.md.",
     "version": "0.1.0"
   },
-  "go-fleet-poc-curl": {
+  "fleet-poc-curl": {
     "container_port": 18158,
     "description": "redacted PoC curl emitter (bash -n parse-gated)",
     "host_port": 18158,
@@ -1054,7 +1054,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). redacted PoC curl emitter (bash -n parse-gated). /selftest + INTEGRATIONS.md shipped. ADR-0008. See services-registry/docs/adr/0008-fleet-poc-curl.md.",
     "version": "0.1.0"
   },
-  "go-fleet-preflight": {
+  "fleet-preflight": {
     "container_port": 18142,
     "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
     "example_path": "/checks",
@@ -1067,7 +1067,7 @@
     "trl_evidence": "check:image (crane HEAD ghcr.io), check:nginx (HTTPS+TLS expiry warn at 30d), 60s ETag-aware registry cache, /selftest against embedded service.yaml fixture with stubbed crane+DNS+HTTPS",
     "version": "0.2.0"
   },
-  "go-fleet-priority-queue": {
+  "fleet-priority-queue": {
     "container_port": 18169,
     "description": "composite-scored findings priority ranker",
     "host_port": 18169,
@@ -1078,7 +1078,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite-scored findings priority ranker. /selftest + INTEGRATIONS.md shipped. ADR-0019. See services-registry/docs/adr/0019-fleet-priority-queue.md.",
     "version": "0.1.0"
   },
-  "go-fleet-resolver-quorum": {
+  "fleet-resolver-quorum": {
     "container_port": 18155,
     "description": "2-of-3 DNS resolver quorum",
     "host_port": 18155,
@@ -1089,7 +1089,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). 2-of-3 DNS resolver quorum. /selftest + INTEGRATIONS.md shipped. ADR-0005. See services-registry/docs/adr/0005-fleet-resolver-quorum.md.",
     "version": "0.1.0"
   },
-  "go-fleet-sandbox-targets": {
+  "fleet-sandbox-targets": {
     "container_port": 18168,
     "description": "internal-only sandbox vulnerable apps (10 endpoints)",
     "host_port": 18168,
@@ -1101,7 +1101,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). internal-only sandbox vulnerable apps (10 endpoints). /selftest + INTEGRATIONS.md shipped. ADR-0018. See services-registry/docs/adr/0018-fleet-sandbox-targets.md.",
     "version": "0.1.0"
   },
-  "go-fleet-schema-validator": {
+  "fleet-schema-validator": {
     "container_port": 18166,
     "description": "JSON Schema catalog + validator (8 baseline schemas)",
     "host_port": 18166,
@@ -1112,7 +1112,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). JSON Schema catalog + validator (8 baseline schemas). /selftest + INTEGRATIONS.md shipped. ADR-0016. See services-registry/docs/adr/0016-fleet-schema-validator.md.",
     "version": "0.1.0"
   },
-  "go-fleet-secrets": {
+  "fleet-secrets": {
     "container_port": 18140,
     "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
     "example_path": "/",
@@ -1125,7 +1125,7 @@
     "trl_evidence": "audit_log with prefix-only redaction (no full tokens), consumer ACL test, rotate-returns-old-once, concurrent rotate (1 winner asserted), /selftest",
     "version": "0.2.0"
   },
-  "go-fleet-selftest-aggregator": {
+  "fleet-selftest-aggregator": {
     "container_port": 18165,
     "description": "/selftest poll-and-render aggregator",
     "host_port": 18165,
@@ -1136,7 +1136,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). /selftest poll-and-render aggregator. /selftest + INTEGRATIONS.md shipped. ADR-0015. See services-registry/docs/adr/0015-fleet-selftest-aggregator.md.",
     "version": "0.1.0"
   },
-  "go-fleet-target-reputation": {
+  "fleet-target-reputation": {
     "container_port": 18171,
     "description": "target reputation lookup (5 sources)",
     "host_port": 18171,
@@ -1147,7 +1147,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). target reputation lookup (5 sources). /selftest + INTEGRATIONS.md shipped. ADR-0021. See services-registry/docs/adr/0021-fleet-target-reputation.md.",
     "version": "0.1.0"
   },
-  "go-fleet-tech-inferrer": {
+  "fleet-tech-inferrer": {
     "container_port": 18159,
     "description": "composite tech-stack inferrer (83 signals)",
     "host_port": 18159,
@@ -1158,7 +1158,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite tech-stack inferrer (83 signals). /selftest + INTEGRATIONS.md shipped. ADR-0009. See services-registry/docs/adr/0009-fleet-tech-inferrer.md.",
     "version": "0.1.0"
   },
-  "go-fleet-vendor-disclosure-tracker": {
+  "fleet-vendor-disclosure-tracker": {
     "container_port": 18167,
     "description": "vendor disclosure history tracker (PII-redacted)",
     "host_port": 18167,
@@ -1169,7 +1169,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). vendor disclosure history tracker (PII-redacted). /selftest + INTEGRATIONS.md shipped. ADR-0017. See services-registry/docs/adr/0017-fleet-vendor-disclosure-tracker.md.",
     "version": "0.1.0"
   },
-  "go-fleet-visualizer": {
+  "fleet-visualizer": {
     "container_port": 18144,
     "depends_on": [
       "go-fleet-graph",
@@ -1186,7 +1186,7 @@
     "trl_evidence": "ETag/304 fetch cache (60s TTL), /graph.dot Graphviz DOT, /trl-heatmap SSR with html-escape proof, /selftest exercises all 3 renderers against embedded 5-service fixture",
     "version": "0.2.0"
   },
-  "go-fleet-webhook-verifier": {
+  "fleet-webhook-verifier": {
     "container_port": 18170,
     "description": "inbound webhook signature verifier (6 platforms)",
     "host_port": 18170,
@@ -1197,7 +1197,7 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). inbound webhook signature verifier (6 platforms). /selftest + INTEGRATIONS.md shipped. ADR-0020. See services-registry/docs/adr/0020-fleet-webhook-verifier.md.",
     "version": "0.1.0"
   },
-  "go-html-proxy": {
+  "html-proxy": {
     "container_port": 3002,
     "description": "Microservice for Go Html Proxy",
     "example_path": "/?url=https://example.com",
@@ -1210,7 +1210,7 @@
     "trl_evidence": "Hexagonal/Clean Architecture in src/ (domain/application/infrastructure split), pipeline middleware with circuit-breakers, response cache + Prometheus metrics, k6 smoke/light/medium/load scripts, header-sanitizer + SSRF awareness on upstream fetch, fleet keystore auth via X-Auth-User header trust (synthetic fleet user, credit bypass) + local-user fallback via ?api_key=/X-API-Key/Authorization Bearer/?token=. Unit-tested auth chain incl. gateway-header + extract-token priority. Plus root-level fleet-canonical handler (ua_pool.go/retry.go/redirect.go/handler.go) at TRL 5 \u2014 UA rotation deterministic by X-Request-ID, retry on 5xx/network with 250ms backoff, configurable timeout/redirect cap, JSON envelope or raw passthrough, safehttp SSRF guard, 9 test cases (httptest server, 5xx-then-success, redirect chain). See docs/adr/0001-trl-uplift-to-5.md.",
     "version": "0.4.0"
   },
-  "go-information-leakage": {
+  "information-leakage": {
     "container_port": 8083,
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "example_path": "/?url=https://example.com",
@@ -1223,7 +1223,7 @@
     "trl_evidence": ">",
     "version": "3.0.0"
   },
-  "go-js-proxy": {
+  "js-proxy": {
     "container_port": 8080,
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
@@ -1235,7 +1235,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet."
   },
-  "go-js-proxy-network": {
+  "js-proxy-network": {
     "auth": {
       "query_param": "api_key",
       "type": "api_key"
@@ -1265,7 +1265,7 @@
     "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
     "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests."
   },
-  "go-pentest-agent-state": {
+  "pentest-agent-state": {
     "container_port": 18146,
     "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
     "example_path": "/stats",
@@ -1278,7 +1278,7 @@
     "trl_evidence": "optimistic-lock state with version history, lease primitive with TestLease_Concurrent50Goroutines (BEGIN IMMEDIATE pattern), /selftest with 409 stale-write + lease exclusivity",
     "version": "0.2.0"
   },
-  "go-pentest-asset-inventory": {
+  "pentest-asset-inventory": {
     "container_port": 18131,
     "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
     "example_path": "/stats",
@@ -1291,7 +1291,7 @@
     "trl_evidence": "asset_history shadow table on tech/tags/status changes; /assets:bulk 5000-row tx benchmarked at 208ms (well under 500ms target); /assets/{id}/history; /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-asset-scope-resolver": {
+  "pentest-asset-scope-resolver": {
     "container_port": 18126,
     "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
     "example_path": "/",
@@ -1303,7 +1303,7 @@
     "trl_ceiling_reason": "Depends on upstream fleet services and live program scope data quality.",
     "trl_evidence": "Parallel CT/subfinder fanout, apex-bounded host normalization, scope-guard filtering, API-key forwarding, merge behavior tests."
   },
-  "go-pentest-attack-chainer": {
+  "pentest-attack-chainer": {
     "container_port": 18149,
     "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
     "example_path": "/health",
@@ -1314,7 +1314,7 @@
     "trl_ceiling": 7,
     "trl_evidence": "4/4 unit tests passing (base-domain inference, severity matrix, PoC rendering with/without chain). Verified end-to-end against accommodations.booking.com: 30 siblings + 12 endpoint probes in 1.2s, correctly downgrades prober high -> informational."
   },
-  "go-pentest-audit-log": {
+  "pentest-audit-log": {
     "container_port": 18119,
     "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
     "example_path": "/stats",
@@ -1325,7 +1325,7 @@
     "trl_ceiling": 7,
     "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design."
   },
-  "go-pentest-authz-matrix": {
+  "pentest-authz-matrix": {
     "container_port": 18152,
     "host_port": 18152,
     "trl": 7,
@@ -1335,7 +1335,7 @@
     "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
     "version": "0.2.0"
   },
-  "go-pentest-bounty-scope-checker": {
+  "pentest-bounty-scope-checker": {
     "container_port": 18110,
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
     "example_path": "/check?target=api.github.com",
@@ -1347,7 +1347,7 @@
     "trl_ceiling_reason": "Production freshness depends on continuously updated program feeds.",
     "trl_evidence": "Bug-bounty scope matcher uses curated program seed data, regex caching, payout sorting, structured matches, and tests."
   },
-  "go-pentest-cert-transparency": {
+  "pentest-cert-transparency": {
     "container_port": 18109,
     "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records (issuer/dates/SANs).",
     "example_path": "/cache/stats",
@@ -1359,7 +1359,7 @@
     "trl_ceiling_reason": "Add Censys + Google CT in parallel for redundancy.",
     "trl_evidence": "crt.sh fetcher + SQLite cache (modernc) + wildcard-skip + SAN-suffix filter; tested for normalization, cache hits, subdomain filter."
   },
-  "go-pentest-chaos-sync": {
+  "pentest-chaos-sync": {
     "container_port": 18128,
     "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
     "example_path": "/sync/status",
@@ -1372,7 +1372,7 @@
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; \u22656 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across \u22653 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
     "version": "0.2.0"
   },
-  "go-pentest-codec": {
+  "pentest-codec": {
     "container_port": 18118,
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
     "example_path": "/encode?algo=base64&input=hello",
@@ -1383,7 +1383,7 @@
     "trl_ceiling": 9,
     "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs."
   },
-  "go-pentest-continuous-monitor": {
+  "pentest-continuous-monitor": {
     "container_port": 18134,
     "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription \u2014 money compounds with the asset universe, not manpower.",
     "example_path": "/stats",
@@ -1396,7 +1396,7 @@
     "trl_evidence": "Concurrent dispatch bounded by errgroup+semaphore, per-program advisory lock via running_until (RFC3339), deterministic idempotency_key sent to job-queue (composes with job-queue 0.2.0), /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-cors-misconfig-prober": {
+  "pentest-cors-misconfig-prober": {
     "container_port": 18124,
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
@@ -1407,7 +1407,7 @@
     "trl_ceiling": 8,
     "trl_evidence": "5 active probes, reflection+credentials high-sev detection, suffix-confusion + pre-subdomain bypass, case-fold. Tested positive (high) + negative."
   },
-  "go-pentest-cvss": {
+  "pentest-cvss": {
     "container_port": 18107,
     "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
     "example_path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
@@ -1419,18 +1419,7 @@
     "trl_ceiling_reason": "CVSS 4.0 support pushes to 9.",
     "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only."
   },
-  "go-pentest-dashboard": {
-    "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
-    "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
-    "trl": 7,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Bounded by what the fleet exposes; active probing tools need auth + deploy before they can be surfaced safely.",
-    "trl_evidence": "sibling fan-out aggregator with 30s TTL cache, /overview HTML with html/template auto-escape (asserted by test), /selftest with 4 sibling stubs, sibling-down does not crash (degraded[] flag)",
-    "version": "0.2.0"
-  },
-  "go-pentest-dedup-fingerprint": {
+  "pentest-dedup-fingerprint": {
     "container_port": 18132,
     "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
     "example_path": "/stats",
@@ -1443,7 +1432,7 @@
     "trl_evidence": "73-row scanner corpus across 4 scanners x 8 vulns: intra=100% / inter=0% collision rates; fp_version=v1; /forget admin-gated; /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-dependency-cve": {
+  "pentest-dependency-cve": {
     "container_port": 18125,
     "description": "CPE -> NVD JSON 2.0 + CISA KEV cross-flag. Per-request fetch (no local cache yet). Composes with go-pentest-httpx tech detection.",
     "example_path": "/",
@@ -1456,7 +1445,7 @@
     "trl_evidence": "SQLite TTL cache (NVD/KEV/OSV), OSV.dev cross-source merge, /selftest with stubbed upstreams, 14 test funcs (was 0)",
     "version": "0.2.0"
   },
-  "go-pentest-disclosure-policy-finder": {
+  "pentest-disclosure-policy-finder": {
     "container_port": 18111,
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
     "example_path": "/check?target=hackerone.com",
@@ -1468,7 +1457,7 @@
     "trl_ceiling_reason": "Add /security anchor crawl + submit-button scraping.",
     "trl_evidence": "12 probe paths, RFC 9116 parser, 9 bounty-platform regexes, 4 safe-harbor regexes, class-priority resolver. Extends fleet security-txt with VDP-vs-bounty classification."
   },
-  "go-pentest-exploit-verifier": {
+  "pentest-exploit-verifier": {
     "container_port": 18137,
     "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
     "example_path": "/capabilities",
@@ -1481,7 +1470,7 @@
     "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
     "version": "0.2.0"
   },
-  "go-pentest-favicon-hash": {
+  "pentest-favicon-hash": {
     "container_port": 18117,
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
     "example_path": "/lookup?hash=-1996286744",
@@ -1492,7 +1481,7 @@
     "trl_ceiling": 9,
     "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity."
   },
-  "go-pentest-finding-triage": {
+  "pentest-finding-triage": {
     "container_port": 18135,
     "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
     "example_path": "/rules",
@@ -1505,7 +1494,7 @@
     "trl_evidence": "SQLite decision ledger with /decisions query, dry_run mode returning would_decide, sony/gobreaker circuit breakers around scope-guard + dedup-fingerprint, degraded_mode in response, /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-findings-store": {
+  "pentest-findings-store": {
     "container_port": 18103,
     "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed (pure Go modernc); collapses same finding from multiple scanners via dedup_key with seen_count.",
     "example_path": "/findings?limit=1",
@@ -1518,7 +1507,7 @@
     "trl_evidence": "findings_history shadow table with SHA-256 evidence hashing, /findings/{id}/history endpoint, /selftest round-trip",
     "version": "0.2.0"
   },
-  "go-pentest-github-dorks": {
+  "pentest-github-dorks": {
     "container_port": 18123,
     "description": "GitHub Search API dorking for leaked credentials: 31 curated patterns (AWS keys, .env, private keys, Slack/Stripe/PAT tokens, kubeconfig, npm/Docker creds). Rate-limit aware; pairs with go-pentest-trufflehog for verification.",
     "example_path": "/dorks",
@@ -1531,7 +1520,7 @@
     "trl_evidence": "38 curated dork patterns (creds + files + vendors + infra + k8s + per-vendor leaks); typed rate-limit handling (primary + secondary/abuse) with adaptive sleep; per-dork 4s + total 90s deadline; optional verification compose with go-pentest-trufflehog (TRUFFLEHOG_URL); domain qualifier (\\\"<domain>\\\" in:file); production mode (MODE=production) refuses to start without GITHUB_TOKEN; 19 unit tests including httptest-mocked GitHub API (success / primary rate-limit / abuse / no-results) + trufflehog compose. Pure Go (CGO-free), no parallelism. Ceiling stays at 7 pending cross-dork dedup, snippet-level secret extraction, and findings-store fan-out.",
     "version": "0.2.0"
   },
-  "go-pentest-http-replay": {
+  "pentest-http-replay": {
     "container_port": 18130,
     "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
     "example_path": "/stats",
@@ -1543,7 +1532,7 @@
     "trl_ceiling_reason": "Single-node SQLite. Fine for evidence retention at typical bug-bounty scale; lifts when paired with object storage for large bodies.",
     "trl_evidence": "go-common safehttp client; 256KB response cap; sha256 body-hash for rerun diff; 19 tests pass including curl-builder edge cases."
   },
-  "go-pentest-httpx": {
+  "pentest-httpx": {
     "container_port": 18113,
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
@@ -1555,7 +1544,7 @@
     "trl_ceiling_reason": "Wrap wappalyzergo for full 3000+ fingerprint DB.",
     "trl_evidence": "Single+batch probes, parallel with worker cap, TLS extract, ~25 tech-detection signatures (CDNs, frameworks, CMS, front-end libs). safehttp-protected. Tested."
   },
-  "go-pentest-job-queue": {
+  "pentest-job-queue": {
     "container_port": 18133,
     "description": "Durable workflow queue. POST jobs, workers /claim \u2192 /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
     "example_path": "/stats",
@@ -1568,7 +1557,7 @@
     "trl_evidence": "idempotency_key column with partial UNIQUE index, /metrics short-circuit middleware, /selftest, TestEnqueue_IdempotencyKey_Concurrent (50-goroutine race)",
     "version": "0.2.0"
   },
-  "go-pentest-leak-bounty-policy": {
+  "pentest-leak-bounty-policy": {
     "container_port": 18145,
     "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
     "example_path": "/search?token=sk_live_xxx",
@@ -1581,7 +1570,7 @@
     "trl_evidence": "30-row vendor policy seed (AWS/GitHub/Slack/Stripe/OpenAI/Anthropic/Twilio/Mailgun/GCP/Azure/etc.), BEGIN IMMEDIATE on both seed and ledger, secret-prefix-only persistence (TestLedger_NoSecretInRows enforces), /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-notify": {
+  "pentest-notify": {
     "container_port": 18108,
     "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
     "example_path": "/sinks",
@@ -1593,7 +1582,7 @@
     "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
     "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks."
   },
-  "go-pentest-nuclei": {
+  "pentest-nuclei": {
     "container_port": 18115,
     "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
     "example_path": "/templates",
@@ -1606,7 +1595,7 @@
     "trl_evidence": "scope-guard preflight (fail-closed -> 503), rate-coordinator per-host acquire (fail-open), findings-store wire on severity>=medium, /selftest round-trips all 3 sibling stubs + runner",
     "version": "0.2.0"
   },
-  "go-pentest-oob-collector": {
+  "pentest-oob-collector": {
     "container_port": 18106,
     "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
     "example_path": "/sessions?limit=1",
@@ -1619,7 +1608,7 @@
     "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
     "version": "0.2.0"
   },
-  "go-pentest-orchestrator": {
+  "pentest-orchestrator": {
     "container_port": 18138,
     "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
     "example_path": "/stats",
@@ -1632,7 +1621,7 @@
     "trl_evidence": "campaign state machine, transitions + campaign_artifacts tables, idempotency_key returns 201/200 same as job-queue pattern, /selftest drives scope->recon->scan against httptest stubs",
     "version": "0.2.0"
   },
-  "go-pentest-payloads": {
+  "pentest-payloads": {
     "container_port": 18101,
     "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
     "example_path": "/classes",
@@ -1644,7 +1633,7 @@
     "trl_ceiling_reason": "Ceiling = PayloadsAllTheThings as submodule.",
     "trl_evidence": "9 classes seeded with real-world payloads (xss reflected+polyglot, sqli error+time, ssrf cloud-meta+local, ssti jinja2+twig, xxe, crlf, nosqli, graphql, path-traversal). Random + filter APIs tested."
   },
-  "go-pentest-payoff-tracker": {
+  "pentest-payoff-tracker": {
     "container_port": 18148,
     "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
     "example_path": "/stats",
@@ -1657,7 +1646,7 @@
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE ingest, amount_cents as INTEGER (no float for money), /stats with percentiles, /scoreboard ordered by payout, /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-rate-coordinator": {
+  "pentest-rate-coordinator": {
     "container_port": 18104,
     "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
     "example_path": "/stats",
@@ -1670,7 +1659,7 @@
     "trl_evidence": "Prometheus /metrics (counter+histogram+gauges), /selftest spawns 100 concurrent acquirers, TestAcquire_Concurrent under -race; 0.2.1 fixes /metrics double-registration panic",
     "version": "0.2.1"
   },
-  "go-pentest-report-templater": {
+  "pentest-report-templater": {
     "container_port": 18114,
     "description": "Turns a structured Finding into a platform-ready markdown report. Ships HackerOne/Bugcrowd/Intigriti templates. Optional CVSS enrichment via go-pentest-cvss. Highest-leverage service in the fleet.",
     "example_path": "/templates",
@@ -1682,7 +1671,7 @@
     "trl_ceiling_reason": "Add org-specific templates + screenshot embed + direct HackerOne API submission.",
     "trl_evidence": "3 platform templates using stdlib text/template, custom func map (title/code/indent/add1), CVSS enrichment via go-pentest-cvss with graceful degrade. Tested for render + missing-template + per-platform output."
   },
-  "go-pentest-scope-guard": {
+  "pentest-scope-guard": {
     "container_port": 18105,
     "description": "Hard scope check before any active prober fires. POST /check {target, program_id} -> {allowed, reason, matched_by}. Matches hostname/wildcard/CIDR/regex; exclusions always win. Legal floor of the pentest fleet.",
     "example_path": "/programs",
@@ -1695,7 +1684,7 @@
     "trl_evidence": "SQLite persistence with 256-LRU, audit_log with /audit query, ReDoS pattern rejection at create-time, target-normalizer composition with 3-strike circuit breaker, /selftest",
     "version": "0.2.0"
   },
-  "go-pentest-screenshot": {
+  "pentest-screenshot": {
     "container_port": 18129,
     "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} \u2192 PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
     "example_path": "/shot?url=https://example.com",
@@ -1707,7 +1696,7 @@
     "trl_ceiling_reason": "Bounded by Chromium-headless RAM (1 GiB shm) and the fact that one container is one Chromium instance.",
     "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build)."
   },
-  "go-pentest-secrets-scanner": {
+  "pentest-secrets-scanner": {
     "container_port": 18122,
     "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
     "example_path": "/rules",
@@ -1719,7 +1708,7 @@
     "trl_ceiling_reason": "TRL 8 with verified-secret feature (call vendor API to confirm key is live).",
     "trl_evidence": "~30 vendor rules, Shannon-entropy gate via math.Log2, line+context+redaction. Tested vs real-looking fixtures."
   },
-  "go-pentest-session-state": {
+  "pentest-session-state": {
     "container_port": 18151,
     "host_port": 18151,
     "trl": 7,
@@ -1727,7 +1716,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 8
   },
-  "go-pentest-ssrf-prober": {
+  "pentest-ssrf-prober": {
     "container_port": 18150,
     "host_port": 18150,
     "trl": 7,
@@ -1735,7 +1724,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 8
   },
-  "go-pentest-subfinder": {
+  "pentest-subfinder": {
     "container_port": 18112,
     "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
     "example_path": "/sources",
@@ -1747,7 +1736,7 @@
     "trl_ceiling_reason": "Add Shodan/Censys/Chaos/SecurityTrails when keys configured.",
     "trl_evidence": "4 passive sources fanned out in parallel with per-source timing + error capture, merged with dedup + suffix filter. No paid keys required."
   },
-  "go-pentest-submit-bot": {
+  "pentest-submit-bot": {
     "container_port": 18136,
     "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
     "example_path": "/quota",
@@ -1760,7 +1749,7 @@
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE on *sql.Conn (canonical pattern), idempotency_key (50-goroutine race test asserts 1 platform call), dry_run mode, /selftest with stubbed platform API",
     "version": "0.2.0"
   },
-  "go-pentest-takeover-checker": {
+  "pentest-takeover-checker": {
     "container_port": 18121,
     "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
     "example_path": "/check?host=example.com",
@@ -1772,7 +1761,7 @@
     "trl_evidence": "2-of-3 multi-resolver quorum, confirmed-tier registration probes (GitHub/S3/Heroku), findings-store wire with fail-open, 20 tests across 4 packages",
     "version": "0.4.0"
   },
-  "go-pentest-takeover-fingerprints": {
+  "pentest-takeover-fingerprints": {
     "container_port": 18116,
     "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
     "example_path": "/fingerprints",
@@ -1783,7 +1772,7 @@
     "trl_ceiling": 8,
     "trl_evidence": "17 curated signatures from can-i-take-over-xyz + in-the-wild. CNAME+status+body multi-signal match. Tested positive (S3) + negative cases."
   },
-  "go-pentest-target-normalizer": {
+  "pentest-target-normalizer": {
     "container_port": 18102,
     "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR). Returns kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls before doing anything else.",
     "example_path": "/?q=https://EXAMPLE.com/path",
@@ -1796,7 +1785,7 @@
     "trl_evidence": "55-row //go:embed golden corpus, /selftest with idempotency assertion, NormalizedVia evidence trail, psl_version in /version",
     "version": "0.2.0"
   },
-  "go-pentest-triager-listener": {
+  "pentest-triager-listener": {
     "container_port": 18147,
     "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
     "example_path": "/stats",
@@ -1808,7 +1797,7 @@
     "trl_ceiling_reason": "Bounded by platform API stability \u2014 H1/BC/Intigriti reshape attributes regularly and there's no signed contract.",
     "trl_evidence": "SQLite-backed, idempotent on (platform, external_id), terminal-state poll skipping, state-change journal, normalized status enum across 3 platform shapes. Adapter stubs for H1/BC/Intigriti return ErrNotConfigured cleanly when tokens absent."
   },
-  "go-pentest-trufflehog": {
+  "pentest-trufflehog": {
     "container_port": 18120,
     "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). 700+ detectors live-tested against providers. Upgrades go-pentest-secrets-scanner with verification.",
     "example_path": "/",
@@ -1821,7 +1810,7 @@
     "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam \u2192 \u226513 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
     "version": "0.2.0"
   },
-  "go-pentest-walkthrough": {
+  "pentest-walkthrough": {
     "container_port": 18139,
     "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
     "example_path": "/preflight",
@@ -1834,7 +1823,7 @@
     "trl_evidence": "4 baked-in markdown templates (ssrf/xss/sqli/idor) via //go:embed, sensitive-header redaction (Cookie/Authorization/X-API-Key -> prefix-only), /selftest exercises all 4 templates",
     "version": "0.2.0"
   },
-  "go-pentest-wayback-urls": {
+  "pentest-wayback-urls": {
     "container_port": 18127,
     "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
     "example_path": "/urls?domain=example.com&limit=5",
@@ -1846,7 +1835,7 @@
     "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump).",
     "proxy_read_timeout": "300s"
   },
-  "go-pentest-wordlists": {
+  "pentest-wordlists": {
     "container_port": 18100,
     "description": "Serves curated pentest wordlists (dirs, subdomains, params, fuzz) by category with SHA256 integrity. Random-sample API. Designed to grow via SecLists submodule.",
     "example_path": "/lists",
@@ -1858,7 +1847,7 @@
     "trl_ceiling_reason": "Ceiling = SecLists submodule contents.",
     "trl_evidence": "Disk-backed catalog with SHA256, reservoir-sample random API, paged reads. Ships with starter dirs/subdomains/params. CPU-only."
   },
-  "go-proxy": {
+  "proxy": {
     "container_port": 3001,
     "description": "HTTP proxy with rotation (?url=)",
     "host_port": 18002,
@@ -1870,7 +1859,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Go proxy implementation, protocol handling"
   },
-  "go-search-duck": {
+  "search-duck": {
     "container_port": 3401,
     "description": "DuckDuckGo SERP scraper in Go (?query=)",
     "host_port": 18013,
@@ -3621,7 +3610,7 @@
     "host_port": 18199,
     "container_port": 18199
   },
-  "go-fleet-pixel": {
+  "fleet-pixel": {
     "category": "fleet_infra",
     "host_port": 18200,
     "container_port": 18200,
@@ -3641,7 +3630,7 @@
       "pixel.0exec.com"
     ]
   },
-  "go-infrastructure-fetch-cache": {
+  "infrastructure-fetch-cache": {
     "name": "Fleet Fetch Cache",
     "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
     "example_path": "/fetch?url=https://example.com/",
@@ -3650,5 +3639,16 @@
     "host_port": 18205,
     "container_port": 18205,
     "version": "0.1.1"
+  },
+  "pentest-dashboard": {
+    "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
+    "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by what the fleet exposes; active probing tools need auth + deploy before they can be surfaced safely.",
+    "trl_evidence": "sibling fan-out aggregator with 30s TTL cache, /overview HTML with html/template auto-escape (asserted by test), /selftest with 4 sibling stubs, sibling-down does not crash (degraded[] flag)",
+    "version": "0.2.0"
   }
 }

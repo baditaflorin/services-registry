@@ -4721,7 +4721,7 @@
   {
     "id": "catalog-service",
     "name": "Catalog Service",
-    "description": "Read-only registry of all 0exec.com services",
+    "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
     "category": "visualization",
     "mesh": "0exec",
     "kind": "container",
@@ -4746,7 +4746,14 @@
       "go-catalog-service.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18022,
+    "container_port": 18022,
+    "depends_on": []
   },
   {
     "id": "d3-graph",
@@ -5370,7 +5377,7 @@
   {
     "id": "fleet-backoff-coordinator",
     "name": "Fleet Backoff Coordinator",
-    "description": "Fleet primitive: response-driven backoff coordinator (ADR-0013)",
+    "description": "response-driven backoff coordinator",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5397,12 +5404,19 @@
       "go-fleet-backoff-coordinator.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). response-driven backoff coordinator. /selftest + INTEGRATIONS.md shipped. ADR-0013. See services-registry/docs/adr/0013-fleet-backoff-coordinator.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18163,
+    "container_port": 18163
   },
   {
     "id": "fleet-body-redactor",
     "name": "Fleet Body Redactor",
-    "description": "Fleet primitive: canonical sensitive-data redaction (ADR-0004)",
+    "description": "canonical sensitive-data redactor",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5429,12 +5443,19 @@
       "go-fleet-body-redactor.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). canonical sensitive-data redactor. /selftest + INTEGRATIONS.md shipped. ADR-0004. See services-registry/docs/adr/0004-fleet-body-redactor.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18154,
+    "container_port": 18154
   },
   {
     "id": "fleet-budget-tracker",
     "name": "Fleet Budget Tracker",
-    "description": "Fleet primitive: per-program scan budget cap (ADR-0014)",
+    "description": "per-program scan-cost cap (atomic check-and-insert)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5461,12 +5482,19 @@
       "go-fleet-budget-tracker.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18164,
+    "container_port": 18164
   },
   {
     "id": "fleet-call-tracer",
     "name": "Fleet Call Tracer",
-    "description": "Fleet primitive: service-to-service call trace collector (ADR-0011)",
+    "description": "per-request call trace collector (Speedscope flamegraph output)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5493,12 +5521,19 @@
       "go-fleet-call-tracer.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-request call trace collector (Speedscope flamegraph output). /selftest + INTEGRATIONS.md shipped. ADR-0011. See services-registry/docs/adr/0011-fleet-call-tracer.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18161,
+    "container_port": 18161
   },
   {
     "id": "fleet-content-normalizer",
     "name": "Fleet Content Normalizer",
-    "description": "Fleet primitive: MIME/charset/encoding normalizer (ADR-0022)",
+    "description": "MIME/charset/encoding normalizer (5MB cap)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5525,12 +5560,19 @@
       "go-fleet-content-normalizer.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). MIME/charset/encoding normalizer (5MB cap). /selftest + INTEGRATIONS.md shipped. ADR-0022. See services-registry/docs/adr/0022-fleet-content-normalizer.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18172,
+    "container_port": 18172
   },
   {
     "id": "fleet-diff-engine",
     "name": "Fleet Diff Engine",
-    "description": "Fleet primitive: structured diff for HTTP/JSON/HTML/asset-set (ADR-0010)",
+    "description": "structured diff: http_response|json|html|asset_set|text",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5557,7 +5599,14 @@
       "go-fleet-diff-engine.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). structured diff: http_response|json|html|asset_set|text. /selftest + INTEGRATIONS.md shipped. ADR-0010. See services-registry/docs/adr/0010-fleet-diff-engine.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18160,
+    "container_port": 18160
   },
   {
     "id": "fleet-discovery",
@@ -5591,7 +5640,7 @@
   {
     "id": "fleet-dns-sync",
     "name": "Fleet Dns Sync",
-    "description": "",
+    "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5603,7 +5652,7 @@
     "url": "https://fleet-dns-sync.0exec.com",
     "health_url": "https://fleet-dns-sync.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-dns-sync",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -5618,12 +5667,20 @@
       "go-fleet-dns-sync.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18141,
+    "container_port": 18141
   },
   {
     "id": "fleet-engagement-timeline",
     "name": "Fleet Engagement Timeline",
-    "description": "Fleet primitive: per-program event timeline aggregator (ADR-0012)",
+    "description": "per-program event timeline aggregator (6 siblings)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5650,12 +5707,19 @@
       "go-fleet-engagement-timeline.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program event timeline aggregator (6 siblings). /selftest + INTEGRATIONS.md shipped. ADR-0012. See services-registry/docs/adr/0012-fleet-engagement-timeline.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18162,
+    "container_port": 18162
   },
   {
     "id": "fleet-fingerprint-cache",
     "name": "Fleet Fingerprint Cache",
-    "description": "Fleet primitive: WAF/soft-404/CDN-noise classifier (ADR-0003)",
+    "description": "WAF/soft-404/CDN-noise classifier",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5682,7 +5746,14 @@
       "go-fleet-fingerprint-cache.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). WAF/soft-404/CDN-noise classifier. /selftest + INTEGRATIONS.md shipped. ADR-0003. See services-registry/docs/adr/0003-fleet-fingerprint-cache.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18153,
+    "container_port": 18153
   },
   {
     "id": "fleet-grafana",
@@ -5717,7 +5788,7 @@
   {
     "id": "fleet-graph",
     "name": "Fleet Graph",
-    "description": "Fleet graph collector \u2014 aggregates service-to-service call observations emitted by go-common/graph into a queryable graph (SQLite, /events, /graph, /drift, /lookup).",
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5727,7 +5798,7 @@
     "url": "https://fleet-graph.0exec.com",
     "health_url": "https://fleet-graph.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-graph",
-    "example_path": "/?target=example.com",
+    "example_path": "/summary?since=1h",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -5742,12 +5813,23 @@
       "go-fleet-graph.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Retention rollup goroutine (minute->hour->drop, env-tuned), drift webhook on new_edge or silent_dep>1h with 1h dedup, /selftest round-trip",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18143,
+    "container_port": 18143,
+    "depends_on": [
+      "go-apikey-service"
+    ]
   },
   {
     "id": "fleet-har-builder",
     "name": "Fleet Har Builder",
-    "description": "Fleet primitive: HAR 1.2 evidence formatter (ADR-0007)",
+    "description": "HAR 1.2 evidence formatter",
     "category": "fleet_evidence",
     "mesh": "0exec",
     "kind": "container",
@@ -5774,12 +5856,19 @@
       "go-fleet-har-builder.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). HAR 1.2 evidence formatter. /selftest + INTEGRATIONS.md shipped. ADR-0007. See services-registry/docs/adr/0007-fleet-har-builder.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18157,
+    "container_port": 18157
   },
   {
     "id": "fleet-payload-corpus",
     "name": "Fleet Payload Corpus",
-    "description": "Fleet primitive: versioned attack-payload corpus (ADR-0006)",
+    "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5806,13 +5895,20 @@
       "go-fleet-payload-corpus.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). versioned attack-payload corpus (125 payloads, 12 classes). /selftest + INTEGRATIONS.md shipped. ADR-0006. See services-registry/docs/adr/0006-fleet-payload-corpus.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18156,
+    "container_port": 18156
   },
   {
     "id": "fleet-pixel",
     "name": "Fleet Pixel",
     "description": "1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet",
-    "category": "uncategorized",
+    "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
@@ -5823,13 +5919,11 @@
     "url": "https://fleet-pixel.0exec.com",
     "health_url": "https://fleet-pixel.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-pixel",
-    "example_path": "/",
+    "example_path": "/pix.gif?app=mesh-test&event=pv",
     "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "type": "none"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "no auth",
     "cert_domain": "wildcard.0exec.com",
     "aliases": [
       "go-fleet-pixel"
@@ -5838,12 +5932,22 @@
       "go-fleet-pixel.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 3,
+    "trl_evidence": "NEW fleet primitive (2026-05-18). 1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet. /selftest covers GIF roundtrip + DNT suppression + IP truncation. Optional Plausible self-host upstream.",
+    "trl_ceiling": 6,
+    "trl_assessed_at": "2026-05-18",
+    "trl_assessor": "claude-session-2026-05-18-pixel",
+    "host_port": 18200,
+    "container_port": 18200,
+    "extra_server_names": [
+      "pixel.0exec.com"
+    ]
   },
   {
     "id": "fleet-poc-curl",
     "name": "Fleet Poc Curl",
-    "description": "Fleet primitive: redacted PoC curl emitter (ADR-0008)",
+    "description": "redacted PoC curl emitter (bash -n parse-gated)",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5871,12 +5975,19 @@
       "go-fleet-poc-curl.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). redacted PoC curl emitter (bash -n parse-gated). /selftest + INTEGRATIONS.md shipped. ADR-0008. See services-registry/docs/adr/0008-fleet-poc-curl.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18158,
+    "container_port": 18158
   },
   {
     "id": "fleet-preflight",
     "name": "Fleet Preflight",
-    "description": "",
+    "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -5888,7 +5999,7 @@
     "url": "https://fleet-preflight.0exec.com",
     "health_url": "https://fleet-preflight.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-preflight",
-    "example_path": "/?target=example.com",
+    "example_path": "/checks",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -5903,12 +6014,20 @@
       "go-fleet-preflight.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "check:image (crane HEAD ghcr.io), check:nginx (HTTPS+TLS expiry warn at 30d), 60s ETag-aware registry cache, /selftest against embedded service.yaml fixture with stubbed crane+DNS+HTTPS",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Each new check is one goroutine. Lift bound is breadth of checks.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18142,
+    "container_port": 18142
   },
   {
     "id": "fleet-priority-queue",
     "name": "Fleet Priority Queue",
-    "description": "Fleet primitive: findings priority queue (ADR-0019)",
+    "description": "composite-scored findings priority ranker",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5935,7 +6054,14 @@
       "go-fleet-priority-queue.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite-scored findings priority ranker. /selftest + INTEGRATIONS.md shipped. ADR-0019. See services-registry/docs/adr/0019-fleet-priority-queue.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18169,
+    "container_port": 18169
   },
   {
     "id": "fleet-prometheus",
@@ -5969,7 +6095,7 @@
   {
     "id": "fleet-resolver-quorum",
     "name": "Fleet Resolver Quorum",
-    "description": "Fleet primitive: 2-of-3 DNS resolver quorum (ADR-0005)",
+    "description": "2-of-3 DNS resolver quorum",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -5996,12 +6122,19 @@
       "go-fleet-resolver-quorum.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). 2-of-3 DNS resolver quorum. /selftest + INTEGRATIONS.md shipped. ADR-0005. See services-registry/docs/adr/0005-fleet-resolver-quorum.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18155,
+    "container_port": 18155
   },
   {
     "id": "fleet-sandbox-targets",
     "name": "Fleet Sandbox Targets",
-    "description": "Fleet primitive: internal-only sandbox vulnerable apps (ADR-0018)",
+    "description": "internal-only sandbox vulnerable apps (10 endpoints)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6028,12 +6161,20 @@
       "go-fleet-sandbox-targets.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). internal-only sandbox vulnerable apps (10 endpoints). /selftest + INTEGRATIONS.md shipped. ADR-0018. See services-registry/docs/adr/0018-fleet-sandbox-targets.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18168,
+    "container_port": 18168,
+    "scope": "internal-only"
   },
   {
     "id": "fleet-schema-validator",
     "name": "Fleet Schema Validator",
-    "description": "Fleet primitive: JSON Schema catalog + validator (ADR-0016)",
+    "description": "JSON Schema catalog + validator (8 baseline schemas)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6060,12 +6201,19 @@
       "go-fleet-schema-validator.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). JSON Schema catalog + validator (8 baseline schemas). /selftest + INTEGRATIONS.md shipped. ADR-0016. See services-registry/docs/adr/0016-fleet-schema-validator.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18166,
+    "container_port": 18166
   },
   {
     "id": "fleet-secrets",
     "name": "Fleet Secrets",
-    "description": "",
+    "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -6077,7 +6225,7 @@
     "url": "https://fleet-secrets.0exec.com",
     "health_url": "https://fleet-secrets.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-secrets",
-    "example_path": "/?target=example.com",
+    "example_path": "/",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6092,12 +6240,20 @@
       "go-fleet-secrets.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "audit_log with prefix-only redaction (no full tokens), consumer ACL test, rotate-returns-old-once, concurrent rotate (1 winner asserted), /selftest",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18140,
+    "container_port": 18140
   },
   {
     "id": "fleet-selftest-aggregator",
     "name": "Fleet Selftest Aggregator",
-    "description": "Fleet primitive: /selftest poll-and-render aggregator (ADR-0015)",
+    "description": "/selftest poll-and-render aggregator",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6124,12 +6280,19 @@
       "go-fleet-selftest-aggregator.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). /selftest poll-and-render aggregator. /selftest + INTEGRATIONS.md shipped. ADR-0015. See services-registry/docs/adr/0015-fleet-selftest-aggregator.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18165,
+    "container_port": 18165
   },
   {
     "id": "fleet-target-reputation",
     "name": "Fleet Target Reputation",
-    "description": "Fleet primitive: target reputation lookup (ADR-0021)",
+    "description": "target reputation lookup (5 sources)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6156,12 +6319,19 @@
       "go-fleet-target-reputation.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). target reputation lookup (5 sources). /selftest + INTEGRATIONS.md shipped. ADR-0021. See services-registry/docs/adr/0021-fleet-target-reputation.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18171,
+    "container_port": 18171
   },
   {
     "id": "fleet-tech-inferrer",
     "name": "Fleet Tech Inferrer",
-    "description": "Fleet primitive: composite tech-stack inferrer (ADR-0009)",
+    "description": "composite tech-stack inferrer (83 signals)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6188,12 +6358,19 @@
       "go-fleet-tech-inferrer.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite tech-stack inferrer (83 signals). /selftest + INTEGRATIONS.md shipped. ADR-0009. See services-registry/docs/adr/0009-fleet-tech-inferrer.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18159,
+    "container_port": 18159
   },
   {
     "id": "fleet-vendor-disclosure-tracker",
     "name": "Fleet Vendor Disclosure Tracker",
-    "description": "Fleet primitive: vendor disclosure history tracker (ADR-0017)",
+    "description": "vendor disclosure history tracker (PII-redacted)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6220,12 +6397,19 @@
       "go-fleet-vendor-disclosure-tracker.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). vendor disclosure history tracker (PII-redacted). /selftest + INTEGRATIONS.md shipped. ADR-0017. See services-registry/docs/adr/0017-fleet-vendor-disclosure-tracker.md.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18167,
+    "container_port": 18167
   },
   {
     "id": "fleet-visualizer",
     "name": "Fleet Visualizer",
-    "description": "Fleet graph visualizer \u2014 operator dashboard (auth-gated) + public summary view rendering the live topology collected by go-fleet-graph.",
+    "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
     "category": "visualization",
     "mesh": "0exec",
     "kind": "container",
@@ -6235,7 +6419,7 @@
     "url": "https://fleet-visualizer.0exec.com",
     "health_url": "https://fleet-visualizer.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-visualizer",
-    "example_path": "/",
+    "example_path": "/public",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6250,12 +6434,24 @@
       "go-fleet-visualizer.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "ETag/304 fetch cache (60s TTL), /graph.dot Graphviz DOT, /trl-heatmap SSR with html-escape proof, /selftest exercises all 3 renderers against embedded 5-service fixture",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18144,
+    "container_port": 18144,
+    "depends_on": [
+      "go-fleet-graph",
+      "go-apikey-service"
+    ]
   },
   {
     "id": "fleet-webhook-verifier",
     "name": "Fleet Webhook Verifier",
-    "description": "Fleet primitive: inbound webhook signature verifier (ADR-0020)",
+    "description": "inbound webhook signature verifier (6 platforms)",
     "category": "fleet_infra",
     "mesh": "0exec",
     "kind": "container",
@@ -6282,7 +6478,14 @@
       "go-fleet-webhook-verifier.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). inbound webhook signature verifier (6 platforms). /selftest + INTEGRATIONS.md shipped. ADR-0020. See services-registry/docs/adr/0020-fleet-webhook-verifier.md.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
+    "host_port": 18170,
+    "container_port": 18170
   },
   {
     "id": "geo-geocode",
@@ -6394,7 +6597,7 @@
   {
     "id": "html-proxy",
     "name": "Html Proxy",
-    "description": "",
+    "description": "Microservice for Go Html Proxy",
     "category": "proxy",
     "mesh": "0exec",
     "kind": "container",
@@ -6422,12 +6625,20 @@
       "go-html-proxy.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Hexagonal/Clean Architecture in src/ (domain/application/infrastructure split), pipeline middleware with circuit-breakers, response cache + Prometheus metrics, k6 smoke/light/medium/load scripts, header-sanitizer + SSRF awareness on upstream fetch, fleet keystore auth via X-Auth-User header trust (synthetic fleet user, credit bypass) + local-user fallback via ?api_key=/X-API-Key/Authorization Bearer/?token=. Unit-tested auth chain incl. gateway-header + extract-token priority. Plus root-level fleet-canonical handler (ua_pool.go/retry.go/redirect.go/handler.go) at TRL 5 \u2014 UA rotation deterministic by X-Request-ID, retry on 5xx/network with 250ms backoff, configurable timeout/redirect cap, JSON envelope or raw passthrough, safehttp SSRF guard, 9 test cases (httptest server, 5xx-then-success, redirect chain). See docs/adr/0001-trl-uplift-to-5.md.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 3002,
+    "container_port": 3002
   },
   {
     "id": "information-leakage",
     "name": "Information Leakage",
-    "description": "",
+    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -6440,7 +6651,7 @@
     "url": "https://information-leakage.0exec.com",
     "health_url": "https://information-leakage.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go_information_leakage",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6456,12 +6667,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": ">",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 8083,
+    "container_port": 8083,
     "proxy_egress": true
   },
   {
     "id": "infrastructure-fetch-cache",
-    "name": "Infrastructure Fetch Cache",
-    "description": "Fleet-wide HTTP fetch cache: Redis-backed, zstd-compressed, singleflight-deduped. Lets producers share one fetch across many analyses of the same URL.",
+    "name": "Fleet Fetch Cache",
+    "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -6471,7 +6690,7 @@
     "url": "https://infrastructure-fetch-cache.0exec.com",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go_infrastructure_fetch_cache",
-    "example_path": "/?target=example.com",
+    "example_path": "/fetch?url=https://example.com/",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6486,12 +6705,16 @@
       "go-infrastructure-fetch-cache.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 4,
+    "trl_evidence": "v0.1 ships singleflight + 60s TTL + zstd-compressed Redis storage + SSRF-safe upstream via safehttp. Negative caching for 5xx (5s), no-cache for 4xx and truncated bodies. Redis-unavailable falls back to direct fetch. Lacks: conditional refresh (If-Modified-Since), per-caller metrics, response-shape contract test vs producers.",
+    "host_port": 18205,
+    "container_port": 18205
   },
   {
     "id": "js-proxy",
-    "name": "Js Proxy",
-    "description": "go-js-proxy \u2014 go-js-proxy.0exec.com",
+    "name": "Proxy (Go+JS)",
+    "description": "JS-rendering proxy (?url=)",
     "category": "proxy",
     "mesh": "0exec",
     "kind": "container",
@@ -6519,12 +6742,20 @@
       "go-js-proxy.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Legacy DOM-only render proxy. Production, load-bearing for fleet.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18006,
+    "container_port": 8080
   },
   {
     "id": "js-proxy-network",
     "name": "Js Proxy Network",
-    "description": "JS-render proxy returning DOM + full network log + console + performance",
+    "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
     "category": "proxy",
     "mesh": "0exec",
     "kind": "container",
@@ -6540,9 +6771,8 @@
     "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "api_key",
       "query_param": "api_key",
-      "header": "X-API-Key"
+      "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
@@ -6553,7 +6783,15 @@
       "go-js-proxy-network.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Live HTTPS, chromedp + CDP event capture (network/console/perf/cookies), Alpine+chromium 190MB, safehttp SSRF guard verified live (blocks 127/10/169.254.169.254).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-13",
+    "trl_assessor": "claude-session-2026-05-13",
+    "host_port": 18024,
+    "container_port": 8500
   },
   {
     "id": "jsbundle-routes",
@@ -6925,7 +7163,7 @@
   {
     "id": "pentest-agent-state",
     "name": "Pentest Agent State",
-    "description": "Persistent agent memory: snapshot + journal for autonomous pentest agents. Closes the 'every Claude conversation starts at zero' gap.",
+    "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -6937,7 +7175,7 @@
     "url": "https://pentest-agent-state.0exec.com",
     "health_url": "https://pentest-agent-state.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-agent-state",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6952,12 +7190,20 @@
       "go-pentest-agent-state.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "optimistic-lock state with version history, lease primitive with TestLease_Concurrent50Goroutines (BEGIN IMMEDIATE pattern), /selftest with 409 stale-write + lease exclusivity",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling lifts once orchestrator + payoff-tracker route through it end-to-end and the loop has survived a week of unattended operation.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18146,
+    "container_port": 18146
   },
   {
     "id": "pentest-asset-inventory",
     "name": "Pentest Asset Inventory",
-    "description": "",
+    "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -6969,7 +7215,7 @@
     "url": "https://pentest-asset-inventory.0exec.com",
     "health_url": "https://pentest-asset-inventory.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-asset-inventory",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6984,12 +7230,20 @@
       "go-pentest-asset-inventory.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "asset_history shadow table on tech/tags/status changes; /assets:bulk 5000-row tx benchmarked at 208ms (well under 500ms target); /assets/{id}/history; /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine until ~1M assets per program; sharding by program or Postgres later.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18131,
+    "container_port": 18131
   },
   {
     "id": "pentest-asset-scope-resolver",
     "name": "Pentest Asset Scope Resolver",
-    "description": "Wildcard scope expansion via cert-transparency + subfinder + scope-guard.",
+    "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7001,7 +7255,7 @@
     "url": "https://pentest-asset-scope-resolver.0exec.com",
     "health_url": "https://pentest-asset-scope-resolver.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-asset-scope-resolver",
-    "example_path": "/?target=example.com",
+    "example_path": "/",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7017,12 +7271,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Parallel CT/subfinder fanout, apex-bounded host normalization, scope-guard filtering, API-key forwarding, merge behavior tests.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Depends on upstream fleet services and live program scope data quality.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
+    "host_port": 18126,
+    "container_port": 18126,
     "proxy_egress": true
   },
   {
     "id": "pentest-attack-chainer",
     "name": "Pentest Attack Chainer",
-    "description": "CORS exploitation chain validator: cross-references CORS misconfig findings with go-pentest-takeover-checker + endpoint probing to classify REAL exploitability (critical/high/medium/low/informational).",
+    "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
     "category": "uncategorized",
     "mesh": "0exec",
     "kind": "container",
@@ -7036,7 +7298,7 @@
     "url": "https://pentest-attack-chainer.0exec.com",
     "health_url": "https://pentest-attack-chainer.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-attack-chainer",
-    "example_path": "/",
+    "example_path": "/health",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7051,12 +7313,19 @@
       "go-pentest-attack-chainer.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 5,
+    "trl_evidence": "4/4 unit tests passing (base-domain inference, severity matrix, PoC rendering with/without chain). Verified end-to-end against accommodations.booking.com: 30 siblings + 12 endpoint probes in 1.2s, correctly downgrades prober high -> informational.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18149,
+    "container_port": 18149
   },
   {
     "id": "pentest-audit-log",
     "name": "Pentest Audit Log",
-    "description": "Append-only audit log for the pentest fleet.",
+    "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7068,7 +7337,7 @@
     "url": "https://pentest-audit-log.0exec.com",
     "health_url": "https://pentest-audit-log.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-audit-log",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7083,7 +7352,14 @@
       "go-pentest-audit-log.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design.",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18119,
+    "container_port": 18119
   },
   {
     "id": "pentest-authz-matrix",
@@ -7116,12 +7392,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18152,
+    "container_port": 18152,
     "proxy_egress": true
   },
   {
     "id": "pentest-bounty-scope-checker",
     "name": "Pentest Bounty Scope Checker",
-    "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs.",
+    "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7133,7 +7416,7 @@
     "url": "https://pentest-bounty-scope-checker.0exec.com",
     "health_url": "https://pentest-bounty-scope-checker.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-bounty-scope-checker",
-    "example_path": "/?target=example.com",
+    "example_path": "/check?target=api.github.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7149,12 +7432,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Bug-bounty scope matcher uses curated program seed data, regex caching, payout sorting, structured matches, and tests.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Production freshness depends on continuously updated program feeds.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "codex-session-2026-05-14",
+    "host_port": 18110,
+    "container_port": 18110,
     "proxy_egress": true
   },
   {
     "id": "pentest-cert-transparency",
     "name": "Pentest Cert Transparency",
-    "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records.",
+    "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records (issuer/dates/SANs).",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7166,7 +7457,7 @@
     "url": "https://pentest-cert-transparency.0exec.com",
     "health_url": "https://pentest-cert-transparency.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-cert-transparency",
-    "example_path": "/?target=example.com",
+    "example_path": "/cache/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7182,12 +7473,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "crt.sh fetcher + SQLite cache (modernc) + wildcard-skip + SAN-suffix filter; tested for normalization, cache hits, subdomain filter.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Add Censys + Google CT in parallel for redundancy.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18109,
+    "container_port": 18109,
     "proxy_egress": true
   },
   {
     "id": "pentest-chaos-sync",
     "name": "Pentest Chaos Sync",
-    "description": "Background syncer for ProjectDiscovery Chaos dataset. SQLite-cached subdomain lookups, zero target-network traffic.",
+    "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7199,7 +7498,7 @@
     "url": "https://pentest-chaos-sync.0exec.com",
     "health_url": "https://pentest-chaos-sync.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-chaos-sync",
-    "example_path": "/?target=example.com",
+    "example_path": "/sync/status",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7215,12 +7514,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; \u22656 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across \u22653 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18128,
+    "container_port": 18128,
     "proxy_egress": true
   },
   {
     "id": "pentest-codec",
     "name": "Pentest Codec",
-    "description": "Encode/decode + JWT segment decoder; 11 formats.",
+    "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7232,7 +7539,7 @@
     "url": "https://pentest-codec.0exec.com",
     "health_url": "https://pentest-codec.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-codec",
-    "example_path": "/?target=example.com",
+    "example_path": "/encode?algo=base64&input=hello",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7248,12 +7555,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 8,
+    "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs.",
+    "trl_ceiling": 9,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18118,
+    "container_port": 18118,
     "proxy_egress": true
   },
   {
     "id": "pentest-continuous-monitor",
     "name": "Pentest Continuous Monitor",
-    "description": "",
+    "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription \u2014 money compounds with the asset universe, not manpower.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7265,7 +7579,7 @@
     "url": "https://pentest-continuous-monitor.0exec.com",
     "health_url": "https://pentest-continuous-monitor.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-continuous-monitor",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7280,12 +7594,20 @@
       "go-pentest-continuous-monitor.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Concurrent dispatch bounded by errgroup+semaphore, per-program advisory lock via running_until (RFC3339), deterministic idempotency_key sent to job-queue (composes with job-queue 0.2.0), /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by job-queue throughput. Sequential per-program scheduler keeps the reasoning simple.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18134,
+    "container_port": 18134
   },
   {
     "id": "pentest-cors-misconfig-prober",
     "name": "Pentest Cors Misconfig Prober",
-    "description": "Active CORS misconfig probes (reflection, null, suffix, pre-subdomain).",
+    "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7297,7 +7619,7 @@
     "url": "https://pentest-cors-misconfig-prober.0exec.com",
     "health_url": "https://pentest-cors-misconfig-prober.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-cors-misconfig-prober",
-    "example_path": "/?target=example.com",
+    "example_path": "/probe?url=https%3A%2F%2Fexample.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7313,12 +7635,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "5 active probes, reflection+credentials high-sev detection, suffix-confusion + pre-subdomain bypass, case-fold. Tested positive (high) + negative.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18124,
+    "container_port": 18124,
     "proxy_egress": true
   },
   {
     "id": "pentest-cvss",
     "name": "Pentest Cvss",
-    "description": "Pure-Go CVSS 3.1 base score calculator. Tested against canonical FIRST.org examples.",
+    "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7330,7 +7659,7 @@
     "url": "https://pentest-cvss.0exec.com",
     "health_url": "https://pentest-cvss.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-cvss",
-    "example_path": "/?target=example.com",
+    "example_path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7346,12 +7675,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 8,
+    "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only.",
+    "trl_ceiling": 9,
+    "trl_ceiling_reason": "CVSS 4.0 support pushes to 9.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18107,
+    "container_port": 18107,
     "proxy_egress": true
   },
   {
     "id": "pentest-dedup-fingerprint",
     "name": "Pentest Dedup Fingerprint",
-    "description": "",
+    "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7363,7 +7700,7 @@
     "url": "https://pentest-dedup-fingerprint.0exec.com",
     "health_url": "https://pentest-dedup-fingerprint.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-dedup-fingerprint",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7379,12 +7716,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "73-row scanner corpus across 4 scanners x 8 vulns: intra=100% / inter=0% collision rates; fp_version=v1; /forget admin-gated; /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18132,
+    "container_port": 18132,
     "proxy_egress": true
   },
   {
     "id": "pentest-dependency-cve",
     "name": "Pentest Dependency Cve",
-    "description": "CPE -> NVD JSON 2.0 + CISA KEV cross-flag.",
+    "description": "CPE -> NVD JSON 2.0 + CISA KEV cross-flag. Per-request fetch (no local cache yet). Composes with go-pentest-httpx tech detection.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7396,7 +7741,7 @@
     "url": "https://pentest-dependency-cve.0exec.com",
     "health_url": "https://pentest-dependency-cve.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-dependency-cve",
-    "example_path": "/?target=example.com",
+    "example_path": "/",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7412,12 +7757,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "SQLite TTL cache (NVD/KEV/OSV), OSV.dev cross-source merge, /selftest with stubbed upstreams, 14 test funcs (was 0)",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "TRL 7 with local CVE feed primitive caching NVD/GHSA delta-updates.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18125,
+    "container_port": 18125,
     "proxy_egress": true
   },
   {
     "id": "pentest-disclosure-policy-finder",
     "name": "Pentest Disclosure Policy Finder",
-    "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/none.",
+    "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7429,7 +7782,7 @@
     "url": "https://pentest-disclosure-policy-finder.0exec.com",
     "health_url": "https://pentest-disclosure-policy-finder.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-disclosure-policy-finder",
-    "example_path": "/?target=example.com",
+    "example_path": "/check?target=hackerone.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7445,12 +7798,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "12 probe paths, RFC 9116 parser, 9 bounty-platform regexes, 4 safe-harbor regexes, class-priority resolver. Extends fleet security-txt with VDP-vs-bounty classification.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Add /security anchor crawl + submit-button scraping.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18111,
+    "container_port": 18111,
     "proxy_egress": true
   },
   {
     "id": "pentest-exploit-verifier",
     "name": "Pentest Exploit Verifier",
-    "description": "",
+    "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7462,7 +7823,7 @@
     "url": "https://pentest-exploit-verifier.0exec.com",
     "health_url": "https://pentest-exploit-verifier.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-exploit-verifier",
-    "example_path": "/?target=example.com",
+    "example_path": "/capabilities",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7478,12 +7839,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Each verifier is a thin recipe \u2014 lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18137,
+    "container_port": 18137,
     "proxy_egress": true
   },
   {
     "id": "pentest-favicon-hash",
     "name": "Pentest Favicon Hash",
-    "description": "Shodan-style mmh3 favicon hash with known-tech lookup.",
+    "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7495,7 +7864,7 @@
     "url": "https://pentest-favicon-hash.0exec.com",
     "health_url": "https://pentest-favicon-hash.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-favicon-hash",
-    "example_path": "/?target=example.com",
+    "example_path": "/lookup?hash=-1996286744",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7511,12 +7880,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity.",
+    "trl_ceiling": 9,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18117,
+    "container_port": 18117,
     "proxy_egress": true
   },
   {
     "id": "pentest-finding-triage",
     "name": "Pentest Finding Triage",
-    "description": "",
+    "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7528,7 +7904,7 @@
     "url": "https://pentest-finding-triage.0exec.com",
     "health_url": "https://pentest-finding-triage.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-finding-triage",
-    "example_path": "/?target=example.com",
+    "example_path": "/rules",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7544,12 +7920,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "SQLite decision ledger with /decisions query, dry_run mode returning would_decide, sony/gobreaker circuit breakers around scope-guard + dedup-fingerprint, degraded_mode in response, /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18135,
+    "container_port": 18135,
     "proxy_egress": true
   },
   {
     "id": "pentest-findings-store",
     "name": "Pentest Findings Store",
-    "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed; collapses same finding from multiple scanners via dedup_key.",
+    "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed (pure Go modernc); collapses same finding from multiple scanners via dedup_key with seen_count.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7561,7 +7945,7 @@
     "url": "https://pentest-findings-store.0exec.com",
     "health_url": "https://pentest-findings-store.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-findings-store",
-    "example_path": "/?target=example.com",
+    "example_path": "/findings?limit=1",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7577,12 +7961,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "findings_history shadow table with SHA-256 evidence hashing, /findings/{id}/history endpoint, /selftest round-trip",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite is fine until ~1M findings; horizontal shard or Postgres later.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18103,
+    "container_port": 18103,
     "proxy_egress": true
   },
   {
     "id": "pentest-github-dorks",
     "name": "Pentest Github Dorks",
-    "description": "GitHub Search API dorks for leaked creds: AWS keys, .env, private keys, Slack/Stripe/PAT tokens. 31 curated patterns.",
+    "description": "GitHub Search API dorking for leaked credentials: 31 curated patterns (AWS keys, .env, private keys, Slack/Stripe/PAT tokens, kubeconfig, npm/Docker creds). Rate-limit aware; pairs with go-pentest-trufflehog for verification.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7594,7 +7986,7 @@
     "url": "https://pentest-github-dorks.0exec.com",
     "health_url": "https://pentest-github-dorks.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-github-dorks",
-    "example_path": "/?target=example.com",
+    "example_path": "/dorks",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7610,12 +8002,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 5,
+    "trl_evidence": "38 curated dork patterns (creds + files + vendors + infra + k8s + per-vendor leaks); typed rate-limit handling (primary + secondary/abuse) with adaptive sleep; per-dork 4s + total 90s deadline; optional verification compose with go-pentest-trufflehog (TRUFFLEHOG_URL); domain qualifier (\\\"<domain>\\\" in:file); production mode (MODE=production) refuses to start without GITHUB_TOKEN; 19 unit tests including httptest-mocked GitHub API (success / primary rate-limit / abuse / no-results) + trufflehog compose. Pure Go (CGO-free), no parallelism. Ceiling stays at 7 pending cross-dork dedup, snippet-level secret extraction, and findings-store fan-out.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "GitHub Search has no regex; semantic dedup + verifier-loop integration cap the climb at 6.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18123,
+    "container_port": 18123,
     "proxy_egress": true
   },
   {
     "id": "pentest-http-replay",
     "name": "Pentest Http Replay",
-    "description": "",
+    "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7627,7 +8027,7 @@
     "url": "https://pentest-http-replay.0exec.com",
     "health_url": "https://pentest-http-replay.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-http-replay",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7642,12 +8042,20 @@
       "go-pentest-http-replay.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 5,
+    "trl_evidence": "go-common safehttp client; 256KB response cap; sha256 body-hash for rerun diff; 19 tests pass including curl-builder edge cases.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine for evidence retention at typical bug-bounty scale; lifts when paired with object storage for large bodies.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18130,
+    "container_port": 18130
   },
   {
     "id": "pentest-httpx",
     "name": "Pentest Httpx",
-    "description": "One HTTP fingerprint per request: status, title, TLS cert, ~25 tech-detection signatures. Parallel batch mode.",
+    "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7659,7 +8067,7 @@
     "url": "https://pentest-httpx.0exec.com",
     "health_url": "https://pentest-httpx.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-httpx",
-    "example_path": "/?target=example.com",
+    "example_path": "/probe?url=https%3A%2F%2Fexample.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7675,12 +8083,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Single+batch probes, parallel with worker cap, TLS extract, ~25 tech-detection signatures (CDNs, frameworks, CMS, front-end libs). safehttp-protected. Tested.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Wrap wappalyzergo for full 3000+ fingerprint DB.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18113,
+    "container_port": 18113,
     "proxy_egress": true
   },
   {
     "id": "pentest-job-queue",
     "name": "Pentest Job Queue",
-    "description": "",
+    "description": "Durable workflow queue. POST jobs, workers /claim \u2192 /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7692,7 +8108,7 @@
     "url": "https://pentest-job-queue.0exec.com",
     "health_url": "https://pentest-job-queue.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-job-queue",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7707,12 +8123,20 @@
       "go-pentest-job-queue.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "idempotency_key column with partial UNIQUE index, /metrics short-circuit middleware, /selftest, TestEnqueue_IdempotencyKey_Concurrent (50-goroutine race)",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18133,
+    "container_port": 18133
   },
   {
     "id": "pentest-leak-bounty-policy",
     "name": "Pentest Leak Bounty Policy",
-    "description": "",
+    "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -7724,7 +8148,7 @@
     "url": "https://pentest-leak-bounty-policy.0exec.com",
     "health_url": "https://pentest-leak-bounty-policy.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-leak-bounty-policy",
-    "example_path": "/?target=example.com",
+    "example_path": "/search?token=sk_live_xxx",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7740,12 +8164,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "30-row vendor policy seed (AWS/GitHub/Slack/Stripe/OpenAI/Anthropic/Twilio/Mailgun/GCP/Azure/etc.), BEGIN IMMEDIATE on both seed and ledger, secret-prefix-only persistence (TestLedger_NoSecretInRows enforces), /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18145,
+    "container_port": 18145,
     "proxy_egress": true
   },
   {
     "id": "pentest-notify",
     "name": "Pentest Notify",
-    "description": "Multi-sink notification fanout (Telegram/Discord/Slack/email/webhook) via containrrr/shoutrrr.",
+    "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7757,7 +8189,7 @@
     "url": "https://pentest-notify.0exec.com",
     "health_url": "https://pentest-notify.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-notify",
-    "example_path": "/?target=example.com",
+    "example_path": "/sinks",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7772,12 +8204,20 @@
       "go-pentest-notify.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks.",
+    "trl_ceiling": 9,
+    "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18108,
+    "container_port": 18108
   },
   {
     "id": "pentest-nuclei",
     "name": "Pentest Nuclei",
-    "description": "Nuclei wrapper: scope-guarded YAML-template scanner. Forwards findings to go-pentest-findings-store.",
+    "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7789,7 +8229,7 @@
     "url": "https://pentest-nuclei.0exec.com",
     "health_url": "https://pentest-nuclei.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-nuclei",
-    "example_path": "/?target=example.com",
+    "example_path": "/templates",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7805,12 +8245,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "scope-guard preflight (fail-closed -> 503), rate-coordinator per-host acquire (fail-open), findings-store wire on severity>=medium, /selftest round-trips all 3 sibling stubs + runner",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Pinned-binary wrapping; templates refresh cadence + concurrency stress-testing gate the climb to 7.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18115,
+    "container_port": 18115,
     "proxy_egress": true
   },
   {
     "id": "pentest-oob-collector",
     "name": "Pentest Oob Collector",
-    "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. v0.1 = HTTP; v0.2 = interactsh DNS wrap.",
+    "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7822,7 +8270,7 @@
     "url": "https://pentest-oob-collector.0exec.com",
     "health_url": "https://pentest-oob-collector.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-oob-collector",
-    "example_path": "/?target=example.com",
+    "example_path": "/sessions?limit=1",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7838,12 +8286,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18106,
+    "container_port": 18106,
     "proxy_egress": true
   },
   {
     "id": "pentest-orchestrator",
     "name": "Pentest Orchestrator",
-    "description": "",
+    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7855,7 +8311,7 @@
     "url": "https://pentest-orchestrator.0exec.com",
     "health_url": "https://pentest-orchestrator.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-orchestrator",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7870,12 +8326,20 @@
       "go-pentest-orchestrator.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "campaign state machine, transitions + campaign_artifacts tables, idempotency_key returns 201/200 same as job-queue pattern, /selftest drives scope->recon->scan against httptest stubs",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18138,
+    "container_port": 18138
   },
   {
     "id": "pentest-payloads",
     "name": "Pentest Payloads",
-    "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant.",
+    "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7887,7 +8351,7 @@
     "url": "https://pentest-payloads.0exec.com",
     "health_url": "https://pentest-payloads.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-payloads",
-    "example_path": "/?target=example.com",
+    "example_path": "/classes",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7903,12 +8367,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "9 classes seeded with real-world payloads (xss reflected+polyglot, sqli error+time, ssrf cloud-meta+local, ssti jinja2+twig, xxe, crlf, nosqli, graphql, path-traversal). Random + filter APIs tested.",
+    "trl_ceiling": 9,
+    "trl_ceiling_reason": "Ceiling = PayloadsAllTheThings as submodule.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18101,
+    "container_port": 18101,
     "proxy_egress": true
   },
   {
     "id": "pentest-payoff-tracker",
     "name": "Pentest Payoff Tracker",
-    "description": "Joins finding-triage predictions against platform outcomes. Per-rule precision + per-program ROI.",
+    "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7920,7 +8392,7 @@
     "url": "https://pentest-payoff-tracker.0exec.com",
     "health_url": "https://pentest-payoff-tracker.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-payoff-tracker",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7935,12 +8407,20 @@
       "go-pentest-payoff-tracker.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE ingest, amount_cents as INTEGER (no float for money), /stats with percentiles, /scoreboard ordered by payout, /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling lifts once at least ~20 real submissions have flowed through and /calibration is non-empty.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18148,
+    "container_port": 18148
   },
   {
     "id": "pentest-rate-coordinator",
     "name": "Pentest Rate Coordinator",
-    "description": "Global per-host token-bucket rate limiter. Every scanner calls /acquire before firing - keeps the fleet from collectively DDoS'ing a target.",
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7952,7 +8432,7 @@
     "url": "https://pentest-rate-coordinator.0exec.com",
     "health_url": "https://pentest-rate-coordinator.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-rate-coordinator",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7967,12 +8447,20 @@
       "go-pentest-rate-coordinator.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Prometheus /metrics (counter+histogram+gauges), /selftest spawns 100 concurrent acquirers, TestAcquire_Concurrent under -race; 0.2.1 fixes /metrics double-registration panic",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18104,
+    "container_port": 18104
   },
   {
     "id": "pentest-report-templater",
     "name": "Pentest Report Templater",
-    "description": "Turns a structured Finding into HackerOne/Bugcrowd/Intigriti markdown. Optional CVSS enrichment.",
+    "description": "Turns a structured Finding into a platform-ready markdown report. Ships HackerOne/Bugcrowd/Intigriti templates. Optional CVSS enrichment via go-pentest-cvss. Highest-leverage service in the fleet.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -7984,7 +8472,7 @@
     "url": "https://pentest-report-templater.0exec.com",
     "health_url": "https://pentest-report-templater.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-report-templater",
-    "example_path": "/?target=example.com",
+    "example_path": "/templates",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8000,12 +8488,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "3 platform templates using stdlib text/template, custom func map (title/code/indent/add1), CVSS enrichment via go-pentest-cvss with graceful degrade. Tested for render + missing-template + per-platform output.",
+    "trl_ceiling": 9,
+    "trl_ceiling_reason": "Add org-specific templates + screenshot embed + direct HackerOne API submission.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18114,
+    "container_port": 18114,
     "proxy_egress": true
   },
   {
     "id": "pentest-scope-guard",
     "name": "Pentest Scope Guard",
-    "description": "Hard scope check before any active prober fires. POST /check {target, program} -> allowed/denied. The legal floor of the pentest fleet.",
+    "description": "Hard scope check before any active prober fires. POST /check {target, program_id} -> {allowed, reason, matched_by}. Matches hostname/wildcard/CIDR/regex; exclusions always win. Legal floor of the pentest fleet.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8017,7 +8513,7 @@
     "url": "https://pentest-scope-guard.0exec.com",
     "health_url": "https://pentest-scope-guard.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-scope-guard",
-    "example_path": "/?target=example.com",
+    "example_path": "/programs",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8033,12 +8529,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "SQLite persistence with 256-LRU, audit_log with /audit query, ReDoS pattern rejection at create-time, target-normalizer composition with 3-strike circuit breaker, /selftest",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18105,
+    "container_port": 18105,
     "proxy_egress": true
   },
   {
     "id": "pentest-screenshot",
     "name": "Pentest Screenshot",
-    "description": "",
+    "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} \u2192 PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8050,7 +8554,7 @@
     "url": "https://pentest-screenshot.0exec.com",
     "health_url": "https://pentest-screenshot.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-screenshot",
-    "example_path": "/?target=example.com",
+    "example_path": "/shot?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8066,12 +8570,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 5,
+    "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build).",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by Chromium-headless RAM (1 GiB shm) and the fact that one container is one Chromium instance.",
+    "trl_assessed_at": "2026-05-15",
+    "trl_assessor": "claude-session-2026-05-15",
+    "host_port": 18129,
+    "container_port": 18129,
     "proxy_egress": true
   },
   {
     "id": "pentest-secrets-scanner",
     "name": "Pentest Secrets Scanner",
-    "description": "~30 vendor regex+entropy secret rules.",
+    "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8083,7 +8595,7 @@
     "url": "https://pentest-secrets-scanner.0exec.com",
     "health_url": "https://pentest-secrets-scanner.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-secrets-scanner",
-    "example_path": "/?target=example.com",
+    "example_path": "/rules",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8099,6 +8611,14 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "~30 vendor rules, Shannon-entropy gate via math.Log2, line+context+redaction. Tested vs real-looking fixtures.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "TRL 8 with verified-secret feature (call vendor API to confirm key is live).",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18122,
+    "container_port": 18122,
     "proxy_egress": true
   },
   {
@@ -8132,6 +8652,12 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18151,
+    "container_port": 18151,
     "proxy_egress": true
   },
   {
@@ -8165,12 +8691,18 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18150,
+    "container_port": 18150,
     "proxy_egress": true
   },
   {
     "id": "pentest-subfinder",
     "name": "Pentest Subfinder",
-    "description": "Multi-source passive subdomain enumeration: crt.sh, HackerTarget, AnubisDB, Wayback. Free sources only.",
+    "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -8182,7 +8714,7 @@
     "url": "https://pentest-subfinder.0exec.com",
     "health_url": "https://pentest-subfinder.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-subfinder",
-    "example_path": "/?target=example.com",
+    "example_path": "/sources",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8198,12 +8730,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "4 passive sources fanned out in parallel with per-source timing + error capture, merged with dedup + suffix filter. No paid keys required.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Add Shodan/Censys/Chaos/SecurityTrails when keys configured.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18112,
+    "container_port": 18112,
     "proxy_egress": true
   },
   {
     "id": "pentest-submit-bot",
     "name": "Pentest Submit Bot",
-    "description": "",
+    "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8215,7 +8755,7 @@
     "url": "https://pentest-submit-bot.0exec.com",
     "health_url": "https://pentest-submit-bot.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-submit-bot",
-    "example_path": "/?target=example.com",
+    "example_path": "/quota",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8231,12 +8771,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE on *sql.Conn (canonical pattern), idempotency_key (50-goroutine race test asserts 1 platform call), dry_run mode, /selftest with stubbed platform API",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18136,
+    "container_port": 18136,
     "proxy_egress": true
   },
   {
     "id": "pentest-takeover-checker",
     "name": "Pentest Takeover Checker",
-    "description": "CNAME + HTTP + fingerprint match for subdomain takeover.",
+    "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8248,7 +8796,7 @@
     "url": "https://pentest-takeover-checker.0exec.com",
     "health_url": "https://pentest-takeover-checker.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-takeover-checker",
-    "example_path": "/?target=example.com",
+    "example_path": "/check?host=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8264,12 +8812,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "2-of-3 multi-resolver quorum, confirmed-tier registration probes (GitHub/S3/Heroku), findings-store wire with fail-open, 20 tests across 4 packages",
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18121,
+    "container_port": 18121,
     "proxy_egress": true
   },
   {
     "id": "pentest-takeover-fingerprints",
     "name": "Pentest Takeover Fingerprints",
-    "description": "Subdomain takeover signature DB (17 vendors).",
+    "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8281,7 +8836,7 @@
     "url": "https://pentest-takeover-fingerprints.0exec.com",
     "health_url": "https://pentest-takeover-fingerprints.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-takeover-fingerprints",
-    "example_path": "/?target=example.com",
+    "example_path": "/fingerprints",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8297,12 +8852,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "17 curated signatures from can-i-take-over-xyz + in-the-wild. CNAME+status+body multi-signal match. Tested positive (S3) + negative cases.",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18116,
+    "container_port": 18116,
     "proxy_egress": true
   },
   {
     "id": "pentest-target-normalizer",
     "name": "Pentest Target Normalizer",
-    "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR) with kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls first.",
+    "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR). Returns kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls before doing anything else.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -8314,7 +8876,7 @@
     "url": "https://pentest-target-normalizer.0exec.com",
     "health_url": "https://pentest-target-normalizer.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-target-normalizer",
-    "example_path": "/?target=example.com",
+    "example_path": "/?q=https://EXAMPLE.com/path",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8329,12 +8891,20 @@
       "go-pentest-target-normalizer.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "55-row //go:embed golden corpus, /selftest with idempotency assertion, NormalizedVia evidence trail, psl_version in /version",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Ceiling is whatever publicsuffix list covers; no external deps to break.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18102,
+    "container_port": 18102
   },
   {
     "id": "pentest-triager-listener",
     "name": "Pentest Triager Listener",
-    "description": "Inbound half of submit-bot: polls HackerOne/Bugcrowd/Intigriti for state changes on submitted reports.",
+    "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8346,7 +8916,7 @@
     "url": "https://pentest-triager-listener.0exec.com",
     "health_url": "https://pentest-triager-listener.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-triager-listener",
-    "example_path": "/?target=example.com",
+    "example_path": "/stats",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8362,12 +8932,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 4,
+    "trl_evidence": "SQLite-backed, idempotent on (platform, external_id), terminal-state poll skipping, state-change journal, normalized status enum across 3 platform shapes. Adapter stubs for H1/BC/Intigriti return ErrNotConfigured cleanly when tokens absent.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Bounded by platform API stability \u2014 H1/BC/Intigriti reshape attributes regularly and there's no signed contract.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-session-2026-05-16",
+    "host_port": 18147,
+    "container_port": 18147,
     "proxy_egress": true
   },
   {
     "id": "pentest-trufflehog",
     "name": "Pentest Trufflehog",
-    "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). Upgrade path over go-pentest-secrets-scanner.",
+    "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). 700+ detectors live-tested against providers. Upgrades go-pentest-secrets-scanner with verification.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8379,7 +8957,7 @@
     "url": "https://pentest-trufflehog.0exec.com",
     "health_url": "https://pentest-trufflehog.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-trufflehog",
-    "example_path": "/?target=example.com",
+    "example_path": "/",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8395,12 +8973,20 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam \u2192 \u226513 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 18120,
+    "container_port": 18120,
     "proxy_egress": true
   },
   {
     "id": "pentest-walkthrough",
     "name": "Pentest Walkthrough",
-    "description": "",
+    "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -8412,7 +8998,7 @@
     "url": "https://pentest-walkthrough.0exec.com",
     "health_url": "https://pentest-walkthrough.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-walkthrough",
-    "example_path": "/?target=example.com",
+    "example_path": "/preflight",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8427,12 +9013,20 @@
       "go-pentest-walkthrough.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "4 baked-in markdown templates (ssrf/xss/sqli/idor) via //go:embed, sensitive-header redaction (Cookie/Authorization/X-API-Key -> prefix-only), /selftest exercises all 4 templates",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Same ceiling as orchestrator \u2014 bounded by submit-bot end-to-end verification.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 18139,
+    "container_port": 18139
   },
   {
     "id": "pentest-wayback-urls",
     "name": "Pentest Wayback Urls",
-    "description": "Historical URL discovery via web.archive.org CDX.",
+    "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
     "category": "recon",
     "mesh": "0exec",
     "kind": "container",
@@ -8444,7 +9038,7 @@
     "url": "https://pentest-wayback-urls.0exec.com",
     "health_url": "https://pentest-wayback-urls.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-wayback-urls",
-    "example_path": "/?target=example.com",
+    "example_path": "/urls?domain=example.com&limit=5",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8460,12 +9054,19 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 7,
+    "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump).",
+    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18127,
+    "container_port": 18127,
     "proxy_egress": true
   },
   {
     "id": "pentest-wordlists",
     "name": "Pentest Wordlists",
-    "description": "Serves curated pentest wordlists (dirs, subdomains, params) by category with SHA256 integrity tags.",
+    "description": "Serves curated pentest wordlists (dirs, subdomains, params, fuzz) by category with SHA256 integrity. Random-sample API. Designed to grow via SecLists submodule.",
     "category": "security",
     "mesh": "0exec",
     "kind": "container",
@@ -8477,7 +9078,7 @@
     "url": "https://pentest-wordlists.0exec.com",
     "health_url": "https://pentest-wordlists.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-pentest-wordlists",
-    "example_path": "/?target=example.com",
+    "example_path": "/lists",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -8493,6 +9094,14 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 6,
+    "trl_evidence": "Disk-backed catalog with SHA256, reservoir-sample random API, paged reads. Ships with starter dirs/subdomains/params. CPU-only.",
+    "trl_ceiling": 9,
+    "trl_ceiling_reason": "Ceiling = SecLists submodule contents.",
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "host_port": 18100,
+    "container_port": 18100,
     "proxy_egress": true
   },
   {
@@ -8567,8 +9176,8 @@
   },
   {
     "id": "proxy",
-    "name": "Proxy",
-    "description": "Go HTTP scraping proxy \u2014 go-proxy.0exec.com",
+    "name": "Proxy (Go)",
+    "description": "HTTP proxy with rotation (?url=)",
     "category": "proxy",
     "mesh": "0exec",
     "kind": "container",
@@ -8596,7 +9205,15 @@
       "go-proxy.0exec.com"
     ],
     "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18"
+    "rename_retire_at": "2026-06-18",
+    "trl": 5,
+    "trl_evidence": "Go proxy implementation, protocol handling",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18002,
+    "container_port": 3001
   },
   {
     "id": "python-proxy",
@@ -8665,8 +9282,8 @@
   },
   {
     "id": "search-duck",
-    "name": "Search Duck",
-    "description": "go-search-duck \u2014 go-search-duck.0exec.com",
+    "name": "Search DuckDuckGo (Go)",
+    "description": "DuckDuckGo SERP scraper in Go (?query=)",
     "category": "search",
     "mesh": "0exec",
     "kind": "container",
@@ -8695,6 +9312,14 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "trl": 5,
+    "trl_evidence": "Go search wrapper, API integration",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-haiku-trl-batch",
+    "host_port": 18013,
+    "container_port": 3401,
     "proxy_egress": true
   },
   {
@@ -9831,7 +10456,7 @@
   {
     "id": "pentest-dashboard",
     "name": "Pentest Dashboard",
-    "description": "",
+    "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
     "category": "visualization",
     "mesh": "pages",
     "kind": "static",
@@ -9848,7 +10473,13 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/"
+    "pages_url": "https://baditaflorin.github.io/go-pentest-dashboard/",
+    "trl": 7,
+    "trl_evidence": "sibling fan-out aggregator with 30s TTL cache, /overview HTML with html/template auto-escape (asserted by test), /selftest with 4 sibling stubs, sibling-down does not crash (degraded[] flag)",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by what the fleet exposes; active probing tools need auth + deploy before they can be surfaced safely.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2"
   },
   {
     "id": "physical-kanban-sync",

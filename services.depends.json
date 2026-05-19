@@ -1,1 +1,1 @@
-[]
+[{"id":"catalog-service","depends_on":[]},{"id":"fleet-graph","depends_on":["go-apikey-service"]},{"id":"fleet-visualizer","depends_on":["go-fleet-graph","go-apikey-service"]}]
