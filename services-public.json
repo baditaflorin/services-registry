@@ -5070,8 +5070,8 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "category": "uncategorized",
-    "description": "F7+F9: dockerhost disk pressure eviction + memory leak detector",
+    "category": "observability",
+    "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression \u2014 flags containers whose slope > 50 MB/h AND R\u00b2 > 0.7.",
     "example_path": "/",
     "health_url": "https://fleet-host-guard.0exec.com/health",
     "id": "fleet-host-guard",
@@ -5082,6 +5082,11 @@
     "repo_url": "https://github.com/baditaflorin/go-fleet-host-guard",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-host-guard-scaffold",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by docker-stats RSS fidelity (cgroup memory.usage_in_bytes includes page cache). Lift to 7+ would require parsing /sys/fs/cgroup/memory/{slice}/memory.stat to separate RSS from cache.",
     "url": "https://fleet-host-guard.0exec.com"
   },
   {
