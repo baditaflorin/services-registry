@@ -5898,8 +5898,8 @@
   {
     "id": "fleet-host-guard",
     "name": "Fleet Host Guard",
-    "description": "F7+F9: dockerhost disk pressure eviction + memory leak detector",
-    "category": "uncategorized",
+    "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression \u2014 flags containers whose slope > 50 MB/h AND R\u00b2 > 0.7.",
+    "category": "observability",
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
@@ -5915,7 +5915,15 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Initial scaffold (2026-05-19). 11 unit tests across both primitives \u2014 injectable Runner + StatFS mocks; tests cover disk sweep below/above threshold (no-op / dry-run / real exec+parse), statfs failure path, log truncate keep-tail correctness, logrotate sibling skip, parseHumanBytes coverage, monotonic growth flagged (slope ~100MB/h, R\u00b2 > 0.99), flat noise NOT flagged (R\u00b2 < 0.7), noisy growth low R\u00b2, leaky vs steady end-to-end ticker, docker-sock unreachable (state untouched, error surfaced). /selftest exercises regression + parsing primitives against in-memory data.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Bounded by docker-stats RSS fidelity (cgroup memory.usage_in_bytes includes page cache). Lift to 7+ would require parsing /sys/fs/cgroup/memory/{slice}/memory.stat to separate RSS from cache.",
+    "trl_assessed_at": "2026-05-19",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-host-guard-scaffold",
+    "host_port": 18206,
+    "container_port": 18206
   },
   {
     "id": "fleet-payload-corpus",
