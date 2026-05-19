@@ -304,15 +304,16 @@ def auth_help_for(auth: dict) -> str:
 
 
 def slug_from_repo_name(name: str, mesh: str) -> str:
-    """0crawl repos are named `go_xxxx` on GitHub but the service runs at
-    `xxxx.0crawl.com`, so we strip the `go-` prefix for that mesh only. The
-    0exec mesh keeps the prefix (`go-js-proxy.0exec.com` matches the repo).
+    """Strip the leading `go-` prefix for both meshes. Previously this was
+    0crawl-only; unified 2026-05-19 so 0exec services also drop the prefix
+    (go-js-proxy.0exec.com → js-proxy.0exec.com, etc.). The `renames.json`
+    log carries 301-redirect rows for every affected hostname so bookmarks
+    keep working through the retire_at date.
     Per-repo overrides above win over the auto-derivation."""
     if name in SLUG_OVERRIDES:
         return SLUG_OVERRIDES[name]
     s = name.replace("_", "-").lower()
-    if mesh == "0crawl":
-        s = s.removeprefix("go-")
+    s = s.removeprefix("go-")
     return s
 
 

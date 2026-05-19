@@ -91,6 +91,17 @@ def main() -> int:
 
     for entry in container:
         slug = entry["id"]
+
+        # Fast-path: if the current slug doesn't start with "go-", the
+        # strip rule leaves it unchanged regardless of the repo name.
+        # This avoids mis-classifying $expand children (e.g. fleet-discovery,
+        # fleet-grafana from go-fleet-metrics-hub) whose repo_url points at
+        # the parent repo (go-fleet-metrics-hub → fleet-metrics-hub) even
+        # though the child's own slug has no go- prefix to strip.
+        if not slug.startswith("go-"):
+            unchanged.append(slug)
+            continue
+
         repo_url = entry.get("repo_url", "")
         repo_name = repo_url.rstrip("/").split("/")[-1] if repo_url else slug
         # Derive the slug fresh from the repo name, matching the new rule
