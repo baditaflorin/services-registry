@@ -1246,6 +1246,28 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-anycast-footprint",
+    "name": "Domain Anycast Footprint",
+    "description": "",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-anycast-footprint.0crawl.com",
+    "health_url": "https://domain-anycast-footprint.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_anycast_footprint",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com"
+  },
+  {
     "id": "domain-bimi-checker",
     "name": "Domain Bimi Checker",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
@@ -1323,6 +1345,29 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8085,
     "container_port": 8085,
+    "proxy_egress": true
+  },
+  {
+    "id": "domain-liveness-state",
+    "name": "Domain Liveness State",
+    "description": "",
+    "category": "recon",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-liveness-state.0crawl.com",
+    "health_url": "https://domain-liveness-state.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_liveness_state",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
     "proxy_egress": true
   },
   {

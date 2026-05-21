@@ -1071,6 +1071,27 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "",
+    "example_path": "/?target=example.com",
+    "health_url": "https://domain-anycast-footprint.0crawl.com/health",
+    "id": "domain-anycast-footprint",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Anycast Footprint",
+    "repo_url": "https://github.com/baditaflorin/go_domain_anycast_footprint",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-anycast-footprint.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
     "example_path": "/?target=example.com",
@@ -1134,6 +1155,27 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://domain-details.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "recon",
+    "description": "",
+    "example_path": "/?target=example.com",
+    "health_url": "https://domain-liveness-state.0crawl.com/health",
+    "id": "domain-liveness-state",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Liveness State",
+    "repo_url": "https://github.com/baditaflorin/go_domain_liveness_state",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-liveness-state.0crawl.com"
   },
   {
     "auth": {
