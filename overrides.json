@@ -156,36 +156,6 @@
         }
       },
       "why": "Detector /selftest replays the labeled corpus from findings-store; without these env vars it is a no-op and fleet-runner's smoke gate cannot catch verifier regressions (ADR-pending, 2026-05-17)."
-    },
-    {
-      "match": {
-        "ids": [
-          "office-locations",
-          "shipping-regions",
-          "customer-logos",
-          "page-load-metrics",
-          "press-mentions",
-          "seasonal-detector",
-          "user-demographics",
-          "legal-entity",
-          "phone-extractor",
-          "tos-finder",
-          "schema-extractor",
-          "api-extractor",
-          "compression-tester",
-          "outlink-graph",
-          "scc",
-          "domain-compliance-claim-scanner",
-          "domain-ai-bot-policy-scanner",
-          "domain-email-deliverability-score",
-          "domain-mobile-app-resolver"
-        ]
-      },
-      "name": "v3-scraper-read-timeout",
-      "patch": {
-        "proxy_read_timeout": "120s"
-      },
-      "why": "ADR 0230 v3 page-scraper tools fetch+parse the target site and take 16-50s; the gateway's default proxy_read_timeout was returning 502 before they finished (observed 2026-05-21). 120s gives them headroom; consumers (domainscope enrichers) cap their own client timeout separately."
     }
   ],
   "a11y-quick": {
