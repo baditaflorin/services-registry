@@ -1328,6 +1328,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Unified deployment fingerprint (PaaS + serverless + edge-compute detector).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-deployment-fingerprint.0crawl.com/health",
+    "id": "domain-deployment-fingerprint",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Deployment Fingerprint",
+    "repo_url": "https://github.com/baditaflorin/go_domain_deployment_fingerprint",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-deployment-fingerprint.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Microservice for Domain Details",
     "example_path": "/?target=example.com",

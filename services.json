@@ -1547,6 +1547,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-deployment-fingerprint",
+    "name": "Domain Deployment Fingerprint",
+    "description": "Unified deployment fingerprint (PaaS + serverless + edge-compute detector).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-deployment-fingerprint.0crawl.com",
+    "health_url": "https://domain-deployment-fingerprint.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_deployment_fingerprint",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18241,
+    "container_port": 18241,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-details",
     "name": "Domain Details",
     "description": "Microservice for Domain Details",
