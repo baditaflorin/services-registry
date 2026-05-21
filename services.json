@@ -1223,6 +1223,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-ad-network",
+    "name": "Domain Ad Network",
+    "description": "Ad-network detector \ufffd\ufffd\ufffd ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-ad-network.0crawl.com",
+    "health_url": "https://domain-ad-network.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ad_network",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18214,
+    "container_port": 18214,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-amp-detector",
     "name": "Domain Amp Detector",
     "description": "AMP (Accelerated Mobile Pages) presence detector \u2014 link rel=amphtml + canonical AMP HTML.",
