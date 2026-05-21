@@ -3656,10 +3656,10 @@
       "go"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "haiku-backfill-2026-05-13",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "needs ML model for accuracy beyond basic heuristics",
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-sonnet-4-6",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Explicit signals (ccTLD, ISO currency, phone prefix) are near-certain when present; inferred signals (tone, generation, income bracket) are heuristic keyword-counts with no accuracy validation against ground truth. TRL 7 is achievable by adding a labelled evaluation dataset and measured precision/recall per signal family. ML is not required to reach TRL 7.",
     "url": "https://user-demographics.0crawl.com"
   },
   {
