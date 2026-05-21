@@ -1178,6 +1178,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "seo",
+    "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
+    "example_path": "/",
+    "health_url": "https://domain-backlink-profile.0crawl.com/health",
+    "id": "domain-backlink-profile",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Backlink Profile",
+    "repo_url": "https://github.com/baditaflorin/go_domain_backlink_profile",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "url": "https://domain-backlink-profile.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
     "example_path": "/?target=example.com",

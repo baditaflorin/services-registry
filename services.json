@@ -1373,6 +1373,35 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-backlink-profile",
+    "name": "Domain Backlink Profile",
+    "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
+    "category": "seo",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-backlink-profile.0crawl.com",
+    "health_url": "https://domain-backlink-profile.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_backlink_profile",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18210,
+    "container_port": 18210
+  },
+  {
     "id": "domain-bimi-checker",
     "name": "Domain Bimi Checker",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
