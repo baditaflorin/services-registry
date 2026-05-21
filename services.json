@@ -1522,6 +1522,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-events-platform",
+    "name": "Domain Events Platform",
+    "description": "Events / webinar platform detector \ufffd\ufffd\ufffd Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-events-platform.0crawl.com",
+    "health_url": "https://domain-events-platform.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_events_platform",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18226,
+    "container_port": 18226,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-experimentation-stack",
     "name": "Domain Experimentation Stack",
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",

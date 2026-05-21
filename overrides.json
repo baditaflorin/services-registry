@@ -864,6 +864,13 @@
     "container_port": 18181,
     "host_port": 18181
   },
+  "domain-events-platform": {
+    "container_port": 18226,
+    "description": "Events / webinar platform detector \ufffd\ufffd\ufffd Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
+    "host_port": 18226,
+    "trl": 4,
+    "version": "0.1.0"
+  },
   "domain-experimentation-stack": {
     "container_port": 18211,
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
