@@ -240,7 +240,7 @@
   {
     "id": "api-first",
     "name": "Api First",
-    "description": "Microservice for Api First",
+    "description": "Scores domains 0-100 for API-first maturity: OpenAPI/GraphQL spec detection, versioned REST endpoint probing, developer portal/path detection, SDK scanning, evidence trail",
     "category": "domains",
     "mesh": "0crawl",
     "kind": "container",
@@ -261,12 +261,12 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
-    "trl": 5,
-    "trl_evidence": "Multi-function service with basic error handling",
+    "trl": 6,
+    "trl_evidence": "selftest(5 live checks incl. outbound probe), corpus_eval(12 synthetic offline cases), evidence trail in every response, versioned-API + developer-path probes, brand-gated Maven false-positive filter, 20-domain live validation (12/14 api-first domains correctly scored \u226560)",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-sonnet-4",
     "host_port": 8276,
     "container_port": 8276,
     "proxy_egress": true
@@ -1220,6 +1220,29 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8084,
     "container_port": 8084,
+    "proxy_egress": true
+  },
+  {
+    "id": "domain-bimi-checker",
+    "name": "Domain Bimi Checker",
+    "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-bimi-checker.0crawl.com",
+    "health_url": "https://domain-bimi-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_bimi_checker",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
     "proxy_egress": true
   },
   {
