@@ -1791,6 +1791,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-glue-records",
+    "name": "Domain Glue Records",
+    "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-glue-records.0crawl.com",
+    "health_url": "https://domain-glue-records.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_glue_records",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18237,
+    "container_port": 18237,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-image-alt-coverage",
     "name": "Domain Image Alt Coverage",
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
