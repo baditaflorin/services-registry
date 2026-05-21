@@ -1909,6 +1909,36 @@
     "container_port": 18227
   },
   {
+    "id": "domain-ratelimit-headers",
+    "name": "Domain Ratelimit Headers",
+    "description": "RateLimit-* / Retry-After header detector + parser.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-ratelimit-headers.0crawl.com",
+    "health_url": "https://domain-ratelimit-headers.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ratelimit_headers",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18234,
+    "container_port": 18234,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-viewport-meta",
     "name": "Domain Viewport Meta",
     "description": "Viewport meta tag parser + mobile-friendliness scoring.",

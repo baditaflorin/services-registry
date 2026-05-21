@@ -977,6 +977,13 @@
     "trl": 4,
     "version": "0.1.0"
   },
+  "domain-ratelimit-headers": {
+    "container_port": 18234,
+    "description": "RateLimit-* / Retry-After header detector + parser.",
+    "host_port": 18234,
+    "trl": 5,
+    "version": "0.1.0"
+  },
   "domain-rbl-reputation": {
     "container_port": 18182,
     "host_port": 18182
