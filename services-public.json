@@ -1050,6 +1050,27 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-amp-detector.0crawl.com/health",
+    "id": "domain-amp-detector",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Amp Detector",
+    "repo_url": "https://github.com/baditaflorin/go_domain_amp_detector",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-amp-detector.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
     "example_path": "/?target=example.com",
@@ -1063,6 +1084,27 @@
     "runtime": "compose",
     "tags": [],
     "url": "https://domain-bimi-checker.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "",
+    "example_path": "/?target=example.com",
+    "health_url": "https://domain-dane-tlsa.0crawl.com/health",
+    "id": "domain-dane-tlsa",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Dane Tlsa",
+    "repo_url": "https://github.com/baditaflorin/go_domain_dane_tlsa",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-dane-tlsa.0crawl.com"
   },
   {
     "auth": {

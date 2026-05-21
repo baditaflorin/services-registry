@@ -1223,6 +1223,29 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-amp-detector",
+    "name": "Domain Amp Detector",
+    "description": "",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-amp-detector.0crawl.com",
+    "health_url": "https://domain-amp-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_amp_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "proxy_egress": true
+  },
+  {
     "id": "domain-bimi-checker",
     "name": "Domain Bimi Checker",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
@@ -1235,6 +1258,29 @@
     "url": "https://domain-bimi-checker.0crawl.com",
     "health_url": "https://domain-bimi-checker.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_bimi_checker",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "proxy_egress": true
+  },
+  {
+    "id": "domain-dane-tlsa",
+    "name": "Domain Dane Tlsa",
+    "description": "",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://domain-dane-tlsa.0crawl.com",
+    "health_url": "https://domain-dane-tlsa.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_dane_tlsa",
     "example_path": "/?target=example.com",
     "auth": {
       "type": "api_key",
