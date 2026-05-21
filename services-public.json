@@ -1072,7 +1072,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "",
+    "description": "Anycast vs unicast routing detector (multi-resolver IP convergence + ASN check).",
     "example_path": "/?target=example.com",
     "health_url": "https://domain-anycast-footprint.0crawl.com/health",
     "id": "domain-anycast-footprint",
@@ -1083,6 +1083,9 @@
     "repo_url": "https://github.com/baditaflorin/go_domain_anycast_footprint",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-opus-4-7",
     "url": "https://domain-anycast-footprint.0crawl.com"
   },
   {
@@ -1855,35 +1858,6 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://jwt-debugger.0crawl.com"
-  },
-  {
-    "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "category": "domains",
-    "description": "Microservice for Keyword Density",
-    "example_path": "/?url=https://example.com",
-    "health_url": "https://keyword-density.0crawl.com/health",
-    "id": "keyword-density",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0crawl",
-    "name": "Keyword Density",
-    "repo_url": "https://github.com/baditaflorin/go_keyword_density",
-    "runtime": "compose",
-    "tags": [
-      "domains",
-      "go"
-    ],
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "url": "https://keyword-density.0crawl.com"
   },
   {
     "auth": {
@@ -7287,6 +7261,42 @@
   },
   {
     "alias_urls": [
+      "go-pentest-notify.0exec.com"
+    ],
+    "aliases": [
+      "go-pentest-notify"
+    ],
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
+    "example_path": "/sinks",
+    "health_url": "https://pentest-notify.0exec.com/health",
+    "id": "pentest-notify",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Pentest Notify",
+    "rename_retire_at": "2026-06-18",
+    "rename_status": "redirect",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-notify",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "trl": 7,
+    "trl_assessed_at": "2026-05-14",
+    "trl_assessor": "claude-session-2026-05-14",
+    "trl_ceiling": 9,
+    "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
+    "url": "https://pentest-notify.0exec.com"
+  },
+  {
+    "alias_urls": [
       "go-pentest-nuclei.0exec.com"
     ],
     "aliases": [
@@ -7356,6 +7366,42 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "url": "https://pentest-oob-collector.0exec.com"
+  },
+  {
+    "alias_urls": [
+      "go-pentest-orchestrator.0exec.com"
+    ],
+    "aliases": [
+      "go-pentest-orchestrator"
+    ],
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
+    "example_path": "/stats",
+    "health_url": "https://pentest-orchestrator.0exec.com/health",
+    "id": "pentest-orchestrator",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Pentest Orchestrator",
+    "rename_retire_at": "2026-06-18",
+    "rename_status": "redirect",
+    "repo_url": "https://github.com/baditaflorin/go-pentest-orchestrator",
+    "runtime": "compose",
+    "tags": [
+      "go-pentest"
+    ],
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
+    "url": "https://pentest-orchestrator.0exec.com"
   },
   {
     "alias_urls": [
