@@ -1791,6 +1791,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-gift-card",
+    "name": "Domain Gift Card",
+    "description": "Gift-card offering detector (URL slugs + schema.org GiftCard + cart signals).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-gift-card.0crawl.com",
+    "health_url": "https://domain-gift-card.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_gift_card",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18239,
+    "container_port": 18239,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-glue-records",
     "name": "Domain Glue Records",
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",

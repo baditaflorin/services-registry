@@ -1539,6 +1539,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Gift-card offering detector (URL slugs + schema.org GiftCard + cart signals).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-gift-card.0crawl.com/health",
+    "id": "domain-gift-card",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Gift Card",
+    "repo_url": "https://github.com/baditaflorin/go_domain_gift_card",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-gift-card.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
     "example_path": "/?target=example.com",
