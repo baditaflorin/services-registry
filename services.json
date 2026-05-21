@@ -1999,6 +1999,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-tracker-density",
+    "name": "Domain Tracker Density",
+    "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-tracker-density.0crawl.com",
+    "health_url": "https://domain-tracker-density.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_tracker_density",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "host_port": 18238,
+    "container_port": 18238,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-viewport-meta",
     "name": "Domain Viewport Meta",
     "description": "Viewport meta tag parser + mobile-friendliness scoring.",
