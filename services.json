@@ -1343,6 +1343,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-app-render-mode",
+    "name": "Domain App Render Mode",
+    "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-app-render-mode.0crawl.com",
+    "health_url": "https://domain-app-render-mode.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_app_render_mode",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18224,
+    "container_port": 18224,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-bimi-checker",
     "name": "Domain Bimi Checker",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",

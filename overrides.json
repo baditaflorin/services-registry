@@ -792,6 +792,13 @@
     "trl_evidence": "Parallel A+AAAA UDP queries against 8 public resolvers (Cloudflare 1.1.1.1/1.0.0.1, Google 8.8.8.8, Quad9 9.9.9.9, OpenDNS 208.67.222.222, Verisign 64.6.64.6, Level3 4.2.2.2, DNS.WATCH 84.200.69.80) via miekg/dns; Team Cymru whois.cymru.com:43 bulk-mode ASN+org+prefix+country lookup; curated 17-entry anycast ASN allowlist; convergence + ASN allowlist decision tree (>=4-resolver convergence + allowlist match -> anycast/high); 5 handler tests with canned DNS+ASN fixtures (zero network); selftest probes pure-logic helpers + live cloudflare.com. Heuristic-grade, not RFC-grounded -> TRL 4.",
     "version": "0.1.0"
   },
+  "domain-app-render-mode": {
+    "container_port": 18224,
+    "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
+    "host_port": 18224,
+    "trl": 4,
+    "version": "0.1.0"
+  },
   "domain-bimi-checker": {
     "container_port": 18218,
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
