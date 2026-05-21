@@ -1880,6 +1880,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-naptr-enum",
+    "name": "Domain Naptr Enum",
+    "description": "NAPTR + ENUM (E.164) record discovery (RFC 3403/2916/6116).",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-naptr-enum.0crawl.com",
+    "health_url": "https://domain-naptr-enum.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_naptr_enum",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18236,
+    "container_port": 18236,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-pagination-rel",
     "name": "Domain Pagination Rel",
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",

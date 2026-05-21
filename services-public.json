@@ -1615,6 +1615,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "NAPTR + ENUM (E.164) record discovery (RFC 3403/2916/6116).",
+    "example_path": "/?target=example.com",
+    "health_url": "https://domain-naptr-enum.0crawl.com/health",
+    "id": "domain-naptr-enum",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Naptr Enum",
+    "repo_url": "https://github.com/baditaflorin/go_domain_naptr_enum",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-naptr-enum.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
     "example_path": "/?url=https://example.com",
