@@ -1909,6 +1909,33 @@
     "container_port": 18227
   },
   {
+    "id": "domain-viewport-meta",
+    "name": "Domain Viewport Meta",
+    "description": "Viewport meta tag parser + mobile-friendliness scoring.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-viewport-meta.0crawl.com",
+    "health_url": "https://domain-viewport-meta.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_viewport_meta",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "proxy_egress": true
+  },
+  {
     "id": "domain-wikidata-entity",
     "name": "Domain Wikidata Entity",
     "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
@@ -1932,7 +1959,10 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0crawl.com"
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18228,
+    "container_port": 18228
   },
   {
     "id": "dtss",
