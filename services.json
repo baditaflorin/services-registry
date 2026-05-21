@@ -1941,6 +1941,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-interactive-demo",
+    "name": "Domain Interactive Demo",
+    "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-interactive-demo.0crawl.com",
+    "health_url": "https://domain-interactive-demo.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_interactive_demo",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18240,
+    "container_port": 18240,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-liveness-state",
     "name": "Domain Liveness State",
     "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",

@@ -1669,6 +1669,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-interactive-demo.0crawl.com/health",
+    "id": "domain-interactive-demo",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Interactive Demo",
+    "repo_url": "https://github.com/baditaflorin/go_domain_interactive_demo",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-interactive-demo.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?target=example.com",
