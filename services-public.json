@@ -1227,6 +1227,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "E-commerce platform detector (Shopify/Magento/Woo/BigCommerce/etc.).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-ecommerce-platform.0crawl.com/health",
+    "id": "domain-ecommerce-platform",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Ecommerce Platform",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ecommerce_platform",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "url": "https://domain-ecommerce-platform.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?target=example.com",
