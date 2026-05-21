@@ -1306,6 +1306,31 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
+    "description": "Front-end error monitoring detector \u2014 Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-error-monitoring.0crawl.com/health",
+    "id": "domain-error-monitoring",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Error Monitoring",
+    "repo_url": "https://github.com/baditaflorin/go_domain_error_monitoring",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-error-monitoring.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
     "description": "Events / webinar platform detector \ufffd\ufffd\ufffd Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-events-platform.0crawl.com/health",
