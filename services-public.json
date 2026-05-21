@@ -1255,6 +1255,32 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
+    "description": "HTTP cache hygiene scorer (RFC 7234/9111).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-cache-policy.0crawl.com/health",
+    "id": "domain-cache-policy",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Cache Policy",
+    "repo_url": "https://github.com/baditaflorin/go_domain_cache_policy",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-cache-policy.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-cms-version.0crawl.com/health",

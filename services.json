@@ -1461,6 +1461,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-cache-policy",
+    "name": "Domain Cache Policy",
+    "description": "HTTP cache hygiene scorer (RFC 7234/9111).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-cache-policy.0crawl.com",
+    "health_url": "https://domain-cache-policy.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_cache_policy",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18235,
+    "container_port": 18235,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-cms-version",
     "name": "Domain Cms Version",
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",
