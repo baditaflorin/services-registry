@@ -818,6 +818,13 @@
     "trl_evidence": "BIMI parser (v=BIMI1, l=, a= tags), CNAME chain walk, safehttp HEAD-fetcher (https-only, SSRF-safe) for logo SVG + VMC cert, degraded[] semantics on per-source failure, 8 unit tests on canned TXT/HTTP, /selftest with live cnn.com DNS lookup. v0.1.0 first ship.",
     "version": "0.1.0"
   },
+  "domain-breadcrumb-schema": {
+    "container_port": 18230,
+    "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
+    "host_port": 18230,
+    "trl": 5,
+    "version": "0.1.0"
+  },
   "domain-cms-version": {
     "container_port": 18216,
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",

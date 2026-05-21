@@ -1455,6 +1455,9 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18230,
+    "container_port": 18230,
     "proxy_egress": true
   },
   {
@@ -1904,6 +1907,32 @@
     "trl": 4,
     "host_port": 18227,
     "container_port": 18227
+  },
+  {
+    "id": "domain-wikidata-entity",
+    "name": "Domain Wikidata Entity",
+    "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-wikidata-entity.0crawl.com",
+    "health_url": "https://domain-wikidata-entity.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_wikidata_entity",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com"
   },
   {
     "id": "dtss",

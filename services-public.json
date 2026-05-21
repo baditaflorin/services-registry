@@ -1244,6 +1244,7 @@
       "language-go",
       "runtime-compose"
     ],
+    "trl": 5,
     "url": "https://domain-breadcrumb-schema.0crawl.com"
   },
   {
@@ -1632,6 +1633,31 @@
     ],
     "trl": 4,
     "url": "https://domain-podcast-presence.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-wikidata-entity.0crawl.com/health",
+    "id": "domain-wikidata-entity",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Wikidata Entity",
+    "repo_url": "https://github.com/baditaflorin/go_domain_wikidata_entity",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-wikidata-entity.0crawl.com"
   },
   {
     "auth": {
