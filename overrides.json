@@ -857,6 +857,13 @@
     "container_port": 18181,
     "host_port": 18181
   },
+  "domain-experimentation-stack": {
+    "container_port": 18211,
+    "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
+    "host_port": 18211,
+    "trl": 4,
+    "version": "0.1.0"
+  },
   "domain-font-stack": {
     "container_port": 18221,
     "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",

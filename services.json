@@ -1492,6 +1492,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-experimentation-stack",
+    "name": "Domain Experimentation Stack",
+    "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-experimentation-stack.0crawl.com",
+    "health_url": "https://domain-experimentation-stack.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_experimentation_stack",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18211,
+    "container_port": 18211,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-font-stack",
     "name": "Domain Font Stack",
     "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
