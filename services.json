@@ -1225,7 +1225,7 @@
   {
     "id": "domain-amp-detector",
     "name": "Domain Amp Detector",
-    "description": "",
+    "description": "AMP (Accelerated Mobile Pages) presence detector \u2014 link rel=amphtml + canonical AMP HTML.",
     "category": "web_analysis",
     "mesh": "0crawl",
     "kind": "container",
@@ -1235,7 +1235,7 @@
     "url": "https://domain-amp-detector.0crawl.com",
     "health_url": "https://domain-amp-detector.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_amp_detector",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?domain=www.bbc.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -1243,6 +1243,14 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real HTML parser via golang.org/x/net/html (no regex); detects link rel=amphtml + canonical, <html amp> + <html \u26a1> (U+26A1), AMP cache URL in og:url / twitter:url; case-insensitive attributes; SSRF-safe outbound via go-common/safehttp (10s timeout, <=3 redirects, 2 MiB body cap); verifies the linked AMP alternative by fetching it; per-failure errors pushed to degraded[]; 15 unit tests on canned HTML covering each signal; /selftest exercises both pure-logic checks and a live bbc.com probe.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-opus-4-7",
+    "host_port": 18222,
+    "container_port": 18222,
     "proxy_egress": true
   },
   {
@@ -3978,6 +3986,74 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8236,
     "container_port": 8236
+  },
+  {
+    "id": "svi",
+    "name": "Svi",
+    "description": "Microservice for Svi",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://svi.0crawl.com",
+    "health_url": "https://svi.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_svi",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 7,
+    "trl_evidence": "Site Visibility Index \u2014 13 weighted SEO/crawl signals computed CPU-only, embedded fixture for /selftest, selftestPassthrough middleware bypasses keystore auth, evidence trail (SignalEvidence struct surfaces raw harvested inputs)",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "host_port": 8313,
+    "container_port": 8313,
+    "proxy_egress": true
+  },
+  {
+    "id": "swagger-finder",
+    "name": "Swagger Finder",
+    "description": "Microservice for Swagger Finder",
+    "category": "recon",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "url": "https://swagger-finder.0crawl.com",
+    "health_url": "https://swagger-finder.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_swagger_finder",
+    "example_path": "/go_swagger_finder?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "Probes 28 well-known OpenAPI/Swagger/GraphQL paths concurrently (worker pool of 8, 5s per-request, 60s total cap) via go-common/safehttp (SSRF-safe). Parses responses with kin-openapi v0.135.0 \u2014 OpenAPI 3.x natively, Swagger 2.0 upgraded via openapi2conv. Extracts {method,path,summary,parameters,security_schemes} inventory (capped at 2k endpoints). 1h sha256-keyed in-memory cache. Tested with httptest fixtures covering openapi3, swagger2, graphql, html, junk, and 404 cases.",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "host_port": 8349,
+    "container_port": 8349,
+    "proxy_egress": true
   },
   {
     "id": "team-size",

@@ -1051,8 +1051,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "",
-    "example_path": "/?url=https://example.com",
+    "description": "AMP (Accelerated Mobile Pages) presence detector \u2014 link rel=amphtml + canonical AMP HTML.",
+    "example_path": "/?domain=www.bbc.com",
     "health_url": "https://domain-amp-detector.0crawl.com/health",
     "id": "domain-amp-detector",
     "kind": "container",
@@ -1062,6 +1062,11 @@
     "repo_url": "https://github.com/baditaflorin/go_domain_amp_detector",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-opus-4-7",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://domain-amp-detector.0crawl.com"
   },
   {
@@ -3399,6 +3404,64 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://substack-scraper.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Microservice for Svi",
+    "example_path": "/?target=example.com",
+    "health_url": "https://svi.0crawl.com/health",
+    "id": "svi",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Svi",
+    "repo_url": "https://github.com/baditaflorin/go_svi",
+    "runtime": "compose",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "trl": 7,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
+    "url": "https://svi.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "recon",
+    "description": "Microservice for Swagger Finder",
+    "example_path": "/go_swagger_finder?url=https://example.com",
+    "health_url": "https://swagger-finder.0crawl.com/health",
+    "id": "swagger-finder",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Swagger Finder",
+    "repo_url": "https://github.com/baditaflorin/go_swagger_finder",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "recon"
+    ],
+    "trl": 6,
+    "trl_assessed_at": "2026-05-16",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
+    "url": "https://swagger-finder.0crawl.com"
   },
   {
     "auth": {
