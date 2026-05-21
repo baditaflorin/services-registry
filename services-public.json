@@ -1093,7 +1093,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
-    "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
+    "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
     "example_path": "/?target=example.com",
     "health_url": "https://domain-bimi-checker.0crawl.com/health",
     "id": "domain-bimi-checker",
@@ -1104,6 +1104,9 @@
     "repo_url": "https://github.com/baditaflorin/go_domain_bimi_checker",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-opus-4-7",
     "url": "https://domain-bimi-checker.0crawl.com"
   },
   {

@@ -1270,7 +1270,7 @@
   {
     "id": "domain-bimi-checker",
     "name": "Domain Bimi Checker",
-    "description": "BIMI logo record + VMC certificate checker (brand email indicators)",
+    "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
     "category": "domains",
     "mesh": "0crawl",
     "kind": "container",
@@ -1288,6 +1288,12 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "BIMI parser (v=BIMI1, l=, a= tags), CNAME chain walk, safehttp HEAD-fetcher (https-only, SSRF-safe) for logo SVG + VMC cert, degraded[] semantics on per-source failure, 8 unit tests on canned TXT/HTTP, /selftest with live cnn.com DNS lookup. v0.1.0 first ship.",
+    "trl_assessed_at": "2026-05-21",
+    "trl_assessor": "claude-opus-4-7",
+    "host_port": 18218,
+    "container_port": 18218,
     "proxy_egress": true
   },
   {
