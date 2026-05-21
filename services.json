@@ -1254,6 +1254,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-analytics-stack",
+    "name": "Domain Analytics Stack",
+    "description": "Analytics stack detector \ufffd\ufffd\ufffd GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-analytics-stack.0crawl.com",
+    "health_url": "https://domain-analytics-stack.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_analytics_stack",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18215,
+    "container_port": 18215,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-anycast-footprint",
     "name": "Domain Anycast Footprint",
     "description": "Anycast vs unicast routing detector (multi-resolver IP convergence + ASN check).",
@@ -5832,13 +5862,13 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
-    "host_port": 18201,
     "container_port": 8080,
+    "host_port": 18201,
     "trl": 4,
-    "trl_evidence": "0.1.0 first deploy 2026-05-18; refresh + probe loop working, no automated tests yet.",
-    "trl_ceiling": 7,
     "trl_assessed_at": "2026-05-19",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub"
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub",
+    "trl_ceiling": 7,
+    "trl_evidence": "0.1.0 first deploy 2026-05-18; refresh + probe loop working, no automated tests yet."
   },
   {
     "id": "fleet-dns-sync",
@@ -5979,15 +6009,15 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
-    "host_port": 18202,
     "container_port": 3000,
     "health_path": "/api/health",
-    "ui_cookie_bridge": true,
+    "host_port": 18202,
     "trl": 4,
-    "trl_evidence": "Vendored grafana/grafana:11.3.0; first deploy 2026-05-18.",
-    "trl_ceiling": 8,
     "trl_assessed_at": "2026-05-19",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub"
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub",
+    "trl_ceiling": 8,
+    "trl_evidence": "Vendored grafana/grafana:11.3.0; first deploy 2026-05-18.",
+    "ui_cookie_bridge": true
   },
   {
     "id": "fleet-graph",
@@ -6350,14 +6380,14 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
-    "host_port": 18203,
     "container_port": 18203,
     "health_path": "/-/healthy",
+    "host_port": 18203,
     "trl": 4,
-    "trl_evidence": "Vendored prom/prometheus:v3.6.0; first deploy 2026-05-18.",
-    "trl_ceiling": 8,
     "trl_assessed_at": "2026-05-19",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub"
+    "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub",
+    "trl_ceiling": 8,
+    "trl_evidence": "Vendored prom/prometheus:v3.6.0; first deploy 2026-05-18."
   },
   {
     "id": "fleet-resolver-quorum",
