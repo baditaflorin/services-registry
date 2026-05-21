@@ -2029,6 +2029,36 @@
     "container_port": 18227
   },
   {
+    "id": "domain-product-count",
+    "name": "Domain Product Count",
+    "description": "E-commerce catalog SKU-count estimator (sitemap + JSON-LD + Shopify probe).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-product-count.0crawl.com",
+    "health_url": "https://domain-product-count.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_product_count",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18242,
+    "container_port": 18242,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-ratelimit-headers",
     "name": "Domain Ratelimit Headers",
     "description": "RateLimit-* / Retry-After header detector + parser.",
