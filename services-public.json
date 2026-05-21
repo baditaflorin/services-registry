@@ -1279,6 +1279,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-font-stack.0crawl.com/health",
+    "id": "domain-font-stack",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Font Stack",
+    "repo_url": "https://github.com/baditaflorin/go_domain_font_stack",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "url": "https://domain-font-stack.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?target=example.com",
