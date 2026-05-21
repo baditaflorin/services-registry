@@ -328,6 +328,36 @@ ENTRYPOINT ["/sbin/tini","--"]
 CMD ["/app/<id>"]
 ```
 
+### `.gitignore`
+
+Every new repo MUST ship a `.gitignore` from the scaffold step. The
+`cp -r <peer>` path used while `fleet-runner new-service` is broken
+will silently carry the peer's pre-built host-arch binary into your
+new repo (named after the source repo, sitting in the working tree
+because somebody ran `go build` once). Three agents have already
+committed one of these by accident — they're useless on x86_64 dockerhost
+and confuse `git status` for every future contributor.
+
+Minimum contents:
+
+```gitignore
+# Pre-built host binary (auto-named after the repo by `go build`).
+/<id>
+*.exe
+bin/
+dist/
+
+# Build & test artefacts.
+*.test
+*.out
+coverage.out
+.DS_Store
+```
+
+Add this before the first commit, not after. If you already
+committed a stray binary, `git rm --cached <id> && git commit` first,
+THEN add the `.gitignore` entry, otherwise the file stays tracked.
+
 ### `go.mod`
 
 ```
@@ -385,8 +415,62 @@ edit per-service — `fleet-runner inject` re-syncs it from the registry.
 | `GET /health`  | `go-common/server` automatically  | `{"status":"healthy","service":"<id>","version":"<ver>"}`         |
 | `GET /version` | `go-common/server` automatically  | Plain version string                                              |
 | `GET /metrics` | `go-common/server` automatically  | JSON request counters (Prometheus shape on roadmap)               |
+| `GET /selftest`| You (see below)                   | Liveness probe of real upstreams — consumed by selftest-aggregator |
 | `GET /_gw_health` | nginx vhost template           | **Do not** implement; the gateway adds it                         |
 | Your route(s)  | You                               | `/` for 0exec/pages; `/t/{token}/` plus `/<id>` for 0crawl        |
+
+### `/selftest` — one small round-trip, NOT a full handler invocation
+
+`go-fleet-selftest-aggregator` polls every container service's
+`/selftest` hourly, with a **hard 5-second cap per check**. Multiple
+services in the 2026-05-21 batch returned 503 because their
+`/selftest` did a full handler invocation (fetch a homepage + walk
+the sitemap + hit the Shopify API), blew past 5s, and got aggregated
+as a fail.
+
+Two prescriptions, both load-bearing:
+
+1. **Do one small round-trip, not a real query.** If your service
+   wraps the Wikidata API, `/selftest` should `GET
+   https://www.wikidata.org/wiki/Special:Statistics` or equivalent —
+   just enough to prove the upstream is reachable + your client can
+   parse a response. Do NOT run the full handler logic.
+2. **Be lenient on the assertion.** Test domains are tiny, change
+   over time, and may go offline. Assert "fetch + parse worked",
+   never "found a specific positive match". A `/selftest` that fails
+   because Wikidata renamed an entity is a false alarm that costs
+   the on-call agent more than a real failure.
+
+Minimum acceptable shape:
+
+```go
+func selftestHandler(w http.ResponseWriter, r *http.Request) {
+    ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second) // leave headroom under 5s
+    defer cancel()
+
+    checks := []selftest.Check{}
+    // ONE small reachability probe, NOT a full handler invocation.
+    if _, err := httpClient.Get(ctx, "https://www.wikidata.org/wiki/Special:Statistics"); err != nil {
+        checks = append(checks, selftest.Fail("wikidata_reachable", err.Error()))
+    } else {
+        checks = append(checks, selftest.Pass("wikidata_reachable"))
+    }
+    selftest.Render(w, ServiceID, version, checks) // 200 if all pass, 503 if any fail
+}
+```
+
+The `selftest` helpers live in `go-common/selftest` (v0.17.0+) — use
+them instead of hand-rolling the response envelope.
+
+### BOM in source code breaks Go's parser
+
+Pasting a literal UTF-8 BOM (U+FEFF) into a `.go` file produces
+`syntax error: invalid BOM in the middle of the file` and the build
+fails far from the actual character. If you genuinely need the BOM
+in a string literal, use the escape: `"﻿"`. In code itself,
+delete it — it's almost never intentional. Common source: copy-paste
+from a Windows-authored snippet or a web editor that prepends BOM
+to UTF-8.
 
 ---
 

@@ -593,6 +593,25 @@ designed to be hit and don't generate abuse complaints. Services
 that only do *internal* fleet calls (orchestrators, queue workers,
 findings-store, etc.) also don't need it.
 
+**Opt-out via `proxy_egress: false` for well-behaved public APIs.**
+The fleet-wide default is `proxy_egress: true`. Some upstreams
+(Wikidata, GitHub API, well-behaved REST APIs) actively block Webshare
+residential ranges with 403, so routing through the proxy is *worse*
+than direct egress. On 2026-05-21 `go_domain_wikidata_entity` hit
+403 from Wikidata because the proxy was on by default. The fix is
+one line in `overrides.json`:
+
+```json
+{
+  "wikidata-entity": { "proxy_egress": false }
+}
+```
+
+Rule of thumb: if the upstream publishes an API spec, runs a public
+endpoint catalog, and isn't a bug-bounty target, set `proxy_egress:
+false`. Keep the proxy on for anything probing third-party
+*production* infra (HTTP fuzzing, takeover, screenshot, etc.).
+
 **Lesson:** when an entire fleet egresses from one DC IP, the
 egress-routing decision is a fleet-level invariant, not a per-call
 choice. Wire it in compose + go-common defaults, not in each
