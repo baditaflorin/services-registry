@@ -1760,6 +1760,62 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-pagination-rel",
+    "name": "Domain Pagination Rel",
+    "description": "WHATWG rel=next/prev + Link-header pagination detector.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-pagination-rel.0crawl.com",
+    "health_url": "https://domain-pagination-rel.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_pagination_rel",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18229,
+    "container_port": 18229,
+    "proxy_egress": true
+  },
+  {
+    "id": "domain-podcast-presence",
+    "name": "Domain Podcast Presence",
+    "description": "Podcast presence detector \u2014 RSS feed + linked platforms + embedded players.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-podcast-presence.0crawl.com",
+    "health_url": "https://domain-podcast-presence.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_podcast_presence",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com"
+  },
+  {
     "id": "dtss",
     "name": "Dtss",
     "description": "Microservice for Dtss",
