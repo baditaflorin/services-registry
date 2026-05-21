@@ -1200,6 +1200,23 @@ for the canonical pattern.
    binary, the recovery is still: `git -C /root/workspace/<repo>
    tag -d <ver>` then re-run bump-version.
 
+9. **`./binary &` smoke tests on Builder LXC 108.** Don't. The builder
+   is a build host and `fleet-runner` host — it is **not** a service
+   host. When an agent runs `go build && ./binary &` inside
+   `/root/workspace/<repo>/` to "quickly check the handler responds,"
+   the binary backgrounds, the agent's SSH session ends, and the
+   process becomes an orphan (`PPid=1`) listening on whichever port it
+   bound. Twelve such orphans were found on 2026-05-21 — three of them
+   silently squatting *registered* host_ports (e.g. 18107/18224),
+   poised to confuse the next agent who deploys the canonical service
+   to dockerhost and runs `ss -tlnp` to debug. Canonical smoke is the
+   `fleet-runner deploy` smoke gate against the dockerhost-side
+   container, not an in-process binary on the builder. If you genuinely
+   need to exercise the handler before `deploy`, run `go test ./...`
+   (which uses `httptest`) — no port binding, no orphan risk. If you
+   *must* bind a port, use `127.0.0.1:0` (ephemeral) and `kill` it on
+   the same line that started it.
+
 ## Fleet-wide changes — change `go-common`, not consumers
 
 The cardinal rule when you'd otherwise touch every service: **modify
