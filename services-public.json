@@ -1329,6 +1329,32 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Martech stack detector \u2014 HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-martech-stack.0crawl.com/health",
+    "id": "domain-martech-stack",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Martech Stack",
+    "repo_url": "https://github.com/baditaflorin/go_domain_martech_stack",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "url": "https://domain-martech-stack.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Dtss",
     "example_path": "/?target=example.com",

@@ -877,6 +877,13 @@
     "trl_assessor": "claude-opus-4-7",
     "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only \u2014 no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet."
   },
+  "domain-martech-stack": {
+    "container_port": 18213,
+    "description": "Martech stack detector \u2014 HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
+    "host_port": 18213,
+    "trl": 4,
+    "version": "0.1.0"
+  },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
     "host_port": 18187

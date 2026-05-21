@@ -1551,6 +1551,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-martech-stack",
+    "name": "Domain Martech Stack",
+    "description": "Martech stack detector \u2014 HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-martech-stack.0crawl.com",
+    "health_url": "https://domain-martech-stack.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_martech_stack",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18213,
+    "container_port": 18213,
+    "proxy_egress": true
+  },
+  {
     "id": "dtss",
     "name": "Dtss",
     "description": "Microservice for Dtss",
