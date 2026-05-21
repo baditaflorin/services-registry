@@ -1524,7 +1524,7 @@
   {
     "id": "domain-error-monitoring",
     "name": "Domain Error Monitoring",
-    "description": "Front-end error monitoring detector \u2014 Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
+    "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "category": "web_analysis",
     "mesh": "0crawl",
     "kind": "container",
@@ -1546,6 +1546,9 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18225,
+    "container_port": 18225,
     "proxy_egress": true
   },
   {

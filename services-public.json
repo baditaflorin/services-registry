@@ -1306,7 +1306,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "Front-end error monitoring detector \u2014 Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
+    "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-error-monitoring.0crawl.com/health",
     "id": "domain-error-monitoring",
@@ -1321,6 +1321,7 @@
       "language-go",
       "runtime-compose"
     ],
+    "trl": 4,
     "url": "https://domain-error-monitoring.0crawl.com"
   },
   {

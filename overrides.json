@@ -864,6 +864,13 @@
     "container_port": 18181,
     "host_port": 18181
   },
+  "domain-error-monitoring": {
+    "container_port": 18225,
+    "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
+    "host_port": 18225,
+    "trl": 4,
+    "version": "0.1.0"
+  },
   "domain-events-platform": {
     "container_port": 18226,
     "description": "Events / webinar platform detector \ufffd\ufffd\ufffd Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
