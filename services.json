@@ -1641,6 +1641,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-faq-schema",
+    "name": "Domain Faq Schema",
+    "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-faq-schema.0crawl.com",
+    "health_url": "https://domain-faq-schema.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_faq_schema",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18231,
+    "container_port": 18231,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-font-stack",
     "name": "Domain Font Stack",
     "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
@@ -1813,7 +1843,10 @@
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0crawl.com"
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18227,
+    "container_port": 18227
   },
   {
     "id": "dtss",

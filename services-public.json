@@ -1410,6 +1410,32 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
+    "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-faq-schema.0crawl.com/health",
+    "id": "domain-faq-schema",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Faq Schema",
+    "repo_url": "https://github.com/baditaflorin/go_domain_faq_schema",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-faq-schema.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
     "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-font-stack.0crawl.com/health",
@@ -1553,6 +1579,7 @@
       "language-go",
       "runtime-compose"
     ],
+    "trl": 4,
     "url": "https://domain-podcast-presence.0crawl.com"
   },
   {

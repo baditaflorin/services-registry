@@ -892,6 +892,13 @@
     "trl": 4,
     "version": "0.1.0"
   },
+  "domain-faq-schema": {
+    "container_port": 18231,
+    "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
+    "host_port": 18231,
+    "trl": 5,
+    "version": "0.1.0"
+  },
   "domain-font-stack": {
     "container_port": 18221,
     "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
@@ -948,6 +955,13 @@
   "domain-passive-dns-history": {
     "container_port": 18183,
     "host_port": 18183
+  },
+  "domain-podcast-presence": {
+    "container_port": 18227,
+    "description": "Podcast presence detector \u2014 RSS feed + linked platforms + embedded players.",
+    "host_port": 18227,
+    "trl": 4,
+    "version": "0.1.0"
   },
   "domain-rbl-reputation": {
     "container_port": 18182,
