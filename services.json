@@ -1642,6 +1642,36 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-image-alt-coverage",
+    "name": "Domain Image Alt Coverage",
+    "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-image-alt-coverage.0crawl.com",
+    "health_url": "https://domain-image-alt-coverage.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_image_alt_coverage",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18223,
+    "container_port": 18223,
+    "proxy_egress": true
+  },
+  {
     "id": "domain-liveness-state",
     "name": "Domain Liveness State",
     "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",
