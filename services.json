@@ -1431,6 +1431,33 @@
     "proxy_egress": true
   },
   {
+    "id": "domain-breadcrumb-schema",
+    "name": "Domain Breadcrumb Schema",
+    "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-breadcrumb-schema.0crawl.com",
+    "health_url": "https://domain-breadcrumb-schema.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_breadcrumb_schema",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "proxy_egress": true
+  },
+  {
     "id": "domain-cms-version",
     "name": "Domain Cms Version",
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",
@@ -1668,6 +1695,36 @@
     "trl": 5,
     "host_port": 18231,
     "container_port": 18231,
+    "proxy_egress": true
+  },
+  {
+    "id": "domain-favicon-completeness",
+    "name": "Domain Favicon Completeness",
+    "description": "Favicon + Web App Manifest icon-set completeness checker.",
+    "category": "web_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-favicon-completeness.0crawl.com",
+    "health_url": "https://domain-favicon-completeness.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_favicon_completeness",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "host_port": 18232,
+    "container_port": 18232,
     "proxy_egress": true
   },
   {

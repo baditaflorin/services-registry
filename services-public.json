@@ -1229,6 +1229,31 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
+    "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-breadcrumb-schema.0crawl.com/health",
+    "id": "domain-breadcrumb-schema",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Breadcrumb Schema",
+    "repo_url": "https://github.com/baditaflorin/go_domain_breadcrumb_schema",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-breadcrumb-schema.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-cms-version.0crawl.com/health",
@@ -1427,6 +1452,32 @@
     ],
     "trl": 5,
     "url": "https://domain-faq-schema.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Favicon + Web App Manifest icon-set completeness checker.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://domain-favicon-completeness.0crawl.com/health",
+    "id": "domain-favicon-completeness",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Favicon Completeness",
+    "repo_url": "https://github.com/baditaflorin/go_domain_favicon_completeness",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 5,
+    "url": "https://domain-favicon-completeness.0crawl.com"
   },
   {
     "auth": {
