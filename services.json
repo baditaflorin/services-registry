@@ -1299,7 +1299,7 @@
   {
     "id": "domain-dane-tlsa",
     "name": "Domain Dane Tlsa",
-    "description": "",
+    "description": "DANE/TLSA record presence + cert binding validation (RFC 6698).",
     "category": "domains",
     "mesh": "0crawl",
     "kind": "container",
@@ -1317,6 +1317,9 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "host_port": 18219,
+    "container_port": 18219,
     "proxy_egress": true
   },
   {
@@ -8418,46 +8421,6 @@
     "proxy_egress": true
   },
   {
-    "id": "pentest-notify",
-    "name": "Pentest Notify",
-    "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "go-pentest"
-    ],
-    "url": "https://pentest-notify.0exec.com",
-    "health_url": "https://pentest-notify.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go-pentest-notify",
-    "example_path": "/sinks",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com",
-    "aliases": [
-      "go-pentest-notify"
-    ],
-    "alias_urls": [
-      "go-pentest-notify.0exec.com"
-    ],
-    "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18",
-    "trl": 7,
-    "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks.",
-    "trl_ceiling": 9,
-    "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
-    "host_port": 18108,
-    "container_port": 18108
-  },
-  {
     "id": "pentest-nuclei",
     "name": "Pentest Nuclei",
     "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
@@ -8538,46 +8501,6 @@
     "host_port": 18106,
     "container_port": 18106,
     "proxy_egress": true
-  },
-  {
-    "id": "pentest-orchestrator",
-    "name": "Pentest Orchestrator",
-    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "go-pentest"
-    ],
-    "url": "https://pentest-orchestrator.0exec.com",
-    "health_url": "https://pentest-orchestrator.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go-pentest-orchestrator",
-    "example_path": "/stats",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com",
-    "aliases": [
-      "go-pentest-orchestrator"
-    ],
-    "alias_urls": [
-      "go-pentest-orchestrator.0exec.com"
-    ],
-    "rename_status": "redirect",
-    "rename_retire_at": "2026-06-18",
-    "trl": 7,
-    "trl_evidence": "campaign state machine, transitions + campaign_artifacts tables, idempotency_key returns 201/200 same as job-queue pattern, /selftest drives scope->recon->scan against httptest stubs",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
-    "host_port": 18138,
-    "container_port": 18138
   },
   {
     "id": "pentest-payloads",

@@ -3754,5 +3754,11 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "DNS security, RFC-aligned protocol"
+  },
+  "domain-dane-tlsa": {
+    "host_port": 18219,
+    "container_port": 18219,
+    "description": "DANE/TLSA record presence + cert binding validation (RFC 6698).",
+    "trl": 4
   }
 }
