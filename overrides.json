@@ -529,7 +529,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Negotiation matrix probes identity + 4 algorithms (gzip/br/zstd/deflate)\nwith raw-bytes capture (Transport.DisableCompression=true), reports\ncompressed/decoded sizes, server preference (full Accept-Encoding), Vary\ncoverage, encoding-mismatch detection (decoder fails when server lies),\nand CRIME/BREACH risk indicator. Pure-Go decoders (stdlib gzip/flate +\nandybalholm/brotli + klauspost/compress/zstd; CGO-free). 8s per-probe / 30s\ntotal budget. \u22656 unit tests cover gzip/brotli/identity round-trip, mismatch,\npreference detection, and full handler shape via httptest.Server fixtures.",
-    "version": "1.5.0"
+    "version": "1.5.0",
+    "proxy_read_timeout": "120s"
   },
   "cookie-checker": {
     "container_port": 8226,
@@ -652,7 +653,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL 6 (real). DOM-based extraction via golang.org/x/net/html (no regex\nHTML parsing, no LLM, no image recognition). Multi-page probe over\n/, /customers, /clients, /case-studies, /testimonials, /enterprise,\n/partners with per-fetch 5s + total 20s wall-clock cap. Per-logo\nconfidence band derived from heading + grid + brand-source signals;\ndocument verdict ladder (none \u2192 weak_signal \u2192 social_proof \u2192\nstrong_social_proof). Brand normalisation strips logo/\u00ae/\u2122 suffixes\nand title-cases; dedup keys on dest_url host first, normalised brand\nsecond. 19 unit tests covering extract/normalize/classify/handler\nincluding an httptest.Server with a canned customers page (logo grid\n+ \"Trusted by\" section + partners). See docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "proxy_read_timeout": "120s"
   },
   "d3-graph": {
     "container_port": 6003,
@@ -1977,7 +1979,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative validation requires jurisdiction-specific registries or paid company data.",
-    "trl_evidence": "Legal extraction returns entity names, jurisdiction hints, addresses, VAT/company identifiers, source evidence, and tests."
+    "trl_evidence": "Legal extraction returns entity names, jurisdiction hints, addresses, VAT/company identifiers, source evidence, and tests.",
+    "proxy_read_timeout": "120s"
   },
   "linkedin-attributes": {
     "container_port": 4314,
@@ -2274,7 +2277,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">-",
-    "version": "2.2.0"
+    "version": "2.2.0",
+    "proxy_read_timeout": "120s"
   },
   "open-indie-studio": {
     "trl": 3,
@@ -2330,7 +2334,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails."
+    "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails.",
+    "proxy_read_timeout": "120s"
   },
   "page-load-metrics": {
     "container_port": 8297,
@@ -2342,7 +2347,8 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "proxy_read_timeout": "120s"
   },
   "parse-address": {
     "trl": 5,
@@ -3032,7 +3038,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic."
+    "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic.",
+    "proxy_read_timeout": "120s"
   },
   "physical-kanban-sync": {
     "trl": 3,
@@ -3079,7 +3086,8 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_evidence": "Curated validation logic, error handling, some test coverage",
+    "proxy_read_timeout": "120s"
   },
   "price-range": {
     "container_port": 8301,
@@ -3161,7 +3169,8 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Python proxy, basic forwarding"
+    "trl_evidence": "Python proxy, basic forwarding",
+    "proxy_read_timeout": "300s"
   },
   "random-proxy": {
     "container_port": 3333,
@@ -3416,7 +3425,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with per-country holiday gazetteer + urgency-language regex.",
-    "trl_evidence": "Holiday/sale-language pattern matching."
+    "trl_evidence": "Holiday/sale-language pattern matching.",
+    "proxy_read_timeout": "120s"
   },
   "secrets-scanner": {
     "container_port": 8229,
@@ -3507,7 +3517,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">-",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "proxy_read_timeout": "120s"
   },
   "show-me-the-way": {
     "trl": 4,
@@ -3818,7 +3829,8 @@
     "trl_assessor": "claude-sonnet-4-6",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Explicit signals (ccTLD, ISO currency, phone prefix) are near-certain when present; inferred signals (tone, generation, income bracket) are heuristic keyword-counts with no accuracy validation against ground truth. TRL 7 is achievable by adding a labelled evaluation dataset and measured precision/recall per signal family. ML is not required to reach TRL 7.",
-    "trl_evidence": "90 passing tests (race-detected); 8 signal families across 7 modular files; 65 ccTLDs, 57 ISO currencies, 57 phone prefixes, 22 Unicode script detectors, English variant detection (en-GB/IN/AU), 22 industry verticals, 7 tone labels (formal/casual/edgy/corporate/scholarly/legal/activist), 6 generation cohort signals, FK-grade guard for non-Latin text; SSRF protection via go-common/safehttp; deployed at v2.2.0 \u2014 2026-05-21"
+    "trl_evidence": "90 passing tests (race-detected); 8 signal families across 7 modular files; 65 ccTLDs, 57 ISO currencies, 57 phone prefixes, 22 Unicode script detectors, English variant detection (en-GB/IN/AU), 22 industry verticals, 7 tone labels (formal/casual/edgy/corporate/scholarly/legal/activist), 6 generation cohort signals, FK-grade guard for non-Latin text; SSRF protection via go-common/safehttp; deployed at v2.2.0 \u2014 2026-05-21",
+    "proxy_read_timeout": "120s"
   },
   "utils-readcontent": {
     "container_port": 5008,
