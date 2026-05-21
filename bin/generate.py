@@ -599,7 +599,12 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # to emit an allow/deny block restricting the https vhost
               # to the internal mesh (ADR-0018 + ADR-0023 gap 4).
               # Sole consumer today: go-fleet-sandbox-targets.
-              "scope"):
+              "scope",
+              # Per-service nginx proxy_read_timeout override (ADR 0230
+              # follow-up #1). Fleet default is 60s; slow page-scrapers
+              # set "120s", python-proxy sets "300s". Consumed by
+              # fleet-runner nginx-render → ProxyReadTimeout field.
+              "proxy_read_timeout"):
         if k in ov:
             entry[k] = ov[k]
 

@@ -778,7 +778,8 @@
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8327,
-    "container_port": 8327
+    "container_port": 8327,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "cookie-checker",
@@ -1050,7 +1051,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8283,
     "container_port": 8283,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "data-inventory",
@@ -3122,7 +3124,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8293,
     "container_port": 8293,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "loadbalancer-detect",
@@ -3291,7 +3294,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8295,
     "container_port": 8295,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "open-redirect",
@@ -3359,7 +3363,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8296,
     "container_port": 8296,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "page-load-metrics",
@@ -3393,7 +3398,8 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8297,
     "container_port": 8297,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "payment-detector",
@@ -3671,7 +3677,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8139,
     "container_port": 8139,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "press-mentions",
@@ -3705,7 +3712,8 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 8300,
     "container_port": 8300,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "price-range",
@@ -4316,7 +4324,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8306,
     "container_port": 8306,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "secrets-scanner",
@@ -4582,7 +4591,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8310,
     "container_port": 8310,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "simulate-ddos",
@@ -5295,7 +5305,8 @@
     "trl_assessor": "claude-sonnet-4-6",
     "host_port": 8321,
     "container_port": 8321,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "120s"
   },
   {
     "id": "video-content",
@@ -10196,7 +10207,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "host_port": 18127,
     "container_port": 18127,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "300s"
   },
   {
     "id": "pentest-wordlists",
@@ -10409,7 +10421,8 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch",
     "host_port": 18177,
-    "container_port": 18177
+    "container_port": 18177,
+    "proxy_read_timeout": "300s"
   },
   {
     "id": "random-proxy",
