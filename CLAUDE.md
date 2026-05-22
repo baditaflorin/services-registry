@@ -8,6 +8,20 @@ propagated to every fleet repo via `fleet-runner inject`.
 If you find a stale copy that differs from this one, the registry copy
 wins — refresh and re-propagate, don't fork it.
 
+> ## ⚠️ RULE ZERO — work against `origin/main`, NOT stale workspace code
+>
+> **Before you read, triage, build, bump, or deploy ANYTHING:**
+> `git fetch origin --tags` first, then operate against `origin/main`
+> (via `git show origin/main:<file>` or a fresh
+> `git worktree add … origin/main`). The shared
+> `/root/workspace/<repo>/` working tree is whatever the last (often
+> parallel) agent left it — routinely **months stale**. Acting on it
+> ships old code, opens PRs against already-fixed bugs, and lets
+> concurrent agents stomp each other. `fleet-runner build-test` runs
+> against the working tree and is NOT freshness-correct — confirm any
+> "failure" against a fresh `origin/main` worktree before triaging.
+> Details below under "pull often, push often." DON'T SKIP THIS.
+
 Per-service specifics (port, mesh, slug, version, category) live in
 the repo's own `service.yaml` + `deploy.yaml` + `README.md`. This file
 is intentionally generic — it explains the *fleet*, not any one
