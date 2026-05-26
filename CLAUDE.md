@@ -1231,6 +1231,62 @@ for the canonical pattern.
    *must* bind a port, use `127.0.0.1:0` (ephemeral) and `kill` it on
    the same line that started it.
 
+## SQLite safety — mandatory three rules (enforced 2026-05-26)
+
+`modernc.org/sqlite` uses real `fcntl` syscalls for WAL file locking.
+Go creates one OS thread per goroutine blocking on a real syscall — unlike
+HTTP or postgres, which go through Go's epoll/kqueue poller and do NOT
+spawn threads. Under high `/verify` traffic, an uncancellable goroutine per
+request × 5s busy_timeout = 1388 OS threads = 48 GB RAM exhausted on the
+host (go-apikey-service incident 2026-05-26).
+
+**Any service that opens a `modernc.org/sqlite` DB MUST follow all three:**
+
+```go
+// 1. Serialise writes at the Go pool level (channel wait, not fcntl wait).
+//    This prevents thread explosion: Go queues at the pool, not the syscall.
+db.SetMaxOpenConns(1)
+db.SetMaxIdleConns(1)
+
+// 2. Cap busy_timeout — belt-and-suspenders, protects against pool leaks.
+//    Use ≤ 500ms.
+dsn := path + "?_pragma=journal_mode(WAL)&_pragma=busy_timeout(500)&..."
+
+// 3. Context-bound ALL goroutines that write to the DB.
+//    Never: go db.Exec(...)
+//    Always:
+go func(k string, ts int64) {
+    ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+    defer cancel()
+    _, _ = db.ExecContext(ctx, `UPDATE ...`, ts, k)
+}(key, now)
+```
+
+**Audit one-liner** — run this in any Go fleet repo workspace to find
+violations before they cause an incident:
+
+```bash
+# Find SQLite services missing safety rules
+for dir in /opt/services/*/; do
+  go_mod="$dir/go.mod"
+  main="$dir/main.go"
+  [ -f "$go_mod" ] || continue
+  grep -q "modernc.org/sqlite" "$go_mod" || continue
+  echo "=== $dir ==="
+  grep -q "SetMaxOpenConns" "$main" || echo "  MISSING: SetMaxOpenConns"
+  grep -q "busy_timeout" "$main" && \
+    grep -oP 'busy_timeout\(\K[0-9]+' "$main" | \
+    awk '{if($1>500) print "  HIGH busy_timeout: "$1"ms (reduce to ≤500)"}'
+  grep -n "go db\." "$main" 2>/dev/null | grep -v '//' | \
+    sed 's/^/  FIRE-AND-FORGET goroutine: /'
+done
+```
+
+**Current fleet status** (as of 2026-05-26):
+- `go-apikey-service`: fixed (was the incident service)
+- `go-fleet-persona`: clean (had `SetMaxOpenConns(1)` + context calls already)
+- All other services: use postgres/redis (no fcntl risk)
+
 ## Fleet-wide changes — change `go-common`, not consumers
 
 The cardinal rule when you'd otherwise touch every service: **modify
