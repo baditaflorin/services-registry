@@ -50,6 +50,21 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "External networks the container joins. Each must be bootstrapped on the dockerhost (`docker network create <name>`) before `compose up`."
+        },
+        "pids_limit": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "compose `pids_limit` — max processes/threads in the container's cgroup. Fleet-wide BACKSTOP against fork bombs (2026-05-29 dockerhost meltdown: a chromium service spawned ~348k procs and starved the host). container_defaults sets 512."
+        },
+        "mem_limit": {
+          "type": "string",
+          "pattern": "^[0-9]+(b|k|m|g|kb|mb|gb)?$",
+          "description": "compose `mem_limit` — hard memory ceiling, e.g. \"1g\". container_defaults sets 1g; browser/chromium services (js-proxy, js-proxy-network) bump to 2g via overrides.json per-slug."
+        },
+        "cpus": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "compose `cpus` — CPU ceiling (not a reservation), e.g. 2.0 = at most 2 cores. container_defaults sets 2.0 so one runaway can't monopolise the host's 20 cores."
         }
       }
     }

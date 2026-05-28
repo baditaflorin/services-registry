@@ -65,6 +65,33 @@ container_defaults:
   networks:
     - pentest_network
 
+  # ---- Host-starvation BACKSTOP (2026-05-29 dockerhost meltdown) ----
+  # On 2026-05-29 a browser service (go-js-proxy) fork-bombed the
+  # dockerhost: ~3000 load, ~348k chromium processes, all 20 cores /
+  # 48 GB starved, whole host down. Root cause: NO container had any
+  # resource cap, so one runaway could consume the entire VM. These
+  # caps are the fleet-wide backstop so EVERY container is bounded by
+  # default. Heavy/browser services raise mem_limit per-slug in
+  # overrides.json (see js-proxy / js-proxy-network).
+  #
+  # These map to docker-compose v2 (CLI, non-swarm) service options.
+  # Override scalars REPLACE the base value on compose merge -- base
+  # composes do not set them, so the rendered override is authoritative.
+
+  # Cap the process/thread count. A normal Go service uses <100
+  # threads; 512 leaves generous headroom while stopping a fork bomb
+  # cold. This is the DIRECT fix for the chromium incident.
+  pids_limit: 512
+
+  # Memory ceiling. 1g is generous for a Go service. Browser services
+  # (chromium) need more and bump this upward per-slug in overrides.json.
+  mem_limit: "1g"
+
+  # CPU ceiling (not a reservation): at most 2 of the 20 cores. Stops
+  # a single runaway from monopolising the host while leaving plenty
+  # for normal concurrency.
+  cpus: 2.0
+
 # Per-mesh defaults can layer on top of container_defaults.
 # 0crawl services lean heavy on outbound HTTP; give them more headroom.
 mesh_defaults:
