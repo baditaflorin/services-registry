@@ -1762,6 +1762,8 @@
     "version": "1.3.0"
   },
   "html-proxy": {
+    "cpus": 4,
+    "mem_limit": "3g",
     "container_port": 3002,
     "description": "Microservice for Go Html Proxy",
     "example_path": "/?url=https://example.com",
