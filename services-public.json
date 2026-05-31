@@ -847,6 +847,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Detects which CSS framework(s) a web page or raw HTML uses (Bootstrap, Tailwind, Bulma, Foundation, Materialize, Semantic/Fomantic UI, UIkit, Pure.css, Tachyons, Skeleton, Milligram) from three independent static-markup signals: linked-stylesheet / CDN hrefs (strong, often versioned), distinctive class-name signatures, and a generator meta hint. Returns frameworks[] (each name + confidence 0..1 + extracted version + evidence[]) sorted by confidence, the top framework, and a raw-signal summary.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://css-framework-detector.0crawl.com/health",
+    "id": "css-framework-detector",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Css Framework Detector",
+    "repo_url": "https://github.com/baditaflorin/go_css_framework_detector",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://css-framework-detector.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Currency Detector",
     "example_path": "/?target=example.com",
@@ -2630,6 +2660,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Detects JavaScript frameworks/libraries and their versions from STATIC markup only (no JS execution) on a web page or raw HTML: parses versioned CDN <script src> URLs (react@18.2.0, vue@3.4.21, jquery-3.7.1.min.js, bootstrap, htmx.org, alpinejs, gsap, d3, lodash, three), the exact ng-version attribute (gold case), build-tool/framework fingerprints (Next.js /_next/, Nuxt __NUXT__/_nuxt/, Gatsby /page-data/ + ___gatsby, SvelteKit /_app/, Astro astro-island, React data-reactroot, Vue data-v-*), and <meta name=generator> (Gatsby/WordPress/Hugo). Returns frameworks[] (name, version omitempty, confidence 0..1, evidence[]) sorted by confidence desc, plus top.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://js-framework-version-extractor.0crawl.com/health",
+    "id": "js-framework-version-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Js Framework Version Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_js_framework_version_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://js-framework-version-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
     "description": "Microservice for Jsonp Finder",
     "example_path": "/go_jsonp_finder?url=https://example.com",
@@ -2886,6 +2946,36 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Real login analysis needs flow-tracing, CSRF/OAuth/SAML detection, which overlap with session-fixation + jwt-pentest. Better to fold into those.",
     "url": "https://login-analyzer.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} \u2014 returning items[], rels, rel-urls, and a summary roll-up.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://microformats2-extractor.0crawl.com/health",
+    "id": "microformats2-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Microformats2 Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_microformats2_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://microformats2-extractor.0crawl.com"
   },
   {
     "auth": {
@@ -4092,6 +4182,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Detects Progressive-Web-App / service-worker signals from the STATIC markup of a web page (or raw HTML): inline navigator.serviceWorker.register() calls with the resolved script URL and scope option, the <link rel=manifest> URL, and PWA meta/link tags (theme-color, apple-mobile-web-app-capable, apple-touch-icon, mobile-web-app-capable, viewport). Returns a flat report with has_service_worker, sw_registrations[], manifest_url, pwa_signals, a pwa_score count, and an evidence[] trail.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://service-worker-detector.0crawl.com/health",
+    "id": "service-worker-detector",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Service Worker Detector",
+    "repo_url": "https://github.com/baditaflorin/go_service_worker_detector",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://service-worker-detector.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "",
     "example_path": "/?target=example.com",
@@ -4428,6 +4548,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://substack-scraper.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Inventories every SVG / icon usage on a web page or raw HTML and classifies by mechanism: inline <svg> elements (with their <symbol> defs and viewBox), sprite references via <use href='#id'> / <use xlink:href='sprite.svg#id'>, <img src='*.svg'>, external SVG via <object data='*.svg'> / <embed src='*.svg'>, and icon-font usage (fa-/material-icons/glyphicon/bi-/icon- class heuristics). Returns icons[] (mechanism, resolved-absolute ref/src, symbol_id, viewBox), a per-mechanism summary, plus deduped unique_symbol_ids[] and external_sprite_urls[].",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://svg-icon-inventory.0crawl.com/health",
+    "id": "svg-icon-inventory",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Svg Icon Inventory",
+    "repo_url": "https://github.com/baditaflorin/go_svg_icon_inventory",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://svg-icon-inventory.0crawl.com"
   },
   {
     "auth": {
