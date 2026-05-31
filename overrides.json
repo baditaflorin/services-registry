@@ -754,7 +754,7 @@
   },
   "domain-ad-network": {
     "container_port": 18214,
-    "description": "Ad-network detector ��� ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
+    "description": "Ad-network detector - ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
     "host_port": 18214,
     "trl": 4,
     "version": "0.1.0"
@@ -783,7 +783,7 @@
   },
   "domain-analytics-stack": {
     "container_port": 18215,
-    "description": "Analytics stack detector ��� GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
+    "description": "Analytics stack detector - GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "host_port": 18215,
     "trl": 4,
     "version": "0.1.0"
@@ -933,7 +933,7 @@
   },
   "domain-events-platform": {
     "container_port": 18226,
-    "description": "Events / webinar platform detector ��� Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
+    "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "host_port": 18226,
     "trl": 4,
     "version": "0.1.0"
@@ -961,7 +961,7 @@
   },
   "domain-font-stack": {
     "container_port": 18221,
-    "description": "Web font stack detector ��� Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
+    "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
     "trl": 4,
     "version": "0.1.0"
@@ -3896,6 +3896,7 @@
     "example_path": "/?url=https://example.com",
     "health_path": "/health",
     "host_port": 18244,
+    "proxy_egress": true,
     "trl": 5,
     "trl_assessed_at": "2026-05-27",
     "trl_assessor": "deploy-session-2026-05-27",
