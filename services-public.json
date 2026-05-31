@@ -3301,6 +3301,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Readability scoring for a web page or raw text \u2014 Flesch Reading Ease, Flesch-Kincaid Grade, Gunning Fog, SMOG, Coleman-Liau, and ARI, plus a consensus US-grade estimate.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://readability-index.0crawl.com/health",
+    "id": "readability-index",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Readability Index",
+    "repo_url": "https://github.com/baditaflorin/go_readability_index",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://readability-index.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
     "description": "Microservice for Redirect Tracer",
     "example_path": "/?url=https://example.com",
