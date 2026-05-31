@@ -3606,6 +3606,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Segment a legal/policy web page or raw HTML (privacy policy, terms of service, cookie policy, EULA, refund/return, acceptable-use) into clauses keyed by heading and classify each by policy type (data-collection, data-sharing, cookies, retention, user-rights/GDPR, liability, governing-law, termination, refund-return, acceptable-use, contact/DPO), plus a summary roll-up.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://policy-clause-extractor.0crawl.com/health",
+    "id": "policy-clause-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Policy Clause Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_policy_clause_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://policy-clause-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Press Mentions",
     "example_path": "/?target=example.com",
