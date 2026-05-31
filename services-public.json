@@ -2987,6 +2987,36 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "content",
+    "description": "Detect the software/content license(s) of a web page or raw HTML/text \u2014 walks the DOM for structured signals (link rel=license, license anchors, JSON-LD license fields) and scans extracted text for license names, normalizing to SPDX identifiers (MIT, Apache-2.0, GPL/LGPL/AGPL, BSD, MPL-2.0, ISC, Unlicense, Creative Commons), plus copyright-line extraction.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://license-extractor.0crawl.com/health",
+    "id": "license-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "License Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_license_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://license-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
     "description": "Extracts HTML lists from a web page or raw HTML: ordered (ol), unordered (ul), and description (dl) lists, with item text, term/definition pairs, nesting depth, and per-list/total counts.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://list-extractor.0crawl.com/health",
@@ -3066,6 +3096,36 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Real login analysis needs flow-tracing, CSRF/OAuth/SAML detection, which overlap with session-fixation + jwt-pentest. Better to fold into those.",
     "url": "https://login-analyzer.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts the navigation menu structure of a web page or raw HTML: nav / role=navigation / aria-labelled regions plus header and footer link lists, each as a tree of menu items (label, href, nested submenu children) with region classification and a region/link/depth summary.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://menu-extractor.0crawl.com/health",
+    "id": "menu-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Menu Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_menu_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://menu-extractor.0crawl.com"
   },
   {
     "auth": {
@@ -3596,6 +3656,66 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://price-range.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extract pricing tiers / plan cards from a web page or raw HTML \u2014 per-tier plan name, parsed price (currency + amount + billing period), most-popular flag, and feature list, plus a summary (tier count, currency, price range, billing-toggle detection).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://pricing-tier-parser.0crawl.com/health",
+    "id": "pricing-tier-parser",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Pricing Tier Parser",
+    "repo_url": "https://github.com/baditaflorin/go_pricing_tier_parser",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://pricing-tier-parser.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Detect promotional offers and discount/coupon codes on a web page or in raw text \u2014 coupon codes near trigger words (use code, promo, voucher), percentage-off and amount-off offers across currencies, BOGO, free shipping, free trial, plus urgency/expiry hints.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://promo-code-detector.0crawl.com/health",
+    "id": "promo-code-detector",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Promo Code Detector",
+    "repo_url": "https://github.com/baditaflorin/go_promo_code_detector",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://promo-code-detector.0crawl.com"
   },
   {
     "auth": {
@@ -4552,6 +4672,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://social-graph.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extract social-proof signals from a web page or raw HTML \u2014 schema.org AggregateRating (JSON-LD + microdata), visible star ratings, review counts, customer/usage counts, testimonial blocks, press mentions, and trust-badge logo counts, plus a one-line summary.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://social-proof-extractor.0crawl.com/health",
+    "id": "social-proof-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Social Proof Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_social_proof_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://social-proof-extractor.0crawl.com"
   },
   {
     "auth": {
