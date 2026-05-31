@@ -2373,6 +2373,40 @@
     "proxy_egress": true
   },
   {
+    "id": "embed-iframe-classifier",
+    "name": "Embed Iframe Classifier",
+    "description": "Inventories and classifies every <iframe>, <embed>, and <object> on a web page or raw HTML: resolved-absolute src/data, host, and a curated provider/category label (youtube/vimeo video, google_maps/openstreetmap maps, twitter/facebook social, spotify/soundcloud audio, google_docs/codepen docs, typeform/airtable forms, ads_analytics), plus per-provider and per-category counts.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://embed-iframe-classifier.0crawl.com",
+    "health_url": "https://embed-iframe-classifier.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_embed_iframe_classifier",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects every <iframe>/<embed>/<object> in document order, descending into <object> subtrees so a fallback iframe/embed nested as object content is still inventoried. The source attribute is picked per element (src for iframe/embed, data for object) and resolved to an absolute URL against the page's final post-redirect fetched URL via net/url ResolveReference, so a relative or protocol-relative src is reported absolute with a derived lower-cased host. Classification is by registrable-domain host SUFFIX (host == suffix or ends with .suffix) so www./m./player./open. subdomains all land on the same provider, and a couple of path checks disambiguate same-host providers (google.com/maps -> google_maps; docs.google.com/forms -> google_forms ahead of generic google_docs). The curated provider table covers video (youtube incl. youtube-nocookie/youtu.be, vimeo, dailymotion, wistia, loom, twitch), maps (google_maps, openstreetmap), social (twitter incl. x.com, facebook incl. fb/fb.watch/facebook.net, instagram, linkedin, reddit, tiktok), audio (spotify, soundcloud, anchor), docs (google_docs, slideshare, scribd, codepen, jsfiddle, codesandbox, github_gist), forms (typeform, airtable, google_forms), and ads_analytics (doubleclick, googlesyndication, googletagmanager, google-analytics). Anything not on the finite list falls to provider/category other rather than being guessed \u2014 the honest TRL-4 ceiling, since novel embed hosts cannot be classified without an external dataset (the TRL-5+ ceiling). A src-less iframe (srcdoc-only / JS-filled) is still counted with provider/category inline and an empty host. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects relative iframe srcs. Direct text= mode scans pasted HTML with no fetch (empty base, so relative srcs stay as-is). Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_embeds, srcless_embed) instead of failing the response; degraded[] is always a non-nil slice. 30 unit tests cover every provider family, category bucketing, host-suffix subdomain matching, lookalike-host rejection, embed src vs object data, relative + protocol-relative resolution, unresolved-without-base, srcless inline handling, by_provider/by_category counts, document-order preservation, embeds anywhere in the tree, object-nested fallback, no-embeds, garbage/data-URI input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (youtube/vimeo classification, relative resolution, object data, srcless inline, host-suffix subdomains, by_provider/by_category counts, unknown->other, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18255,
+    "container_port": 18255
+  },
+  {
     "id": "emotional-tone",
     "name": "Emotional Tone",
     "description": "Microservice for Emotional Tone",
@@ -3159,6 +3193,40 @@
     "trl_assessor": "claude-opus-4-8",
     "host_port": 18250,
     "container_port": 18250
+  },
+  {
+    "id": "leadership-extractor",
+    "name": "Leadership Extractor",
+    "description": "Extracts the leadership/executive team from a web page or raw HTML \u2014 people whose title matches an executive/leadership keyword set \u2014 returning each leader's name, title, normalized rank (c_suite/founder/president/vp/director/board/other_leadership), bio, and profile links, plus a by_rank count map.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://leadership-extractor.0crawl.com",
+    "health_url": "https://leadership-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_leadership_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Multi-stage leadership-team extraction over a fetched HTML page. Detection runs three passes in priority order on the parsed DOM (golang.org/x/net/html): (1) schema.org Person JSON-LD carrying a jobTitle \u2014 walks every <script type=application/ld+json>, descends @graph and nested objects, handles @type as string OR array, and reads name/givenName+familyName/description/url/sameAs via stdlib encoding/json; (2) schema.org Person microdata (itemtype=schema.org/Person, http or https), pulling name/jobTitle/description and itemprop=url/sameAs + bare anchor hrefs; (3) a heuristic card walk used only when no structured data is present (flagged heuristic_fallback) \u2014 it scans repeated person cards (list items, articles, sections, figures, table cells, and team/staff/member-classed divs), skips grid wrappers that contain nested cards, and derives a name (preferring a heading) plus a title line. Every candidate is then FILTERED to leadership: the title must match a curated keyword set, and survivors are classified into exactly one normalized rank (c_suite, founder, president, vp, director, board, other_leadership) by case-insensitive, word-boundary regexes. Priority order is deliberate \u2014 vp is tested before president so 'Vice President' never lands in the president bucket despite containing the substring 'President', and \\b boundaries keep 'Director' from matching inside 'Directory'. c_suite matches the CxO acronyms plus the spelled 'Chief \u2026 Officer' shape; founder covers Founder/Co-Founder/Cofounder/Founding Partner; vp covers VP/SVP/EVP and (Senior|Executive )?Vice President; president covers President + Managing Director; director covers Director/Executive Director/Head of; board covers Chair(man|woman|person)/Board Member/Board of Directors/Trustee; other_leadership is a Partner/Principal/Owner/General Manager catch-all. Returns leaders[] (name/title/rank/bio omitempty/links non-nil), count, by_rank (rank\u2192count), and detection (json_ld|microdata|heuristic). Relative profile hrefs/photo URLs are resolved against the final fetched URL; in text= mode (no fetch) they are returned as-authored. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch, in plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, heuristic_fallback, jsonld_parse_error, no_leaders) instead of failing the response; a page with text but no leaders still returns 200. ~30 unit tests cover every rank bucket, the Vice-President-vs-President disambiguation, the Directory-is-not-Director word-boundary guard, non-leadership rejection, case-insensitivity, the JSON-LD Person path (incl. @graph + @type array + missing-jobTitle skip + parse-error degraded), the microdata Person path, the heuristic card fallback + non-leader filtering + card links, by_rank counts, no-leaders degraded, dedupe across passes, omitempty/non-nil JSON shape, relative-link resolution, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler. /selftest exercises the full pure-logic pipeline (CEO + VP detected, engineer filtered, ranks asserted) plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: the structured-data paths are exact, but the heuristic fallback recognises only common team-page shapes \u2014 it is not layout-agnostic and does not infer roles from arbitrary running prose, which would need NLP-grade entity/role extraction.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18252,
+    "container_port": 18252
   },
   {
     "id": "legal-entity",
@@ -4969,6 +5037,40 @@
     "proxy_egress": true
   },
   {
+    "id": "structured-data-validator",
+    "name": "Structured Data Validator",
+    "description": "Finds and validates a web page's structured data from three sources \u2014 JSON-LD (<script type=application/ld+json>), Microdata (itemscope/itemtype/itemprop), and RDFa (vocab/typeof/property) \u2014 reporting per block its format, the @type/itemtype/typeof values, whether it parsed, any parse errors, and recommended-field warnings for common schema.org types, plus a summary with total/valid/invalid counts, types_seen, and a by_format histogram.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://structured-data-validator.0crawl.com",
+    "health_url": "https://structured-data-validator.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_structured_data_validator",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Finds and validates structured data from three sources on a fetched (or pasted) HTML page, walking the WHOLE parsed document (golang.org/x/net/html tokenizer, zero regex for structure) \u2014 JSON-LD scripts routinely live in <head>, so it deliberately does not restrict to a content root. (1) JSON-LD validation is rigorous: each <script type=application/ld+json> body is parsed with the stdlib encoding/json; malformed JSON yields valid=false plus a precise error message including the byte offset reported by the decoder (json.SyntaxError/UnmarshalTypeError Offset). @type is extracted from a lone object, every object of a JSON array, and the @graph wrapper array; @type accepts both the string and array forms. (2) Microdata extraction reads itemscope elements (top-level and nested), pulling type(s) from itemtype and the itemprop names from descendants without leaking a nested item's props up to its parent. (3) RDFa extraction reads typeof elements, pulling type(s) from typeof and property names from descendants scoped to the nearest typeof ancestor, matching CURIE properties (schema:headline) by bare name. For a curated, intentionally-small checklist of common schema.org types it emits recommended-but-missing-field warnings \u2014 Article/NewsArticle/BlogPosting need headline; Product/Organization/Person need name; BreadcrumbList needs itemListElement \u2014 keyed on the bare type name so full-URL, CURIE, and bare forms all match. Returns blocks[] (format, types, valid, errors[], warnings[]; errors/warnings always non-nil) plus summary { total_blocks, valid_blocks, invalid_blocks, types_seen[] deduped+sorted, by_format map }. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode \u2014 the static markup already carries the ld+json scripts and itemscope/typeof attributes, so no JS rendering is needed. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Non-fatal conditions go to degraded[] (fetch_failed:<err>, no_structured_data, invalid_blocks) instead of failing the response; a page with no structured data still returns 200. ~36 unit tests cover valid single-object/array/@graph JSON-LD, malformed JSON-LD with offset, string and array @type, the per-type recommended-field warnings, full-URL type matching, ld+json charset param, microdata itemtype/itemprop and nested-scope isolation, RDFa typeof/property and CURIE matching, summary counts + by_format + types_seen dedupe/sort, no-data and garbage input, non-nil slices, parseInput aliases, missing-param 400, SSRF rejection, and the finishAnalysis degraded[] tagging. /selftest exercises the pure-logic pipeline (1 valid + 1 invalid JSON-LD, the missing-headline warning, microdata/RDFa extraction, summary, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: it validates parse correctness plus a curated required/recommended-field checklist for a handful of common schema.org types \u2014 it does NOT validate against the full schema.org vocabulary graph (property domains/ranges, enumerations, cardinality), which is what a full validator like Google's Rich Results Test does and would require carrying the entire vocabulary. Microdata/RDFa are structural extraction with lighter checks than the rigorous JSON-LD JSON parse.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18254,
+    "container_port": 18254
+  },
+  {
     "id": "subdomain-finder",
     "name": "Subdomain Finder",
     "description": "Microservice for Subdomain Finder",
@@ -5138,6 +5240,40 @@
     "proxy_egress": true
   },
   {
+    "id": "team-member-extractor",
+    "name": "Team Member Extractor",
+    "description": "Extracts a roster of team / staff members from an about-us or team page (or raw HTML) \u2014 each member's name, role (job title), short bio, photo_url (resolved absolute), and social/profile links \u2014 preferring schema.org Person (JSON-LD then microdata) and falling back to a conservative repeated-card heuristic. Returns members[] plus count and the detection method.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://team-member-extractor.0crawl.com",
+    "health_url": "https://team-member-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_team_member_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over a fetched HTML page (golang.org/x/net/html tokenizer, no regex over HTML structure) plus stdlib encoding/json for embedded structured data. Detection runs three strategies in strict priority order. (1) schema.org Person via JSON-LD: every <script type=\"application/ld+json\"> block is parsed and walked recursively \u2014 top-level Person, Person inside an @graph or array, and Person under an Organization's member/employee/founder/alumni properties are all harvested, with namespaced @type forms (https://schema.org/Person, schema:Person) recognised; jobTitle, description, image (string / array / ImageObject.url), sameAs and url become role/bio/photo_url/links; results are de-duplicated by name. (2) schema.org microdata: elements whose itemtype ends in /Person are read via their itemprop children (name/jobTitle/description/image/sameAs/url), without descending into nested itemscope entities. (3) Conservative repeated-card heuristic: under a common parent it finds the dominant run (>=2) of same-tag card containers (li/article/div/section), extracts a name from the first heading or strong/b that passes a strict person-name gate (2-4 tokens, each capitalised or an allowed name connective, no digits/role-words, length-capped), a role from a class/itemprop hint (role/title/position/jobTitle) or a nearby short line carrying a known role keyword, the longest paragraph as bio, the first img as photo, and the card's anchor hrefs as links. The heuristic is deliberately conservative: a group must yield >=2 qualifying members AND at least one must carry a role line, otherwise it is dropped \u2014 so navigation bars, footers, and link lists are not emitted as people. Photo and link hrefs are resolved against the fetched final URL via net/url ResolveReference; javascript:/fragment-only hrefs are dropped. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode (the static DOM is sufficient \u2014 no JS rendering needed). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Non-fatal conditions are pushed to degraded[] (fetch_failed:<err>, no_extractable_text, jsonld_parse_error, heuristic_fallback, no_members) instead of failing; a page with text but no detectable roster still returns 200, and the response reports which method (jsonld/microdata/heuristic/none) was used. ~35 unit tests cover JSON-LD single/array/@graph/org-employee/namespaced-type/ImageObject/given-family-name/malformed/dedup/precedence, microdata single/multiple/content-attr, the heuristic across div/li/article cards with role-evidence gating, single-card rejection, nav rejection, mixed-role majority, bio capture, relative-link resolution, the name gate's accept/reject sets, omitempty JSON shape, non-nil slice stability, script isolation, and SSRF rejection. /selftest exercises all three pure-logic strategies plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: JSON-LD and microdata paths are exact, but the heuristic card detection is structurally fragile against unmarked, bespoke, or visually-driven layouts \u2014 distinguishing a true team card from a generic content card without semantic markup is a judgement a trained model would make far better than these hand-tuned rules, and the conservative gate trades recall (missing people) for precision (not emitting non-people).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18251,
+    "container_port": 18251
+  },
+  {
     "id": "team-size",
     "name": "Team Size",
     "description": "Microservice for Team Size",
@@ -5272,6 +5408,40 @@
     "host_port": 8086,
     "container_port": 8086,
     "proxy_egress": true
+  },
+  {
+    "id": "testimonial-extractor",
+    "name": "Testimonial Extractor",
+    "description": "Extracts testimonials / customer reviews / endorsements from a web page or raw HTML \u2014 schema.org Review JSON-LD first, then <blockquote> with <cite>/<figcaption> attribution, then heuristic testimonial cards \u2014 capturing each testimonial's text, author, author_title, numeric rating (when present), and source_url, plus count and a has_ratings flag.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://testimonial-extractor.0crawl.com",
+    "health_url": "https://testimonial-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_testimonial_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over a fetched HTML page (golang.org/x/net/html tokenizer; zero regex for structure) with a confidence-ordered three-strategy extractor. Strategy 1 (authoritative): parses every <script type=application/ld+json> block with the stdlib JSON decoder and harvests schema.org Review / Testimonial nodes \u2014 recursing through @graph, arrays, and the review/reviews/itemListElement properties of a parent Product/Organization \u2014 mapping reviewBody/description/text to the body, a string-or-Person/Organization author to name + jobTitle/affiliation/worksFor, reviewRating.ratingValue (or a bare ratingValue, numeric or string) to the rating, and url/sameAs to a source link. Strategy 2: <blockquote> testimonials attributed by a nested <cite>, an enclosing <figure>'s <figcaption>, or an immediately-following <cite>; a bare unattributed pull-quote is conservatively rejected UNLESS it sits inside a testimonial-flavoured container, to avoid emitting marketing/nav copy. Strategy 3 (best-effort, flagged heuristic_fallback): block-container cards (div/section/article/li/figure) whose class/id mentions testimonial/review/endorsement/quote/feedback, taking the longest quote element/paragraph as the body and a cite/footer/author-class/shortest-paragraph line as the attribution; an outer wrapper that contains inner card containers descends to those rather than emitting one blob. Ratings are best-effort and conservative: schema.org microdata itemprop=ratingValue (content= or text) first, then aria-label/title phrases like '5 out of 5' / 'Rated 4.5' / '4.5/5', then a filled-star glyph count \u2014 surfaced per-testimonial as an omitempty numeric rating plus a top-level has_ratings flag. JSON-LD short-circuits the DOM heuristics so the same visible card is never double-counted. Author lines are split into author + author_title on a leading dash/em-dash and the first comma or ' - '/' \u2013 ' separator. Relative source/author URLs are resolved against the final fetched URL. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch, plain-HTML render mode) with SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, and cache-side + safehttp-fallback dial-time guards for DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Non-fatal conditions go to a non-nil degraded[] (fetch_failed:<err>, no_extractable_text, jsonld_parse_error, heuristic_fallback, no_testimonials) instead of failing; a page with text but no testimonials still returns 200. ~40 unit tests plus /selftest cover the JSON-LD review/rating/author paths, blockquote+cite/figcaption/following-cite attribution, the conservative bare-quote rejection, heuristic card extraction and wrapper de-duplication, all three rating heuristics and has_ratings, author-line splitting, empty/garbage/no-testimonial input, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler paths; /selftest also runs a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: Strategy 1 is exact, but the heuristic-card path and star-glyph/aria rating detection are structurally fragile \u2014 they pattern-match on author-supplied class names and rating glyphs, so an unconventional widget will be missed or mis-rated; lifting that ceiling would need site-specific templates or NLP-grade layout inference, not more heuristics.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18253,
+    "container_port": 18253
   },
   {
     "id": "tos-finder",

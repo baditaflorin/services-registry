@@ -2040,6 +2040,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Inventories and classifies every <iframe>, <embed>, and <object> on a web page or raw HTML: resolved-absolute src/data, host, and a curated provider/category label (youtube/vimeo video, google_maps/openstreetmap maps, twitter/facebook social, spotify/soundcloud audio, google_docs/codepen docs, typeform/airtable forms, ads_analytics), plus per-provider and per-category counts.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://embed-iframe-classifier.0crawl.com/health",
+    "id": "embed-iframe-classifier",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Embed Iframe Classifier",
+    "repo_url": "https://github.com/baditaflorin/go_embed_iframe_classifier",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://embed-iframe-classifier.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Emotional Tone",
     "example_path": "/?target=example.com",
@@ -2709,6 +2739,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://language-detector.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts the leadership/executive team from a web page or raw HTML \u2014 people whose title matches an executive/leadership keyword set \u2014 returning each leader's name, title, normalized rank (c_suite/founder/president/vp/director/board/other_leadership), bio, and profile links, plus a by_rank count map.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://leadership-extractor.0crawl.com/health",
+    "id": "leadership-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Leadership Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_leadership_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://leadership-extractor.0crawl.com"
   },
   {
     "auth": {
@@ -4259,6 +4319,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Finds and validates a web page's structured data from three sources \u2014 JSON-LD (<script type=application/ld+json>), Microdata (itemscope/itemtype/itemprop), and RDFa (vocab/typeof/property) \u2014 reporting per block its format, the @type/itemtype/typeof values, whether it parsed, any parse errors, and recommended-field warnings for common schema.org types, plus a summary with total/valid/invalid counts, types_seen, and a by_format histogram.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://structured-data-validator.0crawl.com/health",
+    "id": "structured-data-validator",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Structured Data Validator",
+    "repo_url": "https://github.com/baditaflorin/go_structured_data_validator",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://structured-data-validator.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Microservice for Subdomain Finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
@@ -4404,6 +4494,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts a roster of team / staff members from an about-us or team page (or raw HTML) \u2014 each member's name, role (job title), short bio, photo_url (resolved absolute), and social/profile links \u2014 preferring schema.org Person (JSON-LD then microdata) and falling back to a conservative repeated-card heuristic. Returns members[] plus count and the detection method.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://team-member-extractor.0crawl.com/health",
+    "id": "team-member-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Team Member Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_team_member_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://team-member-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Team Size",
     "example_path": "/?target=example.com",
@@ -4512,6 +4632,36 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "url": "https://telnet-banner.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts testimonials / customer reviews / endorsements from a web page or raw HTML \u2014 schema.org Review JSON-LD first, then <blockquote> with <cite>/<figcaption> attribution, then heuristic testimonial cards \u2014 capturing each testimonial's text, author, author_title, numeric rating (when present), and source_url, plus count and a has_ratings flag.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://testimonial-extractor.0crawl.com/health",
+    "id": "testimonial-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Testimonial Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_testimonial_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://testimonial-extractor.0crawl.com"
   },
   {
     "auth": {
