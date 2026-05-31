@@ -612,6 +612,40 @@
     "proxy_egress": true
   },
   {
+    "id": "citation-reference-extractor",
+    "name": "Citation Reference Extractor",
+    "description": "Extract academic and web citations from a page or raw HTML/text \u2014 <cite> elements, reference/bibliography list items, footnote/endnote targets, and structured identifiers (DOI, arXiv ids, checksum-validated ISBN-10/13, PMID, and reference-context URLs), normalised into typed citation objects with a by-type summary.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://citation-reference-extractor.0crawl.com",
+    "health_url": "https://citation-reference-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_citation_reference_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over a fetched/pasted page (golang.org/x/net/html tokenizer, no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, then runs four ordered passes \u2014 (1) reference/bibliography list items: <ol>/<ul> <li> contents inside a section whose heading text or container id/class matches a reference token (references / bibliography / works cited / literature cited / further reading); (2) every <cite> element's text; (3) footnote/endnote <li> targets keyed by id prefix (fn / footnote / endnote / note / cite_note / ref-) with the trailing number lifted into a marker; (4) an inline sweep for structured identifiers in running prose not already captured. Each citation's raw text is matched for identifiers with anchored regexes (pattern-matching within text, not HTML parsing): DOI (10.<4-9 digits>/<suffix>), arXiv new (NNNN.NNNNN[vN]) and old (archive.subclass/NNNNNNN) schemes normalised to arXiv:<id>, PMID (label-required), http/https URLs (DOI-resolver and arXiv URLs de-duplicated against their id forms), and ISBN-10/ISBN-13 validated by their mod-11 / mod-10 checksums (labelled and bare 978/979 forms; checksum-failing candidates dropped). Output is a typed citation list (raw text + detected type + extracted identifiers) plus a by-type + by-identifier summary. Input fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode; 4 MiB body cap. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (no_references, fetch_failed:<err>) instead of failing the response. ~30 unit + handler tests cover DOI extraction, both arXiv id forms, ISBN-10 and ISBN-13 valid + invalid checksums, PMID, <cite> extraction, reference-list detection by heading and by container id/class, URL-in-reference extraction, footnote markers, type classification, summary counts, parse-input aliases, missing-param 400, SSRF rejection, no-references\u2192degraded, and text= mode. TRL-4 ceiling: heuristic section detection (no full CSL / citation-style parsing, no author/title/year field decomposition), English-centric reference-section headings, and no DOI/ISBN registry resolution (checksum validity only, not 'this identifier exists'). /selftest exercises the pure-logic pipeline (DOI/arXiv parse, ISBN checksum, reference-list + <cite> DOM detection, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18263,
+    "container_port": 18263
+  },
+  {
     "id": "clickjacking-tester",
     "name": "Clickjacking Tester",
     "description": "Microservice for Clickjacking Tester",
@@ -678,6 +712,40 @@
     "host_port": 8280,
     "container_port": 8280,
     "proxy_egress": true
+  },
+  {
+    "id": "color-contrast-checker",
+    "name": "Color Contrast Checker",
+    "description": "WCAG 2.x color-contrast checker for a web page or raw HTML \u2014 resolves declared foreground/background color pairs (inline style= and <style>-block rules), computes the relative-luminance contrast ratio for each, and reports AA/AAA pass/fail for normal and large text plus a failing-pairs summary.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://color-contrast-checker.0crawl.com",
+    "health_url": "https://color-contrast-checker.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_color_contrast_checker",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real WCAG 2.x contrast engine over a golang.org/x/net/html DOM walk (no regex over HTML structure): collects foreground/background color declarations from (1) inline style= attributes and (2) <style>-block CSS rules parsed by a small brace-matching tokenizer that strips /* */ comments and flattens one level of @media/@supports nesting. Colors are resolved by a curated ~148-entry CSS named-color map plus #rgb/#rrggbb (and #rgba/#rrggbbaa alpha-drop) hex and rgb()/rgba() functional notation (comma or space/slash separated, integer or percentage channels, alpha parsed-then-dropped). For each resolved fg+bg pair it computes the exact sRGB relative luminance (channel/255, piecewise <=0.03928 ? /12.92 : ((c+0.055)/1.055)^2.4; L = 0.2126R+0.7152G+0.0722B) and the contrast ratio (L_lighter+0.05)/(L_darker+0.05) \u2014 verified against the canonical black-on-white = 21.0 and white-on-white = 1.0. Verdicts use >= thresholds at the WCAG boundaries: AA normal 4.5, AAA normal 7, AA large 3, AAA large 4.5. Output is de-duplicated, sorted worst-ratio-first, with a summary (total pairs, # failing AA normal, skipped/unparseable color count, min ratio). Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers checking the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted HTML with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_color_pairs, unparseable_colors_skipped:<n>) instead of failing the response. Documented TRL-4 ceiling: it scores only directly-declared color pairs on the same element/rule \u2014 NO computed-style cascade, inheritance, or specificity resolution, so it does not reconstruct the fg/bg a browser would actually composite; no JS-applied styles; no opacity/alpha compositing; CSS variables, gradients, currentColor, and hsl() are reported as skipped rather than guessed. ~40 table-driven unit + handler tests cover luminance of black/white/mid-gray, the 21.0 and 1.0 anchor ratios, hex (#fff/#ffffff) and rgb()/rgba() parsing, named-color resolution, inline-style and <style>-block pair extraction, AA/AAA verdicts at the boundaries, missing-param 400, SSRF rejection (handler + parseInput), and degraded[] population on a no-colors page. /selftest exercises the pure-logic pipeline (luminance/ratio anchors, parsing, inline + stylesheet extraction, threshold verdicts, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18261,
+    "container_port": 18261
   },
   {
     "id": "comment-extractor",
@@ -780,6 +848,40 @@
     "host_port": 8327,
     "container_port": 8327,
     "proxy_read_timeout": "120s"
+  },
+  {
+    "id": "content-fingerprint",
+    "name": "Content Fingerprint",
+    "description": "Near-duplicate-detection fingerprints for a web page or raw text \u2014 a 64-bit Charikar SimHash over k-gram word shingles, a 64-permutation MinHash signature for Jaccard estimation, and a normalized SHA-256 exact-match digest, plus shingle and token counts.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://content-fingerprint.0crawl.com",
+    "health_url": "https://content-fingerprint.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_content_fingerprint",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Near-duplicate fingerprinting over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Computes three standard fingerprints over the normalized lowercased text: a 64-bit Charikar SimHash over k=3 word shingles (FNV-64a per shingle, +1/-1 column sums, sign bit) \u2014 near-identical documents have a small Hamming distance, unrelated documents ~half the bits; a 64-permutation MinHash signature (universal-hash multiply-xor scramble with a splitmix64 avalanche per permutation, min per permutation) whose matching-fraction estimates Jaccard similarity (identical sets 1.0, disjoint ~0 within ~12% sampling error); and a whitespace-collapsed, lowercased SHA-256 hex exact-match digest. Shingle and token counts are returned alongside. A hammingDistanceHex helper documents how to compare two SimHash values. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers fingerprinting the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode fingerprints pasted content with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_tokens) instead of failing the response; <20-token inputs flagged as statistically unstable. ~30 unit tests cover SimHash determinism/case-insensitivity/empty, near-duplicate small-Hamming stability and unrelated large-Hamming divergence, the Hamming helper, MinHash signature length/determinism, Jaccard identical=1.0/disjoint~0/similarity-ordering/mismatched-length, normalized SHA-256 exact match plus case/whitespace insensitivity and content-change sensitivity, shingle generation at the k boundary/below-k/dedup, token+shingle counts, parse-input aliases, low-sample degraded, missing-param 400, SSRF rejection, and text= mode. TRL-4 ceiling: fixed k=3 shingle width, no language-aware tokenization, FNV/universal-hash heuristics rather than cryptographic locality-sensitive guarantees, and fingerprints estimate surface/lexical similarity not semantic meaning. /selftest exercises the pure-logic pipeline (identical\u2192identical fingerprints, one-word\u2192small SimHash Hamming distance but different SHA, unrelated\u2192large Hamming, MinHash Jaccard sanity, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18265,
+    "container_port": 18265
   },
   {
     "id": "cookie-checker",
@@ -1257,6 +1359,40 @@
     "host_port": 8084,
     "container_port": 8084,
     "proxy_egress": true
+  },
+  {
+    "id": "dom-complexity-metrics",
+    "name": "Dom Complexity Metrics",
+    "description": "Structural DOM-complexity metrics for a web page or raw HTML \u2014 total element-node and text-node counts, maximum nesting depth, maximum sibling breadth, per-tag frequency histogram, distinct-tag count, average children per element, high-fan-out element count, the deepest element path, text-to-element ratio, total DOM size in bytes, and a combined complexity score.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://dom-complexity-metrics.0crawl.com",
+    "health_url": "https://dom-complexity-metrics.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_dom_complexity_metrics",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real single-pass DOM tree walk over golang.org/x/net/html's tokenizing parser (no regex over HTML structure): malformed markup is normalised into a well-formed tree, then one depth-first traversal in document order computes total element-node count, total text-node count, maximum element-nesting depth, maximum sibling breadth (widest direct-element-child fan at any parent), a per-lowercase-tag frequency histogram, distinct-tag count, average direct-element-children per element, count of elements exceeding the >60-child high-fan-out threshold (threshold echoed in the response), the deepest element path (root-to-deepest tag chain, first-in-document-order on ties), text-to-element ratio, total DOM size in bytes, and a documented combined complexity score (max_depth + max_breadth + element_nodes/100). The whole served document is counted including head/script/style \u2014 DOM weight is a property of the markup as a whole, distinct from prose extraction. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode analyses pasted markup with no fetch. Per-failure notes pushed to a non-nil degraded[] (empty_document, fetch_failed, parse_failed) instead of failing the response. ~30 unit tests cover nested-div depth, N-sibling breadth, node counts, tag histogram, distinct-tag count, deepest-path chain (including first-wins-on-tie), high-fan-out threshold boundary (60 vs 61), text-node vs element-node counting, malformed-HTML normalisation, script/style inclusion, average-children and ratio math, complexity-score monotonicity, empty-document degraded, missing-param 400, SSRF rejection, and text= mode. /selftest exercises the pure-logic pipeline (hand-built known depth/breadth, node counts, deepest path, fan-out, empty-document, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: metrics describe the STATIC server-rendered DOM only \u2014 no JS-expanded/hydrated DOM, no computed layout/CSSOM, no render-tree or paint cost; a headless-browser engine would be required to advance further.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18262,
+    "container_port": 18262
   },
   {
     "id": "domain-ad-network",
@@ -3672,6 +3808,40 @@
     "container_port": 8297,
     "proxy_egress": true,
     "proxy_read_timeout": "120s"
+  },
+  {
+    "id": "passive-voice-detector",
+    "name": "Passive Voice Detector",
+    "description": "Passive-voice detection for a web page or raw text \u2014 flags sentences using a be/get auxiliary plus a past participle, reports the matched trigger per sentence, total/passive sentence counts, and the passive-sentence ratio.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://passive-voice-detector.0crawl.com",
+    "health_url": "https://passive-voice-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_passive_voice_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Heuristic passive-voice detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Splits prose into sentences on terminal punctuation (collapsing punctuation runs, trailing-fragment aware) and flags each sentence as passive when a form of to-be (am/is/are/was/were/be/been/being) or a get-passive (get/gets/getting/got/gotten) is followed \u2014 within a small window that skips up to three intervening adverbs/negators so 'has been carefully reviewed' still matches \u2014 by a past participle. Participles are identified heuristically: regular -ed forms (with a curated exclusion list for short non-verbal -ed words like red/bed/embed) plus a curated list of ~110 common irregular past participles (done/made/seen/taken/given/written/known/shown/held/thrown/etc.). Reports the flagged sentences with their matched trigger (auxiliary + participle), total sentence count, passive sentence count, and the passive ratio as a percentage. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_sentences) instead of failing the response; inputs below five sentences flagged as statistically noisy. ~30 unit tests cover sentence splitting, classic be-passives (was thrown, is being reviewed, has been done), get-passives (got hit, gets done), active sentences NOT flagged, irregular participles, adverb-interrupted passives, the adverb window not overreaching into unrelated clauses, passive-ratio math, the participle classifier, tokenisation, low-sample handling, missing-param 400, SSRF rejection, text= mode, plus the reused HTML-extraction cases (script/style stripping, article preference, whitespace collapse, block boundaries). /selftest exercises the pure-logic pipeline (a known passive flags, a known active does not, ratio math, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: heuristic participle detection without a POS tagger or dependency parser, English-only \u2014 it will miss participles outside the curated list and false-positive on adjectival participles ('the painted wall'), copular complements, and get as a main verb, where a full NLP parser would not.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18264,
+    "container_port": 18264
   },
   {
     "id": "payment-detector",

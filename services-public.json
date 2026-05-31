@@ -528,6 +528,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extract academic and web citations from a page or raw HTML/text \u2014 <cite> elements, reference/bibliography list items, footnote/endnote targets, and structured identifiers (DOI, arXiv ids, checksum-validated ISBN-10/13, PMID, and reference-context URLs), normalised into typed citation objects with a by-type summary.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://citation-reference-extractor.0crawl.com/health",
+    "id": "citation-reference-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Citation Reference Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_citation_reference_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://citation-reference-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
     "description": "Microservice for Clickjacking Tester",
     "example_path": "/go_clickjacking_tester?target=example.com",
@@ -578,6 +608,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://cognitive-load.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "WCAG 2.x color-contrast checker for a web page or raw HTML \u2014 resolves declared foreground/background color pairs (inline style= and <style>-block rules), computes the relative-luminance contrast ratio for each, and reports AA/AAA pass/fail for normal and large text plus a failing-pairs summary.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://color-contrast-checker.0crawl.com/health",
+    "id": "color-contrast-checker",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Color Contrast Checker",
+    "repo_url": "https://github.com/baditaflorin/go_color_contrast_checker",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://color-contrast-checker.0crawl.com"
   },
   {
     "auth": {
@@ -665,6 +725,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://compression-tester.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Near-duplicate-detection fingerprints for a web page or raw text \u2014 a 64-bit Charikar SimHash over k-gram word shingles, a 64-permutation MinHash signature for Jaccard estimation, and a normalized SHA-256 exact-match digest, plus shingle and token counts.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://content-fingerprint.0crawl.com/health",
+    "id": "content-fingerprint",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Content Fingerprint",
+    "repo_url": "https://github.com/baditaflorin/go_content_fingerprint",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://content-fingerprint.0crawl.com"
   },
   {
     "auth": {
@@ -1072,6 +1162,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://dns-record.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Structural DOM-complexity metrics for a web page or raw HTML \u2014 total element-node and text-node counts, maximum nesting depth, maximum sibling breadth, per-tag frequency histogram, distinct-tag count, average children per element, high-fan-out element count, the deepest element path, text-to-element ratio, total DOM size in bytes, and a combined complexity score.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://dom-complexity-metrics.0crawl.com/health",
+    "id": "dom-complexity-metrics",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Dom Complexity Metrics",
+    "repo_url": "https://github.com/baditaflorin/go_dom_complexity_metrics",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://dom-complexity-metrics.0crawl.com"
   },
   {
     "auth": {
@@ -3150,6 +3270,36 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires a headless browser / DOM rendering to measure real paint/layout metrics; this service is an HTTP-level probe.",
     "url": "https://page-load-metrics.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Passive-voice detection for a web page or raw text \u2014 flags sentences using a be/get auxiliary plus a past participle, reports the matched trigger per sentence, total/passive sentence counts, and the passive-sentence ratio.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://passive-voice-detector.0crawl.com/health",
+    "id": "passive-voice-detector",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Passive Voice Detector",
+    "repo_url": "https://github.com/baditaflorin/go_passive_voice_detector",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://passive-voice-detector.0crawl.com"
   },
   {
     "auth": {
