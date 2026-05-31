@@ -196,8 +196,8 @@
       "recon"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://api-extractor.0crawl.com"
@@ -224,11 +224,11 @@
       "domains",
       "go"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "TRL 8 needs a headless browser to render JS-gated SPA docs/descriptor portals plus a persisted historical corpus for cross-run consistency \u2014 out of scope for a CPU-only, CGO-free, no-runtime-LLM service.",
+    "trl_ceiling_reason": "Definitive API-surface confirmation needs authenticated probing + paid API-catalog feeds; CPU-only host/path heuristic detection caps at real/evidence-backed 6",
     "url": "https://api-first.0crawl.com"
   },
   {
@@ -632,7 +632,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "authoritative headcount needs a paid people-data feed (LinkedIn/Clearbit-class); markup-only inference plateaus at band-level confidence",
     "url": "https://company-size.0crawl.com"
@@ -661,7 +661,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://compression-tester.0crawl.com"
@@ -688,11 +688,11 @@
       "go",
       "security"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "8/9 needs a headless browser engine to observe JS-set and post-consent cookies; CPU-only Set-Cookie audit structurally caps at real/RFC-compliant 6-7",
     "url": "https://cookie-checker.0crawl.com"
   },
   {
@@ -893,7 +893,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://customer-logos.0crawl.com"
@@ -1038,9 +1038,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative MX/SPF/DKIM cross-checks need live SMTP probes + paid deliverability feeds",
     "url": "https://dns-record.0crawl.com"
   },
   {
@@ -2055,11 +2055,11 @@
       "domains",
       "go"
     ],
-    "trl": 5,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 a fundamental language-understanding gap. A CPU-only VADER+AFINN+EmoLex lexicon plateaus at 4; the added confidence field quantifies lexical evidence only and explicitly does not claim to resolve sarcasm/irony.",
     "url": "https://emotional-tone.0crawl.com"
   },
   {
@@ -2173,7 +2173,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://founding-year.0crawl.com"
@@ -2201,8 +2201,8 @@
       "go"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://funding-detector.0crawl.com"
@@ -2471,7 +2471,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://http-protocol.0crawl.com"
@@ -2672,11 +2672,11 @@
       "domains",
       "go"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Authoritative validation requires jurisdiction-specific registries or paid company data (Companies House / Handelsregister / INSEE / KvK). That live-register feed is the structural ceiling for 8.",
+    "trl_ceiling_reason": "authoritative validation requires jurisdiction-specific registries or paid company-data feeds; CPU-only format/checksum validation proves an identifier is well-formed, not that the company exists",
     "url": "https://legal-entity.0crawl.com"
   },
   {
@@ -2819,9 +2819,9 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "36 of 39 successful scans on 100 real rows return 0 locations because the sites carry no machine-readable address (no schema.org/microdata/<address>); raising raw detection needs a browser-render fetch path or a paid address feed, not more CPU heuristics \u2014 so the static-HTML approach is at its ceiling",
     "url": "https://office-locations.0crawl.com"
   },
   {
@@ -2877,9 +2877,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "True authority/trust graph needs cross-site crawl + persistent link-graph storage",
     "url": "https://outlink-graph.0crawl.com"
   },
   {
@@ -2906,9 +2906,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "Headless-browser / post-JS DOM rendering is required for true Core Web Vitals; the CPU-only static fetch cannot measure LCP/CLS/INP. TRL 7+ needs a real renderer.",
+    "trl_ceiling_reason": "Real client-side paint metrics (LCP/CLS/FID) structurally require a headless browser + DOM rendering; a CPU-only fetch service can only measure network/transfer-tier signals.",
     "url": "https://page-load-metrics.0crawl.com"
   },
   {
@@ -2934,10 +2934,10 @@
       "go"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Production-grade (TRL-8) detection-rate is bounded by the upstream fleetfetch RenderJS cache \u2014 every live probe 502'd with context-deadline-exceeded so the detector never sees a page body; correctness can't be proven on live traffic without a faster/warmer fetch tier or a stored-output table. The detector logic itself is sound and fully unit-tested.",
     "url": "https://payment-detector.0crawl.com"
   },
   {
@@ -3173,9 +3173,9 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "~52% of corpus is upstream fetch failure (status=2) and the highest-value targets are JS-rendered SPAs; static-HTML CPU service cannot reach their press content without a browser/JS-render fetch path",
     "url": "https://press-mentions.0crawl.com"
   },
   {
@@ -3346,10 +3346,10 @@
       "go"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": null,
+    "trl_ceiling_reason": "JS-SPA careers pages (Netflix/Dropbox) serve near-empty HTML shells and cross-host handbooks (GitLab all-remote on about.gitlab.com/handbook) need a headless browser or cross-origin crawl \u2014 both forbidden by CPU-only/no-heavy-deps rules.",
     "url": "https://remote-detector.0crawl.com"
   },
   {
@@ -3374,11 +3374,11 @@
       "domains",
       "go"
     ],
-    "trl": 6,
+    "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Definitive revenue-model attribution needs authenticated checkout/pricing-page rendering + paid business-data feeds; CPU-only static-HTML lexicon detection caps at real/evidence-backed 7",
     "url": "https://revenue-model.0crawl.com"
   },
   {
@@ -3579,7 +3579,7 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Full complexity for SPAs needs post-JS DOM rendering; the CPU-only single-pass static walk cannot see client-injected DOM.",
     "url": "https://scc.0crawl.com"
@@ -3606,11 +3606,11 @@
       "go",
       "web-analysis"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "JS-injected structured data needs post-render DOM; the degraded fleet JS-render proxy is the structural dependency. Static extraction of all four syntaxes is now complete.",
+    "trl_ceiling_reason": "client-side/JS-injected schema needs a browser DOM fetcher; a CPU-only static fetch cannot see schema rendered after page load",
     "url": "https://schema-extractor.0crawl.com"
   },
   {
@@ -3693,11 +3693,11 @@
       "domains",
       "go"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Movable-feast dates are heuristic windows (no ephemeris/holiday-API), and detection is bounded by the shared JS-render fetch-cache. TRL 8 needs a dated holiday-calendar feed + a more reliable renderer.",
+    "trl_ceiling_reason": "TRL 7 needs the urgency<->season correlation + upcoming window proven on live production traffic; implemented and unit/corpus-proven this pass, but the upstream fetch-cache outage blocked a before->after detection-rate measurement on the 100 real rows",
     "url": "https://seasonal-detector.0crawl.com"
   },
   {
@@ -3781,10 +3781,10 @@
       "go"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Full policy efficacy (does CSP actually block injection in a live DOM) needs a browser engine; CPU-only header parsing + policy-strength grading caps at real/RFC-aware 7",
     "url": "https://security-headers.0crawl.com"
   },
   {
@@ -3811,7 +3811,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://security-txt.0crawl.com"
@@ -3922,9 +3922,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative shipping coverage needs authenticated checkout/cart rendering + carrier-API data; CPU-only static-HTML region scanning caps at real/evidence-backed 6",
     "url": "https://shipping-regions.0crawl.com"
   },
   {
@@ -4038,7 +4038,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://social-graph.0crawl.com"
@@ -4094,11 +4094,11 @@
       "go",
       "recon"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Exhaustive passive coverage needs a paid CT mirror / DNSDB / self-hosted CT replica; free CT/HTTP feeds (crt.sh, hackertarget) rate-limit to zero in production.",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "free CT log tiers (crt.sh) rate-limit aggressively (crt_sh:0 on most probes); TRL 8 needs a paid CT mirror (DNSDB) or self-hosted CT replica, which the CPU-only/no-new-outbound rules forbid",
     "url": "https://subdomain-finder.0crawl.com"
   },
   {
@@ -4125,7 +4125,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://subdomain-takeover.0crawl.com"
@@ -4297,11 +4297,11 @@
       "domains",
       "go"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Dynamic-only or authenticated stack signals need JS rendering and session context; all new signals are static (headers, cookies, meta generators, asset URLs, server tokens). The one inferred field (database_hint) is labelled and capped at medium.",
+    "trl_ceiling_reason": "JS-only/authenticated stack signals (SPA-rendered vendors, logged-in state) need a real browser engine \u2014 out of scope for a CPU-only header/cookie/static-body detector",
     "url": "https://technology-stack.0crawl.com"
   },
   {
@@ -4355,11 +4355,11 @@
       "domains",
       "go"
     ],
-    "trl": 7,
+    "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "JS-rendered legal pages (SPAs inject policy client-side; fleet JS-render proxy is the structural dependency, currently down) plus a multi-language semantic classifier beyond regex/vocabulary gates would be needed for 8.",
+    "trl_ceiling_reason": "SPA homepages return links_scanned=0; resolving JS-rendered nav needs a render engine outside the CPU-only mandate",
     "url": "https://tos-finder.0crawl.com"
   },
   {
@@ -4386,7 +4386,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": "true longitudinal trust decay needs persisted historical snapshots (the 8+ frontier); current model infers staleness from a single point-in-time fetch",
     "url": "https://trust-decay.0crawl.com"
@@ -4473,9 +4473,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "true update cadence needs persisted multi-snapshot history or a reliable external archive feed; live coverage win currently blocked by Internet Archive CDX 503 outage",
+    "trl_ceiling_reason": "Residual Wayback CDX coverage is bounded by archive.org per-IP rate-limiting and intermittent availability from the shared container; eliminating it needs a CDX response cache / proxy-IP rotation / paid historical-content feed, plus language-aware date scraping and multi-feed dedup at scale.",
     "url": "https://update-frequency.0crawl.com"
   },
   {
@@ -4531,9 +4531,9 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Inferred families (tone/generation/income) remain keyword-heuristics; higher accuracy needs content the degraded JS-render fetcher cannot currently supply and likely an ML classifier. Explicit signals are already near-certain.",
+    "trl_ceiling_reason": "Explicit signals are near-certain; inferred signals (tone, generation, income) are heuristic keyword-counts. The labelled-eval + measured precision/recall path to 7 was completed in Pass 1; Pass 2 hardened it but cannot exceed 7 without paid feeds/persistence.",
     "url": "https://user-demographics.0crawl.com"
   },
   {
@@ -5045,9 +5045,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Full policy semantics need per-bot crawl-delay/path coverage modeling + browser-rendered consent flows",
     "url": "https://domain-ai-bot-policy-scanner.0exec.com"
   },
   {
@@ -5074,9 +5074,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "To reach 8 the JS-render fetch-cache must reliably return page HTML (currently 403/timeout on many domains) and claims should be cross-checked against issuer/accreditation registries \u2014 needs a browser engine and/or paid feeds, structurally above CPU-only.",
+    "trl_ceiling_reason": "Reaching 8 needs a JS-rendering fetch that reliably returns page HTML (many domains still 403/timeout upstream) and cross-checking claims against issuer/accreditation registries \u2014 both require a browser engine and/or paid feeds, structurally above CPU-only.",
     "url": "https://domain-compliance-claim-scanner.0exec.com"
   },
   {
@@ -5103,9 +5103,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Comprehensive, reliable CT coverage is gated by crt.sh's aggressive rate-limiting/gateway errors (observed 100% 429/502/504 across 20 live domains); TRL 8 needs a self-hosted CT mirror or paid CT feed, not better Go.",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Sole data source is crt.sh, a free unauthenticated single CT-log feed that is rate-limit (429) / gateway (502/504) / timeout dominant in every probe window; reaching TRL 8 would require a paid feed (Censys/SecurityTrails) or our own CT log-list poller \u2014 both new outbound sources the campaign rules forbid.",
     "url": "https://domain-ct-log-watcher.0exec.com"
   },
   {
@@ -5130,11 +5130,11 @@
       "domainscope",
       "go-domain"
     ],
-    "trl": 6,
+    "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Full RRSIG-over-RRset signature verification and a second independent resolver for quorum remain; the DS<->DNSKEY digest link is proven locally today. Pure Go, no paid feed needed for 7.",
+    "trl_ceiling_reason": "Multi-resolver quorum and a full root-anchored walk (verifying RRSIGs at every delegation hop) remain absent; a single public resolver is the structural reason it stays at 7. The DS<->DNSKEY digest link and the apex DNSKEY RRSIG signature+window are both proven locally as of v0.2.1.",
     "url": "https://domain-dnssec-validator.0exec.com"
   },
   {
@@ -5185,9 +5185,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "True deliverability scoring needs live SMTP/inbox-placement feeds + reputation data",
     "url": "https://domain-email-deliverability-score.0exec.com"
   },
   {
@@ -5214,9 +5214,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Full HTTP/3 grading needs active QUIC handshake from multiple network vantages",
     "url": "https://domain-http3-quic-detector.0exec.com"
   },
   {
@@ -5243,9 +5243,9 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "TRL 8 needs authoritative store cross-verification (paid App Store / Play Developer APIs) + historical-linkage persistence; CPU-only manifest+App-Links parsing tops out at a validated 7.",
+    "trl_ceiling_reason": "TRL 8 needs authoritative store cross-verification (paid App Store / Play Developer APIs) + historical-linkage persistence; CPU-only manifest + App-Links + iTunes-keyword parsing tops out at a validated 7 \u2014 even a high-tier iTunes match can be a different same-named vendor.",
     "url": "https://domain-mobile-app-resolver.0exec.com"
   },
   {
@@ -5320,9 +5320,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Comprehensive historical passive-DNS (multi-year rdata churn + global first-seen provenance) requires a paid feed (Farsight DNSDB / SecurityTrails); free public sources are sparse/rate-limited and the formerly-used Mnemonic public read API is decommissioned (CloudFront 502).",
+    "trl_ceiling_reason": "Comprehensive multi-year passive-DNS history requires a paid feed (Farsight DNSDB / SecurityTrails); free public sources (HackerTarget) are sparse and rate-limited, and the formerly-used Mnemonic public read API is decommissioned (CloudFront 502).",
     "url": "https://domain-passive-dns-history.0exec.com"
   },
   {
@@ -5349,9 +5349,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative reputation needs cross-vantage DNSBL queries from multiple resolver IPs + paid threat feeds",
     "url": "https://domain-rbl-reputation.0exec.com"
   },
   {
@@ -5378,9 +5378,9 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Comprehensive SaaS attribution needs paid IP-intelligence + CDN-origin feeds",
     "url": "https://domain-saas-host-mapper.0exec.com"
   },
   {
@@ -5407,7 +5407,7 @@
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Structured data injected only after client-side rendering needs a JS DOM fetcher (same ceiling as sibling schema-extractor).",
     "url": "https://domain-structured-data-rollup.0exec.com"
@@ -5460,7 +5460,7 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "SPA/CDN-fronted sites strip version info from headers and minify bundles; full coverage needs JS rendering. Dataset is build-time curated and needs a periodic refresh pipeline for TRL 8.",
     "url": "https://domain-tech-eol-flagger.0exec.com"
@@ -5489,7 +5489,7 @@
     ],
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-pass2-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Sees only static HTML-attribute third parties; dynamically-injected (JS runtime) third parties need a real browser engine, and 8+ would need a periodically-refreshed gazetteer feed.",
     "url": "https://domain-third-party-fetch-map.0exec.com"
