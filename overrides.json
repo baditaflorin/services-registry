@@ -1489,18 +1489,18 @@
     },
     "category": "fleet_infra",
     "container_port": 18272,
-    "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, then pull it from another machine within a hard ≤5-minute TTL. Held in RAM only (restart wipes everything). Random unguessable base62 ids or write-once named slots; ?burn=1 deletes on first read for one-time secrets.",
+    "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, pull it on another machine within a hard ≤5-minute TTL. In-RAM only (restart wipes everything), 10 MiB/blob with a total-RAM budget. Random base62 ids, write-once or last-write-wins (?replace) named slots, say-it-out-loud ids (?words), ?burn one-time reads, ?qr scannable links, ?notify read-receipts. Optional client-side E2E: `-e` (AES-256-CTR+HMAC, key in the URL #fragment — opens in a browser or decrypts with openssl) plus a browser ask-me-a-secret sealed-box (ECDH P-256). `curl …/install | sh` adds a `pipe` client with one-time wormhole codes and an end-to-end universal clipboard. Browser app at GET / for non-CLI users.",
     "example_path": "/",
     "extra_server_names": [
       "pipe.0exec.com"
     ],
     "host_port": 18272,
-    "trl": 4,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-31-pipe",
+    "trl": 5,
+    "trl_assessed_at": "2026-06-01",
+    "trl_assessor": "claude-opus-session-2026-06-01-pipe-0.4.1",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Single-node, in-RAM, stateless relay by design — no persistence, no HA/clustering, no cross-checks. Deliberately minimal; further TRL would require features that contradict the ephemeral intent.",
-    "trl_evidence": "NEW fleet primitive (2026-05-31). In-memory TTL store with 8 store unit tests (put/get roundtrip, burn-on-read, TTL expiry via injected clock, write-once, expired-name reclaim, max-entries cap, clamp-TTL, base62 id shape+uniqueness over 1000 draws, PutRandom uniqueness over 500) and 14 handler/HTTP tests (random push/pull, named write-once 409, reserved-name 409, invalid-name 400, burn-once-then-404, text/plain+nosniff headers, 404 missing, delete, 413 oversized body, usage + shell helper). /selftest exercises put-random → get-multi → burn → named-write-once → reserved → empty-body → ttl-expiry end-to-end against an httptest server. crypto/rand ids with rejection sampling (no modulo bias)."
+    "trl_evidence": "v0.4.1 in-RAM TTL relay (PutOpts API, total-RAM byte budget, last-write-wins ?replace slots, read-receipt watch channels). Store unit tests: put/get, burn-on-read, TTL expiry via injected clock, write-once, replace, expired-name reclaim, max-entries + max-total-bytes budgets, byte accounting across burn/expire, clamp-TTL, base62 id shape/uniqueness over 1000 draws, PutRandom uniqueness over 500, 256-word list uniqueness, word-code shape. Handler/HTTP tests: random+named push/pull, write-once 409, replace overwrite, reserved/invalid name, burn-once-then-404, content negotiation (HTML app vs text vs ?shell/?app/?raw), word-code create, QR text+png, read-receipt notify+watch token/gone, safe headers, delete, 413. /selftest runs put→get-multi→burn→named→reserved→empty→ttl→replace→word-code→byte-budget end-to-end. Cross-impl crypto proven: AES-256-CTR+HMAC openssl↔WebCrypto round-trips (incl. 256 KB + macOS LibreSSL) and ECDH P-256 sealed-box round-trip + wrong-key rejection (node WebCrypto). Live real-browser verification (2026-06-01): terminal-encrypt→browser-decrypt, browser-compose→CLI-decrypt, and ask-me-a-secret reply sealed→inbox decrypt with the server holding ciphertext only. crypto/rand ids, rejection sampling (no modulo bias)."
   },
   "fleet-pixel": {
     "auth": {

@@ -6930,7 +6930,7 @@
     },
     "auth_help": "no auth",
     "category": "fleet_infra",
-    "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, then pull it from another machine within a hard \u22645-minute TTL. Held in RAM only (restart wipes everything). Random unguessable base62 ids or write-once named slots; ?burn=1 deletes on first read for one-time secrets.",
+    "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, pull it on another machine within a hard \u22645-minute TTL. In-RAM only (restart wipes everything), 10 MiB/blob with a total-RAM budget. Random base62 ids, write-once or last-write-wins (?replace) named slots, say-it-out-loud ids (?words), ?burn one-time reads, ?qr scannable links, ?notify read-receipts. Optional client-side E2E: `-e` (AES-256-CTR+HMAC, key in the URL #fragment \u2014 opens in a browser or decrypts with openssl) plus a browser ask-me-a-secret sealed-box (ECDH P-256). `curl \u2026/install | sh` adds a `pipe` client with one-time wormhole codes and an end-to-end universal clipboard. Browser app at GET / for non-CLI users.",
     "example_path": "/",
     "health_url": "https://fleet-pipe.0exec.com/health",
     "id": "fleet-pipe",
@@ -6943,9 +6943,9 @@
     "tags": [
       "fleet-infra"
     ],
-    "trl": 4,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-31-pipe",
+    "trl": 5,
+    "trl_assessed_at": "2026-06-01",
+    "trl_assessor": "claude-opus-session-2026-06-01-pipe-0.4.1",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Single-node, in-RAM, stateless relay by design \u2014 no persistence, no HA/clustering, no cross-checks. Deliberately minimal; further TRL would require features that contradict the ephemeral intent.",
     "url": "https://fleet-pipe.0exec.com"
