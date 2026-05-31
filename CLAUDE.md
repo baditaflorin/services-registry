@@ -893,6 +893,26 @@ copy elsewhere, mirror the same shape.
 
 ### Recipe — Allocating a port for a new service (or resolving a conflict)
 
+> **A host_port collision does NOT fail loudly — it clobbers a live
+> service.** `fleet-runner deploy` resolves the dockerhost compose dir
+> **by host_port**. If you hand-pick a port another service already
+> owns, `deploy <your-service>` finds the *other* service's
+> `/opt/services/<that-repo>/` directory, overwrites its
+> `docker-compose.yml` with your image, and rolls your container in
+> place — **silently evicting the live service that owned the port**.
+> Observed 2026-05-31: `fleet-pipe` registered on a hand-picked `18256`
+> took down `svg-icon-inventory` (which already owned 18256), because
+> the deploy deployed pipe into svg's compose dir. **Always take the
+> port from `allocate-port`; never hand-pick.**
+>
+> Recovery if you collide: (1) `docker compose down` your squatter in
+> the victim's dir to free the port; (2) `fleet-runner deploy
+> <victim_repo> --bootstrap --force-build` — a *plain* deploy is fooled
+> into a no-op when the squatter happens to report the same version, so
+> force it; (3) move your service to a free port in BOTH the registry
+> (`overrides.json` → regen → push) and the repo (Dockerfile, compose,
+> service.yaml, deploy.yaml), then redeploy.
+
 **Canonical (preferred):**
 
 ```bash
@@ -1173,7 +1193,11 @@ for the canonical pattern.
 
 1. **"Port 8313 is taken, I'll pick 8500 and edit `service.yaml`."** Use
    `fleet-runner allocate-port` and register the squatter. See "Allocating
-   a port" above.
+   a port" above. **And never hand-pick a port at all** — deploy resolves
+   the dockerhost compose dir by host_port, so a collision silently
+   clobbers + evicts the live service that owns it (the 2026-05-31
+   fleet-pipe/svg-icon-inventory incident). Always take the number from
+   `allocate-port`.
 
 2. **"I bumped the version in `service.yaml` and pushed."** Did you tag
    git AND push the tag AND update the docker image tag? Use
