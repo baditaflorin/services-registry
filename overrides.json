@@ -61,7 +61,7 @@
       },
       "category": "infrastructure",
       "container_port": 8000,
-      "description": "Self-hosted Plausible Analytics (ghcr.io/plausible/community-edition). Third-party upstream container \u2014 its own docker-compose lives at /opt/services/plausible/ and is managed by hand (NOT by fleet-runner). Registered here so allocate-port and audit-port know host_port 18204 is claimed.",
+      "description": "Self-hosted Plausible Analytics (ghcr.io/plausible/community-edition). Third-party upstream container — its own docker-compose lives at /opt/services/plausible/ and is managed by hand (NOT by fleet-runner). Registered here so allocate-port and audit-port know host_port 18204 is claimed.",
       "external_compose_dir": "/opt/services/plausible/",
       "external_image": "ghcr.io/plausible/community-edition:v3.2.1",
       "health_url": "http://dockerhost:18204/api/health",
@@ -80,7 +80,7 @@
         "analytics"
       ],
       "url": "http://dockerhost:18204",
-      "why": "Plausible is fleet-pixel's optional upstream (see overrides.json: fleet-pixel). Running unregistered on 2026-05-19 caused fleet-runner allocate-port to re-hand-out 18204; the subsequent fleet-persona deploy clobbered /opt/services/plausible/docker-compose.yml. Registering it is the metadata fix \u2014 runtime: external keeps fleet-runner deploy/build off the compose dir."
+      "why": "Plausible is fleet-pixel's optional upstream (see overrides.json: fleet-pixel). Running unregistered on 2026-05-19 caused fleet-runner allocate-port to re-hand-out 18204; the subsequent fleet-persona deploy clobbered /opt/services/plausible/docker-compose.yml. Registering it is the metadata fix — runtime: external keeps fleet-runner deploy/build off the compose dir."
     }
   ],
   "$rules": [
@@ -98,7 +98,7 @@
       "patch": {
         "proxy_egress": true
       },
-      "why": "Active scanners + scrapers must egress via Webshare (FLEET.md \u00a76). `domains` joined 2026-05-19 to cover 0crawl domain-scanners (a11y-quick, broken-links, \u2026) that probe bug-bounty targets and were carrying proxy_egress=true via legacy hand-edit. Audit `infrastructure`/`content`/`proxy` separately \u2014 those have mixed external/internal callers and need per-slug overrides, not a category rule."
+      "why": "Active scanners + scrapers must egress via Webshare (FLEET.md §6). `domains` joined 2026-05-19 to cover 0crawl domain-scanners (a11y-quick, broken-links, …) that probe bug-bounty targets and were carrying proxy_egress=true via legacy hand-edit. Audit `infrastructure`/`content`/`proxy` separately — those have mixed external/internal callers and need per-slug overrides, not a category rule."
     },
     {
       "match": {
@@ -117,7 +117,7 @@
       "patch": {
         "proxy_egress": true
       },
-      "why": "Per-id pin for scanners whose category isn't covered by `proxy-egress-by-category` (infrastructure / content) but which actively probe external bug-bounty targets per FLEET.md \u00a76. Operator to migrate these into a proper category over time and retire this id list."
+      "why": "Per-id pin for scanners whose category isn't covered by `proxy-egress-by-category` (infrastructure / content) but which actively probe external bug-bounty targets per FLEET.md §6. Operator to migrate these into a proper category over time and retire this id list."
     },
     {
       "match": {
@@ -226,7 +226,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated admin discovery requires site-specific credentials or session state.",
-    "trl_evidence": "v1.6.0 \u2014 TRL 5\u21926 uplift.\n- Bundled curated wordlist (~150 paths from SecLists + OWASP CMS + vendor docs)\n  via go:embed; deduped, sorted, comment-stripped at parse time.\n- Per-probe: HEAD then GET fallback (for 405/400 and body sniffing on 2xx);\n  follows up to 2 manual redirects; per-request 3s, total 60s, worker pool 8.\n- Login-form sniffer (password / username / sign in / log in / type=password)\n  with strong-signal short-circuit (\"password\" alone) and 2-of-N rule.\n- First-hop Location preserved across follow chain so \"302 to /wp-admin/login\"\n  classifies as present even when the followed target is 404.\n- Optional ?wordlist_url= composes with sibling go-pentest-wordlists\n  (cap 500 entries, 256 KiB fetch budget, SSRF-safe via go-common/safehttp).\n- SCOPE_GUARD_URL env (comma list, supports *.example.com) gates which\n  hosts may be probed; off when unset.\n- Backward-compat: ?target= alias for ?url=.\n- Tests: handler_test.go + classify_test.go + wordlist_test.go;\n  httptest fake server covers 200-with-form / 302-to-login / 401 /\n  200-generic / 302-to-home / 404. `go test ./...` green.",
+    "trl_evidence": "v1.6.0 — TRL 5→6 uplift.\n- Bundled curated wordlist (~150 paths from SecLists + OWASP CMS + vendor docs)\n  via go:embed; deduped, sorted, comment-stripped at parse time.\n- Per-probe: HEAD then GET fallback (for 405/400 and body sniffing on 2xx);\n  follows up to 2 manual redirects; per-request 3s, total 60s, worker pool 8.\n- Login-form sniffer (password / username / sign in / log in / type=password)\n  with strong-signal short-circuit (\"password\" alone) and 2-of-N rule.\n- First-hop Location preserved across follow chain so \"302 to /wp-admin/login\"\n  classifies as present even when the followed target is 404.\n- Optional ?wordlist_url= composes with sibling go-pentest-wordlists\n  (cap 500 entries, 256 KiB fetch budget, SSRF-safe via go-common/safehttp).\n- SCOPE_GUARD_URL env (comma list, supports *.example.com) gates which\n  hosts may be probed; off when unset.\n- Backward-compat: ?target= alias for ?url=.\n- Tests: handler_test.go + classify_test.go + wordlist_test.go;\n  httptest fake server covers 200-with-form / 302-to-login / 401 /\n  200-generic / 302-to-home / 404. `go test ./...` green.",
     "version": "1.6.0"
   },
   "analyze-headers": {
@@ -266,12 +266,12 @@
     "container_port": 8276,
     "description": "Scores domains 0-100 for API-first maturity: OpenAPI/GraphQL spec detection, versioned REST endpoint probing, developer portal/path detection, SDK scanning, evidence trail",
     "host_port": 8276,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-21",
-    "trl_assessor": "claude-sonnet-4",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_evidence": "selftest(5 live checks incl. outbound probe), corpus_eval(12 synthetic offline cases), evidence trail in every response, versioned-API + developer-path probes, brand-gated Maven false-positive filter, 20-domain live validation (12/14 api-first domains correctly scored \u226560)"
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "TRL 8 needs a headless browser to render JS-gated SPA docs/descriptor portals plus a persisted historical corpus for cross-run consistency — out of scope for a CPU-only, CGO-free, no-runtime-LLM service.",
+    "trl_evidence": "Replaced the GraphQL presence heuristic with a POST __schema introspection probe + pure body-shape validator (accepts only data.__schema or a GraphQL error envelope; rejects HTML/redirect/generic-JSON), hardened OpenAPI to reject HTML-200s, and added 6 verified signals (CORS, .well-known, gRPC-Web/Connect, RSS/Atom, RFC-5988 Link pagination, docs-portal fingerprints) feeding a structured per-signal evidence rubric whose points provably sum to the score. 6 new table-driven test functions (~45 cases). Live corrected 3 false positives (twilio 80->30, mailchimp 85->48, example.com 25->10 no_api) with every genuine api_first site retained."
   },
   "apikey-scanner": {
     "container_port": 8230,
@@ -287,7 +287,7 @@
   },
   "apikey-service": {
     "container_port": 8080,
-    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
+    "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
     "host_port": 18021,
     "trl": 7,
@@ -308,7 +308,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Multi-resolver Team Cymru DNS client (1.1.1.1 + 8.8.8.8) via miekg/dns\nwith parallel-fanout / first-non-empty-wins semantics; RDAP fallback via\nopenrdap when Cymru is unreachable; per-IP 24h in-memory TTL cache; bulk\nendpoint with 10-worker pool, per-lookup 2s and total 30s caps; private/\nreserved IPs refused unless ALLOW_PRIVATE=1; IPv4 reversed-octet and\nIPv6 expanded-nibble qname handling; in-process miekg/dns test rig with\n\u226510 hermetic test cases (IPv4, IPv6, AS-name enrichment, no-result,\nbulk, cache hit, private-IP refusal, multi-origin parsing).",
+    "trl_evidence": "Multi-resolver Team Cymru DNS client (1.1.1.1 + 8.8.8.8) via miekg/dns\nwith parallel-fanout / first-non-empty-wins semantics; RDAP fallback via\nopenrdap when Cymru is unreachable; per-IP 24h in-memory TTL cache; bulk\nendpoint with 10-worker pool, per-lookup 2s and total 30s caps; private/\nreserved IPs refused unless ALLOW_PRIVATE=1; IPv4 reversed-octet and\nIPv6 expanded-nibble qname handling; in-process miekg/dns test rig with\n≥10 hermetic test cases (IPv4, IPv6, AS-name enrichment, no-result,\nbulk, cache hit, private-IP refusal, multi-origin parsing).",
     "version": "1.4.0"
   },
   "audience-field-sculpture": {
@@ -356,7 +356,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
-    "trl_evidence": "~30 curated DNSBL/RBL/URIBL zones across spam, phishing, malware,\ntor, and open-proxy categories. Per-list 127.0.0.x return-code\ndecode tables (operator-sourced). Concurrent worker-pool fan-out\n(10) using miekg/dns directly so we distinguish NXDOMAIN /\nSERVFAIL / \"got 127.0.0.x\". In-process miekg/dns test server with\n\u226510 cases (clean, listed, multi-listed, domain-list, ipv6, private\nIP refusal, ?lists= filter). Reputation score is explainable\n(per-list weight + per-category bonus, capped at 100). See\ndocs/adr/0001-trl-uplift-to-6.md.",
+    "trl_evidence": "~30 curated DNSBL/RBL/URIBL zones across spam, phishing, malware,\ntor, and open-proxy categories. Per-list 127.0.0.x return-code\ndecode tables (operator-sourced). Concurrent worker-pool fan-out\n(10) using miekg/dns directly so we distinguish NXDOMAIN /\nSERVFAIL / \"got 127.0.0.x\". In-process miekg/dns test server with\n≥10 cases (clean, listed, multi-listed, domain-list, ipv6, private\nIP refusal, ?lists= filter). Reputation score is explainable\n(per-list weight + per-category bonus, capped at 100). See\ndocs/adr/0001-trl-uplift-to-6.md.",
     "version": "1.4.0"
   },
   "broken-links": {
@@ -381,7 +381,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
-    "trl_evidence": "v1.4.0 adds permutation-based discovery (?name=acme): generates a\nbounded candidate set (\u2264200) from base + corp/inc + role suffixes\n(backup, prod, staging, assets, internal, \u2026), probes every candidate\nacross AWS S3 (vhost + path), GCS (vhost + path), Azure Blob/File,\nand DigitalOcean Spaces (5 regions) in parallel via a 16-worker pool\nwith a 4s per-probe and 90s total budget. Per-provider response\nclassification distinguishes listable / exists / denied / not_exists\n(via NoSuchBucket vs AccessDenied / Azure AuthenticationFailed) and\nattaches sample object keys + counts when a ListBucketResult or\nEnumerationResults body is present. Optional WORDLISTS_URL extension\nhook for go-pentest-wordlists. Test coverage: permute_test.go (8\ncases), detect_test.go (12 cases), handler_test.go (httptest server\nwith canned XML returning listable/denied/NoSuchBucket/404). Backward\ncompatibility preserved for the legacy ?url= page-scan path. Pure Go,\nCGO-free, SSRF-safe via go-common/safehttp. ADR:\ndocs/adr/0001-trl-uplift-to-6.md.",
+    "trl_evidence": "v1.4.0 adds permutation-based discovery (?name=acme): generates a\nbounded candidate set (≤200) from base + corp/inc + role suffixes\n(backup, prod, staging, assets, internal, …), probes every candidate\nacross AWS S3 (vhost + path), GCS (vhost + path), Azure Blob/File,\nand DigitalOcean Spaces (5 regions) in parallel via a 16-worker pool\nwith a 4s per-probe and 90s total budget. Per-provider response\nclassification distinguishes listable / exists / denied / not_exists\n(via NoSuchBucket vs AccessDenied / Azure AuthenticationFailed) and\nattaches sample object keys + counts when a ListBucketResult or\nEnumerationResults body is present. Optional WORDLISTS_URL extension\nhook for go-pentest-wordlists. Test coverage: permute_test.go (8\ncases), detect_test.go (12 cases), handler_test.go (httptest server\nwith canned XML returning listable/denied/NoSuchBucket/404). Backward\ncompatibility preserved for the legacy ?url= page-scan path. Pure Go,\nCGO-free, SSRF-safe via go-common/safehttp. ADR:\ndocs/adr/0001-trl-uplift-to-6.md.",
     "version": "1.4.0"
   },
   "c-proxy": {
@@ -502,12 +502,12 @@
     "container_port": 8281,
     "description": "Microservice for Company Size",
     "host_port": 8281,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_evidence": "TRL-6 uplift (2026-05-16): refactored from a generic size-tier estimator\ninto the canonical *classifier* sibling of go_team_size. Now produces\nLinkedIn-style buckets (Self-employed / 1-10 / 11-50 / ... / 10001+),\nrevenue-tier inference (pre-revenue / <$1M / $1M-$10M / $10M-$100M /\n$100M-$1B / $1B+) from funding announcements + ARR mentions + IPO/ticker\ndetection, and a composite growth-stage classifier (Solo / Bootstrapped\n/ Pre-seed / Seed / Series-A..C+ / Public / Mature). Composes with\nTEAM_SIZE_URL and FOUNDING_YEAR_URL siblings via JSON. 36 unit tests\npass; httptest.Server-driven coverage of seven end-to-end shapes\n(Series-A composed, public ticker, bootstrapped, sibling outage,\npure POST {employees:N}, missing input, no-siblings local-only).\nSee docs/adr/0001-trl-uplift-to-6.md.",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "authoritative headcount needs a paid people-data feed (LinkedIn/Clearbit-class); markup-only inference plateaus at band-level confidence",
+    "trl_evidence": "v3.1.0: band.go weighted 6-signal-family size-band fusion + a customers-vs-employees disambiguator (killed the basecamp '200k people'->mega false positive) + a wired-in careers/ATS open-role counter. 57 race tests.",
     "version": "3.0.0"
   },
   "complete-gardener-planner": {
@@ -524,12 +524,12 @@
     "example_path": "/?url=https://example.com",
     "host_port": 8327,
     "proxy_read_timeout": "120s",
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Negotiation matrix probes identity + 4 algorithms (gzip/br/zstd/deflate)\nwith raw-bytes capture (Transport.DisableCompression=true), reports\ncompressed/decoded sizes, server preference (full Accept-Encoding), Vary\ncoverage, encoding-mismatch detection (decoder fails when server lies),\nand CRIME/BREACH risk indicator. Pure-Go decoders (stdlib gzip/flate +\nandybalholm/brotli + klauspost/compress/zstd; CGO-free). 8s per-probe / 30s\ntotal budget. \u22656 unit tests cover gzip/brotli/identity round-trip, mismatch,\npreference detection, and full handler shape via httptest.Server fixtures.",
+    "trl_evidence": "Added pure-Go content-negotiation analysis core: per-encoding verdict ladder (honored/uncompressed/wrong-algorithm/encoding-mismatch/double-compressed/unattempted) comparing offered vs returned codec, Content-Type classification, double-compression + wasteful-recompression findings, and a rolled-up summary verdict {well-configured|partial|uncompressed|broken} with supported_encodings + best_encoding/best_ratio. Also fixed the fetch path (RenderJS chromedp proxy -> RenderDefault direct), which alone took real-domain fetch success from 0/18 to 18/18. 19 unit tests, go test -race green.",
     "version": "1.5.0"
   },
   "cookie-checker": {
@@ -537,12 +537,12 @@
     "description": "Microservice for Cookie Checker",
     "example_path": "/go_cookie_checker?url=https://example.com",
     "host_port": 8226,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: publicsuffix-aware domain scope (etld1_scope/parent_scope/public_suffix_scope severity tiers replace single string-suffix heuristic); CMP+tracker cookie fingerprinting across 19 vendors (OneTrust, Cookiebot, Quantcast, etc. + GA/Facebook/Hotjar/CF); ClassCounts taxonomy {cmp,tracker,session,other}; secure_on_http warning. 10/10 corpus PASS; verified: __cf_bm correctly fingerprints to vendor=cloudflare."
+    "trl_evidence": "1.5.0: replaced lossy stdlib http.Cookies() with a hand-written RFC 6265 5.2/6265bis Set-Cookie parser (captures Partitioned/CHIPS, malformed-attribute parse warnings, the raw ordered attribute set); added a per-cookie evidence trail (attribute set + session-vs-persistent + first/third/cross-party intent) and an RFC-clause citation on every finding; new partitioned_without_secure + malformed_attribute checks. 26 new table-driven tests (56 funcs total). Live before->after on 20 real domains: cookies carrying a structured evidence block 0% to 100% (91/91)."
   },
   "cookiecutter-data-science": {
     "trl": 4,
@@ -574,7 +574,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "7-variant active prober (reflection, null, subdomain-suffix-bypass,\nprefix-confusion, port-attack, case-fold, http-vs-https). Each variant\nsends an OPTIONS preflight + GET, records the full ACAO/ACAC/Vary/\nmethods/headers surface, and feeds a documented severity matrix\n(reflection x credentials, null x credentials, etc.). Worker pool of\n4, per-probe 4s, total 30s. Composes with go-pentest-cors-misconfig-\nprober via CORS_MISCONFIG_URL; gateable on bug-bounty scope via\nSCOPE_GUARD_URL. Tests: probes_test (variant table, downgrade skip,\nscheme preservation), evaluate_test (isReflection, isTrueACAC,\nhasVaryOrigin, Classify matrix), handler_test (httptest servers for\nreflective+credentials critical, wildcard-only low, suffix-bypass\ncritical, null-origin critical, safe server, case-fold, full JSON\nshape) \u2014 20+ test cases across 3 files. ADR docs/adr/0001-trl-uplift-\nto-6.md captures the variant taxonomy and severity matrix.",
+    "trl_evidence": "7-variant active prober (reflection, null, subdomain-suffix-bypass,\nprefix-confusion, port-attack, case-fold, http-vs-https). Each variant\nsends an OPTIONS preflight + GET, records the full ACAO/ACAC/Vary/\nmethods/headers surface, and feeds a documented severity matrix\n(reflection x credentials, null x credentials, etc.). Worker pool of\n4, per-probe 4s, total 30s. Composes with go-pentest-cors-misconfig-\nprober via CORS_MISCONFIG_URL; gateable on bug-bounty scope via\nSCOPE_GUARD_URL. Tests: probes_test (variant table, downgrade skip,\nscheme preservation), evaluate_test (isReflection, isTrueACAC,\nhasVaryOrigin, Classify matrix), handler_test (httptest servers for\nreflective+credentials critical, wildcard-only low, suffix-bypass\ncritical, null-origin critical, safe server, case-fold, full JSON\nshape) — 20+ test cases across 3 files. ADR docs/adr/0001-trl-uplift-\nto-6.md captures the variant taxonomy and severity matrix.",
     "version": "1.4.0"
   },
   "crawl-web-application": {
@@ -587,7 +587,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "TRL 6 \u2014 BFS crawler with worker pool (default 8), per-host rate limit\n(golang.org/x/time/rate, 4 rps), robots.txt parsing via temoto/robotstxt\n(RFC 9309), HTML parsing via golang.org/x/net/html (extracts <a>, <link\nrel=canonical>, title; honors rel=nofollow), URL canonicalization +\ncross-page dedup, SSRF-safe outbound via go-common/safehttp, scope\nenforcement (same-origin | same-domain | same-etld), bounded total scan\n(90s) and partial-result return on deadline. Test coverage: \u22659 cases\nincluding robots-respect, scope enforcement, max-pages cap, depth cap,\nbad-URL handling, JSON shape \u2014 all green via httptest fake site.",
+    "trl_evidence": "TRL 6 — BFS crawler with worker pool (default 8), per-host rate limit\n(golang.org/x/time/rate, 4 rps), robots.txt parsing via temoto/robotstxt\n(RFC 9309), HTML parsing via golang.org/x/net/html (extracts <a>, <link\nrel=canonical>, title; honors rel=nofollow), URL canonicalization +\ncross-page dedup, SSRF-safe outbound via go-common/safehttp, scope\nenforcement (same-origin | same-domain | same-etld), bounded total scan\n(90s) and partial-result return on deadline. Test coverage: ≥9 cases\nincluding robots-respect, scope enforcement, max-pages cap, depth cap,\nbad-URL handling, JSON shape — all green via httptest fake site.",
     "version": "1.1.0"
   },
   "crlf-tester": {
@@ -600,7 +600,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Marker-based detection (8-byte per-scan unique hex marker) replaces\nstatic-string echo checks; inspect() classifies header reflection\n(critical), raw-newline-in-header (high), and body reflection (medium)\nseparately. Probes inject across query params, path segments, and four\nreflected headers (User-Agent, Referer, X-Forwarded-For, X-Forwarded-Host;\nHost gated by ALLOW_HOST_INJECT=1). Payload corpus is 20 variants\ncovering hex-case, double-encoding, Unicode/UTF-8 overlong, fragment-\nprefixed, raw \\r vs \\n vs \\r\\n; corpus extensible via PAYLOADS_URL\n(go-pentest-payloads). Per-request 4 s, total 60 s budget, worker pool\n4. SCOPE_GUARD_URL fail-closed gate. \u22659 unit + integration tests\nincluding httptest.Server vulnerable + safe backends.",
+    "trl_evidence": "Marker-based detection (8-byte per-scan unique hex marker) replaces\nstatic-string echo checks; inspect() classifies header reflection\n(critical), raw-newline-in-header (high), and body reflection (medium)\nseparately. Probes inject across query params, path segments, and four\nreflected headers (User-Agent, Referer, X-Forwarded-For, X-Forwarded-Host;\nHost gated by ALLOW_HOST_INJECT=1). Payload corpus is 20 variants\ncovering hex-case, double-encoding, Unicode/UTF-8 overlong, fragment-\nprefixed, raw \\r vs \\n vs \\r\\n; corpus extensible via PAYLOADS_URL\n(go-pentest-payloads). Per-request 4 s, total 60 s budget, worker pool\n4. SCOPE_GUARD_URL fail-closed gate. ≥9 unit + integration tests\nincluding httptest.Server vulnerable + safe backends.",
     "version": "1.4.0"
   },
   "crypto-finder": {
@@ -648,12 +648,12 @@
     "description": "Microservice for Customer Logos",
     "host_port": 8283,
     "proxy_read_timeout": "120s",
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "TRL 6 (real). DOM-based extraction via golang.org/x/net/html (no regex\nHTML parsing, no LLM, no image recognition). Multi-page probe over\n/, /customers, /clients, /case-studies, /testimonials, /enterprise,\n/partners with per-fetch 5s + total 20s wall-clock cap. Per-logo\nconfidence band derived from heading + grid + brand-source signals;\ndocument verdict ladder (none \u2192 weak_signal \u2192 social_proof \u2192\nstrong_social_proof). Brand normalisation strips logo/\u00ae/\u2122 suffixes\nand title-cases; dedup keys on dest_url host first, normalised brand\nsecond. 19 unit tests covering extract/normalize/classify/handler\nincluding an httptest.Server with a canned customers page (logo grid\n+ \"Trusted by\" section + partners). See docs/adr/0001-trl-uplift-to-6.md.",
+    "trl_evidence": "v3.3.0: switched the down JS-render proxy to direct fetch + added a ~250-entry company gazetteer, non-customer (vendor/partner/investor) rejection, and a per-logo evidence trail (matched alt/src-filename/section). 11 new table-driven tests.",
     "version": "3.0.0"
   },
   "d3-graph": {
@@ -680,7 +680,7 @@
   },
   "db-geo-geocode": {
     "container_port": 3909,
-    "description": "City \u2192 lat/lon with local DB (?text=)",
+    "description": "City → lat/lon with local DB (?text=)",
     "host_port": 18009,
     "name": "Geocoding (Go / DB)",
     "trl": 6,
@@ -741,11 +741,11 @@
     "example_path": "/?target=example.com",
     "host_port": 8084,
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Uses battle-tested github.com/miekg/dns (the canonical Go DNS lib);\nparallel fan-out across A/AAAA/CNAME/MX/NS/TXT/SOA/CAA/SRV/PTR/\nDNSKEY/DS/TLSA; multi-resolver round-robin (1.1.1.1, 8.8.8.8, 9.9.9.9)\nwith explicit ?resolver= override; EDNS0 4096 buffer + automatic TCP\nfallback on truncation; optional ?dnssec=1 chain check returning\nsecure|insecure|bogus|indeterminate against the parent zone's DS.\nIn-process miekg/dns server in tests (5 unit cases, no network) plus\none optional live integration test gated on DNS_LIVE=1. ADR\ndocumenting choices at docs/adr/0001-trl-uplift-to-6.md. Hooks for\ncaa-checker (CAA RRset) and reverse-dns (PTR via in-addr.arpa).",
+    "trl_evidence": "1.6.0 adds an additive classification block (raw records untouched): RFC-anchored TXT-purpose classifier (SPF all-qualifier + weak/permissive flags, DKIM revoked-key, DMARC enforcement level, BIMI/MTA-STS/TLS-RPT, verification-authority mapping with per-record evidence), SOA semantic parse (RNAME->email, serial-scheme decode, timers, RFC1912 sanity), CAA parse (issue/issuewild CA sets, iodef, critical per RFC8659), DNSSEC presence posture from already-fetched DNSKEY/DS/TLSA (no extra query), and a coverage summary. 8 new table-driven test funcs / 43 offline cases. Before->after on 18 real domains: any-classification 0/18 -> 18/18; SOA decoded 17/18; CAA 10/18; email-auth 17/18.",
     "version": "1.4.0"
   },
   "domain-abuse-contact-rollup": {
@@ -754,18 +754,24 @@
   },
   "domain-ad-network": {
     "container_port": 18214,
-    "description": "Ad-network detector \ufffd\ufffd\ufffd ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
+    "description": "Ad-network detector ��� ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
     "host_port": 18214,
     "trl": 4,
     "version": "0.1.0"
   },
   "domain-ai-bot-policy-scanner": {
     "container_port": 18195,
-    "host_port": 18195
+    "host_port": 18195,
+    "trl": 6,
+    "trl_evidence": "Replaced naive single-currentUA line scanner with an RFC 9309 parser (grouped multi-UA stacks, Allow/Disallow longest-match precedence, */$ wildcards) over a curated 40-token AI-crawler gazetteer (Google-Extended distinct from Googlebot), plus /.well-known/ai.txt + TDM-Reservation + llms.txt signals and a per-signal evidence trail; 14 table-driven offline unit tests (~40 assertions). On the same real domains: cnn.com 1->38 blocked bots, medium.com 0(+false-allow)->8, nytimes 18->26, theverge 17->33.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-amp-detector": {
     "container_port": 18222,
-    "description": "AMP (Accelerated Mobile Pages) presence detector \u2014 link rel=amphtml + canonical AMP HTML.",
+    "description": "AMP (Accelerated Mobile Pages) presence detector — link rel=amphtml + canonical AMP HTML.",
     "example_path": "/?domain=www.bbc.com",
     "host_port": 18222,
     "trl": 4,
@@ -773,11 +779,11 @@
     "trl_assessor": "claude-opus-4-7",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real HTML parser via golang.org/x/net/html (no regex); detects link rel=amphtml + canonical, <html amp> + <html \u26a1> (U+26A1), AMP cache URL in og:url / twitter:url; case-insensitive attributes; SSRF-safe outbound via go-common/safehttp (10s timeout, <=3 redirects, 2 MiB body cap); verifies the linked AMP alternative by fetching it; per-failure errors pushed to degraded[]; 15 unit tests on canned HTML covering each signal; /selftest exercises both pure-logic checks and a live bbc.com probe."
+    "trl_evidence": "Real HTML parser via golang.org/x/net/html (no regex); detects link rel=amphtml + canonical, <html amp> + <html ⚡> (U+26A1), AMP cache URL in og:url / twitter:url; case-insensitive attributes; SSRF-safe outbound via go-common/safehttp (10s timeout, <=3 redirects, 2 MiB body cap); verifies the linked AMP alternative by fetching it; per-failure errors pushed to degraded[]; 15 unit tests on canned HTML covering each signal; /selftest exercises both pure-logic checks and a live bbc.com probe."
   },
   "domain-analytics-stack": {
     "container_port": 18215,
-    "description": "Analytics stack detector \ufffd\ufffd\ufffd GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
+    "description": "Analytics stack detector ��� GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "host_port": 18215,
     "trl": 4,
     "version": "0.1.0"
@@ -843,11 +849,23 @@
   },
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
-    "host_port": 18198
+    "host_port": 18198,
+    "trl": 6,
+    "trl_evidence": "Replaced flat regex list with a 37-framework gazetteer + confidence-band classifier (certified/compliant/in_progress/mention) and a per-claim evidence trail (framework, matched_phrase, page_location, confidence, boilerplate). Offline+live confirmed: GDPR cookie-banner mention suppressed to mention/excluded, SOC 2 attestation = certified; vanta.com live = 13 certified/30 compliant/9 mention. 18 table-driven classifier tests, build/test/vet green.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "To reach 8 the JS-render fetch-cache must reliably return page HTML (currently 403/timeout on many domains) and claims should be cross-checked against issuer/accreditation registries — needs a browser engine and/or paid feeds, structurally above CPU-only.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-ct-log-watcher": {
     "container_port": 18184,
-    "host_port": 18184
+    "host_port": 18184,
+    "trl": 6,
+    "trl_evidence": "Rewrote the flat crt.sh wrapper into a pure-function parser: precert/leaf dedup on issuer+serial+window, RFC4514 issuer-DN normalization, SAN/wildcard normalization, validity-window parsing (RFC3339 + valid_days), recently-issued flag, per-cert evidence trail, and crt.sh source-health reporting that never crashes. 13 table-driven offline tests over a baked crt.sh fixture. Live crt.sh success rate during measurement was 0/20 (upstream errors), so lift is proven by offline tests + deployed envelope.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Comprehensive, reliable CT coverage is gated by crt.sh's aggressive rate-limiting/gateway errors (observed 100% 429/502/504 across 20 live domains); TRL 8 needs a self-hosted CT mirror or paid CT feed, not better Go.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-dane-tlsa": {
     "container_port": 18219,
@@ -877,7 +895,13 @@
   },
   "domain-dnssec-validator": {
     "container_port": 18180,
-    "host_port": 18180
+    "host_port": 18180,
+    "trl": 6,
+    "trl_evidence": "Added RFC 4034/4509 DS<->DNSKEY digest recomputation proving the chain link locally instead of trusting the resolver AD bit, with a secure|insecure|bogus|indeterminate verdict + per-DS evidence trail, NSEC/NSEC3 distinction, RFC 8624 hygiene flags. 24 cases (79.5% cov) incl IANA root KSK-2017 vector. dnssec-failed.org now correctly bogus.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Full RRSIG-over-RRset signature verification and a second independent resolver for quorum remain; the DS<->DNSKEY digest link is proven locally today. Pure Go, no paid feed needed for 7.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-documentation-platform-detector": {
     "container_port": 18197,
@@ -892,7 +916,13 @@
   },
   "domain-email-deliverability-score": {
     "container_port": 18181,
-    "host_port": 18181
+    "host_port": 18181,
+    "trl": 6,
+    "trl_evidence": "Replaced string-suffix heuristics with pure RFC parsers: SPF RFC 7208 mechanism-chain + 10-lookup PermError counter + qualifier/include/redirect detection + multiple-record PermError; DMARC RFC 7489 full tag parse (p/sp/pct/rua/ruf/adkim/aspf); DKIM RFC 6376 key parse + revoked empty-p detection + RSA-bit estimate; new MX check (RFC 5321 + RFC 7505 null-MX); BIMI VMC chain. Every check emits a record->verdict->delta evidence trail. 16 table-driven unit tests (29 cases) + 3 handler tests, CGO-free. Live lift on same real domains e.g. cloudflare 75->82, paypal 70->78.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-error-monitoring": {
     "container_port": 18225,
@@ -903,7 +933,7 @@
   },
   "domain-events-platform": {
     "container_port": 18226,
-    "description": "Events / webinar platform detector \ufffd\ufffd\ufffd Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
+    "description": "Events / webinar platform detector ��� Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "host_port": 18226,
     "trl": 4,
     "version": "0.1.0"
@@ -931,7 +961,7 @@
   },
   "domain-font-stack": {
     "container_port": 18221,
-    "description": "Web font stack detector \ufffd\ufffd\ufffd Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
+    "description": "Web font stack detector ��� Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
     "trl": 4,
     "version": "0.1.0"
@@ -952,7 +982,13 @@
   },
   "domain-http3-quic-detector": {
     "container_port": 18190,
-    "host_port": 18190
+    "host_port": 18190,
+    "trl": 6,
+    "trl_evidence": "Replaced single-regex h3 sniff with a pure RFC 7838 Alt-Svc parser (h3/h3-29/legacy draft tokens, ma=/persist=, alt host:port, quoted-comma-safe), advertised-vs-confirmed classification (confirmed_h3/advertised_only/none) backed by a real quic-go UDP/443 handshake now reporting negotiated QUIC version (QUICv1/QUICv2) + ALPN, plus an 8-field evidence trail; 23 table-driven parser unit cases. Live: google.com now parses both h3+h3-29 (old parser mishandled multi-value quoted form); bing/amazon correctly advertised_only.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-image-alt-coverage": {
     "container_port": 18223,
@@ -977,23 +1013,29 @@
   },
   "domain-liveness-state": {
     "container_port": 18217,
-    "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",
+    "description": "Domain liveness classifier — live / under-construction / login-wall / parked / default-server-page / error.",
     "host_port": 18217,
     "trl": 4,
     "trl_assessed_at": "2026-05-21",
     "trl_assessor": "claude-opus-4-7",
-    "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only \u2014 no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet."
+    "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only — no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet."
   },
   "domain-martech-stack": {
     "container_port": 18213,
-    "description": "Martech stack detector \u2014 HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
+    "description": "Martech stack detector — HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
     "host_port": 18213,
     "trl": 4,
     "version": "0.1.0"
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
-    "host_port": 18187
+    "host_port": 18187,
+    "trl": 7,
+    "trl_evidence": "Extracted pure validated parsers: AASA (modern+legacy details, all sections, team_id/bundle_id split + structural validation + warnings), assetlinks (namespace/package/SHA-256-fingerprint validation + relations), and golang.org/x/net/html App Links meta (apple-itunes-app/al:ios/al:android + store anchors) cross-referenced against the manifests; per-platform evidence trail. 52 table-driven subtests over offline fixtures, race-clean. Live: HTML App-Links now detects iOS/Android where AASA is empty (pinterest, netflix); iTunes match tightened from substring to dot-label to kill false positives.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "TRL 8 needs authoritative store cross-verification (paid App Store / Play Developer APIs) + historical-linkage persistence; CPU-only manifest+App-Links parsing tops out at a validated 7.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-naptr-enum": {
     "container_port": 18236,
@@ -1019,11 +1061,17 @@
   },
   "domain-passive-dns-history": {
     "container_port": 18183,
-    "host_port": 18183
+    "host_port": 18183,
+    "trl": 6,
+    "trl_evidence": "Swapped the decommissioned Mnemonic feed for live free sources (HackerTarget hostsearch + dnslookup) and added a CPU-only RFC-aware normalization core: canonical IANA RRTYPE, IP re-serialization, FQDN-dot-stripping, MX-priority-preserving rdata canon; dedup that unions [first_seen,last_seen] windows + per-record contributing-source evidence trail; record-family classification + summary roll-up + degraded[] for unreachable sources. 16 table-driven offline tests.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Comprehensive historical passive-DNS (multi-year rdata churn + global first-seen provenance) requires a paid feed (Farsight DNSDB / SecurityTrails); free public sources are sparse/rate-limited and the formerly-used Mnemonic public read API is decommissioned (CloudFront 502).",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-podcast-presence": {
     "container_port": 18227,
-    "description": "Podcast presence detector \u2014 RSS feed + linked platforms + embedded players.",
+    "description": "Podcast presence detector — RSS feed + linked platforms + embedded players.",
     "host_port": 18227,
     "trl": 4,
     "version": "0.1.0"
@@ -1044,15 +1092,33 @@
   },
   "domain-rbl-reputation": {
     "container_port": 18182,
-    "host_port": 18182
+    "host_port": 18182,
+    "trl": 6,
+    "trl_evidence": "Added a principled DNSBL return-code decoder (Spamhaus SBL/CSS/XBL/PBL+DBL, SpamCop, Barracuda, SORBS, URIBL/SURBL bitmask), error-sentinel detection that fixes a live false-positive (127.255.255.x open-resolver / 127.0.0.1 refused no longer counted as hits), TXT listing-reason fetch, result_kind classification, and a flattened per-list evidence trail; 32 table-driven offline unit tests. On real listed domains the trail went from 0 to 34 decoded evidence lines (carolinamespinosa.com).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-saas-host-mapper": {
     "container_port": 18191,
-    "host_port": 18191
+    "host_port": 18191,
+    "trl": 6,
+    "trl_evidence": "Added ~120-entry DNS-fingerprint gazetteer mapping CNAME/MX/NS/A + HTTP server/x-powered-by/body tokens to platforms tagged by category (hosting/commerce/email/cdn/dns/support) via a pure match(DNSRecords) function with a per-match evidence trail; pickPrimary elects only hosting/commerce signals so a CDN never masquerades as the host — fixing the systematic cloudflare_pages false positive (~206k of 1.70M rows). Added MX-email + NS-DNS detection and 11 table-driven offline tests (27 sub-cases). Verified live: cvlcc.org corrected from cloudflare_pages to empty-host+cdn=cloudflare.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-structured-data-rollup": {
     "container_port": 18188,
-    "host_port": 18188
+    "host_port": 18188,
+    "trl": 7,
+    "trl_evidence": "Extended from 2 surfaces (JSON-LD type counts + OG/Twitter) to all four syntaxes: JSON-LD with @graph/array-@type/BOM handling, HTML5 Microdata (nested itemscope), RDFa (typeof/property/vocab + CURIE), OG+Twitter. Added schema.org @type hierarchy resolution, per-type required-property validation against Google rich-result tables, and a per-type evidence trail. 19 table-driven offline tests over HTML fixtures drive the identical analyze() parse path the live handler uses.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Structured data injected only after client-side rendering needs a JS DOM fetcher (same ceiling as sibling schema-extractor).",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-support-stack-detector": {
     "container_port": 18192,
@@ -1060,11 +1126,23 @@
   },
   "domain-tech-eol-flagger": {
     "container_port": 18186,
-    "host_port": 18186
+    "host_port": 18186,
+    "trl": 6,
+    "trl_evidence": "Replaced the per-request endoflife.date HTTP call with an embedded offline EOL gazetteer (20 products / ~110 release lines); added Server/X-Powered-By + HTML/JS body fingerprinting (jQuery/Bootstrap/AngularJS/WordPress), an offline classifier (eol/approaching_eol/supported/unknown) with injectable reference date, and a per-tech evidence trail (version, cycle, EOL date, days overdue, source, snippet). 45 table-driven offline tests, race+gofmt clean.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "SPA/CDN-fronted sites strip version info from headers and minify bundles; full coverage needs JS rendering. Dataset is build-time curated and needs a periodic refresh pipeline for TRL 8.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-third-party-fetch-map": {
     "container_port": 18185,
-    "host_port": 18185
+    "host_port": 18185,
+    "trl": 6,
+    "trl_evidence": "Added PSL-aware registrable-domain resolver, ~180-entry 14-category gazetteer (fixing the broken amazon-adsystem string + missing ad-exchange vendors), per-origin evidence trail, and first/third-party request counts; 7 real table-driven tests (PSL resolver, classifier, offline analyzeDoc fixture). Identical-code-path lift: 'other' misclassifications 7->0 and ads 1->6 over 11 fixture hosts; live CNN ads 6->22.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Sees only static HTML-attribute third parties; dynamically-injected (JS runtime) third parties need a real browser engine, and 8+ would need a periodically-refreshed gazetteer feed.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31"
   },
   "domain-tracker-density": {
     "container_port": 18238,
@@ -1155,7 +1233,7 @@
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 4,
-    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context \u2014 fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
+    "trl_ceiling_reason": "Sentiment with negation/sarcasm/irony requires syntactic parsing and context — fundamental language-understanding gap. CPU-only lexicon approach plateaus.",
     "trl_evidence": "v3.0.0 (2026-05-16): rewrote analyzer on top of bundled VADER + AFINN-165\nsentiment lexicons (~600 + ~550 curated entries) plus an NRC EmoLex subset\n(~250 entries) for six basic emotions. Implements VADER's negation flip,\nintensifier boost, ALL-CAPS boost, and punctuation emphasis rules\n(Hutto & Gilbert 2014). Accepts ?text=, POST body, or ?url= (HTML\nstripped via x/net/html). 19 unit tests covering 5 sentiment classes\n+ intensifier/negation/caps/punct/emotion paths, all green on\ngo test ./.... Pure Go, CGO-free, no LLM, no outbound calls except\nthe optional URL fetch (gated by go-common/safehttp's SSRF guard).",
     "version": "3.0.0"
   },
@@ -1227,7 +1305,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-backup-scaffold",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Verify-after-write in production is byte-equality on the encrypted blob (daemon holds no decrypting identity, by design). Full encrypt+decrypt+tar-diff verify only runs in tests + when an operator opts a verifying identity into the daemon. Lift to 7+ would either issue the daemon a dedicated verify-only identity or require every restore retrieval to verify before exposing bytes.",
-    "trl_evidence": "Initial scaffold (2026-05-19). 19 unit tests with injectable TarFn/EncryptFn/Destination + :memory: audit DB \u2014 tests never touch real disk or run heavy crypto on the hot path. Covered: AGE_RECIPIENTS empty/malformed/blank-only refuses to start (fail-CLOSED on missing crypto); malformed-key error redacts key body (no leak to logs); encrypt+decrypt + tar+untar round-trip; recipient fingerprint never contains raw pubkey; classify retention against 365 daily inputs / sparse inputs / multiple-same-day / zero-bands / non-RFC3339-rejected / deterministic-against-synthetic-clock; orchestrator successful snapshot writes audit row with recipient FP; destination-unreachable writes no blobs AND no audit rows; verify-mismatch marks run FAILED AND skips retention prune (safety invariant: failed run = no safe to delete history); retention-prune respects unowned-snapshot invariant (manually-placed blobs survive); /status JSON shape carries last_run/next_run/runs/audit/recipient_fingerprints/destination_ready; /restore defaults dry-run; /restore dry_run=false rejected without confirm_restore=YES; /run admin-gated (403 without token); /selftest 200 happy path + 503 on destination unreachable; parseSources rejects malformed (missing kind, unknown kind, missing path, duplicate names); LocalDest round-trip on real tmpdir; storage-box:// NotImplemented surfaces cleanly.",
+    "trl_evidence": "Initial scaffold (2026-05-19). 19 unit tests with injectable TarFn/EncryptFn/Destination + :memory: audit DB — tests never touch real disk or run heavy crypto on the hot path. Covered: AGE_RECIPIENTS empty/malformed/blank-only refuses to start (fail-CLOSED on missing crypto); malformed-key error redacts key body (no leak to logs); encrypt+decrypt + tar+untar round-trip; recipient fingerprint never contains raw pubkey; classify retention against 365 daily inputs / sparse inputs / multiple-same-day / zero-bands / non-RFC3339-rejected / deterministic-against-synthetic-clock; orchestrator successful snapshot writes audit row with recipient FP; destination-unreachable writes no blobs AND no audit rows; verify-mismatch marks run FAILED AND skips retention prune (safety invariant: failed run = no safe to delete history); retention-prune respects unowned-snapshot invariant (manually-placed blobs survive); /status JSON shape carries last_run/next_run/runs/audit/recipient_fingerprints/destination_ready; /restore defaults dry-run; /restore dry_run=false rejected without confirm_restore=YES; /run admin-gated (403 without token); /selftest 200 happy path + 503 on destination unreachable; parseSources rejects malformed (missing kind, unknown kind, missing path, duplicate names); LocalDest round-trip on real tmpdir; storage-box:// NotImplemented surfaces cleanly.",
     "version": "0.1.0"
   },
   "fleet-body-redactor": {
@@ -1298,7 +1376,7 @@
   },
   "fleet-dns-sync": {
     "container_port": 18141,
-    "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
+    "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) — the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "example_path": "/stats",
     "host_port": 18141,
     "trl": 7,
@@ -1361,7 +1439,7 @@
   "fleet-host-guard": {
     "category": "observability",
     "container_port": 18207,
-    "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression \u2014 flags containers whose slope > 50 MB/h AND R\u00b2 > 0.7.",
+    "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression — flags containers whose slope > 50 MB/h AND R² > 0.7.",
     "host_port": 18207,
     "internal": true,
     "trl": 4,
@@ -1369,7 +1447,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-host-guard-scaffold",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Bounded by docker-stats RSS fidelity (cgroup memory.usage_in_bytes includes page cache). Lift to 7+ would require parsing /sys/fs/cgroup/memory/{slice}/memory.stat to separate RSS from cache.",
-    "trl_evidence": "Initial scaffold (2026-05-19). 11 unit tests across both primitives \u2014 injectable Runner + StatFS mocks; tests cover disk sweep below/above threshold (no-op / dry-run / real exec+parse), statfs failure path, log truncate keep-tail correctness, logrotate sibling skip, parseHumanBytes coverage, monotonic growth flagged (slope ~100MB/h, R\u00b2 > 0.99), flat noise NOT flagged (R\u00b2 < 0.7), noisy growth low R\u00b2, leaky vs steady end-to-end ticker, docker-sock unreachable (state untouched, error surfaced). /selftest exercises regression + parsing primitives against in-memory data.",
+    "trl_evidence": "Initial scaffold (2026-05-19). 11 unit tests across both primitives — injectable Runner + StatFS mocks; tests cover disk sweep below/above threshold (no-op / dry-run / real exec+parse), statfs failure path, log truncate keep-tail correctness, logrotate sibling skip, parseHumanBytes coverage, monotonic growth flagged (slope ~100MB/h, R² > 0.99), flat noise NOT flagged (R² < 0.7), noisy growth low R², leaky vs steady end-to-end ticker, docker-sock unreachable (state untouched, error surfaced). /selftest exercises regression + parsing primitives against in-memory data.",
     "version": "0.1.0"
   },
   "fleet-payload-corpus": {
@@ -1390,7 +1468,7 @@
     "auth_help": "no auth on read (anonId is the read-secret); writes require client-held argon2id-hashed writeToken in body (not keystore-gated)",
     "category": "fleet_infra",
     "container_port": 18209,
-    "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet \u2014 L2 tier of fleetPersona in mesh-common",
+    "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet — L2 tier of fleetPersona in mesh-common",
     "example_path": "/v1/health",
     "extra_server_names": [
       "persona.0exec.com"
@@ -1409,7 +1487,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "public endpoint (no keystore) \u2014 beacon-only",
+    "auth_help": "public endpoint (no keystore) — beacon-only",
     "category": "fleet_infra",
     "container_port": 18200,
     "example_path": "/pix.gif?app=mesh-test&event=pv",
@@ -1557,7 +1635,7 @@
       "go-fleet-graph",
       "go-apikey-service"
     ],
-    "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
+    "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only — no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
     "example_path": "/public",
     "host_port": 18144,
     "trl": 7,
@@ -1583,12 +1661,12 @@
     "container_port": 8289,
     "description": "Microservice for Founding Year",
     "host_port": 8289,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": ">",
+    "trl_evidence": "Added candidates.go: pure-Go multi-signal year inference collecting all plausible candidates from weighted signals (founded-phrase/schema.org/celebrating-N/historic-copy/copyright-START-weak with END-never), a plausibility filter rejecting version/phone/price/pre-1600/future, and weight-based disambiguation emitting every candidate with a per-candidate evidence trail + chosen year + [0,1] confidence. 16 new table-driven offline tests (54 RUN lines under -race). Live: basecamp.com returns inference{1999,conf 0.81} corroborated by 2 signals; offline mixed fixture picks 1998 while filtering price/version/copyright-END.",
     "version": "3.0.0"
   },
   "funding-detector": {
@@ -1612,7 +1690,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high\u22653 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline)."
+    "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high≥3 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline)."
   },
   "gentle-adhd-flow": {
     "trl": 3,
@@ -1624,7 +1702,7 @@
   },
   "geo-geocode": {
     "container_port": 4902,
-    "description": "City/address \u2192 lat/lon via TomTom (?text=)",
+    "description": "City/address → lat/lon via TomTom (?text=)",
     "host_port": 18008,
     "name": "Geocoding (Node)",
     "trl": 6,
@@ -1682,7 +1760,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Embedded Google Product Taxonomy snapshot (5595 nodes, version 2021-09-21,\ntaxonomy-with-ids.en-US.txt). Three documented endpoints: /lookup (id\u2192path),\n/search (fuzzy via lithammer/fuzzysearch RankFindNormalizedFold), /classify\n(TF-IDF cosine over leaf+ancestor terms, ancestor weight 0.5, leaf weight 2.0,\nsmoothed IDF). Inverted index built once at startup, vectors precomputed.\n9 unit tests cover parser depth/parent, search ranking, search top-K cap,\nclassify ranking, classify matched_terms, GET/POST/JSON-body shapes, lookup\nhit/miss/bad-input, legacy backwards-compat envelope. CGO-free, no runtime\nnetwork calls. Ceiling: TF-IDF without stemming/synonyms misses \"shirt\"\u2194\n\"shirts\" \u2014 TRL 6 would need a stemmer + synonym map.",
+    "trl_evidence": "Embedded Google Product Taxonomy snapshot (5595 nodes, version 2021-09-21,\ntaxonomy-with-ids.en-US.txt). Three documented endpoints: /lookup (id→path),\n/search (fuzzy via lithammer/fuzzysearch RankFindNormalizedFold), /classify\n(TF-IDF cosine over leaf+ancestor terms, ancestor weight 0.5, leaf weight 2.0,\nsmoothed IDF). Inverted index built once at startup, vectors precomputed.\n9 unit tests cover parser depth/parent, search ranking, search top-K cap,\nclassify ranking, classify matched_terms, GET/POST/JSON-body shapes, lookup\nhit/miss/bad-input, legacy backwards-compat envelope. CGO-free, no runtime\nnetwork calls. Ceiling: TF-IDF without stemming/synonyms misses \"shirt\"↔\n\"shirts\" — TRL 6 would need a stemmer + synonym map.",
     "version": "1.1.0"
   },
   "granular-physics-lab": {
@@ -1703,7 +1781,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated GraphQL schemas need user-supplied tokens and role-aware probing.",
-    "trl_evidence": "TRL 6 (real). Beyond endpoint discovery + introspection summary,\nv3 adds three orthogonal abuse probes used by every commercial GraphQL\nscanner (Inspectiv, GraphCrawler, InQL): alias-batching DoS multiplier,\nfield-suggestion info-leak, and text/plain CSRF bypass. Findings are\nemitted with stable severity-tagged classes (introspection-enabled,\nalias-batching-unbounded, csrf-possible, field-suggestions-enabled,\nintrospection-partial) so the catalog UI and sibling services\n(api-extractor, swagger-finder) join on `class` strings without any\nper-service mapping table. 21 Go test functions covering \u22656 server-\nbehaviour fixtures (canned introspection, explicit-disabled,\nfield-suggestion typo, alias-batched echo, CSRF accept, CSRF block).\nSee docs/adr/0001-trl-uplift-to-6.md.",
+    "trl_evidence": "TRL 6 (real). Beyond endpoint discovery + introspection summary,\nv3 adds three orthogonal abuse probes used by every commercial GraphQL\nscanner (Inspectiv, GraphCrawler, InQL): alias-batching DoS multiplier,\nfield-suggestion info-leak, and text/plain CSRF bypass. Findings are\nemitted with stable severity-tagged classes (introspection-enabled,\nalias-batching-unbounded, csrf-possible, field-suggestions-enabled,\nintrospection-partial) so the catalog UI and sibling services\n(api-extractor, swagger-finder) join on `class` strings without any\nper-service mapping table. 21 Go test functions covering ≥6 server-\nbehaviour fixtures (canned introspection, explicit-disabled,\nfield-suggestion typo, alias-batched echo, CSRF accept, CSRF block).\nSee docs/adr/0001-trl-uplift-to-6.md.",
     "version": "3.0.0"
   },
   "group-theory-visualizer": {
@@ -1758,7 +1836,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs real browser DOM for verification",
-    "trl_evidence": "Pure-Go RFC 6797 directive parser with case-insensitive directive names,\nquoted-string handling, negative/garbage rejection, and whitespace\ntolerance (parse_test.go covers 9 cases). Embedded Chromium HSTS preload\nlist snapshot revision 2026-05-16.1 (~190 entries) with TLD-wide\ntreatment for .gov/.dev/.app/.page/.new and parent-domain inheritance.\nPlaintext HTTP\u2192HTTPS redirect probe captures the full chain (up to 5\nhops) and reports the final scheme. Standalone TLS handshake check\nrecords negotiated version, cipher suite, full chain length, and\nperforms explicit hostname + chain verification against the system\ntrust store. Grading rubric (F/D/C/B/A/A+) per\ndocs/adr/0001-trl-uplift-to-6.md, with A+ requiring corroboration from\nthe bundled snapshot (not just the preload directive on the wire).\nTest surface: parse_test.go + preload_test.go + grade_test.go +\nhandler_test.go (httptest.NewTLSServer for HSTS variants, separate\nhttp test server for the redirect probe).",
+    "trl_evidence": "Pure-Go RFC 6797 directive parser with case-insensitive directive names,\nquoted-string handling, negative/garbage rejection, and whitespace\ntolerance (parse_test.go covers 9 cases). Embedded Chromium HSTS preload\nlist snapshot revision 2026-05-16.1 (~190 entries) with TLD-wide\ntreatment for .gov/.dev/.app/.page/.new and parent-domain inheritance.\nPlaintext HTTP→HTTPS redirect probe captures the full chain (up to 5\nhops) and reports the final scheme. Standalone TLS handshake check\nrecords negotiated version, cipher suite, full chain length, and\nperforms explicit hostname + chain verification against the system\ntrust store. Grading rubric (F/D/C/B/A/A+) per\ndocs/adr/0001-trl-uplift-to-6.md, with A+ requiring corroboration from\nthe bundled snapshot (not just the preload directive on the wire).\nTest surface: parse_test.go + preload_test.go + grade_test.go +\nhandler_test.go (httptest.NewTLSServer for HSTS variants, separate\nhttp test server for the redirect probe).",
     "version": "1.3.0"
   },
   "html-proxy": {
@@ -1773,7 +1851,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Hexagonal/Clean Architecture in src/ (domain/application/infrastructure split), pipeline middleware with circuit-breakers, response cache + Prometheus metrics, k6 smoke/light/medium/load scripts, header-sanitizer + SSRF awareness on upstream fetch, fleet keystore auth via X-Auth-User header trust (synthetic fleet user, credit bypass) + local-user fallback via ?api_key=/X-API-Key/Authorization Bearer/?token=. Unit-tested auth chain incl. gateway-header + extract-token priority. Plus root-level fleet-canonical handler (ua_pool.go/retry.go/redirect.go/handler.go) at TRL 5 \u2014 UA rotation deterministic by X-Request-ID, retry on 5xx/network with 250ms backoff, configurable timeout/redirect cap, JSON envelope or raw passthrough, safehttp SSRF guard, 9 test cases (httptest server, 5xx-then-success, redirect chain). See docs/adr/0001-trl-uplift-to-5.md.",
+    "trl_evidence": "Hexagonal/Clean Architecture in src/ (domain/application/infrastructure split), pipeline middleware with circuit-breakers, response cache + Prometheus metrics, k6 smoke/light/medium/load scripts, header-sanitizer + SSRF awareness on upstream fetch, fleet keystore auth via X-Auth-User header trust (synthetic fleet user, credit bypass) + local-user fallback via ?api_key=/X-API-Key/Authorization Bearer/?token=. Unit-tested auth chain incl. gateway-header + extract-token priority. Plus root-level fleet-canonical handler (ua_pool.go/retry.go/redirect.go/handler.go) at TRL 5 — UA rotation deterministic by X-Request-ID, retry on 5xx/network with 250ms backoff, configurable timeout/redirect cap, JSON envelope or raw passthrough, safehttp SSRF guard, 9 test cases (httptest server, 5xx-then-success, redirect chain). See docs/adr/0001-trl-uplift-to-5.md.",
     "version": "0.4.0"
   },
   "http-method-tester": {
@@ -1794,12 +1872,12 @@
     "description": "Microservice for Http Protocol",
     "example_path": "/?url=https://example.com",
     "host_port": 8241,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Five-protocol probe matrix (HTTP/0.9, /1.0, /1.1, /2, /3) implemented\nwith per-protocol 5s budget and 30s overall cap. HTTP/0.9 sends a\nversionless \"GET /\\r\\n\" over plain TCP; /1.0 + /1.1 use hand-crafted\nrequest lines over raw TCP/TLS; /2 uses golang.org/x/net/http2 with\nALPN h2; /3 uses github.com/quic-go/quic-go (pure Go, CGO-free).\nOutputs a structured JSON envelope with per-probe outcome\n(ok/refused/timeout/protocol-error/not_attempted), status, alpn\noffered/negotiated, server header, time_ms, plus alt_svc parsing\n(RFC 7838) for h3 advertisements and a summary {highest_supported,\nsupports_h2, supports_h3}. Test suite: handler_test.go +\nprotocol_test.go cover SSRF refusal, ?url= alias, h1.1 against\nhttptest.Server, h2 against httptest.NewTLSServer with ALPN h2,\nh3 timeout against a closed UDP port, alt-svc parser table, and\nHTTP/0.9 protocol-error detection against a synthetic HTTP/1.x\nresponder. SSRF guard via go-common safehttp; private ranges only\nreachable with ALLOW_PRIVATE=1 (test-only).",
+    "trl_evidence": "Added a pure-function origin-capability classifier emitting per-protocol (h2/h3) verdicts {negotiated|advertised|unsupported} with an ordered evidence trail {source: handshake|alpn|alt-svc|upgrade, value, verdict}; extended Alt-Svc parsing to the h2 family, added RFC 7230 Upgrade + RFC 6797 HSTS/redirect posture + top-level TLS version/cipher. Live: distinguishes true-unsupported (microsoft.com) from advertised-but-handshake-failed (bing.com) across the ~23% of status-OK rows the old flat supports_h3=false conflated. 6 new table-driven test functions, race-clean.",
     "version": "2.2.0"
   },
   "idor-finder": {
@@ -1812,7 +1890,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "True IDOR proof requires authenticated sessions and object ownership context.",
-    "trl_evidence": "TRL 6 (2026-05-16). Detects four ID shapes (integer, UUID,\nMongoDB ObjectId, base64); per-shape variant strategies (sequential\n\u00b1N, UUID segment rotation, ObjectId counter flip, base64 last-byte\nflip); auth-strip + auth-swap probes promote auth-bypass to a\nseparate severity track; user-data sniffer (email, name, role,\nphone, SSN, credit card, address, token) drives the high-vs-medium\nseverity split. Verdict aggregator collapses probe-level signals\ninto one of {clean, suspicious, likely_idor, critical, inconclusive}.\nScope-guard via SCOPE_GUARD_URL; second-opinion via VERIFIER_URL \u2192\ngo-pentest-exploit-verifier. 32-test suite covers ID detection,\nvariant generators, classifier, plus end-to-end fixtures (vulnerable,\nauth-guarded, 404, generic-page).",
+    "trl_evidence": "TRL 6 (2026-05-16). Detects four ID shapes (integer, UUID,\nMongoDB ObjectId, base64); per-shape variant strategies (sequential\n±N, UUID segment rotation, ObjectId counter flip, base64 last-byte\nflip); auth-strip + auth-swap probes promote auth-bypass to a\nseparate severity track; user-data sniffer (email, name, role,\nphone, SSN, credit card, address, token) drives the high-vs-medium\nseverity split. Verdict aggregator collapses probe-level signals\ninto one of {clean, suspicious, likely_idor, critical, inconclusive}.\nScope-guard via SCOPE_GUARD_URL; second-opinion via VERIFIER_URL →\ngo-pentest-exploit-verifier. 32-test suite covers ID detection,\nvariant generators, classifier, plus end-to-end fixtures (vulnerable,\nauth-guarded, 404, generic-page).",
     "version": "3.0.0"
   },
   "iframe-analyzer": {
@@ -1825,7 +1903,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: real CSP3 \u00a76.7.7.7 frame-ancestors source-list parser (none/self/wildcard/scheme/host with port/path/wildcard kinds); X-Frame-Options parser (DENY/SAMEORIGIN/ALLOW-FROM with deprecation flag); ComputeFramingPosture cross-check returning {deny,sameorigin,explicit,open}+Conflicts; client.Fetch. 10/10 corpus PASS; verified: Cloudflare correctly flagged with verdict=deny + conflict 'CSP says deny, XFO disagrees: sameorigin'."
+    "trl_evidence": "1.3.1: real CSP3 §6.7.7.7 frame-ancestors source-list parser (none/self/wildcard/scheme/host with port/path/wildcard kinds); X-Frame-Options parser (DENY/SAMEORIGIN/ALLOW-FROM with deprecation flag); ComputeFramingPosture cross-check returning {deny,sameorigin,explicit,open}+Conflicts; client.Fetch. 10/10 corpus PASS; verified: Cloudflare correctly flagged with verdict=deny + conflict 'CSP says deny, XFO disagrees: sameorigin'."
   },
   "implemment-the-following-time-displaced-ears": {
     "trl": 2,
@@ -1934,7 +2012,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_evidence": "TRL 6 (2026-05-16): discovery uses golang.org/x/net/html token stream\n(not just regex) plus a curated common-paths probe set and an optional\nWayback-Machine compose (env WAYBACK_URLS_URL \u2192 go-pentest-wayback-urls).\nProbes use a per-request marker callback (`marker_<random>`) so JSONP\ndetection is not fooled by partial reflections of a fixed name. Severity\nclassification is centralised, table-driven, and pinned by tests; auth-\nshaped data shapes (email/session/token/userid) escalate to critical,\nPII to high, generic public to medium/info, with a documented one-band\ndowngrade when X-Content-Type-Options: nosniff is present and the\ncontent-type is not a JS variant. Callback-XSS is confirmed via a\nreflection probe (`<script>alert(1)</script>`). 14 unit tests + 5\nhttptest scenarios (auth-data JSONP, public-list JSONP w/ nosniff+CORS,\ncallback-XSS-vulnerable, plain JSON non-JSONP, summary roll-up). Total\ncap 30s, per-request 4s, SSRF guard via go-common/safehttp.",
+    "trl_evidence": "TRL 6 (2026-05-16): discovery uses golang.org/x/net/html token stream\n(not just regex) plus a curated common-paths probe set and an optional\nWayback-Machine compose (env WAYBACK_URLS_URL → go-pentest-wayback-urls).\nProbes use a per-request marker callback (`marker_<random>`) so JSONP\ndetection is not fooled by partial reflections of a fixed name. Severity\nclassification is centralised, table-driven, and pinned by tests; auth-\nshaped data shapes (email/session/token/userid) escalate to critical,\nPII to high, generic public to medium/info, with a documented one-band\ndowngrade when X-Content-Type-Options: nosniff is present and the\ncontent-type is not a JS variant. Callback-XSS is confirmed via a\nreflection probe (`<script>alert(1)</script>`). 14 unit tests + 5\nhttptest scenarios (auth-data JSONP, public-list JSONP w/ nosniff+CORS,\ncallback-XSS-vulnerable, plain JSON non-JSONP, summary roll-up). Total\ncap 30s, per-request 4s, SSRF guard via go-common/safehttp.",
     "version": "1.5.0"
   },
   "jwt-debugger": {
@@ -1952,7 +2030,7 @@
   },
   "jwt-pentest": {
     "container_port": 8315,
-    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
+    "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
     "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
     "host_port": 18029,
     "trl": 6,
@@ -1960,7 +2038,7 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256\u2194RS256 confusion. Offline path complete. 10 tests pass."
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass."
   },
   "keyword-density": {
     "container_port": 8292,
@@ -1979,12 +2057,12 @@
     "description": "Microservice for Legal Entity",
     "host_port": 8293,
     "proxy_read_timeout": "120s",
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Authoritative validation requires jurisdiction-specific registries or paid company data.",
-    "trl_evidence": "Legal extraction returns entity names, jurisdiction hints, addresses, VAT/company identifiers, source evidence, and tests."
+    "trl_ceiling_reason": "Authoritative validation requires jurisdiction-specific registries or paid company data (Companies House / Handelsregister / INSEE / KvK). That live-register feed is the structural ceiling for 8.",
+    "trl_evidence": "Added per-jurisdiction check-digit validation (DE mod-11/10, NL elfproef, AT, ES CIF, IT/FR Luhn, AU ABN/ACN, SIREN/SIRET) tagging each identifier checksum_valid/invalid/format_valid, plus name_source + identifier_status provenance in best_match. 49 existing + 9 new table-driven tests, race-clean. Baseline: entity_name fill 6.3%, identifiers matched but never verified."
   },
   "linkedin-attributes": {
     "container_port": 4314,
@@ -2054,7 +2132,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Real login analysis needs flow-tracing, CSRF/OAuth/SAML detection, which overlap with session-fixation + jwt-pentest. Better to fold into those.",
-    "trl_evidence": "Real fixture-based unit tests (handler_test.go, \u22654 cases covering\npassword-only, oauth-only, captcha, MFA). Structured detection signals\n(auth_method classifier, MFA flag set, session-cookie classifier with\ncurated well-known list) and an interpretable confidence score in [0,1].\nDetection rationale and consumer hookup documented in\ndocs/adr/0001-trl-uplift-to-6.md.",
+    "trl_evidence": "Real fixture-based unit tests (handler_test.go, ≥4 cases covering\npassword-only, oauth-only, captcha, MFA). Structured detection signals\n(auth_method classifier, MFA flag set, session-cookie classifier with\ncurated well-known list) and an interpretable confidence score in [0,1].\nDetection rationale and consumer hookup documented in\ndocs/adr/0001-trl-uplift-to-6.md.",
     "version": "1.4.0"
   },
   "mesh-bench-archive": {
@@ -2155,7 +2233,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real RFC-style HTTP header parsing (Content-Type splitting, charset\nunquoting, X-Content-Type-Options exact-match), WHATWG MIME-sniffing\nvia stdlib net/http.DetectContentType, multi-axis classification\nrubric (declared vs sniffed vs URL-extension vs nosniff posture)\nemitting stable greppable codes (mime.mismatch.*, header.xcto.*,\nheader.charset.*, mime.svg.*, mime.pdf.*, mime.fallback.*).\n\u226515 unit tests + \u226510 httptest integration cases covering SVG-with-\nscript, JSON-as-HTML, image-as-HTML, HTML-as-PNG, XSSI prefix,\nXCTO-missing-on-JS/HTML, charset-missing, octet-stream fallback for\nknown extensions, scope-guard, SSRF loopback, legacy ?target= alias,\nbody-bytes-hex cap, response-shape contract. Per-request 5s + total\n15s timeouts; 512 KiB body cap; SSRF guard via go-common/safehttp;\noptional ?probe_uploads=1 for upload-extension confusion fan-out.",
+    "trl_evidence": "Real RFC-style HTTP header parsing (Content-Type splitting, charset\nunquoting, X-Content-Type-Options exact-match), WHATWG MIME-sniffing\nvia stdlib net/http.DetectContentType, multi-axis classification\nrubric (declared vs sniffed vs URL-extension vs nosniff posture)\nemitting stable greppable codes (mime.mismatch.*, header.xcto.*,\nheader.charset.*, mime.svg.*, mime.pdf.*, mime.fallback.*).\n≥15 unit tests + ≥10 httptest integration cases covering SVG-with-\nscript, JSON-as-HTML, image-as-HTML, HTML-as-PNG, XSSI prefix,\nXCTO-missing-on-JS/HTML, charset-missing, octet-stream fallback for\nknown extensions, scope-guard, SSRF loopback, legacy ?target= alias,\nbody-bytes-hex cap, response-shape contract. Per-request 5s + total\n15s timeouts; 512 KiB body cap; SSRF guard via go-common/safehttp;\noptional ?probe_uploads=1 for upload-extension confusion fan-out.",
     "version": "1.4.0"
   },
   "mobile-friendly": {
@@ -2168,7 +2246,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
-    "trl_evidence": "Single-pass DOM walk over golang.org/x/net/html parses 12 mobile signals\n(viewport validity + user-scalable, apple-touch-icon, manifest, amphtml,\nAMP, theme-color, srcset/sizes ratio, inline font<14px count, small\ntap-target heuristic, horizontal-scroll risk, fixed-width layout, flash).\nDual-UA probe (mobile+desktop) records response-size delta. Composite\n0-100 score with explicit weights documented in score.go and ADR-0001.\nLinked CSS fetched concurrently (\u22643, errgroup) for media-query +\nmin-width detection. \u226515 unit tests across viewport_test.go,\nsignals_test.go, handler_test.go covering perfect-mobile, missing\nviewport, fixed-width, AMP, Flash short-circuit, dedupe, and the\nlegacy ?url= alias. Per-request HTTP cap 6s; total budget 15s.",
+    "trl_evidence": "Single-pass DOM walk over golang.org/x/net/html parses 12 mobile signals\n(viewport validity + user-scalable, apple-touch-icon, manifest, amphtml,\nAMP, theme-color, srcset/sizes ratio, inline font<14px count, small\ntap-target heuristic, horizontal-scroll risk, fixed-width layout, flash).\nDual-UA probe (mobile+desktop) records response-size delta. Composite\n0-100 score with explicit weights documented in score.go and ADR-0001.\nLinked CSS fetched concurrently (≤3, errgroup) for media-query +\nmin-width detection. ≥15 unit tests across viewport_test.go,\nsignals_test.go, handler_test.go covering perfect-mobile, missing\nviewport, fixed-width, AMP, Flash short-circuit, dedupe, and the\nlegacy ?url= alias. Per-request HTTP cap 6s; total budget 15s.",
     "version": "1.3.0"
   },
   "newsletter-flow": {
@@ -2250,7 +2328,7 @@
   },
   "ocr-pdf": {
     "container_port": 5500,
-    "description": "Extract text from PDFs \u2014 upload or URL",
+    "description": "Extract text from PDFs — upload or URL",
     "host_port": 18012,
     "name": "OCR / PDF",
     "trl": 6,
@@ -2277,12 +2355,12 @@
     "description": "Microservice for Office Locations",
     "host_port": 8295,
     "proxy_read_timeout": "120s",
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": ">-",
+    "trl_evidence": "Structured-first multi-signal address extraction (schema.org JSON-LD PostalAddress/Organization/LocalBusiness/Place + microdata + hCard + OpenGraph + geo meta + <address>), then a country-aware address grammar: per-country postal-code matcher table where unique formats resolve country alone and shared digit clusters are disambiguated via region token, a ~120-city gazetteer, or a page-level phone-prefix cross-check. Every location carries an evidence[] trail. Fetch moved off the degraded JS-render proxy to RenderDefault direct-fetch. 40 table-driven + httptest tests; SSRF-guarded.",
     "version": "2.2.0"
   },
   "open-indie-studio": {
@@ -2336,11 +2414,11 @@
     "host_port": 8296,
     "proxy_read_timeout": "120s",
     "trl": 6,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "DOM walk with public-suffix handling, rel-attribute parsing. Clean code, real evidence trails."
+    "trl_evidence": "v2.2.0: switched the down JS-render proxy to direct fetch + a spec-compliant rel parser (nofollow/sponsored/ugc), gov/edu authority gazetteer, SEO outlink signals, and a per-destination evidence trail. 19 table-driven test funcs."
   },
   "page-load-metrics": {
     "container_port": 8297,
@@ -2348,12 +2426,12 @@
     "example_path": "/?url=https://example.com",
     "host_port": 8297,
     "proxy_read_timeout": "120s",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl": 6,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "Requires headless browser, DOM rendering",
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_ceiling_reason": "Headless-browser / post-JS DOM rendering is required for true Core Web Vitals; the CPU-only static fetch cannot measure LCP/CLS/INP. TRL 7+ needs a real renderer.",
+    "trl_evidence": "Added RFC 7838 Alt-Svc/Upgrade protocol-support detection (reads origin's own h2/h3 advertisement) killing a false penalty that fired on 100% of rows; resource-weight classification (render-blocking vs deferred, third-party origins via PSL), numeric score + evidence trail. 19 table-driven tests (was 6) incl httptest e2e, all green under -race."
   },
   "parse-address": {
     "trl": 5,
@@ -2446,7 +2524,7 @@
   },
   "pentest-bounty-pilot": {
     "container_port": 18179,
-    "description": "Bounty-hunt orchestrator: POST /hunt drives waf-detect \u2192 cookie-pwn \u2192 js-bundle-scanner \u2192 wayback-urls \u2192 reflection-hunter against given targets, returns consolidated triage JSON.",
+    "description": "Bounty-hunt orchestrator: POST /hunt drives waf-detect → cookie-pwn → js-bundle-scanner → wayback-urls → reflection-hunter against given targets, returns consolidated triage JSON.",
     "example_path": "/?api_key=default_token",
     "host_port": 18179,
     "trl": 4,
@@ -2489,7 +2567,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
-    "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; \u22656 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across \u22653 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
+    "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; ≥6 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across ≥3 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
     "version": "0.2.0"
   },
   "pentest-codec": {
@@ -2505,7 +2583,7 @@
   },
   "pentest-continuous-monitor": {
     "container_port": 18134,
-    "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription \u2014 money compounds with the asset universe, not manpower.",
+    "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription — money compounds with the asset universe, not manpower.",
     "example_path": "/stats",
     "host_port": 18134,
     "trl": 7,
@@ -2608,7 +2686,7 @@
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Each verifier is a thin recipe \u2014 lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
+    "trl_ceiling_reason": "Each verifier is a thin recipe — lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
     "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
     "version": "0.2.0"
   },
@@ -2688,7 +2766,7 @@
   },
   "pentest-job-queue": {
     "container_port": 18133,
-    "description": "Durable workflow queue. POST jobs, workers /claim \u2192 /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
+    "description": "Durable workflow queue. POST jobs, workers /claim → /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
     "example_path": "/stats",
     "host_port": 18133,
     "trl": 7,
@@ -2712,7 +2790,7 @@
   },
   "pentest-leak-bounty-policy": {
     "container_port": 18145,
-    "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
+    "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure — most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
     "example_path": "/search?token=sk_live_xxx",
     "host_port": 18145,
     "trl": 7,
@@ -2763,7 +2841,7 @@
   },
   "pentest-orchestrator": {
     "container_port": 18138,
-    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
+    "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope→recon→scan→triage→verify→submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default — the unattended money loop.",
     "example_path": "/stats",
     "host_port": 18138,
     "trl": 7,
@@ -2801,14 +2879,14 @@
   },
   "pentest-rate-coordinator": {
     "container_port": 18104,
-    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
+    "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
     "example_path": "/stats",
     "host_port": 18104,
     "trl": 7,
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-sonnet-4-6-session-2026-05-20-phase7b",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "In-process state \u2014 single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
+    "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_evidence": "Prometheus /metrics (counter+histogram+gauges), /selftest spawns 100 concurrent acquirers, TestAcquire_Concurrent under -race; 0.2.1 fixes /metrics double-registration panic",
     "version": "0.2.1"
   },
@@ -2844,13 +2922,13 @@
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Ceiling is whatever feeds it programs \u2014 once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
+    "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_evidence": "SQLite persistence with 256-LRU, audit_log with /audit query, ReDoS pattern rejection at create-time, target-normalizer composition with 3-strike circuit breaker, /selftest",
     "version": "0.2.0"
   },
   "pentest-screenshot": {
     "container_port": 18129,
-    "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} \u2192 PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
+    "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} → PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
     "example_path": "/shot?url=https://example.com",
     "host_port": 18129,
     "trl": 5,
@@ -2958,7 +3036,7 @@
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-session-2026-05-16",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "Bounded by platform API stability \u2014 H1/BC/Intigriti reshape attributes regularly and there's no signed contract.",
+    "trl_ceiling_reason": "Bounded by platform API stability — H1/BC/Intigriti reshape attributes regularly and there's no signed contract.",
     "trl_evidence": "SQLite-backed, idempotent on (platform, external_id), terminal-state poll skipping, state-change journal, normalized status enum across 3 platform shapes. Adapter stubs for H1/BC/Intigriti return ErrNotConfigured cleanly when tokens absent."
   },
   "pentest-trufflehog": {
@@ -2971,7 +3049,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
-    "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam \u2192 \u226513 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
+    "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam → ≥13 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
     "version": "0.2.0"
   },
   "pentest-waf-detect": {
@@ -2987,14 +3065,14 @@
   },
   "pentest-walkthrough": {
     "container_port": 18139,
-    "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
+    "description": "HTTP equivalent of go-pentest-cli — single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
     "example_path": "/preflight",
     "host_port": 18139,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Same ceiling as orchestrator \u2014 bounded by submit-bot end-to-end verification.",
+    "trl_ceiling_reason": "Same ceiling as orchestrator — bounded by submit-bot end-to-end verification.",
     "trl_evidence": "4 baked-in markdown templates (ssrf/xss/sqli/idor) via //go:embed, sensitive-header redaction (Cookie/Authorization/X-API-Key -> prefix-only), /selftest exercises all 4 templates",
     "version": "0.2.0"
   },
@@ -3079,7 +3157,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "v0.2.0 (TRL 6) \u2014 AST-aware classification via tdewolff/parse/v2/js.\nFindings carry per-listener missing|weak|strong taxonomy for both\norigin and source checks, plus the dangerous method name when weak\n(indexOf, includes, startsWith, endsWith, search, match, test, exec).\nRegex remains as a fallback for unparseable JS, marked confidence=regex.\n24 unit tests cover: missing-origin (high), weak indexOf (high),\nweak includes (high), strong origin alone (medium), strong both (low),\nonmessage assignment, Object.defineProperty, arrow handlers, regex\nfallback path, line/col location, summary aggregation, verdict\nrollup, and POST-body / ?url= handler shapes.",
+    "trl_evidence": "v0.2.0 (TRL 6) — AST-aware classification via tdewolff/parse/v2/js.\nFindings carry per-listener missing|weak|strong taxonomy for both\norigin and source checks, plus the dangerous method name when weak\n(indexOf, includes, startsWith, endsWith, search, match, test, exec).\nRegex remains as a fallback for unparseable JS, marked confidence=regex.\n24 unit tests cover: missing-origin (high), weak indexOf (high),\nweak includes (high), strong origin alone (medium), strong both (low),\nonmessage assignment, Object.defineProperty, arrow handlers, regex\nfallback path, line/col location, summary aggregation, verdict\nrollup, and POST-body / ?url= handler shapes.",
     "version": "0.2.0"
   },
   "press-mentions": {
@@ -3087,12 +3165,12 @@
     "description": "Microservice for Press Mentions",
     "host_port": 8300,
     "proxy_read_timeout": "120s",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Curated validation logic, error handling, some test coverage"
+    "trl_evidence": "v2.3.0: three-tier signal classifier (linked_article/logo_in_press_section/bare_name) with confidence tiers + per-mention evidence trail (matched href/img-alt/src-filename/text); unlinked logo-strip detection via display-name + registrable-filename matchers gated to press sections; bare-name text detection with an ambiguous-word stoplist; social/share-link rejection; link-folds-logo dedup; switched off the down JS-render proxy to direct fetch. 32 table-driven test funcs (-race green). Offline fixture: 1->6 outlets on the common logo-strip pattern; live, all 4 probed domains went from pages=0/none to populated."
   },
   "price-range": {
     "container_port": 8301,
@@ -3161,7 +3239,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "W3C App Manifest spec coverage (name, short_name, id, scope, display,\ndisplay_override, orientation, theme_color, background_color, icons[],\nshortcuts, screenshots, related_applications, lang, dir, categories);\nmanifest discovery via <link rel=\"manifest\"> with fallback probe order\n/manifest.json \u2192 /manifest.webmanifest \u2192 /site.webmanifest gated on\nvalid JSON; rule-engine validation (errors + warnings + info, 0..100\nscore, is_pwa boolean); icon HEAD probe (first 5, content-type +\nbytes); SW registration path extraction; \u226518 unit + integration tests\nexercising perfect / missing-icons / display=browser / out-of-scope /\nbroken-JSON / probe-order cases; SSRF-guarded outbound via safehttp.",
+    "trl_evidence": "W3C App Manifest spec coverage (name, short_name, id, scope, display,\ndisplay_override, orientation, theme_color, background_color, icons[],\nshortcuts, screenshots, related_applications, lang, dir, categories);\nmanifest discovery via <link rel=\"manifest\"> with fallback probe order\n/manifest.json → /manifest.webmanifest → /site.webmanifest gated on\nvalid JSON; rule-engine validation (errors + warnings + info, 0..100\nscore, is_pwa boolean); icon HEAD probe (first 5, content-type +\nbytes); SW registration path extraction; ≥18 unit + integration tests\nexercising perfect / missing-icons / display=browser / out-of-scope /\nbroken-JSON / probe-order cases; SSRF-guarded outbound via safehttp.",
     "version": "1.4.0"
   },
   "python-proxy": {
@@ -3254,11 +3332,11 @@
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
     "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Evidence+verdict+confidence system with test coverage"
+    "trl_evidence": "v2.2.0: markup-anchored multi-signal revenue-model classifier replacing the single-keyword guess. Each candidate model (subscription/transactional/marketplace/ads/freemium/services/affiliate) is scored from weighted matched signals (pricing-page markup, cart/checkout DOM, plan cards, ad-network script tags) with a per-signal evidence trail (signal/matched/weight) and a margin-based verdict so close calls return ambiguous instead of a coin-flip. Fixed the stripe.com false positive (payments-vendor vs payments-user). 13 table-driven test funcs."
   },
   "reverse-dns": {
     "container_port": 8333,
@@ -3270,7 +3348,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "TRL 6 capability: multi-resolver PTR fanout (1.1.1.1, 8.8.8.8, 9.9.9.9)\nfor IPv4 + IPv6, real FCrDNS forward-confirm via miekg/dns (not the OS\nresolver \u2014 so an in-process test server can drive the suite hermetically),\nbulk mode with 10-worker pool over ?ips= (\u226450) and ?cidr= (\u2264/24, 256\nhosts), per-lookup 2s + total 30s timeout, refusal of private/loopback\nunless ALLOW_PRIVATE=1, optional ?include_asn=1 composing the sibling\nasn-lookup service (env ASN_LOOKUP_URL), zone cohesion summary on CIDR\nprobes. Backward-compat: ?host= and ?target=. 13 hermetic tests cover\nFCrDNS pass/fail, NXDOMAIN, IPv6, bulk, CIDR expand limits, and private-IP\nrefusal. Pure Go, CGO-free.",
+    "trl_evidence": "TRL 6 capability: multi-resolver PTR fanout (1.1.1.1, 8.8.8.8, 9.9.9.9)\nfor IPv4 + IPv6, real FCrDNS forward-confirm via miekg/dns (not the OS\nresolver — so an in-process test server can drive the suite hermetically),\nbulk mode with 10-worker pool over ?ips= (≤50) and ?cidr= (≤/24, 256\nhosts), per-lookup 2s + total 30s timeout, refusal of private/loopback\nunless ALLOW_PRIVATE=1, optional ?include_asn=1 composing the sibling\nasn-lookup service (env ASN_LOOKUP_URL), zone cohesion summary on CIDR\nprobes. Backward-compat: ?host= and ?target=. 13 hermetic tests cover\nFCrDNS pass/fail, NXDOMAIN, IPv6, bulk, CIDR expand limits, and private-IP\nrefusal. Pure Go, CGO-free.",
     "version": "2.0.0"
   },
   "roamless-notes": {
@@ -3291,7 +3369,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: RFC 9309 \u00a72.2.2 path matching with $ end-anchor and * wildcards; \u00a72.3 precedence (specific UA > wildcard, longest-match wins, Allow beats Disallow on ties); Request-rate + Visit-time directive parsing; CrawlabilityMatrix evaluates 7 probe paths \u00d7 {*, Googlebot, top-3 site UAs}. 10/10 corpus PASS; verified evidence: HN matrix shows /login disallowed for both * and Googlebot."
+    "trl_evidence": "1.3.1: RFC 9309 §2.2.2 path matching with $ end-anchor and * wildcards; §2.3 precedence (specific UA > wildcard, longest-match wins, Allow beats Disallow on ties); Request-rate + Visit-time directive parsing; CrawlabilityMatrix evaluates 7 probe paths × {*, Googlebot, top-3 site UAs}. 10/10 corpus PASS; verified evidence: HN matrix shows /login disallowed for both * and Googlebot."
   },
   "robots-parser": {
     "container_port": 8304,
@@ -3336,7 +3414,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Per-port probe table covers SSH/FTP/SMTP(EHLO)/POP3/IMAP/HTTP/HTTPS-via-TLS/Redis/memcached/MySQL/Postgres/Mongo/Elasticsearch/Telnet (composes with telnet-banner for IAC handling). Structured fingerprints (product/version/os_hint) for OpenSSH, Dropbear, nginx, Apache, lighttpd, IIS, Caddy, Postfix, Exim, Sendmail, vsftpd, ProFTPD, Pure-FTPd, Redis, memcached, MariaDB, MySQL, Dovecot, Cyrus. Pure-Go (CGO-free), no shell-out to nmap/curl. Per-port 5s + total 12s timeouts. ALLOW_PRIVATE guard against RFC1918. \u226530 unit tests with canned-banner net.Listen fixtures (HTTP/SSH/SMTP/Redis/FTP/IMAP/MySQL).",
+    "trl_evidence": "Per-port probe table covers SSH/FTP/SMTP(EHLO)/POP3/IMAP/HTTP/HTTPS-via-TLS/Redis/memcached/MySQL/Postgres/Mongo/Elasticsearch/Telnet (composes with telnet-banner for IAC handling). Structured fingerprints (product/version/os_hint) for OpenSSH, Dropbear, nginx, Apache, lighttpd, IIS, Caddy, Postfix, Exim, Sendmail, vsftpd, ProFTPD, Pure-FTPd, Redis, memcached, MariaDB, MySQL, Dovecot, Cyrus. Pure-Go (CGO-free), no shell-out to nmap/curl. Per-port 5s + total 12s timeouts. ALLOW_PRIVATE guard against RFC1918. ≥30 unit tests with canned-banner net.Listen fixtures (HTTP/SSH/SMTP/Redis/FTP/IMAP/MySQL).",
     "version": "1.1.0"
   },
   "scan-port-ssh": {
@@ -3356,24 +3434,24 @@
     "container_port": 8305,
     "description": "Microservice for Scc",
     "host_port": 8305,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
+    "trl": 6,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "Full complexity for SPAs needs post-JS DOM rendering.",
-    "trl_evidence": "Structural complexity scoring parses DOM/resource counts, third-party domains, gzip estimate, stable scoring labels, and tests."
+    "trl_ceiling_reason": "Full complexity for SPAs needs post-JS DOM rendering; the CPU-only single-pass static walk cannot see client-injected DOM.",
+    "trl_evidence": "Replaced the opaque integer score with a five-axis breakdown + signals + third_party_by_class evidence trail, and swapped the naive last-two-labels heuristic for PSL-aware registrable-root/third-party resolution. 22 test functions, go vet + -race clean. Discovered the real table is domain_page_complexity (1.56M rows; mapping had null); baseline avg score 4.4/100, 82.1% zero third-party."
   },
   "schema-extractor": {
     "container_port": 8165,
     "description": "Microservice for Schema Extractor",
     "example_path": "/go_schema_extractor?url=https://example.com",
     "host_port": 8165,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Schema injected only after client-side rendering needs a JS DOM fetcher.",
-    "trl_evidence": "Extracts JSON-LD, Microdata, RDFa, rich-result type summaries, caps oversized blocks, SSRF guard, and unit tests."
+    "trl_ceiling_reason": "JS-injected structured data needs post-render DOM; the degraded fleet JS-render proxy is the structural dependency. Static extraction of all four syntaxes is now complete.",
+    "trl_evidence": "Added Open Graph + Twitter Card extraction (the missing 4th syntax), @type hierarchy resolution (NewsArticle->Article, Restaurant->LocalBusiness/Organization), and required-property completeness validation with a provenance evidence trail. 19 test functions (8+11 new), race-clean. Baseline rollup was blind to Microdata/RDFa/OG, under-reporting real structured-data coverage."
   },
   "schlieren-imaging-simulator": {
     "trl": 4,
@@ -3426,12 +3504,12 @@
     "description": "Microservice for Seasonal Detector",
     "host_port": 8306,
     "proxy_read_timeout": "120s",
-    "trl": 5,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Reaches TRL 7 with per-country holiday gazetteer + urgency-language regex.",
-    "trl_evidence": "Holiday/sale-language pattern matching."
+    "trl_ceiling_reason": "Movable-feast dates are heuristic windows (no ephemeris/holiday-API), and detection is bounded by the shared JS-render fetch-cache. TRL 8 needs a dated holiday-calendar feed + a more reliable renderer.",
+    "trl_evidence": "Added a 63-entry per-country gazetteer across 15 markets with localized keywords, an expanded urgency lexicon, and a per-detection evidence trail plus regions_detected[]; fixed the year-round Eid false positive. A/B identical text: detection 65%->85%, season tags 14->44; live 8/12 fetched retail domains detected vs ~0.5% stored baseline. 42 cases green under -race."
   },
   "secrets-scanner": {
     "container_port": 8229,
@@ -3455,7 +3533,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Differentiated diff-engine over five named compliance baselines\n(owasp-a-grade, mozilla-observatory-100, pci-dss, hipaa, fedramp-moderate).\nPer-header conformance verdict (pass|warn|fail) with exact suggested fix\nvalues, weighted scoring, http-vs-https comparison, multi-page averaging.\nBuilt on go-common/safehttp (SSRF-gated) and go-common/server. Test\ncoverage: handler + diff + profiles, \u226517 cases, all green via httptest.\nCPU-only, CGO-free, single binary.",
+    "trl_evidence": "Differentiated diff-engine over five named compliance baselines\n(owasp-a-grade, mozilla-observatory-100, pci-dss, hipaa, fedramp-moderate).\nPer-header conformance verdict (pass|warn|fail) with exact suggested fix\nvalues, weighted scoring, http-vs-https comparison, multi-page averaging.\nBuilt on go-common/safehttp (SSRF-gated) and go-common/server. Test\ncoverage: handler + diff + profiles, ≥17 cases, all green via httptest.\nCPU-only, CGO-free, single binary.",
     "version": "3.0.0"
   },
   "security-headers": {
@@ -3475,12 +3553,12 @@
     "description": "Microservice for Security Txt",
     "example_path": "/go_security_txt?url=https://example.com",
     "host_port": 8167,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "RFC 9116 conformant: probes /.well-known/security.txt then /security.txt;\nparses Contact, Expires, Encryption, Acknowledgments, Preferred-Languages,\nCanonical, Policy, Hiring, CSAF; detects PGP cleartext signatures (no key\nverification \u2014 flagged in ADR-0001 as future work). Validation splits\nerrors (Contact required, Expires required+future+RFC3339, Canonical must\ninclude served URL, HTML payload rejected) from warnings (Expires <30d,\nhttp:// URIs, missing charset). Tests: 24 cases including httptest fixtures\nfor canonical/fallback/expired/missing-contact/HTML-404/PGP-signed paths.\nBackward-compatible (?url=, ?domain=, ?target= all accepted).",
+    "trl_evidence": "v2.2.0 adds a per-field RFC 9116 evidence trail (field_grades[]: absent/valid/malformed/expired with notes), misnamed-field detection (50+ near-miss labels e.g. Email->Contact, plus edit-distance-1 fuzzy fallback) surfaced as actionable warnings instead of silent drops, and a served-host-mismatch flag (RFC 9116 section 3). Motivated by real data: of 235,771 present files only 12% had a recognized Contact, mostly mislabeled. 46 tests (18 new, table-driven) green under -race.",
     "version": "2.1.0"
   },
   "seo-basics": {
@@ -3493,7 +3571,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: multi-sitemap parsing (RFC 9309 \u00a72.2.4 allows multiple Sitemap: directives) with per-sitemap reachability/Content-Type probe; canonical reachability probe (status + same-host + self-reference); pathsEqualish handles trailing-slash equivalence. 9/10 corpus PASS."
+    "trl_evidence": "1.3.1: multi-sitemap parsing (RFC 9309 §2.2.4 allows multiple Sitemap: directives) with per-sitemap reachability/Content-Type probe; canonical reachability probe (status + same-host + self-reference); pathsEqualish handles trailing-slash equivalence. 9/10 corpus PASS."
   },
   "services-dashboard": {
     "container_port": 18173,
@@ -3509,7 +3587,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs authenticated session state for full testing",
-    "trl_evidence": "RFC6265bis prefix validation (__Secure-/__Host-), curated session-cookie list (~25 platforms), Shannon-entropy weak-token detector, two-pass fixation probe behind ?probe_fixation=1, \u226518 unit + httptest cases (entropy_test.go + validate_test.go + handler_test.go) all green; safehttp client with no auto-jar so cookies aren't replayed across analyses.",
+    "trl_evidence": "RFC6265bis prefix validation (__Secure-/__Host-), curated session-cookie list (~25 platforms), Shannon-entropy weak-token detector, two-pass fixation probe behind ?probe_fixation=1, ≥18 unit + httptest cases (entropy_test.go + validate_test.go + handler_test.go) all green; safehttp client with no auto-jar so cookies aren't replayed across analyses.",
     "version": "1.1.0"
   },
   "shipping-regions": {
@@ -3518,11 +3596,11 @@
     "host_port": 8310,
     "proxy_read_timeout": "120s",
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": ">-",
+    "trl_evidence": "Root-caused near-zero real-data coverage to a dead RenderJS (chromedp) fetch path degraded fleet-wide; switched to RenderDefault direct fetch (live e-commerce fetch success 0/3 -> 3/3 domains, allbirds/mejuri resolve policy_url + specific_countries, beardbrand 64 destinations). Added geohints.go: ccTLD home-market + ISO-4217 currency + flag-emoji gazetteer, promoted only inside a shipping/checkout context window (disambiguates currency/language switchers) with per-signal evidence. 7 new table-driven tests, 44 total, race+vet+gofmt clean.",
     "version": "1.4.0"
   },
   "show-me-the-way": {
@@ -3574,12 +3652,12 @@
     "description": "Microservice for Social Graph",
     "example_path": "/?url=https://example.com",
     "host_port": 8312,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "2.3.0 uplift: ~25 platform matchers with URL-shape validation, JSON-LD\nschema.org sameAs walker (incl. @graph), IndieAuth rel=me anchor + link\nscraping, WebFinger (/.well-known/webfinger, RFC 7033 \u00a74.4) probe with\ngraceful 404 handling, section-aware source tagging\n(footer-anchor/header-anchor/nav-anchor), per-platform counts, deterministic\noutput ordering. Tests: 12 unit + httptest server with canned HTML covering\n5 platforms + Mastodon rel=me + schema.org sameAs + WebFinger present/absent.",
+    "trl_evidence": "Added principled GitHub site-nav false-positive rejection (expanded reserved-slug gazetteer + structural rules: >2 path segments / query-string / invalid-hyphen logins rejected) and org-match-driven profile_type promotion to company. Live github.com went from 18 profiles (14 bogus) to 4 genuine with no real signals lost; vercel/stripe/cloudflare own-domain handles now correctly classified company. 19 unit tests incl. a 20-row reject/keep table + offline github.com homepage fixture (0 false positives).",
     "version": "2.3.0"
   },
   "sourcemap-finder": {
@@ -3607,24 +3685,24 @@
     "description": "Microservice for Subdomain Finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
     "host_port": 8348,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "CT-log free tiers rate-limit aggressively; reaching TRL 8 would need a paid CT mirror (DNSDB) or self-hosted CT replica.",
-    "trl_evidence": "1.5.0+: URL-input coercion (1.4.1) + sitemap.xml source parsing both robots.txt Sitemap: directives and /sitemap.xml fallback with <urlset>/<sitemapindex> XML envelope parsing (1.4.2); TLD-anchored homepage regex (rightmost label 2-24 ASCII letters) eliminates IP/version-string false positives. 10/10 corpus PASS."
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Exhaustive passive coverage needs a paid CT mirror / DNSDB / self-hosted CT replica; free CT/HTTP feeds (crt.sh, hackertarget) rate-limit to zero in production.",
+    "trl_evidence": "Added resolver-backed DNS enumeration over a hand-authored ~320-label gazetteer (injectable resolver, zero-network tests) as a fallback that works when the passive HTTP feeds are dead. 17 tests (+11 new). Live delta on same domains: github.com 17->48, ntp.org 2->15 subdomains. Baseline: 68.5% of 1.64M domains returned <=2 subdomains."
   },
   "subdomain-takeover": {
     "container_port": 8223,
     "description": "Microservice for Subdomain Takeover",
     "example_path": "/go_subdomain_takeover?domain=example.com",
     "host_port": 8223,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": ">",
+    "trl_evidence": "1.5.0: added SERVFAIL (dangling-delegation) detection + a pure three-way claimability classifier {vulnerable|dangling_review|safe} that distinguishes a live owned service (2xx/3xx, no orphan fingerprint) from a genuinely claimable target (NXDOMAIN/SERVFAIL OR matched orphan fingerprint), with a structured per-finding EvidenceTrail (subdomain, CNAME chain, service, resolution status, fingerprint, reason). Tightened FP-prone Vercel/Cargo fingerprints, added 5 vendors (gazetteer=30). ~20 new table-driven tests; 33 test funcs green under -race. On 10 real flagged domains: 3 confirmed vulnerable, 6 reclassified safe, 1 dangling_review.",
     "version": "1.4.0"
   },
   "substack-scraper": {
@@ -3656,7 +3734,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Site Visibility Index \u2014 13 weighted SEO/crawl signals computed CPU-only, embedded fixture for /selftest, selftestPassthrough middleware bypasses keystore auth, evidence trail (SignalEvidence struct surfaces raw harvested inputs)",
+    "trl_evidence": "Site Visibility Index — 13 weighted SEO/crawl signals computed CPU-only, embedded fixture for /selftest, selftestPassthrough middleware bypasses keystore auth, evidence trail (SignalEvidence struct surfaces raw harvested inputs)",
     "version": "2.1.0"
   },
   "swagger-finder": {
@@ -3669,7 +3747,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
-    "trl_evidence": "Probes 28 well-known OpenAPI/Swagger/GraphQL paths concurrently (worker pool of 8, 5s per-request, 60s total cap) via go-common/safehttp (SSRF-safe). Parses responses with kin-openapi v0.135.0 \u2014 OpenAPI 3.x natively, Swagger 2.0 upgraded via openapi2conv. Extracts {method,path,summary,parameters,security_schemes} inventory (capped at 2k endpoints). 1h sha256-keyed in-memory cache. Tested with httptest fixtures covering openapi3, swagger2, graphql, html, junk, and 404 cases.",
+    "trl_evidence": "Probes 28 well-known OpenAPI/Swagger/GraphQL paths concurrently (worker pool of 8, 5s per-request, 60s total cap) via go-common/safehttp (SSRF-safe). Parses responses with kin-openapi v0.135.0 — OpenAPI 3.x natively, Swagger 2.0 upgraded via openapi2conv. Extracts {method,path,summary,parameters,security_schemes} inventory (capped at 2k endpoints). 1h sha256-keyed in-memory cache. Tested with httptest fixtures covering openapi3, swagger2, graphql, html, junk, and 404 cases.",
     "version": "1.0.0"
   },
   "tagboard": {
@@ -3689,7 +3767,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "TRL 6 \u2014 multi-signal team-size estimator with composite confidence.\nDirect claims (regex on \"team of N people\", \"N+ employees\", \"founded\nwith N\"), schema.org Organization.numberOfEmployees (number, string,\nQuantitativeValue, min/max range), LinkedIn-style bucket badges\n(11-50 / 51-200 / 201-500 / 501-1000 / 1001-5000 / 5001-10000 /\n10000+), DOM team-card / people-list counts, /careers open-job\ncounts. Composite estimator ranks signals by confidence, cross-\nvalidates within \u00b120% (each agreement +0.04 conf, capped 0.97),\nemits LinkedIn bucket label for sibling biz-classifier / company-\nsize services. ADR 0001 documents the weighting decisions. \u226512 unit\ntests across claims/estimate/handler, all green.",
+    "trl_evidence": "TRL 6 — multi-signal team-size estimator with composite confidence.\nDirect claims (regex on \"team of N people\", \"N+ employees\", \"founded\nwith N\"), schema.org Organization.numberOfEmployees (number, string,\nQuantitativeValue, min/max range), LinkedIn-style bucket badges\n(11-50 / 51-200 / 201-500 / 501-1000 / 1001-5000 / 5001-10000 /\n10000+), DOM team-card / people-list counts, /careers open-job\ncounts. Composite estimator ranks signals by confidence, cross-\nvalidates within ±20% (each agreement +0.04 conf, capped 0.97),\nemits LinkedIn bucket label for sibling biz-classifier / company-\nsize services. ADR 0001 documents the weighting decisions. ≥12 unit\ntests across claims/estimate/handler, all green.",
     "version": "3.0.0"
   },
   "tech-stack": {
@@ -3708,12 +3786,12 @@
     "description": "Microservice for Technology Stack",
     "example_path": "/?url=https://example.com",
     "host_port": 8315,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Dynamic-only or authenticated stack signals need JS rendering and session context.",
-    "trl_evidence": "Infrastructure fingerprints cover headers, cookies, hosting/CDN, CMS, runtime, JS/CSS vendors, analytics, payments, confidence, and tests."
+    "trl_ceiling_reason": "Dynamic-only or authenticated stack signals need JS rendering and session context; all new signals are static (headers, cookies, meta generators, asset URLs, server tokens). The one inferred field (database_hint) is labelled and capped at medium.",
+    "trl_evidence": "Added +20 server-token attributions (Wix/Pepyaka, Squarespace, Framer, Kestrel→.NET, GSE→Google, etc.), ~3x body signatures, meta-generator expansion, an inferred database_hint, and an auditable evidence_trail[]. 8 new table-driven test funcs, race-clean. Baseline: 83.7% of 471,798 rows had tech_count=0 with ~15k raw-passthrough server tokens."
   },
   "telnet-banner": {
     "container_port": 8086,
@@ -3733,23 +3811,23 @@
     "description": "Microservice for Tos Finder",
     "example_path": "/?url=https://example.com",
     "host_port": 8316,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": null,
-    "trl_evidence": "Curated 30+ canonical paths for ToS/Privacy/DMCA/etc + freshness check."
+    "trl_ceiling_reason": "JS-rendered legal pages (SPAs inject policy client-side; fleet JS-render proxy is the structural dependency, currently down) plus a multi-language semantic classifier beyond regex/vocabulary gates would be needed for 8.",
+    "trl_evidence": "Added content-verification gates (soft-404/JS-redirect/parking-stub rejection), confidence bands, and a per-document evidence trail; rejects the exact 114-byte production parking stub. 26 test functions (15 new) incl full httptest e2e flow, go vet+gofmt clean. Baseline had ~1.34M parking-stub false positives across the table."
   },
   "trust-decay": {
     "container_port": 8317,
     "description": "Microservice for Trust Decay",
     "host_port": 8317,
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_evidence": "v2.1.0 \u2014 Composite trust-decay score 0..100 from CPU-only weighted signals\n(TLS cert age + chain trust + wildcard SNI, HSTS-vs-cert lifetime mismatch,\nsitemap.xml lastmod freshness, robots.txt + security.txt age, copyright year\nregex, HTML Last-Modified header age, deprecated <meta http-equiv> charset\nhint, mixed-content references on https pages with -15 cap, outdated jQuery /\nBootstrap / AngularJS via <script src> regex, and dead-link probe over the\nfirst 5 in-page internal links). Every signal contributes a non-positive\nweight; trust_score = clamp(100 + \u03a3 weights, 0, 100). 28 unit tests covering\nfresh-site, stale-copyright, mixed-content, dead-links, and self-signed-cert\nfixtures (httptest.Server + httptest.NewTLSServer). Per-fetch budget 5 s,\ntotal cap 30 s, errgroup-bounded concurrency, SSRF guard via go-common\nsafehttp on every outbound URL. JSON envelope: url, trust_score, max_score,\nbreakdown (per-class), signals[], recommendations[], duration_ms.",
+    "trl_ceiling_reason": "true longitudinal trust decay needs persisted historical snapshots (the 8+ frontier); current model infers staleness from a single point-in-time fetch",
+    "trl_evidence": "v2.2.0: dated evidence-backed staleness model (fresh/aging/stale/expired/critical ladder) + injectable reference_date + dated TLS-expired/imminent detection + wider EOL fingerprints. 74 tests.",
     "version": "2.1.0"
   },
   "trust-no-one-anonymizer": {
@@ -3797,11 +3875,11 @@
     "description": "Microservice for Update Frequency",
     "host_port": 8319,
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_evidence": "Sitemap (urlset + sitemap-index) and RSS/Atom parsers, Schema.org JSON-LD, HEAD Last-Modified, inline-date heuristics, cadence buckets (daily..dormant), trend (accelerating/steady/decelerating), recency_score, posts_30/90/365 windows, 21 unit + httptest cases (daily, dormant, no-sitemap, RSS-only, BlogPosting), SSRF-guarded fetcher, 5s per-fetch + 25s total budget.",
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "true update cadence needs persisted multi-snapshot history or a reliable external archive feed; live coverage win currently blocked by Internet Archive CDX 503 outage",
+    "trl_evidence": "v2.3.0: added a Wayback CDX cadence cross-check (the table was domain_wayback but the service never actually queried Wayback) + per-signal evidence + confidence bands. 74 tests; graceful degradation + offline httptest proven.",
     "version": "2.2.0"
   },
   "urban-farm-year": {
@@ -3814,7 +3892,7 @@
   },
   "url-categorizer-api": {
     "container_port": 8080,
-    "description": "URL categorization API \ufffd\ufffd\ufffd classifies URLs by topic/category",
+    "description": "URL categorization API ��� classifies URLs by topic/category",
     "example_path": "/?url=https://example.com",
     "health_path": "/health",
     "host_port": 18244,
@@ -3843,12 +3921,12 @@
     "example_path": "/?url=https://example.com",
     "host_port": 8321,
     "proxy_read_timeout": "120s",
-    "trl": 6,
-    "trl_assessed_at": "2026-05-21",
-    "trl_assessor": "claude-sonnet-4-6",
+    "trl": 7,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-trl-uplift-2026-05-31",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Explicit signals (ccTLD, ISO currency, phone prefix) are near-certain when present; inferred signals (tone, generation, income bracket) are heuristic keyword-counts with no accuracy validation against ground truth. TRL 7 is achievable by adding a labelled evaluation dataset and measured precision/recall per signal family. ML is not required to reach TRL 7.",
-    "trl_evidence": "90 passing tests (race-detected); 8 signal families across 7 modular files; 65 ccTLDs, 57 ISO currencies, 57 phone prefixes, 22 Unicode script detectors, English variant detection (en-GB/IN/AU), 22 industry verticals, 7 tone labels (formal/casual/edgy/corporate/scholarly/legal/activist), 6 generation cohort signals, FK-grade guard for non-Latin text; SSRF protection via go-common/safehttp; deployed at v2.2.0 \u2014 2026-05-21"
+    "trl_ceiling_reason": "Inferred families (tone/generation/income) remain keyword-heuristics; higher accuracy needs content the degraded JS-render fetcher cannot currently supply and likely an ML classifier. Explicit signals are already near-certain.",
+    "trl_evidence": "Surfaced the previously-discarded per-detector evidence trail in the wire format with graded confidence (near-certain explicit vs heuristic inferred), and added a 16-domain hand-labelled eval harness measuring precision/recall per signal family. 102 test functions (was 90), green under -race."
   },
   "utils-readcontent": {
     "container_port": 5008,
@@ -3860,7 +3938,7 @@
     "trl_assessor": "claude-opus-trl-bump-2026-05-14-corpus-10x10",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 \u2014 pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs."
+    "trl_evidence": "9/10 corpus PASS (1 BROKEN: news.ycombinator.com returns 500 — pre-existing edge case, not regression). Extracts structured article content from real-world sites across SaaS landing pages, news sites, government, blogs."
   },
   "vagus-reset-coach": {
     "trl": 3,
@@ -3924,7 +4002,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs authenticated session for extended carbon source data",
-    "trl_evidence": "Sustainable Web Design Model v3 / v4 implementation: per-segment kWh\n(data centre 0.81 + network 0.65 + device 0.55) \u00d7 configurable grid\nintensity (default 442 gCO2/kWh, ?intensity= override). First-visit\nvs returning-visitor blend (returning_ratio default 0.25, cache\nfactor 0.25). Sub-resource discovery walks <link>/<script>/<img>/\n<source>/<video>/<audio>/<link as=font>, deduped, capped at 50,\nsized via worker pool of 8 with 4s per-fetch / 30s total budget.\nGreen-host detection: ASN lookup (Team Cymru DNS) + bundled\n~100-suffix Green Web Foundation fallback. A+ ... F SWD rating\nbucketing. Tests: handler_test.go + formula_test.go + rate_test.go,\n\u2265 5 cases, including a real httptest.Server end-to-end with canned\nsub-resources of known sizes that asserts the math.",
+    "trl_evidence": "Sustainable Web Design Model v3 / v4 implementation: per-segment kWh\n(data centre 0.81 + network 0.65 + device 0.55) × configurable grid\nintensity (default 442 gCO2/kWh, ?intensity= override). First-visit\nvs returning-visitor blend (returning_ratio default 0.25, cache\nfactor 0.25). Sub-resource discovery walks <link>/<script>/<img>/\n<source>/<video>/<audio>/<link as=font>, deduped, capped at 50,\nsized via worker pool of 8 with 4s per-fetch / 30s total budget.\nGreen-host detection: ASN lookup (Team Cymru DNS) + bundled\n~100-suffix Green Web Foundation fallback. A+ ... F SWD rating\nbucketing. Tests: handler_test.go + formula_test.go + rate_test.go,\n≥ 5 cases, including a real httptest.Server end-to-end with canned\nsub-resources of known sizes that asserts the math.",
     "version": "2.2.0"
   },
   "websocket-analyzer": {
