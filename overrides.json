@@ -1488,13 +1488,13 @@
       "type": "none"
     },
     "category": "fleet_infra",
-    "container_port": 18256,
+    "container_port": 18272,
     "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, then pull it from another machine within a hard ≤5-minute TTL. Held in RAM only (restart wipes everything). Random unguessable base62 ids or write-once named slots; ?burn=1 deletes on first read for one-time secrets.",
     "example_path": "/",
     "extra_server_names": [
       "pipe.0exec.com"
     ],
-    "host_port": 18256,
+    "host_port": 18272,
     "trl": 4,
     "trl_assessed_at": "2026-05-31",
     "trl_assessor": "claude-opus-4-7-session-2026-05-31-pipe",
