@@ -1483,6 +1483,25 @@
     "url": "https://persona.0exec.com",
     "version": "0.1.0"
   },
+  "fleet-pipe": {
+    "auth": {
+      "type": "none"
+    },
+    "category": "fleet_infra",
+    "container_port": 18256,
+    "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, then pull it from another machine within a hard ≤5-minute TTL. Held in RAM only (restart wipes everything). Random unguessable base62 ids or write-once named slots; ?burn=1 deletes on first read for one-time secrets.",
+    "example_path": "/",
+    "extra_server_names": [
+      "pipe.0exec.com"
+    ],
+    "host_port": 18256,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-7-session-2026-05-31-pipe",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Single-node, in-RAM, stateless relay by design — no persistence, no HA/clustering, no cross-checks. Deliberately minimal; further TRL would require features that contradict the ephemeral intent.",
+    "trl_evidence": "NEW fleet primitive (2026-05-31). In-memory TTL store with 8 store unit tests (put/get roundtrip, burn-on-read, TTL expiry via injected clock, write-once, expired-name reclaim, max-entries cap, clamp-TTL, base62 id shape+uniqueness over 1000 draws, PutRandom uniqueness over 500) and 14 handler/HTTP tests (random push/pull, named write-once 409, reserved-name 409, invalid-name 400, burn-once-then-404, text/plain+nosniff headers, 404 missing, delete, 413 oversized body, usage + shell helper). /selftest exercises put-random → get-multi → burn → named-write-once → reserved → empty-body → ttl-expiry end-to-end against an httptest server. crypto/rand ids with rejection sampling (no modulo bias)."
+  },
   "fleet-pixel": {
     "auth": {
       "type": "none"
