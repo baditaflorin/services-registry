@@ -2720,6 +2720,40 @@
     "proxy_egress": true
   },
   {
+    "id": "heading-outline-extractor",
+    "name": "Heading Outline Extractor",
+    "description": "Extracts the heading structure (h1-h6) of a web page or raw HTML and builds a nested document outline plus accessibility diagnostics \u2014 per-level counts, max nesting depth, and structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level, empty_heading).",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://heading-outline-extractor.0crawl.com",
+    "health_url": "https://heading-outline-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_heading_outline_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure): recurses the parsed document in document order collecting every h1-h6 with its resolved numeric level, collapsed visible text, and id attribute. skipTags subtrees (script/style/noscript/svg/template/head/iframe/object/embed) are pruned before text collection so an h-tag embedded in an inline SVG title or a <template> never pollutes the outline, and script/style text never leaks into a heading's label. The nested outline is built with a single-pass ancestor-stack algorithm (pop until the stack top is a strictly-lower level, attach, push) which is the standard 'nest under the most recent heading of a lower level' rule \u2014 it tolerates skipped levels (h1 directly to h3 still nests the h3 under the h1), multiple roots (each h1 starts a new root), and a leading deep heading without losing any node. Reports per-level counts (h1..h6 + total), max nesting depth, and an advisory issues[] of accessibility/structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level:hX->hY for any deeper-by-more-than-one jump, empty_heading) \u2014 all advisory, never fatal. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers analysing the same URL trigger one upstream fetch; plain-HTML render mode (heading structure lives in the served HTML, not a JS-rendered DOM \u2014 the documented TRL-4 ceiling for SPAs that build headings client-side). Direct text= mode analyses pasted HTML with no fetch. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, no_headings) instead of failing the response; a page with zero headings still returns 200. 26 unit tests cover document-order extraction, id capture, whitespace collapse, script/style stripping inside headings, inline-markup flattening, template/svg pruning, outline nesting (simple/deep/skipped-level/multiple-roots/leading-deep), depth measurement, per-level counts, every diagnostic (no_h1, multiple_h1, skipped_level, empty_heading, ascent-is-not-a-skip, clean-document), parse-input aliases, missing-param 400, SSRF rejection, and the handler text-mode + no_headings degraded paths. /selftest exercises the pure-logic pipeline (order, skipped-level, multiple-h1, empty-heading, nested depth, script/style stripping, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18247,
+    "container_port": 18247
+  },
+  {
     "id": "hidden-fields",
     "name": "Hidden Fields",
     "description": "Microservice for Hidden Fields",
@@ -3093,6 +3127,40 @@
     "proxy_egress": true
   },
   {
+    "id": "language-detector",
+    "name": "Language Detector",
+    "description": "Detects the dominant natural language and writing system of a web page or raw text: Unicode-range script detection (Latin, Cyrillic, Greek, CJK, Arabic, Hebrew, Devanagari) plus curated-stopword frequency scoring for en/es/fr/de/it/pt/nl, returning an ISO 639-1 language, confidence, and top-5 scores.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://language-detector.0crawl.com",
+    "health_url": "https://language-detector.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_language_detector",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Dependency-free, pure-Go language detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace with block-element boundaries. Two complementary signals. (1) SCRIPT detection \u2014 every letter rune is bucketed by its Unicode block into Latin (incl. Latin-1/Extended accents), Cyrillic, Greek (incl. Extended), CJK Han, Japanese kana (hiragana+katakana), Arabic, Hebrew, Devanagari; the dominant writing system by letter count is reported. This is near-certain because scripts occupy disjoint Unicode ranges. (2) STOPWORD-frequency scoring \u2014 for Latin-script prose the text is tokenised into lowercased words and, for each scored language (English, Spanish, French, German, Italian, Portuguese, Dutch), score = stopword-hits / total-tokens from curated high-frequency function-word sets; the highest score wins. Confidence is the margin form winner/(winner+runner_up) so a clear separation reads as high-confidence and a tight race reads ~0.5; a sole non-zero scorer reports its raw density. Non-Latin scripts map to a best-effort script\u2192language guess (Cyrillic\u2192ru, Greek\u2192el, Arabic\u2192ar, Hebrew\u2192he, Devanagari\u2192hi, Han\u2192zh, Han+kana\u2192ja) at deliberately modest confidence with a script_guess degraded note (script != language). Per-failure notes go to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_words for <30-word inputs, undetermined when no stopwords match) rather than failing the response; degraded[] is always a non-null slice. Direct text= mode analyses pasted content with no fetch. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode; SSRF defense-in-depth (input-time block of literal loopback/private/link-local IPs via safehttp + localhost/.local names, with cache-side + safehttp-fallback dial-time guards). ~30 unit tests cover seven real multi-language Latin sentences mapping to the correct ISO 639-1 code, the es-vs-it and de-vs-nl confusable pairs, six non-Latin script classifications (Cyrillic/Greek/Arabic/Hebrew/Devanagari/Han) plus the kana\u2192Japanese flip, the confidence margin metric, tokenisation, per-rune Unicode bucketing, low-sample + undetermined + no-stopword degraded paths, parse-input aliases, missing-param 400, and SSRF rejection. /selftest runs the pure-logic checks (en/es/fr/de detection, Cyrillic + CJK script, low-sample flag, extraction, SSRF guard) AND a live example.com fetch through the cache (asserting Latin script + no error, since example.com is too short for confident language scoring). Honest TRL-4 ceiling: this is a stopword/script heuristic, NOT a trained character-n-gram model (CLD3, fastText). It cannot separate two languages that share a script and most function words (e.g. Norwegian vs Danish, or any language outside the curated seven on the Latin path), a single short sentence can be misranked, and a CJK/Cyrillic/Arabic script result is a writing-system identification, not a language one. A trained n-gram/byte-model would lift accuracy and language coverage (and TRL) but requires shipping a model artifact and is out of scope for the no-dependency contract.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18250,
+    "container_port": 18250
+  },
+  {
     "id": "legal-entity",
     "name": "Legal Entity",
     "description": "Microservice for Legal Entity",
@@ -3126,6 +3194,40 @@
     "container_port": 8293,
     "proxy_egress": true,
     "proxy_read_timeout": "120s"
+  },
+  {
+    "id": "list-extractor",
+    "name": "List Extractor",
+    "description": "Extracts HTML lists from a web page or raw HTML: ordered (ol), unordered (ul), and description (dl) lists, with item text, term/definition pairs, nesting depth, and per-list/total counts.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://list-extractor.0crawl.com",
+    "health_url": "https://list-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_list_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the document, prefers the first <article>/<main> content root then falls back to <body>, and recursively collects top-level lists. A list is treated as top-level only when no ancestor element is itself a ul/ol/dl, so a nested list is never emitted as a separate top-level entry \u2014 it only bumps the enclosing list's depth (computed as the max list-nesting level under the node). <ul> -> type ul/ordered false, <ol> -> type ol/ordered true with direct <li> item text, <dl> -> type dl with term/definition pairs walked in document order from <dt>/<dd> (bare <dt> yields empty definition, orphan <dd> yields empty term). Each <li>/<dt>/<dd> text is the text of its direct, non-list descendants \u2014 a nested list inside an item does NOT fold its items into the parent's text, keeping item text crisp and avoiding up-tree duplication. script/style/noscript/svg/template/head/iframe subtrees are pruned via the shared skipTags map so code/CSS never leak into item text; whitespace is collapsed via the shared normalizeWhitespace helper and empty items are skipped. Response carries lists[] ({type, ordered, depth, item_count, items[] or pairs[]}) plus total_lists and total_items. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, no_lists) instead of failing the response; degraded[] is always a non-nil slice. 23 unit tests cover ul/ol/dl extraction, ordered flag, term/definition pairing (including bare dt / orphan dd), nested-depth (flat=0 through 3 levels), top-level-only counting (nested ul and nested dl not double-counted, nested item text not leaked up), multiple-list ordering, total counts, empty-item skipping, whitespace normalisation, script/style stripping, article-preference, garbage-input safety, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (ul/ol/dl, ordered flag, pairs, depth, top-level-only, ordering, script/style pruning, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18249,
+    "container_port": 18249
   },
   {
     "id": "loadbalancer-detect",
@@ -3818,6 +3920,40 @@
     "proxy_egress": true
   },
   {
+    "id": "quote-extractor",
+    "name": "Quote Extractor",
+    "description": "Extracts quotations from a web page or raw HTML \u2014 <blockquote> (kind block) and inline <q> elements \u2014 capturing each quote's text, its cite= source URL, and any nested <cite> attribution, with block/inline counts.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://quote-extractor.0crawl.com",
+    "health_url": "https://quote-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_quote_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Real DOM walk over a fetched HTML page (golang.org/x/net/html tokenizer, zero regex for structure): parses the document, prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, and walks for <blockquote> (kind block) and inline <q> (kind inline) in document order. Per quote it captures the normalised text, the cite= attribute (source URL), and the first nested <cite> child's text as the human-readable attribution. Quotation text is collected with the nested <cite> subtree pruned so the attribution never glues onto the quote body; the quote text and the source attribution are returned as distinct fields. Whitespace is collapsed via the shared normalizeWhitespace; quotes empty after normalisation are skipped; a <q> nested inside a <blockquote> is folded into the block's text rather than double-counted. Returns quotes[] (text/kind/cite/source, cite/source omitempty), count, block_count, inline_count. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (the static DOM is sufficient \u2014 no JS rendering needed). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, no_quotes) instead of failing the response; a page with text but no quotes still returns 200. ~25 unit tests cover block/inline extraction, cite-attribute capture on both element types, nested <cite> source capture and its removal from the quote body, multi-quote document ordering, script/style isolation, empty/quoteless input, empty-quote skipping, whitespace normalisation, omitempty JSON shape, nested-q non-double-counting, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode/no_quotes handler paths. /selftest exercises the full pure-logic pipeline AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: it extracts only the explicit semantic quote elements (<blockquote>/<q>) \u2014 it does not infer quotations from typographic quotation marks in running prose, which would need NLP-grade sentence boundary detection.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18248,
+    "container_port": 18248
+  },
+  {
     "id": "ratelimit-tester",
     "name": "Ratelimit Tester",
     "description": "Microservice for Ratelimit Tester",
@@ -3884,6 +4020,40 @@
     "trl_assessor": "claude-opus-4-8",
     "host_port": 18245,
     "container_port": 18245
+  },
+  {
+    "id": "reading-time-estimator",
+    "name": "Reading Time Estimator",
+    "description": "Estimates reading time for a web page or raw text across slow/average/fast WPM bands, plus a Medium-style per-image viewing allowance \u2014 returns words, image count, per-band minutes/seconds, and a humanized 'about N min read' label.",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://reading-time-estimator.0crawl.com",
+    "health_url": "https://reading-time-estimator.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_reading_time_estimator",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "Reading-time estimator over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): the shared extractor prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Word count reuses the readability tokenizer's rule (runs of letters with apostrophes kept, so 'don't' counts once; digit-only/punctuation tokens excluded). Reading time is computed at three documented WPM bands \u2014 slow 150, average 238 (Brysbaert 2019 adult-silent-reading mean), fast 300 \u2014 each returning minutes (2dp), whole seconds_total, and a humanized label ('less than a minute' under 60s, else 'about N min read' rounded to the nearest minute, singular at 1). The average band is surfaced at top level as primary; its WPM is overridable via the wpm query param (clamped 50-1000, out-of-range flagged in degraded[]). Image count is the number of <img> elements parsed over the whole document via the same html tokenizer; each image adds a Medium-style viewing allowance (12s for the first, -1s per subsequent image, 3s floor) \u2014 a documented simplification that does not count <picture>/<figure>/<svg> or CSS backgrounds. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode estimates pasted content with no fetch (images=0). Per-failure notes pushed to degraded[] (empty_text, fetch_failed:<err>, no_extractable_text, low_sample:<n>_words_below_20, invalid_wpm/wpm_out_of_range) instead of failing the response. ~20 unit tests cover word tokenisation + contractions, <img> counting (and the deliberate non-counting of picture/figure/svg), the per-image allowance + floor, band words-only math (238 words @ 238 wpm == 60s), image-allowance addition, WPM monotonicity (fewer minutes at higher WPM), wpm override re-anchoring only the average band, 2dp minute rounding, humanize banding, empty-text handling, plus handler-level text mode, wpm parse/validation, low-sample degraded, missing-param 400, and SSRF rejection; the copied extraction suite adds 6 more. /selftest exercises the pure-logic pipeline (word count, WPM monotonicity, humanize bands, image counting, extraction strip, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: WPM constants are population averages not per-reader calibration, and the image allowance is a heuristic not a measured dwell time.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "host_port": 18246,
+    "container_port": 18246
   },
   {
     "id": "redirect-tracer",

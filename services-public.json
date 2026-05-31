@@ -2338,6 +2338,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts the heading structure (h1-h6) of a web page or raw HTML and builds a nested document outline plus accessibility diagnostics \u2014 per-level counts, max nesting depth, and structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level, empty_heading).",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://heading-outline-extractor.0crawl.com/health",
+    "id": "heading-outline-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Heading Outline Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_heading_outline_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://heading-outline-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Microservice for Hidden Fields",
     "example_path": "/go_hidden_fields?url=https://example.com",
@@ -2657,6 +2687,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Detects the dominant natural language and writing system of a web page or raw text: Unicode-range script detection (Latin, Cyrillic, Greek, CJK, Arabic, Hebrew, Devanagari) plus curated-stopword frequency scoring for en/es/fr/de/it/pt/nl, returning an ISO 639-1 language, confidence, and top-5 scores.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://language-detector.0crawl.com/health",
+    "id": "language-detector",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Language Detector",
+    "repo_url": "https://github.com/baditaflorin/go_language_detector",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://language-detector.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Legal Entity",
     "example_path": "/?target=example.com",
@@ -2678,6 +2738,36 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative existence-validation needs jurisdiction-specific registries or paid company-data feeds; CPU-only/no-outbound forbids them, so the service can detect/classify suffixes and validate identifier form but cannot prove a company exists.",
     "url": "https://legal-entity.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts HTML lists from a web page or raw HTML: ordered (ol), unordered (ul), and description (dl) lists, with item text, term/definition pairs, nesting depth, and per-list/total counts.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://list-extractor.0crawl.com/health",
+    "id": "list-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "List Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_list_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://list-extractor.0crawl.com"
   },
   {
     "auth": {
@@ -3272,6 +3362,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extracts quotations from a web page or raw HTML \u2014 <blockquote> (kind block) and inline <q> elements \u2014 capturing each quote's text, its cite= source URL, and any nested <cite> attribution, with block/inline counts.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://quote-extractor.0crawl.com/health",
+    "id": "quote-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Quote Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_quote_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://quote-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
     "description": "Microservice for Ratelimit Tester",
     "example_path": "/?target=example.com",
@@ -3323,6 +3443,36 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://readability-index.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Estimates reading time for a web page or raw text across slow/average/fast WPM bands, plus a Medium-style per-image viewing allowance \u2014 returns words, image count, per-band minutes/seconds, and a humanized 'about N min read' label.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://reading-time-estimator.0crawl.com/health",
+    "id": "reading-time-estimator",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Reading Time Estimator",
+    "repo_url": "https://github.com/baditaflorin/go_reading_time_estimator",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "url": "https://reading-time-estimator.0crawl.com"
   },
   {
     "auth": {
