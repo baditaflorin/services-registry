@@ -3072,10 +3072,10 @@
     "version": "0.2.0"
   },
   "pentest-waf-detect": {
-    "container_port": 18173,
+    "container_port": 18295,
     "description": "Fingerprint WAF/CDN challenge interstitials (14 vendors, 18 signatures). Used by reflection-hunter and bounty pipeline to drop interstitial false positives.",
     "example_path": "/?url=https://example.com&api_key=default_token",
-    "host_port": 18173,
+    "host_port": 18295,
     "trl": 5,
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
