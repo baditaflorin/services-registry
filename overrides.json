@@ -4460,7 +4460,13 @@
     "example_path": "/",
     "extra_server_names": [
       "tail.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "23 race-clean tests covering ring eviction by line+byte, MaxStreams cap, idle-TTL expiry with injectable clock, slow-follower non-blocking drop, DELETE/close releasing followers, concurrent fan-out; lock never held across channel send; /selftest exercises write->fanout->replay->delete each deploy. Pass-2 fixed a confirmed unbounded-RAM hole (no-newline bodies bypassed ring eviction) and added uniform text/plain+nosniff. Live fan-out probe on 0.2.0 confirmed a follower receiving a posted line in real time.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "in-RAM ephemeral relay — no durability, replication, or delivery guarantees by design; restart wipes all state",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-q": {
     "auth": {
@@ -4472,7 +4478,13 @@
     "example_path": "/",
     "extra_server_names": [
       "q.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live at q.0exec.com serving 0.2.0; 47 tests pass under -race incl. 2000-item/8-worker exactly-once concurrency, ctx-cancel long-poll, bounds (max items/bytes/body), idle-TTL reaping; /selftest exercises push->FIFO-pop->peek end-to-end; live FIFO+peek+long-poll probes confirmed; bounded RAM + per-IP write limit + nosniff headers + reserved/invalid/overlong/multi-segment name guards. Hardened long-poll to honor client disconnect (was a goroutine/timer leak under churn).",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "in-RAM ephemeral with no durability or replication — a restart loses all queued work (by design), so it can't reach durable-system-of-record TRL-9",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-counter": {
     "auth": {
@@ -4484,7 +4496,13 @@
     "example_path": "/",
     "extra_server_names": [
       "counter.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live at counter.0exec.com /version=0.2.0, /health=200, /selftest=200; 5 sequential GETs returned strictly increasing 1-5, ?peek non-mutating, new int64-overflow guard returns 409 and preserves value, DELETE=204; 22 tests incl go test -race green; single-mutex atomic store, name validation, reserved-name 409, idle TTL+janitor, MaxCounters cap, per-IP write rate limit, nosniff/no-store headers.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "in-RAM non-durable — every counter resets to 0 on restart, cannot serve as a durable ledger",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-webhook": {
     "auth": {
@@ -4496,7 +4514,13 @@
     "example_path": "/",
     "extra_server_names": [
       "webhook.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live on webhook.0exec.com behind nginx+TLS; deployed via fleet-runner with healthcheck-gated roll. 37 tests (race-clean) covering capture fidelity, ring/TTL eviction, MaxBins cap, slow-watcher drop, follow fan-out + context-cancel unsubscribe, ID validation. /selftest exercises real handler end-to-end. In-RAM, idle-TTL reaped, per-request body cap (now truncation-flagged), per-IP create rate limit, crypto/rand unguessable ids, nosniff on all reflected output. Verified live: create->follow->capture->inspect roundtrip streamed in real time.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "ephemeral in-RAM bins, no durability — restart or idle-TTL wipes all captures, so it can't reach 8-9 production-data-integrity tiers",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-pwgen": {
     "auth": {
@@ -4508,7 +4532,13 @@
     "example_path": "/",
     "extra_server_names": [
       "pwgen.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live on pwgen/fleet-pwgen.0exec.com, 0.2.0 deployed via fleet-runner with green healthcheck + /selftest + /version gates. Cryptographically sound: crypto/rand only, rejection sampling with no modulo bias on both password chars and passphrase word indices (distribution-tested), param clamping prevents allocation DoS, secrets sent no-store/no-cache/nosniff and never persisted. 25 tests incl. statistical uniformity, bounds, headers, entropy.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "unauthenticated stateless utility with no SLA/observability commitments",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-ip": {
     "auth": {
@@ -4520,7 +4550,13 @@
     "example_path": "/",
     "extra_server_names": [
       "ip.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live on two hostnames at 0.2.0, /health+/selftest 200; correctly echoes real public IP and now rejects spoofed X-Forwarded-For (fixed leftmost-XFF vuln; verified pre/post live); stateless, dependency-free, CPU-only, no secrets; in-process selftest gates deploy; 27 test cases incl. spoof/multi-hop/IPv6/malformed XFF table.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance echo/facts utility with no SLA, persistence, or HA",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-dig": {
     "auth": {
@@ -4532,7 +4568,13 @@
     "example_path": "/",
     "extra_server_names": [
       "dig.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live at dig.0exec.com, /version=0.2.0 deployed via fleet-runner with green direct smoke. Returns correct live DNS for A/MX/TXT/PTR and custom-resolver (?server=1.1.1.1). SSRF guard, port-scan lockdown (server:port rejected), control-char/NUL/oversize name rejection, type whitelist, per-lookup timeout, response-size caps, nosniff all verified live with 400/200 probes. 19 tests green through pre-commit gate.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance diagnostic proxy, no HA/auth/rate-limit hardening for production-grade SLA",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-port": {
     "auth": {
@@ -4544,7 +4586,13 @@
     "example_path": "/",
     "extra_server_names": [
       "port.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Deployed live on two prod vhosts at 0.2.0; /health 200, /selftest all-green incl. live-dial-soft. Real functional value (open 5ms to public hosts, hostname resolution works). SSRF boundary verified end-to-end: resolve-first guard rejects RFC1918/loopback/link-local/CGNAT/unique-local/multicast/unspecified/reserved-240-4/IPv4-mapped, dials the validated literal IP (rebinding-safe), 18 test funcs + selftest assert the dialer is NEVER reached for blocked targets, all reject cases HTTP 400 in prod. nosniff on every response, per-IP rate limit, dial timeout cap.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "unauthenticated single-purpose probe with no HA/load evidence",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-fake": {
     "auth": {
@@ -4556,7 +4604,13 @@
     "example_path": "/",
     "extra_server_names": [
       "fake.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live at fake.0exec.com /version=0.2.0, /health 200; 21 entity types across json/text formats with correct per-format content-type + nosniff; seedable RNG gives byte-identical reproducible fixtures (verified live, same sha256 twice) while UUIDs stay crypto-random; ?n clamped to 100, number-range overflow panic fixed and regression-tested; 16 unit tests + in-process /selftest gate all green.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance fake-data utility, no persistence/auth/SLA",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-md": {
     "auth": {
@@ -4568,7 +4622,13 @@
     "example_path": "/",
     "extra_server_names": [
       "md.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live at md.0exec.com /version=0.2.0, /health 200; renders Markdown via goldmark to ANSI (glamour), sanitized HTML, or plain text via ?to=. HTML path is XSS-safe end-to-end: bluemonday UGCPolicy strips <script>/<iframe>/onerror, neutralizes javascript: and data:text/html hrefs (verified live with a full XSS battery — zero executable tokens survived), plus defense-in-depth CSP (default-src 'none'; sandbox) + nosniff on the text/html response. Unknown ?to= returns 400. 21 tests incl. sanitization battery, race-clean; pre-commit gate enforced.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance stateless renderer, no auth/SLA/persistence",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-read": {
     "auth": {
@@ -4580,7 +4640,13 @@
     "example_path": "/",
     "extra_server_names": [
       "read.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live on two hosts at 0.2.0; /health+/selftest 200 with all 7 in-container checks passing. SSRF guard is resolve-then-pin via go-common/safehttp on every dial incl. redirects (DNS-rebind Dialer.Control re-check + 5-redirect cap), proven live: metadata/loopback/RFC1918 and file/gopher/ftp all return HTTP 400. Real readability extraction (title+body, strips nav/ads), text/md/html/json outputs, body cap + timeout, nosniff/no-store, now UTF-8 transcoding for Latin-1/1252/Shift-JIS. 22 tests incl. redirect-SSRF, charset, body-cap, e2e — green under -race.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance stateless extractor, no JS rendering / paywall handling",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "fleet-notify": {
     "auth": {
@@ -4592,7 +4658,13 @@
     "example_path": "/",
     "extra_server_names": [
       "notify.0exec.com"
-    ]
+    ],
+    "trl": 7,
+    "trl_evidence": "Live on notify.0exec.com & fleet-notify.0exec.com at 0.2.0; /health+/selftest 200 (5/5 checks); live fan-out probe (publish->subscriber received in real time through prod edge) and ring-replay probe both confirmed; deployed via fleet-runner with preflight build/test + green healthcheck; 30 tests pass with -race incl. a regression test for a fixed send-on-closed-channel panic in the fan-out path.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "in-RAM ephemeral, single-node, at-most-once (slow-subs dropped); no persistence or HA by design",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
   },
   "brand-color-palette": {
     "container_port": 18288,

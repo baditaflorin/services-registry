@@ -6847,6 +6847,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "in-RAM non-durable \u2014 every counter resets to 0 on restart, cannot serve as a durable ledger",
     "url": "https://fleet-counter.0exec.com"
   },
   {
@@ -6903,6 +6908,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance diagnostic proxy, no HA/auth/rate-limit hardening for production-grade SLA",
     "url": "https://fleet-dig.0exec.com"
   },
   {
@@ -7020,6 +7030,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance fake-data utility, no persistence/auth/SLA",
     "url": "https://fleet-fake.0exec.com"
   },
   {
@@ -7196,6 +7211,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance echo/facts utility with no SLA, persistence, or HA",
     "url": "https://fleet-ip.0exec.com"
   },
   {
@@ -7217,6 +7237,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance stateless renderer, no auth/SLA/persistence",
     "url": "https://fleet-md.0exec.com"
   },
   {
@@ -7238,6 +7263,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "in-RAM ephemeral, single-node, at-most-once (slow-subs dropped); no persistence or HA by design",
     "url": "https://fleet-notify.0exec.com"
   },
   {
@@ -7414,6 +7444,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "unauthenticated single-purpose probe with no HA/load evidence",
     "url": "https://fleet-port.0exec.com"
   },
   {
@@ -7531,6 +7566,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "unauthenticated stateless utility with no SLA/observability commitments",
     "url": "https://fleet-pwgen.0exec.com"
   },
   {
@@ -7552,6 +7592,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "in-RAM ephemeral with no durability or replication \u2014 a restart loses all queued work (by design), so it can't reach durable-system-of-record TRL-9",
     "url": "https://fleet-q.0exec.com"
   },
   {
@@ -7573,6 +7618,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "single-instance stateless extractor, no JS rendering / paywall handling",
     "url": "https://fleet-read.0exec.com"
   },
   {
@@ -7770,6 +7820,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "in-RAM ephemeral relay \u2014 no durability, replication, or delivery guarantees by design; restart wipes all state",
     "url": "https://fleet-tail.0exec.com"
   },
   {
@@ -7930,6 +7985,11 @@
     "tags": [
       "fleet-infra"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "ephemeral in-RAM bins, no durability \u2014 restart or idle-TTL wipes all captures, so it can't reach 8-9 production-data-integrity tiers",
     "url": "https://fleet-webhook.0exec.com"
   },
   {
