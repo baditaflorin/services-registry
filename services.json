@@ -7648,6 +7648,33 @@
     "container_port": 18172
   },
   {
+    "id": "fleet-counter",
+    "name": "Fleet Counter",
+    "description": "Atomic distributed counters over HTTP \u2014 monotonic ids/build numbers, no DB",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-counter.0exec.com",
+    "health_url": "https://fleet-counter.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-counter",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18275,
+    "container_port": 18275,
+    "extra_server_names": [
+      "counter.0exec.com"
+    ]
+  },
+  {
     "id": "fleet-diff-engine",
     "name": "Fleet Diff Engine",
     "description": "structured diff: http_response|json|html|asset_set|text",
@@ -7685,6 +7712,33 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "host_port": 18160,
     "container_port": 18160
+  },
+  {
+    "id": "fleet-dig",
+    "name": "Fleet Dig",
+    "description": "DNS lookups as a service \u2014 dig over curl from minimal containers",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-dig.0exec.com",
+    "health_url": "https://fleet-dig.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-dig",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18279,
+    "container_port": 18279,
+    "extra_server_names": [
+      "dig.0exec.com"
+    ]
   },
   {
     "id": "fleet-discovery",
@@ -7793,6 +7847,33 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "host_port": 18162,
     "container_port": 18162
+  },
+  {
+    "id": "fleet-fake",
+    "name": "Fleet Fake",
+    "description": "Fake/test data generator \u2014 fixtures and seed data over curl",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-fake.0exec.com",
+    "health_url": "https://fleet-fake.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-fake",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18281,
+    "container_port": 18281,
+    "extra_server_names": [
+      "fake.0exec.com"
+    ]
   },
   {
     "id": "fleet-fingerprint-cache",
@@ -7973,6 +8054,87 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-host-guard-scaffold",
     "host_port": 18207,
     "container_port": 18207
+  },
+  {
+    "id": "fleet-ip",
+    "name": "Fleet Ip",
+    "description": "Echo your public IP plus request facts \u2014 your own ifconfig.me",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-ip.0exec.com",
+    "health_url": "https://fleet-ip.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-ip",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18278,
+    "container_port": 18278,
+    "extra_server_names": [
+      "ip.0exec.com"
+    ]
+  },
+  {
+    "id": "fleet-md",
+    "name": "Fleet Md",
+    "description": "Render Markdown to terminal ANSI or sanitized HTML over curl",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-md.0exec.com",
+    "health_url": "https://fleet-md.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-md",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18282,
+    "container_port": 18282,
+    "extra_server_names": [
+      "md.0exec.com"
+    ]
+  },
+  {
+    "id": "fleet-notify",
+    "name": "Fleet Notify",
+    "description": "HTTP pub/sub \u2014 push a line to your phone or any subscriber",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-notify.0exec.com",
+    "health_url": "https://fleet-notify.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-notify",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18284,
+    "container_port": 18284,
+    "extra_server_names": [
+      "notify.0exec.com"
+    ]
   },
   {
     "id": "fleet-payload-corpus",
@@ -8159,6 +8321,33 @@
     "container_port": 18158
   },
   {
+    "id": "fleet-port",
+    "name": "Fleet Port",
+    "description": "Is a host:port reachable from the public internet? (SSRF-guarded check)",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-port.0exec.com",
+    "health_url": "https://fleet-port.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-port",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18280,
+    "container_port": 18280,
+    "extra_server_names": [
+      "port.0exec.com"
+    ]
+  },
+  {
     "id": "fleet-preflight",
     "name": "Fleet Preflight",
     "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
@@ -8266,6 +8455,87 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub",
     "trl_ceiling": 8,
     "trl_evidence": "Vendored prom/prometheus:v3.6.0; first deploy 2026-05-18."
+  },
+  {
+    "id": "fleet-pwgen",
+    "name": "Fleet Pwgen",
+    "description": "Stateless password and passphrase generator (crypto/rand) over curl",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-pwgen.0exec.com",
+    "health_url": "https://fleet-pwgen.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-pwgen",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18277,
+    "container_port": 18277,
+    "extra_server_names": [
+      "pwgen.0exec.com"
+    ]
+  },
+  {
+    "id": "fleet-q",
+    "name": "Fleet Q",
+    "description": "Ephemeral in-RAM FIFO job queue over HTTP \u2014 a shell task-farm, no Redis",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-q.0exec.com",
+    "health_url": "https://fleet-q.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-q",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18274,
+    "container_port": 18274,
+    "extra_server_names": [
+      "q.0exec.com"
+    ]
+  },
+  {
+    "id": "fleet-read",
+    "name": "Fleet Read",
+    "description": "Reader-mode / readability \u2014 clean article text or markdown from a URL",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-read.0exec.com",
+    "health_url": "https://fleet-read.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-read",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18283,
+    "container_port": 18283,
+    "extra_server_names": [
+      "read.0exec.com"
+    ]
   },
   {
     "id": "fleet-resolver-quorum",
@@ -8465,6 +8735,33 @@
     "container_port": 18165
   },
   {
+    "id": "fleet-tail",
+    "name": "Fleet Tail",
+    "description": "Ephemeral shared log streaming \u2014 tail -f across machines over curl, no SSH",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-tail.0exec.com",
+    "health_url": "https://fleet-tail.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-tail",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18273,
+    "container_port": 18273,
+    "extra_server_names": [
+      "tail.0exec.com"
+    ]
+  },
+  {
     "id": "fleet-target-reputation",
     "name": "Fleet Target Reputation",
     "description": "target reputation lookup (5 sources)",
@@ -8621,6 +8918,33 @@
     "depends_on": [
       "go-fleet-graph",
       "go-apikey-service"
+    ]
+  },
+  {
+    "id": "fleet-webhook",
+    "name": "Fleet Webhook",
+    "description": "Ephemeral request bin \u2014 capture and watch webhooks live from the terminal",
+    "category": "fleet_infra",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-webhook.0exec.com",
+    "health_url": "https://fleet-webhook.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-webhook",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18276,
+    "container_port": 18276,
+    "extra_server_names": [
+      "webhook.0exec.com"
     ]
   },
   {

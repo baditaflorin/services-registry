@@ -6579,6 +6579,27 @@
     "url": "https://fleet-content-normalizer.0exec.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Atomic distributed counters over HTTP \u2014 monotonic ids/build numbers, no DB",
+    "example_path": "/",
+    "health_url": "https://fleet-counter.0exec.com/health",
+    "id": "fleet-counter",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Counter",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-counter",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-counter.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-diff-engine.0exec.com"
     ],
@@ -6612,6 +6633,27 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "url": "https://fleet-diff-engine.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "DNS lookups as a service \u2014 dig over curl from minimal containers",
+    "example_path": "/",
+    "health_url": "https://fleet-dig.0exec.com/health",
+    "id": "fleet-dig",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Dig",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-dig",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-dig.0exec.com"
   },
   {
     "auth": {
@@ -6708,6 +6750,27 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "url": "https://fleet-engagement-timeline.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Fake/test data generator \u2014 fixtures and seed data over curl",
+    "example_path": "/",
+    "health_url": "https://fleet-fake.0exec.com/health",
+    "id": "fleet-fake",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Fake",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-fake",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-fake.0exec.com"
   },
   {
     "alias_urls": [
@@ -6865,6 +6928,69 @@
     "url": "https://fleet-host-guard.0exec.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Echo your public IP plus request facts \u2014 your own ifconfig.me",
+    "example_path": "/",
+    "health_url": "https://fleet-ip.0exec.com/health",
+    "id": "fleet-ip",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Ip",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-ip",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-ip.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Render Markdown to terminal ANSI or sanitized HTML over curl",
+    "example_path": "/",
+    "health_url": "https://fleet-md.0exec.com/health",
+    "id": "fleet-md",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Md",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-md",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-md.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "HTTP pub/sub \u2014 push a line to your phone or any subscriber",
+    "example_path": "/",
+    "health_url": "https://fleet-notify.0exec.com/health",
+    "id": "fleet-notify",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Notify",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-notify",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-notify.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-payload-corpus.0exec.com"
     ],
@@ -7020,6 +7146,27 @@
     "url": "https://fleet-poc-curl.0exec.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Is a host:port reachable from the public internet? (SSRF-guarded check)",
+    "example_path": "/",
+    "health_url": "https://fleet-port.0exec.com/health",
+    "id": "fleet-port",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Port",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-port",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-port.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-preflight.0exec.com"
     ],
@@ -7114,6 +7261,69 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-fleet-metrics-hub",
     "trl_ceiling": 8,
     "url": "https://fleet-prometheus.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Stateless password and passphrase generator (crypto/rand) over curl",
+    "example_path": "/",
+    "health_url": "https://fleet-pwgen.0exec.com/health",
+    "id": "fleet-pwgen",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Pwgen",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-pwgen",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-pwgen.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Ephemeral in-RAM FIFO job queue over HTTP \u2014 a shell task-farm, no Redis",
+    "example_path": "/",
+    "health_url": "https://fleet-q.0exec.com/health",
+    "id": "fleet-q",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Q",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-q",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-q.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Reader-mode / readability \u2014 clean article text or markdown from a URL",
+    "example_path": "/",
+    "health_url": "https://fleet-read.0exec.com/health",
+    "id": "fleet-read",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Read",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-read",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-read.0exec.com"
   },
   {
     "alias_urls": [
@@ -7292,6 +7502,27 @@
     "url": "https://fleet-selftest-aggregator.0exec.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Ephemeral shared log streaming \u2014 tail -f across machines over curl, no SSH",
+    "example_path": "/",
+    "health_url": "https://fleet-tail.0exec.com/health",
+    "id": "fleet-tail",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Tail",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-tail",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-tail.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-target-reputation.0exec.com"
     ],
@@ -7429,6 +7660,27 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
     "url": "https://fleet-visualizer.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "fleet_infra",
+    "description": "Ephemeral request bin \u2014 capture and watch webhooks live from the terminal",
+    "example_path": "/",
+    "health_url": "https://fleet-webhook.0exec.com/health",
+    "id": "fleet-webhook",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Webhook",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-webhook",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infra"
+    ],
+    "url": "https://fleet-webhook.0exec.com"
   },
   {
     "alias_urls": [
