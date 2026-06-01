@@ -1278,6 +1278,35 @@
     "proxy_read_timeout": "120s"
   },
   {
+    "id": "data-format-converter",
+    "name": "Data Format Converter",
+    "description": "Convert payloads between CSV/JSON/XML/YAML/TOML (wraps go-common/dataformat)",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://data-format-converter.0crawl.com",
+    "health_url": "https://data-format-converter.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_data_format_converter",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18294,
+    "container_port": 18294,
+    "proxy_egress": false
+  },
+  {
     "id": "data-inventory",
     "name": "Data Inventory",
     "description": "Microservice for Data Inventory",
