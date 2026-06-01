@@ -408,6 +408,64 @@
     "proxy_egress": true
   },
   {
+    "id": "brand-color-palette",
+    "name": "Brand Color Palette",
+    "description": "Extract a brand colour palette (hex + role) from a site's CSS custom properties, theme-color meta, and logo pixels via k-means",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://brand-color-palette.0crawl.com",
+    "health_url": "https://brand-color-palette.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_brand_color_palette",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18288,
+    "container_port": 18288,
+    "proxy_egress": true
+  },
+  {
+    "id": "brand-logo-extractor",
+    "name": "Brand Logo Extractor",
+    "description": "Resolve a website's primary brand logo URL, dimensions, format and provenance (header DOM + schema.org + web-app-manifest + og:image)",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://brand-logo-extractor.0crawl.com",
+    "health_url": "https://brand-logo-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_brand_logo_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18287,
+    "container_port": 18287,
+    "proxy_egress": true
+  },
+  {
     "id": "broken-links",
     "name": "Broken Links",
     "description": "Microservice for Broken Links",
@@ -1051,6 +1109,35 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8142,
     "container_port": 8142,
+    "proxy_egress": true
+  },
+  {
+    "id": "crux-field-vitals",
+    "name": "Crux Field Vitals",
+    "description": "Real-user p75 LCP/CLS/INP/TTFB + good/needs-improvement/poor histograms from the Chrome UX Report API",
+    "category": "infrastructure",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://crux-field-vitals.0crawl.com",
+    "health_url": "https://crux-field-vitals.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_crux_field_vitals",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18290,
+    "container_port": 18290,
     "proxy_egress": true
   },
   {
@@ -2781,6 +2868,35 @@
     "proxy_egress": true
   },
   {
+    "id": "funding-signal",
+    "name": "Funding Signal",
+    "description": "Best-effort funding signal (latest round, total, investors, press) for a brand/domain from Crunchbase + brand press pages + Google News RSS",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://funding-signal.0crawl.com",
+    "health_url": "https://funding-signal.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_funding_signal",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18293,
+    "container_port": 18293,
+    "proxy_egress": true
+  },
+  {
     "id": "gdpr-compliance",
     "name": "Gdpr Compliance",
     "description": "Microservice for Gdpr Compliance",
@@ -3128,6 +3244,35 @@
     "proxy_egress": true
   },
   {
+    "id": "iban-bic-validator",
+    "name": "Iban Bic Validator",
+    "description": "Offline IBAN (ISO 13616 MOD-97) and BIC (ISO 9362) validator \u2014 domains mesh, TRL-7",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://iban-bic-validator.0crawl.com",
+    "health_url": "https://iban-bic-validator.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_iban_bic_validator",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18291,
+    "container_port": 18291,
+    "proxy_egress": false
+  },
+  {
     "id": "idor-finder",
     "name": "Idor Finder",
     "description": "Microservice for Idor Finder",
@@ -3328,6 +3473,35 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8202,
     "container_port": 8202,
+    "proxy_egress": true
+  },
+  {
+    "id": "keyphrase-extractor",
+    "name": "Keyphrase Extractor",
+    "description": "Rank multi-word keyphrases + topics via RAKE candidate generation re-ranked by a TextRank co-occurrence PageRank (pure Go, no external NLP service)",
+    "category": "nlp",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://keyphrase-extractor.0crawl.com",
+    "health_url": "https://keyphrase-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_keyphrase_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18286,
+    "container_port": 18286,
     "proxy_egress": true
   },
   {
@@ -3736,6 +3910,35 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8294,
     "container_port": 8294,
+    "proxy_egress": true
+  },
+  {
+    "id": "named-entity-recognizer",
+    "name": "Named Entity Recognizer",
+    "description": "Named-entity recognizer (PERSON/ORG/LOCATION/PRODUCT/EVENT) \u2014 pure-Go prose statistical NER + curated gazetteer, rune-accurate offsets, SSRF-guarded url fetch",
+    "category": "nlp",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://named-entity-recognizer.0crawl.com",
+    "health_url": "https://named-entity-recognizer.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_named_entity_recognizer",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18285,
+    "container_port": 18285,
     "proxy_egress": true
   },
   {
@@ -4699,6 +4902,35 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8333,
     "container_port": 8333
+  },
+  {
+    "id": "review-presence",
+    "name": "Review Presence",
+    "description": "Fetch Trustpilot/G2/Capterra/Glassdoor star rating + review count for a brand by parsing each public profile's JSON-LD AggregateRating",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://review-presence.0crawl.com",
+    "health_url": "https://review-presence.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_review_presence",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18292,
+    "container_port": 18292,
+    "proxy_egress": true
   },
   {
     "id": "robots-analyzer",
@@ -5781,6 +6013,35 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8349,
     "container_port": 8349,
+    "proxy_egress": true
+  },
+  {
+    "id": "table-extractor",
+    "name": "Table Extractor",
+    "description": "Parse every HTML table into a dense matrix with full colspan/rowspan expansion and header detection (no regex)",
+    "category": "content",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://table-extractor.0crawl.com",
+    "health_url": "https://table-extractor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_table_extractor",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18289,
+    "container_port": 18289,
     "proxy_egress": true
   },
   {

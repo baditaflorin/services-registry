@@ -354,6 +354,56 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Extract a brand colour palette (hex + role) from a site's CSS custom properties, theme-color meta, and logo pixels via k-means",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://brand-color-palette.0crawl.com/health",
+    "id": "brand-color-palette",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Brand Color Palette",
+    "repo_url": "https://github.com/baditaflorin/go_brand_color_palette",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://brand-color-palette.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Resolve a website's primary brand logo URL, dimensions, format and provenance (header DOM + schema.org + web-app-manifest + og:image)",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://brand-logo-extractor.0crawl.com/health",
+    "id": "brand-logo-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Brand Logo Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_brand_logo_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://brand-logo-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
     "description": "Microservice for Broken Links",
     "example_path": "/go_broken_links?target=example.com",
@@ -900,6 +950,31 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://crlf-tester.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "Real-user p75 LCP/CLS/INP/TTFB + good/needs-improvement/poor histograms from the Chrome UX Report API",
+    "example_path": "/?target=example.com",
+    "health_url": "https://crux-field-vitals.0crawl.com/health",
+    "id": "crux-field-vitals",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Crux Field Vitals",
+    "repo_url": "https://github.com/baditaflorin/go_crux_field_vitals",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://crux-field-vitals.0crawl.com"
   },
   {
     "auth": {
@@ -2395,6 +2470,31 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
+    "description": "Best-effort funding signal (latest round, total, investors, press) for a brand/domain from Crunchbase + brand press pages + Google News RSS",
+    "example_path": "/?target=example.com",
+    "health_url": "https://funding-signal.0crawl.com/health",
+    "id": "funding-signal",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Funding Signal",
+    "repo_url": "https://github.com/baditaflorin/go_funding_signal",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://funding-signal.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
     "description": "Microservice for Gdpr Compliance",
     "example_path": "/?url=https://example.com",
     "health_url": "https://gdpr-compliance.0crawl.com/health",
@@ -2693,6 +2793,31 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Offline IBAN (ISO 13616 MOD-97) and BIC (ISO 9362) validator \u2014 domains mesh, TRL-7",
+    "example_path": "/?target=example.com",
+    "health_url": "https://iban-bic-validator.0crawl.com/health",
+    "id": "iban-bic-validator",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Iban Bic Validator",
+    "repo_url": "https://github.com/baditaflorin/go_iban_bic_validator",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://iban-bic-validator.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
     "description": "Microservice for Idor Finder",
     "example_path": "/go_idor_finder?url=https://example.com",
@@ -2860,6 +2985,31 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://jwt-debugger.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "nlp",
+    "description": "Rank multi-word keyphrases + topics via RAKE candidate generation re-ranked by a TextRank co-occurrence PageRank (pure Go, no external NLP service)",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://keyphrase-extractor.0crawl.com/health",
+    "id": "keyphrase-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Keyphrase Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_keyphrase_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://keyphrase-extractor.0crawl.com"
   },
   {
     "auth": {
@@ -3214,6 +3364,31 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "url": "https://mobile-friendly.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "nlp",
+    "description": "Named-entity recognizer (PERSON/ORG/LOCATION/PRODUCT/EVENT) \u2014 pure-Go prose statistical NER + curated gazetteer, rune-accurate offsets, SSRF-guarded url fetch",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://named-entity-recognizer.0crawl.com/health",
+    "id": "named-entity-recognizer",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Named Entity Recognizer",
+    "repo_url": "https://github.com/baditaflorin/go_named_entity_recognizer",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://named-entity-recognizer.0crawl.com"
   },
   {
     "auth": {
@@ -4039,6 +4214,31 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://reverse-dns.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Fetch Trustpilot/G2/Capterra/Glassdoor star rating + review count for a brand by parsing each public profile's JSON-LD AggregateRating",
+    "example_path": "/?target=example.com",
+    "health_url": "https://review-presence.0crawl.com/health",
+    "id": "review-presence",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Review Presence",
+    "repo_url": "https://github.com/baditaflorin/go_review_presence",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://review-presence.0crawl.com"
   },
   {
     "auth": {
@@ -4966,6 +5166,31 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
     "url": "https://swagger-finder.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "content",
+    "description": "Parse every HTML table into a dense matrix with full colspan/rowspan expansion and header detection (no regex)",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://table-extractor.0crawl.com/health",
+    "id": "table-extractor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Table Extractor",
+    "repo_url": "https://github.com/baditaflorin/go_table_extractor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://table-extractor.0crawl.com"
   },
   {
     "auth": {

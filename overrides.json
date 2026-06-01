@@ -4593,5 +4593,50 @@
     "extra_server_names": [
       "notify.0exec.com"
     ]
+  },
+  "brand-color-palette": {
+    "container_port": 18288,
+    "host_port": 18288,
+    "proxy_egress": true
+  },
+  "brand-logo-extractor": {
+    "container_port": 18287,
+    "host_port": 18287,
+    "proxy_egress": true
+  },
+  "crux-field-vitals": {
+    "container_port": 18290,
+    "host_port": 18290,
+    "proxy_egress": true
+  },
+  "funding-signal": {
+    "container_port": 18293,
+    "host_port": 18293,
+    "proxy_egress": true
+  },
+  "iban-bic-validator": {
+    "container_port": 18291,
+    "host_port": 18291,
+    "proxy_egress": false
+  },
+  "keyphrase-extractor": {
+    "container_port": 18286,
+    "host_port": 18286,
+    "proxy_egress": true
+  },
+  "named-entity-recognizer": {
+    "container_port": 18285,
+    "host_port": 18285,
+    "proxy_egress": true
+  },
+  "review-presence": {
+    "container_port": 18292,
+    "host_port": 18292,
+    "proxy_egress": true
+  },
+  "table-extractor": {
+    "container_port": 18289,
+    "host_port": 18289,
+    "proxy_egress": true
   }
 }
