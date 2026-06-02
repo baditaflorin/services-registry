@@ -7105,6 +7105,94 @@
     "proxy_egress": true
   },
   {
+    "id": "agent-approval",
+    "name": "Agent Approval",
+    "description": "Human-in-the-loop approval gate with timeout default \u2014 a go-common fleet primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://agent-approval.0exec.com",
+    "health_url": "https://agent-approval.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-agent-approval",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
+    "id": "agent-mailbox",
+    "name": "Agent Mailbox",
+    "description": "Addressed request/reply bus for agents (A\u2192B\u2192A) \u2014 a go-common fleet primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://agent-mailbox.0exec.com",
+    "health_url": "https://agent-mailbox.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-agent-mailbox",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
+    "id": "agent-quorum",
+    "name": "Agent Quorum",
+    "description": "k-of-n answer aggregation / voting for redundant agents \u2014 a go-common fleet primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://agent-quorum.0exec.com",
+    "health_url": "https://agent-quorum.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-agent-quorum",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
+    "id": "agent-tools",
+    "name": "Agent Tools",
+    "description": "LLM function-call manifest over the fleet catalog \u2014 a go-common fleet primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://agent-tools.0exec.com",
+    "health_url": "https://agent-tools.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-agent-tools",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
     "id": "apikey-service",
     "name": "Apikey Service",
     "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
@@ -8406,6 +8494,50 @@
     "container_port": 18162
   },
   {
+    "id": "fleet-eventlog",
+    "name": "Fleet Eventlog",
+    "description": "Replayable per-topic event log with monotonic offsets \u2014 a go-common fleet primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-eventlog.0exec.com",
+    "health_url": "https://fleet-eventlog.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-eventlog",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
+    "id": "fleet-exec",
+    "name": "Fleet Exec",
+    "description": "Ephemeral, bounded code/command runner for fleet agents (keystore-gated, NOT internet-exposed) \u2014 go-common.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-exec.0exec.com",
+    "health_url": "https://fleet-exec.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-exec",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
     "id": "fleet-fake",
     "name": "Fleet Fake",
     "description": "Fake/test data generator \u2014 fixtures and seed data over curl",
@@ -8652,6 +8784,28 @@
     ]
   },
   {
+    "id": "fleet-lock",
+    "name": "Fleet Lock",
+    "description": "Distributed advisory locks, leases & leader-election over HTTP \u2014 a go-common fleet coordination primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-lock.0exec.com",
+    "health_url": "https://fleet-lock.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-lock",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
+  },
+  {
     "id": "fleet-md",
     "name": "Fleet Md",
     "description": "Render Markdown to terminal ANSI or sanitized HTML over curl",
@@ -8683,6 +8837,28 @@
     "extra_server_names": [
       "md.0exec.com"
     ]
+  },
+  {
+    "id": "fleet-memory",
+    "name": "Fleet Memory",
+    "description": "Cross-session/cross-agent working memory with keyword recall \u2014 a go-common fleet primitive.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-memory.0exec.com",
+    "health_url": "https://fleet-memory.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-memory",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com"
   },
   {
     "id": "fleet-notify",
