@@ -36,8 +36,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "Composite service: accessibility_audit",
-    "example_path": "/?url=https://example.com",
+    "description": "WCAG accessibility audit: a11y quick checks, accessibility score, color contrast ratio, image alt coverage, heading outline \u2014 5 analyzers covering the main WCAG 2.x success criteria.",
+    "example_path": "/?target=stripe.com",
     "health_url": "https://accessibility-audit.0crawl.com/health",
     "id": "accessibility-audit",
     "kind": "container",
@@ -50,6 +50,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with WCAG criterion-to-issue mapping.",
     "url": "https://accessibility-audit.0crawl.com"
   },
   {
@@ -2461,8 +2466,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
-    "description": "",
-    "example_path": "/?target=example.com",
+    "description": "Clearbit-style company firmographic profile: industry, employee band, founding year, legal entity, revenue model, office locations, funding \u2014 8 fleet analyzers merged via composite-runner.",
+    "example_path": "/?target=stripe.com",
     "health_url": "https://firmographic-profile.0crawl.com/health",
     "id": "firmographic-profile",
     "kind": "container",
@@ -2475,6 +2480,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with real-time funding data integration and structured output validation.",
     "url": "https://firmographic-profile.0crawl.com"
   },
   {
@@ -3358,8 +3368,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
-    "description": "Composite service: merchant_profile",
-    "example_path": "/?target=example.com",
+    "description": "E-commerce merchant profile: platform detection, payment methods, accepted currencies, price range, shipping regions, catalog SKU count \u2014 6 analyzers in one structured record.",
+    "example_path": "/?target=gymshark.com",
     "health_url": "https://merchant-profile.0crawl.com/health",
     "id": "merchant-profile",
     "kind": "container",
@@ -3372,6 +3382,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with checkout-flow detection.",
     "url": "https://merchant-profile.0crawl.com"
   },
   {
@@ -4751,8 +4766,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "Composite service: seo_audit",
-    "example_path": "/?url=https://example.com",
+    "description": "Full SEO site audit: on-page basics, keyword density, heading structure, structured data, sitemap, robots.txt, broken links, mobile-friendliness \u2014 9 analyzers in one call.",
+    "example_path": "/?target=stripe.com",
     "health_url": "https://seo-audit.0crawl.com/health",
     "id": "seo-audit",
     "kind": "container",
@@ -4765,6 +4780,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with issue prioritisation and fix recommendations.",
     "url": "https://seo-audit.0crawl.com"
   },
   {
@@ -5700,8 +5720,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
-    "description": "Composite service: vendor_security_scorecard",
-    "example_path": "/?target=example.com",
+    "description": "Third-party / vendor risk scorecard: HTTP security headers, HSTS, cookie flags, DNSSEC, CORS posture, end-of-life tech \u2014 6 security analyzers merged into one graded report.",
+    "example_path": "/?target=stripe.com",
     "health_url": "https://vendor-security-scorecard.0crawl.com/health",
     "id": "vendor-security-scorecard",
     "kind": "container",
@@ -5714,6 +5734,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with CVSS-weighted aggregate score and remediation guidance.",
     "url": "https://vendor-security-scorecard.0crawl.com"
   },
   {
@@ -5805,8 +5830,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "Composite service: web_vitals_report",
-    "example_path": "/?url=https://example.com",
+    "description": "Core Web Vitals and performance report: page-load metrics, CrUX field vitals (p75 LCP/CLS/INP/TTFB), DOM complexity, compression, cache policy, website carbon footprint.",
+    "example_path": "/?target=stripe.com",
     "health_url": "https://web-vitals-report.0crawl.com/health",
     "id": "web-vitals-report",
     "kind": "container",
@@ -5819,6 +5844,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with weighted performance grade.",
     "url": "https://web-vitals-report.0crawl.com"
   },
   {
@@ -6152,8 +6182,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "",
-    "example_path": "/?target=example.com",
+    "description": "Generic composite fan-out engine. GET /?recipe=<name>&target=<domain> runs any named recipe concurrently across N fleet analyzers; returns a merged envelope with summary + per-source fields. Add a recipe row in recipes.go \u2014 no new code.",
+    "example_path": "/?recipe=firmographic&target=stripe.com",
     "health_url": "https://composite-runner.0exec.com/health",
     "id": "composite-runner",
     "kind": "container",
@@ -6166,6 +6196,11 @@
       "go",
       "kind-container"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with catalog-driven recipe discovery and schema validation on output.",
     "url": "https://composite-runner.0exec.com"
   },
   {

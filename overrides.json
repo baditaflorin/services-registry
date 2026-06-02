@@ -4715,5 +4715,107 @@
     "container_port": 18294,
     "host_port": 18294,
     "proxy_egress": false
+  },
+  "composite-runner": {
+    "container_port": 18296,
+    "host_port": 18296,
+    "description": "Generic composite fan-out engine. GET /?recipe=<name>&target=<domain> runs any named recipe concurrently across N fleet analyzers; returns a merged envelope with summary + per-source fields. Add a recipe row in recipes.go — no new code.",
+    "example_path": "/?recipe=firmographic&target=stripe.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with catalog-driven recipe discovery and schema validation on output.",
+    "trl_evidence": "Live on dockerhost 18296; 6 recipes tested end-to-end (firmographic 8/8, seo-audit 8-9/9, vendor-security 6/6, web-vitals 6/6, accessibility 5/5, merchant 6/6) across stripe/shopify/notion/gymshark."
+  },
+  "firmographic-profile": {
+    "container_port": 18297,
+    "host_port": 18297,
+    "description": "Clearbit-style company firmographic profile: industry, employee band, founding year, legal entity, revenue model, office locations, funding — 8 fleet analyzers merged via composite-runner.",
+    "example_path": "/?target=stripe.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with real-time funding data integration and structured output validation.",
+    "trl_evidence": "8/8 sub-services OK on stripe.com/shopify.com/notion.so. Public at firmographic-profile.0crawl.com.",
+    "depends_on": [
+      "composite-runner"
+    ]
+  },
+  "seo-audit": {
+    "container_port": 18298,
+    "host_port": 18298,
+    "description": "Full SEO site audit: on-page basics, keyword density, heading structure, structured data, sitemap, robots.txt, broken links, mobile-friendliness — 9 analyzers in one call.",
+    "example_path": "/?target=stripe.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with issue prioritisation and fix recommendations.",
+    "trl_evidence": "8/9 OK on stripe.com; seo_basics grade A+/95. Public at seo-audit.0crawl.com.",
+    "depends_on": [
+      "composite-runner"
+    ]
+  },
+  "vendor-security-scorecard": {
+    "container_port": 18299,
+    "host_port": 18299,
+    "description": "Third-party / vendor risk scorecard: HTTP security headers, HSTS, cookie flags, DNSSEC, CORS posture, end-of-life tech — 6 security analyzers merged into one graded report.",
+    "example_path": "/?target=stripe.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with CVSS-weighted aggregate score and remediation guidance.",
+    "trl_evidence": "6/6 OK on stripe.com and github.com; hsts A+, security_headers B/73. Public at vendor-security-scorecard.0crawl.com.",
+    "depends_on": [
+      "composite-runner"
+    ]
+  },
+  "web-vitals-report": {
+    "container_port": 18300,
+    "host_port": 18300,
+    "description": "Core Web Vitals and performance report: page-load metrics, CrUX field vitals (p75 LCP/CLS/INP/TTFB), DOM complexity, compression, cache policy, website carbon footprint.",
+    "example_path": "/?target=stripe.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with weighted performance grade.",
+    "trl_evidence": "6/6 OK on stripe.com; page_load slow + carbon C. Public at web-vitals-report.0crawl.com.",
+    "depends_on": [
+      "composite-runner"
+    ]
+  },
+  "accessibility-audit": {
+    "container_port": 18301,
+    "host_port": 18301,
+    "description": "WCAG accessibility audit: a11y quick checks, accessibility score, color contrast ratio, image alt coverage, heading outline — 5 analyzers covering the main WCAG 2.x success criteria.",
+    "example_path": "/?target=stripe.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with WCAG criterion-to-issue mapping.",
+    "trl_evidence": "5/5 OK on stripe.com; accessibility_score grade A+. Public at accessibility-audit.0crawl.com.",
+    "depends_on": [
+      "composite-runner"
+    ]
+  },
+  "merchant-profile": {
+    "container_port": 18302,
+    "host_port": 18302,
+    "description": "E-commerce merchant profile: platform detection, payment methods, accepted currencies, price range, shipping regions, catalog SKU count — 6 analyzers in one structured record.",
+    "example_path": "/?target=gymshark.com",
+    "trl": 6,
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with checkout-flow detection.",
+    "trl_evidence": "6/6 OK on gymshark.com; payments_present, single_currency. Public at merchant-profile.0crawl.com.",
+    "depends_on": [
+      "composite-runner"
+    ]
   }
 }

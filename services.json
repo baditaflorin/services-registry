@@ -36,7 +36,7 @@
   {
     "id": "accessibility-audit",
     "name": "Accessibility Audit",
-    "description": "Composite service: accessibility_audit",
+    "description": "WCAG accessibility audit: a11y quick checks, accessibility score, color contrast ratio, image alt coverage, heading outline \u2014 5 analyzers covering the main WCAG 2.x success criteria.",
     "category": "web_analysis",
     "mesh": "0crawl",
     "kind": "container",
@@ -49,7 +49,7 @@
     "url": "https://accessibility-audit.0crawl.com",
     "health_url": "https://accessibility-audit.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_accessibility_audit",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -57,6 +57,17 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "5/5 OK on stripe.com; accessibility_score grade A+. Public at accessibility-audit.0crawl.com.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with WCAG criterion-to-issue mapping.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18301,
+    "container_port": 18301,
+    "depends_on": [
+      "composite-runner"
+    ],
     "proxy_egress": true
   },
   {
@@ -2857,7 +2868,7 @@
   {
     "id": "firmographic-profile",
     "name": "Firmographic Profile",
-    "description": "",
+    "description": "Clearbit-style company firmographic profile: industry, employee band, founding year, legal entity, revenue model, office locations, funding \u2014 8 fleet analyzers merged via composite-runner.",
     "category": "domains",
     "mesh": "0crawl",
     "kind": "container",
@@ -2870,7 +2881,7 @@
     "url": "https://firmographic-profile.0crawl.com",
     "health_url": "https://firmographic-profile.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_firmographic_profile",
-    "example_path": "/?target=example.com",
+    "example_path": "/?target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2878,6 +2889,17 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "8/8 sub-services OK on stripe.com/shopify.com/notion.so. Public at firmographic-profile.0crawl.com.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with real-time funding data integration and structured output validation.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18297,
+    "container_port": 18297,
+    "depends_on": [
+      "composite-runner"
+    ],
     "proxy_egress": true
   },
   {
@@ -3894,7 +3916,7 @@
   {
     "id": "merchant-profile",
     "name": "Merchant Profile",
-    "description": "Composite service: merchant_profile",
+    "description": "E-commerce merchant profile: platform detection, payment methods, accepted currencies, price range, shipping regions, catalog SKU count \u2014 6 analyzers in one structured record.",
     "category": "domains",
     "mesh": "0crawl",
     "kind": "container",
@@ -3907,7 +3929,7 @@
     "url": "https://merchant-profile.0crawl.com",
     "health_url": "https://merchant-profile.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_merchant_profile",
-    "example_path": "/?target=example.com",
+    "example_path": "/?target=gymshark.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3915,6 +3937,17 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "6/6 OK on gymshark.com; payments_present, single_currency. Public at merchant-profile.0crawl.com.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with checkout-flow detection.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18302,
+    "container_port": 18302,
+    "depends_on": [
+      "composite-runner"
+    ],
     "proxy_egress": true
   },
   {
@@ -5519,7 +5552,7 @@
   {
     "id": "seo-audit",
     "name": "Seo Audit",
-    "description": "Composite service: seo_audit",
+    "description": "Full SEO site audit: on-page basics, keyword density, heading structure, structured data, sitemap, robots.txt, broken links, mobile-friendliness \u2014 9 analyzers in one call.",
     "category": "web_analysis",
     "mesh": "0crawl",
     "kind": "container",
@@ -5532,7 +5565,7 @@
     "url": "https://seo-audit.0crawl.com",
     "health_url": "https://seo-audit.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_seo_audit",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -5540,6 +5573,17 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "8/9 OK on stripe.com; seo_basics grade A+/95. Public at seo-audit.0crawl.com.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with issue prioritisation and fix recommendations.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18298,
+    "container_port": 18298,
+    "depends_on": [
+      "composite-runner"
+    ],
     "proxy_egress": true
   },
   {
@@ -6623,7 +6667,7 @@
   {
     "id": "vendor-security-scorecard",
     "name": "Vendor Security Scorecard",
-    "description": "Composite service: vendor_security_scorecard",
+    "description": "Third-party / vendor risk scorecard: HTTP security headers, HSTS, cookie flags, DNSSEC, CORS posture, end-of-life tech \u2014 6 security analyzers merged into one graded report.",
     "category": "security",
     "mesh": "0crawl",
     "kind": "container",
@@ -6636,7 +6680,7 @@
     "url": "https://vendor-security-scorecard.0crawl.com",
     "health_url": "https://vendor-security-scorecard.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_vendor_security_scorecard",
-    "example_path": "/?target=example.com",
+    "example_path": "/?target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6644,6 +6688,17 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "6/6 OK on stripe.com and github.com; hsts A+, security_headers B/73. Public at vendor-security-scorecard.0crawl.com.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with CVSS-weighted aggregate score and remediation guidance.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18299,
+    "container_port": 18299,
+    "depends_on": [
+      "composite-runner"
+    ],
     "proxy_egress": true
   },
   {
@@ -6743,7 +6798,7 @@
   {
     "id": "web-vitals-report",
     "name": "Web Vitals Report",
-    "description": "Composite service: web_vitals_report",
+    "description": "Core Web Vitals and performance report: page-load metrics, CrUX field vitals (p75 LCP/CLS/INP/TTFB), DOM complexity, compression, cache policy, website carbon footprint.",
     "category": "web_analysis",
     "mesh": "0crawl",
     "kind": "container",
@@ -6756,7 +6811,7 @@
     "url": "https://web-vitals-report.0crawl.com",
     "health_url": "https://web-vitals-report.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_web_vitals_report",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6764,6 +6819,17 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 6,
+    "trl_evidence": "6/6 OK on stripe.com; page_load slow + carbon C. Public at web-vitals-report.0crawl.com.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with weighted performance grade.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18300,
+    "container_port": 18300,
+    "depends_on": [
+      "composite-runner"
+    ],
     "proxy_egress": true
   },
   {
@@ -7145,7 +7211,7 @@
   {
     "id": "composite-runner",
     "name": "Composite Runner",
-    "description": "",
+    "description": "Generic composite fan-out engine. GET /?recipe=<name>&target=<domain> runs any named recipe concurrently across N fleet analyzers; returns a merged envelope with summary + per-source fields. Add a recipe row in recipes.go \u2014 no new code.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7158,14 +7224,22 @@
     "url": "https://composite-runner.0exec.com",
     "health_url": "https://composite-runner.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go_composite_runner",
-    "example_path": "/?target=example.com",
+    "example_path": "/?recipe=firmographic&target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
       "header": "X-API-Key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 6,
+    "trl_evidence": "Live on dockerhost 18296; 6 recipes tested end-to-end (firmographic 8/8, seo-audit 8-9/9, vendor-security 6/6, web-vitals 6/6, accessibility 5/5, merchant 6/6) across stripe/shopify/notion/gymshark.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with catalog-driven recipe discovery and schema validation on output.",
+    "trl_assessed_at": "2026-06-02",
+    "trl_assessor": "claude-opus-4-8-2026-06-02",
+    "host_port": 18296,
+    "container_port": 18296
   },
   {
     "id": "d3-graph",
