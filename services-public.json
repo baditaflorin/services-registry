@@ -35,6 +35,30 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Composite service: accessibility_audit",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://accessibility-audit.0crawl.com/health",
+    "id": "accessibility-audit",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Accessibility Audit",
+    "repo_url": "https://github.com/baditaflorin/go_accessibility_audit",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://accessibility-audit.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Accessibility Score",
     "example_path": "/?url=https://example.com",
@@ -2437,6 +2461,30 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
+    "description": "",
+    "example_path": "/?target=example.com",
+    "health_url": "https://firmographic-profile.0crawl.com/health",
+    "id": "firmographic-profile",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Firmographic Profile",
+    "repo_url": "https://github.com/baditaflorin/go_firmographic_profile",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://firmographic-profile.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
     "description": "Microservice for Founding Year",
     "example_path": "/?target=example.com",
     "health_url": "https://founding-year.0crawl.com/health",
@@ -3301,6 +3349,30 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://menu-extractor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Composite service: merchant_profile",
+    "example_path": "/?target=example.com",
+    "health_url": "https://merchant-profile.0crawl.com/health",
+    "id": "merchant-profile",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Merchant Profile",
+    "repo_url": "https://github.com/baditaflorin/go_merchant_profile",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://merchant-profile.0crawl.com"
   },
   {
     "auth": {
@@ -4678,6 +4750,30 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Composite service: seo_audit",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://seo-audit.0crawl.com/health",
+    "id": "seo-audit",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Seo Audit",
+    "repo_url": "https://github.com/baditaflorin/go_seo_audit",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://seo-audit.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Microservice for Seo Basics",
     "example_path": "/?url=https://example.com",
@@ -5603,6 +5699,30 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "security",
+    "description": "Composite service: vendor_security_scorecard",
+    "example_path": "/?target=example.com",
+    "health_url": "https://vendor-security-scorecard.0crawl.com/health",
+    "id": "vendor-security-scorecard",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Vendor Security Scorecard",
+    "repo_url": "https://github.com/baditaflorin/go_vendor_security_scorecard",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://vendor-security-scorecard.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
     "example_path": "/?url=https://example.com",
@@ -5676,6 +5796,30 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://wayback-checker.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "web_analysis",
+    "description": "Composite service: web_vitals_report",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://web-vitals-report.0crawl.com/health",
+    "id": "web-vitals-report",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Web Vitals Report",
+    "repo_url": "https://github.com/baditaflorin/go_web_vitals_report",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://web-vitals-report.0crawl.com"
   },
   {
     "auth": {
@@ -5999,6 +6143,30 @@
     "trl_assessed_at": "2026-05-15",
     "trl_assessor": "claude-session-2026-05-15",
     "url": "https://catalog-service.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "",
+    "example_path": "/?target=example.com",
+    "health_url": "https://composite-runner.0exec.com/health",
+    "id": "composite-runner",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Composite Runner",
+    "repo_url": "https://github.com/baditaflorin/go_composite_runner",
+    "runtime": "compose",
+    "tags": [
+      "go",
+      "kind-container"
+    ],
+    "url": "https://composite-runner.0exec.com"
   },
   {
     "auth": {
@@ -10720,6 +10888,30 @@
       "type": "none"
     },
     "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/automata-lab/",
+    "id": "automata-lab",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Automata Lab",
+    "pages_url": "https://baditaflorin.github.io/automata-lab/",
+    "repo_url": "https://github.com/baditaflorin/automata-lab",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/automata-lab/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
     "category": "archive",
     "description": "Private browser-based EMDR-inspired audio journaling with local transcription, reflection prompts, and no trauma uploads.",
     "example_path": "/",
@@ -10764,6 +10956,30 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/castle-archive-memory-vault/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/chatwrapped/",
+    "id": "chatwrapped",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Chatwrapped",
+    "pages_url": "https://baditaflorin.github.io/chatwrapped/",
+    "repo_url": "https://github.com/baditaflorin/chatwrapped",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/chatwrapped/"
   },
   {
     "auth": {
@@ -10945,6 +11161,30 @@
       "type": "none"
     },
     "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/fake-text/",
+    "id": "fake-text",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Fake Text",
+    "pages_url": "https://baditaflorin.github.io/fake-text/",
+    "repo_url": "https://github.com/baditaflorin/fake-text",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/fake-text/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
     "category": "archive",
     "description": "A private browser instrument that records 30 seconds of now and replays it as a subtly altered sonic mirror.",
     "example_path": "/",
@@ -10964,6 +11204,30 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/field-recording-mirror/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/flowfield/",
+    "id": "flowfield",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Flowfield",
+    "pages_url": "https://baditaflorin.github.io/flowfield/",
+    "repo_url": "https://github.com/baditaflorin/flowfield",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/flowfield/"
   },
   {
     "auth": {
@@ -11096,6 +11360,30 @@
     },
     "auth_help": "no auth",
     "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/life-in-weeks/",
+    "id": "life-in-weeks",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Life In Weeks",
+    "pages_url": "https://baditaflorin.github.io/life-in-weeks/",
+    "repo_url": "https://github.com/baditaflorin/life-in-weeks",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/life-in-weeks/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
     "description": "Turn a kid\u2019s drawing into a bedtime story narrated in a parent\u2019s voice, entirely in the browser.",
     "example_path": "/",
     "health_url": "https://baditaflorin.github.io/little-voice-stories",
@@ -11195,6 +11483,30 @@
       "type": "none"
     },
     "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mandala-studio/",
+    "id": "mandala-studio",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mandala Studio",
+    "pages_url": "https://baditaflorin.github.io/mandala-studio/",
+    "repo_url": "https://github.com/baditaflorin/mandala-studio",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/mandala-studio/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
     "category": "peer_to_peer",
     "description": "Peer-to-peer mesh: voice notes tied to a place. Scan a QR sticker on a bench, hear the last visitors. Audio lives only in browsers that have scanned.",
     "example_path": "/",
@@ -11239,6 +11551,31 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-carpool-bingo/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-codenames/",
+    "id": "mesh-codenames",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Codenames",
+    "pages_url": "https://baditaflorin.github.io/mesh-codenames/",
+    "repo_url": "https://github.com/baditaflorin/mesh-codenames",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "peer-to-peer",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-codenames/"
   },
   {
     "auth": {
@@ -11370,6 +11707,81 @@
       "type": "none"
     },
     "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-most-likely/",
+    "id": "mesh-most-likely",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Most Likely",
+    "pages_url": "https://baditaflorin.github.io/mesh-most-likely/",
+    "repo_url": "https://github.com/baditaflorin/mesh-most-likely",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "peer-to-peer",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-most-likely/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-picker/",
+    "id": "mesh-picker",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Picker",
+    "pages_url": "https://baditaflorin.github.io/mesh-picker/",
+    "repo_url": "https://github.com/baditaflorin/mesh-picker",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "peer-to-peer",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-picker/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-reaction/",
+    "id": "mesh-reaction",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Reaction",
+    "pages_url": "https://baditaflorin.github.io/mesh-reaction/",
+    "repo_url": "https://github.com/baditaflorin/mesh-reaction",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "peer-to-peer",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-reaction/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
     "category": "peer_to_peer",
     "description": "Peer-to-peer mesh: 2-4 friends in different homes each point their camera at a view they like; every phone tiles all the others' feeds into one composite.",
     "example_path": "/",
@@ -11439,6 +11851,31 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-tap-symphony/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "Two teams tap frantically \u2014 the rope moves live on every phone",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-tug-of-war/",
+    "id": "mesh-tug-of-war",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Tug Of War",
+    "pages_url": "https://baditaflorin.github.io/mesh-tug-of-war/",
+    "repo_url": "https://github.com/baditaflorin/mesh-tug-of-war",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "peer-to-peer",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-tug-of-war/"
   },
   {
     "auth": {
@@ -11986,6 +12423,30 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/stellar-evolution-simulator/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "app",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/string-portrait/",
+    "id": "string-portrait",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "String Portrait",
+    "pages_url": "https://baditaflorin.github.io/string-portrait/",
+    "repo_url": "https://github.com/baditaflorin/string-portrait",
+    "runtime": "github-pages",
+    "tags": [
+      "kind-static",
+      "language-html",
+      "runtime-github-pages"
+    ],
+    "url": "https://baditaflorin.github.io/string-portrait/"
   },
   {
     "auth": {
