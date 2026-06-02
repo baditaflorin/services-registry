@@ -7107,7 +7107,7 @@
   {
     "id": "agent-approval",
     "name": "Agent Approval",
-    "description": "Human-in-the-loop approval gate with timeout default \u2014 a go-common fleet primitive.",
+    "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7117,19 +7117,23 @@
     "url": "https://agent-approval.0exec.com",
     "health_url": "https://agent-approval.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-agent-approval",
-    "example_path": "/?target=example.com",
+    "example_path": "/pending",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18310,
+    "container_port": 18310
   },
   {
     "id": "agent-mailbox",
     "name": "Agent Mailbox",
-    "description": "Addressed request/reply bus for agents (A\u2192B\u2192A) \u2014 a go-common fleet primitive.",
+    "description": "Addressed request/reply bus for agents: POST /send to enqueue a message for a named agent, GET /inbox to drain it, POST /reply to send a correlated reply, GET /await to block until a reply arrives. Closes the A\u2192B\u2192A gap that fleet-notify (broadcast) and fleet-q (anonymous pull) leave open.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7139,19 +7143,23 @@
     "url": "https://agent-mailbox.0exec.com",
     "health_url": "https://agent-mailbox.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-agent-mailbox",
-    "example_path": "/?target=example.com",
+    "example_path": "/",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18304,
+    "container_port": 18304
   },
   {
     "id": "agent-quorum",
     "name": "Agent Quorum",
-    "description": "k-of-n answer aggregation / voting for redundant agents \u2014 a go-common fleet primitive.",
+    "description": "k-of-n answer aggregation and voting for redundant agents. Create a round, cast votes, GET /result for the aggregated decision (majority/weighted/unanimous). Productizes the adversarial-verify loop as a fleet primitive.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7161,19 +7169,23 @@
     "url": "https://agent-quorum.0exec.com",
     "health_url": "https://agent-quorum.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-agent-quorum",
-    "example_path": "/?target=example.com",
+    "example_path": "/",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18306,
+    "container_port": 18306
   },
   {
     "id": "agent-tools",
     "name": "Agent Tools",
-    "description": "LLM function-call manifest over the fleet catalog \u2014 a go-common fleet primitive.",
+    "description": "Turns the fleet catalog into an LLM function-calling manifest. GET /manifest returns a callable tool spec per service (name, description, base_url, auth, example_path). POST /refresh re-fetches the live catalog. Used by agents to discover how to call any fleet service.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -7183,14 +7195,18 @@
     "url": "https://agent-tools.0exec.com",
     "health_url": "https://agent-tools.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-agent-tools",
-    "example_path": "/?target=example.com",
+    "example_path": "/manifest",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18307,
+    "container_port": 18307
   },
   {
     "id": "apikey-service",
@@ -8496,7 +8512,7 @@
   {
     "id": "fleet-eventlog",
     "name": "Fleet Eventlog",
-    "description": "Replayable per-topic event log with monotonic offsets \u2014 a go-common fleet primitive.",
+    "description": "Replayable per-topic event log with monotonic offsets. Publish events to named topics; consumers read from any offset and long-poll for new ones. v0.1 is in-RAM with per-topic retention cap; disk-backed durability is a planned follow-up.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -8506,19 +8522,23 @@
     "url": "https://fleet-eventlog.0exec.com",
     "health_url": "https://fleet-eventlog.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-eventlog",
-    "example_path": "/?target=example.com",
+    "example_path": "/topics",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18305,
+    "container_port": 18305
   },
   {
     "id": "fleet-exec",
     "name": "Fleet Exec",
-    "description": "Ephemeral, bounded code/command runner for fleet agents (keystore-gated, NOT internet-exposed) \u2014 go-common.",
+    "description": "Ephemeral, bounded code/command execution for fleet agents. POST /run {lang, code} executes in an isolated temp dir with a hard timeout, process-group SIGKILL, output caps, and minimal child env. Keystore-gated; NOT internet-exposed. v0.1 TRL 4.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -8528,14 +8548,18 @@
     "url": "https://fleet-exec.0exec.com",
     "health_url": "https://fleet-exec.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-exec",
-    "example_path": "/?target=example.com",
+    "example_path": "/langs",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18309,
+    "container_port": 18309
   },
   {
     "id": "fleet-fake",
@@ -8786,7 +8810,7 @@
   {
     "id": "fleet-lock",
     "name": "Fleet Lock",
-    "description": "Distributed advisory locks, leases & leader-election over HTTP \u2014 a go-common fleet coordination primitive.",
+    "description": "Distributed advisory locks, leases, and leader-election over HTTP. Every fresh acquire returns a monotonic fencing token; re-acquire by the same owner refreshes the lease in place (leader renewal). In-RAM, ephemeral by design \u2014 a restart releases every lock.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -8796,14 +8820,18 @@
     "url": "https://fleet-lock.0exec.com",
     "health_url": "https://fleet-lock.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-lock",
-    "example_path": "/?target=example.com",
+    "example_path": "/locks",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18303,
+    "container_port": 18303
   },
   {
     "id": "fleet-md",
@@ -8841,7 +8869,7 @@
   {
     "id": "fleet-memory",
     "name": "Fleet Memory",
-    "description": "Cross-session/cross-agent working memory with keyword recall \u2014 a go-common fleet primitive.",
+    "description": "Cross-session, cross-agent working memory with pure-CPU keyword recall. POST /remember to store a text doc with optional agent/key/tags; GET /recall?q= for TF-overlap ranked retrieval. Generalizes pentest-agent-state into a fleet-wide searchable store.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -8851,14 +8879,18 @@
     "url": "https://fleet-memory.0exec.com",
     "health_url": "https://fleet-memory.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-memory",
-    "example_path": "/?target=example.com",
+    "example_path": "/recall?q=example",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "query_param": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com"
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Scaffolded 2026-06-02; not yet deployed",
+    "host_port": 18308,
+    "container_port": 18308
   },
   {
     "id": "fleet-notify",

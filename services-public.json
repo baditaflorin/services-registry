@@ -6091,8 +6091,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Human-in-the-loop approval gate with timeout default \u2014 a go-common fleet primitive.",
-    "example_path": "/?target=example.com",
+    "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
+    "example_path": "/pending",
     "health_url": "https://agent-approval.0exec.com/health",
     "id": "agent-approval",
     "kind": "container",
@@ -6102,6 +6102,7 @@
     "repo_url": "https://github.com/baditaflorin/go-agent-approval",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://agent-approval.0exec.com"
   },
   {
@@ -6112,8 +6113,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Addressed request/reply bus for agents (A\u2192B\u2192A) \u2014 a go-common fleet primitive.",
-    "example_path": "/?target=example.com",
+    "description": "Addressed request/reply bus for agents: POST /send to enqueue a message for a named agent, GET /inbox to drain it, POST /reply to send a correlated reply, GET /await to block until a reply arrives. Closes the A\u2192B\u2192A gap that fleet-notify (broadcast) and fleet-q (anonymous pull) leave open.",
+    "example_path": "/",
     "health_url": "https://agent-mailbox.0exec.com/health",
     "id": "agent-mailbox",
     "kind": "container",
@@ -6123,6 +6124,7 @@
     "repo_url": "https://github.com/baditaflorin/go-agent-mailbox",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://agent-mailbox.0exec.com"
   },
   {
@@ -6133,8 +6135,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "k-of-n answer aggregation / voting for redundant agents \u2014 a go-common fleet primitive.",
-    "example_path": "/?target=example.com",
+    "description": "k-of-n answer aggregation and voting for redundant agents. Create a round, cast votes, GET /result for the aggregated decision (majority/weighted/unanimous). Productizes the adversarial-verify loop as a fleet primitive.",
+    "example_path": "/",
     "health_url": "https://agent-quorum.0exec.com/health",
     "id": "agent-quorum",
     "kind": "container",
@@ -6144,6 +6146,7 @@
     "repo_url": "https://github.com/baditaflorin/go-agent-quorum",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://agent-quorum.0exec.com"
   },
   {
@@ -6154,8 +6157,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "LLM function-call manifest over the fleet catalog \u2014 a go-common fleet primitive.",
-    "example_path": "/?target=example.com",
+    "description": "Turns the fleet catalog into an LLM function-calling manifest. GET /manifest returns a callable tool spec per service (name, description, base_url, auth, example_path). POST /refresh re-fetches the live catalog. Used by agents to discover how to call any fleet service.",
+    "example_path": "/manifest",
     "health_url": "https://agent-tools.0exec.com/health",
     "id": "agent-tools",
     "kind": "container",
@@ -6165,6 +6168,7 @@
     "repo_url": "https://github.com/baditaflorin/go-agent-tools",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://agent-tools.0exec.com"
   },
   {
@@ -7306,8 +7310,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Replayable per-topic event log with monotonic offsets \u2014 a go-common fleet primitive.",
-    "example_path": "/?target=example.com",
+    "description": "Replayable per-topic event log with monotonic offsets. Publish events to named topics; consumers read from any offset and long-poll for new ones. v0.1 is in-RAM with per-topic retention cap; disk-backed durability is a planned follow-up.",
+    "example_path": "/topics",
     "health_url": "https://fleet-eventlog.0exec.com/health",
     "id": "fleet-eventlog",
     "kind": "container",
@@ -7317,6 +7321,7 @@
     "repo_url": "https://github.com/baditaflorin/go-fleet-eventlog",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://fleet-eventlog.0exec.com"
   },
   {
@@ -7327,8 +7332,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Ephemeral, bounded code/command runner for fleet agents (keystore-gated, NOT internet-exposed) \u2014 go-common.",
-    "example_path": "/?target=example.com",
+    "description": "Ephemeral, bounded code/command execution for fleet agents. POST /run {lang, code} executes in an isolated temp dir with a hard timeout, process-group SIGKILL, output caps, and minimal child env. Keystore-gated; NOT internet-exposed. v0.1 TRL 4.",
+    "example_path": "/langs",
     "health_url": "https://fleet-exec.0exec.com/health",
     "id": "fleet-exec",
     "kind": "container",
@@ -7338,6 +7343,7 @@
     "repo_url": "https://github.com/baditaflorin/go-fleet-exec",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://fleet-exec.0exec.com"
   },
   {
@@ -7555,8 +7561,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Distributed advisory locks, leases & leader-election over HTTP \u2014 a go-common fleet coordination primitive.",
-    "example_path": "/?target=example.com",
+    "description": "Distributed advisory locks, leases, and leader-election over HTTP. Every fresh acquire returns a monotonic fencing token; re-acquire by the same owner refreshes the lease in place (leader renewal). In-RAM, ephemeral by design \u2014 a restart releases every lock.",
+    "example_path": "/locks",
     "health_url": "https://fleet-lock.0exec.com/health",
     "id": "fleet-lock",
     "kind": "container",
@@ -7566,6 +7572,7 @@
     "repo_url": "https://github.com/baditaflorin/go-fleet-lock",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://fleet-lock.0exec.com"
   },
   {
@@ -7602,8 +7609,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Cross-session/cross-agent working memory with keyword recall \u2014 a go-common fleet primitive.",
-    "example_path": "/?target=example.com",
+    "description": "Cross-session, cross-agent working memory with pure-CPU keyword recall. POST /remember to store a text doc with optional agent/key/tags; GET /recall?q= for TF-overlap ranked retrieval. Generalizes pentest-agent-state into a fleet-wide searchable store.",
+    "example_path": "/recall?q=example",
     "health_url": "https://fleet-memory.0exec.com/health",
     "id": "fleet-memory",
     "kind": "container",
@@ -7613,6 +7620,7 @@
     "repo_url": "https://github.com/baditaflorin/go-fleet-memory",
     "runtime": "compose",
     "tags": [],
+    "trl": 4,
     "url": "https://fleet-memory.0exec.com"
   },
   {
