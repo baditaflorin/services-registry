@@ -1995,7 +1995,8 @@
     "trl": 4,
     "host_port": 18225,
     "container_port": 18225,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-events-platform",
