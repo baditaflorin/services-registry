@@ -1844,7 +1844,8 @@
     "trl": 4,
     "host_port": 18216,
     "container_port": 18216,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "70s"
   },
   {
     "id": "domain-dane-tlsa",
