@@ -1072,7 +1072,8 @@
   "domain-documentation-platform-detector": {
     "proxy_read_timeout": "75s",
     "container_port": 18197,
-    "host_port": 18197
+    "host_port": 18197,
+    "proxy_egress": true
   },
   "domain-ecommerce-platform": {
     "container_port": 18212,
@@ -1348,7 +1349,7 @@
     "container_port": 18228,
     "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
     "host_port": 18228,
-    "proxy_egress": false,
+    "proxy_egress": true,
     "trl": 4,
     "version": "0.1.0"
   },

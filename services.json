@@ -2603,7 +2603,7 @@
     "trl": 4,
     "host_port": 18228,
     "container_port": 18228,
-    "proxy_egress": false
+    "proxy_egress": true
   },
   {
     "id": "dtss",
@@ -7611,6 +7611,7 @@
     "cert_domain": "wildcard.0exec.com",
     "host_port": 18197,
     "container_port": 18197,
+    "proxy_egress": true,
     "proxy_read_timeout": "75s"
   },
   {
