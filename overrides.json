@@ -965,6 +965,7 @@
     "version": "0.1.0"
   },
   "domain-app-render-mode": {
+    "proxy_read_timeout": "75s",
     "container_port": 18224,
     "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
     "host_port": 18224,
@@ -1069,6 +1070,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31"
   },
   "domain-documentation-platform-detector": {
+    "proxy_read_timeout": "75s",
     "container_port": 18197,
     "host_port": 18197
   },
@@ -1099,6 +1101,7 @@
     "proxy_read_timeout": "75s"
   },
   "domain-events-platform": {
+    "proxy_read_timeout": "75s",
     "container_port": 18226,
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "host_port": 18226,
@@ -1106,6 +1109,7 @@
     "version": "0.1.0"
   },
   "domain-experimentation-stack": {
+    "proxy_read_timeout": "75s",
     "container_port": 18211,
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
     "host_port": 18211,
@@ -1173,6 +1177,7 @@
     "version": "0.1.0"
   },
   "domain-interactive-demo": {
+    "proxy_read_timeout": "75s",
     "container_port": 18240,
     "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
     "host_port": 18240,
@@ -1189,6 +1194,7 @@
     "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only \u2014 no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet."
   },
   "domain-martech-stack": {
+    "proxy_read_timeout": "75s",
     "container_port": 18213,
     "description": "Martech stack detector \u2014 HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
     "host_port": 18213,
@@ -1213,6 +1219,7 @@
     "version": "0.1.0"
   },
   "domain-newsletter-platform-detector": {
+    "proxy_read_timeout": "75s",
     "container_port": 18193,
     "host_port": 18193
   },
@@ -1238,6 +1245,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31"
   },
   "domain-podcast-presence": {
+    "proxy_read_timeout": "75s",
     "container_port": 18227,
     "description": "Podcast presence detector \u2014 RSS feed + linked platforms + embedded players.",
     "host_port": 18227,
@@ -1289,6 +1297,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31"
   },
   "domain-support-stack-detector": {
+    "proxy_read_timeout": "75s",
     "container_port": 18192,
     "host_port": 18192
   },
@@ -1313,6 +1322,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31"
   },
   "domain-tracker-density": {
+    "proxy_read_timeout": "75s",
     "container_port": 18238,
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
     "host_port": 18238,

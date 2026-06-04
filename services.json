@@ -1696,7 +1696,8 @@
     "trl": 4,
     "host_port": 18224,
     "container_port": 18224,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-backlink-profile",
@@ -2027,7 +2028,8 @@
     "trl": 4,
     "host_port": 18226,
     "container_port": 18226,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-experimentation-stack",
@@ -2057,7 +2059,8 @@
     "trl": 4,
     "host_port": 18211,
     "container_port": 18211,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-faq-schema",
@@ -2298,7 +2301,8 @@
     "trl": 5,
     "host_port": 18240,
     "container_port": 18240,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-liveness-state",
@@ -2357,7 +2361,8 @@
     "trl": 4,
     "host_port": 18213,
     "container_port": 18213,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-naptr-enum",
@@ -2446,7 +2451,8 @@
     "cert_domain": "wildcard.0crawl.com",
     "trl": 4,
     "host_port": 18227,
-    "container_port": 18227
+    "container_port": 18227,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-product-count",
@@ -2536,7 +2542,8 @@
     "trl": 6,
     "host_port": 18238,
     "container_port": 18238,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-viewport-meta",
@@ -7603,7 +7610,8 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
     "host_port": 18197,
-    "container_port": 18197
+    "container_port": 18197,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-email-deliverability-score",
@@ -7731,7 +7739,8 @@
     "cert_domain": "wildcard.0exec.com",
     "host_port": 18193,
     "container_port": 18193,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-open-source-presence",
@@ -7921,7 +7930,8 @@
     "cert_domain": "wildcard.0exec.com",
     "host_port": 18192,
     "container_port": 18192,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-tech-eol-flagger",
