@@ -1964,7 +1964,8 @@
     "trl": 4,
     "host_port": 18212,
     "container_port": 18212,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-error-monitoring",
