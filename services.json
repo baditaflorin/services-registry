@@ -1636,7 +1636,8 @@
     "trl": 4,
     "host_port": 18215,
     "container_port": 18215,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "proxy_read_timeout": "75s"
   },
   {
     "id": "domain-anycast-footprint",
