@@ -406,6 +406,22 @@ docker compose up --build
 Copy the canonical file from `services-registry/CLAUDE.md`. Do **not**
 edit per-service — `fleet-runner inject` re-syncs it from the registry.
 
+### `CHANGELOG.md`
+
+Seed it at `0.1.0`; `fleet-runner bump-version` prepends a new entry on
+every subsequent bump (see "Per-repo CHANGELOG.md" in CLAUDE.md).
+
+```markdown
+# Changelog
+
+All notable changes to this service are recorded here, newest first.
+
+## 0.1.0 — <YYYY-MM-DD>
+
+### Added
+- Initial service: GET / detector + /health, /version, /metrics, /selftest.
+```
+
 ---
 
 ## 3. Required endpoints
