@@ -643,6 +643,7 @@ fleet-runner smoke  [--insecure]             # GET example_url on all container 
 fleet-runner pages-audit                     # verify pages_url 200s for every kind=static entry
 fleet-runner build-test                      # go test ./... in every kind=container,language=go workspace
 fleet-runner update-dep <mod@ver>            # bump dep across all language=go repos (or a subset: --repos a,b / --filter mesh=…,category=…,ids=a;b)
+fleet-runner rollout --dep <mod@ver> [--grep REGEX] [--graph-callers-of S,…] [--depends-on S,…] [--clone] [--apply [--pr]]  # blast-radius: discover EVERY affected service (grep ∪ graph ∪ depends_on), bump + build/test, land only the green (plan-only by default)
 fleet-runner deploy-all                       # redeploy a filtered set (--repos a,b / --mesh / --framework); honors the exclude list (won't touch infra)
 fleet-runner inject <src> <dest>             # copy a file into every repo (still all kinds, on purpose)
 fleet-runner exec   "<cmd>"                  # shell command in every repo (filterable)
@@ -1129,6 +1130,48 @@ fleet-runner converge       --services /root/workspace/services-registry/service
 fleet-runner audit --all    --services /root/workspace/services-registry/services.json
 fleet-runner state snapshot --services /root/workspace/services-registry/services.json
 ```
+
+### Recipe — Rolling out a blast-radius change (shared lib / shared dep)
+
+**When a change to a shared thing affects N services** — a `go-common`
+bump, a changed client signature, a new env contract — don't hand-grep
+and hope. `fleet-runner rollout` finds EVERY affected service, propagates
+the change, and proves each still builds.
+
+```bash
+# 1. PLAN (read-only, the default): see the complete affected set.
+#    Run on Builder LXC 108 so the code-grep sees the full workspace.
+fleet-runner rollout \
+  --dep github.com/baditaflorin/go-common@<LATEST> \
+  --grep 'client\.JSProxy(DOM)?\(|GetRendered\(|FetchNetwork\(|RenderJS' \
+  --graph-callers-of go-js-proxy,go-js-proxy-network,infrastructure-fetch-cache
+
+# 2. APPLY: bump + build/test each consumer, land one auto-merge PR per repo,
+#    emit a fleet-state/sweeps manifest (revertable via sweep-rollback).
+fleet-runner rollout --dep …@<LATEST> --grep '…' --clone --apply --pr
+```
+
+Discovery is the **union** of three sources, because each has blind spots:
+`--grep` (code signature — catches cold consumers the runtime graph never
+saw), `--graph-callers-of` (go-fleet-graph inbound callers), `--depends-on`
+(services.json declared edges). The union is intersected with
+`kind=container,language=go` + excludes, and the backend slugs themselves
+are dropped.
+
+Three non-obvious rules:
+
+- **The runtime graph is blind to intra-mesh calls.** Sibling-service calls
+  (fetch-cache, js-proxy) use a plain `net/http.Client`, not `safehttp`, so
+  go-fleet-graph never records the edge. `fleet-runner deps <slug>` will show
+  ZERO callers for an intra-mesh backend even when 48 services depend on it.
+  For intra-mesh deps the **code-grep is authoritative** — that's why rollout
+  unions grep with the graph instead of trusting the graph alone.
+- **`--clone` first** (or run on LXC 108 where the workspace is kept
+  complete): the grep is only as complete as the local checkouts, and the
+  registry has ~110 repos that may not be cloned on a given host. rollout
+  reports a "code-grep is PARTIAL" warning when repos are missing.
+- **Always pass the actual LATEST dep version**, never a stale literal —
+  `go get dep@vOld` on a repo already ahead silently *downgrades* it.
 
 ### Recipe — Closing a capability gap (gap → fix loop)
 
