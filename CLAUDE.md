@@ -1343,6 +1343,42 @@ for the canonical pattern.
    *must* bind a port, use `127.0.0.1:0` (ephemeral) and `kill` it on
    the same line that started it.
 
+## Memory discipline — services must run for years without OOM (enforced 2026-06-08)
+
+A fleet service is expected to stay up for **years unattended**. The
+failure mode that breaks that promise is slow RSS creep: a per-request
+or per-domain data structure that grows without bound until the kernel
+OOM-kills the container. Real incidents in this fleet:
+
+- **`go-html-proxy` StringInterner leak** — a package-level string
+  interner (a `map[string]string` keyed by interned values, never
+  evicted) grew to ~3 GB RSS. Every distinct header/host string lived
+  forever; GC can't reclaim a strongly-referenced live map entry.
+- **Unbounded response cache** — a `sync.Map` keyed by URL with only a
+  time-based sweep (no entry cap) grew linearly with request
+  cardinality under real traffic.
+- **Fetch-cache Redis/TTL churn** — a cache whose only bound was a TTL
+  still let the working set balloon faster than entries expired.
+
+**The throughline: time-based cleanup is NOT a bound.** Under sustained
+high-cardinality load, entries arrive faster than a TTL sweep retires
+them. A bound is a hard cap on *entries* with eviction.
+
+### Six rules — any service holding state across requests MUST follow them
+
+| # | Rule | Why |
+|---|------|-----|
+| 1 | **No unbounded in-memory structure on a per-request / per-domain / per-URL / per-header path.** Every such map, cache, or pool gets a hard cap + eviction (LRU or idle-TTL). | A package-level `sync.Map`/`map` keyed by domain/URL/header is a leak by construction — GC cannot reclaim strongly-referenced live entries, so the map only ever grows. |
+| 2 | **Prefer the stdlib `unique` package (Go 1.23+) over a hand-rolled string interner.** It's weak-reference-backed: interned values are GC-reclaimed once no longer referenced (self-healing). For custom canonical caches use `weak.Pointer` + `runtime.AddCleanup` (Go 1.24+). | The fleet is on **Go 1.25** — `unique`/`weak` are available. They turn the html-proxy leak class into a non-event because the canonical map self-prunes. |
+| 3 | **Bounded caches only: LRU-by-entries or idle-TTL.** Never an unbounded map with only a periodic time-based cleanup. | The fetch-cache / response-cache incidents: a TTL alone is not a bound under high cardinality. Cap the entry count. |
+| 4 | **Set `GOMEMLIMIT` ≈ 80% of the container `mem_limit`** as a GC backstop for transient spikes. | It pressures GC harder under memory pressure, smoothing transient spikes — but it **cannot reclaim a live leak** (a leak is live, not garbage). It buys time, never fixes the bug. |
+| 5 | **Observability is mandatory.** Every service exposes runtime metrics + a localhost pprof endpoint via **go-common `obs` (≥ v0.61.0)** — auto-wired through `server.New` (opt out with `DEBUG_ADDR=off`). | `go_memstats_heap_inuse_bytes`, `go_goroutines`, `process_resident_memory_bytes` on `/metrics`; pprof on `127.0.0.1:6060` (**never** public). This is how RSS creep is caught *before* the OOM, and how a heap profile localises the leaking map. |
+| 6 | **Soak-test expectation: RSS plateaus, it does not grow linearly with request count.** A high-cardinality load test that shows linear RSS growth has found a leak — fix it, don't paper over it with restarts. | A memory watchdog (restart on RSS > threshold) is an acceptable last-resort backstop **only if it alarms** — silent auto-restart hides the leak instead of surfacing it. |
+
+In one line: **bound every cache by entry count, lean on `unique`/`weak`
+for canonical strings, wire `obs` so you can see RSS, and treat linear
+soak-test growth as a bug — not a tuning knob.**
+
 ## SQLite safety — mandatory three rules (enforced 2026-05-26)
 
 `modernc.org/sqlite` uses real `fcntl` syscalls for WAL file locking.
