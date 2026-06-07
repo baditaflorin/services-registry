@@ -484,6 +484,33 @@ patches live in `services-registry/overrides.json`. Two shapes coexist:
 }
 ```
 
+**Per-slug container resource caps** (`cpus`, `mem_limit`, `pids_limit`).
+The fleet-wide backstop lives in `host-conventions.yaml`
+(`container_defaults`, default `cpus: 2.0` / `mem_limit: "1g"` /
+`pids_limit: 512`). Heavy/browser services raise them per-slug in
+`overrides.json`, which **wins over** `mesh_defaults` and
+`container_defaults` (precedence rule #4):
+
+```json
+{
+  "infrastructure-fetch-cache": { "cpus": 4.0, "mem_limit": "3g" },
+  "html-proxy":                 { "cpus": 8,   "mem_limit": "6g" }
+}
+```
+
+`cpus` is a number (e.g. `4` or `4.0`); `mem_limit` is a docker size
+string (e.g. `"3g"`). These are honored by `fleet-runner render-compose`
+(and `deploy --render-compose`) **only with fleet-runner ≥ the version
+from go_fleet_runner PR #82** — earlier binaries silently rendered the
+`host-conventions.yaml` default. A service that hand-maintains its own
+caps in its base `docker-compose.yml` opts OUT of overlay injection with
+`"compose_self_managed": true`.
+
+> **Operational gotcha:** a live `docker update --cpus N` on a running
+> container **reverts** to the rendered value on the next
+> `render-compose` / `deploy` unless the per-slug `cpus` override is set
+> in `overrides.json`. Declare the cap there to make it durable.
+
 **Bulk rules** (new, via reserved `$rules` key):
 ```json
 {

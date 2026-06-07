@@ -2447,6 +2447,7 @@
   },
   "infrastructure-fetch-cache": {
     "container_port": 18205,
+    "cpus": 4.0,
     "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
     "example_path": "/fetch?url=https://example.com/",
     "host_port": 18205,

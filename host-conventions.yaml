@@ -92,6 +92,26 @@ container_defaults:
   # for normal concurrency.
   cpus: 2.0
 
+  # ---- Per-slug override (precedence rule #4 above) ----
+  # `cpus`, `mem_limit`, and `pids_limit` are per-slug overridable via
+  # overrides.json, winning over these container_defaults (and over any
+  # mesh_defaults) -- consistent with the precedence note at the top of
+  # this file ("overrides.json per-slug -- wins over everything").
+  # Heavy/browser services raise them per-slug, e.g.:
+  #
+  #   // overrides.json
+  #   "infrastructure-fetch-cache": { "cpus": 4.0, "mem_limit": "3g" }
+  #
+  # Honored by `fleet-runner render-compose` (>= the version from
+  # go_fleet_runner PR #82). A service that hand-maintains its own caps
+  # in its base docker-compose.yml opts OUT of overlay injection with a
+  # per-slug "compose_self_managed": true.
+  #
+  # Operational gotcha: a live `docker update --cpus N` on a container
+  # reverts to the rendered value on the next render-compose/deploy
+  # unless the per-slug override is set here. Declare the cap in
+  # overrides.json to make it durable.
+
 # Per-mesh defaults can layer on top of container_defaults.
 # 0crawl services lean heavy on outbound HTTP; give them more headroom.
 mesh_defaults:
