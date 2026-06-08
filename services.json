@@ -1,39 +1,5 @@
 [
   {
-    "id": "airflow-domainscope",
-    "name": "Airflow DomainScope",
-    "description": "Apache Airflow orchestrator for DomainScope pipelines \u2014 DAG scheduler for domain ingestion, enrichment, and embedding jobs.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "python",
-    "runtime": "compose",
-    "tags": [
-      "domainscope",
-      "infrastructure"
-    ],
-    "url": "https://airflow-domainscope.0exec.com",
-    "health_url": "https://airflow-domainscope.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/domainscope",
-    "example_path": "/dags",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com",
-    "trl": 4,
-    "trl_evidence": "Airflow DAG orchestrator for domainscope",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-06-05",
-    "trl_assessor": "manual",
-    "host_port": 18311,
-    "container_port": 8080,
-    "proxy_egress": true
-  },
-  {
     "id": "a11y-quick",
     "name": "A11y Quick",
     "description": "Microservice for A11y Quick",
@@ -7534,7 +7500,7 @@
     "url": "https://domain-compliance-claim-scanner.0exec.com",
     "health_url": "https://domain-compliance-claim-scanner.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_compliance_claim_scanner",
-    "example_path": "/?target=example.com",
+    "example_path": "/?target=stripe.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
