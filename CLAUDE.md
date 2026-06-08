@@ -417,6 +417,7 @@ auth shapes documented above.
 | jsbundle     | `github.com/baditaflorin/go-common/jsbundle`      | source-map recovery for scanning JS bundles             |
 | apikey       | `github.com/baditaflorin/go-common/apikey`        | keystore client (`Verify`, `Cache`, admin endpoints)    |
 | middleware   | `github.com/baditaflorin/go-common/middleware`    | `TokenAuthKeystore` HTTP middleware (≥ v0.7.0)          |
+| loadshed     | `github.com/baditaflorin/go-common/loadshed`      | non-blocking concurrency gate: cap calls to a slow upstream, fast-503 the excess (`loadshed_shed_total`) (≥ v0.64.0) |
 
 ```go
 import (
@@ -1342,6 +1343,67 @@ for the canonical pattern.
    (which uses `httptest`) — no port binding, no orphan risk. If you
    *must* bind a port, use `127.0.0.1:0` (ephemeral) and `kill` it on
    the same line that started it.
+
+## Deploy failure class — a saturated slow upstream sheds load and rolls back deploys (2026-06-08)
+
+**Symptom.** `fleet-runner deploy <enricher>` (or any container deploy)
+rolls back at the smoke gate because the new image's `GET /selftest`
+times out — even though `/health` is green and the code is fine. The
+real cause is somewhere else entirely: a *different* service is piling
+goroutines on a slow shared upstream and starving the whole dockerhost's
+scheduler, so every service's `/selftest` probe stalls past its 8 s
+deadline. One service's overload silently fails everyone's deploys.
+
+The canonical instance: `go_infrastructure_fetch_cache` (port 18205)
+proxies render requests to `go-js-proxy` / `go-html-proxy`, each held up
+to 95 s. A backfill fan-out fires thousands of concurrent `render=*`
+requests; ~8.3k goroutines pile on the saturated renderer (host loadavg
+56/20 cores); the scheduler thrashes; downstream enrichers' `/selftest`
+probes time out; healthy deploys fleet-wide roll back. Any service that
+proxies to a saturatable sibling (a renderer, a headless browser, a
+rate-limited upstream) can produce the same blast radius.
+
+**Diagnosis.** Confirm it's goroutine pile-up, not the deploying service:
+
+```bash
+# Goroutine count on the suspected proxy (fetch-cache here): a healthy
+# box sits in the low hundreds; a pile-up reads thousands.
+curl -s http://<dockerhost>:18205/metrics | grep '^go_goroutines'
+
+# The human-readable stats page surfaces the shed + upstream-error
+# counters: a climbing render_shed means the gate is actively shedding
+# (good — it's protecting the box); a high upstream_errors means the
+# renderer itself is failing/slow (the root cause).
+curl -s http://<dockerhost>:18205/ | grep -E 'render_shed|upstream_errors'
+```
+
+For the fleet-standard signal, `loadshed_shed_total{service,gate}` is
+emitted on `/metrics` by every service using `go-common/loadshed` — a
+sustained nonzero rate is the "this box is shedding load" alert.
+
+**Live mitigation (no rebuild).** The render cap is env-tunable. Lower
+`MAX_RENDER_INFLIGHT` on the host to shed sooner and shrink the pile-up,
+then bounce the container — no image rebuild, no `fleet-runner deploy`:
+
+```bash
+# On the dockerhost, in the service's compose dir:
+cd /opt/services/go_infrastructure_fetch_cache
+sed -i 's/^MAX_RENDER_INFLIGHT=.*/MAX_RENDER_INFLIGHT=24/' .env   # or add it
+sudo docker compose up -d   # picks up the new env; no pull/rebuild
+```
+
+Once the pile-up drains, the stalled `/selftest` probes pass and deploys
+stop rolling back. Re-run the blocked deploy. Set the cap back up (or
+remove it for the default 64) when the upstream recovers. The durable
+fix for the root-cause backfill is to rate-limit the fan-out producer,
+not just shed at the cache.
+
+**Building a new proxy-to-slow-upstream service?** Don't hand-roll the
+shed semaphore — use `go-common/loadshed` (`loadshed.New(name, limit)` +
+`TryAcquire`/`WriteShed`, or `gate.Guard` middleware). It gives you the
+fast-503 + `Retry-After` path and the `loadshed_shed_total` metric for
+free. See `go_infrastructure_fetch_cache`'s `renderGate` for the
+canonical in-line (gate only the expensive sub-path) usage.
 
 ## SQLite safety — mandatory three rules (enforced 2026-05-26)
 
