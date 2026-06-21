@@ -144,33 +144,34 @@ check_container "go-url-categorizer-api"              "18244" "/health"
 
 # ── 3. FETCH CACHE QUALITY ─────────────────────────────────────────────────────
 sep "FETCH CACHE QUALITY (last 2 min)"
-fc_raw=$(docker logs go-infrastructure-fetch-cache --since 2m 2>&1 \
-         | grep '"msg":"request_completed"' || true)
+fc_tmp=$(mktemp)
+docker logs go-infrastructure-fetch-cache --since 2m 2>&1 \
+  | grep '"msg":"request_completed"' > "$fc_tmp" 2>/dev/null || true
 
-if [[ -z "$fc_raw" ]]; then
+if [[ ! -s "$fc_tmp" ]]; then
   warn "No fetch cache request_completed logs in last 2 min (idle or container restarting)"
 else
-  # Pass data via env var to avoid heredoc stdin conflict
-  FC_RAW="$fc_raw" python3 - << 'PY'
-import os, json, re
-lines = os.environ.get('FC_RAW','').strip().split('\n')
+  # Read from temp file to avoid env var ARG_MAX overflow on high-traffic logs
+  python3 - "$fc_tmp" << 'PY'
+import sys, json, re
 total = s200 = s502 = s404 = other = 0
 durations = []
-for l in lines:
-    if not l.strip(): continue
-    total += 1
-    try:
-        d = json.loads(l)
-        c = d.get('status', 0)
-        dur = d.get('duration', '')
-        if   c == 200: s200 += 1
-        elif c == 502: s502 += 1
-        elif c == 404: s404 += 1
-        else:          other += 1
-        if dur:
-            m = re.match(r'([\d.]+)', str(dur))
-            if m: durations.append(float(m.group(1)))
-    except: pass
+with open(sys.argv[1]) as f:
+    for l in f:
+        if not l.strip(): continue
+        total += 1
+        try:
+            d = json.loads(l)
+            c = d.get('status', 0)
+            dur = d.get('duration', '')
+            if   c == 200: s200 += 1
+            elif c == 502: s502 += 1
+            elif c == 404: s404 += 1
+            else:          other += 1
+            if dur:
+                m = re.match(r'([\d.]+)', str(dur))
+                if m: durations.append(float(m.group(1)))
+        except: pass
 
 p200 = s200/total*100 if total else 0
 p502 = s502/total*100 if total else 0
@@ -188,6 +189,7 @@ if p502 > 20:
     print(f"       Fix: docker restart go-js-proxy go-html-proxy go-js-proxy-network")
 PY
 fi
+rm -f "$fc_tmp"
 
 # ── 4. CATEGORIZER (10.10.10.30) ───────────────────────────────────────────────
 sep "CATEGORIZER API (10.10.10.30:23481)"
@@ -257,42 +259,41 @@ fi
 
 # ── 6. UPSTREAM ENRICHER ERRORS ────────────────────────────────────────────────
 sep "UPSTREAM ENRICHER ERRORS (last 5 min, from .30 categorizer)"
-cat_logs_raw=$(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 \
-  root@10.10.10.30 "docker logs domainscope-api --since 5m 2>&1" 2>/dev/null || echo "")
+cat_tmp=$(mktemp)
+ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 \
+  root@10.10.10.30 "docker logs domainscope-api --since 5m 2>&1" > "$cat_tmp" 2>/dev/null || true
 
-if [[ -z "$cat_logs_raw" ]]; then
+if [[ ! -s "$cat_tmp" ]]; then
   warn "Cannot reach 10.10.10.30 via SSH — run from bastion for this section"
   note "  ssh root@0docker.com 'ssh root@10.10.10.30 docker logs domainscope-api --since 5m 2>&1'"
 else
-  CAT_LOGS="$cat_logs_raw" python3 - << 'PY'
-import os, json
+  python3 - "$cat_tmp" << 'PY'
+import sys, json
 from collections import defaultdict
 
-lines = os.environ.get('CAT_LOGS','').strip().split('\n')
-proxy_timeout = defaultdict(int)   # fetch-cache/proxy chain overloaded
-not_found     = defaultdict(int)   # HTTP 404 — domain data absent (expected)
-bad_request   = defaultdict(int)   # HTTP 400 — API contract bug
+proxy_timeout = defaultdict(int)
+not_found     = defaultdict(int)
+bad_request   = defaultdict(int)
 other_errors  = defaultdict(int)
-total_lines   = 0
 
-for l in lines:
-    if not l.strip(): continue
-    try:
-        d = json.loads(l)
-        err = d.get('error','')
-        svc = d.get('service','unknown')
-        if not err: continue
-        total_lines += 1
-        if 'proxy: all providers failed' in err or 'timeout awaiting response headers' in err:
-            proxy_timeout[svc] += 1
-        elif 'HTTP 404' in err:
-            not_found[svc] += 1
-        elif 'HTTP 400' in err:
-            bad_request[svc] += 1
-        elif err:
-            other_errors[svc] += 1
-    except:
-        pass
+with open(sys.argv[1]) as f:
+    for l in f:
+        if not l.strip(): continue
+        try:
+            d = json.loads(l)
+            err = d.get('error','')
+            svc = d.get('service','unknown')
+            if not err: continue
+            if 'proxy: all providers failed' in err or 'timeout awaiting response headers' in err:
+                proxy_timeout[svc] += 1
+            elif 'HTTP 404' in err:
+                not_found[svc] += 1
+            elif 'HTTP 400' in err:
+                bad_request[svc] += 1
+            elif err:
+                other_errors[svc] += 1
+        except:
+            pass
 
 pt = sum(proxy_timeout.values())
 nf = sum(not_found.values())
@@ -320,6 +321,7 @@ if nf > 0:
     print(f"       {nf} HTTP 404s across {len(not_found)} enrichers (domain data absent — expected, not a bug)")
 PY
 fi
+rm -f "$cat_tmp"
 
 # ── 7. NGINX ───────────────────────────────────────────────────────────────────
 sep "NGINX (webgateway 10.10.10.10)"
