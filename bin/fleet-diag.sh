@@ -71,9 +71,10 @@ trap 'rm -f "$TMP_A" "$TMP_B" "$TMP_C" "$TMP_D" "$TMP_E" "$TMP_F"' EXIT
     --format $'{{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}' \
     "${CRIT_NAMES[@]}" 2>/dev/null || true)
 
-  # One docker inspect call for all 7 containers
+  # One docker inspect call for all 7 containers.
+  # {{if .State.Health}} guards against the template error on containers without HEALTHCHECK.
   INSP=$(docker inspect \
-    --format $'{{.Name}}\t{{.State.Status}}\t{{.State.Health.Status}}\t{{.RestartCount}}\t{{.State.StartedAt}}\t{{.HostConfig.Memory}}' \
+    --format $'{{.Name}}\t{{.State.Status}}\t{{if .State.Health}}{{.State.Health.Status}}{{else}}n/a{{end}}\t{{.RestartCount}}\t{{.State.StartedAt}}\t{{.HostConfig.Memory}}' \
     "${CRIT_NAMES[@]}" 2>/dev/null || true)
 
   # HTTP health probes in parallel (don't wait for each before starting next)
@@ -204,12 +205,14 @@ PID_A=$!
 
 # ── B: Fetch cache quality + top callers (enricher flood detection) ─────────────
 (
-  sep "FETCH CACHE QUALITY (last 2 min)"
+  sep "FETCH CACHE QUALITY (last 20k entries)"
   fc_tmp=$(mktemp)
   ip_tmp=$(mktemp)
 
-  # Fetch logs and build IP→service map in parallel
-  docker logs go-infrastructure-fetch-cache --since 2m 2>&1 \
+  # Fetch logs and build IP→service map in parallel.
+  # --tail 20000 instead of --since 2m so high-traffic runs don't take 88s
+  # (at 1k req/s, --since 2m fetches 120k lines; 20k = ~20s of recent data).
+  docker logs go-infrastructure-fetch-cache --tail 20000 2>&1 \
     | grep '"msg":"request_completed"' > "$fc_tmp" 2>/dev/null &
   PLOG=$!
 
@@ -306,12 +309,11 @@ if p502 > 20:
 if caller_counts:
     total_calls = sum(caller_counts.values())
     top = sorted(caller_counts.items(), key=lambda x: -x[1])[:10]
-    print(f'\n  Top 10 callers (last 2min, {total_calls} total — these are enrichers, NOT processors):')
+    print(f'\n  Top 10 callers (last ~20k entries, {total_calls} total — these are enrichers, NOT processors):')
     for ip, n in top:
-        pct   = n / total_calls * 100
-        per_s = n / 120
-        svc   = ip_map.get(ip, ip)
-        print(f'       {n:6d} ({pct:4.1f}%, {per_s:.1f}/s)  {svc}')
+        pct = n / total_calls * 100
+        svc = ip_map.get(ip, ip)
+        print(f'       {n:6d} ({pct:4.1f}%)  {svc}')
     print()
     print(f'  NOTE: High request rate = enrichers retrying on 502s (retry storm).')
     print(f'        Breaking the cycle: stop domain processors to drain enricher queue.')
