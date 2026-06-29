@@ -18,6 +18,16 @@
 # Verify:
 #
 #   fleet-runner --help          # should print the remote binary's help
+#
+# Setting up a new Builder LXC 108 (after cloning or rebuilding):
+#
+#   ssh root@0docker.com 'pct exec 108 -- bash -s' \
+#     < bin/setup-lxc-108.sh
+#
+#   This creates /usr/bin/fleet-runner and /usr/sbin/fleet-runner symlinks
+#   so `pct exec 108 -- bash -lc "fleet-runner …"` works without the full
+#   path. Without it, bash -lc doesn't find /usr/local/bin in its lookup
+#   path even though it's technically in PATH — a pct exec env quirk.
 #   fleet-runner allocate-port --count 1
 #
 # Overrides (env vars):
