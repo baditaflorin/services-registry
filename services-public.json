@@ -1397,7 +1397,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Consent-gated tags, WAF pages, and analytics loaded only after interaction remain outside a single homepage snapshot.",
     "url": "https://domain-analytics-stack.0crawl.com"
   },
   {
@@ -1627,7 +1631,9 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 5,
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "url": "https://domain-deployment-fingerprint.0crawl.com"
   },
   {
@@ -1710,7 +1716,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "First-party bundled SDKs with no static or response-header fingerprint require reliable post-hydration browser execution.",
     "url": "https://domain-error-monitoring.0crawl.com"
   },
   {
@@ -2028,7 +2038,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Cold heavy-SPA rendering can exceed the enrichment budget and bot/consent gates hide some client-injected tools.",
     "url": "https://domain-martech-stack.0crawl.com"
   },
   {
@@ -2677,9 +2691,9 @@
       "domains",
       "go"
     ],
-    "trl": 5,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://google-taxonomy.0crawl.com"
@@ -6820,6 +6834,9 @@
       "domainscope",
       "go-domain"
     ],
+    "trl": 8,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "url": "https://domain-support-stack-detector.0exec.com"
   },
   {

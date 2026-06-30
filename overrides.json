@@ -948,8 +948,13 @@
     "container_port": 18215,
     "description": "Analytics stack detector - GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "host_port": 18215,
-    "trl": 4,
-    "version": "0.1.0",
+    "trl": 6,
+    "trl_evidence": "Real HTML parsing and a 28-tool international analytics catalogue combine static DOM, rendered DOM, cookies, headers, and network-log evidence. Per-tool IDs and source trails are surfaced; false-positive guards, graceful render degradation, six test files, and live selftests cover both positive and abstain paths.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Consent-gated tags, WAF pages, and analytics loaded only after interaction remain outside a single homepage snapshot.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "version": "0.4.3",
     "proxy_read_timeout": "75s"
   },
   "domain-anycast-footprint": {
@@ -1049,8 +1054,11 @@
     "container_port": 18241,
     "description": "Unified deployment fingerprint (PaaS + serverless + edge-compute detector).",
     "host_port": 18241,
-    "trl": 5,
-    "version": "0.1.0"
+    "trl": 7,
+    "trl_evidence": "One bounded probe combines homepage headers/HTML, API HEAD behavior, and DNS CNAME evidence across PaaS, serverless backend, edge compute, and static hosting. Claims require platform-pinning signals, preserve evidence and confidence, and are covered by directional fixtures, handler tests, and a live selftest.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "version": "0.2.2"
   },
   "domain-details": {
     "container_port": 8085,
@@ -1111,8 +1119,13 @@
     "container_port": 18225,
     "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "host_port": 18225,
-    "trl": 4,
-    "version": "0.1.0",
+    "trl": 6,
+    "trl_evidence": "Real HTML parsing plus W3C Reporting API, Report-To, Reporting-Endpoints, and NEL response-header detection covers 22 error-monitoring SDK and browser-reporting patterns. Evidence positions, identifiers, degradation output, directional tests, and live selftests are present.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "First-party bundled SDKs with no static or response-header fingerprint require reliable post-hydration browser execution.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "version": "0.3.4",
     "proxy_read_timeout": "75s"
   },
   "domain-events-platform": {
@@ -1223,8 +1236,13 @@
     "container_port": 18213,
     "description": "Martech stack detector — HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
     "host_port": 18213,
-    "trl": 4,
-    "version": "0.1.0"
+    "trl": 7,
+    "trl_evidence": "Real HTML parsing with a table-driven 30-SDK catalogue spans marketing automation, CRM, live chat, CDP, behavioral analytics, tag managers, and experience suites. Static-first analysis can escalate to shared JS rendering without losing its floor; per-tool evidence, identifiers, international coverage, tests, and live selftests are present.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Cold heavy-SPA rendering can exceed the enrichment budget and bot/consent gates hide some client-injected tools.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "version": "0.4.2"
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
@@ -1336,7 +1354,12 @@
   "domain-support-stack-detector": {
     "proxy_read_timeout": "75s",
     "container_port": 18192,
-    "host_port": 18192
+    "host_port": 18192,
+    "trl": 8,
+    "trl_evidence": "Calibrated multi-signal support-stack detection separates high-confidence loader hosts, medium bootstrap symbols, and low brand/status links. A single weak footer or prose signal can never assert installation; corroboration, evidence trails, vendor-level confidence, false-positive regression fixtures, and live production validation cover the supported catalogue.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "version": "0.3.4"
   },
   "domain-tech-eol-flagger": {
     "container_port": 18186,
@@ -2301,13 +2324,13 @@
     "description": "Microservice for Google Taxonomy",
     "example_path": "/?url=https://example.com",
     "host_port": 8096,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Embedded Google Product Taxonomy snapshot (5595 nodes, version 2021-09-21,\ntaxonomy-with-ids.en-US.txt). Three documented endpoints: /lookup (id→path),\n/search (fuzzy via lithammer/fuzzysearch RankFindNormalizedFold), /classify\n(TF-IDF cosine over leaf+ancestor terms, ancestor weight 0.5, leaf weight 2.0,\nsmoothed IDF). Inverted index built once at startup, vectors precomputed.\n9 unit tests cover parser depth/parent, search ranking, search top-K cap,\nclassify ranking, classify matched_terms, GET/POST/JSON-body shapes, lookup\nhit/miss/bad-input, legacy backwards-compat envelope. CGO-free, no runtime\nnetwork calls. Ceiling: TF-IDF without stemming/synonyms misses \"shirt\"↔\n\"shirts\" — TRL 6 would need a stemmer + synonym map.",
-    "version": "1.1.0"
+    "trl_evidence": "Embedded 5,595-node Google Product Taxonomy supports exact lookup, fuzzy search, and precomputed TF-IDF classification. Version 1.2 adds confidence/abstention gates, strong head-noun handling, stemming and synonym normalization, deterministic ranking, compatibility envelopes, five test files, and offline selftests with no runtime data dependency.",
+    "version": "1.2.1"
   },
   "granular-physics-lab": {
     "trl": 4,
