@@ -1575,7 +1575,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Plugin/theme-level depth needs a Wappalyzer-grade signature database; bot-protected and fingerprint-less sites remain outside reliable CPU-only detection.",
     "url": "https://domain-cms-version.0crawl.com"
   },
   {
@@ -1678,7 +1682,9 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
     "url": "https://domain-ecommerce-platform.0crawl.com"
   },
   {
@@ -1756,7 +1762,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Server-side experimentation can emit no client-observable fingerprint; measured JS rendering recovered almost no additional vendor signal and remains a flaky upstream.",
     "url": "https://domain-experimentation-stack.0crawl.com"
   },
   {
@@ -1938,7 +1948,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 5,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Hard bot protection, catalogs hosted on separate ecosystem domains, and authoritative ground-truth counts require platform APIs or different egress.",
     "url": "https://domain-integration-marketplace.0crawl.com"
   },
   {
@@ -2222,7 +2236,9 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 4,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
     "url": "https://domain-wikidata-entity.0crawl.com"
   },
   {
@@ -2568,6 +2584,9 @@
       "language-go",
       "runtime-compose"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
     "url": "https://funding-signal.0crawl.com"
   },
   {
@@ -4350,6 +4369,11 @@
       "language-go",
       "runtime-compose"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative third-party rating and review counts require a headless browser or paid platform APIs because major profile pages hard-block server-side fetches.",
     "url": "https://review-presence.0crawl.com"
   },
   {
@@ -6510,6 +6534,9 @@
       "domainscope",
       "go-domain"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
     "url": "https://domain-documentation-platform-detector.0exec.com"
   },
   {
@@ -6621,6 +6648,11 @@
       "domainscope",
       "go-domain"
     ],
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "The shared JS-render upstream can degrade on cold or failed renders, limiting SLA-grade completeness.",
     "url": "https://domain-newsletter-platform-detector.0exec.com"
   },
   {
@@ -6645,6 +6677,9 @@
       "domainscope",
       "go-domain"
     ],
+    "trl": 6,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01",
     "url": "https://domain-open-source-presence.0exec.com"
   },
   {
