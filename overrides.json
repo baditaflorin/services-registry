@@ -433,12 +433,20 @@
   "brand-color-palette": {
     "container_port": 18288,
     "host_port": 18288,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "trl": 7,
+    "trl_evidence": "DOM-based HTML/CSS collection combines theme-color, stylesheet, inline-style, and logo-image signals; colors are normalized, clustered, contrast-scored, and returned with provenance. Six test files and offline/live selftests cover extraction and false-positive paths.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "brand-logo-extractor": {
     "container_port": 18287,
     "host_port": 18287,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "trl": 7,
+    "trl_evidence": "A real DOM walk combines header/navigation images, structured metadata, icons, and manifest evidence with URL resolution, scoring, deduplication, provenance, and false-positive guards. Three test files and selftests exercise multiple logo source classes.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "broken-links": {
     "container_port": 8192,
@@ -735,7 +743,11 @@
   "crux-field-vitals": {
     "container_port": 18290,
     "host_port": 18290,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "trl": 7,
+    "trl_evidence": "Uses the official Chrome UX Report API to map real-user p75 and histogram data for LCP, CLS, INP, and TTFB, with explicit no-data/upstream-error handling, SSRF-safe egress, fixtures, and selftests.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "crypto-finder": {
     "container_port": 8341,
@@ -815,7 +827,11 @@
   "data-format-converter": {
     "container_port": 18294,
     "host_port": 18294,
-    "proxy_egress": false
+    "proxy_egress": false,
+    "trl": 7,
+    "trl_evidence": "Pure in-process JSON, CSV, XML, YAML, and TOML conversion uses format-specific decoders/encoders, deterministic normalization, size/error boundaries, fixtures, and selftests with no runtime network dependency.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "data-inventory": {
     "container_port": 8284,
@@ -1792,13 +1808,13 @@
     "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression — flags containers whose slope > 50 MB/h AND R² > 0.7.",
     "host_port": 18207,
     "internal": true,
-    "trl": 4,
-    "trl_assessed_at": "2026-05-19",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-19-host-guard-scaffold",
+    "trl": 5,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Bounded by docker-stats RSS fidelity (cgroup memory.usage_in_bytes includes page cache). Lift to 7+ would require parsing /sys/fs/cgroup/memory/{slice}/memory.stat to separate RSS from cache.",
     "trl_evidence": "Initial scaffold (2026-05-19). 11 unit tests across both primitives — injectable Runner + StatFS mocks; tests cover disk sweep below/above threshold (no-op / dry-run / real exec+parse), statfs failure path, log truncate keep-tail correctness, logrotate sibling skip, parseHumanBytes coverage, monotonic growth flagged (slope ~100MB/h, R² > 0.99), flat noise NOT flagged (R² < 0.7), noisy growth low R², leaky vs steady end-to-end ticker, docker-sock unreachable (state untouched, error surfaced). /selftest exercises regression + parsing primitives against in-memory data.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "fleet-ip": {
     "auth": {
@@ -1947,9 +1963,9 @@
     ],
     "health_url": "https://pixel.0exec.com/health",
     "host_port": 18200,
-    "trl": 3,
-    "trl_assessed_at": "2026-05-18",
-    "trl_assessor": "claude-session-2026-05-18-pixel",
+    "trl": 4,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "trl_ceiling": 6,
     "trl_evidence": "NEW fleet primitive (2026-05-18). 1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet. /selftest covers GIF roundtrip + DNT suppression + IP truncation. Optional Plausible self-host upstream.",
     "url": "https://pixel.0exec.com"
@@ -2464,7 +2480,11 @@
   "iban-bic-validator": {
     "container_port": 18291,
     "host_port": 18291,
-    "proxy_egress": false
+    "proxy_egress": false,
+    "trl": 7,
+    "trl_evidence": "Pure offline ISO 13616 IBAN validation performs normalization, country-specific BBAN structure checks, MOD-97 verification, and BIC validation across a curated country table. Four test files and selftests cover valid, invalid, and normalization cases.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "idor-finder": {
     "container_port": 8242,
@@ -2642,7 +2662,11 @@
   "keyphrase-extractor": {
     "container_port": 18286,
     "host_port": 18286,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "trl": 7,
+    "trl_evidence": "RAKE candidate generation and TextRank/PageRank re-ranking operate on extracted prose with deterministic scoring, evidence-bearing results, language-aware token handling, fixtures, and three test files.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "keyword-density": {
     "container_port": 8292,
@@ -2943,7 +2967,11 @@
   "named-entity-recognizer": {
     "container_port": 18285,
     "host_port": 18285,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "trl": 7,
+    "trl_evidence": "Runs a baked ONNX transformer NER model with rune-accurate spans, normalized fleet labels, a deterministic fallback engine, panic recovery, provenance, and four test files; clean main now includes current go-common plus model-pipeline hardening.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "newsletter-flow": {
     "trl": 4,
@@ -4394,7 +4422,11 @@
   },
   "services-dashboard": {
     "container_port": 18173,
-    "host_port": 18173
+    "host_port": 18173,
+    "trl": 5,
+    "trl_evidence": "Operational fleet dashboard with registry-backed discovery, health/version aggregation, filtering, and deployed UI; maturity remains capped below the real band until automated handler/UI tests are added.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "session-management": {
     "container_port": 8095,
@@ -4608,7 +4640,11 @@
   "table-extractor": {
     "container_port": 18289,
     "host_port": 18289,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "trl": 7,
+    "trl_evidence": "Single-pass DOM table extraction expands rowspan/colspan into deterministic dense grids, handles nested/ragged tables, preserves captions and headers, and exposes honest no-table degradation. Two test files and selftests cover structural edge cases.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "tagboard": {
     "trl": 3,
@@ -4739,12 +4775,12 @@
     "container_port": 8318,
     "description": "Microservice for Ugc Detector",
     "host_port": 8318,
-    "trl": 5,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl": 7,
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with schema.org Review parsing + moderation-system fingerprints.",
-    "trl_evidence": "Review/comment signal extraction."
+    "trl_evidence": "Weighted-confidence UGC verdict combines moderation-system fingerprints, schema.org Review/QAPage parsing, comment/forum signals, full evidence trails, and false-positive guards. Expanded table-driven tests cover weighting and each fingerprint family."
   },
   "universal-document-workbench": {
     "trl": 4,
@@ -4870,7 +4906,11 @@
   },
   "voice-search": {
     "container_port": 8323,
-    "host_port": 8323
+    "host_port": 8323,
+    "trl": 5,
+    "trl_evidence": "Curated voice-search SEO audit combines structured-data, question/answer, conversational-copy, mobile, and page signals with an explainable score. It remains developing pending broader fixtures and cross-engine validation.",
+    "trl_assessed_at": "2026-07-01",
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
   },
   "wayback-checker": {
     "container_port": 8351,
