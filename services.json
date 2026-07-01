@@ -3170,7 +3170,7 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "Embedded 5,595-node Google Product Taxonomy supports exact lookup, fuzzy search, and precomputed TF-IDF classification. Version 1.3.0 implements conservative singularization, concrete product aliases, coordinated-leaf head extraction, and a stricter two-term confidence rule. Directional tests recover shirt, sneakers, and notebook classifications while rejecting modifier-only two-term evidence. Deterministic ranking, compatibility envelopes, offline selftests, and no runtime data dependency.",
+    "trl_evidence": "Embedded 5,595-node Google Product Taxonomy supports exact lookup, fuzzy search, and precomputed TF-IDF classification. Version 1.3 implements conservative singularization, concrete product aliases, coordinated-leaf head extraction, and a stricter two-term confidence rule. Directional tests recover shirt, sneakers, and notebook classifications while rejecting modifier-only two-term evidence. Version 1.3.1 additionally runs the production selftest against the full embedded snapshot. Deterministic ranking, compatibility envelopes, offline selftests, and no runtime data dependency.",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-07-01",
