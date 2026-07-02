@@ -1339,10 +1339,13 @@
   },
   "domain-ratelimit-headers": {
     "container_port": 18234,
-    "description": "RateLimit-* / Retry-After header detector + parser.",
+    "description": "Validated RateLimit and Retry-After detector with evidence-driven endpoint discovery and HEAD-to-GET fallback.",
     "host_port": 18234,
-    "trl": 5,
-    "version": "0.1.0"
+    "trl": 6,
+    "trl_assessed_at": "2026-07-02",
+    "trl_assessor": "codex-logic-improvement-2026-07-02",
+    "trl_evidence": "v0.2.0 validates numeric quotas/resets and policy windows, rejects malformed or contradictory families, treats Retry-After as rate-limit evidence only on 429, and prevents vendor metadata from creating positives alone. Discovery continues past no-signal 2xx/4xx responses and HEAD falls back to GET when headers lack evidence. Unit/race/vet/build and deterministic selftests are green.",
+    "version": "0.2.0"
   },
   "domain-rbl-reputation": {
     "container_port": 18182,
