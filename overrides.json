@@ -953,15 +953,16 @@
   },
   "domain-amp-detector": {
     "container_port": 18222,
-    "description": "AMP (Accelerated Mobile Pages) presence detector — link rel=amphtml + canonical AMP HTML.",
+    "description": "Strict AMP detector requiring the root marker, official runtime, same-site canonical, and verified AMP alternatives.",
     "example_path": "/?domain=www.bbc.com",
     "host_port": 18222,
-    "trl": 4,
-    "trl_assessed_at": "2026-05-21",
-    "trl_assessor": "claude-opus-4-7",
+    "trl": 6,
+    "trl_assessed_at": "2026-07-02",
+    "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real HTML parser via golang.org/x/net/html (no regex); detects link rel=amphtml + canonical, <html amp> + <html ⚡> (U+26A1), AMP cache URL in og:url / twitter:url; case-insensitive attributes; SSRF-safe outbound via go-common/safehttp (10s timeout, <=3 redirects, 2 MiB body cap); verifies the linked AMP alternative by fetching it; per-failure errors pushed to degraded[]; 15 unit tests on canned HTML covering each signal; /selftest exercises both pure-logic checks and a live bbc.com probe."
+    "trl_evidence": "v0.2.0 requires the AMP/lightning root marker, exact official v0.js runtime, and a same-site canonical link. amphtml alternatives must stay within the registrable site, preserve their path through redirects, return 2xx, and pass the complete AMP gate. AMP-cache evidence uses exact HTTPS host/path parsing. Cross-site, homepage-redirect, lone-marker, and substring false positives have regressions; unit/race/vet/build and deterministic selftest are green.",
+    "version": "0.2.0"
   },
   "domain-analytics-stack": {
     "container_port": 18215,
