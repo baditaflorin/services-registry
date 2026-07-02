@@ -933,10 +933,13 @@
   },
   "domain-ad-network": {
     "container_port": 18214,
-    "description": "Ad-network detector - ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
+    "description": "Ad-network detector with validated ads.txt seller records and executable-context matching for 18 in-page advertising providers.",
     "host_port": 18214,
-    "trl": 4,
-    "version": "0.1.0"
+    "trl": 7,
+    "trl_assessed_at": "2026-07-02",
+    "trl_assessor": "codex-logic-improvement-2026-07-02",
+    "trl_evidence": "v0.3.0 fixes a measured false-positive class: 213/221 cached ads_txt_present=true sample rows had zero valid seller lines. Presence now requires at least one syntactically valid seller declaration, rejecting HTTP-200 soft 404s, directive-only placeholders, and arbitrary comma-separated error text. In-page provider matching is restricted to executable script/iframe/ad-widget contexts, so prose, comments, policy links, and vendor lists no longer count as active ad-network evidence. Unit, race, vet, build, deterministic selftest, positive seller/provider, and negative soft-404/non-executable regressions are green.",
+    "version": "0.3.0"
   },
   "domain-ai-bot-policy-scanner": {
     "container_port": 18195,
