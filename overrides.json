@@ -220,16 +220,16 @@
   },
   "address-extractor": {
     "container_port": 8275,
-    "description": "Microservice for Address Extractor",
+    "description": "Multi-locale address extractor with coherent component validation and localized schema.org evidence.",
     "example_path": "/?url=https://example.com",
     "host_port": 8275,
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-07-02",
+    "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
-    "trl_evidence": ">-",
-    "version": "3.0.0"
+    "trl_evidence": "v3.2.0 localizes schema.org cues instead of granting a page-wide postal-code exemption. Structured English-locale matches require house, street-type road, city, and postcode; order/report/version/legal/identifier component tokens are rejected. Existing labelled precision/recall corpus caught and prevented over-tightening of St abbreviations and bare Postcode cues; unit/race/vet/build are green.",
+    "version": "3.2.0"
   },
   "admin-finder": {
     "container_port": 8335,
