@@ -302,16 +302,16 @@
   },
   "analyze-headers": {
     "container_port": 8081,
-    "description": "Microservice for Analyze Headers",
+    "description": "Browser-facing security-header auditor with deterministic duplicate handling, HEAD/GET comparison, and edge attribution.",
     "example_path": "/?url=https://example.com",
     "host_port": 8081,
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-07-02",
+    "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Full OWASP secure-header matrix: HSTS (max-age/includeSubDomains/preload),\nCSP (parsed; flags unsafe-inline/unsafe-eval/wildcard/data:/http: in script-src\nand style-src; checks default-src, object-src 'none', frame-ancestors), COOP,\nCOEP, CORP, Permissions-Policy (risky sinks parsed), Referrer-Policy,\nX-Frame-Options (ALLOW-FROM deprecation), X-Content-Type-Options,\nX-XSS-Protection (deprecated; flagged), Cache-Control, Server/X-Powered-By\ninformation disclosure. SSRF-safe via go-common/safehttp; HEAD-first with\nGET fallback when origin rejects HEAD. Composite grade is critical-aware:\nany missing HSTS on HTTPS or missing CSP forces F. Split into headers.go,\ncsp.go, grade.go, handler.go; covered by handler_test.go (6 cases including\nperfect-site, weak-CSP, missing-HSTS, deprecated-X-XSS) and csp_test.go (7\nparser/grader cases). `go test ./...` green.",
-    "version": "1.1.0"
+    "trl_evidence": "v1.3.0 audits GET as the authoritative browser representation, reports material HEAD/GET security-header differences, folds case variants and exact duplicates, and conservatively downgrades conflicting repeated values. Cloudflare/Fastly/Vercel/CloudFront/Akamai/Fly markers are surfaced and results state edge_or_origin vs origin_or_unknown. Existing OWASP matrix, applicability, CSP parser, corpus evaluation, SSRF guard, unit/race/vet/build, and deterministic selftest remain green.",
+    "version": "1.3.0"
   },
   "anon-conf-poll": {
     "trl": 3,
