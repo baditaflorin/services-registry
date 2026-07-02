@@ -1194,7 +1194,7 @@
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "host_port": 18239,
     "trl": 5,
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "domain-glue-records": {
     "container_port": 18237,
@@ -1334,7 +1334,7 @@
     "trl_assessed_at": "2026-07-02",
     "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_evidence": "v0.2.0 removes count inflation across all weak aggregators: sitemap and homepage URL variants are canonicalized without query/fragment noise and deduplicated across sources; repeated JSON-LD products collapse by stable @id/url/sku/productID/mpn/gtin identities; hidden, aria-hidden, template, noscript, skeleton, placeholder, and unresolved template links are excluded. Positive distinct-product cases and negative duplicate/placeholder cases pass unit, race, vet, build, and deterministic selftest coverage.",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "domain-ratelimit-headers": {
     "container_port": 18234,
