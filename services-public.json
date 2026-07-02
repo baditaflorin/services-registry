@@ -1877,7 +1877,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "Gift-card offering detector (URL slugs + schema.org GiftCard + cart signals).",
+    "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-gift-card.0crawl.com/health",
     "id": "domain-gift-card",

@@ -1188,10 +1188,10 @@
   },
   "domain-gift-card": {
     "container_port": 18239,
-    "description": "Gift-card offering detector (URL slugs + schema.org GiftCard + cart signals).",
+    "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "host_port": 18239,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "domain-glue-records": {
     "container_port": 18237,
