@@ -1424,7 +1424,13 @@
   },
   "domain-well-known-catalog": {
     "container_port": 18194,
-    "host_port": 18194
+    "description": "Semantic /.well-known/ coverage scanner that rejects wildcard routes, soft 404s, malformed documents, and wrong redirects.",
+    "host_port": 18194,
+    "trl": 6,
+    "trl_assessed_at": "2026-07-02",
+    "trl_assessor": "codex-logic-improvement-2026-07-02",
+    "trl_evidence": "v0.2.0 replaces status-only presence with same-site/final-path validation and document semantics. JSON endpoints must parse, host-meta must contain XRD, security.txt/MTA-STS/Keybase require defining fields, and empty/HTML/soft-404/homepage/cross-host responses are rejected. Baseline had 103/965 scored domains at implausible 100% coverage. Unit, race, vet, build, and deterministic selftest are green.",
+    "version": "0.2.0"
   },
   "domain-wikidata-entity": {
     "container_port": 18228,
