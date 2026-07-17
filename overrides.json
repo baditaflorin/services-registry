@@ -2454,7 +2454,8 @@
   },
   "html-proxy": {
     "cpus": 8,
-    "mem_limit": "6g",
+    "mem_limit": "8g",
+    "pids_limit": 2048,
     "container_port": 3002,
     "description": "Microservice for Go Html Proxy",
     "example_path": "/?url=https://example.com",
