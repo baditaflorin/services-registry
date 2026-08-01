@@ -1417,7 +1417,13 @@
   },
   "domain-trust-composite-grader": {
     "container_port": 18199,
-    "host_port": 18199
+    "host_port": 18199,
+    "trl": 6,
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Self-contained protocol-hygiene heuristic (RDAP age via IANA bootstrap, DNSSEC, SPF/DMARC, MTA-STS, TLS, RFC 9116 security.txt) with real RFC-compliant parsing and a measured-vs-unmeasured evidence trail, but no external reputation/threat-intel signal, no historical-trend component, and no empirically-calibrated ground truth for its 90-point weighting scheme -- structurally cannot reach SLA-grade (8-9) as designed.",
+    "trl_assessed_at": "2026-08-01",
+    "trl_assessor": "claude-sonnet-5-trl-audit-2026-08-01",
+    "trl_evidence": "First-ever registry TRL for this slug (a local-only 2026-07-01 codex note in the repo's service.yaml was never propagated here). go build/vet/gofmt/test all clean; 11 unit tests. Confirmed self-contained -- no calls to sibling services (go_trust_decay, go_scc, etc.) despite the description implying aggregation -- and no safehttp.NewClient() usage (uses fleetfetch exclusively), so the fetch-cache-masking bug class does not apply. Ran current origin/main live against 200 fresh domains from prod_2026_domainscope_scrapetheworld_org: 200/200 valid JSON, 0 crashes, 0 malformed output, 0 score/grade-banding inconsistencies. Found the deployed container (ghcr.io/.../go_domain_trust_composite_grader:652e8b7, running since 2026-07-11) predates two already-merged, never-version-bumped fixes and has been mis-scoring DNS-resolution timeouts during the TLS check as a full measured 0/20 penalty (~17.6% of a 500-row prod sample); see go_domain_trust_composite_grader PR #8 and its 0.1.4 CHANGELOG entry. Recommend redeploying that PR before re-auditing."
   },
   "domain-viewport-meta": {
     "container_port": 18233,
