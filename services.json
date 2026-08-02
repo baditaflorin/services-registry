@@ -13545,12 +13545,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/group-theory-visualizer/",
-    "trl": 4,
-    "trl_evidence": "math visualization, algebraic structures",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-pass audit of this interactive finite-group/symmetry explorer (hand-authored WASM table-lookup kernel + Three.js): mathematical correctness verified clean via an independent from-scratch reimplementation (not reusing the app's own algebra.ts/cayley.ts) run against all 18 catalog groups -- full associativity/closure/identity/inverse/Latin-square checks pass for every group, Q8's table matches an independently coded Hamilton quaternion product exactly, S3/A4/S4 element-order distributions match known character-table facts exactly. No math bugs found. Found and fixed a severe rendering bug instead: the 3D-visualization camera was built but camera.lookAt() was never called, so a fresh camera faces local -Z while every group's geometry is centered at the origin (~41 degrees off boresight, well outside the 24-degree half-FOV) -- the '3D' tab silently rendered nothing but background color for EVERY group in the catalog, with no console error and status text still claiming 'live WebGL.' Confirmed live in-browser before/after across C1, D4, and S4 (order 24). The existing e2e smoke test only asserted the canvas was visible, not that it contained real content -- exactly why this shipped unnoticed. Fixed with one camera.lookAt(0,0,0) call. trl bumped 4->5; trl_ceiling=7 added -- solidly 'developing' (curated catalog, multi-step group-theory logic, now-verified real test coverage) but not yet 'real' (6-7) since it has no external/RFC-style input parsing or operational evidence trail; capped below 8-9 since 'battle-tested, SLA-grade' isn't a meaningful target for a static no-backend GitHub Pages demo. See PR #6 (merged).",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "highlight-recall",
@@ -13572,11 +13572,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/highlight-recall/",
     "trl": 3,
-    "trl_evidence": "learning app, highlight storage",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this local-first EPUB/PDF highlight-review app (spaced repetition + semantic search): privacy claim holds up -- no fetch/XHR/sendBeacon/analytics anywhere in src/, all persistence is IndexedDB/localStorage, the only network-capable code is dynamic import() of pdfjs-dist/jszip/optional AI libs, none of which ever receive document/highlight content. Found and fixed 2 real bugs. (1) scheduleReview() computed a first 'hard' review's interval as intervalDays*1.2, but intervalDays on a new highlight is just the random 0-14 day import jitter, not a real interval -- so a 'hard' (worse) grade could schedule further out than 'good' or 'easy' on the same highlight, inverting the difficulty ordering; fixed by anchoring the first 'hard' repetition to 1 day, matching how good/easy already special-case repetitions===0. (2) A real, well-formed EPUB fixture returned 0 highlights before the fix -- Element.textContent concatenates adjacent paragraphs with no separator, so a short non-sentence line (page footer, heading) between two real paragraphs glued onto the next paragraph and the whole merged run got discarded by the 'Page N' metadata filter, silently dropping legitimate highlights; fixed by preserving paragraph breaks through extraction and treating them as hard boundaries independent of punctuation (also fixes the same bug class for plain-text/Markdown import). Password-protected/corrupted PDFs handled correctly (verified with real qpdf-encrypted and truncated fixtures). Also restored docs/privacy.md, which along with 1,300+ lines of architecture/deploy/ADR docs had silently vanished in a 'build:' commit 40+ commits ago with nobody noticing, leaving README links dead (rest flagged, not restored, to keep the PR focused). trl held at 3 (real bugs just found in both the core scheduling and extraction paths -- genuinely early-stage, not gold-plated); trl_ceiling=5 added -- well-scoped single-user no-backend app with no fundamental design flaws found, but no CI, previously-broken lint/tests on main, and zero tests for two of three importers before this PR. See PR #7 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "implemment-the-following-time-displaced-ears",
