@@ -6938,12 +6938,13 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
-    "trl": 5,
-    "trl_evidence": "Curated voice-search SEO audit combines structured-data, question/answer, conversational-copy, mobile, and page signals with an explainable score. It remains developing pending broader fixtures and cross-engine validation.",
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
+    "trl": 6,
+    "trl_evidence": "First-pass audit (250-domain live sample, live before/after): found and fixed 2 real bugs. (1) The recurring fetch-cache-masking bug -- for a service whose entire job is auditing live page state and measuring real TTFB, silently serving cached bytes is a correctness bug, not just a performance nuance; the same root cause already caused a 79.9% production-fetch failure in sibling go_technology_stack. Fixed with WithoutFetchCache + WithForceHTTP2 (the SSRF-guarded dialer otherwise silently forces HTTP/1.1). (2) A question-heading false positive -- a real 19-word marketing tagline starting with 'Where' was scored as a conversational question heading because the bare-prefix match had no length bound; capped at 14 words, verified genuine short question headings still match. Confirmed genuinely differentiated from sibling go_domain_faq_schema (a narrow single-signal detector vs. this service's broad 8-signal composite auditor). trl bumped 5->6; trl_ceiling=7 added -- the score is an unvalidatable heuristic (no ground truth for 'voice-search readiness' exists) and body-text signals get polluted by nav/footer boilerplate on real pages, a structural limit not a patchable bug. See PR #3 (merged).",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 8323,
-    "container_port": 8323
+    "container_port": 8323,
+    "trl_ceiling": 7
   },
   {
     "id": "wayback-checker",
@@ -9972,11 +9973,11 @@
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
     "trl": 7,
-    "trl_evidence": "ETag/304 fetch cache (60s TTL), /graph.dot Graphviz DOT, /trl-heatmap SSR with html-escape proof, /selftest exercises all 3 renderers against embedded 5-service fixture",
+    "trl_evidence": "Second-pass re-audit of this fleet topology/TRL-heatmap dashboard: found and fixed 3 real bugs. (1) A data race in the ETag registry cache -- the 304 branch mutated a shared cache entry's fields in place while a concurrent Fetch call read those same fields unlocked, confirmed with go test -race; directly relevant since /dashboard, /graph.dot, and /trl-heatmap all hit the same cached URL concurrently. Fixed by making cache entries immutable-once-published. (2) A client-side XSS gap -- the operator dashboard built rows via innerHTML template-literal interpolation of collector-reported strings with zero escaping, unlike the SSR heatmap which correctly uses html.EscapeString; rewrote all sinks to use textContent/createElement and scheme-checked lookup URLs. (3) A malformed optional slice (services.depends.json) broke the entire read surface with a 502, despite the code's own comment claiming this case was tolerated -- the tolerance only covered fetch errors, not JSON decode errors; reproduced live, now returns 200. Confirmed /selftest is correctly wired (unlike sibling go-fleet-graph's dead-code bug) and no leaked secrets exist (unlike sibling go-fleet-metrics-hub). trl/trl_ceiling held at 7/7 -- the ceiling's stated rationale (no collector-failure circuit breaking/snapshot persistence) is unrelated to these bugs and still holds; all three are now fixed with regression tests. See PR #3 (merged).",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 18144,
     "container_port": 18144,
     "depends_on": [
