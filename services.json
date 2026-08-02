@@ -13653,11 +13653,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/little-voice-stories",
     "trl": 3,
-    "trl_evidence": "storytelling app, voice recording",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this 'kid's drawing into a bedtime story narrated in a parent's voice' app (sensitive categories: child content + voice-biometric-adjacent data, so privacy verification was the priority): thoroughly verified no undisclosed transmission of any of it. Drawing analysis is 100% in-browser canvas pixel math (color histogram, ink coverage, edge energy) plus filename-keyword regex, no vision API call. Default story generation is a deterministic local template engine seeded by a hash of the inputs; the optional local-LLM path (@mlc-ai/web-llm, Qwen2.5-0.5B) downloads only model weights after explicit opt-in, inference runs locally via WebGPU, the prompt itself never crosses the network. Voice 'cloning' is honestly not neural voice cloning -- it's local AudioContext analysis (RMS, zero-crossing pitch, warmth) tuning the browser's built-in SpeechSynthesis; the raw recording Blob is discarded from memory immediately after analysis, never persisted, only derived non-identifying acoustic parameters are stored. Share links deliberately exclude the drawing image and voice profile from their payload, unlike the full session export. Found and fixed a real data-loss bug: the session-restore effect returned early after loading a #share= link, before reaching the finally block that sets hasLoaded(true); since the debounced autosave effect is gated on hasLoaded, opening any shared story link silently disabled autosave for the rest of that browser session -- a newly recorded parent voice profile or freshly generated story made afterward would show a normal 'saved' toast but vanish on refresh/close with no warning. Fixed with one line plus a new e2e regression test. trl held at 3; trl_ceiling=5 added -- the privacy architecture is sound and would support real hardening without an architecture rework, but today's 'AI' is honestly simple heuristics/templates and there was a genuine silent data-loss bug, consistent with early/toy-stage rather than higher until the fix ships with real CI coverage (currently none). See PR #6 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "local-proofreader",
