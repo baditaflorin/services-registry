@@ -13016,11 +13016,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/accent-coach/",
     "trl": 4,
-    "trl_evidence": "wellness app, guided audio/coaching",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this browser-based accent/phoneme coach (classical 12th-order LPC + Durand-Kerner formant analysis, no WASM/ML model): privacy claim verified clean via live network capture during load, mic-denial, and analysis -- zero external calls anywhere, matches README/SECURITY.md exactly. Core functionality handled silence/empty/very-short/very-long clips and no-mic-permission gracefully. Found and fixed a real bug: analyzeFormants enters an infinite loop if sampleRate is 0, negative, or non-finite (hopSize rounds to 0, so the scan offset never advances) -- not reachable via the actual recording pipeline today, but a genuine unguarded hang other code could trigger; fixed with an early-return guard and a hopSize floor. No XSS surface, accessibility basics solid. trl held at 4; trl_ceiling=6 added -- classical LPC-based formant tracking has genuine structural accuracy limits (harmonic/formant confusion, only 3 curated practice sentences) blocking it from 'production, SLA-grade' without a fundamentally different acoustic-model architecture. See PR #6 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "anon-conf-poll",
@@ -13041,12 +13041,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/anon-conf-poll/",
-    "trl": 3,
-    "trl_evidence": "polling app, basic UI and state",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "First-pass audit of this anonymous conference-polling app (real @semaphore-protocol v4.12.1 zk-SNARK library, y-webrtc/Yjs CRDT mesh, libsodium Ed25519 host signing): the anonymity/one-vote claim verified as genuine, not a placeholder -- every vote is independently re-verified by every peer via real verifyProof before tallying, and the one-vote guarantee is enforced through the Semaphore nullifier (deduped in tally logic), not client-side state; confirmed clearing localStorage/incognito/replay all fail to bypass it. Found and fixed a real CRDT bug: tallyVotes/summarizeDuplicateVotes/uniqueQuestions picked the dedup 'winner' by sorting on createdAt alone -- when two records from the same nullifier tied on createdAt (millisecond-identical), the tie-break depended on each peer's local Y.Map iteration order (network-arrival-dependent), so two honest, fully-synced peers could disagree on the tally for a tied pair; reproduced concretely with a standalone multi-peer Yjs simulation. Fixed with a deterministic tie-break keyed on the record's unique id. Vote counts themselves were never wrong -- only which record wins a tie could diverge. trl bumped 3->4; trl_ceiling=5 added -- no server component to hold to a higher bar, anonymity strength is explicitly room-size-dependent per the project's own honest privacy docs, and one-vote enforcement's Sybil-resistance ultimately rests on the host distributing exactly one invite per attendee (an operational trust assumption, not a code flaw). See PR #6 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "audience-field-sculpture",
@@ -13068,11 +13068,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/audience-field-sculpture/",
     "trl": 3,
-    "trl_evidence": "creative app, field manipulation",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this ArUco-marker-based privacy-preserving browser artwork (js-aruco2 camera detection, no NFC/QR/Bluetooth): privacy claim verified true via full source + built-bundle grep -- zero fetch/XHR/WebSocket/RTCPeerConnection anywhere, camera frames go straight to an offscreen canvas and are never serialized or sent anywhere, mic never requested. All DOM writes use textContent (no XSS/injection path for tag-derived data). Found and fixed a real bug: the requestAnimationFrame render loop had no exception containment -- a single throw inside tick() (from the third-party detector library, or canvas/Web Audio calls) would abort the callback before it re-scheduled itself, silently and permanently freezing the artwork with no error shown and no recovery short of a page reload -- a real risk for an always-on public installation. Fixed with a Result-returning wrapper matching the codebase's existing idiom; on a caught exception the app now stops cleanly with a persistent, actionable error. trl held at 3; trl_ceiling=4 added -- genuinely well-engineered early-stage project (strict TS, 93%+ tested-layer coverage) but shouldn't go above 4 until someone runs the real-phone measurement pass the project's own docs already flag as outstanding. See PR #6 (merged).",
+    "trl_ceiling": 4,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "audio-repair-lab",
@@ -13093,12 +13093,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/audio-repair-lab/",
-    "trl": 4,
-    "trl_evidence": "audio processing app, basic DSP",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-pass audit of this browser audio-repair toolkit (corrected the catalog's 'WASM DSP/ML model' framing -- it's pure TypeScript FFT-based spectral noise gating and heuristic mid/side/bandpass 'vocal isolation,' no WASM, no ML source separation): privacy verified via a full network-panel watch through a real import->process->export cycle in an actual browser -- nothing left the machine. Core processing correct across 9 real-world fixtures plus 14 synthetic edge cases (silence, clipping, 1-sample clips, 192kHz, 5.1 downmix) with deterministic output. Found and fixed a real memory bug: no real ceiling existed for large files (only a soft 30s/10MB warning, nothing blocking), and processAudioData redundantly cloned already-normalized channel buffers a second time for zero benefit -- measured a synthetic 30-minute 48kHz stereo clip (this app's stated use case, a full podcast episode) pushing worker RSS to ~2.5GB against only ~690MB of raw decoded PCM, a real risk of a crashed/hung tab. Fixed by removing the redundant clone and wiring up the hard >450MB ceiling an existing ADR documented as intent but never implemented. trl bumped 4->5; trl_ceiling=6 added -- well-engineered, honestly-scoped tool (extensive ADRs, real-fixture test suite) but has a real structural ceiling: no ML source separation, just spectral gating/heuristics on a single worker with no streaming, will never match server-side/paid tools for source-separation quality. See PR #8 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "automata-lab",
@@ -13122,7 +13122,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/automata-lab/"
+    "pages_url": "https://baditaflorin.github.io/automata-lab/",
+    "trl": 6,
+    "trl_ceiling": 7,
+    "trl_evidence": "First-pass audit (never assessed before, no summary in catalog): confirmed real and complete -- 3 correctly-implemented cellular-automaton simulators (Conway's Life B3/S23, Gray-Scott reaction-diffusion, Lenia/Orbium), 24/24 tests pass (blinker period-2 oscillation, glider translation, Gray-Scott boundedness/determinism, Lenia kernel normalization all verified as real correctness invariants, not just smoke tests). Verified live in-browser under adversarial parameter extremes (all sliders maxed simultaneously at 20x speed) with no NaN/crash; the animation loop already caps ticks-per-frame at a budget of 6 before scheduling the next frame -- a deliberate, already-present guard against exactly the 'heavy sim freezes the tab' bug class. Grid sizes are hardcoded constants (no user control to grow them, so unbounded-grid-size hang doesn't exist as an attack surface) and all parameters are range-clamped HTML inputs (invalid rule input structurally impossible from the UI). No real bug found -- genuinely clean audit, no PR needed. trl=6, trl_ceiling=7 -- mathematically-correct, well-documented implementations (cited Gray-Scott/Lenia references) with genuine unit-test coverage, clean build, verified working end-to-end; capped below 8-9 since it's a static single-purpose client-side demo with no backend/SLA concept.",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "bilateral-memory-processing",
@@ -13143,12 +13148,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/bilateral-memory-processing/",
-    "trl": 2,
-    "trl_evidence": "archive concept, foundational logic",
+    "trl": 4,
+    "trl_evidence": "First-pass audit of this EMDR-inspired local audio-journaling app (Whisper transcription + WebLLM reflection, both fully client-side): privacy claim verified holds up via full network-call trace (only model-weight fetches, never audio/text). Found and fixed a real data-loss-appearing bug: sessionRepository.listSessions() validated each IndexedDB row with SavedSessionSchema.parse() inside .map(), which throws on the first row that doesn't match the schema, rejecting the whole call -- the UI then silently showed 'Nothing has been saved in this browser,' indistinguishable from real data loss, even though every session was still intact on disk. Fixed by switching to safeParse per row (bad rows skipped, left untouched, never deleted); also memoized a previously-leaked-per-call IndexedDB connection. trl bumped 2->4 (current trl=2 undersold real multi-step logic and genuine local Whisper/WebLLM integration); no trl_ceiling -- static browser-only app by design, but nothing structurally blocks maturing toward 6-8 with dependency hygiene, CI, and broader test coverage. Separately flagged: 21 known vulnerabilities (1 critical, 9 high) in transitive devDependencies, dev/build-time only. See PR #9 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "castle-archive-memory-vault",
@@ -13170,11 +13175,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/castle-archive-memory-vault/",
     "trl": 3,
-    "trl_evidence": "archive app, storage and retrieval",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this local-first voice-reflection vault for retreats (Whisper + WebLLM, both running fully client-side via ONNX/WASM in Web Workers -- only model *weights* are fetched remotely, never audio/text): privacy/local-first claim verified genuinely holds up via full network-call trace. Data persistence (IndexedDB/OPFS) sound, no bug found there. Found and fixed a real data-corruption bug: embed() and transcribe() each lazily create one shared Worker reused by every caller with no request-correlation id, so if a user switched to the Search tab while a reflection was still saving in the background, a search query's embedding could silently get attached to the wrong saved entry (or vice versa), permanently corrupting that entry's semantic-search ranking with no visible error. Fixed with per-request correlation ids. trl held at 3 (a real, previously-unnoticed correctness bug just surfaced in the core search pipeline, and no evidence of real-world multi-attendee usage yet); trl_ceiling=6 added -- solo-maintainer project, no CI pipeline, manual/technical key-sharing UX that's a real support burden for non-technical retreat attendees, Whisper-tiny is a low-accuracy tradeoff. See PR #15 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "chatwrapped",
@@ -13198,7 +13203,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/chatwrapped/"
+    "pages_url": "https://baditaflorin.github.io/chatwrapped/",
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_evidence": "First-pass audit (never assessed before): confirmed real, complete, and working -- a client-side 'Spotify Wrapped'-style chat-export stat generator, zero backend, deployed live. Privacy claim (100% on-device) verified genuinely true via full source grep -- no fetch/XHR/WebSocket/analytics anywhere. Found and fixed a real bug: the emoji-counting regex (\\p{Extended_Pictographic}) missed flag emoji (regional-indicator pairs) and keycap sequences entirely, so a chat full of country flags or a countdown would show zero for those glyphs in the advertised 'Top emoji' feature. trl=7, trl_ceiling=8 -- fully built, deployed, correctly functioning app with a real 35-test automated suite and a working build/smoke gate, well past prototype; capped below 9 since there's no CI (manual local smoke gate stands in) and, by privacy-first design, no telemetry exists to evidence sustained real-world usage. See PR #6 (merged).",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "complete-gardener-planner",
@@ -13219,12 +13229,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/complete-gardener-planner/",
-    "trl": 3,
-    "trl_evidence": "planning app, calendar and checklist logic",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "First-pass audit of this static-first garden/crop-rotation planner: found and fixed 2 real bugs. (1) Crop rotation anchored on the alphabetically-first selected crop only, ignoring the rest of the bed -- concretely, selecting marigold+tomato anchored on marigold ('flower') and completely missed that tomato (nightshade family) shouldn't be replanted for years, recommending a real horticultural error while claiming to move away from pressure; fixed to consider every selected crop's family. (2) Share links caused silent, repeating data loss -- loading a shared plan from the URL hash never cleared the hash, so reloading that tab or revisiting a bookmarked link would silently overwrite the user's own autosaved local plan every time with no confirmation or recovery path; fixed by clearing the hash once consumed. No XSS found (pure JSX interpolation); plant-ID is honestly labeled as heuristic, not a hidden ML claim. trl bumped 3->4; trl_ceiling=6 added -- genuinely working, well-documented static PWA with real computation (SunCalc solar-position math, a yield model) and honest labeling, but a single-maintainer hobby project with a heuristic (not trained-ML) plant-ID feature. See PR #7 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "cookiecutter-data-science",
@@ -13246,11 +13256,11 @@
     "auth_help": "no auth",
     "pages_url": "http://drivendata.github.io/cookiecutter-data-science/",
     "trl": 4,
-    "trl_evidence": "data science template, multi-module scaffolding",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit: confirmed a genuine, unmodified fork of the well-known upstream DrivenData cookiecutter-data-science template (isFork:true, byte-for-byte identical template payload at the fork point) -- correctly left the vendored template's core structure alone rather than attempting a risky upstream re-sync. Real local finding: 12 commits since the fork point had accidentally propagated this fleet's onboarding automation (CLAUDE.md, SERVICE-TEMPLATE.md, git hooks) into this unrelated public repo, publishing internal fleet ops detail (auth flow, token-rotation playbook, mesh domains -- no literal secrets, but real information disclosure about unrelated infrastructure) with no bearing on what this repo actually is. Removed. trl held at 4; trl_ceiling=6 added -- the template itself is genuinely functional (verified end-to-end: generation, install, tests all pass) but this fork is frozen ~4+ years behind upstream with no CI of its own; periodic re-sync from upstream is the only lever, not local engineering. See PR #1 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "crystal-growth-simulator",
@@ -13272,11 +13282,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/crystal-growth-simulator/",
     "trl": 4,
-    "trl_evidence": "physics simulator, crystallography model",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this browser phase-field (Allen-Cahn-style) crystal-growth simulator (WebGPU compute shader with a CPU JS fallback): found a critical bug -- the stochastic noise term was gated by (1-phase), non-zero across the ENTIRE grid rather than just the growth interface, and at the shipped undercooling/nutrient values background (phase=0) is a linearly unstable fixed point, so noise spontaneously nucleated solid across the whole domain at once around step ~20-25 (confirmed via instrumented radius-growth tracing: 5.5%%->138%% of center-to-edge in one step, reproduced for all 3 presets independent of grid size); at real frame rates the 'snowflake' would explode into full-screen static within about a second of pressing Start, meaning the app essentially never showed a real crystal in any normal session. Fixed by gating noise with front (phase*(1-phase), zero in untouched background) in both the CPU and WGSL paths, verified mathematically and live in-browser (~50s sustained run at ~80fps, smooth gradual growth, no errors). Also flagged 3 lower-severity issues, not fixed: the 'Coral mineral' preset renders as a 7-pointed star rather than the amorphous disk its own code comment documents; a toroidal grid boundary causes a maze-fill on long runs once a crystal reaches the edge; the CPU-fallback lower-resolution claim in the postmortem is never actually implemented. trl/trl_ceiling held at 4/4 -- the core 'does it actually grow a recognizable crystal' promise was broken in every normal session before this fix, and the 3 flagged-not-fixed issues are real user-visible gaps worth triaging before raising the ceiling. See PR #7 (merged).",
+    "trl_ceiling": 4,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "cursorparty",
@@ -13298,11 +13308,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/cursorparty/",
     "trl": 3,
-    "trl_evidence": "collaborative app, cursor tracking",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this P2P shared-cursor/sticky-note infinite-canvas app (Yjs CRDT over y-webrtc, self-hosted signaling/TURN): confirmed the exact classic CRDT bug the audit was primed to look for -- Y.Map#delete() loses unconditionally to any concurrent set() on the same key, so deleting a note another peer is mid-edit on always resurrects it with the edit's content regardless of real-time ordering; reproduced with real multi-Y.Doc merges. Also found and fixed a real crash: nothing validates the runtime shape of Y.Map values from peers, so a peer writing e.g. null for a note key crashes the sort call with no try/catch anywhere in the chain and no ErrorBoundary in the app -- one bad peer write breaks every other peer's live sync. Fixed both: delete now uses a deleted:true tombstone via set() (same deterministic LWW rule as any edit, no asymmetric resurrection bias), plus runtime validation guards. Added the repo's first-ever tests. No privacy leak found (visibility matches the honestly-documented threat model). Catalog's 'infinite canvas' claim doesn't match reality -- no pan/zoom exists, just a fixed-viewport 0-1 fractional-position canvas (noted, not fixed). trl held at 3; trl_ceiling=6 added -- honestly toy-stage (no tests existed before this fix, one malformed peer write could crash every session) but the core CRDT engine is sound; structurally a backend-less serverless P2P toy, can't reach production/SLA-grade. See PR #6 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "deep-searcher",
@@ -13324,11 +13334,11 @@
     "auth_help": "no auth",
     "pages_url": "https://zilliztech.github.io/deep-searcher/",
     "trl": 4,
-    "trl_evidence": "search aggregator, multi-source query",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit: confirmed a pure, unmodified 6-month-stale fork of zilliztech/deep-searcher (isFork:true, zero application-file changes vs the merge-base -- every local commit beyond it is fleet-doc-propagation noise, not app code). Privacy claim ('search on private data') verified honest with an important nuance correctly disclosed: only the user's query, collection names/descriptions (for routing), and already-retrieved chunk text ever get formatted into an LLM prompt -- never the full/un-retrieved corpus -- but 'private' means the corpus stays in your own local vector store (embedded Milvus-lite by default), not that zero bytes reach a cloud LLM; the default config actually uses OpenAI for both LLM and embeddings unless you opt into a local provider (Ollama/FastEmbed/SentenceTransformer, all present and functional) -- this is disclosed behavior in the README, not a discrepancy. Found 3 real bugs, all confirmed identical in the merge-base and current upstream/master (an unbounded firecrawl-py dependency pin breaking on fresh installs, matching an already-open upstream PR #262; a hardcoded 3-model embedding-dimension whitelist throwing KeyError for any other model; a malformed closing tag in a RAG prompt) -- per instructions to be conservative with third-party code, correctly declined to patch any of them or open a PR, since fixing upstream-inherited bugs in a passively-mirrored fork would only deepen the exact divergence problem this audit exists to catch. Also noted the repo's own pytest CI step is present but commented out, so its test suite never actually runs. trl held at 4, trl_ceiling=6 -- a legitimate, moderately mature multi-provider RAG framework, not toy-tier, but reaching 'real' (6-7) requires the owner to merge the 12 pending upstream commits, pin dependencies, and re-enable the disabled CI step.",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "earthquake-wave-propagation",
@@ -13349,12 +13359,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/earthquake-wave-propagation/",
-    "trl": 4,
-    "trl_evidence": "seismic simulator, wave physics",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-pass audit of this interactive WebGPU seismic-wave demo (P/S-wave visualization + sonification): confirmed physically correct -- P-wave velocity > S-wave velocity in every scenario preset, CPU and WebGPU kernels implement identical Ricker-wavelet/attenuation formulas, audio sonification schedules pulses at the same distance/velocity formulas driving the visual arrival readouts (sound and visuals physically consistent). WebGPU->CPU fallback verified live in an isolated headless Chromium with no WebGPU adapter; no GPU/audio-node leak under sustained rapid-strike use. Found and fixed a real bug that broke the app's headline 'see the waves propagate' feature: updateArrivalRings scaled each P/S arrival ring uniformly on x/y/z via scale.setScalar(radius), but the ring geometry has a fixed y=1.2 hover height above the terrain, so that hover height got multiplied by the wave radius too -- rings went rocketing kilometers into the sky as the wavefront expanded, visually confirmed as a floating ellipse detached from the terrain, broken for anything beyond the first second or two. Fixed by scaling only the flat x/z footprint, verified via a Playwright screenshot series showing rings now correctly hugging the terrain across the wave's lifetime. One test-environment false alarm (render loop appearing to never fire) correctly diagnosed as sandbox tab-backgrounding, not an app bug, confirmed by reproducing cleanly in an isolated headless instance. trl bumped 4->5; trl_ceiling=6 added -- a self-described 'educational analytic wavefront model, not a validated scientific solver' per its own postmortem, static client-only with no backend, structurally depends on a browser engine feature (WebGPU) with still-inconsistent cross-browser support (CPU fallback keeps it fully functional everywhere, so not a hard blocker, but caps how far it can honestly claim toward production/SLA-grade). See PR #5 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "elder-care-coordinator",
@@ -13376,11 +13386,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/elder-care-coordinator/",
     "trl": 4,
-    "trl_evidence": "care app, scheduling and notes",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this local-first elder-care coordination app (meds/appointments/insurance, IndexedDB/Yjs, no backend): privacy/local-first claim verified clean -- no analytics/telemetry anywhere, only non-user-initiated network call is a read-only GitHub commits-endpoint fetch with no care data. Found and fixed 2 real, compounding bugs with genuine safety stakes in the medication-reminder core: (1) the 'due' (overdue) status was practically unreachable -- the scheduler always rolled a passed dose time forward to the next occurrence BEFORE checking confirmation, so a missed dose silently became 'tomorrow, upcoming' instead of flagged overdue, meaning the dashboard's overdue-medication alert essentially never fired. (2) medications store one lastConfirmedAt timestamp per medication, not per dose-time, so confirming a twice-daily medication's 08:00 dose retroactively marked its still-not-given 20:00 dose as confirmed too -- a caregiver could see 'Done' and skip giving it. Fixed both (dose slots stay 'due' until actually confirmed; confirmation now requires the confirmation clock-time to be at/after the specific dose's scheduled time); one existing test was found to have been unknowingly encoding the bug's own symptom, now corrected. trl held at 4 pending this fix landing and CI going green; trl_ceiling=5 added -- genuinely local-first/no-backend/no-telemetry with real schema validation and tests, but no at-rest encryption for local IndexedDB, no DST-transition test coverage. See PR #8 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "fake-text",
@@ -13404,7 +13414,11 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/fake-text/"
+    "pages_url": "https://baditaflorin.github.io/fake-text/",
+    "trl": 6,
+    "trl_evidence": "First-pass audit of this fabricated iMessage/SMS/Tweet screenshot generator (never assessed before, catalog name suggested Lorem-Ipsum but it's actually a meme-image tool): confirmed real and complete -- clean typecheck/build/smoke, deployed live. No XSS found (all user text via textContent; the one innerHTML use only ever receives numeric formatCount() output). Found and fixed a real layout bug: an unbroken character run (long URL, hashtag, base64 blob) in a chat bubble blew the CSS layout width out to ~4.85 million px, because flex items default to min-width:auto and word-wrap:break-word doesn't affect min-content sizing -- the phone frame's overflow:hidden then silently clipped the text past ~380px in both the live preview and the exported PNG, with no crash but no graceful handling either. Fixed with min-width:0 plus overflow-wrap:anywhere; also added a shared MAX_TEXT_LEN=4000 cap to the chat-bubble textarea (previously uncapped, unlike the tweet-text field). An initial suspicion that this also hung PNG export did not hold up under cross-check with real Chrome via Playwright -- correctly walked back rather than overclaimed. trl=6, no ceiling -- real, genuine tests, builds/runs end-to-end, deployed, no backend surface; young and no CI, but nothing structurally caps it from climbing higher with more field use. See PR #6 (merged).",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "field-recording-mirror",
@@ -13425,12 +13439,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/field-recording-mirror/",
-    "trl": 3,
-    "trl_evidence": "audio archive, recording sync",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "First-pass audit of this browser field-recording-loop instrument (WebAudio, OPFS/Whisper/Pyodide workers): privacy claim verified genuine -- audio only ever moves via postMessage (transferred ArrayBuffer) into a local Worker, no exfiltration anywhere. Found and fixed 2 real bugs: (1) a reentrancy race in engine.stop() -- the running guard was only cleared AFTER await audioContext.close(), so a fast double-click on Stop could call AudioContext.close() twice on the same context, throwing an uncaught InvalidStateError and leaving the UI stuck mid-teardown; fixed by flipping the guard synchronously before the first await. (2) a Whisper/Pyodide worker leak -- every click of 'Transcribe'/'Analyse' created a brand-new client/Worker without disposing the previous one, growing memory by hundreds of MB per click, directly contradicting the docs' own 'second run is instant' claim; fixed by caching one client per session and reusing it. trl bumped 3->4; trl_ceiling=7 added -- client-only art piece with no server component and a subjective 'does it sound right' success criterion, 8-9 doesn't apply. See PR #6 (merged).",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "flowfield",
@@ -13454,7 +13468,11 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/flowfield/"
+    "pages_url": "https://baditaflorin.github.io/flowfield/",
+    "trl": 6,
+    "trl_evidence": "First-pass audit of this Perlin/flow-field generative-art tool (never assessed before, no summary in catalog): confirmed real and complete -- 17 pre-existing tests, clean build, correct-looking generative art verified visually. Found and fixed a real bug: since the app's whole premise is reproducible/shareable-by-link, decodeSettings() parsed numeric URL-hash fields with only a finiteness check, no clamping to the app's own slider limits (particles 50-3000, steps 40-600) even though a clamp() helper already existed for exactly this -- a crafted or shared link bypasses every slider cap and feeds straight into spawn()/render() on page load. Live-proved: a link with 200,000 particles (17x over the cap) crashed the process with an out-of-memory fatal error; 5,000,000 particles hung the tab for 30+ seconds without completing even 2 animation frames. Fixed by clamping every numeric field to the same LIMITS the sliders enforce, narrowing the type so it's enforced at compile time too. The separate classic 'uncanceled RAF loop' bug is NOT present -- render() correctly cancels before restarting, resize is debounced. trl=6, no ceiling -- real, working, well-tested client-side tool at its stated scope; genuinely a hobby/toy generative-art app by design (no backend/auth/accounts), so not a candidate for 7-9, but far past 'toy/no tests' territory. See PR #6 (merged).",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "gentle-adhd-flow",
@@ -13475,12 +13493,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/gentle-adhd-flow/",
-    "trl": 3,
-    "trl_evidence": "wellness app, task flow UI",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "First-pass audit of this local-first ADHD self-management app (Whisper STT + Flan-T5 refine, both in-browser via WASM/WebGPU): found and fixed a real privacy leak -- the browser-TTS fallback (used only if the local Piper engine fails) used the native SpeechSynthesisUtterance API, which on some browsers (notably Chrome) can route to a network TTS voice, silently sending derived personal task text off-device despite the 'local-first' claim, with no UI disclosure; fixed to require an explicitly local voice or stay silent. Also found and fixed a real data-loss bug in the core voice-to-task pipeline: extractBrainDump's sentence splitter only broke on newlines/periods/semicolons/bullets, so realistic rambling/voice-transcribed input with no punctuation (e.g. 'call mom and email boss and buy milk...') collapsed into one garbled task, silently losing 3 of 4 distinct actionable items; fixed with conjunction-aware splitting that still keeps plain item lists as one task. Focus timer verified immune to the classic setInterval drift bug (recomputes from Date.now() each tick). trl bumped 3->4; trl_ceiling=5 added -- real client-side-only architecture with genuine self-audits already done, but extraction is still a heuristic regex/keyword classifier, no external usability testing, no cross-device sync. Separately flagged: GitHub shows 24 Dependabot vulnerabilities (1 critical, 9 high) on the default branch, out of scope for this audit. See PR #9 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "granular-physics-lab",
@@ -13501,12 +13519,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/granular-physics-lab/",
-    "trl": 4,
-    "trl_evidence": "physics simulator, particle dynamics",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-pass audit of this browser granular-material teaching sandbox (Three.js/WebGPU-or-WebGL, a tiny WASM contact kernel with a TS fallback): confirmed no uncapped-particle-count or uncanceled-animation-loop leak (GranularScene.dispose() correctly tears down everything, particleBudget always enforced) -- clean bill of health on the hypothesized bug classes. Found a real physics-correctness bug instead: resolvePair()'s inter-particle friction impulse cap was a fixed +-0.08 constant that ignored the material's actual friction coefficient entirely, so sand (0.7), gravel (0.62), and snow (0.86) all resisted sliding at essentially the same rate -- measured a resting sand pile in the app's own default setup settling to only ~13.5deg and sliding to the outer wall within 15 simulated seconds instead of holding a slope, undermining the app's own stated teaching claim ('clean avalanche angle,' 'jammed pile'). Fixed by scaling the friction cap to the material's coefficient with a basic Coulomb stick/slip model -- the same scenario now holds ~21deg and stays clear of the wall. Also fixed a broken pre-commit test hook (Node's built-in localStorage global wasn't being overridden by vitest's jsdom environment). trl bumped 4->5; trl_ceiling=6 added -- permanently committed (per its own ADR/postmortem) to a simplified non-Chrono-parity 2.5D approximation with no backend, no path to SLA-grade for a client-side teaching sandbox. See PR #5 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "group-theory-visualizer",
@@ -13579,12 +13597,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/",
-    "trl": 2,
-    "trl_evidence": "conceptual app, minimal implementation",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-pass audit of this live-mic delay/pitch-shift/spectral-effects browser toy (20 ADRs, real OfflineAudioContext DSP regression tests, honest postmortems documenting bugs caught by testing): privacy confirmed clean via full source grep -- only network hits are an optional Pyodide CDN load (no audio in the request) and same-origin service-worker asset caching; the offline-analysis feature runs librosa entirely inside a Worker via Pyodide, audio never crosses a network boundary. Found and fixed a real hearing-safety gap: the live-mic effects chain (delay + pitch shift + output gain clamped to 2x) had no dynamics processing anywhere in the audio graph -- outGain connected straight to the AnalyserNode/destination -- combined with echoCancellation/noiseSuppression/autoGainControl intentionally disabled on mic capture, and this being a tool people plausibly run through speakers (not headphones) given its whole premise, a hot mic input or acoustic feedback plus a maxed output slider had no ceiling before hitting the user's ears. Fixed by adding a DynamicsCompressorNode (threshold -6dB, ratio 20:1, 3ms attack, 250ms release) as the final stage before both the analyser and destination; WAV export now taps post-limiter so recordings match what's actually heard. Documented in a new ADR. Delay/pitch/output-gain clamping and mic-permission-denied handling all verified correct; mid-session mic disconnect degrades to silence per Web Audio semantics rather than crashing (minor polish gap, not a bug). trl bumped 2->5 (significantly understated by the prior value -- real DSP-correctness regression tests, not just mocked units, plus gated local CI); trl_ceiling=7 added -- structural limit, not temporary: single-developer fully client-side creative tool with no backend/SLA, and no cross-browser testing exists despite README claims. See PR #9 (merged).",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "life-in-weeks",
@@ -13608,7 +13626,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/life-in-weeks/"
+    "pages_url": "https://baditaflorin.github.io/life-in-weeks/",
+    "trl": 7,
+    "trl_ceiling": 8,
+    "trl_evidence": "First-pass audit of this 'Life in Weeks' poster generator (never assessed before, no summary in catalog): confirmed real, complete, and well-architected -- deployed live, 24 pre-existing tests. Date-math correctness (the priority check for this class of tool) verified with no bugs found across leap-day (Feb 29 2000), future-mistake-birthdate, 126-year-old-past-expectancy, born-today/yesterday, and exact-grid-boundary edge cases -- all UTC-midnight-based floor arithmetic, no off-by-one anywhere. Privacy confirmed as advertised (no fetch/XHR/analytics anywhere). Found and fixed a real bug: milestones are packed into the shareable URL hash as date~label~color, and the label is passed through encodeURIComponent, but ~ is an RFC 3986 unreserved character that encodeURIComponent does NOT escape -- so a milestone label containing a literal tilde (e.g. 'Won ~1000 dollars') smuggled extra separators into the packed string, and the naive 3-part split then misfired, silently dropping the entire milestone on the next page load or shared-link open with no error shown. Fixed with first/last-tilde splitting instead of a naive 3-way split (backward-compatible). trl=7, trl_ceiling=8 -- deployed, functioning correctly, privacy claims verified, one real bug found and fixed; deliberately small single-purpose backend-free tool, so 8 reflects its realistic maximum maturity (9 reserved for things needing field-usage telemetry at scale, which this intentionally has none of by design). See PR #6 (merged).",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "little-voice-stories",
@@ -13656,11 +13679,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/local-proofreader/",
     "trl": 4,
-    "trl_evidence": "text tool, grammar and style checking",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this local grammar/style/rewrite assistant (corrected the task's premise -- not an LLM/WASM/WebGPU app, it's a purely deterministic rule-based checker: regex grammar rules, a Hunspell dictionary via nspell, hand-written style rules, no model of any kind runs client-side): privacy/local-first claim verified TRUE -- only fetches are same-origin dictionary/version files, DuckDB-WASM is self-hosted not CDN-fetched, no analytics/telemetry anywhere, the browser extension's broad host permission only runs local regex on manual click with zero network calls. Found and fixed a real bug: an entire advertised feature -- style/jargon/hedging checks (weasel words, 'utilize', etc) -- was defined, unit-tested in isolation, and imported, but never actually called in the real analysis pipeline; confirmed live that a sentence full of jargon returned zero suggestions despite the README advertising exactly this check. Fixed with a one-line pipeline wire-in plus a new end-to-end regression test (the existing tests only covered the rule table in isolation, not the real pipeline -- exactly the kind of test that would have caught this). Data-loss check: no bug found, drafts autosave to IndexedDB on a 250ms debounce with a recoverable error message on analysis failure. trl/trl_ceiling held at 4/4 -- honestly assessed as near its structural maximum for a hand-rolled regex/Hunspell engine, not the ML/LLM system its 'LanguageTool-style'/'Vale-style' branding implies; its heuristics also look tuned closely to its own test fixtures, so real-world coverage is thinner than advertised. See PR #6 (merged).",
+    "trl_ceiling": 4,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "localhuman-mail",
@@ -13682,11 +13705,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/localhuman-mail/",
     "trl": 3,
-    "trl_evidence": "mail app, basic send/receive",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this privacy-first AI email client (manual .eml import only, not a live IMAP client): privacy claim verified genuine -- no cloud AI service exists anywhere in the codebase (grepped for OpenAI/Anthropic/API-key patterns, nothing), only local Ollama with a non-network template fallback; 'semantic search' is honestly disclosed as aspirational (plain SQL LIKE substring search today, not real ranking). No credential-storage issue since there's no IMAP/SMTP login flow anywhere -- nothing to leak. Found and fixed a real bug: countPart() reused the 2MB indexing cap as a hard cap when measuring attachment size, so any attachment over 2MB got a silently wrong, truncated SizeBytes (verified: a real 3,145,728-byte attachment reported as 2,097,153); fixed by removing the unnecessary cap. trl held at 3; trl_ceiling=5 added -- solid, tested, honestly-documented local .eml triage tool, but no live IMAP sync or real semantic ranking yet, enough room to reward hardening the current scope without implying 'production email client' status. Separately flagged: 27 Dependabot vulnerabilities (7 critical, 9 high) on the default branch, out of scope for this audit. See PR #16 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "localingo",
@@ -13708,11 +13731,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/localingo/",
     "trl": 4,
-    "trl_evidence": "language app, learning path",
-    "trl_ceiling": null,
+    "trl_evidence": "First-pass audit of this gamified local-first language tutor (local speech/pitch scoring, SM-2-style spaced repetition, no backend): privacy claim verified genuine -- the only outbound network call in the whole app is a GitHub commit-hash display fetch, no learner data involved; speech scoring, review/SRS, and grammar checking are 100%% local computation. SRS scheduler verified correct (ease-factor updates, interval growth/reset, timezone-safe absolute-timestamp dueAt comparisons). Found and fixed a real timezone bug in the streak/gamification logic: updateStreak() computed 'today'/'yesterday' via date.toISOString().slice(0,10) -- the UTC calendar day, not the learner's local day -- so a learner in a timezone ahead of UTC (e.g. Sydney, UTC+10) practicing late at night and again the next morning (two genuinely different local days) would land on the same UTC day and silently fail to increment their streak; live-reproduced before fixing, resolved with a localDateKey() helper used consistently across recordAttempt/reviewCard/updateStreak. trl held at 4; trl_ceiling=5 added -- solid, honest, privacy-correct small app with decent test coverage, but single-maintainer hobby-scale with no dedicated CI workflow and 'pronunciation scoring' is an honest but crude pitch/energy heuristic rather than real ASR. See PR #11 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "mandala-studio",
@@ -13736,7 +13759,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/mandala-studio/"
+    "pages_url": "https://baditaflorin.github.io/mandala-studio/",
+    "trl": 3,
+    "trl_ceiling": 3,
+    "trl_evidence": "First-pass audit of this radial/kaleidoscope drawing canvas (never assessed before, no summary in catalog): confirmed real, complete, and working -- no stub code, no TODOs, 19 pre-existing tests pass, live deployment matches local build. Symmetry correctness verified live (12-fold and max 24-fold rotation with/without mirror render correctly, no crash at max segment count + mirror). No persistence by design (README accurately states drawings live only in the tab until exported) and privacy confirmed 100%% client-side. Found and fixed a real bug, precisely measured: canvas resize (window resize, orientation change, DevTools toggle) after drawing anything silently distorted already-drawn strokes, because Stroke.points are stored in absolute canvas-pixel coordinates but rendering always expands strokes about the CURRENT center, and resizeCanvas() never adjusted stored points when the center moved -- measured a 24-segment mirrored stroke's bloom radius growing from 76px to 112px (~47%% distortion) on a real resize with zero new strokes drawn. Fixed by tracking the last-known center and translating existing strokes by the delta on resize. trl=3 (was None), trl_ceiling=3 -- small, complete, single-purpose client-side tool with no backend/auth/persistence; 3 is an honest ceiling for its actual scope, not a placeholder. See PR #6 (merged).",
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "mesh-bench-archive",
@@ -13757,12 +13785,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-bench-archive/",
-    "trl": 4,
-    "trl_evidence": "p2p archive, benchmarking",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-pass audit of this P2P mesh voice-notes-tied-to-a-place app (QR-sticker scan -> Yjs CRDT sync): found a real privacy-disclosure gap -- the app's own dedicated privacy doc claims 'no location data,' but MeshShell unconditionally fires an analytics beacon on every page load sending the room id (the physical bench's place label from the sticker itself, e.g. 'park-bench-A'), a truncated peer id, referrer, version, and timestamp; it's opt-out-able and disclosed in the in-app Settings drawer, but the dedicated threat-model doc and README summary never mentioned it -- a real false-as-shipped privacy claim. Fixed by correcting the privacy doc and README (the beacon itself is shared fleet-wide infrastructure in a separate repo, already has an opt-out, left unchanged). Found and fixed a real P2P concurrency bug: the FIFO 30-clip cap logic decided how much to trim from each peer's own possibly-stale view, so when 2+ peers publish concurrently while at the cap (a busy-bench scenario), the merged archive could hold cap+(writers-1) clips instead of 30, silently exceeding the documented ~7-9MB memory bound until another publish happens (no clips lost/duplicated -- convergence itself was sound); fixed with self-healing enforcement wired into the Yjs observe callback so every peer corrects overshoot as soon as it observes the converged state. trl bumped 4->5; trl_ceiling=6 added -- real CRDT P2P sync with a genuine cross-peer e2e test and, after this PR, an accurate privacy doc plus concurrency-correctness unit tests; capped by ADR-0001's intentionally serverless/unauthenticated design with no backend to add integration/evidence-trail tests against. See PR #1 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-02",
+    "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   {
     "id": "mesh-carpool-bingo",
