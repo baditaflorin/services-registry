@@ -2567,10 +2567,14 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
-    "trl": 4,
+    "trl": 5,
     "host_port": 18227,
     "container_port": 18227,
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "trl_ceiling": 7,
+    "trl_evidence": "Real-data audit (2026-07-31, previously unsynced to registry despite a merged fix): fetchPage never checked resp.StatusCode, so a non-2xx homepage response (429 rate-limited, 403 WAF/bot-block, 404, 5xx, or an un-followed 3xx) was silently parsed as if it were the real page. Confirmed live: swordandlaser.com (a genuine podcast site) returned a Squarespace 429 during the audit and was scored a confident, error-free is_podcast_site=false, indistinguishable from a real non-podcast page. Verified via a 1050-domain real Postgres sample (900 random + 150 known-true) run against the actual built binary. Confirmed this repo does NOT have the fleet's common fetch-cache-masking bug (it uses a different fleetfetch client wrapper that correctly surfaces the final post-redirect URL). trl bumped 4->5; trl_ceiling=7 -- the fix is real and verified, but the fleet-wide raw_domain_podcast_presence-always-NULL evidence-column gap (shared downstream-writer issue, out of scope for this repo) caps it below 7 for now. See github.com/baditaflorin/go_domain_podcast_presence PR #8 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
   {
     "id": "domain-product-count",
@@ -10276,10 +10280,13 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
-    "trl": 4,
-    "trl_evidence": "v0.1 ships singleflight + 60s TTL + zstd-compressed Redis storage + SSRF-safe upstream via safehttp. Negative caching for 5xx (5s), no-cache for 4xx and truncated bodies. Redis-unavailable falls back to direct fetch. Lacks: conditional refresh (If-Modified-Since), per-caller metrics, response-shape contract test vs producers.",
+    "trl": 5,
+    "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "host_port": 18205,
-    "container_port": 18205
+    "container_port": 18205,
+    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
   {
     "id": "js-proxy",
