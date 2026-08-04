@@ -1750,7 +1750,11 @@
     "cert_domain": "wildcard.0crawl.com",
     "trl": 4,
     "host_port": 18210,
-    "container_port": 18210
+    "container_port": 18210,
+    "trl_ceiling": 4,
+    "trl_evidence": "First-ever audit re-validated the v0.3.0 honesty-gate architecture against 200 live production domains and the full 349,747-row production table; confirmed the fleet-common safehttp fetch-cache bug class does not apply (plain net/http, no safehttp import). Found and fixed a real evidence-integrity bug: fetchBytesOnce only special-cased >=500/404, so any other non-2xx response (403 auth-wall, 400 on IDN domains) had its HTML error body fed to the line parsers as fabricated real data -- reproduced live for web.archive.org's 403 on nytimes.com and a 400 on cafe.com/moskva.rf/nihon.jp (no punycode encoding before outbound URL construction). Fixed by hard-failing any non-2xx status at the shared fetch layer. Also surfaced two upstream/ops gaps (Common Crawl index-query endpoint failing fleet-wide, OPEN_PAGE_RANK_KEY unprovisioned in production) as follow-ups, not code bugs. trl/trl_ceiling held at 4/4 -- the no-paid-backlink-feed ceiling rationale still holds. See github.com/baditaflorin/go_domain_backlink_profile PR #10 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "domain-bimi-checker",
@@ -7282,12 +7286,12 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
-    "trl": 5,
-    "trl_evidence": "DNS security, RFC-aligned protocol",
-    "trl_ceiling": null,
+    "trl": 7,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this DNS AXFR zone-transfer checker. Live-tested against zonetransfer.me (known-vulnerable), google.com, and a 150-domain live production sample. Found and fixed 4 real bugs: (1) leaked_records silently doubled/tripled per mirrored leaking nameserver (104 entries for 51 actually-distinct records on zonetransfer.me) -- fixed with proper dedup; (2) no bound on transfer duration/record count let a slow-drip server hold a connection open well past the request timeout -- fixed with a 20s/1000-record cap; (3) any mid-transfer error discarded already-captured evidence, turning a real leak interrupted by a network blip into a false negative -- fixed to preserve partial evidence; (4) three distinct real-world AXFR-refusal shapes (TCP reset/EOF, bare-SOA-close, NOERROR-empty-answer) were misclassified as generic errors instead of 'refused' -- confirmed on 89/91 pre-fix 'error' entries in the live sample, now down to 2 (98% drop) with zero regressions in true leak detection. trl bumped 5->7; trl_ceiling=7 (no glue/delegation-consistency check, no TSIG support, unverified IPv6 outbound in some environments). See github.com/baditaflorin/go_zone_transfer PR #5 (merged).",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
     "host_port": 8232,
     "container_port": 8232,
     "proxy_egress": true
@@ -12812,12 +12816,12 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
-    "trl": 5,
-    "trl_evidence": "Go proxy implementation, protocol handling",
-    "trl_ceiling": null,
+    "trl": 6,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this general HTTP proxy, primed to check for the SSRF-guard-built-but-bypassed bug class found in multiple sibling proxies this initiative. Confirmed exactly that: the SSRF validator ran a one-time DNS lookup at request-validation time, but the actual outbound client used a bare http.Transport with no custom DialContext/CheckRedirect -- vulnerable to DNS-rebind/TOCTOU (two independent lookups seconds apart) and redirect-based SSRF (Go's default client follows redirects with zero re-validation of Location). Direct SSRF payloads were already correctly blocked; it was the second-order paths that were open. Fixed by migrating to go-common/safehttp.NewClient() (the fleet's own documented SSRF-safe dialer that re-validates on every dial including redirects), plus added WithoutFetchCache/WithForceHTTP2 and capped previously-unbounded request/response body sizes (DoS gap). Live-tested against real SSRF payloads (169.254.169.254, localhost, internal IPs, file://) -- all rejected post-fix; legitimate traffic unaffected. trl bumped 5->6; trl_ceiling=8. See github.com/baditaflorin/go-proxy PR #4 (merged).",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
     "host_port": 18002,
     "container_port": 3001
   },
@@ -13818,12 +13822,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-carpool-bingo/",
-    "trl": 3,
-    "trl_evidence": "p2p game, location-based",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Found and fixed a real bug live-verified in-browser: the per-device bingo-card seed was regenerated via crypto.randomUUID() on every mount instead of being persisted, so a page reload silently handed players a completely different card -- contradicting the app's own documented 'same card across reloads' guarantee, and directly relevant to this app's spotty-mobile-connectivity car-trip use case. Fixed via localStorage persistence matching the existing room/name pattern. Card generation, win detection (rows/cols/diagonals), XSS handling, secret hygiene, claim-conflict resolution, and privacy-network-call claims were all independently verified sound. trl bumped 3->4; trl_ceiling=5. See github.com/baditaflorin/mesh-carpool-bingo PR #1 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-codenames",
@@ -13848,7 +13852,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/mesh-codenames/"
+    "pages_url": "https://baditaflorin.github.io/mesh-codenames/",
+    "trl": 3,
+    "trl_ceiling": 4,
+    "trl_evidence": "First-ever audit of this P2P Codenames game (Yjs/y-webrtc, no backend beyond signaling/TURN). Found and fixed a real bug: cn:phase/cn:game are room-wide Yjs maps, and 'Lobby'/'New game'/'Deal a board' wrote to them with no confirmation and no restriction on when clickable -- any single connected peer, including a bystander who never joined a team, could instantly and irreversibly wipe an in-progress board and every revealed tile for the entire room, with no resume path. Reproduced via a raw Yjs-map script and a new Vitest suite driving the real component. Fixed by gating all three actions behind confirm() only when a game is genuinely in progress. No XSS/secrets found; privacy claims hold. trl bumped from unassessed to 3; trl_ceiling=4 -- working app with one real fixed bug now under regression coverage, but no CI configured to auto-gate future regressions of this class. See github.com/baditaflorin/mesh-codenames PR #1 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-firefly-walk",
@@ -13869,12 +13878,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-firefly-walk/",
-    "trl": 3,
-    "trl_evidence": "p2p app, location tracking",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a WebRTC/Yjs clock-synchronized ambient pulse effect (median-offset mesh clock, phones brighten in unison), not a geolocation app -- no geolocation API anywhere in source. Found and fixed two issues: (1) the pulse-period input had no upper clamp despite a documented 500-10000ms range, live-reproduced typing a huge value permanently darkened the app with no error; (2) privacy docs claimed zero non-clock data in the wire payload, but mesh-common's MeshShell fires an undisclosed pageview beacon carrying the room ID on every join (has a working DNT opt-out, verified live) -- fixed the disclosure gap in docs/privacy.md rather than the (working) opt-out mechanism. Stale-peer cleanup and adversarial-peer-data handling verified sound. trl bumped 3->4; trl_ceiling=5. See github.com/baditaflorin/mesh-firefly-walk PR #1 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-lightning-flash",
@@ -13895,12 +13904,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-lightning-flash/",
-    "trl": 3,
-    "trl_evidence": "p2p messaging, latency-optimized",
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a P2P photography aid where one phone broadcasts a synchronized fire time and others flash/torch-strobe in unison, not a reflex game. Found and fixed a core-usability bug via live two-tab testing: the camera's FLASH button became permanently disabled after the first flash of any session, because pending-fire state was only recomputed on Yjs array mutations rather than on a timer, so its 500ms wall-clock grace window never actually expired in the UI -- confirmed the button stayed disabled for 9+ seconds when it should clear in ~2.2s. Fixed with a timer-driven recheck plus a soonest-fireAt event-selection fix. Epilepsy-safety, secrets/XSS, and privacy claims (camera frame never rendered/transmitted) all verified sound. trl bumped 3->4. See github.com/baditaflorin/mesh-lightning-flash PR #1 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-mafia",
@@ -13921,12 +13930,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-mafia/",
-    "trl": 3,
-    "trl_evidence": "p2p game, role-based logic",
+    "trl": 5,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass), specifically primed to check for the information-leakage bug class common to hidden-role games. Found and fixed exactly that: every peer computed and stored the FULL {peerId: role} map for the whole table in long-lived React state, even though the UI only ever rendered the local player's own role -- any player could read every other player's role, including who the mafia were, straight out of devtools. Live-proved: a villager's own state contained the full role assignment for all 4 players. Also found and fixed a second real bug: mafiaCount is a per-device localStorage setting fed into the deterministic role-derivation math, so phones with different stale local values disagreed about who was mafia for the identical deal -- live-proved with 6 peers. Fixed by only storing each peer's own role+teammates, and by syncing mafiaCount into the shared doc at deal time. trl bumped 3->5 -- not ceilinged, could be hardened further via per-recipient encrypted role delivery without a redesign. See github.com/baditaflorin/mesh-mafia PR #1 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-metronome",
@@ -13947,12 +13956,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-metronome/",
-    "trl": 4,
-    "trl_evidence": "p2p sync, distributed timing",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Confirmed sample-accurate Web Audio API scheduling throughout (no setTimeout-based audio timing). Found and fixed a real bug: the clock-sync layer trusted remote peers' clock.t/bpm awareness data with only a typeof-number check, which doesn't reject NaN/Infinity -- any peer (no auth, default room) could poison meshNow() for the whole room, silently and permanently killing all audio with no visible error (the exception was swallowed by a try/catch elsewhere). Reproduced with a new unit test confirmed to fail pre-fix. Also found and fixed a privacy-disclosure gap: an undisclosed pageview beacon and a fleet-persona identity panel wired by default, neither mentioned in docs/privacy.md -- regenerated the doc via the project's own generator plus an explicit addendum. trl bumped 4->5; trl_ceiling=6 pending upstream mesh-common privacy-story tightening. See github.com/baditaflorin/mesh-metronome PR #1 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-mirror",
@@ -13973,12 +13982,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-mirror/",
-    "trl": 4,
-    "trl_evidence": "p2p replication, state sync",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "First-ever audit of this ring-topology WebRTC camera-mirroring app (Yjs awareness carries low-fps JPEG frames, not real video tracks, per the app's own ADR). Confirmed live two-peer testing shows the core cross-mesh mirroring genuinely works, including the no-own-camera discriminator case. Found and fixed a real camera-leak bug: unprotected await/throw points between acquiring the camera and returning the stop-capable handle left the camera running indefinitely on any setup failure (video.play() rejecting, canvas context null), with no in-app way to release it or retry. Fixed with try/catch cleanup plus a 'Try again' recovery path; a new Playwright test using a fake device confirmed the leak pre-fix and its absence post-fix. No server-side frame exfiltration found (traced all network calls). trl bumped from unassessed to 5; trl_ceiling=6 -- by-design limits reasonable for a peer_to_peer novelty app. See github.com/baditaflorin/mesh-mirror PR #1 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-most-likely",
@@ -14003,7 +14012,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/mesh-most-likely/"
+    "pages_url": "https://baditaflorin.github.io/mesh-most-likely/",
+    "trl": 2,
+    "trl_ceiling": 3,
+    "trl_evidence": "First-ever audit of this P2P 'Most Likely To' voting game (Yjs/y-webrtc). Verified architecture and privacy claims against source. Found and fixed two real gameplay bugs via a two-peer CRDT test harness: (1) a per-card vote key missing the round seed, so replaying a deck resurrected stale votes from the previous shuffle onto a completely different reshuffled prompt; (2) a reveal verdict computed from an unfiltered vote tally, so a departed/refreshed peer could be crowned winner while absent from the leaderboard shown directly beneath -- live-verified with linked peers ('Ghost' crowned survivor-of-a-zombie-apocalypse while showing 0 on the leaderboard). Both fixed with regression tests. A related gap (stale-voter count inflation on non-peer-indexed vote kinds) needs a mesh-common library change, flagged as follow-up. trl=2, trl_ceiling=3 -- real bugs just found and fixed in core scoring logic, genuinely early-stage. See github.com/baditaflorin/mesh-most-likely PR #1 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-picker",
@@ -14028,7 +14042,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/mesh-picker/"
+    "pages_url": "https://baditaflorin.github.io/mesh-picker/",
+    "trl": 4,
+    "trl_ceiling": 6,
+    "trl_evidence": "First-ever audit of this P2P random-picker/decision app (Yjs/y-webrtc). Confirmed core RNG/shuffle math (mulberry32, seeded Fisher-Yates, single-cycle derangement for Secret Santa) is sound -- no modulo bias, no self-assignment, edge cases handled, 24 existing unit tests. Found and fixed two real bugs via the project's own mock-room test harness (each verified to fail pre-fix): (1) a room-wide crash from an unvalidated shared 'mode' value indexed into a lookup table -- any peer writing an unrecognized value crashes every connected peer's render; (2) a split-brain reveal -- teams/winner were recomputed from the live roster on every render instead of a value snapshotted at Draw time, so transient roster disagreement between peers (propagation lag, clock skew, mid-draw joins) could produce different results from an identical shared seed. Also corrected a false 'commit-reveal' security claim in the README/tagline -- salts are published in the clear and Reroll is unlimited/unilateral, verified by tracing mesh-common's useFairRng. trl=4, trl_ceiling=6 pending a real fix to the shared fairness-protocol gap (flagged as a follow-up task against mesh-common). See github.com/baditaflorin/mesh-picker PR #1 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-reaction",
@@ -14053,7 +14072,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/mesh-reaction/"
+    "pages_url": "https://baditaflorin.github.io/mesh-reaction/",
+    "trl": 3,
+    "trl_ceiling": 4,
+    "trl_evidence": "First-ever audit of this P2P reaction-speed game (Yjs/y-webrtc). Found and fixed a 100%-reproducible React render-phase violation: the mesh-median clock sync object was built inside useMemo, but its constructor synchronously publishes onto shared WebRTC awareness state, which synchronously fires a parent component's setState mid-render -- illegal in React, reproduced on every single page load (confirmed via console errors). Fixed by moving clock construction into a properly-keyed useEffect. Scoring/false-start/tie-break logic (pure, unit-tested) verified correct; no XSS (tested live with an injection payload in the name field); no hardcoded secrets. Noted but out-of-scope: clock sync has no RTT/2 latency correction (lives in shared mesh-common), though each peer's own recorded reaction time is unaffected by the bias. trl=3, trl_ceiling=4. See github.com/baditaflorin/mesh-reaction PR #1 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-shared-window",
@@ -14074,12 +14098,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-shared-window/",
-    "trl": 4,
-    "trl_evidence": "p2p collaboration, canvas sharing",
+    "trl": 5,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a tiled-grid low-fps camera-snapshot sharing app over Yjs awareness (not a shared-cursor surface). Found and fixed two real bugs: (1) editing the tile-label field re-triggered the camera-acquisition effect on every keystroke, flashing the whole tile to 'opening...'; (2) with no auth by design, any peer could publish malformed awareness data (e.g. non-string label) that threw inside a shared change handler, freezing the tile grid for the entire room off one bad message. Both fixed and covered by new unit/e2e regression tests confirmed to fail pre-fix. Late-joiner sync, XSS, and secrets all verified sound. trl bumped 4->5. See github.com/baditaflorin/mesh-shared-window PR #1 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-silence-counter",
@@ -14100,12 +14124,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-silence-counter/",
-    "trl": 2,
-    "trl_evidence": "p2p minimal logic",
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass, which also mis-scored this the lowest trl of any mesh app). Corrected assumption: this is an accelerometer-based DeviceMotionEvent stillness detector for group meditation, not a mic app -- no getUserMedia anywhere, so mic-privacy concerns don't apply. Found and fixed two silent WebRTC bootstrapping bugs: (1) the self-heal path for a stale cached signaling URL returned an empty string instead of the live default -- new WebSocket('') doesn't throw, so peer discovery broke permanently with zero error for any browser that ever cached the dead URL; (2) the WebRTC room was constructed synchronously reading ICE servers from localStorage while the TURN-credential fetch ran in parallel, so every user's first join ran STUN-only despite the app existing specifically to work around NAT via TURN. Both live-verified and fixed. trl bumped 2->4. See github.com/baditaflorin/mesh-silence-counter PR #1 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-tap-symphony",
@@ -14126,12 +14150,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-tap-symphony/",
-    "trl": 3,
-    "trl_evidence": "p2p audio, tap-based interaction",
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Confirmed sample-accurate Web Audio scheduling (no setTimeout drift) and correct late-joiner CRDT replay of the shared drum loop. Found and fixed a real, high-severity crash: the shared tap-event array was written by every peer with zero validation, so a malformed entry (bad slot value, from a malicious/buggy peer or stray devtools write) threw during render with no error boundary anywhere in the app -- crashed the whole tree to a white screen for every current AND future joiner, since the bad entry replays from the shared CRDT. Fixed with input validation at the CRDT-to-render boundary plus a MeshErrorBoundary wrap; added the repo's first unit tests. trl bumped 3->4. See github.com/baditaflorin/mesh-tap-symphony PR #1 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-tug-of-war",
@@ -14156,7 +14180,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/mesh-tug-of-war/"
+    "pages_url": "https://baditaflorin.github.io/mesh-tug-of-war/",
+    "trl": 5,
+    "trl_ceiling": null,
+    "trl_evidence": "First-ever audit of this P2P tug-of-war game (Yjs/y-webrtc). Tally aggregation and win detection verified immune to double-counting by construction (keyed-map sums, not deltas). Found and fixed a real, live-reproduced bug: team-switch buttons were unconditionally disabled for the whole countdown/pull phase, so a peer who reloaded mid-match (flaky wifi, tab backgrounding -- a realistic scenario for a co-located party game) got a fresh, teamless peerId and was permanently benched as a spectator with no way back in. Fixed by only locking team-switching once a peer already has a team this match. Verified with a new e2e test confirmed to fail pre-fix. No XSS/secrets found. A known, documented gap (raw Date.now() phase transitions instead of the available clockSync primitive) was flagged but not fixed. trl bumped from unassessed to 5. See github.com/baditaflorin/mesh-tug-of-war PR #1 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "mesh-wave-canvas",
@@ -14177,12 +14206,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-wave-canvas/",
-    "trl": 3,
-    "trl_evidence": "p2p visualization, wave drawing",
+    "trl": 5,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a shared ripple/tap-pulse effect across a physical row of phones (Yjs/y-webrtc), not a stroke-drawing canvas. Found and fixed two real bugs: (1) untrusted peer awareness data let NaN/Infinity through a weak typeof check, poisoning the mesh clock offset for the whole room and baking permanent, un-garbage-collectable NaN entries into the shared doc; (2) the periodic ripple GC deleted dead entries by count-from-front rather than by identity, an assumption that breaks under concurrent multi-peer taps and could delete a live ripple while a dead one survived. Both fixed and regression-tested (2 of 3 new tests confirmed to fail pre-fix). Also corrected a false privacy claim: docs claimed encrypted SDP signaling, but y-webrtc's encryption is opt-in and never enabled here, so signaling is plaintext (TLS-in-transit only) -- doc corrected rather than bolting on a false sense of security. trl bumped 3->5. See github.com/baditaflorin/mesh-wave-canvas PR #1 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "newsletter-flow",
@@ -14204,11 +14233,11 @@
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/newsletter-flow/",
     "trl": 4,
-    "trl_evidence": "email app, newsletter pipeline",
-    "trl_ceiling": null,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first newsletter drafting/repurposing tool. Found and fixed a real XSS vulnerability: source.url and discussionUrl fields (sourced from untrusted RSS/Atom/HTML/OPML imports, or an auto-loading shared Project JSON payload reachable via a #project= link with no confirmation) were rendered as raw <a href> with no scheme check -- a javascript: URL would execute in the app's own origin with access to every local project in IndexedDB, directly undermining the app's 'local-first, doesn't collect draft/source contents' privacy claim. Fixed with a sanitizeUrl() helper blocking javascript:/data:/vbscript:/file:/blob: schemes including tab/newline scheme-splitting bypasses, applied at both render sites. Autosave/draft-persistence logic checked specifically for the early-return-disables-autosave pattern found elsewhere in this initiative -- not present here. trl bumped 4->4 with real security hardening; trl_ceiling=5. See github.com/baditaflorin/newsletter-flow PR #7 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "numen",
@@ -14229,12 +14258,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/numen/",
-    "trl": 3,
-    "trl_evidence": "app, core concept implementation",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first academic-writing workbench. Verified privacy claim true via live browser network trace on a production build (zero external requests during normal use). Independently fuzz-tested the PDF line-wrapping algorithm against 500 random paragraphs using real pdf-lib font metrics (not the test suite's mocked measure) -- no overflow, no dropped content. Found and fixed a real bug: escapeLatex() only escaped 4 of 10 LaTeX special characters, so ordinary academic text ('O(n^2)', 'cost $5', 'dataset #1') produced a .tex export that fails to compile, undermining the app's 'submission-ready' claim. Fixed with a single-pass regex covering all special characters (avoiding a double-escape trap from naive chained replaceAll calls). Live-tested autosave survives a hard reload. trl bumped 3->4; trl_ceiling=5 pending real TeX-engine compilation testing of the export pipeline. See github.com/baditaflorin/numen PR #16 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "open-indie-studio",
@@ -14255,12 +14284,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/open-indie-studio/",
-    "trl": 3,
-    "trl_evidence": "studio framework, scaffolding",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this browser-based 2D game-prototyping toolkit. Confirmed local-first privacy claim true (only network call is an explicit, user-configured local LLM endpoint). Verified the exported playtest HTML is genuinely playable (collision/pickup/hazard/win-loss logic all correct via a scripted animation-frame harness) and properly escapes injected XSS payloads in project name/goal fields. Found and fixed a real, live-reproduced data-loss bug: no text input enforced the underlying Zod schema's max lengths, and storage.ts silently discarded any save that failed validation, falling back to the starter project -- typing an ordinary 98-character title permanently and silently wiped the entire project on next reload, with the very next autosave overwriting the old save. Fixed by clamping input at the state-setter level plus matching maxLength attributes as defense-in-depth. trl bumped 3->4; trl_ceiling=5 -- editing loop is still minimal (no reposition/remove/re-import), a completeness gap not a correctness bug. See github.com/baditaflorin/open-indie-studio PR #7 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "open-school-lab",
@@ -14281,12 +14310,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/open-school-lab/",
-    "trl": 3,
-    "trl_evidence": "educational app, course structure",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this static, client-side educational lab-widget app. Confirmed zero data collection (only network call is the app's own service worker caching its own same-origin assets) and no XSS surface (all inputs are bounded range sliders, no free text). Found and fixed two real bugs: (1) a critical one -- switching between any two labs corrupted every metric to NaN because the renderer had no React key, so component state (and its stale control keys from the previous lab) was reused instead of remounted, breaking the app's core educational output on every single lab switch; (2) an unhandled localStorage.setItem exception (confirmed the repo's own test suite already failed on a clean checkout from this exact line) that could blank the whole app under realistic classroom conditions (Safari private browsing, LMS iframe embedding, quota errors) with no error boundary anywhere. Both fixed with regression tests; formulas hand-verified correct once NaN was fixed. trl bumped 3->4; trl_ceiling=6. See github.com/baditaflorin/open-school-lab PR #6 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "openphoto-studio",
@@ -14307,12 +14336,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/openphoto-studio/",
-    "trl": 4,
-    "trl_evidence": "photo app, editing and filters",
-    "trl_ceiling": null,
+    "trl": 5,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first photo editor. Verified the privacy claim true beyond just tracing calls: uploaded a synthetic JPEG with real GPS EXIF data, watched the full network log through import/edit/export (nothing external ever), and confirmed byte-for-byte that the exported file contains no EXIF/GPS markers (the canvas round-trip inherently strips all metadata) while EXIF orientation is correctly honored on import. Found and fixed three real, live-reproduced bugs: (1) Export ignored the Original/Edited compare toggle, always encoding the edited pixels even when Original was shown; (2) Save Local/Load Last always repackaged the pristine original blob, silently discarding destructive edits like 2x upscale or background removal; (3) Undo dropped adjustment-slider state, not just the destructive edit that triggered it. All three verified before/after at the pixel level with new regression tests. trl bumped 4->5; trl_ceiling=6 -- 'WebGPU ready'/'AI' framing overstates heuristic-only local processing per the project's own self-audit docs, no versioned project file format. See github.com/baditaflorin/openphoto-studio PR #6 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "osm-poster",
@@ -14333,12 +14362,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/osm-poster/",
-    "trl": 4,
-    "trl_evidence": "map visualization, OSM integration",
-    "trl_ceiling": null,
+    "trl": 6,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this client-side OpenStreetMap poster generator (MapLibre GL + OpenFreeMap tiles + Nominatim geocoding, no backend or API keys, all disclosed). Found and fixed a severe security bug: the shareable-URL feature encodes full app state into the URL hash and rehydrates it on load with zero sanitization -- four fields flowed unescaped into innerHTML that runs automatically on page boot, and a live PoC confirmed a crafted share link executes arbitrary JS with zero clicks (unauthenticated, zero-interaction stored XSS). Fixed by escaping all four sites with the project's existing helper; re-tested the same payloads live post-fix, all blocked. Also found and fixed a domain-correctness bug: the PDF export's hand-authored mm-dimension table had drifted from the live CSS preview (story frame off by ~26%, screen/4K sizes had no mm table at all and silently defaulted to A4-portrait) -- fixed with a single CSS-synced source of truth, verified against the real jsPDF library for all 30 frame x size combinations. trl bumped 4->6 pending merge; trl_ceiling=7. See github.com/baditaflorin/osm-poster PR #2 (merged).",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "parse-address",
@@ -14359,12 +14388,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "http://hassansin.github.io/parse-address/",
-    "trl": 5,
-    "trl_evidence": "address parsing, RFC-aligned",
+    "trl": 3,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass that had scored this the highest trl in its batch without ever running the test suite -- 6 subtests were already failing on main). Found and fixed 10 real bugs in this US street-address parser: incorrect street-type classification defaulting unrecognized words to a plausible-looking match instead of empty; mis-parsing of no-comma addresses with abbreviated street types; comma-before-bare-ZIP wiping the whole address; trailing-comma breaking dictionary lookups; undetectable &/@ intersections; dropped city on non-comma-separated intersections; a UTF-8 byte-slicing bug in title-casing that corrupted accented first letters (real impact: Puerto Rico place names); possible invalid-UTF-8 emission from input truncation; input validation bypassed for 4 of 5 API request types; and a reflected/self-XSS in the embedded test GUI (live-confirmed executing payload) contradicting the README's explicit XSS-protection claim. All fixed with regression tests; all 6 previously-failing tests now pass. No network calls anywhere (fully local). trl dropped 5->3 pending a monitoring window post-merge and a broader address-corpus regression suite; no hard structural ceiling. See github.com/baditaflorin/parse-address PR #2 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "pentest-dashboard",
@@ -14413,12 +14442,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/physical-kanban-sync/",
-    "trl": 3,
-    "trl_evidence": "kanban app, board sync",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first camera-based physical-kanban-board tracker (vendored WASM AprilTag detector, tag-ID-keyed card matching, IndexedDB autosave). Verified privacy (camera frames never leave the browser), XSS safety (live injection test), and data persistence (live reload test) all sound. Found and fixed a real camera-leak bug: a scan-failure code path (worker crash, WASM init failure) never called stopCamera(), unlike the symmetric start-failure path -- left the camera stream, AprilTag worker, and scan interval running indefinitely while the UI misleadingly reverted to a 'start camera' button; clicking it again opened a second getUserMedia stream and orphaned the first, keeping the camera hardware/LED on indefinitely. Fixed to match the existing symmetric cleanup pattern, with a regression test confirmed to fail pre-fix. Flagged (not fixed): the default sync room name is a shared constant across all installs, a privacy footgun if two strangers both press Join without changing it. trl bumped 3->4; trl_ceiling=5. See github.com/baditaflorin/physical-kanban-sync PR #7 (merged).",
+    "trl_ceiling": 5,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "pockettalkie",
@@ -14439,12 +14468,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/pockettalkie/",
-    "trl": 3,
-    "trl_evidence": "messaging app, walkie-talkie mode",
+    "trl": 5,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this WebRTC mesh push-to-talk app. Confirmed voice audio is genuinely peer-to-peer (DTLS-SRTP), signaling carries no audio, and mic-release-on-leave is correct. Found and fixed a real reliability bug live-reproduced against the production signaling server in two real browser tabs: the peer-announce 'hello' was a one-shot timeout fired once 200ms after connect with no retry, so two peers joining the same room could get permanently stuck showing 'alone' -- confirmed live, and confirmed fixed by adding a periodic 4s re-announce. Also fixed a related gap: ICE connection failures triggered immediate peer teardown with no restart attempt, so any transient network blip permanently ended that leg of a call -- added up to 3 ICE-restart attempts before falling back. Repo had zero automated tests; added a fake-WebSocket/RTCPeerConnection regression suite covering both fixes. trl bumped 3->5. See github.com/baditaflorin/pockettalkie PR #5 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "polyglot-nlp-toolkit",
@@ -14465,12 +14494,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/",
-    "trl": 5,
-    "trl_evidence": "NLP toolkit, multi-language support",
-    "trl_ceiling": null,
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass, which had scored this the highest trl in its batch) of this Go+Python multi-language NLP toolkit. Found and fixed the fleet's recurring CJK/multi-byte-script handling bug class: the tokenizer's unicode-aware greedy regex swallowed entire Chinese/Japanese sentences (no ASCII whitespace) into a single 'token' -- live-tested with a 40,000-char Chinese string tokenizing as exactly 1 token, and confirmed this reproduces through the exact code path the project's own Docker image ships for Japanese (no SudachiPy or per-language model actually installed, silently falls back to spaCy's blank whitespace-only tokenizer). Fixed with targeted Han/Kana re-segmentation, deliberately excluding space-delimited Korean. Also found and fixed a CSV formula-injection bug (CWE-1236) in the token exporter, and corrected a privacy doc that contradicted the app's actual unconditional localStorage autosave of raw corpus text. Wired a previously dead, never-CI'd test file into the build. trl dropped 5->4 pending a live Docker-deployment pass with real spaCy models; trl_ceiling=6. See github.com/baditaflorin/polyglot-nlp-toolkit PR #5 (merged).",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "project-bootstrap-meta",
@@ -14748,7 +14777,12 @@
       "type": "none"
     },
     "auth_help": "no auth",
-    "pages_url": "https://baditaflorin.github.io/string-portrait/"
+    "pages_url": "https://baditaflorin.github.io/string-portrait/",
+    "trl": 6,
+    "trl_ceiling": 7,
+    "trl_evidence": "First-ever audit of this browser-only string-art (thread-portrait) generator. Confirmed genuine, provably-convergent greedy solver (residual monotonically decreases) and a verified-true privacy claim (no fetch/XHR/analytics anywhere in source or built bundle). Found and fixed a real correctness bug live-reproduced via a scripted mid-run slider drag: the nail-count setting was re-read live from settings mid-generation instead of snapshotted at run start, so dragging the Nails slider during a run (ordinary UI use) desynced the anti-oscillation edge-hash space partway through, silently breaking the 'never redraw the same chord' guarantee. Fixed by snapshotting nail count at run start. Non-square photo handling and malformed-file-upload handling both already worked cleanly; no XSS surface. trl bumped from unassessed to 6; trl_ceiling=7 -- a canvas/JS greedy solver naturally tops out here. See github.com/baditaflorin/string-portrait PR #6 (merged).",
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "substance-sampler",
@@ -14905,12 +14939,12 @@
     },
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/vagus-reset-coach/",
-    "trl": 3,
-    "trl_evidence": "wellness app, guided exercises",
+    "trl": 4,
+    "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this webcam-rPPG + breathing-pacer wellness app, held to extra rigor given the health-adjacent domain. Live-verified in real Chromium (fake camera device via Playwright) that breathing-phase timing is drift-free (elapsed-time modulo, not accumulated) and the session timer stayed accurate to the second across a simulated 5s background-tab freeze. Privacy claim verified true (only network call is a scoped GitHub API check, zero non-localhost requests during a session). Found and fixed two real robustness bugs: no top-level React error boundary anywhere (an unhandled render exception mid-session would blank the whole app with no recovery); and the webcam/rPPG sampling and session-timer/completion logic shared one unguarded setInterval block, so a throwing camera/pulse step could silently freeze the pacer forever and prevent the session from ever finishing or saving. Both fixed and regression-tested. trl bumped 3->4; trl_ceiling unchanged -- the rPPG HR/HRV estimate remains inherently best-effort (app already self-discloses 'not a medical device'). See github.com/baditaflorin/vagus-reset-coach PR #6 (merged).",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-haiku-trl-batch"
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
     "id": "vcard-personal-portfolio",
