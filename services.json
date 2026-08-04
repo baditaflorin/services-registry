@@ -15049,5 +15049,39 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "fleet-mcp-gateway",
+    "name": "Fleet MCP Gateway",
+    "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://fleet-mcp-gateway.0exec.com",
+    "health_url": "https://fleet-mcp-gateway.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-mcp-gateway",
+    "example_path": "/gateway/tools",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18311,
+    "container_port": 18311,
+    "trl": 4,
+    "trl_evidence": "First ship. Real MCP wire-level tests pass (initialize -> tools/list -> tools/call, incl. caller-Authorization pass-through) against in-process aggregation. Fleet-wide registry-driven aggregation unproven in production -- zero services expose /agent.json yet (Phase 2 of a 5-phase rollout).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-mcp-phase2"
   }
 ]
