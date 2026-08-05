@@ -13182,5 +13182,29 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://fleet-mcp-gateway.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
+    "example_path": "/v1/balance",
+    "health_url": "https://fleet-token-ledger.0exec.com/health",
+    "id": "fleet-token-ledger",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Token Ledger",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-token-ledger",
+    "runtime": "compose",
+    "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-token-ledger",
+    "url": "https://fleet-token-ledger.0exec.com"
   }
 ]
