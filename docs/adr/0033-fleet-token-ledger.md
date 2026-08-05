@@ -111,6 +111,33 @@ and per-service handlers are not modified in this phase — wiring
 metering into the gateway centrally is a follow-up, not blocked on
 this ADR.
 
+**go-common owns the client, not per-service HTTP calls.** Per this
+fleet's cardinal rule ("change the library, not every service" —
+CLAUDE.md), the HTTP contract above is not something each metering
+service hand-rolls. `go-common` v0.76.0 ships a `ledger` package
+(`go-common/go-common#58`):
+
+```go
+cred := ledger.CredentialFromRequest(r)          // forwards the caller's own token
+res, err := ledger.New().Charge(ctx, cred, 10, "call:some-endpoint")
+var pr *ledger.PaymentRequired
+if errors.As(err, &pr) {
+    ledger.WritePaymentRequired(w, pr)           // proxies the 402 verbatim
+    return
+}
+```
+
+`ledger.CredentialFromRequest` forwards the exact token
+`server.WithKeystoreAuth` already verified for the inbound request —
+never the calling service's own `FLEET_API_KEY` — via the newly
+exported `middleware.ExtractToken` (was unexported `extractToken`;
+same three-shape lookup, now reusable). This is the same
+caller-credential-forwarding model `go-fleet-mcp-gateway` already
+uses for upstream calls (ADR-0032): a keystore revoke still kills a
+compromised caller's access (and spend) everywhere, ledger included.
+A service opts into metering in ~3 lines; the balance/402/settlement
+logic lives once in `go-common`, not duplicated per service.
+
 ## Consequences
 
 **Positive**: one 402-speaking source of truth instead of N
@@ -180,3 +207,5 @@ already uniquely identifies every caller.
   Stripe Machine Payments Protocol (March 2026) — external, cited for
   the 402 `accepts[]`/`PaymentRequirements` shape this ADR mirrors
 - `go-fleet-token-ledger` — new repo, port 18208
+- `go-common` `ledger` package + `middleware.ExtractToken` export
+  (v0.76.0) — [go-common#58](https://github.com/baditaflorin/go-common/pull/58)
