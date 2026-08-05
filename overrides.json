@@ -5140,8 +5140,8 @@
   },
   "fleet-token-ledger": {
     "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
-    "host_port": 18208,
-    "container_port": 18208,
+    "host_port": 18314,
+    "container_port": 18314,
     "example_path": "/v1/balance",
     "trl": 4,
     "trl_assessed_at": "2026-08-05",
