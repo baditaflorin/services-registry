@@ -195,3 +195,35 @@ metaphor doesn't fit. Naming it `$external` is honest.
   and the plausible compose dir on the dockerhost.
 * 2026-05-18 fleet-discovery incident — port-allocation collision on
   18201; precursor to this ADR's pattern.
+
+## Update (2026-08-05) — a third variant: registered, but *wrong*
+
+Both incidents above were "no registry row at all." `fleet-backup` was
+a third, distinct variant: a normal, fully-registered fleet repo
+(`go-fleet-backup`, real `mesh-0exec` topic, proper `services.json`
+entry) whose `host_port` field was simply **wrong** — it recorded
+`18208` (its own *container* port) instead of `18311`, its actual
+external binding, which had only ever been set in its
+`docker-compose.override.yml` (fleet-runner-rendered, canonical) and
+never reflected back into `services.json`.
+
+`fleet-runner allocate-port` handed out `18311` as free. Deploying
+`go-fleet-mcp-gateway` on that port resolved the dockerhost compose
+directory *by host_port*, found `/opt/services/fleet-backup/`, and
+overwrote its compose file. No data loss (`.env`/secrets untouched;
+recovered by restoring `docker-compose.yml` from `go-fleet-backup`'s
+own repo and `docker compose up -d`) — but it's the same root shape
+as the ADR's "allocator lies" framing, just a data-accuracy bug
+instead of a missing-row bug. `$external` doesn't help here (this
+*was* a fleet repo); the fix was correcting the existing entry's
+`host_port` to match reality. See services-registry#33 and #34.
+
+**Takeaway for the next agent hitting "port X is free" from
+`allocate-port`**: the registry's `host_port` field can be wrong for a
+*registered* service, not just absent for an unregistered one. A live
+`ss -tlnp` scan on the dockerhost catches both classes; the registry
+alone catches neither reliably. Consider promoting "cross-check a
+freshly-allocated port against a live dockerhost scan before first
+use" from tribal knowledge into `fleet-runner allocate-port` itself
+(flag the port, don't just print a number) — not implemented as part
+of this update, noted here as a follow-up.

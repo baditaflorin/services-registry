@@ -182,6 +182,13 @@ PROJECTIONS = {
     # and fleet-runner audit-graph. Entries without depends_on are dropped
     # by _pick (since "depends_on" is the only non-id key requested).
     "services.depends.json": _pick(["id", "depends_on"]),
+    # MCP-ready services — what the hub's directory filter and
+    # go-fleet-mcp-gateway's own onboarding docs read. Entries without
+    # mcp_ready fall out of this slice entirely (_pick drops them), so
+    # it's naturally just the "yes" list, not every service with a
+    # false/absent flag.
+    "services.mcp.json":     _pick(["id", "name", "url", "mcp_ready",
+                                    "mcp_tool_count", "mcp_assessed_at"]),
 }
 
 MESHES = ("0exec", "0crawl", "pages")
@@ -604,7 +611,17 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # follow-up #1). Fleet default is 60s; slow page-scrapers
               # set "120s", python-proxy sets "300s". Consumed by
               # fleet-runner nginx-render → ProxyReadTimeout field.
-              "proxy_read_timeout"):
+              "proxy_read_timeout",
+              # MCP readiness (fleet-wide MCP support, Phase 3). Set by
+              # bin/audit_mcp_ready.py, which reads the aggregated tool
+              # list from go-fleet-mcp-gateway's GET /gateway/tools (the
+              # gateway already live-probes every container service's
+              # /agent.json every REGISTRY_REFRESH — this just mirrors
+              # that finding into the registry instead of re-probing).
+              # Never hand-set true; a service earns it by actually
+              # serving /agent.json and showing up in the gateway's
+              # aggregation.
+              "mcp_ready", "mcp_tool_count", "mcp_assessed_at"):
         if k in ov:
             entry[k] = ov[k]
 
