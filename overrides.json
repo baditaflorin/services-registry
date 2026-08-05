@@ -168,7 +168,10 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "trl_evidence": ">",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "accent-coach": {
     "trl": 4,
@@ -216,7 +219,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "trl_evidence": ">-",
-    "version": "2.2.0"
+    "version": "2.2.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "address-extractor": {
     "container_port": 8275,
@@ -229,7 +235,10 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_evidence": "v3.2.0 localizes schema.org cues instead of granting a page-wide postal-code exemption. Structured English-locale matches require house, street-type road, city, and postcode; order/report/version/legal/identifier component tokens are rejected. Existing labelled precision/recall corpus caught and prevented over-tightening of St abbreviations and bare Postcode cues; unit/race/vet/build are green.",
-    "version": "3.2.0"
+    "version": "3.2.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "admin-finder": {
     "container_port": 8335,
@@ -311,7 +320,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.3.0 audits GET as the authoritative browser representation, reports material HEAD/GET security-header differences, folds case variants and exact duplicates, and conservatively downgrades conflicting repeated values. Cloudflare/Fastly/Vercel/CloudFront/Akamai/Fly markers are surfaced and results state edge_or_origin vs origin_or_unknown. Existing OWASP matrix, applicability, CSP parser, corpus evaluation, SSRF guard, unit/race/vet/build, and deterministic selftest remain green.",
-    "version": "1.3.0"
+    "version": "1.3.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "anon-conf-poll": {
     "trl": 3,
@@ -415,7 +427,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict."
+    "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "blocklist-checker": {
     "container_port": 8338,
@@ -437,7 +452,10 @@
     "trl": 7,
     "trl_evidence": "DOM-based HTML/CSS collection combines theme-color, stylesheet, inline-style, and logo-image signals; colors are normalized, clustered, contrast-scored, and returned with provenance. Six test files and offline/live selftests cover extraction and false-positive paths.",
     "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "brand-logo-extractor": {
     "container_port": 18287,
@@ -446,7 +464,10 @@
     "trl": 7,
     "trl_evidence": "A real DOM walk combines header/navigation images, structured metadata, icons, and manifest evidence with URL resolution, scoring, deduplication, provenance, and false-positive guards. Three test files and selftests exercise multiple logo source classes.",
     "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "broken-links": {
     "container_port": 8192,
@@ -458,7 +479,10 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.4.1: ErrorClass taxonomy with 14 stable kinds (timeout/dns_failure/conn_refused/conn_reset/tls_error/hard_404/hard_4xx/hard_5xx/unauthorized/rate_limited/soft_404/too_many_redirects/ssrf_blocked/unknown); Soft404Detector with per-origin baseline; redirect hop tracking; ClassCounts histogram; client.Fetch migration. 9/10 corpus PASS; verified evidence: 403 from twitter.com correctly classifies as 'unauthorized' not 'broken'."
+    "trl_evidence": "1.4.1: ErrorClass taxonomy with 14 stable kinds (timeout/dns_failure/conn_refused/conn_reset/tls_error/hard_404/hard_4xx/hard_5xx/unauthorized/rate_limited/soft_404/too_many_redirects/ssrf_blocked/unknown); Soft404Detector with per-origin baseline; redirect hop tracking; ClassCounts histogram; client.Fetch migration. 9/10 corpus PASS; verified evidence: 403 from twitter.com correctly classifies as 'unauthorized' not 'broken'.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "bucket-finder": {
     "container_port": 8339,
@@ -494,7 +518,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation."
+    "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "captcha-detector": {
     "container_port": 8209,
@@ -506,7 +533,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc."
+    "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "cas": {
     "container_port": 8279,
@@ -548,7 +578,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring."
+    "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "citation-reference-extractor": {
     "container_port": 18263,
@@ -560,7 +593,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM walk over a fetched/pasted page (golang.org/x/net/html tokenizer, no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, then runs four ordered passes — (1) reference/bibliography list items: <ol>/<ul> <li> contents inside a section whose heading text or container id/class matches a reference token (references / bibliography / works cited / literature cited / further reading); (2) every <cite> element's text; (3) footnote/endnote <li> targets keyed by id prefix (fn / footnote / endnote / note / cite_note / ref-) with the trailing number lifted into a marker; (4) an inline sweep for structured identifiers in running prose not already captured. Each citation's raw text is matched for identifiers with anchored regexes (pattern-matching within text, not HTML parsing): DOI (10.<4-9 digits>/<suffix>), arXiv new (NNNN.NNNNN[vN]) and old (archive.subclass/NNNNNNN) schemes normalised to arXiv:<id>, PMID (label-required), http/https URLs (DOI-resolver and arXiv URLs de-duplicated against their id forms), and ISBN-10/ISBN-13 validated by their mod-11 / mod-10 checksums (labelled and bare 978/979 forms; checksum-failing candidates dropped). Output is a typed citation list (raw text + detected type + extracted identifiers) plus a by-type + by-identifier summary. Input fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode; 4 MiB body cap. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (no_references, fetch_failed:<err>) instead of failing the response. ~30 unit + handler tests cover DOI extraction, both arXiv id forms, ISBN-10 and ISBN-13 valid + invalid checksums, PMID, <cite> extraction, reference-list detection by heading and by container id/class, URL-in-reference extraction, footnote markers, type classification, summary counts, parse-input aliases, missing-param 400, SSRF rejection, no-references→degraded, and text= mode. TRL-4 ceiling: heuristic section detection (no full CSL / citation-style parsing, no author/title/year field decomposition), English-centric reference-section headings, and no DOI/ISBN registry resolution (checksum validity only, not 'this identifier exists'). /selftest exercises the pure-logic pipeline (DOI/arXiv parse, ISBN checksum, reference-list + <cite> DOM detection, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal."
+    "trl_evidence": "Real DOM walk over a fetched/pasted page (golang.org/x/net/html tokenizer, no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, then runs four ordered passes — (1) reference/bibliography list items: <ol>/<ul> <li> contents inside a section whose heading text or container id/class matches a reference token (references / bibliography / works cited / literature cited / further reading); (2) every <cite> element's text; (3) footnote/endnote <li> targets keyed by id prefix (fn / footnote / endnote / note / cite_note / ref-) with the trailing number lifted into a marker; (4) an inline sweep for structured identifiers in running prose not already captured. Each citation's raw text is matched for identifiers with anchored regexes (pattern-matching within text, not HTML parsing): DOI (10.<4-9 digits>/<suffix>), arXiv new (NNNN.NNNNN[vN]) and old (archive.subclass/NNNNNNN) schemes normalised to arXiv:<id>, PMID (label-required), http/https URLs (DOI-resolver and arXiv URLs de-duplicated against their id forms), and ISBN-10/ISBN-13 validated by their mod-11 / mod-10 checksums (labelled and bare 978/979 forms; checksum-failing candidates dropped). Output is a typed citation list (raw text + detected type + extracted identifiers) plus a by-type + by-identifier summary. Input fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode; 4 MiB body cap. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (no_references, fetch_failed:<err>) instead of failing the response. ~30 unit + handler tests cover DOI extraction, both arXiv id forms, ISBN-10 and ISBN-13 valid + invalid checksums, PMID, <cite> extraction, reference-list detection by heading and by container id/class, URL-in-reference extraction, footnote markers, type classification, summary counts, parse-input aliases, missing-param 400, SSRF rejection, no-references→degraded, and text= mode. TRL-4 ceiling: heuristic section detection (no full CSL / citation-style parsing, no author/title/year field decomposition), English-centric reference-section headings, and no DOI/ISBN registry resolution (checksum validity only, not 'this identifier exists'). /selftest exercises the pure-logic pipeline (DOI/arXiv parse, ISBN checksum, reference-list + <cite> DOM detection, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "clickjacking-tester": {
     "container_port": 8225,
@@ -585,7 +621,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "color-contrast-checker": {
     "container_port": 18261,
@@ -621,7 +660,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Pass-3 geo: all headcount detection in v3.1.1 keyed on English phrasing only (employees, team of N, staff of N, headcount), so the entire non-English web returned band=unknown even when the count was in the fetched HTML -- confirmed live: siemens.com renders 'unserer Mitarbeiter 438', bosch.de '413.000 Mitarbeiter', sap.com mis-read as 1-10, lvmh.fr / telefonica.es / toyota.jp / alibaba.com / hyundai.com all band=unknown. v3.2.0 adds geo.go: a multilingual headcount gazetteer in 11 languages + 3 CJK scripts (Mitarbeiter/Beschaeftigte DE, salaries/effectif/collaborateurs FR, empleados/plantilla ES, funcionarios PT, dipendenti IT, medewerkers NL, pracownikow PL, sotrudnikov RU, JP/CN/KR), both noun-first and number-first orderings + 'emploie/zatrudnia N' equivalents, a locale-aware integer parser (12.500 / 12 500 / 12'500 / 1,200名 all parse correctly -- the old comma-only parser read '12.500 Mitarbeiter' as 12), and a multilingual employees-vs-customers guard (Kunden/clients/utilisateurs/users rejected). The multilingual count is an authoritative 0.9-weight band signal. A space-grouping false positive (siemens 'Mitarbeiter 438 438 Millionen' -> bogus 438438) was found mid-pass and fixed by a tight, whitespace-free number token on noun-first patterns. On the fetched-page non-English live set, detection went from 3/12 to 9/12 (sap mis-classification corrected). 88+ unit tests incl. 41 new Pass-3 cases (locale parser, 18-language/script detection, 10-language customer-rejection, siemens regression, multilingual disambiguator, German GmbH end-to-end through the HTTP handler), gofmt/vet/-race clean. Ceiling unchanged at 7: an exact certified headcount still needs a paid provider. Residual non-English unknowns are fetch-tier variance (bot-hostile sites returning 0 pages), not detector misses -- proven by re-probes alternating sigs=0/unknown with sigs=10/1000+ on the same domain.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "complete-gardener-planner": {
     "trl": 3,
@@ -655,7 +697,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pass-3 found the prior probe client used fleetfetch.NewHTTPClient(RenderDefault), which despite its name routes every GET through the shared Redis fetch-cache, silently ignoring Transport.DisableCompression and collapsing the five independent Accept-Encoding negotiations into one warm cached body. On 1000 real v1.6.1 rows this produced 344/1000 (34%) recording supports_gzip=false while supports_br=true (implausible; gzip is the universal fallback). Replaced with a direct *http.Transport using safehttp.GuardedDialer (same SSRF/DNS-rebind guard, no new dep) + DisableCompression=true + ProxyFromEnvironment, so each offer and the raw wire bytes reach the origin. Re-probed the FP cohort live against deployed v1.6.2: 18/20 (90%) now correctly report gzip honored, 2 are genuine true negatives. 27 unit tests green.",
-    "version": "1.5.0"
+    "version": "1.5.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "content-fingerprint": {
     "container_port": 18265,
@@ -667,7 +712,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Near-duplicate fingerprinting over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Computes three standard fingerprints over the normalized lowercased text: a 64-bit Charikar SimHash over k=3 word shingles (FNV-64a per shingle, +1/-1 column sums, sign bit) — near-identical documents have a small Hamming distance, unrelated documents ~half the bits; a 64-permutation MinHash signature (universal-hash multiply-xor scramble with a splitmix64 avalanche per permutation, min per permutation) whose matching-fraction estimates Jaccard similarity (identical sets 1.0, disjoint ~0 within ~12% sampling error); and a whitespace-collapsed, lowercased SHA-256 hex exact-match digest. Shingle and token counts are returned alongside. A hammingDistanceHex helper documents how to compare two SimHash values. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers fingerprinting the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode fingerprints pasted content with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_tokens) instead of failing the response; <20-token inputs flagged as statistically unstable. ~30 unit tests cover SimHash determinism/case-insensitivity/empty, near-duplicate small-Hamming stability and unrelated large-Hamming divergence, the Hamming helper, MinHash signature length/determinism, Jaccard identical=1.0/disjoint~0/similarity-ordering/mismatched-length, normalized SHA-256 exact match plus case/whitespace insensitivity and content-change sensitivity, shingle generation at the k boundary/below-k/dedup, token+shingle counts, parse-input aliases, low-sample degraded, missing-param 400, SSRF rejection, and text= mode. TRL-4 ceiling: fixed k=3 shingle width, no language-aware tokenization, FNV/universal-hash heuristics rather than cryptographic locality-sensitive guarantees, and fingerprints estimate surface/lexical similarity not semantic meaning. /selftest exercises the pure-logic pipeline (identical→identical fingerprints, one-word→small SimHash Hamming distance but different SHA, unrelated→large Hamming, MinHash Jaccard sanity, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal."
+    "trl_evidence": "Near-duplicate fingerprinting over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Computes three standard fingerprints over the normalized lowercased text: a 64-bit Charikar SimHash over k=3 word shingles (FNV-64a per shingle, +1/-1 column sums, sign bit) — near-identical documents have a small Hamming distance, unrelated documents ~half the bits; a 64-permutation MinHash signature (universal-hash multiply-xor scramble with a splitmix64 avalanche per permutation, min per permutation) whose matching-fraction estimates Jaccard similarity (identical sets 1.0, disjoint ~0 within ~12% sampling error); and a whitespace-collapsed, lowercased SHA-256 hex exact-match digest. Shingle and token counts are returned alongside. A hammingDistanceHex helper documents how to compare two SimHash values. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers fingerprinting the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode fingerprints pasted content with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_tokens) instead of failing the response; <20-token inputs flagged as statistically unstable. ~30 unit tests cover SimHash determinism/case-insensitivity/empty, near-duplicate small-Hamming stability and unrelated large-Hamming divergence, the Hamming helper, MinHash signature length/determinism, Jaccard identical=1.0/disjoint~0/similarity-ordering/mismatched-length, normalized SHA-256 exact match plus case/whitespace insensitivity and content-change sensitivity, shingle generation at the k boundary/below-k/dedup, token+shingle counts, parse-input aliases, low-sample degraded, missing-param 400, SSRF rejection, and text= mode. TRL-4 ceiling: fixed k=3 shingle width, no language-aware tokenization, FNV/universal-hash heuristics rather than cryptographic locality-sensitive guarantees, and fingerprints estimate surface/lexical similarity not semantic meaning. /selftest exercises the pure-logic pipeline (identical→identical fingerprints, one-word→small SimHash Hamming distance but different SHA, unrelated→large Hamming, MinHash Jaccard sanity, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "cookie-checker": {
     "container_port": 8226,
@@ -725,7 +773,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL 6 — BFS crawler with worker pool (default 8), per-host rate limit\n(golang.org/x/time/rate, 4 rps), robots.txt parsing via temoto/robotstxt\n(RFC 9309), HTML parsing via golang.org/x/net/html (extracts <a>, <link\nrel=canonical>, title; honors rel=nofollow), URL canonicalization +\ncross-page dedup, SSRF-safe outbound via go-common/safehttp, scope\nenforcement (same-origin | same-domain | same-etld), bounded total scan\n(90s) and partial-result return on deadline. Test coverage: ≥9 cases\nincluding robots-respect, scope enforcement, max-pages cap, depth cap,\nbad-URL handling, JSON shape — all green via httptest fake site.",
-    "version": "1.1.0"
+    "version": "1.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "crlf-tester": {
     "container_port": 8142,
@@ -747,7 +798,10 @@
     "trl": 7,
     "trl_evidence": "Uses the official Chrome UX Report API to map real-user p75 and histogram data for LCP, CLS, INP, and TTFB, with explicit no-data/upstream-error handling, SSRF-safe egress, fixtures, and selftests.",
     "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "crypto-finder": {
     "container_port": 8341,
@@ -780,7 +834,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects three independent signal families per candidate framework. (1) CDN / linked-stylesheet signal: every <link rel=stylesheet|preload href> and <script src> is matched case-insensitively against a curated needle table (bootstrap, tailwindcss/tailwind, bulma, foundation, materialize, fomantic/semantic-ui, uikit, purecss/pure-min, tachyons, skeleton, milligram) covering jsdelivr/cdnjs/unpkg/self-hosted filenames; this is the strong, author-declared signal and frequently carries an exact pinned version. (2) Class-name signatures: distinctive tokens (navbar, col-*, btn-*, d-flex; tailwind md:/lg:/sm:/pt-/px- prefixes + text-sm/bg-blue-500; bulma columns/is-*; foundation grid-x/callout; materialize waves-effect; uikit uk-*; pure-*; tachyons pa3/f6) are separated from generic shared tokens (container, row, flex, button, column, hero) that are flagged weak so a single one never yields a confident detection; Semantic UI's generic 'ui' token only counts as distinctive when it co-occurs with a real SUI partner (button/grid/menu/segment/...) on the same element. (3) <meta name=generator> naming a framework adds a soft corroborating hint. Version extraction: a single regexp pulls the dotted version from the common CDN shapes bootstrap@5.3.0, /bootstrap/5.3.0/, and bootstrap-5.3.0.min.css (stdlib regexp is used ONLY for class-token/CDN/version pattern matching, never to parse HTML structure). Confidence is a documented heuristic blend (scoreFramework): CDN hit base 0.80 plus 0.15 when a version was extracted; first distinctive class +0.25 with diminishing +0.10 each for the next two (class-only contribution capped at ~0.45 so class signatures alone never reach CDN-level certainty); weak classes +0.05 each capped at 0.10; generator +0.10; clamped to [0,1], 2dp; results below a 0.15 floor (e.g. a lone weak class) are dropped, and the list is sorted by confidence desc with a deterministic framework-order tie-break. Honest TRL-4 ceiling: this is a pure static-markup heuristic over a finite curated framework set; it cannot see browser-computed CSS, and minified / renamed / content-purged class names (e.g. a Tailwind build that purges unused utilities and inlines arbitrary values) can defeat the class-signature path entirely, leaving the CDN/link signal as the reliable one — frameworks outside the curated list are not guessed but reported as an empty frameworks[] with no_framework_detected in degraded[]. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects hrefs/srcs embedded in the markup. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_framework_detected) instead of failing the response; degraded[] is always a non-nil slice and frameworks[] is always non-nil. 36 unit + handler tests cover bootstrap by CDN and by classes, tailwind by utility classes and by CDN, bulma, foundation, materialize, semantic-ui by distinctive pair (and the bare-ui non-detection), uikit, pure.css, tachyons, skeleton + milligram by CDN, version extraction at @ / path / dash shapes and two-component versions, multiple frameworks on one page, confidence ordering and the class-below-CDN ceiling, the cap-at-one blend, generator meta hint, evidence de-duplication, raw-signal counts, single-weak-class rejection, protocol-relative CDN, garbage/empty input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (bootstrap CDN+version, tailwind classes, class-below-CDN ceiling, confidence ordering, no-framework, non-nil result, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal."
+    "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects three independent signal families per candidate framework. (1) CDN / linked-stylesheet signal: every <link rel=stylesheet|preload href> and <script src> is matched case-insensitively against a curated needle table (bootstrap, tailwindcss/tailwind, bulma, foundation, materialize, fomantic/semantic-ui, uikit, purecss/pure-min, tachyons, skeleton, milligram) covering jsdelivr/cdnjs/unpkg/self-hosted filenames; this is the strong, author-declared signal and frequently carries an exact pinned version. (2) Class-name signatures: distinctive tokens (navbar, col-*, btn-*, d-flex; tailwind md:/lg:/sm:/pt-/px- prefixes + text-sm/bg-blue-500; bulma columns/is-*; foundation grid-x/callout; materialize waves-effect; uikit uk-*; pure-*; tachyons pa3/f6) are separated from generic shared tokens (container, row, flex, button, column, hero) that are flagged weak so a single one never yields a confident detection; Semantic UI's generic 'ui' token only counts as distinctive when it co-occurs with a real SUI partner (button/grid/menu/segment/...) on the same element. (3) <meta name=generator> naming a framework adds a soft corroborating hint. Version extraction: a single regexp pulls the dotted version from the common CDN shapes bootstrap@5.3.0, /bootstrap/5.3.0/, and bootstrap-5.3.0.min.css (stdlib regexp is used ONLY for class-token/CDN/version pattern matching, never to parse HTML structure). Confidence is a documented heuristic blend (scoreFramework): CDN hit base 0.80 plus 0.15 when a version was extracted; first distinctive class +0.25 with diminishing +0.10 each for the next two (class-only contribution capped at ~0.45 so class signatures alone never reach CDN-level certainty); weak classes +0.05 each capped at 0.10; generator +0.10; clamped to [0,1], 2dp; results below a 0.15 floor (e.g. a lone weak class) are dropped, and the list is sorted by confidence desc with a deterministic framework-order tie-break. Honest TRL-4 ceiling: this is a pure static-markup heuristic over a finite curated framework set; it cannot see browser-computed CSS, and minified / renamed / content-purged class names (e.g. a Tailwind build that purges unused utilities and inlines arbitrary values) can defeat the class-signature path entirely, leaving the CDN/link signal as the reliable one — frameworks outside the curated list are not guessed but reported as an empty frameworks[] with no_framework_detected in degraded[]. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects hrefs/srcs embedded in the markup. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_framework_detected) instead of failing the response; degraded[] is always a non-nil slice and frameworks[] is always non-nil. 36 unit + handler tests cover bootstrap by CDN and by classes, tailwind by utility classes and by CDN, bulma, foundation, materialize, semantic-ui by distinctive pair (and the bare-ui non-detection), uikit, pure.css, tachyons, skeleton + milligram by CDN, version extraction at @ / path / dash shapes and two-component versions, multiple frameworks on one page, confidence ordering and the class-below-CDN ceiling, the cap-at-one blend, generator meta hint, evidence de-duplication, raw-signal counts, single-weak-class rejection, protocol-relative CDN, garbage/empty input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (bootstrap CDN+version, tailwind classes, class-below-CDN ceiling, confidence ordering, no-framework, non-nil result, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "currency-detector": {
     "container_port": 8282,
@@ -812,7 +869,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "CPU-only DOM heuristics plateau at principled multilingual structural extraction; exact brand disambiguation / image recognition (vs structural alt/anchor/grid signals) and SLA-grade live verdicts would need a browser engine or paid logo-recognition feed. No persisted logo-detail table exists to certify live accuracy against.",
     "trl_evidence": "Pass-3 geo de-biasing (locale.go): the extractor only knew US-English social-proof conventions (English path probes, English headings, English CSS class hints, English-only generic reject, Latin-only brand mangling). 1000-row 3.4.0 sample + live probes confirmed the gap: datev.de 404'd EVERY English path (/customers /about /case-studies /testimonials /enterprise) so its German reference wall was never fetched -> verdict=none; a fixture proved a 'Unsere Kunden' heading set HasHeading=false on every logo. v3.5.0 adds ~70 localized path probes (/kunden /referenzen /references /clientes /casos-de-exito /clienti /klanten /kunder /klienci /musteriler /導入事例 /고객사 /客户 …) deduped by resolved URL, ~130 localized social-proof headings across DE/FR/ES/PT/IT/NL/Nordic/PL/TR/RU+UA(Cyrillic)/JA/KO/ZH/VI/ID matched in lower-case and native script, localized grid-class hints (kundenlogos/logos-clients/clientes/jirei), localized generic-alt reject (Bild/imagen/ロゴ/客户/고객/иконка), and a script-aware normalizeBrand that skips Latin-only hash/dimension/vowel-ratio/titleCase heuristics for non-Latin brands (株式会社トヨタ/Лаборатория/삼성전자 preserved verbatim). Probe widened to Accept-Language '*' + 8 workers to fit the larger set in the 20s budget. Live before->after: factorial.es has ALL 5 English customer paths 404 and only Spanish /clientes + /nuestros-clientes 200 -> 3.5.0 fetches them and returns strong_social_proof (35 logos) where 3.4.0 saw the wall pages as nonexistent. Soft-404 SPA (doctolib.fr 200-on-all-paths) correctly held at weak_signal by the verdict ladder -- no new FP. 46 test funcs / 62 subtests incl. a 16-language heading-attribution matrix, an end-to-end German /kunden httptest, non-Latin brand preservation, and an English-regression guard; build/vet/test green, gofmt clean. CPU-only, CGO-free, no new deps, no runtime LLM, no new outbound calls.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "d3-graph": {
     "container_port": 6003,
@@ -843,7 +903,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "db-geo-geocode": {
     "container_port": 3909,
@@ -888,7 +951,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "dir-listing": {
     "container_port": 8342,
@@ -925,7 +991,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real single-pass DOM tree walk over golang.org/x/net/html's tokenizing parser (no regex over HTML structure): malformed markup is normalised into a well-formed tree, then one depth-first traversal in document order computes total element-node count, total text-node count, maximum element-nesting depth, maximum sibling breadth (widest direct-element-child fan at any parent), a per-lowercase-tag frequency histogram, distinct-tag count, average direct-element-children per element, count of elements exceeding the >60-child high-fan-out threshold (threshold echoed in the response), the deepest element path (root-to-deepest tag chain, first-in-document-order on ties), text-to-element ratio, total DOM size in bytes, and a documented combined complexity score (max_depth + max_breadth + element_nodes/100). The whole served document is counted including head/script/style — DOM weight is a property of the markup as a whole, distinct from prose extraction. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode analyses pasted markup with no fetch. Per-failure notes pushed to a non-nil degraded[] (empty_document, fetch_failed, parse_failed) instead of failing the response. ~30 unit tests cover nested-div depth, N-sibling breadth, node counts, tag histogram, distinct-tag count, deepest-path chain (including first-wins-on-tie), high-fan-out threshold boundary (60 vs 61), text-node vs element-node counting, malformed-HTML normalisation, script/style inclusion, average-children and ratio math, complexity-score monotonicity, empty-document degraded, missing-param 400, SSRF rejection, and text= mode. /selftest exercises the pure-logic pipeline (hand-built known depth/breadth, node counts, deepest path, fan-out, empty-document, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: metrics describe the STATIC server-rendered DOM only — no JS-expanded/hydrated DOM, no computed layout/CSSOM, no render-tree or paint cost; a headless-browser engine would be required to advance further."
+    "trl_evidence": "Real single-pass DOM tree walk over golang.org/x/net/html's tokenizing parser (no regex over HTML structure): malformed markup is normalised into a well-formed tree, then one depth-first traversal in document order computes total element-node count, total text-node count, maximum element-nesting depth, maximum sibling breadth (widest direct-element-child fan at any parent), a per-lowercase-tag frequency histogram, distinct-tag count, average direct-element-children per element, count of elements exceeding the >60-child high-fan-out threshold (threshold echoed in the response), the deepest element path (root-to-deepest tag chain, first-in-document-order on ties), text-to-element ratio, total DOM size in bytes, and a documented combined complexity score (max_depth + max_breadth + element_nodes/100). The whole served document is counted including head/script/style — DOM weight is a property of the markup as a whole, distinct from prose extraction. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode analyses pasted markup with no fetch. Per-failure notes pushed to a non-nil degraded[] (empty_document, fetch_failed, parse_failed) instead of failing the response. ~30 unit tests cover nested-div depth, N-sibling breadth, node counts, tag histogram, distinct-tag count, deepest-path chain (including first-wins-on-tie), high-fan-out threshold boundary (60 vs 61), text-node vs element-node counting, malformed-HTML normalisation, script/style inclusion, average-children and ratio math, complexity-score monotonicity, empty-document degraded, missing-param 400, SSRF rejection, and text= mode. /selftest exercises the pure-logic pipeline (hand-built known depth/breadth, node counts, deepest path, fan-out, empty-document, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: metrics describe the STATIC server-rendered DOM only — no JS-expanded/hydrated DOM, no computed layout/CSSOM, no render-tree or paint cost; a headless-browser engine would be required to advance further.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-abuse-contact-rollup": {
     "container_port": 18189,
@@ -939,7 +1008,10 @@
     "trl_assessed_at": "2026-07-02",
     "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_evidence": "v0.3.0 fixes a measured false-positive class: 213/221 cached ads_txt_present=true sample rows had zero valid seller lines. Presence now requires at least one syntactically valid seller declaration, rejecting HTTP-200 soft 404s, directive-only placeholders, and arbitrary comma-separated error text. In-page provider matching is restricted to executable script/iframe/ad-widget contexts, so prose, comments, policy links, and vendor lists no longer count as active ad-network evidence. Unit, race, vet, build, deterministic selftest, positive seller/provider, and negative soft-404/non-executable regressions are green.",
-    "version": "0.3.0"
+    "version": "0.3.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-ai-bot-policy-scanner": {
     "container_port": 18195,
@@ -962,7 +1034,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v0.2.0 requires the AMP/lightning root marker, exact official v0.js runtime, and a same-site canonical link. amphtml alternatives must stay within the registrable site, preserve their path through redirects, return 2xx, and pass the complete AMP gate. AMP-cache evidence uses exact HTTPS host/path parsing. Cross-site, homepage-redirect, lone-marker, and substring false positives have regressions; unit/race/vet/build and deterministic selftest are green.",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-analytics-stack": {
     "container_port": 18215,
@@ -975,7 +1050,10 @@
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "version": "0.4.3",
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-anycast-footprint": {
     "container_port": 18220,
@@ -987,7 +1065,10 @@
     "trl_assessed_at": "2026-05-21",
     "trl_assessor": "claude-opus-4-7",
     "trl_evidence": "Parallel A+AAAA UDP queries against 8 public resolvers (Cloudflare 1.1.1.1/1.0.0.1, Google 8.8.8.8, Quad9 9.9.9.9, OpenDNS 208.67.222.222, Verisign 64.6.64.6, Level3 4.2.2.2, DNS.WATCH 84.200.69.80) via miekg/dns; Team Cymru whois.cymru.com:43 bulk-mode ASN+org+prefix+country lookup; curated 17-entry anycast ASN allowlist; convergence + ASN allowlist decision tree (>=4-resolver convergence + allowlist match -> anycast/high); 5 handler tests with canned DNS+ASN fixtures (zero network); selftest probes pure-logic helpers + live cloudflare.com. Heuristic-grade, not RFC-grounded -> TRL 4.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-app-render-mode": {
     "proxy_read_timeout": "75s",
@@ -995,14 +1076,20 @@
     "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
     "host_port": 18224,
     "trl": 4,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-backlink-profile": {
     "container_port": 18210,
     "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
     "host_port": 18210,
     "trl": 4,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-bimi-checker": {
     "container_port": 18218,
@@ -1014,14 +1101,20 @@
     "trl_assessed_at": "2026-05-21",
     "trl_assessor": "claude-opus-4-7",
     "trl_evidence": "BIMI parser (v=BIMI1, l=, a= tags), CNAME chain walk, safehttp HEAD-fetcher (https-only, SSRF-safe) for logo SVG + VMC cert, degraded[] semantics on per-source failure, 8 unit tests on canned TXT/HTTP, /selftest with live cnn.com DNS lookup. v0.1.0 first ship.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-breadcrumb-schema": {
     "container_port": 18230,
     "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
     "host_port": 18230,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-cache-policy": {
     "container_port": 18235,
@@ -1041,7 +1134,10 @@
     "trl_ceiling_reason": "Plugin/theme-level depth needs a Wappalyzer-grade signature database; bot-protected and fingerprint-less sites remain outside reliable CPU-only detection.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01",
-    "version": "0.3.8"
+    "version": "0.3.8",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
@@ -1068,7 +1164,10 @@
     "container_port": 18219,
     "description": "DANE/TLSA record presence + cert binding validation (RFC 6698).",
     "host_port": 18219,
-    "trl": 4
+    "trl": 4,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-deployment-fingerprint": {
     "container_port": 18241,
@@ -1078,7 +1177,10 @@
     "trl_evidence": "One bounded probe combines homepage headers/HTML, API HEAD behavior, and DNS CNAME evidence across PaaS, serverless backend, edge compute, and static hosting. Claims require platform-pinning signals, preserve evidence and confidence, and are covered by directional fixtures, handler tests, and a live selftest.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
-    "version": "0.2.2"
+    "version": "0.2.2",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-details": {
     "container_port": 8085,
@@ -1123,7 +1225,10 @@
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01",
     "version": "0.4.5",
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-email-deliverability-score": {
     "container_port": 18181,
@@ -1154,7 +1259,10 @@
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "host_port": 18226,
     "trl": 4,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-experimentation-stack": {
     "proxy_read_timeout": "75s",
@@ -1167,42 +1275,60 @@
     "trl_ceiling_reason": "Server-side experimentation can emit no client-observable fingerprint; measured JS rendering recovered almost no additional vendor signal and remains a flaky upstream.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01",
-    "version": "0.4.0"
+    "version": "0.4.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-faq-schema": {
     "container_port": 18231,
     "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
     "host_port": 18231,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-favicon-completeness": {
     "container_port": 18232,
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "host_port": 18232,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-font-stack": {
     "container_port": 18221,
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
     "trl": 4,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-gift-card": {
     "container_port": 18239,
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "host_port": 18239,
     "trl": 5,
-    "version": "0.2.1"
+    "version": "0.2.1",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-glue-records": {
     "container_port": 18237,
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
     "host_port": 18237,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-http3-quic-detector": {
     "container_port": 18190,
@@ -1219,7 +1345,10 @@
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
     "host_port": 18223,
     "trl": 4,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-integration-marketplace": {
     "container_port": 18243,
@@ -1232,7 +1361,10 @@
     "trl_ceiling_reason": "Hard bot protection, catalogs hosted on separate ecosystem domains, and authoritative ground-truth counts require platform APIs or different egress.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01",
-    "version": "0.3.6"
+    "version": "0.3.6",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-interactive-demo": {
     "proxy_read_timeout": "75s",
@@ -1240,7 +1372,10 @@
     "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
     "host_port": 18240,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-liveness-state": {
     "container_port": 18217,
@@ -1249,7 +1384,10 @@
     "trl": 4,
     "trl_assessed_at": "2026-05-21",
     "trl_assessor": "claude-opus-4-7",
-    "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only — no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet."
+    "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only — no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-martech-stack": {
     "proxy_read_timeout": "75s",
@@ -1262,7 +1400,10 @@
     "trl_ceiling_reason": "Cold heavy-SPA rendering can exceed the enrichment budget and bot/consent gates hide some client-injected tools.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
-    "version": "0.4.2"
+    "version": "0.4.2",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
@@ -1279,7 +1420,10 @@
     "description": "NAPTR + ENUM (E.164) record discovery (RFC 3403/2916/6116).",
     "host_port": 18236,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-newsletter-platform-detector": {
     "proxy_read_timeout": "75s",
@@ -1307,7 +1451,10 @@
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
     "host_port": 18229,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-passive-dns-history": {
     "container_port": 18183,
@@ -1325,7 +1472,10 @@
     "description": "Podcast presence detector — RSS feed + linked platforms + embedded players.",
     "host_port": 18227,
     "trl": 4,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-product-count": {
     "container_port": 18242,
@@ -1345,7 +1495,10 @@
     "trl_assessed_at": "2026-07-02",
     "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_evidence": "v0.2.0 validates numeric quotas/resets and policy windows, rejects malformed or contradictory families, treats Retry-After as rate-limit evidence only on 429, and prevents vendor metadata from creating positives alone. Discovery continues past no-signal 2xx/4xx responses and HEAD falls back to GET when headers lack evidence. Unit/race/vet/build and deterministic selftests are green.",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-rbl-reputation": {
     "container_port": 18182,
@@ -1430,7 +1583,10 @@
     "description": "Viewport meta tag parser + mobile-friendliness scoring.",
     "host_port": 18233,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "domain-well-known-catalog": {
     "container_port": 18194,
@@ -1451,7 +1607,10 @@
     "trl_evidence": "SPARQL-first P856 matching with Wikidata API fallback uses entity-type rejection, multilingual brand normalization, confidence gating, and deterministic primary-entity ranking. Per-source degradation and honest no-data/upstream-error states are exposed; 48 offline unit/handler tests and live probes cover known human/place/media false positives.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01",
-    "version": "0.2.2"
+    "version": "0.2.2",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "dtss": {
     "container_port": 8286,
@@ -1514,7 +1673,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects every <iframe>/<embed>/<object> in document order, descending into <object> subtrees so a fallback iframe/embed nested as object content is still inventoried. The source attribute is picked per element (src for iframe/embed, data for object) and resolved to an absolute URL against the page's final post-redirect fetched URL via net/url ResolveReference, so a relative or protocol-relative src is reported absolute with a derived lower-cased host. Classification is by registrable-domain host SUFFIX (host == suffix or ends with .suffix) so www./m./player./open. subdomains all land on the same provider, and a couple of path checks disambiguate same-host providers (google.com/maps -> google_maps; docs.google.com/forms -> google_forms ahead of generic google_docs). The curated provider table covers video (youtube incl. youtube-nocookie/youtu.be, vimeo, dailymotion, wistia, loom, twitch), maps (google_maps, openstreetmap), social (twitter incl. x.com, facebook incl. fb/fb.watch/facebook.net, instagram, linkedin, reddit, tiktok), audio (spotify, soundcloud, anchor), docs (google_docs, slideshare, scribd, codepen, jsfiddle, codesandbox, github_gist), forms (typeform, airtable, google_forms), and ads_analytics (doubleclick, googlesyndication, googletagmanager, google-analytics). Anything not on the finite list falls to provider/category other rather than being guessed — the honest TRL-4 ceiling, since novel embed hosts cannot be classified without an external dataset (the TRL-5+ ceiling). A src-less iframe (srcdoc-only / JS-filled) is still counted with provider/category inline and an empty host. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects relative iframe srcs. Direct text= mode scans pasted HTML with no fetch (empty base, so relative srcs stay as-is). Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_embeds, srcless_embed) instead of failing the response; degraded[] is always a non-nil slice. 30 unit tests cover every provider family, category bucketing, host-suffix subdomain matching, lookalike-host rejection, embed src vs object data, relative + protocol-relative resolution, unresolved-without-base, srcless inline handling, by_provider/by_category counts, document-order preservation, embeds anywhere in the tree, object-nested fallback, no-embeds, garbage/data-URI input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (youtube/vimeo classification, relative resolution, object data, srcless inline, host-suffix subdomains, by_provider/by_category counts, unknown->other, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal."
+    "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects every <iframe>/<embed>/<object> in document order, descending into <object> subtrees so a fallback iframe/embed nested as object content is still inventoried. The source attribute is picked per element (src for iframe/embed, data for object) and resolved to an absolute URL against the page's final post-redirect fetched URL via net/url ResolveReference, so a relative or protocol-relative src is reported absolute with a derived lower-cased host. Classification is by registrable-domain host SUFFIX (host == suffix or ends with .suffix) so www./m./player./open. subdomains all land on the same provider, and a couple of path checks disambiguate same-host providers (google.com/maps -> google_maps; docs.google.com/forms -> google_forms ahead of generic google_docs). The curated provider table covers video (youtube incl. youtube-nocookie/youtu.be, vimeo, dailymotion, wistia, loom, twitch), maps (google_maps, openstreetmap), social (twitter incl. x.com, facebook incl. fb/fb.watch/facebook.net, instagram, linkedin, reddit, tiktok), audio (spotify, soundcloud, anchor), docs (google_docs, slideshare, scribd, codepen, jsfiddle, codesandbox, github_gist), forms (typeform, airtable, google_forms), and ads_analytics (doubleclick, googlesyndication, googletagmanager, google-analytics). Anything not on the finite list falls to provider/category other rather than being guessed — the honest TRL-4 ceiling, since novel embed hosts cannot be classified without an external dataset (the TRL-5+ ceiling). A src-less iframe (srcdoc-only / JS-filled) is still counted with provider/category inline and an empty host. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects relative iframe srcs. Direct text= mode scans pasted HTML with no fetch (empty base, so relative srcs stay as-is). Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_embeds, srcless_embed) instead of failing the response; degraded[] is always a non-nil slice. 30 unit tests cover every provider family, category bucketing, host-suffix subdomain matching, lookalike-host rejection, embed src vs object data, relative + protocol-relative resolution, unresolved-without-base, srcless inline handling, by_provider/by_category counts, document-order preservation, embeds anywhere in the tree, object-nested fallback, no-embeds, garbage/data-URI input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (youtube/vimeo classification, relative resolution, object data, srcless inline, host-suffix subdomains, by_provider/by_category counts, unknown->other, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "emotional-tone": {
     "container_port": 8288,
@@ -1526,7 +1688,10 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "CPU-only lexicon/cue method: no sarcasm/irony/syntactic context, and per-language cue lists are necessarily positive-skewed; reaching 6 needs RFC-grade evidence trails + production cross-checks beyond a lexicon.",
     "trl_evidence": "Pass-3 geo: added CPU-only page-language detection (Unicode script census for CJK/Hangul/Cyrillic/Greek/Arabic/Hebrew/Thai/Devanagari + a function-word stopword vote for en/es/fr/de/pt/it/nl + diacritic signal) and per-language routing. Non-English text now scores against hand-curated polarity cue lists (es/fr/de/pt/it/nl + basic ja/zh/ko/ru, no English false friends) or is gated to neutral with language_supported=false. On 101 live non-English ccTLD domains the cross-language false-friend/sparse-English false-positive class dropped from 69/101 to ~0 (all 67 post-fix non-neutral labels backed by a same-language cue, 0 unbacked); negative misfires 30->7; 94/100 pages now scored in their own language vs 6 before. Output gained detected_language/language_confidence/language_script/language_supported/score_engine. 37 Go tests; go build/vet/test green, gofmt clean.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "env-finder": {
     "container_port": 8344,
@@ -1688,7 +1853,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-diff-engine": {
     "container_port": 18160,
@@ -1720,7 +1885,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-dns-sync": {
     "container_port": 18141,
@@ -1793,7 +1958,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-fingerprint-cache": {
     "container_port": 18153,
@@ -1866,7 +2031,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-lock": {
     "host_port": 18303,
@@ -1901,7 +2066,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-memory": {
     "host_port": 18308,
@@ -1936,7 +2101,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-payload-corpus": {
     "container_port": 18156,
@@ -1972,7 +2137,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 2,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-pipe": {
     "auth": {
@@ -1994,7 +2159,7 @@
     "trl_evidence": "v0.4.1 in-RAM TTL relay (PutOpts API, total-RAM byte budget, last-write-wins ?replace slots, read-receipt watch channels). Store unit tests: put/get, burn-on-read, TTL expiry via injected clock, write-once, replace, expired-name reclaim, max-entries + max-total-bytes budgets, byte accounting across burn/expire, clamp-TTL, base62 id shape/uniqueness over 1000 draws, PutRandom uniqueness over 500, 256-word list uniqueness, word-code shape. Handler/HTTP tests: random+named push/pull, write-once 409, replace overwrite, reserved/invalid name, burn-once-then-404, content negotiation (HTML app vs text vs ?shell/?app/?raw), word-code create, QR text+png, read-receipt notify+watch token/gone, safe headers, delete, 413. /selftest runs put→get-multi→burn→named→reserved→empty→ttl→replace→word-code→byte-budget end-to-end. Cross-impl crypto proven: AES-256-CTR+HMAC openssl↔WebCrypto round-trips (incl. 256 KB + macOS LibreSSL) and ECDH P-256 sealed-box round-trip + wrong-key rejection (node WebCrypto). Live real-browser verification (2026-06-01): terminal-encrypt→browser-decrypt, browser-compose→CLI-decrypt, and ask-me-a-secret reply sealed→inbox decrypt with the server holding ciphertext only. crypto/rand ids, rejection sampling (no modulo bias).",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-pixel": {
     "auth": {
@@ -2046,7 +2211,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-preflight": {
     "container_port": 18142,
@@ -2091,7 +2256,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-q": {
     "auth": {
@@ -2112,7 +2277,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 5,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-read": {
     "auth": {
@@ -2133,7 +2298,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-resolver-quorum": {
     "container_port": 18155,
@@ -2212,7 +2377,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 3,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-target-reputation": {
     "container_port": 18171,
@@ -2283,7 +2448,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "fleet-webhook-verifier": {
     "container_port": 18170,
@@ -2327,7 +2492,10 @@
     "trl_evidence": "Best-effort multi-source funding aggregation combines parsed Crunchbase organization pages, first-party press/news pages, and Google News RSS. Each source degrades independently; DOM and XML parsers, deterministic USD amount normalization, evidence-bearing partial output, 33 offline tests, and deterministic plus live selftests are present.",
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01",
-    "version": "0.1.1"
+    "version": "0.1.1",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "gdpr-compliance": {
     "container_port": 8291,
@@ -2339,7 +2507,10 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high≥3 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline)."
+    "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high≥3 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline).",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "gentle-adhd-flow": {
     "trl": 3,
@@ -2385,7 +2556,10 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
-    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests."
+    "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "go-session-fixation": {
     "container_port": 8316,
@@ -2410,7 +2584,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Embedded 5,595-node Google Product Taxonomy supports exact lookup, fuzzy search, and precomputed TF-IDF classification. Version 1.3 implements conservative singularization, concrete product aliases, coordinated-leaf head extraction, and a stricter two-term confidence rule. Directional tests recover shirt, sneakers, and notebook classifications while rejecting modifier-only two-term evidence. Version 1.3.1 additionally runs the production selftest against the full embedded snapshot. Deterministic ranking, compatibility envelopes, offline selftests, and no runtime data dependency.",
-    "version": "1.3.1"
+    "version": "1.3.1",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "granular-physics-lab": {
     "trl": 4,
@@ -2451,7 +2628,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure): recurses the parsed document in document order collecting every h1-h6 with its resolved numeric level, collapsed visible text, and id attribute. skipTags subtrees (script/style/noscript/svg/template/head/iframe/object/embed) are pruned before text collection so an h-tag embedded in an inline SVG title or a <template> never pollutes the outline, and script/style text never leaks into a heading's label. The nested outline is built with a single-pass ancestor-stack algorithm (pop until the stack top is a strictly-lower level, attach, push) which is the standard 'nest under the most recent heading of a lower level' rule — it tolerates skipped levels (h1 directly to h3 still nests the h3 under the h1), multiple roots (each h1 starts a new root), and a leading deep heading without losing any node. Reports per-level counts (h1..h6 + total), max nesting depth, and an advisory issues[] of accessibility/structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level:hX->hY for any deeper-by-more-than-one jump, empty_heading) — all advisory, never fatal. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers analysing the same URL trigger one upstream fetch; plain-HTML render mode (heading structure lives in the served HTML, not a JS-rendered DOM — the documented TRL-4 ceiling for SPAs that build headings client-side). Direct text= mode analyses pasted HTML with no fetch. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, no_headings) instead of failing the response; a page with zero headings still returns 200. 26 unit tests cover document-order extraction, id capture, whitespace collapse, script/style stripping inside headings, inline-markup flattening, template/svg pruning, outline nesting (simple/deep/skipped-level/multiple-roots/leading-deep), depth measurement, per-level counts, every diagnostic (no_h1, multiple_h1, skipped_level, empty_heading, ascent-is-not-a-skip, clean-document), parse-input aliases, missing-param 400, SSRF rejection, and the handler text-mode + no_headings degraded paths. /selftest exercises the pure-logic pipeline (order, skipped-level, multiple-h1, empty-heading, nested depth, script/style stripping, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal."
+    "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure): recurses the parsed document in document order collecting every h1-h6 with its resolved numeric level, collapsed visible text, and id attribute. skipTags subtrees (script/style/noscript/svg/template/head/iframe/object/embed) are pruned before text collection so an h-tag embedded in an inline SVG title or a <template> never pollutes the outline, and script/style text never leaks into a heading's label. The nested outline is built with a single-pass ancestor-stack algorithm (pop until the stack top is a strictly-lower level, attach, push) which is the standard 'nest under the most recent heading of a lower level' rule — it tolerates skipped levels (h1 directly to h3 still nests the h3 under the h1), multiple roots (each h1 starts a new root), and a leading deep heading without losing any node. Reports per-level counts (h1..h6 + total), max nesting depth, and an advisory issues[] of accessibility/structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level:hX->hY for any deeper-by-more-than-one jump, empty_heading) — all advisory, never fatal. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers analysing the same URL trigger one upstream fetch; plain-HTML render mode (heading structure lives in the served HTML, not a JS-rendered DOM — the documented TRL-4 ceiling for SPAs that build headings client-side). Direct text= mode analyses pasted HTML with no fetch. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, no_headings) instead of failing the response; a page with zero headings still returns 200. 26 unit tests cover document-order extraction, id capture, whitespace collapse, script/style stripping inside headings, inline-markup flattening, template/svg pruning, outline nesting (simple/deep/skipped-level/multiple-roots/leading-deep), depth measurement, per-level counts, every diagnostic (no_h1, multiple_h1, skipped_level, empty_heading, ascent-is-not-a-skip, clean-document), parse-input aliases, missing-param 400, SSRF rejection, and the handler text-mode + no_headings degraded paths. /selftest exercises the pure-logic pipeline (order, skipped-level, multiple-h1, empty-heading, nested depth, script/style stripping, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   "hidden-fields": {
     "container_port": 8345,

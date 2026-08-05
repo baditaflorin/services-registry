@@ -31,7 +31,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8272,
     "container_port": 8272,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "accessibility-audit",
@@ -135,7 +138,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8274,
     "container_port": 8274,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "address-extractor",
@@ -168,7 +174,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8275,
     "container_port": 8275,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "admin-finder",
@@ -236,7 +245,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8081,
     "container_port": 8081,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "api-extractor",
@@ -404,7 +416,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8277,
     "container_port": 8277,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "blocklist-checker",
@@ -472,7 +487,10 @@
     "host_port": 18288,
     "container_port": 18288,
     "proxy_egress": true,
-    "trl_ceiling": 7
+    "trl_ceiling": 7,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "brand-logo-extractor",
@@ -506,7 +524,10 @@
     "host_port": 18287,
     "container_port": 18287,
     "proxy_egress": true,
-    "trl_ceiling": 7
+    "trl_ceiling": 7,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "broken-links",
@@ -539,7 +560,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8192,
     "container_port": 8192,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "bucket-finder",
@@ -607,7 +631,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8325,
     "container_port": 8325,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "captcha-detector",
@@ -641,7 +668,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8209,
     "container_port": 8209,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "cas",
@@ -709,7 +739,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "host_port": 8326,
     "container_port": 8326,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "citation-reference-extractor",
@@ -743,7 +776,10 @@
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18263,
-    "container_port": 18263
+    "container_port": 18263,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "clickjacking-tester",
@@ -811,7 +847,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8280,
     "container_port": 8280,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "color-contrast-checker",
@@ -912,7 +951,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8281,
     "container_port": 8281,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "compression-tester",
@@ -946,7 +988,10 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8327,
     "container_port": 8327,
-    "proxy_read_timeout": "120s"
+    "proxy_read_timeout": "120s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "content-fingerprint",
@@ -980,7 +1025,10 @@
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18265,
-    "container_port": 18265
+    "container_port": 18265,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "cookie-checker",
@@ -1115,7 +1163,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8082,
     "container_port": 8082,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "crlf-tester",
@@ -1182,7 +1233,10 @@
     "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "host_port": 18290,
     "container_port": 18290,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "crypto-finder",
@@ -1250,7 +1304,10 @@
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18257,
-    "container_port": 18257
+    "container_port": 18257,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "currency-detector",
@@ -1317,7 +1374,10 @@
     "host_port": 8283,
     "container_port": 8283,
     "proxy_egress": true,
-    "proxy_read_timeout": "120s"
+    "proxy_read_timeout": "120s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "data-format-converter",
@@ -1385,7 +1445,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8284,
     "container_port": 8284,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "debug-detector",
@@ -1453,7 +1516,10 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8285,
     "container_port": 8285,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "dir-listing",
@@ -1555,7 +1621,10 @@
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18262,
-    "container_port": 18262
+    "container_port": 18262,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-ad-network",
@@ -1590,7 +1659,10 @@
     "trl_ceiling_reason": "No headless/JS rendering -- homepage HTML fetched statically, so client-side-only ad injection (SPA hydration, JS-only tag managers) is structurally undetectable; RenderJS was tried and reverted after breaking /selftest.",
     "trl_evidence": "1,266-domain live audit (ads.txt + 18 in-page ad-network signatures). Fixed a real bug: Google Ad Manager out-of-page/interstitial slots were detected but their network code was never extracted. Zero false positives on manual spot-check across the full sample. Independently re-validated this repo's own pre-existing trl:7 self-claim rather than assuming it. See github.com/baditaflorin/go_domain_ad_network PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-amp-detector",
@@ -1621,7 +1693,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18222,
     "container_port": 18222,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-analytics-stack",
@@ -1657,7 +1732,10 @@
     "host_port": 18215,
     "container_port": 18215,
     "proxy_egress": true,
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-anycast-footprint",
@@ -1686,7 +1764,10 @@
     "trl_assessor": "claude-opus-4-7",
     "host_port": 18220,
     "container_port": 18220,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-app-render-mode",
@@ -1721,7 +1802,10 @@
     "trl_ceiling": null,
     "trl_evidence": "866-domain 3-way replay (deployed prod vs pre-fix main vs fix, on identical HTML bytes). Fixed two real classification bugs: positive framework detections (e.g. Next.js at high confidence) reported as 'unknown'; an earlier merged fix over-corrected and lost legitimate same-origin framework fingerprints (Astro, Gatsby). ~1.1% of verdicts corrected, zero regressions. Also patched a real CVE. Flagged: production is 2 real-bug generations behind main. See github.com/baditaflorin/go_domain_app_render_mode PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-backlink-profile",
@@ -1754,7 +1838,10 @@
     "trl_ceiling": 4,
     "trl_evidence": "First-ever audit re-validated the v0.3.0 honesty-gate architecture against 200 live production domains and the full 349,747-row production table; confirmed the fleet-common safehttp fetch-cache bug class does not apply (plain net/http, no safehttp import). Found and fixed a real evidence-integrity bug: fetchBytesOnce only special-cased >=500/404, so any other non-2xx response (403 auth-wall, 400 on IDN domains) had its HTML error body fed to the line parsers as fabricated real data -- reproduced live for web.archive.org's 403 on nytimes.com and a 400 on cafe.com/moskva.rf/nihon.jp (no punycode encoding before outbound URL construction). Fixed by hard-failing any non-2xx status at the shared fetch layer. Also surfaced two upstream/ops gaps (Common Crawl index-query endpoint failing fleet-wide, OPEN_PAGE_RANK_KEY unprovisioned in production) as follow-ups, not code bugs. trl/trl_ceiling held at 4/4 -- the no-paid-backlink-feed ceiling rationale still holds. See github.com/baditaflorin/go_domain_backlink_profile PR #10 (merged).",
     "trl_assessed_at": "2026-08-04",
-    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-bimi-checker",
@@ -1785,7 +1872,10 @@
     "container_port": 18218,
     "proxy_egress": true,
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "VMC chain-of-trust needs a curated MVA root bundle not available in this fleet; SVG Tiny PS profile check is structural-only; DMARC check is exact-domain-only, no organizational rollup."
+    "trl_ceiling_reason": "VMC chain-of-trust needs a curated MVA root bundle not available in this fleet; SVG Tiny PS profile check is structural-only; DMARC check is exact-domain-only, no organizational rollup.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-breadcrumb-schema",
@@ -1819,7 +1909,10 @@
     "trl_ceiling": null,
     "trl_evidence": "900-domain live audit (real HTML parser across JSON-LD/microdata/RDFa Lite). Fixed 4 real bugs: a cross-host false positive, a vacuous-truth path_aligned check that hit 78% of well-formed breadcrumb lists (mostly Yoast/RankMost/WooCommerce single-item homepage breadcrumbs), a missing nested item.name extraction path, and total JSON-LD parse failure on embedded control characters. Also fixed a dead selftest check that never ran and a false live-probe claim in trl_evidence/README. See github.com/baditaflorin/go_domain_breadcrumb_schema PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-cache-policy",
@@ -1890,7 +1983,10 @@
     "host_port": 18216,
     "container_port": 18216,
     "proxy_egress": true,
-    "proxy_read_timeout": "70s"
+    "proxy_read_timeout": "70s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-dane-tlsa",
@@ -1921,7 +2017,10 @@
     "trl_ceiling_reason": "No independent DNSSEC chain validation (trusts the resolver's AD bit over plain UDP), no STARTTLS for mail ports, possible resolver/dial inconsistency for multi-CDN domains.",
     "trl_evidence": "Tested against 913 real domains (700 random + 80 .cz + 80 .nl + 53 known-DANE-positive from prod data). Fixed: (1) matches_served_cert was a plain bool silently conflating 'never checked' (e.g. a real dial timeout) with 'genuine mismatch' -- now nullable, affected 7/913 domains; (2) added new dane_verified field distinguishing DANE matches on DNSSEC-signed zones from unsigned ones -- 16/52 real matches were on unsigned zones (DANE without the RFC 6698 guarantee). Independently reproduced 51/53 of the DB's existing recorded DANE positives from a fresh build. See github.com/baditaflorin/go_domain_dane_tlsa PR #3.",
     "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-deployment-fingerprint",
@@ -1954,7 +2053,10 @@
     "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "host_port": 18241,
     "container_port": 18241,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-details",
@@ -2024,7 +2126,10 @@
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Signature/heuristic fingerprinting has an inherent recall ceiling -- new/custom/headless storefronts and anti-bot content variance served to datacenter IPs will always cost some recall, ruling out SLA-grade 9 without ruling out further hardening toward 8."
+    "trl_ceiling_reason": "Signature/heuristic fingerprinting has an inherent recall ceiling -- new/custom/headless storefronts and anti-bot content variance served to datacenter IPs will always cost some recall, ruling out SLA-grade 9 without ruling out further hardening toward 8.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-error-monitoring",
@@ -2096,7 +2201,10 @@
     "trl_ceiling_reason": "Single homepage-snapshot scope (no crawl), no JS-render escalation for SPA-only embeds, and no independent cross-check of extracted ids against platform APIs -- real parser/evidence-trail/tested but not SLA-grade without an architecture change.",
     "trl_evidence": "991-domain live audit. Fixed 6 real bugs: the fetch layer never checked HTTP status codes so WAF/bot-block pages sailed through as clean scans (35+ domains affected); broken ID extraction for On24 (0/7->6/7) and Eventive (0/8->2/8) event links; false positives from self-hosted vFairs analytics and Eventbrite's own CDN favicon; plus a real CVE patch. See github.com/baditaflorin/go_domain_events_platform PR #3.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-experimentation-stack",
@@ -2132,7 +2240,10 @@
     "host_port": 18211,
     "container_port": 18211,
     "proxy_egress": true,
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-faq-schema",
@@ -2167,7 +2278,10 @@
     "trl_ceiling_reason": "Static-fetch-only architecture cannot see JS-hydrated/streamed JSON-LD, confirmed against 3 live Next.js domains injecting FAQ schema via client-hydration streaming -- closing it needs a headless-render step, out of scope for this detector.",
     "trl_evidence": "This repo's own service.yaml already carried a genuine trl:7 assessment that a later registry-sync commit discarded down to a bare trl:5 -- a registry bookkeeping gap, not a code regression. Re-validated with a fresh 1,000-domain live audit: fixed a real bug affecting the two most common JSON-LD producers on the web (Yoast SEO, RankMath) where @id-reference-style FAQ entries were misread as malformed, zeroing out otherwise-valid FAQ pages (reproduced live on 2 real sites, 6/6 valid questions each, previously misreported as 0). See github.com/baditaflorin/go_domain_faq_schema PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-favicon-completeness",
@@ -2201,7 +2315,10 @@
     "trl_ceiling": null,
     "trl_evidence": "The repo's own prior trl:7 claim was an unvalidated text-only edit the central catalog correctly never trusted. 900-domain live audit found and fixed a real bug: icons declared via inline data: URIs (2.3% of domains) were mis-parsed as unreachable by the URL normalizer, permanently zeroing an otherwise valid favicon score. Zero regressions. Flagged: production is 4+ weeks stale, missing an already-merged fix. See github.com/baditaflorin/go_domain_favicon_completeness PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-font-stack",
@@ -2236,7 +2353,10 @@
     "trl_ceiling_reason": "No JS execution -- 7/19 real Adobe Fonts detections in the sample are JS-driven kit loaders, permanently invisible without a headless browser; single-external-stylesheet-fetch design also caps completeness.",
     "trl_evidence": "Independently re-validated this repo's own pre-existing trl:7 claim (earned across two prior real audit rounds, never synced to the central registry) via a fresh 900-domain paired audit. Fixed 4 real bugs: a false positive from a CDN mirror rewriting a Typekit URL, a missed preload-as-style async-loading pattern, an unfetched @import provider reference, and undercounting of fonts.gstatic.com direct-preload assets. Family-count sum improved 403->408, 2 false positives removed, 0 introduced. See github.com/baditaflorin/go_domain_font_stack PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-gift-card",
@@ -2271,7 +2391,10 @@
     "trl_ceiling_reason": "Static-HTML-only fetch (no JS execution) plus a curated, finite probe-slug/anchor taxonomy caps recall on real merchants (~0.26 measured) -- some SPA-hydrated nav is invisible without headless rendering, and enterprise anti-bot systems block a non-browser client outright; evading bot-detection is out of policy scope. Precision is strong (1.00 measured); ceiling is a recall problem, not a correctness problem.",
     "trl_evidence": "950-domain live audit plus a 39-merchant/20-non-commerce ground-truth set (precision 1.00, recall 0.26). Fixed a real bug: no HTTP fallback on TLS/certificate failure caused 11.4% of homepage fetches to fail entirely even though real content existed over plain HTTP -- errors dropped 108->23, recovering 2 previously-masked real positives. Also closed a fetch-cache-consistency gap between homepage and probe evidence. See github.com/baditaflorin/go_domain_gift_card PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-glue-records",
@@ -2304,7 +2427,10 @@
     "proxy_egress": true,
     "trl_evidence": "Tested against domain_glue_records (946,788 rows, actively written by this service) and a 200-domain random sample. Fixed 3 real bugs, one already visibly producing wrong production rows: (1) checker trusted only the first-responding parent nameserver, but different authoritative instances of the same TLD zone disagree on glue provisioning -- verified live that forth.gr and nic.sh had real false-negative production rows dated the day of this audit from exactly this cause; fixed by merging glue across all responding parent NS instances; (2) glue_provided_count was inflated by counting opportunistic out-of-bailiwick glue -- 37% of the 200-domain sample affected (e.g. amazon.com); (3) empty glue results couldn't distinguish 'no glue needed' from NXDOMAIN -- 4% of the sample were silently-wrong NXDOMAIN domains reported as clean. All fixed with live-verified before/after numbers. TRL held at 7 rather than inflated further -- re-affirmed with real evidence instead of a fresh bump. See github.com/baditaflorin/go_domain_glue_records PR #4.",
     "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-image-alt-coverage",
@@ -2339,7 +2465,10 @@
     "trl_ceiling_reason": "Static-HTML-only fetch (no headless browser) -- lazy-loaded/JS-injected images and CSS background-images are structurally invisible by design; WCAG 1.1.1 is one criterion among many; domain-parking detection is a fixed hostname allowlist, not exhaustive.",
     "trl_evidence": "800-domain live audit. The DOM parsing/classification logic held up well (no bugs found), but the fetch layer had real defects: no HTTP fallback when HTTPS failed (84/800 domains affected by cert mismatches/refused connections), no status-code check before parsing (Cloudflare 403 challenge pages and domain-parking pages scored as real homepages), and a redirect cap cutting off legitimate chains one hop short. Fetch failure rate dropped 17.9%->14.2%. See github.com/baditaflorin/go_domain_image_alt_coverage PR #3.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-integration-marketplace",
@@ -2375,7 +2504,10 @@
     "host_port": 18243,
     "container_port": 18243,
     "proxy_egress": true,
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-interactive-demo",
@@ -2410,7 +2542,10 @@
     "trl_ceiling": null,
     "trl_evidence": "The repo's own prior trl:7 claim came from a commit that only edited YAML text with elaborate write-up but no data validation -- exactly why the central registry never accepted it and kept trl:5. Re-validated with a live audit against 1,957 real detected instances plus 600 clean domains. Fixed a Vimeo false-positive class from unfilled CMS template placeholders and generic lightbox JS libraries (223->0 no-id detections), and a host-validation bypass in the inline-script scanner exploitable via lookalike hosts. See github.com/baditaflorin/go_domain_interactive_demo PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-liveness-state",
@@ -2439,7 +2574,10 @@
     "trl_assessor": "claude-opus-4-7",
     "host_port": 18217,
     "container_port": 18217,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-martech-stack",
@@ -2475,7 +2613,10 @@
     "host_port": 18213,
     "container_port": 18213,
     "proxy_egress": true,
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-naptr-enum",
@@ -2510,7 +2651,10 @@
     "trl_ceiling_reason": "No live non-defunct ENUM test corpus available; single-level NAPTR resolution rather than full RFC 3958 chain-walking.",
     "trl_evidence": "Tested against domain_naptr_enum (946,853 rows) and a fresh 2,000-domain sample. Confirmed ENUM essentially never occurs on generic web domains (0/946k). Fixed 3 real bugs: (1) exact-string flag matching silently dropped multi-char NAPTR flags -- verified live against apple.com's actual SIP records (flags=\"se\"); (2) no IDNA/punycode encoding meant IDN domains (e.g. muenchen.de) got a false 'verified empty' instead of the real DNS answer; (3) NXDOMAIN was indistinguishable from 'verified empty' -- 2.55% of a fresh 2,000-domain sample were misreported this way. Also fixed a CVE by bumping a vulnerable x/net dependency. See github.com/baditaflorin/go_domain_naptr_enum PR #3.",
     "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-pagination-rel",
@@ -2544,7 +2688,10 @@
     "trl_ceiling": null,
     "trl_evidence": "Caught a rubber-stamp: the repo's local trl:7 commit changed only the number, leaving trl_evidence byte-for-byte identical to the prior trl:5 text. 1,000-domain live audit found and fixed a confusing bug where scheme-only mismatches (http vs https, same host) were misreported identically to real cross-domain hijacks (2/3 of all cross-host flags were this false positive), plus a redirect-cap bug breaking legitimate multi-hop chains, plus a CVE patch. Held at trl:6, not 7, specifically to avoid repeating the rubber-stamp pattern this audit was meant to correct. See github.com/baditaflorin/go_domain_pagination_rel PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-podcast-presence",
@@ -2578,7 +2725,10 @@
     "trl_ceiling": 7,
     "trl_evidence": "Real-data audit (2026-07-31, previously unsynced to registry despite a merged fix): fetchPage never checked resp.StatusCode, so a non-2xx homepage response (429 rate-limited, 403 WAF/bot-block, 404, 5xx, or an un-followed 3xx) was silently parsed as if it were the real page. Confirmed live: swordandlaser.com (a genuine podcast site) returned a Squarespace 429 during the audit and was scored a confident, error-free is_podcast_site=false, indistinguishable from a real non-podcast page. Verified via a 1050-domain real Postgres sample (900 random + 150 known-true) run against the actual built binary. Confirmed this repo does NOT have the fleet's common fetch-cache-masking bug (it uses a different fleetfetch client wrapper that correctly surfaces the final post-redirect URL). trl bumped 4->5; trl_ceiling=7 -- the fix is real and verified, but the fleet-wide raw_domain_podcast_presence-always-NULL evidence-column gap (shared downstream-writer issue, out of scope for this repo) caps it below 7 for now. See github.com/baditaflorin/go_domain_podcast_presence PR #8 (merged).",
     "trl_assessed_at": "2026-08-04",
-    "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
+    "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-product-count",
@@ -2648,7 +2798,10 @@
     "trl_ceiling_reason": "The fetch-cache fix hasn't been observed live in production yet, so the ~988k historical rows can't be trusted as clean operational evidence until a post-deploy monitoring window confirms correct behavior.",
     "trl_evidence": "994-domain live audit superseding a prior trl:7 self-assessment validated only against synthetic fixtures. Found the fetch-cache-masking bug confirmed live via docker inspect -- a service whose entire job is reading current rate-limit counters was eligible to silently serve stale shared-cache data. Also fixed a false negative (rejected a real API's float-format X-Rate-Limit-Limit as malformed) and a false positive (12 unrelated shared-hosting domains flagged present based on a boilerplate RateLimit-Policy header alone). See github.com/baditaflorin/go_domain_ratelimit_headers PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-tracker-density",
@@ -2719,7 +2872,10 @@
     "trl_ceiling_reason": "Mobile-friendliness scoring from a static meta tag can never verify actual rendered reflow (WCAG 1.4.10) without a headless browser -- a structural, permanent limit.",
     "trl_evidence": "Corrected an internal contradiction (repo's own service.yaml had drifted to trl:7 above its own ceiling:5). 916-domain live audit proved the fetch-cache-masking bug live: two back-to-back requests for the same domain returned in 5100ms then 454ms, only explainable by a cache hit. Fixed. Also fixed Safari's shrink-to-fit viewport directive being misfiled as unknown (~4% of viewport-present pages) plus a CVE patch. See github.com/baditaflorin/go_domain_viewport_meta PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "domain-wikidata-entity",
@@ -2752,7 +2908,10 @@
     "trl_assessor": "codex-trl-audit-2026-07-01",
     "host_port": 18228,
     "container_port": 18228,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "dtss",
@@ -2887,7 +3046,10 @@
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18255,
-    "container_port": 18255
+    "container_port": 18255,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "emotional-tone",
@@ -2920,7 +3082,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8288,
     "container_port": 8288,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "env-finder",
@@ -3162,7 +3327,10 @@
     "container_port": 18293,
     "proxy_egress": true,
     "trl_ceiling": 5,
-    "trl_ceiling_reason": "Crunchbase (source a) is unprovisioned fleet-wide (0 of hundreds of thousands of real captures ever resolved a Crunchbase org page -- same finding as go_firmographic_profile's audit). The two remaining free sources (Google News RSS relevance matching + a fixed keyword list) mean real fleet inputs will remain near zero by design even after this fix."
+    "trl_ceiling_reason": "Crunchbase (source a) is unprovisioned fleet-wide (0 of hundreds of thousands of real captures ever resolved a Crunchbase org page -- same finding as go_firmographic_profile's audit). The two remaining free sources (Google News RSS relevance matching + a fixed keyword list) mean real fleet inputs will remain near zero by design even after this fix.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "gdpr-compliance",
@@ -3196,7 +3364,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8291,
     "container_port": 8291,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "go-oauth-mapper",
@@ -3237,7 +3408,10 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8330,
-    "container_port": 8330
+    "container_port": 8330,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "google-taxonomy",
@@ -3270,7 +3444,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8096,
     "container_port": 8096,
-    "proxy_egress": true
+    "proxy_egress": true,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "graphql-introspection",
@@ -3338,7 +3515,10 @@
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18247,
-    "container_port": 18247
+    "container_port": 18247,
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "hidden-fields",
@@ -8572,7 +8752,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-diff-engine",
@@ -8647,7 +8827,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-discovery",
@@ -8849,7 +9029,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-fingerprint-cache",
@@ -9065,7 +9245,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-lock",
@@ -9130,7 +9310,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-memory",
@@ -9195,7 +9375,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-payload-corpus",
@@ -9269,7 +9449,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 2,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-pipe",
@@ -9305,7 +9485,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-pixel",
@@ -9421,7 +9601,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-preflight",
@@ -9566,7 +9746,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-q",
@@ -9602,7 +9782,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 5,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-read",
@@ -9638,7 +9818,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-resolver-quorum",
@@ -9871,7 +10051,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 3,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-target-reputation",
@@ -10066,7 +10246,7 @@
     ],
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
+    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
   },
   {
     "id": "fleet-webhook-verifier",
