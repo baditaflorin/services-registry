@@ -101,6 +101,18 @@
         "contact": { "type": "string", "description": "Canonical contact — email, slack handle, mailing list." },
         "github":  { "type": "string", "description": "Optional GitHub login used as default assignee for issues / PRs auto-filed against this service." }
       }
+    },
+    "mcp_ready": {
+      "type": "boolean",
+      "description": "True if this service serves a live GET /agent.json and is currently aggregated into go-fleet-mcp-gateway's MCP tool list. Set by bin/audit_mcp_ready.py from the gateway's own GET /gateway/tools — never hand-set. Absence means not yet assessed or not currently reachable; false is not written, only true (see services.mcp.json)."
+    },
+    "mcp_tool_count": {
+      "type": "integer", "minimum": 0,
+      "description": "How many MCP tools this service currently contributes to the gateway's aggregation. Companion to mcp_ready."
+    },
+    "mcp_assessed_at": {
+      "type": "string", "format": "date-time",
+      "description": "Timestamp of the audit_mcp_ready.py run that last confirmed mcp_ready."
     }
   },
   "additionalProperties": false
