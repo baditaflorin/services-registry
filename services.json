@@ -15125,5 +15125,33 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-08-05",
     "trl_assessor": "claude-sonnet-5-mcp-phase2"
+  },
+  {
+    "id": "fleet-token-ledger",
+    "name": "Fleet Token Ledger",
+    "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-token-ledger.0exec.com",
+    "health_url": "https://fleet-token-ledger.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-token-ledger",
+    "example_path": "/v1/balance",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "First ship. Atomic charge/credit + audit trail with unit test coverage (11 tests, storage + handler layers). Zero fleet services call /v1/charge yet; /v1/topup is admin-only by design -- no real payment rail (Stripe/x402) wired in this phase.",
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-token-ledger",
+    "host_port": 18208,
+    "container_port": 18208
   }
 ]
