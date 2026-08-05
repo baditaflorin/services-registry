@@ -159,6 +159,17 @@ def _pick(keys: list[str]):
         return {k: e[k] for k in keys if k in e}
     return f
 
+def _pick_where(keys: list[str], predicate):
+    """Like _pick, but drops an entry unless predicate(entry) is true —
+    for slices whose filter isn't "has any of these fields" (several
+    fields here, like `url`, are on nearly every entry, so _pick's
+    generic heuristic wouldn't actually filter anything)."""
+    def f(e: dict) -> dict | None:
+        if not predicate(e):
+            return None
+        return {k: e[k] for k in keys if k in e}
+    return f
+
 PROJECTIONS = {
     # Bare slug list — smallest possible "what services exist?" answer.
     "services.ids.json":     lambda e: e["id"],
@@ -183,12 +194,14 @@ PROJECTIONS = {
     # by _pick (since "depends_on" is the only non-id key requested).
     "services.depends.json": _pick(["id", "depends_on"]),
     # MCP-ready services — what the hub's directory filter and
-    # go-fleet-mcp-gateway's own onboarding docs read. Entries without
-    # mcp_ready fall out of this slice entirely (_pick drops them), so
-    # it's naturally just the "yes" list, not every service with a
-    # false/absent flag.
-    "services.mcp.json":     _pick(["id", "name", "url", "mcp_ready",
-                                    "mcp_tool_count", "mcp_assessed_at"]),
+    # go-fleet-mcp-gateway's own onboarding docs read. Explicit
+    # predicate (not _pick's generic "has any of these fields"
+    # heuristic) because `url` is on nearly every entry regardless of
+    # mcp_ready — _pick alone wouldn't filter anything out.
+    "services.mcp.json":     _pick_where(
+        ["id", "name", "url", "mcp_ready", "mcp_tool_count", "mcp_assessed_at"],
+        lambda e: e.get("mcp_ready") is True,
+    ),
 }
 
 MESHES = ("0exec", "0crawl", "pages")

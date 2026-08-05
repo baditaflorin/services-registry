@@ -1714,7 +1714,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance diagnostic proxy, no HA/auth/rate-limit hardening for production-grade SLA",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:02:00.930309332Z"
   },
   "fleet-dns-sync": {
     "container_port": 18141,
@@ -1886,7 +1889,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance stateless renderer, no auth/SLA/persistence",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:02:00.930309332Z"
   },
   "fleet-memory": {
     "host_port": 18308,
@@ -2061,7 +2067,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "unauthenticated stateless utility with no SLA/observability commitments",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:02:00.930309332Z"
   },
   "fleet-q": {
     "auth": {
