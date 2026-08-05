@@ -1688,7 +1688,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-diff-engine": {
     "container_port": 18160,
@@ -1720,7 +1720,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-dns-sync": {
     "container_port": 18141,
@@ -1863,7 +1863,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-lock": {
     "host_port": 18303,
@@ -1898,7 +1898,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-memory": {
     "host_port": 18308,
@@ -1930,7 +1930,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "in-RAM ephemeral, single-node, at-most-once (slow-subs dropped); no persistence or HA by design",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-payload-corpus": {
     "container_port": 18156,
@@ -2034,7 +2037,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-preflight": {
     "container_port": 18142,
@@ -2079,7 +2082,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-q": {
     "auth": {
@@ -2118,7 +2121,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-resolver-quorum": {
     "container_port": 18155,
@@ -2194,7 +2197,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "in-RAM ephemeral relay — no durability, replication, or delivery guarantees by design; restart wipes all state",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 3,
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-target-reputation": {
     "container_port": 18171,
@@ -2262,7 +2268,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "ephemeral in-RAM bins, no durability — restart or idle-TTL wipes all captures, so it can't reach 8-9 production-data-integrity tiers",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 4,
+    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
   },
   "fleet-webhook-verifier": {
     "container_port": 18170,
