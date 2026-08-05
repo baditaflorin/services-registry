@@ -756,7 +756,7 @@ alongside vault secrets (`secrets:`) and shared proxy config
 Deploy-time rejects any `extra_env:` key that looks secret-shaped
 (contains `TOKEN`/`SECRET`/`PASSWORD`/`KEY`/`CREDENTIAL`) — those
 belong in `secrets:` (vault-backed), never in a version-controlled
-YAML file. See [ADR-0033](docs/adr/0033-extra-env-declarative-non-secret-overrides.md)
+YAML file. See [ADR-0034](docs/adr/0034-extra-env-declarative-non-secret-overrides.md)
 for the full decision record.
 
 **Rule of thumb:** secret → `secrets:`. Non-secret, worth tracking →
