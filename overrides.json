@@ -1688,7 +1688,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-diff-engine": {
     "container_port": 18160,
@@ -1720,7 +1720,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-dns-sync": {
     "container_port": 18141,
@@ -1790,7 +1790,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance fake-data utility, no persistence/auth/SLA",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-fingerprint-cache": {
     "container_port": 18153,
@@ -1863,7 +1866,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-lock": {
     "host_port": 18303,
@@ -1898,7 +1901,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-memory": {
     "host_port": 18308,
@@ -1933,7 +1936,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-payload-corpus": {
     "container_port": 18156,
@@ -1966,7 +1969,10 @@
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (2026-05-19). Pairs with mesh-common's fleetPersona (39 vitest tests). Server: 21 Go unit + handler tests covering validation, argon2id verify, fixed-window rate-limit, CORS preflight, read-only kill switch, oversized body. testing/smoke.sh runs the full lifecycle end-to-end against a running container. Strict-ASCII allowlist mirrors the client. Pure-Go SQLite (modernc.org/sqlite), CGO_ENABLED=0.",
     "url": "https://persona.0exec.com",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 2,
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-pipe": {
     "auth": {
@@ -1985,7 +1991,10 @@
     "trl_assessor": "claude-opus-session-2026-06-01-pipe-0.4.1",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Single-node, in-RAM, stateless relay by design — no persistence, no HA/clustering, no cross-checks. Deliberately minimal; further TRL would require features that contradict the ephemeral intent.",
-    "trl_evidence": "v0.4.1 in-RAM TTL relay (PutOpts API, total-RAM byte budget, last-write-wins ?replace slots, read-receipt watch channels). Store unit tests: put/get, burn-on-read, TTL expiry via injected clock, write-once, replace, expired-name reclaim, max-entries + max-total-bytes budgets, byte accounting across burn/expire, clamp-TTL, base62 id shape/uniqueness over 1000 draws, PutRandom uniqueness over 500, 256-word list uniqueness, word-code shape. Handler/HTTP tests: random+named push/pull, write-once 409, replace overwrite, reserved/invalid name, burn-once-then-404, content negotiation (HTML app vs text vs ?shell/?app/?raw), word-code create, QR text+png, read-receipt notify+watch token/gone, safe headers, delete, 413. /selftest runs put→get-multi→burn→named→reserved→empty→ttl→replace→word-code→byte-budget end-to-end. Cross-impl crypto proven: AES-256-CTR+HMAC openssl↔WebCrypto round-trips (incl. 256 KB + macOS LibreSSL) and ECDH P-256 sealed-box round-trip + wrong-key rejection (node WebCrypto). Live real-browser verification (2026-06-01): terminal-encrypt→browser-decrypt, browser-compose→CLI-decrypt, and ask-me-a-secret reply sealed→inbox decrypt with the server holding ciphertext only. crypto/rand ids, rejection sampling (no modulo bias)."
+    "trl_evidence": "v0.4.1 in-RAM TTL relay (PutOpts API, total-RAM byte budget, last-write-wins ?replace slots, read-receipt watch channels). Store unit tests: put/get, burn-on-read, TTL expiry via injected clock, write-once, replace, expired-name reclaim, max-entries + max-total-bytes budgets, byte accounting across burn/expire, clamp-TTL, base62 id shape/uniqueness over 1000 draws, PutRandom uniqueness over 500, 256-word list uniqueness, word-code shape. Handler/HTTP tests: random+named push/pull, write-once 409, replace overwrite, reserved/invalid name, burn-once-then-404, content negotiation (HTML app vs text vs ?shell/?app/?raw), word-code create, QR text+png, read-receipt notify+watch token/gone, safe headers, delete, 413. /selftest runs put→get-multi→burn→named→reserved→empty→ttl→replace→word-code→byte-budget end-to-end. Cross-impl crypto proven: AES-256-CTR+HMAC openssl↔WebCrypto round-trips (incl. 256 KB + macOS LibreSSL) and ECDH P-256 sealed-box round-trip + wrong-key rejection (node WebCrypto). Live real-browser verification (2026-06-01): terminal-encrypt→browser-decrypt, browser-compose→CLI-decrypt, and ask-me-a-secret reply sealed→inbox decrypt with the server holding ciphertext only. crypto/rand ids, rejection sampling (no modulo bias).",
+    "mcp_ready": true,
+    "mcp_tool_count": 4,
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-pixel": {
     "auth": {
@@ -2037,7 +2046,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-preflight": {
     "container_port": 18142,
@@ -2082,7 +2091,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-q": {
     "auth": {
@@ -2100,7 +2109,10 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "in-RAM ephemeral with no durability or replication — a restart loses all queued work (by design), so it can't reach durable-system-of-record TRL-9",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 5,
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-read": {
     "auth": {
@@ -2121,7 +2133,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-resolver-quorum": {
     "container_port": 18155,
@@ -2200,7 +2212,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 3,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-target-reputation": {
     "container_port": 18171,
@@ -2271,7 +2283,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T14:52:01.76392809Z"
+    "mcp_assessed_at": "2026-08-05T15:32:02.051118151Z"
   },
   "fleet-webhook-verifier": {
     "container_port": 18170,
