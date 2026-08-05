@@ -271,7 +271,7 @@ it.
 #### `extra_env:` — non-secret env vars the service needs at boot
 
 `extra_env:` is an **optional** block in `service.yaml`
-([ADR-0033](docs/adr/0033-extra-env-declarative-non-secret-overrides.md),
+([ADR-0034](docs/adr/0034-extra-env-declarative-non-secret-overrides.md),
 added 2026-08-05). It's a flat map of env var name to literal value,
 for config that isn't secret but still needs to reach the running
 container — a public base URL the service echoes back in its own
@@ -296,7 +296,7 @@ already used for `proxy_egress:` vars.
 vault-backed `secrets:` block instead (see ADR-0025). If your service
 needs neither of those but currently has a hand-placed dockerhost
 `.env` line nobody remembers setting, that's the signal to migrate it
-into `extra_env:` — see ADR-0033's migration path.
+into `extra_env:` — see ADR-0034's migration path.
 
 ### `deploy.yaml`
 

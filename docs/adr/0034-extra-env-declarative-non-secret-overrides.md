@@ -1,4 +1,4 @@
-# ADR-0033 — `extra_env:` for declarative, non-secret service.yaml overrides
+# ADR-0034 — `extra_env:` for declarative, non-secret service.yaml overrides
 
 * **Status**: Accepted
 * **Date**: 2026-08-05
