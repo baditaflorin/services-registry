@@ -718,6 +718,56 @@ in a different session. The cost of the autofix/disclose loop is
 ~30 lines per gap; the cost of re-discovery is hours of confused
 spelunking. Always file before moving on.
 
+### 9. Non-secret operator config belongs in `extra_env:`, not a hand-edited dockerhost `.env`
+
+**A hand-edited `.env` fix is real but invisible.** `go-fleet-pipe`
+and `go-fleet-webhook` both build the public URL they hand back
+(`pipe-push`'s read link, `webhook-new-bin`'s capture link) from the
+incoming request's `Host`/`X-Forwarded-Host`. When
+`go-fleet-mcp-gateway` calls either service directly at its internal
+dockerhost address instead of through the public reverse proxy, that
+derivation silently returns a private `10.10.10.x` URL — unopenable
+by a real caller, and useless for a webhook bin that's supposed to
+receive callbacks from Stripe/GitHub/a CI runner. Both services
+already ship the fix as an env var override
+(`PIPE_PUBLIC_BASE_URL` / `WEBHOOK_PUBLIC_BASE_URL`); the gap was
+that nothing had ever set it on the dockerhost.
+
+The quick fix — SSH in, hand-edit `/opt/services/<slug>/.env` — works
+and even survives redeploys (`materializeServiceEnv`'s preserved-entry
+merge already carries forward anything not covered by `secrets:` or
+`proxy_egress:`). But it's invisible: no PR, no code review, no record
+in git of what was set or why. The next dockerhost bootstrap or a
+different operator has no way to know it exists.
+
+**Use `extra_env:` in `service.yaml` for anything like this** — a
+non-secret, per-service config value that should live in version
+control instead of dockerhost tribal knowledge:
+
+```yaml
+extra_env:
+  PIPE_PUBLIC_BASE_URL: https://pipe.0exec.com
+```
+
+`fleet-runner deploy` materializes it into `/opt/services/<slug>/.env`
+alongside vault secrets (`secrets:`) and shared proxy config
+(`proxy_egress: true`), in that precedence order — vault wins, then
+`extra_env:`, then proxy, then any remaining hand-edited leftovers.
+Deploy-time rejects any `extra_env:` key that looks secret-shaped
+(contains `TOKEN`/`SECRET`/`PASSWORD`/`KEY`/`CREDENTIAL`) — those
+belong in `secrets:` (vault-backed), never in a version-controlled
+YAML file. See [ADR-0033](docs/adr/0033-extra-env-declarative-non-secret-overrides.md)
+for the full decision record.
+
+**Rule of thumb:** secret → `secrets:`. Non-secret, worth tracking →
+`extra_env:`. Shared bulk proxy config → `proxy_egress: true`. Ad hoc
+or not-yet-migrated → hand-edited `.env` still works (lowest
+precedence), but treat that as a TODO, not a destination.
+
+**Lesson:** "it works and survives redeploys" is not the same bar as
+"the next person can find out it exists." If a fix belongs in code
+review, it belongs in `service.yaml`, not an SSH session.
+
 ## No secrets policy
 
 Restating the [README](README.md): nothing sensitive belongs here.

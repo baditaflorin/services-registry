@@ -268,6 +268,36 @@ After fleet-wide adoption reaches ~80% the field will be promoted to
 required in `schema/v1.json` and downstream verbs will start gating on
 it.
 
+#### `extra_env:` — non-secret env vars the service needs at boot
+
+`extra_env:` is an **optional** block in `service.yaml`
+([ADR-0033](docs/adr/0033-extra-env-declarative-non-secret-overrides.md),
+added 2026-08-05). It's a flat map of env var name to literal value,
+for config that isn't secret but still needs to reach the running
+container — a public base URL the service echoes back in its own
+responses, a feature flag, a tuning knob.
+
+```yaml
+extra_env:
+  PIPE_PUBLIC_BASE_URL: https://pipe.0exec.com
+```
+
+`fleet-runner deploy` writes these into `/opt/services/<id>/.env`
+alongside vault secrets and shared proxy config, in this precedence:
+`secrets:` (vault) > `extra_env:` (this) > `proxy_egress:` (shared) >
+any leftover hand-edited `.env` lines. Your `docker-compose.yml` must
+reference the var with an empty-string default so compose is happy
+when it's unset (`${PIPE_PUBLIC_BASE_URL:-}`), matching the pattern
+already used for `proxy_egress:` vars.
+
+**Do NOT put secrets here.** `fleet-runner deploy` rejects any
+`extra_env:` key containing `TOKEN`, `SECRET`, `PASSWORD`, `PASSWD`,
+`APIKEY`, `API_KEY`, `PRIVATE_KEY`, or `CREDENTIAL` — those go in the
+vault-backed `secrets:` block instead (see ADR-0025). If your service
+needs neither of those but currently has a hand-placed dockerhost
+`.env` line nobody remembers setting, that's the signal to migrate it
+into `extra_env:` — see ADR-0033's migration path.
+
 ### `deploy.yaml`
 
 Some services keep this collapsed into `service.yaml`. If you split it,
