@@ -1685,7 +1685,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "in-RAM non-durable — every counter resets to 0 on restart, cannot serve as a durable ledger",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-diff-engine": {
     "container_port": 18160,
@@ -1717,7 +1720,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:02:00.930309332Z"
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-dns-sync": {
     "container_port": 18141,
@@ -1857,7 +1860,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance echo/facts utility with no SLA, persistence, or HA",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-lock": {
     "host_port": 18303,
@@ -1892,7 +1898,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:02:00.930309332Z"
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-memory": {
     "host_port": 18308,
@@ -2025,7 +2031,10 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "unauthenticated single-purpose probe with no HA/load evidence",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-preflight": {
     "container_port": 18142,
@@ -2070,7 +2079,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T13:02:00.930309332Z"
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-q": {
     "auth": {
@@ -2106,7 +2115,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance stateless extractor, no JS rendering / paywall handling",
     "trl_assessed_at": "2026-06-02",
-    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02"
+    "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-05T13:22:06.328806763Z"
   },
   "fleet-resolver-quorum": {
     "container_port": 18155,
