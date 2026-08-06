@@ -100,7 +100,7 @@ class TestExpandEntry(unittest.TestCase):
 
         d = next(c for c in children if c["id"] == "fleet-discovery")
         self.assertEqual(d["url"],        "https://fleet-discovery.0exec.com")
-        self.assertEqual(d["health_url"], "https://fleet-discovery.0exec.com/_gw_health")
+        self.assertEqual(d["health_url"], "https://fleet-discovery.0exec.com/health")
         self.assertEqual(d["name"],       "Fleet Discovery")  # humanize()
         self.assertEqual(d["host_port"],      18201)
         self.assertEqual(d["container_port"], 8080)
