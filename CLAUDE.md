@@ -1522,17 +1522,25 @@ entry.
 - Local workspace root: `/Users/live/Documents/Codex/2026-05-08/`.
   Sibling repos sit next to this one — read them directly when you
   need to understand a dependency.
-- CI: piloting self-hosted **Woodpecker CI** on Builder LXC 108 (see
+- CI: self-hosted **Woodpecker CI** is live at
+  [https://ci.0exec.com](https://ci.0exec.com) on Builder LXC 108 (see
   [ADR-0035](docs/adr/0035-self-hosted-ci-on-builder-lxc.md)) —
-  server + agent running at `/opt/woodpecker/` on the LXC, capped at
-  2 concurrent workflows so it doesn't contend with `fleet-runner
-  deploy-all` batches on the same box. **Not yet wired to GitHub
-  webhooks** (pending a public hostname + GitHub OAuth App — pilot in
-  progress as of 2026-08-06). Until that lands, Husky pre-commit
-  hooks + local `npm run smoke` (Node repos) or `go test ./...` (Go
-  repos) remain the primary gate. Still don't scaffold GitHub Actions
-  build workflows — that's the billing model this pilot exists to
-  avoid.
+  server + agent at `/opt/woodpecker/` on the LXC, capped at 2
+  concurrent workflows so it doesn't contend with `fleet-runner
+  deploy-all` batches on the same box. GitHub webhooks are wired
+  (OAuth App + nginx vhost reusing the `wildcard.0exec.com` cert);
+  pushes and PRs trigger `go build ./... && go test ./...` on every
+  activated repo — the same gate `fleet-runner deploy`'s pre-flight
+  already runs, now push-triggered instead of deploy-time-only. A
+  daily cron (`docker builder prune -af --filter unused-for=24h`,
+  3:15am) keeps the LXC's build-cache disk usage bounded. Fleet-wide
+  rollout is in progress (batches of `.woodpecker.yml` + repo
+  activation via the API, tracked via `git log` on this file / repo
+  PRs — no separate rollout ledger). Still don't scaffold GitHub
+  Actions build workflows — that's the billing model this exists to
+  avoid. Repos without their own `go.mod` (composite-pattern services
+  built on a shared `go_composite_runner` base image) don't get a
+  pipeline — there's no local Go source for `go build` to act on.
 - Supply chain: prefer npm packages ≥ 3 days old over `@latest` —
   accept known CVEs over zero-day supply-chain injection.
 - Supply chain: prefer npm packages ≥ 3 days old over `@latest` —
