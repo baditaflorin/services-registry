@@ -729,8 +729,11 @@ or health-check a static Pages site.
 | Webgateway      | `ssh -J root@0docker.com florin@10.10.10.10`                   |
 
 - **Builder LXC 108** is a Proxmox container on `0docker.com`. Hosts
-  per-service build workspaces at `/root/workspace/<repo>/` and the
-  `fleet-runner` binary.
+  per-service build workspaces at `/root/workspace/<repo>/`, the
+  `fleet-runner` binary, and (pilot, ADR-0035) Woodpecker CI
+  server+agent at `/opt/woodpecker/` — `docker compose ps` there to
+  check status; `.env` holds the generated secrets, not committed
+  anywhere.
 
   **AI-agent rule — always use a git worktree, never the shared
   workspace directly.** Multiple AI sessions (or a session + a human)
@@ -1519,8 +1522,18 @@ entry.
 - Local workspace root: `/Users/live/Documents/Codex/2026-05-08/`.
   Sibling repos sit next to this one — read them directly when you
   need to understand a dependency.
-- CI: there is none. Husky pre-commit hooks + local `npm run smoke`
-  (Node repos) or `go test ./...` (Go repos) are the gate. Don't
-  scaffold GitHub Actions build workflows.
+- CI: piloting self-hosted **Woodpecker CI** on Builder LXC 108 (see
+  [ADR-0035](docs/adr/0035-self-hosted-ci-on-builder-lxc.md)) —
+  server + agent running at `/opt/woodpecker/` on the LXC, capped at
+  2 concurrent workflows so it doesn't contend with `fleet-runner
+  deploy-all` batches on the same box. **Not yet wired to GitHub
+  webhooks** (pending a public hostname + GitHub OAuth App — pilot in
+  progress as of 2026-08-06). Until that lands, Husky pre-commit
+  hooks + local `npm run smoke` (Node repos) or `go test ./...` (Go
+  repos) remain the primary gate. Still don't scaffold GitHub Actions
+  build workflows — that's the billing model this pilot exists to
+  avoid.
+- Supply chain: prefer npm packages ≥ 3 days old over `@latest` —
+  accept known CVEs over zero-day supply-chain injection.
 - Supply chain: prefer npm packages ≥ 3 days old over `@latest` —
   accept known CVEs over zero-day supply-chain injection.
