@@ -359,7 +359,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated admin discovery requires site-specific credentials or session state.",
     "trl_evidence": "v1.6.0 — TRL 5→6 uplift.\n- Bundled curated wordlist (~150 paths from SecLists + OWASP CMS + vendor docs)\n  via go:embed; deduped, sorted, comment-stripped at parse time.\n- Per-probe: HEAD then GET fallback (for 405/400 and body sniffing on 2xx);\n  follows up to 2 manual redirects; per-request 3s, total 60s, worker pool 8.\n- Login-form sniffer (password / username / sign in / log in / type=password)\n  with strong-signal short-circuit (\"password\" alone) and 2-of-N rule.\n- First-hop Location preserved across follow chain so \"302 to /wp-admin/login\"\n  classifies as present even when the followed target is 404.\n- Optional ?wordlist_url= composes with sibling go-pentest-wordlists\n  (cap 500 entries, 256 KiB fetch budget, SSRF-safe via go-common/safehttp).\n- SCOPE_GUARD_URL env (comma list, supports *.example.com) gates which\n  hosts may be probed; off when unset.\n- Backward-compat: ?target= alias for ?url=.\n- Tests: handler_test.go + classify_test.go + wordlist_test.go;\n  httptest fake server covers 200-with-form / 302-to-login / 401 /\n  200-generic / 302-to-home / 404. `go test ./...` green.",
-    "version": "1.6.0"
+    "version": "1.6.0",
+    "coolify_app_uuid": "jpahbgqwgmshagf91j3h4ggn"
   },
   "agent-approval": {
     "host_port": 18310,
@@ -451,7 +452,8 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction."
+    "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
+    "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8"
   },
   "api-first": {
     "container_port": 8276,
@@ -474,7 +476,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Entropy-based + pattern-matched API key detection in HTML+JS."
+    "trl_evidence": "Entropy-based + pattern-matched API key detection in HTML+JS.",
+    "coolify_app_uuid": "r3s8sxosmycwuolwijycjrgc"
   },
   "apikey-service": {
     "container_port": 8080,
@@ -500,7 +503,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Multi-resolver Team Cymru DNS client (1.1.1.1 + 8.8.8.8) via miekg/dns\nwith parallel-fanout / first-non-empty-wins semantics; RDAP fallback via\nopenrdap when Cymru is unreachable; per-IP 24h in-memory TTL cache; bulk\nendpoint with 10-worker pool, per-lookup 2s and total 30s caps; private/\nreserved IPs refused unless ALLOW_PRIVATE=1; IPv4 reversed-octet and\nIPv6 expanded-nibble qname handling; in-process miekg/dns test rig with\n≥10 hermetic test cases (IPv4, IPv6, AS-name enrichment, no-result,\nbulk, cache hit, private-IP refusal, multi-origin parsing).",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "gmhjeope5wg7owardeoio2ae"
   },
   "audience-field-sculpture": {
     "trl": 3,
@@ -551,7 +555,8 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
     "trl_evidence": "~30 curated DNSBL/RBL/URIBL zones across spam, phishing, malware,\ntor, and open-proxy categories. Per-list 127.0.0.x return-code\ndecode tables (operator-sourced). Concurrent worker-pool fan-out\n(10) using miekg/dns directly so we distinguish NXDOMAIN /\nSERVFAIL / \"got 127.0.0.x\". In-process miekg/dns test server with\n≥10 cases (clean, listed, multi-listed, domain-list, ipv6, private\nIP refusal, ?lists= filter). Reputation score is explainable\n(per-list weight + per-category bonus, capped at 100). See\ndocs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "bhyw09mpgmoc4r37en1mq26o"
   },
   "brand-color-palette": {
     "container_port": 18288,
@@ -603,7 +608,8 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
     "trl_evidence": "v1.4.0 adds permutation-based discovery (?name=acme): generates a\nbounded candidate set (≤200) from base + corp/inc + role suffixes\n(backup, prod, staging, assets, internal, …), probes every candidate\nacross AWS S3 (vhost + path), GCS (vhost + path), Azure Blob/File,\nand DigitalOcean Spaces (5 regions) in parallel via a 16-worker pool\nwith a 4s per-probe and 90s total budget. Per-provider response\nclassification distinguishes listable / exists / denied / not_exists\n(via NoSuchBucket vs AccessDenied / Azure AuthenticationFailed) and\nattaches sample object keys + counts when a ListBucketResult or\nEnumerationResults body is present. Optional WORDLISTS_URL extension\nhook for go-pentest-wordlists. Test coverage: permute_test.go (8\ncases), detect_test.go (12 cases), handler_test.go (httptest server\nwith canned XML returning listable/denied/NoSuchBucket/404). Backward\ncompatibility preserved for the legacy ?url= page-scan path. Pure Go,\nCGO-free, SSRF-safe via go-common/safehttp. ADR:\ndocs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "ioxy3gabe7xoido8gx6574zf"
   },
   "c-proxy": {
     "container_port": 3001,
@@ -717,7 +723,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Browser-level frame behavior needs real rendering for unusual CSP/sandbox cases.",
     "trl_evidence": ">",
-    "version": "1.3.0"
+    "version": "1.3.0",
+    "coolify_app_uuid": "ixgke6um39vhypr3g9dhdtlw"
   },
   "cognitive-load": {
     "container_port": 8280,
@@ -759,7 +766,8 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: classification across 11 CommentKind labels (boilerplate/ie_conditional/todo/deprecation/internal_path/internal_email/credential_leak/source_map/react_dev/vue_ssr/dev_note) with info/low/medium/high severity. Credential detectors: AWS access keys, GCP service tokens, GitHub tokens, Stripe live/test keys, JWTs, PEM private keys, inline api_key/password assignments. HTML entity decoding pre-classification. Summary.Notable surfaces medium+high findings. 22 unit tests. 10/10 corpus PASS."
+    "trl_evidence": "1.3.1: classification across 11 CommentKind labels (boilerplate/ie_conditional/todo/deprecation/internal_path/internal_email/credential_leak/source_map/react_dev/vue_ssr/dev_note) with info/low/medium/high severity. Credential detectors: AWS access keys, GCP service tokens, GitHub tokens, Stripe live/test keys, JWTs, PEM private keys, inline api_key/password assignments. HTML entity decoding pre-classification. Summary.Notable surfaces medium+high findings. 22 unit tests. 10/10 corpus PASS.",
+    "coolify_app_uuid": "l8lihsf5ayj6qj331n5pqn97"
   },
   "company-size": {
     "container_port": 8281,
@@ -838,7 +846,8 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Header-only fetcher with no JS engine; a large share of CMP/consent cookies (OneTrust OptanonConsent, Cookiebot, most banners) are JS-set after the consent click and never appear in Set-Cookie headers, so a header-only audit structurally under-observes CMP cookies regardless of gazetteer breadth. Closing that needs a headless browser, out of scope for a CPU-only pure-Go service.",
-    "trl_evidence": "Live-probe Set-Cookie auditor (RFC 6265bis hand-written parser, per-cookie evidence trail, CMP/tracker/anti-bot gazetteer, real table-driven tests). Pass-3 closed a geographic-coverage bias: the Pass-1/2 gazetteer knew only Anglo-centric CMPs (OneTrust/Cookiebot/Quantcast/TrustArc) and fell through to class=other on the entire EU/non-US consent ecosystem. Added 15 EU/non-US CMPs + WordPress consent-plugin ecosystem (Complianz/Borlabs/CookieYes/Axeptio/tarteaucitron/consentmanager.net/Cookie Information/Klaro/Osano/CookieScript/Real Cookie Banner/CookieFirst/Cookiehub/Clickio/Secure Privacy), IAB consent strings (addtl_consent/usprivacy/GPP), CIS/Russia anti-bot WAFs (DDoS-Guard/Qrator/Variti), and Shopify telemetry. Fixed a consentmanager.net-vs-Quantcast prefix collision and a geo-specific FP where a non-English consent cookie containing 'token' was mis-flagged session_missing_httponly. 7 new table-driven tests with real German Borlabs/Complianz and French Axeptio/tarteaucitron banner fixtures; FP corpus gate unchanged (fp=0,fn=0). Verified live on real domains: lacompagniedescartes.fr 5 Shopify cookies other->tracker, dearchitect.nl didomi_interaction other->cmp, dreamjob.ru qrator_ssid2 mis-classed session->anti_bot. domain_cookies stores aggregate tallies not per-cookie names and has no tool_version column, so measurement was live-probe over geo-diverse real domains."
+    "trl_evidence": "Live-probe Set-Cookie auditor (RFC 6265bis hand-written parser, per-cookie evidence trail, CMP/tracker/anti-bot gazetteer, real table-driven tests). Pass-3 closed a geographic-coverage bias: the Pass-1/2 gazetteer knew only Anglo-centric CMPs (OneTrust/Cookiebot/Quantcast/TrustArc) and fell through to class=other on the entire EU/non-US consent ecosystem. Added 15 EU/non-US CMPs + WordPress consent-plugin ecosystem (Complianz/Borlabs/CookieYes/Axeptio/tarteaucitron/consentmanager.net/Cookie Information/Klaro/Osano/CookieScript/Real Cookie Banner/CookieFirst/Cookiehub/Clickio/Secure Privacy), IAB consent strings (addtl_consent/usprivacy/GPP), CIS/Russia anti-bot WAFs (DDoS-Guard/Qrator/Variti), and Shopify telemetry. Fixed a consentmanager.net-vs-Quantcast prefix collision and a geo-specific FP where a non-English consent cookie containing 'token' was mis-flagged session_missing_httponly. 7 new table-driven tests with real German Borlabs/Complianz and French Axeptio/tarteaucitron banner fixtures; FP corpus gate unchanged (fp=0,fn=0). Verified live on real domains: lacompagniedescartes.fr 5 Shopify cookies other->tracker, dearchitect.nl didomi_interaction other->cmp, dreamjob.ru qrator_ssid2 mis-classed session->anti_bot. domain_cookies stores aggregate tallies not per-cookie names and has no tool_version column, so measurement was live-probe over geo-diverse real domains.",
+    "coolify_app_uuid": "fqmqklxqrf710ryv77xlriao"
   },
   "cookiecutter-data-science": {
     "trl": 4,
@@ -858,7 +867,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Endpoint discovery, CORS preflight testing, credential+wildcard checks, risk categorization."
+    "trl_evidence": "Endpoint discovery, CORS preflight testing, credential+wildcard checks, risk categorization.",
+    "coolify_app_uuid": "ucpnn7eamllrrvvjwp5nne1y"
   },
   "cors-tester": {
     "container_port": 8141,
@@ -871,7 +881,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "7-variant active prober (reflection, null, subdomain-suffix-bypass,\nprefix-confusion, port-attack, case-fold, http-vs-https). Each variant\nsends an OPTIONS preflight + GET, records the full ACAO/ACAC/Vary/\nmethods/headers surface, and feeds a documented severity matrix\n(reflection x credentials, null x credentials, etc.). Worker pool of\n4, per-probe 4s, total 30s. Composes with go-pentest-cors-misconfig-\nprober via CORS_MISCONFIG_URL; gateable on bug-bounty scope via\nSCOPE_GUARD_URL. Tests: probes_test (variant table, downgrade skip,\nscheme preservation), evaluate_test (isReflection, isTrueACAC,\nhasVaryOrigin, Classify matrix), handler_test (httptest servers for\nreflective+credentials critical, wildcard-only low, suffix-bypass\ncritical, null-origin critical, safe server, case-fold, full JSON\nshape) — 20+ test cases across 3 files. ADR docs/adr/0001-trl-uplift-\nto-6.md captures the variant taxonomy and severity matrix.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "crawl-web-application": {
     "container_port": 8082,
@@ -900,7 +911,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Marker-based detection (8-byte per-scan unique hex marker) replaces\nstatic-string echo checks; inspect() classifies header reflection\n(critical), raw-newline-in-header (high), and body reflection (medium)\nseparately. Probes inject across query params, path segments, and four\nreflected headers (User-Agent, Referer, X-Forwarded-For, X-Forwarded-Host;\nHost gated by ALLOW_HOST_INJECT=1). Payload corpus is 20 variants\ncovering hex-case, double-encoding, Unicode/UTF-8 overlong, fragment-\nprefixed, raw \\r vs \\n vs \\r\\n; corpus extensible via PAYLOADS_URL\n(go-pentest-payloads). Per-request 4 s, total 60 s budget, worker pool\n4. SCOPE_GUARD_URL fail-closed gate. ≥9 unit + integration tests\nincluding httptest.Server vulnerable + safe backends.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx"
   },
   "crux-field-vitals": {
     "container_port": 18290,
@@ -925,7 +937,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "~30 vendor-specific regex rules (AWS/GitHub/Slack/Stripe/Google/Twilio/\nSendGrid/Mailgun/Anthropic/OpenAI/HuggingFace/Discord/npm/JWT/PEM)\nwith severity classification, Shannon-entropy gating for the generic\nrule, masked evidence snippets (first4...last4 + length), byte-offset\n+ line tracking, optional verification hop into go-pentest-trufflehog.\nInline tests cover every vendor pattern + an entropy-edge negative.\nADR 0001 documents the rule taxonomy and fleet hookup.",
-    "version": "1.2.0"
+    "version": "1.2.0",
+    "coolify_app_uuid": "cqk66ogn6g4aj2cjkhxzlm5c"
   },
   "crystal-growth-simulator": {
     "trl": 4,
@@ -1042,7 +1055,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "2.0.0"
+    "version": "2.0.0",
+    "coolify_app_uuid": "sri96kx10a1iltoz0q7m472k"
   },
   "deep-searcher": {
     "trl": 4,
@@ -1077,7 +1091,8 @@
     "trl_assessor": "haiku-backfill-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "RFC-compliant directory listing parser with SSRF guards, tests, and verdict structure"
+    "trl_evidence": "RFC-compliant directory listing parser with SSRF guards, tests, and verdict structure",
+    "coolify_app_uuid": "tr54hs1ir6x719g1fe3h7ov7"
   },
   "dns-record": {
     "container_port": 8084,
@@ -1090,7 +1105,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.7.0 ACE/punycode-normalizes native Unicode domains via golang.org/x/net/idna (IDNA2008, BidiRule) before the DNS query; live IDN false-negative rate 18/18 -> 0/18 on real .рф/.укр/.рус/Korean/Greek/Arabic/Swiss domains; also widened MX gazetteer with regional hosts (Cloudflare Email Routing, Strato, ALL-INKL, IONOS regional TLDs, reg.ru/beget, naver, NetEase). New table-driven IDN tests across 7 scripts + e2e handler test.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "rg33g8wm5fwwxzue83j5y6d9"
   },
   "dom-complexity-metrics": {
     "container_port": 18262,
@@ -1307,7 +1323,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "RDAP-first via openrdap (IANA bootstrap, RFC 7483 structured fields incl. event actions, status codes, secureDNS); whois TCP-43 fallback via likexian/whois + whois-parser; per-source 5s / total 12s timeouts; 6h in-process cache; 8 unit tests over canned RDAP JSON + canned whois text fixtures (no network in CI); GDPR-aware contact handling; ADR docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.1.0"
+    "version": "1.1.0",
+    "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2"
   },
   "domain-dnssec-validator": {
     "container_port": 18180,
@@ -1784,7 +1801,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
-    "trl_evidence": "Same-domain contact/about/legal discovery, email extraction with found_on evidence, dedupe, SSRF guard, and tests."
+    "trl_evidence": "Same-domain contact/about/legal discovery, email extraction with found_on evidence, dedupe, SSRF guard, and tests.",
+    "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e"
   },
   "embed-iframe-classifier": {
     "container_port": 18255,
@@ -1827,7 +1845,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": ".env / config file probing at common locations.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "vt65hjm8wqhknrp5vyrn5g1a"
   },
   "feed-finder": {
     "container_port": 8164,
@@ -1860,7 +1879,8 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs auth state for deeper testing",
     "trl_evidence": "Curated 25-payload corpus across LFI/Windows/PHP-wrapper/RFI classes.\nMulti-signal detection (etc/passwd leak, win.ini leak, PHP base64 dump\ndecoded + header-hint check, error-disclosure regex, RFI canary echo).\nWorker pool with per-request 5s and total 60s budget. Optional remote\npayload feed (PAYLOADS_URL), scope-guard integration (SCOPE_GUARD_URL),\nRFI canary host (CANARY_HOST). 11 unit tests + 5 handler-level tests\nwith httptest fixtures (vulnerable / safe / error-disclosure servers).\nStill single-shot HTTP probing - no follow-up auth, no SSRF chain\npivot, no per-target rate adaptation; that's the gap to TRL 6+.",
-    "version": "1.3.0"
+    "version": "1.3.0",
+    "coolify_app_uuid": "dhktp4bwh0g974ygj02nf1td"
   },
   "firmographic-profile": {
     "container_port": 18297,
@@ -2169,6 +2189,16 @@
       "header": "X-API-Key",
       "query_param": "api_key"
     }
+  },
+  "fleet-mcp-gateway": {
+    "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
+    "host_port": 18313,
+    "container_port": 18313,
+    "example_path": "/gateway/tools",
+    "trl": 4,
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-mcp-phase2",
+    "trl_evidence": "First ship. Real MCP wire-level tests pass (initialize -> tools/list -> tools/call, incl. caller-Authorization pass-through) against in-process aggregation. Fleet-wide registry-driven aggregation unproven in production -- zero services expose /agent.json yet (Phase 2 of a 5-phase rollout)."
   },
   "fleet-md": {
     "auth": {
@@ -2524,6 +2554,16 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite tech-stack inferrer (83 signals). /selftest + INTEGRATIONS.md shipped. ADR-0009. See services-registry/docs/adr/0009-fleet-tech-inferrer.md.",
     "version": "0.1.0"
   },
+  "fleet-token-ledger": {
+    "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
+    "host_port": 18314,
+    "container_port": 18314,
+    "example_path": "/v1/balance",
+    "trl": 4,
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-token-ledger",
+    "trl_evidence": "First ship. Atomic charge/credit + audit trail with unit test coverage (11 tests, storage + handler layers). Zero fleet services call /v1/charge yet; /v1/topup is admin-only by design -- no real payment rail (Stripe/x402) wired in this phase."
+  },
   "fleet-vendor-disclosure-tracker": {
     "container_port": 18167,
     "description": "vendor disclosure history tracker (PII-redacted)",
@@ -2697,7 +2737,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "SPA login flows (JSON POST with custom headers) not yet detected; CSRF-protected logins are misclassified.",
-    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass."
+    "trl_evidence": "Two-pass probe with cookie-name gazetteer (PHPSESSID/JSESSIONID/etc), classic-flow login pages. 5 tests pass.",
+    "coolify_app_uuid": "d53fvns2b33ml5z1scbjd1y7"
   },
   "google-taxonomy": {
     "container_port": 8096,
@@ -2734,7 +2775,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated GraphQL schemas need user-supplied tokens and role-aware probing.",
     "trl_evidence": "TRL 6 (real). Beyond endpoint discovery + introspection summary,\nv3 adds three orthogonal abuse probes used by every commercial GraphQL\nscanner (Inspectiv, GraphCrawler, InQL): alias-batching DoS multiplier,\nfield-suggestion info-leak, and text/plain CSRF bypass. Findings are\nemitted with stable severity-tagged classes (introspection-enabled,\nalias-batching-unbounded, csrf-possible, field-suggestions-enabled,\nintrospection-partial) so the catalog UI and sibling services\n(api-extractor, swagger-finder) join on `class` strings without any\nper-service mapping table. 21 Go test functions covering ≥6 server-\nbehaviour fixtures (canned introspection, explicit-disabled,\nfield-suggestion typo, alias-batched echo, CSRF accept, CSRF block).\nSee docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "coolify_app_uuid": "bnr51pclmti2vobu122vemoq"
   },
   "group-theory-visualizer": {
     "trl": 4,
@@ -2770,7 +2812,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pure-Go x/net/html DOM walker. Per-field role taxonomy (csrf-token,\nhoneypot, state, id, timestamp, flag, viewstate, session, other) plus\nsix risk rules (csrf-on-get, honeypot-default, sensitive-plaintext,\nstate-without-nonce, timestamp-future/epoch-zero, javascript-action).\nToken-like values masked before serialisation (raw value never escapes\nthe process). 23 unit + integration tests against canned login,\nsignup, OAuth, GET-csrf, javascript:-action, and PII fixtures via\nhttptest.Server. safehttp SSRF guard + 5s per-request / 10s total\nbudget. ADR docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "q122and0425dsjnhw56b2gio"
   },
   "highlight-recall": {
     "trl": 3,
@@ -2791,7 +2834,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "2.2.0"
+    "version": "2.2.0",
+    "coolify_app_uuid": "likwplvqrfh94dukv1bm5qt7"
   },
   "hsts-checker": {
     "container_port": 8328,
@@ -2833,7 +2877,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "full method+override+CORS matrix, 7 finding classes (xst-vulnerable/method-override-bypass/unrestricted-write/allow-header-misconfigured/cors-override/cors-wildcard), /selftest with in-process vulnerable target",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "o3t4k0qvwf0mskinbdzor4nh"
   },
   "http-protocol": {
     "container_port": 8241,
@@ -2868,7 +2913,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "True IDOR proof requires authenticated sessions and object ownership context.",
     "trl_evidence": "TRL 6 (2026-05-16). Detects four ID shapes (integer, UUID,\nMongoDB ObjectId, base64); per-shape variant strategies (sequential\n±N, UUID segment rotation, ObjectId counter flip, base64 last-byte\nflip); auth-strip + auth-swap probes promote auth-bypass to a\nseparate severity track; user-data sniffer (email, name, role,\nphone, SSN, credit card, address, token) drives the high-vs-medium\nseverity split. Verdict aggregator collapses probe-level signals\ninto one of {clean, suspicious, likely_idor, critical, inconclusive}.\nScope-guard via SCOPE_GUARD_URL; second-opinion via VERIFIER_URL →\ngo-pentest-exploit-verifier. 32-test suite covers ID detection,\nvariant generators, classifier, plus end-to-end fixtures (vulnerable,\nauth-guarded, 404, generic-page).",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "coolify_app_uuid": "lqeajjm3lticxppsi3qurh4r"
   },
   "iframe-analyzer": {
     "container_port": 8243,
@@ -2880,7 +2926,8 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "1.3.1: real CSP3 §6.7.7.7 frame-ancestors source-list parser (none/self/wildcard/scheme/host with port/path/wildcard kinds); X-Frame-Options parser (DENY/SAMEORIGIN/ALLOW-FROM with deprecation flag); ComputeFramingPosture cross-check returning {deny,sameorigin,explicit,open}+Conflicts; client.Fetch. 10/10 corpus PASS; verified: Cloudflare correctly flagged with verdict=deny + conflict 'CSP says deny, XFO disagrees: sameorigin'."
+    "trl_evidence": "1.3.1: real CSP3 §6.7.7.7 frame-ancestors source-list parser (none/self/wildcard/scheme/host with port/path/wildcard kinds); X-Frame-Options parser (DENY/SAMEORIGIN/ALLOW-FROM with deprecation flag); ComputeFramingPosture cross-check returning {deny,sameorigin,explicit,open}+Conflicts; client.Fetch. 10/10 corpus PASS; verified: Cloudflare correctly flagged with verdict=deny + conflict 'CSP says deny, XFO disagrees: sameorigin'.",
+    "coolify_app_uuid": "b7e5qvvxomxwyz0ulo7sequ0"
   },
   "implemment-the-following-time-displaced-ears": {
     "trl": 2,
@@ -2901,7 +2948,8 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
     "trl_evidence": ">",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "coolify_app_uuid": "dgfll92zgusjswf1nzxpwbmk"
   },
   "infrastructure-fetch-cache": {
     "container_port": 18205,
@@ -2979,7 +3027,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass."
+    "trl_evidence": "AST-like pattern match on recovered bundles for React/Vue/Next/Express routes. Surfaces unlinked admin/internal routes. 7 tests pass.",
+    "coolify_app_uuid": "hk5ym0t2p339163kwj6chjwf"
   },
   "jsbundle-secrets": {
     "container_port": 8311,
@@ -2991,7 +3040,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass."
+    "trl_evidence": "Sourcemap recovery via go-common/jsbundle, embedded gitleaks-grade ruleset on recovered original source. 9 tests pass.",
+    "coolify_app_uuid": "s13roc0xole7p683zfxn2u8z"
   },
   "jsonp-finder": {
     "container_port": 8158,
@@ -3004,7 +3054,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL 6 (2026-05-16): discovery uses golang.org/x/net/html token stream\n(not just regex) plus a curated common-paths probe set and an optional\nWayback-Machine compose (env WAYBACK_URLS_URL → go-pentest-wayback-urls).\nProbes use a per-request marker callback (`marker_<random>`) so JSONP\ndetection is not fooled by partial reflections of a fixed name. Severity\nclassification is centralised, table-driven, and pinned by tests; auth-\nshaped data shapes (email/session/token/userid) escalate to critical,\nPII to high, generic public to medium/info, with a documented one-band\ndowngrade when X-Content-Type-Options: nosniff is present and the\ncontent-type is not a JS variant. Callback-XSS is confirmed via a\nreflection probe (`<script>alert(1)</script>`). 14 unit tests + 5\nhttptest scenarios (auth-data JSONP, public-list JSONP w/ nosniff+CORS,\ncallback-XSS-vulnerable, plain JSON non-JSONP, summary roll-up). Total\ncap 30s, per-request 4s, SSRF guard via go-common/safehttp.",
-    "version": "1.5.0"
+    "version": "1.5.0",
+    "coolify_app_uuid": "mlqalkr0pn6seq6mqf5xwrc0"
   },
   "jwt-debugger": {
     "container_port": 8202,
@@ -3029,7 +3080,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
-    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass."
+    "trl_evidence": "alg=none, weak-HMAC dictionary, kid traversal, jku/x5u, audience leakage, HS256↔RS256 confusion. Offline path complete. 10 tests pass.",
+    "coolify_app_uuid": "pdw49fd7niktinh18cnvjrv9"
   },
   "keyphrase-extractor": {
     "container_port": 18286,
@@ -3324,7 +3376,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Real RFC-style HTTP header parsing (Content-Type splitting, charset\nunquoting, X-Content-Type-Options exact-match), WHATWG MIME-sniffing\nvia stdlib net/http.DetectContentType, multi-axis classification\nrubric (declared vs sniffed vs URL-extension vs nosniff posture)\nemitting stable greppable codes (mime.mismatch.*, header.xcto.*,\nheader.charset.*, mime.svg.*, mime.pdf.*, mime.fallback.*).\n≥15 unit tests + ≥10 httptest integration cases covering SVG-with-\nscript, JSON-as-HTML, image-as-HTML, HTML-as-PNG, XSSI prefix,\nXCTO-missing-on-JS/HTML, charset-missing, octet-stream fallback for\nknown extensions, scope-guard, SSRF loopback, legacy ?target= alias,\nbody-bytes-hex cap, response-shape contract. Per-request 5s + total\n15s timeouts; 512 KiB body cap; SSRF guard via go-common/safehttp;\noptional ?probe_uploads=1 for upload-extension confusion fan-out.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "t4ikuexuurt9uk3m56laoruv"
   },
   "mobile-friendly": {
     "container_port": 8294,
@@ -3490,7 +3543,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Canonical 26-payload bypass set with class taxonomy\n(absolute / protocol-relative / userinfo / scheme-abuse / encoding /\nsuffix / unicode / CRLF). 17-name redirect-param matrix. eTLD+1\nescape detection via golang.org/x/net/publicsuffix (Mozilla PSL).\nMulti-hop chain tracing up to 5 hops with javascript:/data: refusal\nand unfollowed-Location-on-cap evaluation. Per-request 4s, total 30s,\nworker pool 4. handler_test.go + chain_test.go cover vulnerable\necho server, safe server, same-host ignore, dangerous-scheme labeling,\nhop cap, eTLD+1 comparison (incl. multi-label TLDs), back-compat\n?url= alias, SSRF guard. See docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "2.3.0"
+    "version": "2.3.0",
+    "coolify_app_uuid": "aj6l0wno9j8d35m7qwbu17ux"
   },
   "open-school-lab": {
     "trl": 3,
@@ -3614,7 +3668,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Depends on upstream fleet services and live program scope data quality.",
-    "trl_evidence": "Parallel CT/subfinder fanout, apex-bounded host normalization, scope-guard filtering, API-key forwarding, merge behavior tests."
+    "trl_evidence": "Parallel CT/subfinder fanout, apex-bounded host normalization, scope-guard filtering, API-key forwarding, merge behavior tests.",
+    "coolify_app_uuid": "w11jlc1cbxyokw87klmh388p"
   },
   "pentest-attack-chainer": {
     "container_port": 18149,
@@ -3646,7 +3701,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
     "container_port": 18179,
@@ -3657,7 +3713,8 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "Wraps 6 fleet primitives. Per-host worker pool, WAF pre-filter, triage rollup. 5 integration tests with fixture upstreams.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coolify_app_uuid": "xinj0vpxvwqnk60uq9uom5zl"
   },
   "pentest-bounty-scope-checker": {
     "container_port": 18110,
@@ -3669,7 +3726,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Production freshness depends on continuously updated program feeds.",
-    "trl_evidence": "Bug-bounty scope matcher uses curated program seed data, regex caching, payout sorting, structured matches, and tests."
+    "trl_evidence": "Bug-bounty scope matcher uses curated program seed data, regex caching, payout sorting, structured matches, and tests.",
+    "coolify_app_uuid": "w101yz0tp2q2k7noi1127wz5"
   },
   "pentest-cert-transparency": {
     "container_port": 18109,
@@ -3681,7 +3739,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Add Censys + Google CT in parallel for redundancy.",
-    "trl_evidence": "crt.sh fetcher + SQLite cache (modernc) + wildcard-skip + SAN-suffix filter; tested for normalization, cache hits, subdomain filter."
+    "trl_evidence": "crt.sh fetcher + SQLite cache (modernc) + wildcard-skip + SAN-suffix filter; tested for normalization, cache hits, subdomain filter.",
+    "coolify_app_uuid": "a13ee2j0glflbis9e7h0jux0"
   },
   "pentest-chaos-sync": {
     "container_port": 18128,
@@ -3694,7 +3753,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; ≥6 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across ≥3 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
   },
   "pentest-codec": {
     "container_port": 18118,
@@ -3705,7 +3765,8 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
-    "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs."
+    "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs.",
+    "coolify_app_uuid": "gcvcza9jqe4d7zdhrrc42dd2"
   },
   "pentest-continuous-monitor": {
     "container_port": 18134,
@@ -3729,7 +3790,8 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "5 cookie classes + 2 fallbacks, 9 severity-coded issue codes, 9 session-probe endpoints, PoC bundle generator with 4 embedded templates. 7 unit tests with real CyberGhost/Thuringer fixtures.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coolify_app_uuid": "w6w2145jjtk01ulaplf0f1c0"
   },
   "pentest-cors-misconfig-prober": {
     "container_port": 18124,
@@ -3740,7 +3802,8 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
-    "trl_evidence": "5 active probes, reflection+credentials high-sev detection, suffix-confusion + pre-subdomain bypass, case-fold. Tested positive (high) + negative."
+    "trl_evidence": "5 active probes, reflection+credentials high-sev detection, suffix-confusion + pre-subdomain bypass, case-fold. Tested positive (high) + negative.",
+    "coolify_app_uuid": "qmj9u5wiz6vsr12i5gscv4yz"
   },
   "pentest-cvss": {
     "container_port": 18107,
@@ -3752,7 +3815,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "CVSS 4.0 support pushes to 9.",
-    "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only."
+    "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only.",
+    "coolify_app_uuid": "y970m89nf0q6mrz1r1f0ee16"
   },
   "pentest-dashboard": {
     "description": "Browser dashboard for the pentest fleet. Single-page HTML app (Tailwind CDN, vanilla JS) with tabs for Preflight, Programs, Recon, Scan, Findings, Report. Calls every passive scanner via the api_key in browser localStorage. Human-facing GUI for the same flow go-pentest-cli and go-pentest-walkthrough automate.",
@@ -3776,7 +3840,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
     "trl_evidence": "73-row scanner corpus across 4 scanners x 8 vulns: intra=100% / inter=0% collision rates; fp_version=v1; /forget admin-gated; /selftest",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "isb3ajcqvl49u83555lmktwx"
   },
   "pentest-dependency-cve": {
     "container_port": 18125,
@@ -3789,7 +3854,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 7 with local CVE feed primitive caching NVD/GHSA delta-updates.",
     "trl_evidence": "SQLite TTL cache (NVD/KEV/OSV), OSV.dev cross-source merge, /selftest with stubbed upstreams, 14 test funcs (was 0)",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "f8wp3sz3hf71oup0b6wpnv5h"
   },
   "pentest-disclosure-policy-finder": {
     "container_port": 18111,
@@ -3801,7 +3867,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Add /security anchor crawl + submit-button scraping.",
-    "trl_evidence": "12 probe paths, RFC 9116 parser, 9 bounty-platform regexes, 4 safe-harbor regexes, class-priority resolver. Extends fleet security-txt with VDP-vs-bounty classification."
+    "trl_evidence": "12 probe paths, RFC 9116 parser, 9 bounty-platform regexes, 4 safe-harbor regexes, class-priority resolver. Extends fleet security-txt with VDP-vs-bounty classification.",
+    "coolify_app_uuid": "d1vb8tk7rlf5zyayg0e0xomd"
   },
   "pentest-exploit-verifier": {
     "container_port": 18137,
@@ -3814,7 +3881,8 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Each verifier is a thin recipe — lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
     "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "x14nsu29g3jrr1biwgifwugm"
   },
   "pentest-favicon-hash": {
     "container_port": 18117,
@@ -3825,7 +3893,8 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
-    "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity."
+    "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity.",
+    "coolify_app_uuid": "jnajpnv9r9dsmfc89e5og0qg"
   },
   "pentest-finding-triage": {
     "container_port": 18135,
@@ -3838,7 +3907,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
     "trl_evidence": "SQLite decision ledger with /decisions query, dry_run mode returning would_decide, sony/gobreaker circuit breakers around scope-guard + dedup-fingerprint, degraded_mode in response, /selftest",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "je3qc07vjjuov2qqd84vb13h"
   },
   "pentest-findings-store": {
     "container_port": 18103,
@@ -3851,7 +3921,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite is fine until ~1M findings; horizontal shard or Postgres later.",
     "trl_evidence": "findings_history shadow table with SHA-256 evidence hashing, /findings/{id}/history endpoint, /selftest round-trip",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "vbeehwr7p783yg53y5fxhn4c"
   },
   "pentest-github-dorks": {
     "container_port": 18123,
@@ -3864,7 +3935,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "GitHub Search has no regex; semantic dedup + verifier-loop integration cap the climb at 6.",
     "trl_evidence": "38 curated dork patterns (creds + files + vendors + infra + k8s + per-vendor leaks); typed rate-limit handling (primary + secondary/abuse) with adaptive sleep; per-dork 4s + total 90s deadline; optional verification compose with go-pentest-trufflehog (TRUFFLEHOG_URL); domain qualifier (\\\"<domain>\\\" in:file); production mode (MODE=production) refuses to start without GITHUB_TOKEN; 19 unit tests including httptest-mocked GitHub API (success / primary rate-limit / abuse / no-results) + trufflehog compose. Pure Go (CGO-free), no parallelism. Ceiling stays at 7 pending cross-dork dedup, snippet-level secret extraction, and findings-store fan-out.",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "mmjzm5ovulcr2x9sbpyii597"
   },
   "pentest-http-replay": {
     "container_port": 18130,
@@ -3888,7 +3960,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Wrap wappalyzergo for full 3000+ fingerprint DB.",
-    "trl_evidence": "Single+batch probes, parallel with worker cap, TLS extract, ~25 tech-detection signatures (CDNs, frameworks, CMS, front-end libs). safehttp-protected. Tested."
+    "trl_evidence": "Single+batch probes, parallel with worker cap, TLS extract, ~25 tech-detection signatures (CDNs, frameworks, CMS, front-end libs). safehttp-protected. Tested.",
+    "coolify_app_uuid": "fb9gk4en12bhh1e7ya5aptkt"
   },
   "pentest-job-queue": {
     "container_port": 18133,
@@ -3912,7 +3985,8 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "21 secret-pattern classes (private RSA requires full PEM block to avoid jsencrypt FP). Static-asset filtering. First-vs-third-party sourcemap classifier. 7 unit tests with realistic SPA fixture.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coolify_app_uuid": "p11myndrybtb6epn40dgvbua"
   },
   "pentest-leak-bounty-policy": {
     "container_port": 18145,
@@ -3925,7 +3999,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
     "trl_evidence": "30-row vendor policy seed (AWS/GitHub/Slack/Stripe/OpenAI/Anthropic/Twilio/Mailgun/GCP/Azure/etc.), BEGIN IMMEDIATE on both seed and ledger, secret-prefix-only persistence (TestLedger_NoSecretInRows enforces), /selftest",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "d13v7qexw5979ml26lyr901n"
   },
   "pentest-notify": {
     "container_port": 18108,
@@ -3950,7 +4025,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Pinned-binary wrapping; templates refresh cadence + concurrency stress-testing gate the climb to 7.",
     "trl_evidence": "scope-guard preflight (fail-closed -> 503), rate-coordinator per-host acquire (fail-open), findings-store wire on severity>=medium, /selftest round-trips all 3 sibling stubs + runner",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "ihb1oqr2spj8jlcj3cb1shm7"
   },
   "pentest-oob-collector": {
     "container_port": 18106,
@@ -3963,7 +4039,8 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo"
   },
   "pentest-orchestrator": {
     "container_port": 18138,
@@ -3988,7 +4065,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Ceiling = PayloadsAllTheThings as submodule.",
-    "trl_evidence": "9 classes seeded with real-world payloads (xss reflected+polyglot, sqli error+time, ssrf cloud-meta+local, ssti jinja2+twig, xxe, crlf, nosqli, graphql, path-traversal). Random + filter APIs tested."
+    "trl_evidence": "9 classes seeded with real-world payloads (xss reflected+polyglot, sqli error+time, ssrf cloud-meta+local, ssti jinja2+twig, xxe, crlf, nosqli, graphql, path-traversal). Random + filter APIs tested.",
+    "coolify_app_uuid": "fkk45m0hk84dz0mves6mdsma"
   },
   "pentest-payoff-tracker": {
     "container_port": 18148,
@@ -4025,7 +4103,8 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "6 reflection contexts + per-context escalation, 11 inline WAF signatures (vendored from go-pentest-waf-detect), 6 integration tests covering vulnerable/safe/WAF-masked/no-reflection/skip-WAF.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coolify_app_uuid": "kwhedb2sxgighnkn9ltu0v3n"
   },
   "pentest-report-templater": {
     "container_port": 18114,
@@ -4037,7 +4116,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Add org-specific templates + screenshot embed + direct HackerOne API submission.",
-    "trl_evidence": "3 platform templates using stdlib text/template, custom func map (title/code/indent/add1), CVSS enrichment via go-pentest-cvss with graceful degrade. Tested for render + missing-template + per-platform output."
+    "trl_evidence": "3 platform templates using stdlib text/template, custom func map (title/code/indent/add1), CVSS enrichment via go-pentest-cvss with graceful degrade. Tested for render + missing-template + per-platform output.",
+    "coolify_app_uuid": "im67r9oeenhrfax75moulig0"
   },
   "pentest-scope-guard": {
     "container_port": 18105,
@@ -4050,7 +4130,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_evidence": "SQLite persistence with 256-LRU, audit_log with /audit query, ReDoS pattern rejection at create-time, target-normalizer composition with 3-strike circuit breaker, /selftest",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "y14dh7j5fizv7tbo3z1dnx51"
   },
   "pentest-screenshot": {
     "container_port": 18129,
@@ -4062,7 +4143,8 @@
     "trl_assessor": "claude-session-2026-05-15",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Bounded by Chromium-headless RAM (1 GiB shm) and the fact that one container is one Chromium instance.",
-    "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build)."
+    "trl_evidence": "chromedp + Chromium in Alpine container; pure-Go SQLite cache; 14 tests pass via fake Capturer (no Chromium needed to build).",
+    "coolify_app_uuid": "lsnzmw5sxciksu5lvfomrhsv"
   },
   "pentest-secrets-scanner": {
     "container_port": 18122,
@@ -4074,7 +4156,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "TRL 8 with verified-secret feature (call vendor API to confirm key is live).",
-    "trl_evidence": "~30 vendor rules, Shannon-entropy gate via math.Log2, line+context+redaction. Tested vs real-looking fixtures."
+    "trl_evidence": "~30 vendor rules, Shannon-entropy gate via math.Log2, line+context+redaction. Tested vs real-looking fixtures.",
+    "coolify_app_uuid": "ozbu751n6lkn2pg42mfct4ki"
   },
   "pentest-session-state": {
     "container_port": 18151,
@@ -4082,7 +4165,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": 8
+    "trl_ceiling": 8,
+    "coolify_app_uuid": "b83h92cux80bgsbpf8rb09nz"
   },
   "pentest-ssrf-prober": {
     "container_port": 18150,
@@ -4090,7 +4174,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": 8
+    "trl_ceiling": 8,
+    "coolify_app_uuid": "q2ovt9m5sn859aqsgeji5kf5"
   },
   "pentest-subfinder": {
     "container_port": 18112,
@@ -4102,7 +4187,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Add Shodan/Censys/Chaos/SecurityTrails when keys configured.",
-    "trl_evidence": "4 passive sources fanned out in parallel with per-source timing + error capture, merged with dedup + suffix filter. No paid keys required."
+    "trl_evidence": "4 passive sources fanned out in parallel with per-source timing + error capture, merged with dedup + suffix filter. No paid keys required.",
+    "coolify_app_uuid": "x121svo53ijlwgdc4lfihc9l"
   },
   "pentest-submit-bot": {
     "container_port": 18136,
@@ -4115,7 +4201,8 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE on *sql.Conn (canonical pattern), idempotency_key (50-goroutine race test asserts 1 platform call), dry_run mode, /selftest with stubbed platform API",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "r6y6un7n6emjwaa5dfywcsgc"
   },
   "pentest-takeover-checker": {
     "container_port": 18121,
@@ -4127,7 +4214,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_evidence": "2-of-3 multi-resolver quorum, confirmed-tier registration probes (GitHub/S3/Heroku), findings-store wire with fail-open, 20 tests across 4 packages",
-    "version": "0.4.0"
+    "version": "0.4.0",
+    "coolify_app_uuid": "ix66ihzc7zqgw85flaxerjm5"
   },
   "pentest-takeover-fingerprints": {
     "container_port": 18116,
@@ -4138,7 +4226,8 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-sonnet-4-6-session-2026-05-20-phase7b",
     "trl_ceiling": 8,
-    "trl_evidence": "17 curated signatures from can-i-take-over-xyz + in-the-wild. CNAME+status+body multi-signal match. Tested positive (S3) + negative cases."
+    "trl_evidence": "17 curated signatures from can-i-take-over-xyz + in-the-wild. CNAME+status+body multi-signal match. Tested positive (S3) + negative cases.",
+    "coolify_app_uuid": "sqscgiph45qj0ao58sxl5bag"
   },
   "pentest-target-normalizer": {
     "container_port": 18102,
@@ -4163,7 +4252,8 @@
     "trl_assessor": "claude-session-2026-05-16",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by platform API stability — H1/BC/Intigriti reshape attributes regularly and there's no signed contract.",
-    "trl_evidence": "SQLite-backed, idempotent on (platform, external_id), terminal-state poll skipping, state-change journal, normalized status enum across 3 platform shapes. Adapter stubs for H1/BC/Intigriti return ErrNotConfigured cleanly when tokens absent."
+    "trl_evidence": "SQLite-backed, idempotent on (platform, external_id), terminal-state poll skipping, state-change journal, normalized status enum across 3 platform shapes. Adapter stubs for H1/BC/Intigriti return ErrNotConfigured cleanly when tokens absent.",
+    "coolify_app_uuid": "ar8u5rv0dp3cfpucrzyvezul"
   },
   "pentest-trufflehog": {
     "container_port": 18120,
@@ -4176,7 +4266,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
     "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam → ≥13 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
     "container_port": 18295,
@@ -4187,7 +4278,8 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "14 vendor signatures, 10 unit tests covering CF managed-challenge / Akamai / F5 / Imperva / PerimeterX / DataDome / ModSecurity / no-WAF baseline.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coolify_app_uuid": "ptteeog28oq6dcjni50vztgb"
   },
   "pentest-walkthrough": {
     "container_port": 18139,
@@ -4212,7 +4304,8 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 8,
-    "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump)."
+    "trl_evidence": "Wayback CDX API client; MIME+status filters; ~15 interesting-extension signatures (backup/config/key/sqlite/dump).",
+    "coolify_app_uuid": "h1l5dpv77ha30bw3crzmf3kc"
   },
   "pentest-wordlists": {
     "container_port": 18100,
@@ -4224,7 +4317,8 @@
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Ceiling = SecLists submodule contents.",
-    "trl_evidence": "Disk-backed catalog with SHA256, reservoir-sample random API, paged reads. Ships with starter dirs/subdomains/params. CPU-only."
+    "trl_evidence": "Disk-backed catalog with SHA256, reservoir-sample random API, paged reads. Ships with starter dirs/subdomains/params. CPU-only.",
+    "coolify_app_uuid": "bcyth03ylz1xux22rday1hvu"
   },
   "pentest-ywh-sync": {
     "container_port": 18176,
@@ -4235,7 +4329,8 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "YWH API client with pagination, 1h in-memory cache, criteria-based filter, /programs/seed for direct ingestion into bounty-scope-checker. 5 unit tests with real DataDome fixture.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "coolify_app_uuid": "yv2ow8edj38olrzbdr8ds11x"
   },
   "phone-extractor": {
     "container_port": 8139,
@@ -4248,7 +4343,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic."
+    "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic.",
+    "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat"
   },
   "physical-kanban-sync": {
     "trl": 3,
@@ -4299,7 +4395,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v0.2.0 (TRL 6) — AST-aware classification via tdewolff/parse/v2/js.\nFindings carry per-listener missing|weak|strong taxonomy for both\norigin and source checks, plus the dangerous method name when weak\n(indexOf, includes, startsWith, endsWith, search, match, test, exec).\nRegex remains as a fallback for unparseable JS, marked confidence=regex.\n24 unit tests cover: missing-origin (high), weak indexOf (high),\nweak includes (high), strong origin alone (medium), strong both (low),\nonmessage assignment, Object.defineProperty, arrow handlers, regex\nfallback path, line/col location, summary aggregation, verdict\nrollup, and POST-body / ?url= handler shapes.",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "fe5lz8cfftoe56qbb3nm38ay"
   },
   "press-mentions": {
     "container_port": 8300,
@@ -4367,7 +4464,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Static-only without endpoint discovery; reaches TRL 7 once wired to api-extractor for auto-probe targets.",
-    "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass."
+    "trl_evidence": "Static scan for known sink patterns (Object.assign, lodash.merge by hash). Active probe documented but not wired. 6 tests pass.",
+    "coolify_app_uuid": "cxrkgs4gc1806pt21vjvihhj"
   },
   "proxy": {
     "container_port": 3001,
@@ -4454,7 +4552,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "classifier matrix (none/fixed-window/token-bucket/sliding/indeterminate), 7 bypass vectors with rate-normalized decision, hard caps (100 req / 50 RPS), /selftest with strict+weak httptest fixtures",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "o10nvzk98vdnz1eis1sondiq"
   },
   "react-data-grid": {
     "trl": 6,
@@ -4615,7 +4714,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pure-Go connect scanner (no nmap shellout, no CGO). Ports input\nparser handles CSV + ranges + 5 named profiles (top10/top100/\ntop1000/web/all) with embedded nmap-services-derived top-1000 list\nvia go:embed. Per-port 1s timeout + 50-worker pool + per-profile\ntotal cap (10s..300s). TCP classification distinguishes\nopen / closed (RST) / filtered (timeout); UDP follows nmap's\nopen|filtered convention for the no-reply ambiguity. Service-hint\nmap covers ~120 well-known TCP + ~17 UDP ports. Pre-scan guards:\nrefuses RFC1918 / loopback / link-local / multicast / CGNAT\nunless ALLOW_PRIVATE=1; optional remote SCOPE_GUARD_URL fail-closed\non non-200; optional RATE_COORDINATOR_URL hook fails open. Tests:\nparser cases, profile resolution, real loopback open / closed /\nTEST-NET-1 timeout, end-to-end JSON envelope, private-IP guard,\nlegacy ?ip= alias. Backward-compat ?host=/?ip=/?url=/?target=.\nSee docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.3.0"
+    "version": "1.3.0",
+    "coolify_app_uuid": "r11ztr9exd5b0kqt5ngizd2l"
   },
   "scan-port-banner": {
     "container_port": 8089,
@@ -4628,7 +4728,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Per-port probe table covers SSH/FTP/SMTP(EHLO)/POP3/IMAP/HTTP/HTTPS-via-TLS/Redis/memcached/MySQL/Postgres/Mongo/Elasticsearch/Telnet (composes with telnet-banner for IAC handling). Structured fingerprints (product/version/os_hint) for OpenSSH, Dropbear, nginx, Apache, lighttpd, IIS, Caddy, Postfix, Exim, Sendmail, vsftpd, ProFTPD, Pure-FTPd, Redis, memcached, MariaDB, MySQL, Dovecot, Cyrus. Pure-Go (CGO-free), no shell-out to nmap/curl. Per-port 5s + total 12s timeouts. ALLOW_PRIVATE guard against RFC1918. ≥30 unit tests with canned-banner net.Listen fixtures (HTTP/SSH/SMTP/Redis/FTP/IMAP/MySQL).",
-    "version": "1.1.0"
+    "version": "1.1.0",
+    "coolify_app_uuid": "r1f8esfzv4scgf000pdegdg4"
   },
   "scan-port-ssh": {
     "container_port": 8090,
@@ -4641,7 +4742,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "x/crypto/ssh full algo capture, weak-algo detection (KEX/cipher/MAC/host_key), findings-store wire with sha256-of-algos dedup, /selftest against in-process ssh.NewServerConn with planted weak algos (12 invariants)",
-    "version": "0.2.2"
+    "version": "0.2.2",
+    "coolify_app_uuid": "ijkuh1oi5c57hy190v6qjz24"
   },
   "scc": {
     "container_port": 8305,
@@ -4734,7 +4836,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Entropy + curated regex (AWS/Stripe/SendGrid/etc) on response bodies."
+    "trl_evidence": "Entropy + curated regex (AWS/Stripe/SendGrid/etc) on response bodies.",
+    "coolify_app_uuid": "pe03mzt29pshi8kgoazm9ceq"
   },
   "security-header-analyzer": {
     "container_port": 8091,
@@ -4747,7 +4850,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Differentiated diff-engine over five named compliance baselines\n(owasp-a-grade, mozilla-observatory-100, pci-dss, hipaa, fedramp-moderate).\nPer-header conformance verdict (pass|warn|fail) with exact suggested fix\nvalues, weighted scoring, http-vs-https comparison, multi-page averaging.\nBuilt on go-common/safehttp (SSRF-gated) and go-common/server. Test\ncoverage: handler + diff + profiles, ≥17 cases, all green via httptest.\nCPU-only, CGO-free, single binary.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "coolify_app_uuid": "f65g6b6k4r7hsxr8q9ck31yt"
   },
   "security-headers": {
     "container_port": 8307,
@@ -4832,7 +4936,8 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs authenticated session state for full testing",
     "trl_evidence": "RFC6265bis prefix validation (__Secure-/__Host-), curated session-cookie list (~25 platforms), Shannon-entropy weak-token detector, two-pass fixation probe behind ?probe_fixation=1, ≥18 unit + httptest cases (entropy_test.go + validate_test.go + handler_test.go) all green; safehttp client with no auto-jar so cookies aren't replayed across analyses.",
-    "version": "1.1.0"
+    "version": "1.1.0",
+    "coolify_app_uuid": "ndfiu265nwa69g8j749nn9ya"
   },
   "shipping-regions": {
     "container_port": 8310,
@@ -4865,7 +4970,8 @@
     "trl_assessor": "haiku-backfill-2026-05-13",
     "trl_ceiling": 4,
     "trl_ceiling_reason": "policy-blocked from public deployment",
-    "trl_evidence": "DDoS simulation logic present but policy-blocked from public deployment"
+    "trl_evidence": "DDoS simulation logic present but policy-blocked from public deployment",
+    "coolify_app_uuid": "f9apfdnpdg5hgsovtq3mpw64"
   },
   "sitemap-finder": {
     "container_port": 8311,
@@ -4889,7 +4995,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Timing-only request smuggling signals require manual confirmation to avoid false positives.",
-    "trl_evidence": "Raw TCP/TLS request-boundary probes cover CL.TE, TE.CL, TE.TE, duplicate CL, SSRF-sticky resolution, deltas, and tests."
+    "trl_evidence": "Raw TCP/TLS request-boundary probes cover CL.TE, TE.CL, TE.TE, duplicate CL, SSRF-sticky resolution, deltas, and tests.",
+    "coolify_app_uuid": "rb5pn82f8bv599l7z2v7prfy"
   },
   "social-graph": {
     "container_port": 8312,
@@ -4926,7 +5033,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Map metadata parsing, source-path extraction."
+    "trl_evidence": "Map metadata parsing, source-path extraction.",
+    "coolify_app_uuid": "whmyonnanr83b2i41mpiv658"
   },
   "stellar-evolution-simulator": {
     "trl": 4,
@@ -4958,7 +5066,8 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 8+ needs paid resolver/threat-intel feeds and an exhaustive 10k-100k brute dictionary beyond the polite CPU-only resolver budget; passive feeds (crt.sh/hackertarget) are also intermittently rate-limited/502 in production.",
-    "trl_evidence": "v1.6.0 adds wildcard-DNS suppression to the passive-source liveness pass (probe a random nonce label; under a catch-all *.apex record count a candidate active only when its A/AAAA answer introduces an IP the wildcard set does not; apex never suppressed) plus golang.org/x/net/idna (IDNA2008 lookup) so Unicode hosts/subdomains normalize to punycode instead of being dropped by the ASCII-only validator. domainscope showed 16,831 stored rows with active_count==total_count>=10 (407,922 claimed-active) - the dominant FP class; 5/5 worst offenders (domainloud.com, alyssalow.com...) confirmed wildcarded via nonce-label dig. Fixture reproducing domainloud.com's 369/369 row: OLD counted all 369 active, NEW keeps 2 (apex + 1 distinct host) = 367 FP removed. Live-confirmed IDN: probe muenchen.de returns domain xn--mnchen-3ya.de and resolves. 19 new table-driven tests; build/test/vet/gofmt green."
+    "trl_evidence": "v1.6.0 adds wildcard-DNS suppression to the passive-source liveness pass (probe a random nonce label; under a catch-all *.apex record count a candidate active only when its A/AAAA answer introduces an IP the wildcard set does not; apex never suppressed) plus golang.org/x/net/idna (IDNA2008 lookup) so Unicode hosts/subdomains normalize to punycode instead of being dropped by the ASCII-only validator. domainscope showed 16,831 stored rows with active_count==total_count>=10 (407,922 claimed-active) - the dominant FP class; 5/5 worst offenders (domainloud.com, alyssalow.com...) confirmed wildcarded via nonce-label dig. Fixture reproducing domainloud.com's 369/369 row: OLD counted all 369 active, NEW keeps 2 (apex + 1 distinct host) = 367 FP removed. Live-confirmed IDN: probe muenchen.de returns domain xn--mnchen-3ya.de and resolves. 19 new table-driven tests; build/test/vet/gofmt green.",
+    "coolify_app_uuid": "qhxo952d5vz3vjbsm3qq2lwl"
   },
   "subdomain-takeover": {
     "container_port": 8223,
@@ -4971,7 +5080,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 8 would need battle-tested cross-checks / paid threat-intel feeds / stateful re-verification; the detector is CPU-only DNS+HTTP with a curated gazetteer and reaches its real ceiling at principled, evidence-trailed, false-positive-hardened detection.",
     "trl_evidence": "1.6.0 adds a NotClaimable flag for can-i-take-over-xyz 'Edge case / Not vulnerable' platforms (Fastly); both the claimability and legacy severity ladders now cap such matches at dangling_review/possible. On 400 live re-probes of stored findings, Fastly false-'vulnerable' verdicts dropped 17 to 0 (22% of all 'vulnerable' were Ghost(Pro)/RebelMouse-over-Fastly HTTP-500 'unknown domain' pages on shared service maps an attacker cannot register), while genuine GitHub Pages/Azure orphans stayed vulnerable. Also adds IDNA2008 Unicode->punycode normalization (golang.org/x/net/idna, CGO-free) so native-script IDNs (bucher.de, rossiya.rf, example.jp) are scanned instead of rejected by the RFC-1035 ASCII validator (451 stored IDN domains affected). +18 table-driven tests; build/test/vet/gofmt green.",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "ydqmdzvdgkaw3mxb21y0lvg5"
   },
   "substack-scraper": {
     "container_port": 8236,
@@ -5028,7 +5138,8 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
     "trl_evidence": "Probes 28 well-known OpenAPI/Swagger/GraphQL paths concurrently (worker pool of 8, 5s per-request, 60s total cap) via go-common/safehttp (SSRF-safe). Parses responses with kin-openapi v0.135.0 — OpenAPI 3.x natively, Swagger 2.0 upgraded via openapi2conv. Extracts {method,path,summary,parameters,security_schemes} inventory (capped at 2k endpoints). 1h sha256-keyed in-memory cache. Tested with httptest fixtures covering openapi3, swagger2, graphql, html, junk, and 404 cases.",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "coolify_app_uuid": "p14igv1fadqxha4rmaw9t4l5"
   },
   "table-extractor": {
     "container_port": 18289,
@@ -5105,7 +5216,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "30-row fingerprint table (Mikrotik/Cisco/Juniper/OpenBSD/Solaris-CVE-2007-0882/IoT cameras/BusyBox-Mirai/etc.), IAC-WONT negotiation, in-process TCP listener for /selftest, hex-safe banner storage",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "coolify_app_uuid": "mcv3og31c6mmjmhqwcsbn4m7"
   },
   "testimonial-extractor": {
     "container_port": 18253,
@@ -5162,7 +5274,8 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
     "trl_evidence": "PSL adoption via publicsuffix.EffectiveTLDPlusOne (fixes multi-label TLD bug); 32-row offline corpus at 100% hit-rate; parked-SSL-CN heuristic against 7 provider markers; /selftest; psl_version in /version",
-    "version": "1.4.0"
+    "version": "1.4.0",
+    "coolify_app_uuid": "v10xrrzd40holg48pqye556h"
   },
   "ugc-detector": {
     "container_port": 8318,
@@ -5316,7 +5429,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "CDX API integration, snapshot distribution analysis, historical HTTPS adoption trends."
+    "trl_evidence": "CDX API integration, snapshot distribution analysis, historical HTTPS adoption trends.",
+    "coolify_app_uuid": "jlgndpylkfhcdcnqdk66bgcj"
   },
   "web-vitals-report": {
     "container_port": 18300,
@@ -5377,7 +5491,8 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
-    "trl_evidence": "All RFC 8615 paths probed with response classification."
+    "trl_evidence": "All RFC 8615 paths probed with response classification.",
+    "coolify_app_uuid": "issc4hdee6k1ydw6bhluz7jf"
   },
   "wp-plugins": {
     "container_port": 8353,
@@ -5389,7 +5504,8 @@
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Vulnerability enrichment needs a maintained plugin CVE/WPScan-style dataset.",
-    "trl_evidence": "WordPress fingerprinting covers generator/header/assets, plugin/theme versions, endpoint exposure, confidence scoring, and unit tests."
+    "trl_evidence": "WordPress fingerprinting covers generator/header/assets, plugin/theme versions, endpoint exposure, confidence scoring, and unit tests.",
+    "coolify_app_uuid": "mfct41oydxnl7pedsg2liu7i"
   },
   "wps": {
     "container_port": 8270,
@@ -5453,26 +5569,7 @@
     "trl_assessor": "claude-haiku-trl-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "DNS security, RFC-aligned protocol"
-  },
-  "fleet-mcp-gateway": {
-    "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
-    "host_port": 18313,
-    "container_port": 18313,
-    "example_path": "/gateway/tools",
-    "trl": 4,
-    "trl_assessed_at": "2026-08-05",
-    "trl_assessor": "claude-sonnet-5-mcp-phase2",
-    "trl_evidence": "First ship. Real MCP wire-level tests pass (initialize -> tools/list -> tools/call, incl. caller-Authorization pass-through) against in-process aggregation. Fleet-wide registry-driven aggregation unproven in production -- zero services expose /agent.json yet (Phase 2 of a 5-phase rollout)."
-  },
-  "fleet-token-ledger": {
-    "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
-    "host_port": 18314,
-    "container_port": 18314,
-    "example_path": "/v1/balance",
-    "trl": 4,
-    "trl_assessed_at": "2026-08-05",
-    "trl_assessor": "claude-sonnet-5-token-ledger",
-    "trl_evidence": "First ship. Atomic charge/credit + audit trail with unit test coverage (11 tests, storage + handler layers). Zero fleet services call /v1/charge yet; /v1/topup is admin-only by design -- no real payment rail (Stripe/x402) wired in this phase."
+    "trl_evidence": "DNS security, RFC-aligned protocol",
+    "coolify_app_uuid": "iqn0l00ac6ya7aaelcdfg6mt"
   }
 }
