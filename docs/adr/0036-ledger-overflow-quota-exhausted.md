@@ -167,6 +167,12 @@ existing semantics intact for every account that never tops up.
 
 ## Open — not resolved by this ADR
 
+**Resolved by [ADR-0037](0037-ledger-overflow-debit-timing.md):** async
+fire-and-forget debit, same pattern as the existing fire-and-forget
+`use_count` increment. See that ADR for the full reasoning — it was
+deliberately kept separate from this one so the debit-timing decision got
+its own review, per the note below (left here for the historical record).
+
 **How/when does the debit actually happen?** Granting an overflow request
 via a balance check doesn't spend the balance. Two shapes, deliberately
 left open for a separate decision because it changes the risk profile
