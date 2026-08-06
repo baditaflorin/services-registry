@@ -279,7 +279,7 @@
     "version": "1.4.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "accent-coach": {
     "trl": 4,
@@ -330,7 +330,7 @@
     "version": "2.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "address-extractor": {
     "container_port": 8275,
@@ -346,7 +346,7 @@
     "version": "3.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "admin-finder": {
     "container_port": 8335,
@@ -431,7 +431,7 @@
     "version": "1.3.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "anon-conf-poll": {
     "trl": 3,
@@ -538,7 +538,7 @@
     "trl_evidence": "Per-vertical keyword DB (16 top-level + 15 tech sub-verticals), compliance-badge detector, CTA gazetteer, multi-page probe with verdict.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "blocklist-checker": {
     "container_port": 8338,
@@ -563,7 +563,7 @@
     "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "brand-logo-extractor": {
     "container_port": 18287,
@@ -575,7 +575,7 @@
     "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "broken-links": {
     "container_port": 8192,
@@ -590,7 +590,7 @@
     "trl_evidence": "1.4.1: ErrorClass taxonomy with 14 stable kinds (timeout/dns_failure/conn_refused/conn_reset/tls_error/hard_404/hard_4xx/hard_5xx/unauthorized/rate_limited/soft_404/too_many_redirects/ssrf_blocked/unknown); Soft404Detector with per-origin baseline; redirect hop tracking; ClassCounts histogram; client.Fetch migration. 9/10 corpus PASS; verified evidence: 403 from twitter.com correctly classifies as 'unauthorized' not 'broken'.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "bucket-finder": {
     "container_port": 8339,
@@ -629,7 +629,7 @@
     "trl_evidence": "CAA record parsing, issuance prediction, IODEF endpoint validation.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "captcha-detector": {
     "container_port": 8209,
@@ -644,7 +644,7 @@
     "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "cas": {
     "container_port": 8279,
@@ -689,7 +689,7 @@
     "trl_evidence": "RFC-aware DNS+PTR+ASN correlation, header fingerprinting, evidence-diversity confidence scoring.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "citation-reference-extractor": {
     "container_port": 18263,
@@ -704,7 +704,7 @@
     "trl_evidence": "Real DOM walk over a fetched/pasted page (golang.org/x/net/html tokenizer, no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, then runs four ordered passes — (1) reference/bibliography list items: <ol>/<ul> <li> contents inside a section whose heading text or container id/class matches a reference token (references / bibliography / works cited / literature cited / further reading); (2) every <cite> element's text; (3) footnote/endnote <li> targets keyed by id prefix (fn / footnote / endnote / note / cite_note / ref-) with the trailing number lifted into a marker; (4) an inline sweep for structured identifiers in running prose not already captured. Each citation's raw text is matched for identifiers with anchored regexes (pattern-matching within text, not HTML parsing): DOI (10.<4-9 digits>/<suffix>), arXiv new (NNNN.NNNNN[vN]) and old (archive.subclass/NNNNNNN) schemes normalised to arXiv:<id>, PMID (label-required), http/https URLs (DOI-resolver and arXiv URLs de-duplicated against their id forms), and ISBN-10/ISBN-13 validated by their mod-11 / mod-10 checksums (labelled and bare 978/979 forms; checksum-failing candidates dropped). Output is a typed citation list (raw text + detected type + extracted identifiers) plus a by-type + by-identifier summary. Input fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode; 4 MiB body cap. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (no_references, fetch_failed:<err>) instead of failing the response. ~30 unit + handler tests cover DOI extraction, both arXiv id forms, ISBN-10 and ISBN-13 valid + invalid checksums, PMID, <cite> extraction, reference-list detection by heading and by container id/class, URL-in-reference extraction, footnote markers, type classification, summary counts, parse-input aliases, missing-param 400, SSRF rejection, no-references→degraded, and text= mode. TRL-4 ceiling: heuristic section detection (no full CSL / citation-style parsing, no author/title/year field decomposition), English-centric reference-section headings, and no DOI/ISBN registry resolution (checksum validity only, not 'this identifier exists'). /selftest exercises the pure-logic pipeline (DOI/arXiv parse, ISBN checksum, reference-list + <cite> DOM detection, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "clickjacking-tester": {
     "container_port": 8225,
@@ -732,7 +732,7 @@
     "version": "1.4.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "color-contrast-checker": {
     "container_port": 18261,
@@ -744,7 +744,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real WCAG 2.x contrast engine over a golang.org/x/net/html DOM walk (no regex over HTML structure): collects foreground/background color declarations from (1) inline style= attributes and (2) <style>-block CSS rules parsed by a small brace-matching tokenizer that strips /* */ comments and flattens one level of @media/@supports nesting. Colors are resolved by a curated ~148-entry CSS named-color map plus #rgb/#rrggbb (and #rgba/#rrggbbaa alpha-drop) hex and rgb()/rgba() functional notation (comma or space/slash separated, integer or percentage channels, alpha parsed-then-dropped). For each resolved fg+bg pair it computes the exact sRGB relative luminance (channel/255, piecewise <=0.03928 ? /12.92 : ((c+0.055)/1.055)^2.4; L = 0.2126R+0.7152G+0.0722B) and the contrast ratio (L_lighter+0.05)/(L_darker+0.05) — verified against the canonical black-on-white = 21.0 and white-on-white = 1.0. Verdicts use >= thresholds at the WCAG boundaries: AA normal 4.5, AAA normal 7, AA large 3, AAA large 4.5. Output is de-duplicated, sorted worst-ratio-first, with a summary (total pairs, # failing AA normal, skipped/unparseable color count, min ratio). Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers checking the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted HTML with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_color_pairs, unparseable_colors_skipped:<n>) instead of failing the response. Documented TRL-4 ceiling: it scores only directly-declared color pairs on the same element/rule — NO computed-style cascade, inheritance, or specificity resolution, so it does not reconstruct the fg/bg a browser would actually composite; no JS-applied styles; no opacity/alpha compositing; CSS variables, gradients, currentColor, and hsl() are reported as skipped rather than guessed. ~40 table-driven unit + handler tests cover luminance of black/white/mid-gray, the 21.0 and 1.0 anchor ratios, hex (#fff/#ffffff) and rgb()/rgba() parsing, named-color resolution, inline-style and <style>-block pair extraction, AA/AAA verdicts at the boundaries, missing-param 400, SSRF rejection (handler + parseInput), and degraded[] population on a no-colors page. /selftest exercises the pure-logic pipeline (luminance/ratio anchors, parsing, inline + stylesheet extraction, threshold verdicts, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal."
+    "trl_evidence": "Real WCAG 2.x contrast engine over a golang.org/x/net/html DOM walk (no regex over HTML structure): collects foreground/background color declarations from (1) inline style= attributes and (2) <style>-block CSS rules parsed by a small brace-matching tokenizer that strips /* */ comments and flattens one level of @media/@supports nesting. Colors are resolved by a curated ~148-entry CSS named-color map plus #rgb/#rrggbb (and #rgba/#rrggbbaa alpha-drop) hex and rgb()/rgba() functional notation (comma or space/slash separated, integer or percentage channels, alpha parsed-then-dropped). For each resolved fg+bg pair it computes the exact sRGB relative luminance (channel/255, piecewise <=0.03928 ? /12.92 : ((c+0.055)/1.055)^2.4; L = 0.2126R+0.7152G+0.0722B) and the contrast ratio (L_lighter+0.05)/(L_darker+0.05) — verified against the canonical black-on-white = 21.0 and white-on-white = 1.0. Verdicts use >= thresholds at the WCAG boundaries: AA normal 4.5, AAA normal 7, AA large 3, AAA large 4.5. Output is de-duplicated, sorted worst-ratio-first, with a summary (total pairs, # failing AA normal, skipped/unparseable color count, min ratio). Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers checking the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted HTML with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_color_pairs, unparseable_colors_skipped:<n>) instead of failing the response. Documented TRL-4 ceiling: it scores only directly-declared color pairs on the same element/rule — NO computed-style cascade, inheritance, or specificity resolution, so it does not reconstruct the fg/bg a browser would actually composite; no JS-applied styles; no opacity/alpha compositing; CSS variables, gradients, currentColor, and hsl() are reported as skipped rather than guessed. ~40 table-driven unit + handler tests cover luminance of black/white/mid-gray, the 21.0 and 1.0 anchor ratios, hex (#fff/#ffffff) and rgb()/rgba() parsing, named-color resolution, inline-style and <style>-block pair extraction, AA/AAA verdicts at the boundaries, missing-param 400, SSRF rejection (handler + parseInput), and degraded[] population on a no-colors page. /selftest exercises the pure-logic pipeline (luminance/ratio anchors, parsing, inline + stylesheet extraction, threshold verdicts, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "comment-extractor": {
     "container_port": 8340,
@@ -771,7 +774,7 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "complete-gardener-planner": {
     "trl": 3,
@@ -808,7 +811,7 @@
     "version": "1.5.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "content-fingerprint": {
     "container_port": 18265,
@@ -823,7 +826,7 @@
     "trl_evidence": "Near-duplicate fingerprinting over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Computes three standard fingerprints over the normalized lowercased text: a 64-bit Charikar SimHash over k=3 word shingles (FNV-64a per shingle, +1/-1 column sums, sign bit) — near-identical documents have a small Hamming distance, unrelated documents ~half the bits; a 64-permutation MinHash signature (universal-hash multiply-xor scramble with a splitmix64 avalanche per permutation, min per permutation) whose matching-fraction estimates Jaccard similarity (identical sets 1.0, disjoint ~0 within ~12% sampling error); and a whitespace-collapsed, lowercased SHA-256 hex exact-match digest. Shingle and token counts are returned alongside. A hammingDistanceHex helper documents how to compare two SimHash values. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers fingerprinting the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode fingerprints pasted content with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_tokens) instead of failing the response; <20-token inputs flagged as statistically unstable. ~30 unit tests cover SimHash determinism/case-insensitivity/empty, near-duplicate small-Hamming stability and unrelated large-Hamming divergence, the Hamming helper, MinHash signature length/determinism, Jaccard identical=1.0/disjoint~0/similarity-ordering/mismatched-length, normalized SHA-256 exact match plus case/whitespace insensitivity and content-change sensitivity, shingle generation at the k boundary/below-k/dedup, token+shingle counts, parse-input aliases, low-sample degraded, missing-param 400, SSRF rejection, and text= mode. TRL-4 ceiling: fixed k=3 shingle width, no language-aware tokenization, FNV/universal-hash heuristics rather than cryptographic locality-sensitive guarantees, and fingerprints estimate surface/lexical similarity not semantic meaning. /selftest exercises the pure-logic pipeline (identical→identical fingerprints, one-word→small SimHash Hamming distance but different SHA, unrelated→large Hamming, MinHash Jaccard sanity, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "cookie-checker": {
     "container_port": 8226,
@@ -884,7 +887,7 @@
     "version": "1.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "crlf-tester": {
     "container_port": 8142,
@@ -909,7 +912,7 @@
     "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "crypto-finder": {
     "container_port": 8341,
@@ -945,7 +948,7 @@
     "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects three independent signal families per candidate framework. (1) CDN / linked-stylesheet signal: every <link rel=stylesheet|preload href> and <script src> is matched case-insensitively against a curated needle table (bootstrap, tailwindcss/tailwind, bulma, foundation, materialize, fomantic/semantic-ui, uikit, purecss/pure-min, tachyons, skeleton, milligram) covering jsdelivr/cdnjs/unpkg/self-hosted filenames; this is the strong, author-declared signal and frequently carries an exact pinned version. (2) Class-name signatures: distinctive tokens (navbar, col-*, btn-*, d-flex; tailwind md:/lg:/sm:/pt-/px- prefixes + text-sm/bg-blue-500; bulma columns/is-*; foundation grid-x/callout; materialize waves-effect; uikit uk-*; pure-*; tachyons pa3/f6) are separated from generic shared tokens (container, row, flex, button, column, hero) that are flagged weak so a single one never yields a confident detection; Semantic UI's generic 'ui' token only counts as distinctive when it co-occurs with a real SUI partner (button/grid/menu/segment/...) on the same element. (3) <meta name=generator> naming a framework adds a soft corroborating hint. Version extraction: a single regexp pulls the dotted version from the common CDN shapes bootstrap@5.3.0, /bootstrap/5.3.0/, and bootstrap-5.3.0.min.css (stdlib regexp is used ONLY for class-token/CDN/version pattern matching, never to parse HTML structure). Confidence is a documented heuristic blend (scoreFramework): CDN hit base 0.80 plus 0.15 when a version was extracted; first distinctive class +0.25 with diminishing +0.10 each for the next two (class-only contribution capped at ~0.45 so class signatures alone never reach CDN-level certainty); weak classes +0.05 each capped at 0.10; generator +0.10; clamped to [0,1], 2dp; results below a 0.15 floor (e.g. a lone weak class) are dropped, and the list is sorted by confidence desc with a deterministic framework-order tie-break. Honest TRL-4 ceiling: this is a pure static-markup heuristic over a finite curated framework set; it cannot see browser-computed CSS, and minified / renamed / content-purged class names (e.g. a Tailwind build that purges unused utilities and inlines arbitrary values) can defeat the class-signature path entirely, leaving the CDN/link signal as the reliable one — frameworks outside the curated list are not guessed but reported as an empty frameworks[] with no_framework_detected in degraded[]. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects hrefs/srcs embedded in the markup. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_framework_detected) instead of failing the response; degraded[] is always a non-nil slice and frameworks[] is always non-nil. 36 unit + handler tests cover bootstrap by CDN and by classes, tailwind by utility classes and by CDN, bulma, foundation, materialize, semantic-ui by distinctive pair (and the bare-ui non-detection), uikit, pure.css, tachyons, skeleton + milligram by CDN, version extraction at @ / path / dash shapes and two-component versions, multiple frameworks on one page, confidence ordering and the class-below-CDN ceiling, the cap-at-one blend, generator meta hint, evidence de-duplication, raw-signal counts, single-weak-class rejection, protocol-relative CDN, garbage/empty input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (bootstrap CDN+version, tailwind classes, class-below-CDN ceiling, confidence ordering, no-framework, non-nil result, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "currency-detector": {
     "container_port": 8282,
@@ -980,7 +983,7 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "d3-graph": {
     "container_port": 6003,
@@ -1014,7 +1017,7 @@
     "version": "1.4.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "db-geo-geocode": {
     "container_port": 3909,
@@ -1062,7 +1065,7 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "dir-listing": {
     "container_port": 8342,
@@ -1102,7 +1105,7 @@
     "trl_evidence": "Real single-pass DOM tree walk over golang.org/x/net/html's tokenizing parser (no regex over HTML structure): malformed markup is normalised into a well-formed tree, then one depth-first traversal in document order computes total element-node count, total text-node count, maximum element-nesting depth, maximum sibling breadth (widest direct-element-child fan at any parent), a per-lowercase-tag frequency histogram, distinct-tag count, average direct-element-children per element, count of elements exceeding the >60-child high-fan-out threshold (threshold echoed in the response), the deepest element path (root-to-deepest tag chain, first-in-document-order on ties), text-to-element ratio, total DOM size in bytes, and a documented combined complexity score (max_depth + max_breadth + element_nodes/100). The whole served document is counted including head/script/style — DOM weight is a property of the markup as a whole, distinct from prose extraction. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode analyses pasted markup with no fetch. Per-failure notes pushed to a non-nil degraded[] (empty_document, fetch_failed, parse_failed) instead of failing the response. ~30 unit tests cover nested-div depth, N-sibling breadth, node counts, tag histogram, distinct-tag count, deepest-path chain (including first-wins-on-tie), high-fan-out threshold boundary (60 vs 61), text-node vs element-node counting, malformed-HTML normalisation, script/style inclusion, average-children and ratio math, complexity-score monotonicity, empty-document degraded, missing-param 400, SSRF rejection, and text= mode. /selftest exercises the pure-logic pipeline (hand-built known depth/breadth, node counts, deepest path, fan-out, empty-document, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: metrics describe the STATIC server-rendered DOM only — no JS-expanded/hydrated DOM, no computed layout/CSSOM, no render-tree or paint cost; a headless-browser engine would be required to advance further.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-abuse-contact-rollup": {
     "container_port": 18189,
@@ -1119,7 +1122,7 @@
     "version": "0.3.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-ai-bot-policy-scanner": {
     "container_port": 18195,
@@ -1145,7 +1148,7 @@
     "version": "0.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-analytics-stack": {
     "container_port": 18215,
@@ -1161,7 +1164,7 @@
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-anycast-footprint": {
     "container_port": 18220,
@@ -1176,7 +1179,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-app-render-mode": {
     "proxy_read_timeout": "75s",
@@ -1187,7 +1190,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-backlink-profile": {
     "container_port": 18210,
@@ -1197,7 +1200,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-bimi-checker": {
     "container_port": 18218,
@@ -1212,7 +1215,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-breadcrumb-schema": {
     "container_port": 18230,
@@ -1222,14 +1225,17 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-cache-policy": {
     "container_port": 18235,
     "description": "HTTP cache hygiene scorer (RFC 7234/9111).",
     "host_port": 18235,
     "trl": 5,
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-cms-version": {
     "container_port": 18216,
@@ -1245,7 +1251,7 @@
     "version": "0.3.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
@@ -1275,7 +1281,7 @@
     "trl": 4,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-deployment-fingerprint": {
     "container_port": 18241,
@@ -1288,7 +1294,7 @@
     "version": "0.2.2",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-details": {
     "container_port": 8085,
@@ -1336,7 +1342,7 @@
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-email-deliverability-score": {
     "container_port": 18181,
@@ -1359,7 +1365,10 @@
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
     "version": "0.3.4",
-    "proxy_read_timeout": "75s"
+    "proxy_read_timeout": "75s",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-events-platform": {
     "proxy_read_timeout": "75s",
@@ -1370,7 +1379,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-experimentation-stack": {
     "proxy_read_timeout": "75s",
@@ -1386,7 +1395,7 @@
     "version": "0.4.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-faq-schema": {
     "container_port": 18231,
@@ -1396,7 +1405,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-favicon-completeness": {
     "container_port": 18232,
@@ -1406,7 +1415,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-font-stack": {
     "container_port": 18221,
@@ -1416,7 +1425,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-gift-card": {
     "container_port": 18239,
@@ -1426,7 +1435,7 @@
     "version": "0.2.1",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-glue-records": {
     "container_port": 18237,
@@ -1436,7 +1445,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-http3-quic-detector": {
     "container_port": 18190,
@@ -1456,7 +1465,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-integration-marketplace": {
     "container_port": 18243,
@@ -1472,7 +1481,7 @@
     "version": "0.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-interactive-demo": {
     "proxy_read_timeout": "75s",
@@ -1483,7 +1492,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-liveness-state": {
     "container_port": 18217,
@@ -1495,7 +1504,7 @@
     "trl_evidence": "Pure-function Classify(body,status,finalURL) split out from handler; 12 unit tests over canned HTML fixtures + 3 handler tests against httptest servers + 6-check /selftest including one real outbound probe to example.com. Curated parking-host markers (sedo/dan/afternic/hugedomains/parkingcrew/bodis/cashparking) + phrase regex; curated default-server markers for nginx/Apache/IIS/OpenResty/Caddy. Heuristic-only — no DOM rendering, qualitative confidence, no DNS-level parking nameserver check yet.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-martech-stack": {
     "proxy_read_timeout": "75s",
@@ -1511,7 +1520,7 @@
     "version": "0.4.2",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
@@ -1531,7 +1540,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-newsletter-platform-detector": {
     "proxy_read_timeout": "75s",
@@ -1562,7 +1571,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-passive-dns-history": {
     "container_port": 18183,
@@ -1583,7 +1592,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-product-count": {
     "container_port": 18242,
@@ -1593,7 +1602,10 @@
     "trl_assessed_at": "2026-07-02",
     "trl_assessor": "codex-logic-improvement-2026-07-02",
     "trl_evidence": "v0.2.0 removes count inflation across all weak aggregators: sitemap and homepage URL variants are canonicalized without query/fragment noise and deduplicated across sources; repeated JSON-LD products collapse by stable @id/url/sku/productID/mpn/gtin identities; hidden, aria-hidden, template, noscript, skeleton, placeholder, and unresolved template links are excluded. Positive distinct-product cases and negative duplicate/placeholder cases pass unit, race, vet, build, and deterministic selftest coverage.",
-    "version": "0.2.1"
+    "version": "0.2.1",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-ratelimit-headers": {
     "container_port": 18234,
@@ -1606,7 +1618,7 @@
     "version": "0.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-rbl-reputation": {
     "container_port": 18182,
@@ -1694,7 +1706,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "domain-well-known-catalog": {
     "container_port": 18194,
@@ -1718,7 +1730,7 @@
     "version": "0.2.2",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "dtss": {
     "container_port": 8286,
@@ -1757,7 +1769,10 @@
     "trl_assessor": "claude-session-2026-05-13",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "RFC-light parser, 5444-domain disposable gazetteer, opt-in MX validation, multi-page crawl with frontier, Cloudflare/obfuscation decoder."
+    "trl_evidence": "RFC-light parser, 5444-domain disposable gazetteer, opt-in MX validation, multi-page crawl with frontier, Cloudflare/obfuscation decoder.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "email-harvester": {
     "container_port": 8137,
@@ -1784,7 +1799,7 @@
     "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects every <iframe>/<embed>/<object> in document order, descending into <object> subtrees so a fallback iframe/embed nested as object content is still inventoried. The source attribute is picked per element (src for iframe/embed, data for object) and resolved to an absolute URL against the page's final post-redirect fetched URL via net/url ResolveReference, so a relative or protocol-relative src is reported absolute with a derived lower-cased host. Classification is by registrable-domain host SUFFIX (host == suffix or ends with .suffix) so www./m./player./open. subdomains all land on the same provider, and a couple of path checks disambiguate same-host providers (google.com/maps -> google_maps; docs.google.com/forms -> google_forms ahead of generic google_docs). The curated provider table covers video (youtube incl. youtube-nocookie/youtu.be, vimeo, dailymotion, wistia, loom, twitch), maps (google_maps, openstreetmap), social (twitter incl. x.com, facebook incl. fb/fb.watch/facebook.net, instagram, linkedin, reddit, tiktok), audio (spotify, soundcloud, anchor), docs (google_docs, slideshare, scribd, codepen, jsfiddle, codesandbox, github_gist), forms (typeform, airtable, google_forms), and ads_analytics (doubleclick, googlesyndication, googletagmanager, google-analytics). Anything not on the finite list falls to provider/category other rather than being guessed — the honest TRL-4 ceiling, since novel embed hosts cannot be classified without an external dataset (the TRL-5+ ceiling). A src-less iframe (srcdoc-only / JS-filled) is still counted with provider/category inline and an empty host. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects relative iframe srcs. Direct text= mode scans pasted HTML with no fetch (empty base, so relative srcs stay as-is). Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_embeds, srcless_embed) instead of failing the response; degraded[] is always a non-nil slice. 30 unit tests cover every provider family, category bucketing, host-suffix subdomain matching, lookalike-host rejection, embed src vs object data, relative + protocol-relative resolution, unresolved-without-base, srcless inline handling, by_provider/by_category counts, document-order preservation, embeds anywhere in the tree, object-nested fallback, no-embeds, garbage/data-URI input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (youtube/vimeo classification, relative resolution, object data, srcless inline, host-suffix subdomains, by_provider/by_category counts, unknown->other, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "emotional-tone": {
     "container_port": 8288,
@@ -1799,7 +1814,7 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "env-finder": {
     "container_port": 8344,
@@ -1961,7 +1976,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-diff-engine": {
     "container_port": 18160,
@@ -1993,7 +2008,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-dns-sync": {
     "container_port": 18141,
@@ -2066,7 +2081,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-fingerprint-cache": {
     "container_port": 18153,
@@ -2139,7 +2154,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-lock": {
     "host_port": 18303,
@@ -2174,7 +2189,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-memory": {
     "host_port": 18308,
@@ -2209,7 +2224,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-payload-corpus": {
     "container_port": 18156,
@@ -2245,7 +2260,7 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 2,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-pipe": {
     "auth": {
@@ -2267,7 +2282,7 @@
     "trl_evidence": "v0.4.1 in-RAM TTL relay (PutOpts API, total-RAM byte budget, last-write-wins ?replace slots, read-receipt watch channels). Store unit tests: put/get, burn-on-read, TTL expiry via injected clock, write-once, replace, expired-name reclaim, max-entries + max-total-bytes budgets, byte accounting across burn/expire, clamp-TTL, base62 id shape/uniqueness over 1000 draws, PutRandom uniqueness over 500, 256-word list uniqueness, word-code shape. Handler/HTTP tests: random+named push/pull, write-once 409, replace overwrite, reserved/invalid name, burn-once-then-404, content negotiation (HTML app vs text vs ?shell/?app/?raw), word-code create, QR text+png, read-receipt notify+watch token/gone, safe headers, delete, 413. /selftest runs put→get-multi→burn→named→reserved→empty→ttl→replace→word-code→byte-budget end-to-end. Cross-impl crypto proven: AES-256-CTR+HMAC openssl↔WebCrypto round-trips (incl. 256 KB + macOS LibreSSL) and ECDH P-256 sealed-box round-trip + wrong-key rejection (node WebCrypto). Live real-browser verification (2026-06-01): terminal-encrypt→browser-decrypt, browser-compose→CLI-decrypt, and ask-me-a-secret reply sealed→inbox decrypt with the server holding ciphertext only. crypto/rand ids, rejection sampling (no modulo bias).",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-pixel": {
     "auth": {
@@ -2319,7 +2334,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-preflight": {
     "container_port": 18142,
@@ -2364,7 +2379,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-q": {
     "auth": {
@@ -2385,7 +2400,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 5,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-read": {
     "auth": {
@@ -2406,7 +2421,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-resolver-quorum": {
     "container_port": 18155,
@@ -2485,7 +2500,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 3,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-target-reputation": {
     "container_port": 18171,
@@ -2556,7 +2571,7 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "fleet-webhook-verifier": {
     "container_port": 18170,
@@ -2579,7 +2594,10 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_evidence": "Pass-3 geo: locale-aware founding-year extraction (intl.go). Latin-script founding verbs in DE/FR/ES/PT/IT/NL/PL/RU (gegruendet/fonde/fundada/fondata/opgericht/zalozona/osnovana) matched diacritic-insensitively, plus weak seit/depuis/desde/dal/sinds (copyright-tier, capped 0.45). CJK markers with no word boundaries: JP setsuritsu/sougyou/souritsu+nen, CN chengli-yu/chuangli-yu, KR seollip/changlip. European DD.MM.YYYY year extraction without tripping the version/digit-run guard. FP guards: native relative phrasing (20 Jahre/30 ans), native copyright footers, non-USD euro prices, JP phone digit-runs all produce NO founding candidate. Native explicit verbs are anchor-tier (beat whois/wayback in reconciler+inference). Fixture founding-phrase extraction went 0/16 -> 16/16 across 15 languages/3 scripts. Live-confirmed firing on fetchable non-English sites: gulbenkian.pt -> 1956 (matched_text 'es: desde 1956', correct), orf.at -> 'de: seit 2008', azzurro.it -> 'it: Dal 1987'. 67 table-driven tests (race-clean) incl. 7 new multilingual/multi-script suites with FP guards; build/vet/test/gofmt green. Pure Go, CGO-free, no new deps, no runtime LLM, no new outbound calls.",
-    "version": "3.0.0"
+    "version": "3.0.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "funding-detector": {
     "container_port": 8290,
@@ -2603,7 +2621,7 @@
     "version": "0.1.1",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "gdpr-compliance": {
     "container_port": 8291,
@@ -2618,7 +2636,7 @@
     "trl_evidence": "1.3.1: TrackerHit per-vendor structured detection with SignalCount/Confidence (high≥3 / medium=2 / low=1)/InScriptSrc/InInlineJS/MatchedSignals replaces flat []string; 20 CMP fingerprints + 17 tracker vendors; PolicyHit gains ContentLength+ContentType+SameOrigin to flag stub policies and third-party-hosted privacy URLs. 10/10 corpus PASS; verified evidence: NYT shows GTM medium-confidence (2 signals, both src+inline).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "gentle-adhd-flow": {
     "trl": 3,
@@ -2667,7 +2685,7 @@
     "trl_evidence": "OIDC/OAuth well-known parsing, JWKS probing, deprecated-flow/security issue triage, endpoint origin checks, SSRF guard, and tests.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "go-session-fixation": {
     "container_port": 8316,
@@ -2695,7 +2713,7 @@
     "version": "1.3.1",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "granular-physics-lab": {
     "trl": 4,
@@ -2739,7 +2757,7 @@
     "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure): recurses the parsed document in document order collecting every h1-h6 with its resolved numeric level, collapsed visible text, and id attribute. skipTags subtrees (script/style/noscript/svg/template/head/iframe/object/embed) are pruned before text collection so an h-tag embedded in an inline SVG title or a <template> never pollutes the outline, and script/style text never leaks into a heading's label. The nested outline is built with a single-pass ancestor-stack algorithm (pop until the stack top is a strictly-lower level, attach, push) which is the standard 'nest under the most recent heading of a lower level' rule — it tolerates skipped levels (h1 directly to h3 still nests the h3 under the h1), multiple roots (each h1 starts a new root), and a leading deep heading without losing any node. Reports per-level counts (h1..h6 + total), max nesting depth, and an advisory issues[] of accessibility/structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level:hX->hY for any deeper-by-more-than-one jump, empty_heading) — all advisory, never fatal. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers analysing the same URL trigger one upstream fetch; plain-HTML render mode (heading structure lives in the served HTML, not a JS-rendered DOM — the documented TRL-4 ceiling for SPAs that build headings client-side). Direct text= mode analyses pasted HTML with no fetch. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, no_headings) instead of failing the response; a page with zero headings still returns 200. 26 unit tests cover document-order extraction, id capture, whitespace collapse, script/style stripping inside headings, inline-markup flattening, template/svg pruning, outline nesting (simple/deep/skipped-level/multiple-roots/leading-deep), depth measurement, per-level counts, every diagnostic (no_h1, multiple_h1, skipped_level, empty_heading, ascent-is-not-a-skip, clean-document), parse-input aliases, missing-param 400, SSRF rejection, and the handler text-mode + no_headings degraded paths. /selftest exercises the pure-logic pipeline (order, skipped-level, multiple-h1, empty-heading, nested depth, script/style stripping, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-05T19:31:15.987689679Z"
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "hidden-fields": {
     "container_port": 8345,
@@ -3290,7 +3308,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure). Implements the COMMON microformats2 rules. Root detection of any h-* class (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and arbitrary h-* tokens), emitting the canonical type[] array sorted and de-duplicated. Property reading on descendants by class prefix. p-* takes the collapsed visible text with img alt / area alt / abbr title fallbacks. u-* takes href/src/data/poster (in that order) resolved ABSOLUTE against the final fetched URL via net/url ResolveReference, falling back to element text. dt-* takes the datetime/value/title attribute, falling back to element text. e-* yields the {value, html} embedded-HTML object (collapsed text plus serialized inner HTML). Implied properties per the spec subset. implied p-name from a sole img alt / area alt / abbr title / element text, suppressed when an explicit name exists or the root has nested item values; implied u-url from the root element when it is an a/area with href, else a sole a/area/link descendant; implied u-photo from the root when it is an img/object, else a sole img/object descendant. Nesting. an h-* element carrying a property class becomes that property's value as a nested item (e.g. p-author h-card resolves to an Item with its own properties), while a bare nested h-* is appended to the parent's children[]; a nested root is never double-counted as a top-level item. rel collection across the whole document. a/link/area rel tokens populate rels{} (token -> deduped url list, absolute) and rel-urls{} (url -> {rels, text, type}). All JSON collections are non-nil (items=[], rels={}, rel-urls={}, types_seen=[]) so the envelope is stable, and degraded[] carries non-fatal notes (fetch_failed, no_microformats) instead of failing the response so a page with zero mf2 markup still returns 200. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode; direct text= mode parses pasted HTML with no fetch (no base, so relative u-* stay relative). SSRF defense-in-depth. input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs. 43 Go unit + handler tests cover explicit h-card properties, type[] arrays, implied name from text and from img alt, implied photo and url from sole elements and from the root element, implied-name suppression, dt-* from datetime/value/text, u-* text fallback, e-content value+html, nested author h-card, h-feed with child h-entry children[], multiple top-level roots, h-event properties, rels (me/author/webmention, multi-token, multi-url), absolute u-* resolution and relative-without-base, no-microformats empty, garbage/empty input, p-adr wrapper with nested props, summary sorting/dedup, abbr title fallback, and the handler text-mode + no_microformats + JSON-shape-stable paths. /selftest exercises the pure-logic pipeline (h-card name+url, implied name, absolute u-url, dt-published, e-content, nested author, rels, no-microformats, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real outbound-fetch signal. The documented TRL-4 ceiling. it implements the common-case rules, NOT the full mf2 algorithm. it deliberately SKIPS the value-class-pattern (vcp) for dt-* date/time assembly and for p-* (reads the attribute or element text directly, not multi-span value reconstruction), lang propagation onto property values, the mf1-to-mf2 backcompat upgrade path, and resolving u-* against an in-document base href (resolves against the fetched URL only)."
+    "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure). Implements the COMMON microformats2 rules. Root detection of any h-* class (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and arbitrary h-* tokens), emitting the canonical type[] array sorted and de-duplicated. Property reading on descendants by class prefix. p-* takes the collapsed visible text with img alt / area alt / abbr title fallbacks. u-* takes href/src/data/poster (in that order) resolved ABSOLUTE against the final fetched URL via net/url ResolveReference, falling back to element text. dt-* takes the datetime/value/title attribute, falling back to element text. e-* yields the {value, html} embedded-HTML object (collapsed text plus serialized inner HTML). Implied properties per the spec subset. implied p-name from a sole img alt / area alt / abbr title / element text, suppressed when an explicit name exists or the root has nested item values; implied u-url from the root element when it is an a/area with href, else a sole a/area/link descendant; implied u-photo from the root when it is an img/object, else a sole img/object descendant. Nesting. an h-* element carrying a property class becomes that property's value as a nested item (e.g. p-author h-card resolves to an Item with its own properties), while a bare nested h-* is appended to the parent's children[]; a nested root is never double-counted as a top-level item. rel collection across the whole document. a/link/area rel tokens populate rels{} (token -> deduped url list, absolute) and rel-urls{} (url -> {rels, text, type}). All JSON collections are non-nil (items=[], rels={}, rel-urls={}, types_seen=[]) so the envelope is stable, and degraded[] carries non-fatal notes (fetch_failed, no_microformats) instead of failing the response so a page with zero mf2 markup still returns 200. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode; direct text= mode parses pasted HTML with no fetch (no base, so relative u-* stay relative). SSRF defense-in-depth. input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs. 43 Go unit + handler tests cover explicit h-card properties, type[] arrays, implied name from text and from img alt, implied photo and url from sole elements and from the root element, implied-name suppression, dt-* from datetime/value/text, u-* text fallback, e-content value+html, nested author h-card, h-feed with child h-entry children[], multiple top-level roots, h-event properties, rels (me/author/webmention, multi-token, multi-url), absolute u-* resolution and relative-without-base, no-microformats empty, garbage/empty input, p-adr wrapper with nested props, summary sorting/dedup, abbr title fallback, and the handler text-mode + no_microformats + JSON-shape-stable paths. /selftest exercises the pure-logic pipeline (h-card name+url, implied name, absolute u-url, dt-published, e-content, nested author, rels, no-microformats, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real outbound-fetch signal. The documented TRL-4 ceiling. it implements the common-case rules, NOT the full mf2 algorithm. it deliberately SKIPS the value-class-pattern (vcp) for dt-* date/time assembly and for p-* (reads the attribute or element text directly, not multi-span value reconstruction), lang propagation onto property values, the mf1-to-mf2 backcompat upgrade path, and resolving u-* against an in-document base href (resolves against the fetched URL only).",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "mime-trap": {
     "container_port": 8145,
@@ -3316,7 +3337,10 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "trl_evidence": "Single-pass DOM walk over golang.org/x/net/html parses 12 mobile signals\n(viewport validity + user-scalable, apple-touch-icon, manifest, amphtml,\nAMP, theme-color, srcset/sizes ratio, inline font<14px count, small\ntap-target heuristic, horizontal-scroll risk, fixed-width layout, flash).\nDual-UA probe (mobile+desktop) records response-size delta. Composite\n0-100 score with explicit weights documented in score.go and ADR-0001.\nLinked CSS fetched concurrently (≤3, errgroup) for media-query +\nmin-width detection. ≥15 unit tests across viewport_test.go,\nsignals_test.go, handler_test.go covering perfect-mobile, missing\nviewport, fixed-width, AMP, Flash short-circuit, dedupe, and the\nlegacy ?url= alias. Per-request HTTP cap 6s; total budget 15s.",
-    "version": "1.3.0"
+    "version": "1.3.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "named-entity-recognizer": {
     "container_port": 18285,
@@ -3325,7 +3349,10 @@
     "trl": 7,
     "trl_evidence": "Runs a baked ONNX transformer NER model with rune-accurate spans, normalized fleet labels, a deterministic fallback engine, panic recovery, provenance, and four test files; clean main now includes current go-common plus model-pipeline hardening.",
     "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch3"
+    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "newsletter-flow": {
     "trl": 4,
@@ -3439,7 +3466,10 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "Pass-3 geo: country-agnostic ISO-3166-1 gate (iso.go, 249 alpha-2 + alpha-3) + routeTrailingToken replaces 'any trailing all-caps token = country'. Junk-acronym country FPs 6/1000->0; region-as-foreign-country misfires 4/4 corrected to US+region; 15/15 genuine non-US (CO/AR/ID/IN/DE) addresses preserved incl. correct subnational region; +20 multi-country/multi-script tests; build/test/vet green, gofmt clean.",
-    "version": "2.2.0"
+    "version": "2.2.0",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "open-indie-studio": {
     "trl": 3,
@@ -3529,7 +3559,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Heuristic passive-voice detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Splits prose into sentences on terminal punctuation (collapsing punctuation runs, trailing-fragment aware) and flags each sentence as passive when a form of to-be (am/is/are/was/were/be/been/being) or a get-passive (get/gets/getting/got/gotten) is followed — within a small window that skips up to three intervening adverbs/negators so 'has been carefully reviewed' still matches — by a past participle. Participles are identified heuristically: regular -ed forms (with a curated exclusion list for short non-verbal -ed words like red/bed/embed) plus a curated list of ~110 common irregular past participles (done/made/seen/taken/given/written/known/shown/held/thrown/etc.). Reports the flagged sentences with their matched trigger (auxiliary + participle), total sentence count, passive sentence count, and the passive ratio as a percentage. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_sentences) instead of failing the response; inputs below five sentences flagged as statistically noisy. ~30 unit tests cover sentence splitting, classic be-passives (was thrown, is being reviewed, has been done), get-passives (got hit, gets done), active sentences NOT flagged, irregular participles, adverb-interrupted passives, the adverb window not overreaching into unrelated clauses, passive-ratio math, the participle classifier, tokenisation, low-sample handling, missing-param 400, SSRF rejection, text= mode, plus the reused HTML-extraction cases (script/style stripping, article preference, whitespace collapse, block boundaries). /selftest exercises the pure-logic pipeline (a known passive flags, a known active does not, ratio math, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: heuristic participle detection without a POS tagger or dependency parser, English-only — it will miss participles outside the curated list and false-positive on adjectival participles ('the painted wall'), copular complements, and get as a main verb, where a full NLP parser would not."
+    "trl_evidence": "Heuristic passive-voice detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Splits prose into sentences on terminal punctuation (collapsing punctuation runs, trailing-fragment aware) and flags each sentence as passive when a form of to-be (am/is/are/was/were/be/been/being) or a get-passive (get/gets/getting/got/gotten) is followed — within a small window that skips up to three intervening adverbs/negators so 'has been carefully reviewed' still matches — by a past participle. Participles are identified heuristically: regular -ed forms (with a curated exclusion list for short non-verbal -ed words like red/bed/embed) plus a curated list of ~110 common irregular past participles (done/made/seen/taken/given/written/known/shown/held/thrown/etc.). Reports the flagged sentences with their matched trigger (auxiliary + participle), total sentence count, passive sentence count, and the passive ratio as a percentage. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_sentences) instead of failing the response; inputs below five sentences flagged as statistically noisy. ~30 unit tests cover sentence splitting, classic be-passives (was thrown, is being reviewed, has been done), get-passives (got hit, gets done), active sentences NOT flagged, irregular participles, adverb-interrupted passives, the adverb window not overreaching into unrelated clauses, passive-ratio math, the participle classifier, tokenisation, low-sample handling, missing-param 400, SSRF rejection, text= mode, plus the reused HTML-extraction cases (script/style stripping, article preference, whitespace collapse, block boundaries). /selftest exercises the pure-logic pipeline (a known passive flags, a known active does not, ratio math, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: heuristic participle detection without a POS tagger or dependency parser, English-only — it will miss participles outside the curated list and false-positive on adjectival participles ('the painted wall'), copular complements, and get as a main verb, where a full NLP parser would not.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "payment-detector": {
     "container_port": 8298,
@@ -3540,7 +3573,10 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Production-grade live detection-rate is bounded by the upstream fleetfetch RenderJS cache (502 context-deadline on every probe) — when it times out the detector never sees a page body, so live correctness can't be proven without a faster/warmer fetch tier or a stored-output table. Detector logic itself is sound and fully unit-tested.",
-    "trl_evidence": "Pass-3 geo: methodTable 28->58 signatures (+30 regional methods: SEPA/EPS/TWINT/Przelewy24/Swish/Vipps/MobilePay/Paytm/PhonePe/RuPay/Boleto/Pix/OXXO/SPEI/Konbini/GrabPay/PayNow/GCash/DANA/M-Pesa/Flutterwave/Cartes Bancaires/Maestro/...) with multilingual + CJK button/aria hints and a region+evidence trail; 37 new table-driven tests (33 localized non-US fixtures + prose-FP guard). Live delta unmeasurable - every probe 502'd at the upstream RenderJS fetch cache."
+    "trl_evidence": "Pass-3 geo: methodTable 28->58 signatures (+30 regional methods: SEPA/EPS/TWINT/Przelewy24/Swish/Vipps/MobilePay/Paytm/PhonePe/RuPay/Boleto/Pix/OXXO/SPEI/Konbini/GrabPay/PayNow/GCash/DANA/M-Pesa/Flutterwave/Cartes Bancaires/Maestro/...) with multilingual + CJK button/aria hints and a region+evidence trail; 37 new table-driven tests (33 localized non-US fixtures + prose-FP guard). Live delta unmeasurable - every probe 502'd at the upstream RenderJS fetch cache.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "pentest-agent-state": {
     "container_port": 18146,
@@ -4240,7 +4276,10 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Real DOM-driven policy segmenter over a golang.org/x/net/html tokenizer (no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, walks the tree in document order and opens a new clause at every h1-h6 heading (text before the first heading becomes a synthetic preamble clause so nothing is dropped); <section>/<article> wrappers contribute naturally because their own headings drive the boundary. Each clause carries heading, level, body word-count, and a 200-char snippet. Classification is a curated keyword/phrase lexicon (substring, case-insensitive, heading double-weighted) across eleven policy types: data-collection, data-sharing/third-parties, cookies, retention, user-rights/GDPR, liability/warranty, governing-law/jurisdiction, termination, refund/return, acceptable-use, contact/DPO. The summary rolls up clause_count, a by_type histogram, a detected_policy_kind guess (privacy-policy / terms-of-service / cookie-policy / eula / refund-policy / acceptable-use-policy via phrase tally, else unknown), has_gdpr_signals, has_contact, and an uncategorized_rate. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers analysing the same policy URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode extracts pasted raw HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_clauses_segmented) instead of failing the response. 30+ unit tests cover each of the eleven policy-type classifications, heading-based segmentation, preamble capture, section boundaries, multi-type clauses, uncategorized clauses, GDPR/user-rights and contact/DPO signal detection, policy-kind detection, the summary roll-up + histogram + uncategorized_rate, script/style not leaking into clause text, snippet truncation, article-root preference, parse-input aliases (url/target/q), missing-param 400, SSRF rejection (input + handler), and text= raw-HTML mode. /selftest exercises the pure-logic pipeline (segmentation, classification, signal + kind detection, script/style stripping, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. CEILING (honest TRL-4, not higher): static-DOM only — JS-rendered/accordion-collapsed policy pages are invisible to the tokenizer; classification is a heuristic lexicon, not semantic legal understanding, so it cannot disambiguate context, negation (e.g. 'we do NOT sell your data' still hits data-sharing), or paraphrase outside the curated phrases; English-centric — non-English policies will largely fall through to uncategorized; segmentation assumes heading-structured markup, so wall-of-text policies with no h-tags collapse into a single preamble clause."
+    "trl_evidence": "Real DOM-driven policy segmenter over a golang.org/x/net/html tokenizer (no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, walks the tree in document order and opens a new clause at every h1-h6 heading (text before the first heading becomes a synthetic preamble clause so nothing is dropped); <section>/<article> wrappers contribute naturally because their own headings drive the boundary. Each clause carries heading, level, body word-count, and a 200-char snippet. Classification is a curated keyword/phrase lexicon (substring, case-insensitive, heading double-weighted) across eleven policy types: data-collection, data-sharing/third-parties, cookies, retention, user-rights/GDPR, liability/warranty, governing-law/jurisdiction, termination, refund/return, acceptable-use, contact/DPO. The summary rolls up clause_count, a by_type histogram, a detected_policy_kind guess (privacy-policy / terms-of-service / cookie-policy / eula / refund-policy / acceptable-use-policy via phrase tally, else unknown), has_gdpr_signals, has_contact, and an uncategorized_rate. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers analysing the same policy URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode extracts pasted raw HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_clauses_segmented) instead of failing the response. 30+ unit tests cover each of the eleven policy-type classifications, heading-based segmentation, preamble capture, section boundaries, multi-type clauses, uncategorized clauses, GDPR/user-rights and contact/DPO signal detection, policy-kind detection, the summary roll-up + histogram + uncategorized_rate, script/style not leaking into clause text, snippet truncation, article-root preference, parse-input aliases (url/target/q), missing-param 400, SSRF rejection (input + handler), and text= raw-HTML mode. /selftest exercises the pure-logic pipeline (segmentation, classification, signal + kind detection, script/style stripping, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. CEILING (honest TRL-4, not higher): static-DOM only — JS-rendered/accordion-collapsed policy pages are invisible to the tokenizer; classification is a heuristic lexicon, not semantic legal understanding, so it cannot disambiguate context, negation (e.g. 'we do NOT sell your data' still hits data-sharing), or paraphrase outside the curated phrases; English-centric — non-English policies will largely fall through to uncategorized; segmentation assumes heading-structured markup, so wall-of-text policies with no h-tags collapse into a single preamble clause.",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-06T06:56:15.865425335Z"
   },
   "polyglot-nlp-toolkit": {
     "trl": 5,
