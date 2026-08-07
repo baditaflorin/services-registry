@@ -10868,7 +10868,7 @@
     "name": "Information Leakage",
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "category": "security",
-    "mesh": "0exec",
+    "mesh": "0crawl",
     "kind": "container",
     "language": "go",
     "runtime": "coolify",
@@ -10876,8 +10876,8 @@
       "go",
       "infoleak"
     ],
-    "url": "https://information-leakage.0exec.com",
-    "health_url": "https://information-leakage.0exec.com/health",
+    "url": "https://information-leakage.0crawl.com",
+    "health_url": "https://information-leakage.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_information_leakage",
     "example_path": "/?url=https://example.com",
     "auth": {
