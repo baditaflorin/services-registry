@@ -3953,11 +3953,11 @@
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
     "example_path": "/encode?algo=base64&input=hello",
     "host_port": 18118,
-    "trl": 8,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-session-2026-08-08",
     "trl_ceiling": 9,
-    "trl_evidence": "Pure-stdlib codec table; full roundtrip tests; JWT decoder flags dangerous algs.",
+    "trl_evidence": "Audited 2026-08-08 (real code read + adversarial stress-testing, not a rubber stamp): pure-stdlib codec table (11 formats: base64 std/url/raw/auto, base32, hex, url, url-path, html-encode-only, gzip, zlib, json-string) plus a JWT segment decoder that flags alg=none and path-traversable kid headers. No outbound HTTP calls, so the fleet safehttp/SSRF bug class does not apply here. Found and fixed a real bug: a 2-segment JWT whose header or payload segment is the empty string (e.g. \"eyJhbGciOiJIUzI1NiJ9.\") base64url-decoded to zero bytes and passed validation; json.Marshal of the response then failed, and because handler.go's writeJSON discards the encode error, the API silently returned HTTP 200 with Content-Type: application/json and an empty/truncated body instead of a clear error -- exactly the kind of hostile-input case a pentest tool must handle. Fixed in v0.1.7 (jwt.go: decodeJWTSegment now rejects segments that don't decode to valid JSON) with 2 new regression tests plus a marshal-roundtrip fuzz-style test; full suite (6 tests) passes. PR open, unmerged: https://github.com/baditaflorin/go-pentest-codec/pull/10. Prior evidence (\"full roundtrip tests\") only covered the happy path for all 10 decode-capable formats plus 2 JWT cases -- no error-path, malformed-input, or fuzz coverage existed before this audit. That gap is real: this is a working, RFC-reasonable implementation with genuine test coverage, but the first adversarial pass turned up a live production bug, so \"battle-tested / SLA-grade\" (TRL 8-9) was premature. Downgrading to TRL 7 (real: correct parsing + genuine but not yet exhaustive test coverage) until a further adversarial/fuzz pass turns up nothing new.",
     "coolify_app_uuid": "gcvcza9jqe4d7zdhrrc42dd2"
   },
   "pentest-continuous-monitor": {
