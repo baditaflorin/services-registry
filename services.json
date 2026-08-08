@@ -11532,6 +11532,7 @@
   {
     "id": "pentest-attack-chainer",
     "name": "Pentest Attack Chainer",
+    "access_tier": "vetted-pentest",
     "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
     "category": "uncategorized",
     "mesh": "0exec",
