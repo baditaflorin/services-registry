@@ -2896,6 +2896,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "go-session-fixation": {
+    "access_tier": "vetted-pentest",
     "container_port": 8316,
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
     "example_path": "/go_session_fixation?target=https://github.com",
@@ -3192,6 +3193,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "jsbundle-routes": {
+    "access_tier": "vetted-pentest",
     "container_port": 8312,
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
     "example_path": "/go_jsbundle_route_extractor?target=https://stripe.com",
@@ -3205,6 +3207,7 @@
     "coolify_app_uuid": "hk5ym0t2p339163kwj6chjwf"
   },
   "jsbundle-secrets": {
+    "access_tier": "vetted-pentest",
     "container_port": 8311,
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
     "example_path": "/go_jsbundle_secrets?target=https://stripe.com",
@@ -3245,6 +3248,7 @@
     "version": "1.4.0"
   },
   "jwt-pentest": {
+    "access_tier": "vetted-pentest",
     "container_port": 8315,
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
     "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
@@ -3848,6 +3852,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-asset-scope-resolver": {
+    "access_tier": "vetted-pentest",
     "container_port": 18126,
     "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
     "example_path": "/",
@@ -3887,6 +3892,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-authz-matrix": {
+    "access_tier": "vetted-pentest",
     "container_port": 18152,
     "host_port": 18152,
     "trl": 7,
@@ -3898,6 +3904,7 @@
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
+    "access_tier": "vetted-pentest",
     "container_port": 18179,
     "description": "Bounty-hunt orchestrator: POST /hunt drives waf-detect → cookie-pwn → js-bundle-scanner → wayback-urls → reflection-hunter against given targets, returns consolidated triage JSON.",
     "example_path": "/?api_key=default_token",
@@ -3923,6 +3930,7 @@
     "coolify_app_uuid": "w101yz0tp2q2k7noi1127wz5"
   },
   "pentest-cert-transparency": {
+    "access_tier": "vetted-pentest",
     "container_port": 18109,
     "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records (issuer/dates/SANs).",
     "example_path": "/cache/stats",
@@ -3962,6 +3970,7 @@
     "coolify_app_uuid": "gcvcza9jqe4d7zdhrrc42dd2"
   },
   "pentest-continuous-monitor": {
+    "access_tier": "vetted-pentest",
     "container_port": 18134,
     "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription — money compounds with the asset universe, not manpower.",
     "example_path": "/stats",
@@ -3978,6 +3987,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-cookie-pwn": {
+    "access_tier": "vetted-pentest",
     "container_port": 18174,
     "description": "Parse Set-Cookie, classify cookies (session/Keycloak/F5/CSRF/tracker), flag missing flags, probe session-bearing endpoints, emit runnable PoC tar.gz.",
     "example_path": "/?url=https://example.com&test_session=1&api_key=default_token",
@@ -3990,6 +4000,7 @@
     "coolify_app_uuid": "w6w2145jjtk01ulaplf0f1c0"
   },
   "pentest-cors-misconfig-prober": {
+    "access_tier": "vetted-pentest",
     "container_port": 18124,
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
@@ -4054,6 +4065,7 @@
     "coolify_app_uuid": "f8wp3sz3hf71oup0b6wpnv5h"
   },
   "pentest-disclosure-policy-finder": {
+    "access_tier": "vetted-pentest",
     "container_port": 18111,
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
     "example_path": "/check?target=hackerone.com",
@@ -4067,6 +4079,7 @@
     "coolify_app_uuid": "d1vb8tk7rlf5zyayg0e0xomd"
   },
   "pentest-exploit-verifier": {
+    "access_tier": "vetted-pentest",
     "container_port": 18137,
     "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
     "example_path": "/capabilities",
@@ -4081,6 +4094,7 @@
     "coolify_app_uuid": "x14nsu29g3jrr1biwgifwugm"
   },
   "pentest-favicon-hash": {
+    "access_tier": "vetted-pentest",
     "container_port": 18117,
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
     "example_path": "/lookup?hash=-1996286744",
@@ -4121,6 +4135,7 @@
     "coolify_app_uuid": "vbeehwr7p783yg53y5fxhn4c"
   },
   "pentest-github-dorks": {
+    "access_tier": "vetted-pentest",
     "container_port": 18123,
     "description": "GitHub Search API dorking for leaked credentials: 31 curated patterns (AWS keys, .env, private keys, Slack/Stripe/PAT tokens, kubeconfig, npm/Docker creds). Rate-limit aware; pairs with go-pentest-trufflehog for verification.",
     "example_path": "/dorks",
@@ -4135,6 +4150,7 @@
     "coolify_app_uuid": "mmjzm5ovulcr2x9sbpyii597"
   },
   "pentest-http-replay": {
+    "access_tier": "vetted-pentest",
     "container_port": 18130,
     "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
     "example_path": "/stats",
@@ -4150,6 +4166,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-httpx": {
+    "access_tier": "vetted-pentest",
     "container_port": 18113,
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
@@ -4179,6 +4196,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-js-bundle-scanner": {
+    "access_tier": "vetted-pentest",
     "container_port": 18178,
     "description": "Fetch URL, recurse script src tags, scan 21 secret-pattern classes (AWS/Stripe/GitHub/Google/Anthropic/RSA-PEM/etc.), extract endpoints, classify sourcemaps as first vs third party (eTLD+1).",
     "example_path": "/?target=https://example.com&api_key=default_token",
@@ -4220,6 +4238,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-nuclei": {
+    "access_tier": "vetted-pentest",
     "container_port": 18115,
     "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
     "example_path": "/templates",
@@ -4248,6 +4267,7 @@
     "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo"
   },
   "pentest-orchestrator": {
+    "access_tier": "vetted-pentest",
     "container_port": 18138,
     "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope→recon→scan→triage→verify→submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default — the unattended money loop.",
     "example_path": "/stats",
@@ -4309,6 +4329,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-reflection-hunter": {
+    "access_tier": "vetted-pentest",
     "container_port": 18175,
     "description": "Brute-fuzz ~40 standard params, classify reflection context (js-string/html-attr/json/url), escalate with composite breakout payloads. Filters WAF-challenge interstitials before classification.",
     "example_path": "/?url=https://example.com&params=q,promo&escalate=1&api_key=default_token",
@@ -4348,6 +4369,7 @@
     "coolify_app_uuid": "y14dh7j5fizv7tbo3z1dnx51"
   },
   "pentest-screenshot": {
+    "access_tier": "vetted-pentest",
     "container_port": 18129,
     "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} → PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
     "example_path": "/shot?url=https://example.com",
@@ -4361,6 +4383,7 @@
     "coolify_app_uuid": "lsnzmw5sxciksu5lvfomrhsv"
   },
   "pentest-secrets-scanner": {
+    "access_tier": "vetted-pentest",
     "container_port": 18122,
     "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
     "example_path": "/rules",
@@ -4383,6 +4406,7 @@
     "coolify_app_uuid": "b83h92cux80bgsbpf8rb09nz"
   },
   "pentest-ssrf-prober": {
+    "access_tier": "vetted-pentest",
     "container_port": 18150,
     "host_port": 18150,
     "trl": 7,
@@ -4392,6 +4416,7 @@
     "coolify_app_uuid": "q2ovt9m5sn859aqsgeji5kf5"
   },
   "pentest-subfinder": {
+    "access_tier": "vetted-pentest",
     "container_port": 18112,
     "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
     "example_path": "/sources",
@@ -4419,6 +4444,7 @@
     "coolify_app_uuid": "r6y6un7n6emjwaa5dfywcsgc"
   },
   "pentest-takeover-checker": {
+    "access_tier": "vetted-pentest",
     "container_port": 18121,
     "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
     "example_path": "/check?host=example.com",
@@ -4473,6 +4499,7 @@
     "coolify_app_uuid": "ar8u5rv0dp3cfpucrzyvezul"
   },
   "pentest-trufflehog": {
+    "access_tier": "vetted-pentest",
     "container_port": 18120,
     "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). 700+ detectors live-tested against providers. Upgrades go-pentest-secrets-scanner with verification.",
     "example_path": "/",
@@ -4487,6 +4514,7 @@
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
+    "access_tier": "vetted-pentest",
     "container_port": 18295,
     "description": "Fingerprint WAF/CDN challenge interstitials (14 vendors, 18 signatures). Used by reflection-hunter and bounty pipeline to drop interstitial false positives.",
     "example_path": "/?url=https://example.com&api_key=default_token",
@@ -4499,6 +4527,7 @@
     "coolify_app_uuid": "ptteeog28oq6dcjni50vztgb"
   },
   "pentest-walkthrough": {
+    "access_tier": "vetted-pentest",
     "container_port": 18139,
     "description": "HTTP equivalent of go-pentest-cli — single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
     "example_path": "/preflight",
@@ -4515,6 +4544,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-wayback-urls": {
+    "access_tier": "vetted-pentest",
     "container_port": 18127,
     "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
     "example_path": "/urls?domain=example.com&limit=5",
@@ -4606,6 +4636,7 @@
     "trl_evidence": "NLP toolkit, multi-language support"
   },
   "postmessage": {
+    "access_tier": "vetted-pentest",
     "container_port": 8313,
     "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
     "host_port": 18027,
@@ -4687,6 +4718,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "proto-pollution": {
+    "access_tier": "vetted-pentest",
     "container_port": 8314,
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
     "example_path": "/go_prototype_pollution_static?target=https://example.com",
