@@ -3861,6 +3861,7 @@
     "coolify_app_uuid": "w11jlc1cbxyokw87klmh388p"
   },
   "pentest-attack-chainer": {
+    "access_tier": "vetted-pentest",
     "container_port": 18149,
     "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
     "example_path": "/health",
