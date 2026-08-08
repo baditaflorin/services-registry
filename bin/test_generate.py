@@ -307,6 +307,44 @@ class TestPublicMirror(unittest.TestCase):
         for k in ("aliases", "alias_urls", "rename_status", "rename_retire_at"):
             self.assertIn(k, pub)
 
+    def test_access_tier_is_public(self):
+        """access_tier tells a prospective caller which trust tier a gated
+        tool needs — withholding it wouldn't protect anything the
+        keystore doesn't already gate, so unlike scope/proxy_egress/etc.
+        it's allowlisted, not stripped."""
+        entry = dict(self.FULL_ENTRY, access_tier="vetted-pentest")
+        pub = generate.to_public_entry(entry)
+        self.assertEqual(pub.get("access_tier"), "vetted-pentest")
+
+
+class TestMCPProjection(unittest.TestCase):
+    """services.mcp.json — what go-fleet-mcp-gateway and the site read to
+    decide what's aggregated and what tier it requires."""
+
+    def test_access_tier_included_when_present(self):
+        project = generate.PROJECTIONS["services.mcp.json"]
+        entry = {"id": "pentest-nuclei", "name": "Nuclei", "url": "https://x",
+                  "mcp_ready": True, "access_tier": "vetted-pentest"}
+        self.assertEqual(project(entry).get("access_tier"), "vetted-pentest")
+
+    def test_access_tier_absent_when_unset(self):
+        """Most services have no access_tier override at all — _pick's
+        'omit, don't null' semantics mean the key simply shouldn't appear,
+        not appear as access_tier: null."""
+        project = generate.PROJECTIONS["services.mcp.json"]
+        entry = {"id": "open-tool", "name": "Open Tool", "url": "https://x",
+                  "mcp_ready": True}
+        self.assertNotIn("access_tier", project(entry))
+
+    def test_non_mcp_ready_entry_still_filtered_out(self):
+        """Adding access_tier to the projected keys must not loosen the
+        existing mcp_ready predicate — a tiered-but-not-ready service is
+        still excluded entirely, not included in some half-ready state."""
+        project = generate.PROJECTIONS["services.mcp.json"]
+        entry = {"id": "not-ready", "name": "Not Ready", "url": "https://x",
+                  "access_tier": "vetted-pentest"}
+        self.assertIsNone(project(entry))
+
 
 if __name__ == "__main__":
     unittest.main()

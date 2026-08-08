@@ -93,6 +93,12 @@ PUBLIC_FIELDS: frozenset[str] = frozenset({
     # redirect targets, so exposing the alias map is informational not
     # disclosure. Lets external bookmark-followers resolve old slugs.
     "aliases", "alias_urls", "rename_status", "rename_retire_at",
+    # access_tier — the opposite of a disclosure risk: this is the field
+    # that tells a prospective caller (human or agent) which tier they'd
+    # need before a gated tool call will succeed. Withholding it wouldn't
+    # protect anything the mcp_ready/keystore gates don't already protect
+    # — it would just make the catalog lie about what's actually required.
+    "access_tier",
 })
 
 # auth sub-fields kept in the public mirror. `public_demo_token` is
@@ -198,8 +204,11 @@ PROJECTIONS = {
     # predicate (not _pick's generic "has any of these fields"
     # heuristic) because `url` is on nearly every entry regardless of
     # mcp_ready — _pick alone wouldn't filter anything out.
+    # access_tier rides along so the gateway can enforce per-service
+    # trust tiers without a second registry fetch.
     "services.mcp.json":     _pick_where(
-        ["id", "name", "url", "mcp_ready", "mcp_tool_count", "mcp_assessed_at"],
+        ["id", "name", "url", "mcp_ready", "mcp_tool_count", "mcp_assessed_at",
+         "access_tier"],
         lambda e: e.get("mcp_ready") is True,
     ),
 }
