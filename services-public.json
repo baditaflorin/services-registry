@@ -309,8 +309,8 @@
       "recon"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-06-08",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-sonnet-5-2026-08-08-fleet-safehttp-audit",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://asn-lookup.0crawl.com"
@@ -1234,8 +1234,8 @@
       "go"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-sonnet-5-2026-08-08-fleet-safehttp-audit",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://dependency-counter.0crawl.com"
@@ -1408,8 +1408,8 @@
       "runtime-compose"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-14",
-    "trl_assessor": "codex-trl-audit-2026-07-14",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Consent-gated tags, WAF pages, and analytics loaded only after interaction remain outside a single homepage snapshot.",
     "url": "https://domain-analytics-stack.0crawl.com"
@@ -1433,9 +1433,10 @@
     "repo_url": "https://github.com/baditaflorin/go_domain_anycast_footprint",
     "runtime": "compose",
     "tags": [],
-    "trl": 4,
-    "trl_assessed_at": "2026-05-21",
-    "trl_assessor": "claude-opus-4-7",
+    "trl": 5,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 6,
     "url": "https://domain-anycast-footprint.0crawl.com"
   },
   {
@@ -1605,8 +1606,8 @@
       "runtime-compose"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Plugin/theme-level depth needs a Wappalyzer-grade signature database; bot-protected and fingerprint-less sites remain outside reliable CPU-only detection.",
     "url": "https://domain-cms-version.0crawl.com"
@@ -1660,9 +1661,10 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 7,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "trl": 6,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "url": "https://domain-deployment-fingerprint.0crawl.com"
   },
   {
@@ -1688,9 +1690,9 @@
       "recon"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": null,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "url": "https://domain-details.0crawl.com"
   },
@@ -1747,9 +1749,9 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "First-party bundled SDKs with no static or response-header fingerprint require reliable post-hydration browser execution.",
     "url": "https://domain-error-monitoring.0crawl.com"
@@ -1808,8 +1810,8 @@
       "runtime-compose"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Server-side experimentation can emit no client-observable fingerprint; measured JS rendering recovered almost no additional vendor signal and remains a flaky upstream.",
     "url": "https://domain-experimentation-stack.0crawl.com"
@@ -2014,9 +2016,9 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Hard bot protection, catalogs hosted on separate ecosystem domains, and authoritative ground-truth counts require platform APIs or different egress.",
     "url": "https://domain-integration-marketplace.0crawl.com"
@@ -2069,9 +2071,10 @@
     "repo_url": "https://github.com/baditaflorin/go_domain_liveness_state",
     "runtime": "compose",
     "tags": [],
-    "trl": 4,
-    "trl_assessed_at": "2026-05-21",
-    "trl_assessor": "claude-opus-4-7",
+    "trl": 5,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "url": "https://domain-liveness-state.0crawl.com"
   },
   {
@@ -2098,9 +2101,9 @@
       "runtime-compose"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
-    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "Cold heavy-SPA rendering can exceed the enrichment budget and bot/consent gates hide some client-injected tools.",
     "url": "https://domain-martech-stack.0crawl.com"
   },
@@ -2336,8 +2339,9 @@
       "runtime-compose"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 7,
     "url": "https://domain-wikidata-entity.0crawl.com"
   },
   {
@@ -2594,9 +2598,9 @@
       "kind-container"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-29",
-    "trl_assessor": "claude-trl-uplift-2026-07-29",
-    "trl_ceiling": 8,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": null,
     "trl_ceiling_reason": "TRL 8 requires real-time funding data integration, but funding_signal's only available source (Crunchbase is unprovisioned fleet-wide -- 299/299 real captures confirm degraded:[crunchbase_unavailable]) is a news/press keyword matcher that was wrong in 10/10 manually-audited non-zero hits; wiring it in would trade the TRL for a new false-positive class. Structured output validation is now wired in (go-common/validate, response-boundary backstop) -- that half of the original ceiling reason is closed.",
     "url": "https://firmographic-profile.0crawl.com"
   },
@@ -2748,8 +2752,8 @@
       "infrastructure"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "codex-session-2026-05-14",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-sonnet-5-2026-08-08-fetch-cache-audit",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Runtime auth-flow verification needs client credentials or interactive login state.",
     "url": "https://go-oauth-mapper.0crawl.com"
@@ -4007,8 +4011,8 @@
       "recon"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-sonnet-5-2026-08-08-fetch-cache-audit",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://phone-extractor.0crawl.com"
@@ -4853,9 +4857,9 @@
       "go"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "8-9 needs a real browser engine for post-JS-render header capture plus a persistent cross-check/SLA tier; structurally above a CPU-only RFC header-parser",
     "url": "https://security-headers.0crawl.com"
   },
@@ -5229,8 +5233,8 @@
       "recon"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-13",
-    "trl_assessor": "claude-session-2026-05-13",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-session-2026-08-08",
     "trl_ceiling": 8,
     "trl_ceiling_reason": null,
     "url": "https://sourcemap-finder.0crawl.com"
@@ -5579,8 +5583,8 @@
       "go"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Static (no-JS) HTTP+markup fingerprinting. Detecting JS-injected platforms (client-rendered SPAs that only emit their analytics/CMS markers after hydration) requires a real browser engine (chromedp/playwright), which is out of scope for a CPU-only single-fetch service. TRL 8-9 would need a headless-render feed.",
     "url": "https://technology-stack.0crawl.com"
@@ -5725,8 +5729,8 @@
       "recon"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-sonnet-5-2026-08-08-fetch-cache-audit",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
     "url": "https://typosquat-finder.0crawl.com"
@@ -5753,11 +5757,11 @@
       "domains",
       "go"
     ],
-    "trl": 7,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
+    "trl": 6,
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-trl-audit-2026-08-08-ugc-detector",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Reaches TRL 7 with schema.org Review parsing + moderation-system fingerprints.",
+    "trl_ceiling_reason": "Architecture (schema.org Review/QAPage parsing + moderation-system fingerprints, no headless-browser/JS execution) can reach TRL 7 once the reddit-signature false positive is fixed and re-validated against a broader live-page sample. trl lowered 7->6 on 2026-08-08: the prior TRL 7 self-report cited only synthetic table-driven tests with no live-sample validation, and a first real-world sample run immediately surfaced a reproducible false positive on an ordinary non-UGC page (see trl_evidence) -- the demonstrated-in-operational-environment bar for TRL 7 was not actually met. Recommend re-promoting to 7 only after the reddit substring-match signature is scoped to actual embed markers (e.g. embed.redditmedia.com, not bare reddit.com/r/ links) and re-tested live.",
     "url": "https://ugc-detector.0crawl.com"
   },
   {
@@ -6549,9 +6553,9 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-07",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": null,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": null,
     "url": "https://domain-ai-bot-policy-scanner.0exec.com"
   },
@@ -6578,8 +6582,8 @@
       "go-domain"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaching 7 needs cross-checks against an external trust-registry / attestation feed (e.g. confirming a claimed SOC 2 against an auditor registry) \u2014 that requires a paid/external source, outside the CPU-only no-new-outbound-calls constraint.",
     "url": "https://domain-compliance-claim-scanner.0exec.com"
@@ -6606,9 +6610,9 @@
       "domainscope",
       "go-domain"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single free heavily rate-limited crt.sh upstream (429/502/504), no second CT source or paid feed, no persistence/cross-check",
     "url": "https://domain-ct-log-watcher.0exec.com"
@@ -6636,9 +6640,9 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Single public validating resolver. Lifting to 8 needs multi-resolver quorum (a second independent validating resolver) and a full root-anchored walk (.->TLD->zone verifying RRSIGs at every cut). That is breadth, not the core crypto check, which is already real.",
     "url": "https://domain-dnssec-validator.0exec.com"
   },
@@ -6665,8 +6669,9 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": null,
     "url": "https://domain-documentation-platform-detector.0exec.com"
   },
   {
@@ -6692,9 +6697,9 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "No live SMTP-delivery / inbox-placement / sending-reputation feed; DKIM selector discovery is gazetteer-bounded, not exhaustive \u2014 the production-grade deliverability signals require paid feeds.",
     "url": "https://domain-email-deliverability-score.0exec.com"
   },
@@ -6721,9 +6726,9 @@
       "go-domain"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": "Single CPU-only probe; true TRL 8 needs independent QUIC cross-checks / IP-path diversity / persistence, out of scope for one detector.",
     "url": "https://domain-http3-quic-detector.0exec.com"
   },
@@ -6750,9 +6755,9 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaching TRL 8 needs a paid/queryable cross-store feed (or JS-rendered fetch tier) to confirm an app truly exists in each regional store rather than parsing the advertised link; outside the CPU-only / no-paid-feed / no-new-outbound-call envelope.",
     "url": "https://domain-mobile-app-resolver.0exec.com"
   },
@@ -6779,8 +6784,8 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "The shared JS-render upstream can degrade on cold or failed renders, limiting SLA-grade completeness.",
     "url": "https://domain-newsletter-platform-detector.0exec.com"
@@ -6835,9 +6840,9 @@
       "domainscope",
       "go-domain"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Comprehensive multi-year passive-DNS history requires a paid feed (Farsight DNSDB / SecurityTrails); the free public sources are sparse + rate-limited (HackerTarget hostsearch/dnslookup) and the formerly-primary Mnemonic public read API is decommissioned (CloudFront 502). Cannot break the ceiling CPU-only without a new paid outbound source, which the rules forbid.",
     "url": "https://domain-passive-dns-history.0exec.com"
@@ -6865,9 +6870,9 @@
       "go-domain"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 6,
     "trl_ceiling_reason": "DNSBL verdicts are bounded by free public blocklist coverage and the shared resolver vantage point; SLA-grade reputation (TRL 8-9) needs paid/commercial threat feeds, multiple resolver vantage points, and historical listing persistence that this CPU-only DNS-query service cannot provide.",
     "url": "https://domain-rbl-reputation.0exec.com"
   },
@@ -6894,9 +6899,9 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-07",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Fingerprint-only (DNS+HTTP-header) detection; an origin behind a generic CDN/anycast front (Cloudflare, AWS Global Accelerator) is structurally undeterminable without a browser engine or paid host-intel feed.",
     "url": "https://domain-saas-host-mapper.0exec.com"
   },
@@ -6923,8 +6928,8 @@
       "go-domain"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Structured data injected only after client-side JS rendering needs a headless DOM fetcher (same ceiling as sibling schema-extractor); offline parse path is identical to the live one.",
     "url": "https://domain-structured-data-rollup.0exec.com"
@@ -6952,8 +6957,9 @@
       "go-domain"
     ],
     "trl": 8,
-    "trl_assessed_at": "2026-07-01",
-    "trl_assessor": "codex-trl-audit-2026-07-01-batch2",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 9,
     "url": "https://domain-support-stack-detector.0exec.com"
   },
   {
@@ -6978,10 +6984,10 @@
       "domainscope",
       "go-domain"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
-    "trl_ceiling": 7,
+    "trl": 7,
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Authoritative, continuously-fresh EOL dating needs a live lifecycle/CVE feed (endoflife.date); a CPU-only offline gazetteer is correct-at-curation-date but cannot guarantee freshness for TRL 7+.",
     "url": "https://domain-tech-eol-flagger.0exec.com"
   },
@@ -7008,8 +7014,8 @@
       "go-domain"
     ],
     "trl": 6,
-    "trl_assessed_at": "2026-05-31",
-    "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
+    "trl_assessed_at": "2026-08-07",
+    "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Static HTML parse only sees markup-declared resources; capturing runtime XHR/fetch()/dynamically-injected third parties (TRL 8+) needs a real headless browser, which is structurally out of scope for a CPU-only Go service.",
     "url": "https://domain-third-party-fetch-map.0exec.com"
@@ -8742,11 +8748,11 @@
     "category": "security",
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "example_path": "/?url=https://example.com",
-    "health_url": "https://information-leakage.0exec.com/health",
+    "health_url": "https://information-leakage.0crawl.com/health",
     "id": "information-leakage",
     "kind": "container",
     "language": "go",
-    "mesh": "0exec",
+    "mesh": "0crawl",
     "name": "Information Leakage",
     "rename_retire_at": "2026-06-18",
     "rename_status": "redirect",
@@ -8761,7 +8767,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
-    "url": "https://information-leakage.0exec.com"
+    "url": "https://information-leakage.0crawl.com"
   },
   {
     "alias_urls": [
@@ -9540,9 +9546,9 @@
     "tags": [
       "go-pentest"
     ],
-    "trl": 8,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-session-2026-08-08",
     "trl_ceiling": 9,
     "url": "https://pentest-codec.0exec.com"
   },
