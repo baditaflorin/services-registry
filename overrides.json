@@ -4006,11 +4006,11 @@
     "example_path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
     "host_port": 18107,
     "trl": 8,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl_assessed_at": "2026-08-08",
+    "trl_assessor": "claude-session-2026-08-08",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "CVSS 4.0 support pushes to 9.",
-    "trl_evidence": "Pure-Go CVSS 3.1; tested vs 6 canonical FIRST.org examples incl. 0.0/10.0 boundaries and scope-changed XSS. Stateless; CPU-only.",
+    "trl_evidence": "TRL-8 re-audit 2026-08-08: cvss31.go checked line-by-line vs FIRST.org 3.1 spec (weights, ISS, roundup) -- no deviation. 6 canonical FIRST.org cases plus 5 real NVD-published CVE vectors (Log4Shell CVE-2021-44228=10.0, BlueKeep CVE-2019-0708=9.8, Zerologon CVE-2020-1472=10.0, Heartbleed CVE-2014-0160=7.5, Spring4Shell CVE-2022-22965=9.8) all match NVD exactly; no scoring bugs found. No outbound HTTP calls, so safehttp fetch-cache/HTTP2 bug class is N/A. go vet/build/test -race clean. Gap: handler.go (HTTP glue) has 0% direct coverage, only the scoring engine is tested (58% overall). NVD-vector regression tests added: github.com/baditaflorin/go-pentest-cvss PR #8 (unmerged, no functional change).",
     "coolify_app_uuid": "y970m89nf0q6mrz1r1f0ee16"
   },
   "pentest-dashboard": {
