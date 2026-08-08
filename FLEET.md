@@ -216,6 +216,31 @@ require `X-Admin-Token: <token>`. Token is `ADMIN_TOKEN` env var on
 the keystore container; clients read it from `APIKEY_SERVICE_ADMIN_TOKEN`.
 **Token storage + rotation playbook**: private `fleet-state/OPS.md`.
 
+### `access_tier` — per-service caller trust tier (override-only field)
+
+`mcp_ready` is a fleet-wide on/off switch (is this service exposed via
+MCP at all?). `access_tier` is the orthogonal, newer axis: **which
+caller trust tier does this service require**, e.g. `"open"`, `"free"`,
+or `"vetted-pentest"`. Like `scope`, this is an override-only field —
+it's never computed by `generate.py` and doesn't appear in
+`schema/v1.json`'s declared properties; it's set per-slug in
+`overrides.json` (or via a `$rules` bulk match) and rides through
+`resolved_overrides_for()`'s shallow merge same as any other override.
+
+Absence means "no tier required beyond whatever the key's own scope/
+auth already gates" — don't default it to `"open"` on write; leave it
+unset unless a service genuinely needs a stricter tier than the
+default. It's included in `services.mcp.json` (so `go-fleet-mcp-gateway`
+can enforce it without a second registry fetch) and in the public
+mirror's `PUBLIC_FIELDS` (so the catalog can honestly tell a visitor
+which tier a gated tool needs — withholding it wouldn't protect
+anything the keystore doesn't already gate).
+
+The caller's side of this — which tier a given API key was actually
+granted — lives in `go-apikey-service` (`tier` column, `X-Auth-Tier` on
+`/verify`), not here. This repo only ever states the *requirement*, never
+a caller's *grant*.
+
 ## Fleet-wide changes — modify 130 repos at once
 
 The fleet has ~160 container repos (Go-heavy) plus 63 static Pages.
