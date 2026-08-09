@@ -366,18 +366,19 @@
     "coolify_app_uuid": "jpahbgqwgmshagf91j3h4ggn"
   },
   "agent-approval": {
-    "host_port": 18310,
-    "container_port": 18310,
-    "category": "infrastructure",
-    "example_path": "/pending",
-    "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
-    }
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "category": "infrastructure",
+    "container_port": 18310,
+    "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
+    "example_path": "/pending",
+    "host_port": 18310,
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "agent-mailbox": {
     "host_port": 18304,
@@ -2130,20 +2131,21 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-dns-sync": {
+    "access_tier": "infra-privileged",
     "container_port": 18141,
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) — the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "example_path": "/stats",
     "host_port": 18141,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
     "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
-    "version": "0.2.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.0"
   },
   "fleet-engagement-timeline": {
     "container_port": 18162,
@@ -2177,21 +2179,22 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-exec": {
-    "host_port": 18309,
-    "container_port": 18309,
-    "category": "infrastructure",
-    "example_path": "/langs",
-    "description": "Ephemeral, bounded code/command execution for fleet agents. POST /run {lang, code} executes in an isolated temp dir with a hard timeout, process-group SIGKILL, output caps, and minimal child env. Keystore-gated; NOT internet-exposed. v0.1 TRL 4.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
+      "query_param": "api_key",
+      "type": "api_key"
     },
+    "category": "infrastructure",
+    "container_port": 18309,
+    "description": "Ephemeral, bounded code/command execution for fleet agents. POST /run {lang, code} executes in an isolated temp dir with a hard timeout, process-group SIGKILL, output caps, and minimal child env. Keystore-gated; NOT internet-exposed. v0.1 TRL 4.",
+    "example_path": "/langs",
+    "host_port": 18309,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "fleet-fake": {
     "auth": {
@@ -2297,21 +2300,22 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-lock": {
-    "host_port": 18303,
-    "container_port": 18303,
-    "category": "infrastructure",
-    "example_path": "/locks",
-    "description": "Distributed advisory locks, leases, and leader-election over HTTP. Every fresh acquire returns a monotonic fencing token; re-acquire by the same owner refreshes the lease in place (leader renewal). In-RAM, ephemeral by design — a restart releases every lock.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
+      "query_param": "api_key",
+      "type": "api_key"
     },
+    "category": "infrastructure",
+    "container_port": 18303,
+    "description": "Distributed advisory locks, leases, and leader-election over HTTP. Every fresh acquire returns a monotonic fencing token; re-acquire by the same owner refreshes the lease in place (leader renewal). In-RAM, ephemeral by design — a restart releases every lock.",
+    "example_path": "/locks",
+    "host_port": 18303,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "fleet-mcp-gateway": {
     "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
@@ -2632,20 +2636,21 @@
     "version": "0.1.0"
   },
   "fleet-secrets": {
+    "access_tier": "infra-privileged",
     "container_port": 18140,
     "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
     "example_path": "/",
     "host_port": 18140,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "audit_log with prefix-only redaction (no full tokens), consumer ACL test, rotate-returns-old-once, concurrent rotate (1 winner asserted), /selftest",
-    "version": "0.2.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.0"
   },
   "fleet-selftest-aggregator": {
     "container_port": 18165,
