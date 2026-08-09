@@ -3416,6 +3416,9 @@
     "trl_evidence": "Real fixture-based unit tests (handler_test.go, ≥4 cases covering\npassword-only, oauth-only, captcha, MFA). Structured detection signals\n(auth_method classifier, MFA flag set, session-cookie classifier with\ncurated well-known list) and an interpretable confidence score in [0,1].\nDetection rationale and consumer hookup documented in\ndocs/adr/0001-trl-uplift-to-6.md.",
     "version": "1.4.0"
   },
+  "mcp-site-service-registry-pr-live-test3": {
+    "access_tier": "delete-me-test"
+  },
   "menu-extractor": {
     "container_port": 18266,
     "description": "Extracts the navigation menu structure of a web page or raw HTML: nav / role=navigation / aria-labelled regions plus header and footer link lists, each as a tree of menu items (label, href, nested submenu children) with region classification and a region/link/depth summary.",
