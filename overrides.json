@@ -382,32 +382,36 @@
     "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "agent-mailbox": {
-    "host_port": 18304,
-    "container_port": 18304,
-    "category": "infrastructure",
-    "example_path": "/",
-    "description": "Addressed request/reply bus for agents: POST /send to enqueue a message for a named agent, GET /inbox to drain it, POST /reply to send a correlated reply, GET /await to block until a reply arrives. Closes the A→B→A gap that fleet-notify (broadcast) and fleet-q (anonymous pull) leave open.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
-    }
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "category": "infrastructure",
+    "container_port": 18304,
+    "description": "Addressed request/reply bus for agents: POST /send to enqueue a message for a named agent, GET /inbox to drain it, POST /reply to send a correlated reply, GET /await to block until a reply arrives. Closes the A→B→A gap that fleet-notify (broadcast) and fleet-q (anonymous pull) leave open.",
+    "example_path": "/",
+    "host_port": 18304,
+    "scope": "internal-only",
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "agent-quorum": {
-    "host_port": 18306,
-    "container_port": 18306,
-    "category": "infrastructure",
-    "example_path": "/",
-    "description": "k-of-n answer aggregation and voting for redundant agents. Create a round, cast votes, GET /result for the aggregated decision (majority/weighted/unanimous). Productizes the adversarial-verify loop as a fleet primitive.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
-    }
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "category": "infrastructure",
+    "container_port": 18306,
+    "description": "k-of-n answer aggregation and voting for redundant agents. Create a round, cast votes, GET /result for the aggregated decision (majority/weighted/unanimous). Productizes the adversarial-verify loop as a fleet primitive.",
+    "example_path": "/",
+    "host_port": 18306,
+    "scope": "internal-only",
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "agent-tools": {
     "host_port": 18307,
@@ -2165,21 +2169,23 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-eventlog": {
-    "host_port": 18305,
-    "container_port": 18305,
-    "category": "infrastructure",
-    "example_path": "/topics",
-    "description": "Replayable per-topic event log with monotonic offsets. Publish events to named topics; consumers read from any offset and long-poll for new ones. v0.1 is in-RAM with per-topic retention cap; disk-backed durability is a planned follow-up.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
+      "query_param": "api_key",
+      "type": "api_key"
     },
+    "category": "infrastructure",
+    "container_port": 18305,
+    "description": "Replayable per-topic event log with monotonic offsets. Publish events to named topics; consumers read from any offset and long-poll for new ones. v0.1 is in-RAM with per-topic retention cap; disk-backed durability is a planned follow-up.",
+    "example_path": "/topics",
+    "host_port": 18305,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "scope": "internal-only",
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "fleet-exec": {
     "access_tier": "infra-privileged",
@@ -2236,6 +2242,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-graph": {
+    "access_tier": "infra-privileged",
     "container_port": 18143,
     "depends_on": [
       "go-apikey-service"
@@ -2243,6 +2250,7 @@
     "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
     "example_path": "/summary?since=1h",
     "host_port": 18143,
+    "scope": "internal-only",
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
@@ -2357,21 +2365,23 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-memory": {
-    "host_port": 18308,
-    "container_port": 18308,
-    "category": "infrastructure",
-    "example_path": "/recall?q=example",
-    "description": "Cross-session, cross-agent working memory with pure-CPU keyword recall. POST /remember to store a text doc with optional agent/key/tags; GET /recall?q= for TF-overlap ranked retrieval. Generalizes pentest-agent-state into a fleet-wide searchable store.",
-    "trl": 5,
-    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8",
+    "access_tier": "infra-privileged",
     "auth": {
-      "type": "api_key",
       "header": "X-API-Key",
-      "query_param": "api_key"
+      "query_param": "api_key",
+      "type": "api_key"
     },
+    "category": "infrastructure",
+    "container_port": 18308,
+    "description": "Cross-session, cross-agent working memory with pure-CPU keyword recall. POST /remember to store a text doc with optional agent/key/tags; GET /recall?q= for TF-overlap ranked retrieval. Generalizes pentest-agent-state into a fleet-wide searchable store.",
+    "example_path": "/recall?q=example",
+    "host_port": 18308,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "scope": "internal-only",
+    "trl": 5,
+    "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
   "fleet-notify": {
     "auth": {
@@ -2395,18 +2405,19 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-payload-corpus": {
+    "access_tier": "vetted-pentest",
     "container_port": 18156,
     "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
     "host_port": 18156,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 6,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 8,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). versioned attack-payload corpus (125 payloads, 12 classes). /selftest + INTEGRATIONS.md shipped. ADR-0006. See services-registry/docs/adr/0006-fleet-payload-corpus.md.",
-    "version": "0.1.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.1.0"
   },
   "fleet-persona": {
     "auth": {
@@ -3132,19 +3143,21 @@
     "coolify_app_uuid": "dgfll92zgusjswf1nzxpwbmk"
   },
   "infrastructure-fetch-cache": {
+    "access_tier": "infra-privileged",
     "container_port": 18205,
-    "cpus": 4.0,
+    "cpus": 4,
     "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
     "example_path": "/fetch?url=https://example.com/",
     "host_port": 18205,
-    "mem_limit": "1.5g",
-    "name": "Fleet Fetch Cache",
-    "trl": 4,
-    "trl_evidence": "v0.1 ships singleflight + 60s TTL + zstd-compressed Redis storage + SSRF-safe upstream via safehttp. Negative caching for 5xx (5s), no-cache for 4xx and truncated bodies. Redis-unavailable falls back to direct fetch. Lacks: conditional refresh (If-Modified-Since), per-caller metrics, response-shape contract test vs producers.",
-    "version": "0.1.1",
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mem_limit": "1.5g",
+    "name": "Fleet Fetch Cache",
+    "scope": "internal-only",
+    "trl": 4,
+    "trl_evidence": "v0.1 ships singleflight + 60s TTL + zstd-compressed Redis storage + SSRF-safe upstream via safehttp. Negative caching for 5xx (5s), no-cache for 4xx and truncated bodies. Redis-unavailable falls back to direct fetch. Lacks: conditional refresh (If-Modified-Since), per-caller metrics, response-shape contract test vs producers.",
+    "version": "0.1.1"
   },
   "ipv6-checker": {
     "container_port": 8244,
@@ -3831,36 +3844,38 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-agent-state": {
+    "access_tier": "vetted-pentest",
     "container_port": 18146,
     "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
     "example_path": "/stats",
     "host_port": 18146,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling lifts once orchestrator + payoff-tracker route through it end-to-end and the loop has survived a week of unattended operation.",
     "trl_evidence": "optimistic-lock state with version history, lease primitive with TestLease_Concurrent50Goroutines (BEGIN IMMEDIATE pattern), /selftest with 409 stale-write + lease exclusivity",
-    "version": "0.2.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.0"
   },
   "pentest-asset-inventory": {
+    "access_tier": "vetted-pentest",
     "container_port": 18131,
     "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
     "example_path": "/stats",
     "host_port": 18131,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite. Fine until ~1M assets per program; sharding by program or Postgres later.",
     "trl_evidence": "asset_history shadow table on tech/tags/status changes; /assets:bulk 5000-row tx benchmarked at 208ms (well under 500ms target); /assets/{id}/history; /selftest",
-    "version": "0.2.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.0"
   },
   "pentest-asset-scope-resolver": {
     "access_tier": "vetted-pentest",
@@ -3889,18 +3904,19 @@
     "trl_evidence": "4/4 unit tests passing (base-domain inference, severity matrix, PoC rendering with/without chain). Verified end-to-end against accommodations.booking.com: 30 siblings + 12 endpoint probes in 1.2s, correctly downgrades prober high -> informational."
   },
   "pentest-audit-log": {
+    "access_tier": "vetted-pentest",
     "container_port": 18119,
     "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
     "example_path": "/stats",
     "host_port": 18119,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 6,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 7,
-    "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design.",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design."
   },
   "pentest-authz-matrix": {
     "access_tier": "vetted-pentest",
@@ -4191,20 +4207,21 @@
     "coolify_app_uuid": "fb9gk4en12bhh1e7ya5aptkt"
   },
   "pentest-job-queue": {
+    "access_tier": "vetted-pentest",
     "container_port": 18133,
     "description": "Durable workflow queue. POST jobs, workers /claim → /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
     "example_path": "/stats",
     "host_port": 18133,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
     "trl_evidence": "idempotency_key column with partial UNIQUE index, /metrics short-circuit middleware, /selftest, TestEnqueue_IdempotencyKey_Concurrent (50-goroutine race)",
-    "version": "0.2.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.0"
   },
   "pentest-js-bundle-scanner": {
     "access_tier": "vetted-pentest",
@@ -4234,19 +4251,20 @@
     "coolify_app_uuid": "d13v7qexw5979ml26lyr901n"
   },
   "pentest-notify": {
+    "access_tier": "vetted-pentest",
     "container_port": 18108,
     "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
     "example_path": "/sinks",
     "host_port": 18108,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
-    "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks.",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks."
   },
   "pentest-nuclei": {
     "access_tier": "vetted-pentest",
@@ -4308,36 +4326,38 @@
     "coolify_app_uuid": "fkk45m0hk84dz0mves6mdsma"
   },
   "pentest-payoff-tracker": {
+    "access_tier": "vetted-pentest",
     "container_port": 18148,
     "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
     "example_path": "/stats",
     "host_port": 18148,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling lifts once at least ~20 real submissions have flowed through and /calibration is non-empty.",
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE ingest, amount_cents as INTEGER (no float for money), /stats with percentiles, /scoreboard ordered by payout, /selftest",
-    "version": "0.2.0",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.0"
   },
   "pentest-rate-coordinator": {
+    "access_tier": "vetted-pentest",
     "container_port": 18104,
     "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
     "example_path": "/stats",
     "host_port": 18104,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
     "trl": 7,
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-sonnet-4-6-session-2026-05-20-phase7b",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_evidence": "Prometheus /metrics (counter+histogram+gauges), /selftest spawns 100 concurrent acquirers, TestAcquire_Concurrent under -race; 0.2.1 fixes /metrics double-registration panic",
-    "version": "0.2.1",
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "version": "0.2.1"
   },
   "pentest-reflection-hunter": {
     "access_tier": "vetted-pentest",
