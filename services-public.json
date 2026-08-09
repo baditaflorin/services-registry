@@ -6257,6 +6257,7 @@
     "url": "https://agent-approval.0exec.com"
   },
   {
+    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -6282,6 +6283,7 @@
     "url": "https://agent-mailbox.0exec.com"
   },
   {
+    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7493,6 +7495,7 @@
     "url": "https://fleet-engagement-timeline.0exec.com"
   },
   {
+    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7630,6 +7633,7 @@
     "url": "https://fleet-grafana.0exec.com"
   },
   {
+    "access_tier": "infra-privileged",
     "alias_urls": [
       "go-fleet-graph.0exec.com"
     ],
@@ -7803,6 +7807,7 @@
     "url": "https://fleet-md.0exec.com"
   },
   {
+    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7854,6 +7859,7 @@
     "url": "https://fleet-notify.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-fleet-payload-corpus.0exec.com"
     ],
@@ -8781,6 +8787,7 @@
     "url": "https://information-leakage.0crawl.com"
   },
   {
+    "access_tier": "infra-privileged",
     "alias_urls": [
       "go-infrastructure-fetch-cache.0exec.com"
     ],
@@ -9209,6 +9216,7 @@
     "url": "https://ocr-pdf-express.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-agent-state.0exec.com"
     ],
@@ -9245,6 +9253,7 @@
     "url": "https://pentest-agent-state.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-asset-inventory.0exec.com"
     ],
@@ -9356,6 +9365,7 @@
     "url": "https://pentest-attack-chainer.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-audit-log.0exec.com"
     ],
@@ -10045,6 +10055,7 @@
     "url": "https://pentest-httpx.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-job-queue.0exec.com"
     ],
@@ -10117,6 +10128,7 @@
     "url": "https://pentest-leak-bounty-policy.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-notify.0exec.com"
     ],
@@ -10299,6 +10311,7 @@
     "url": "https://pentest-payloads.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-payoff-tracker.0exec.com"
     ],
@@ -10335,6 +10348,7 @@
     "url": "https://pentest-payoff-tracker.0exec.com"
   },
   {
+    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-rate-coordinator.0exec.com"
     ],
