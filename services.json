@@ -7793,7 +7793,8 @@
     "trl_ceiling": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "access_tier": "infra-privileged"
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "agent-mailbox",
@@ -7914,7 +7915,8 @@
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 18021,
-    "container_port": 8080
+    "container_port": 8080,
+    "scope": "internal-only"
   },
   {
     "id": "c-proxy",
@@ -9270,7 +9272,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "access_tier": "infra-privileged"
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-engagement-timeline",
@@ -9377,7 +9380,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "access_tier": "infra-privileged"
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-fake",
@@ -9671,7 +9675,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "access_tier": "infra-privileged"
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-md",
@@ -10395,7 +10400,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "access_tier": "infra-privileged"
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-selftest-aggregator",
