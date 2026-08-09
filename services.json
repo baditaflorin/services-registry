@@ -7823,7 +7823,9 @@
     "container_port": 18304,
     "trl_ceiling": 7,
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "agent-quorum",
@@ -7852,7 +7854,9 @@
     "container_port": 18306,
     "trl_ceiling": 7,
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "agent-tools",
@@ -9347,7 +9351,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-exec",
@@ -9531,7 +9537,9 @@
     "container_port": 18143,
     "depends_on": [
       "go-apikey-service"
-    ]
+    ],
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-har-builder",
@@ -9744,7 +9752,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "fleet-notify",
@@ -9822,7 +9832,8 @@
     "container_port": 18156,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "fleet-persona",
@@ -10961,7 +10972,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "infra-privileged",
+    "scope": "internal-only"
   },
   {
     "id": "js-proxy",
@@ -11462,7 +11475,8 @@
     "container_port": 18146,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-asset-inventory",
@@ -11505,7 +11519,8 @@
     "container_port": 18131,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-asset-scope-resolver",
@@ -11632,7 +11647,8 @@
     "container_port": 18119,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-authz-matrix",
@@ -12439,7 +12455,8 @@
     "container_port": 18133,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-leak-bounty-policy",
@@ -12524,7 +12541,8 @@
     "container_port": 18108,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-nuclei",
@@ -12738,7 +12756,8 @@
     "container_port": 18148,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-rate-coordinator",
@@ -12781,7 +12800,8 @@
     "container_port": 18104,
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "access_tier": "vetted-pentest"
   },
   {
     "id": "pentest-report-templater",
