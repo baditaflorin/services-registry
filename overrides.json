@@ -377,6 +377,7 @@
     "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
     "example_path": "/pending",
     "host_port": 18310,
+    "scope": "internal-only",
     "trl": 5,
     "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
@@ -491,6 +492,7 @@
     "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
     "host_port": 18021,
+    "scope": "internal-only",
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
@@ -2139,6 +2141,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
+    "scope": "internal-only",
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
@@ -2193,6 +2196,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
+    "scope": "internal-only",
     "trl": 5,
     "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
@@ -2314,6 +2318,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
+    "scope": "internal-only",
     "trl": 5,
     "trl_evidence": "Deployed 2026-06-02; /health + /selftest green on all 8"
   },
@@ -2644,6 +2649,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "mcp_ready": true,
     "mcp_tool_count": 1,
+    "scope": "internal-only",
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
