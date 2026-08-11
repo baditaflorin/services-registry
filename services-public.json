@@ -846,7 +846,7 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
     "description": "Microservice for Cookie Checker",
-    "example_path": "/go_cookie_checker?url=https://example.com",
+    "example_path": "/go_cookie_checker?target=https://example.com",
     "health_url": "https://cookie-checker.0crawl.com/health",
     "id": "cookie-checker",
     "kind": "container",
@@ -854,7 +854,7 @@
     "mesh": "0crawl",
     "name": "Cookie Checker",
     "repo_url": "https://github.com/baditaflorin/go_cookie_checker",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5283,7 +5283,7 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Microservice for Subdomain Finder",
-    "example_path": "/go_subdomain_finder?url=https://example.com",
+    "example_path": "/go_subdomain_finder?domain=example.com",
     "health_url": "https://subdomain-finder.0crawl.com/health",
     "id": "subdomain-finder",
     "kind": "container",
@@ -5291,7 +5291,7 @@
     "mesh": "0crawl",
     "name": "Subdomain Finder",
     "repo_url": "https://github.com/baditaflorin/go_subdomain_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"

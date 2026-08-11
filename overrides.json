@@ -168,7 +168,6 @@
           "bucket-finder",
           "clickjacking-tester",
           "comment-extractor",
-          "cookie-checker",
           "cors-scanner",
           "cors-tester",
           "crlf-tester",
@@ -248,7 +247,6 @@
           "simulate-ddos",
           "smuggling-probe",
           "sourcemap-finder",
-          "subdomain-finder",
           "subdomain-takeover",
           "swagger-finder",
           "telnet-banner",
@@ -861,15 +859,14 @@
   "cookie-checker": {
     "container_port": 8226,
     "description": "Microservice for Cookie Checker",
-    "example_path": "/go_cookie_checker?url=https://example.com",
+    "example_path": "/go_cookie_checker?target=https://example.com",
     "host_port": 8226,
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Header-only fetcher with no JS engine; a large share of CMP/consent cookies (OneTrust OptanonConsent, Cookiebot, most banners) are JS-set after the consent click and never appear in Set-Cookie headers, so a header-only audit structurally under-observes CMP cookies regardless of gazetteer breadth. Closing that needs a headless browser, out of scope for a CPU-only pure-Go service.",
-    "trl_evidence": "Live-probe Set-Cookie auditor (RFC 6265bis hand-written parser, per-cookie evidence trail, CMP/tracker/anti-bot gazetteer, real table-driven tests). Pass-3 closed a geographic-coverage bias: the Pass-1/2 gazetteer knew only Anglo-centric CMPs (OneTrust/Cookiebot/Quantcast/TrustArc) and fell through to class=other on the entire EU/non-US consent ecosystem. Added 15 EU/non-US CMPs + WordPress consent-plugin ecosystem (Complianz/Borlabs/CookieYes/Axeptio/tarteaucitron/consentmanager.net/Cookie Information/Klaro/Osano/CookieScript/Real Cookie Banner/CookieFirst/Cookiehub/Clickio/Secure Privacy), IAB consent strings (addtl_consent/usprivacy/GPP), CIS/Russia anti-bot WAFs (DDoS-Guard/Qrator/Variti), and Shopify telemetry. Fixed a consentmanager.net-vs-Quantcast prefix collision and a geo-specific FP where a non-English consent cookie containing 'token' was mis-flagged session_missing_httponly. 7 new table-driven tests with real German Borlabs/Complianz and French Axeptio/tarteaucitron banner fixtures; FP corpus gate unchanged (fp=0,fn=0). Verified live on real domains: lacompagniedescartes.fr 5 Shopify cookies other->tracker, dearchitect.nl didomi_interaction other->cmp, dreamjob.ru qrator_ssid2 mis-classed session->anti_bot. domain_cookies stores aggregate tallies not per-cookie names and has no tool_version column, so measurement was live-probe over geo-diverse real domains.",
-    "coolify_app_uuid": "fqmqklxqrf710ryv77xlriao"
+    "trl_evidence": "Live-probe Set-Cookie auditor (RFC 6265bis hand-written parser, per-cookie evidence trail, CMP/tracker/anti-bot gazetteer, real table-driven tests). Pass-3 closed a geographic-coverage bias: the Pass-1/2 gazetteer knew only Anglo-centric CMPs (OneTrust/Cookiebot/Quantcast/TrustArc) and fell through to class=other on the entire EU/non-US consent ecosystem. Added 15 EU/non-US CMPs + WordPress consent-plugin ecosystem (Complianz/Borlabs/CookieYes/Axeptio/tarteaucitron/consentmanager.net/Cookie Information/Klaro/Osano/CookieScript/Real Cookie Banner/CookieFirst/Cookiehub/Clickio/Secure Privacy), IAB consent strings (addtl_consent/usprivacy/GPP), CIS/Russia anti-bot WAFs (DDoS-Guard/Qrator/Variti), and Shopify telemetry. Fixed a consentmanager.net-vs-Quantcast prefix collision and a geo-specific FP where a non-English consent cookie containing 'token' was mis-flagged session_missing_httponly. 7 new table-driven tests with real German Borlabs/Complianz and French Axeptio/tarteaucitron banner fixtures; FP corpus gate unchanged (fp=0,fn=0). Verified live on real domains: lacompagniedescartes.fr 5 Shopify cookies other->tracker, dearchitect.nl didomi_interaction other->cmp, dreamjob.ru qrator_ssid2 mis-classed session->anti_bot. domain_cookies stores aggregate tallies not per-cookie names and has no tool_version column, so measurement was live-probe over geo-diverse real domains."
   },
   "cookiecutter-data-science": {
     "trl": 4,
@@ -5432,15 +5429,14 @@
   "subdomain-finder": {
     "container_port": 8348,
     "description": "Microservice for Subdomain Finder",
-    "example_path": "/go_subdomain_finder?url=https://example.com",
+    "example_path": "/go_subdomain_finder?domain=example.com",
     "host_port": 8348,
     "trl": 6,
     "trl_assessed_at": "2026-05-31",
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 8+ needs paid resolver/threat-intel feeds and an exhaustive 10k-100k brute dictionary beyond the polite CPU-only resolver budget; passive feeds (crt.sh/hackertarget) are also intermittently rate-limited/502 in production.",
-    "trl_evidence": "v1.6.0 adds wildcard-DNS suppression to the passive-source liveness pass (probe a random nonce label; under a catch-all *.apex record count a candidate active only when its A/AAAA answer introduces an IP the wildcard set does not; apex never suppressed) plus golang.org/x/net/idna (IDNA2008 lookup) so Unicode hosts/subdomains normalize to punycode instead of being dropped by the ASCII-only validator. domainscope showed 16,831 stored rows with active_count==total_count>=10 (407,922 claimed-active) - the dominant FP class; 5/5 worst offenders (domainloud.com, alyssalow.com...) confirmed wildcarded via nonce-label dig. Fixture reproducing domainloud.com's 369/369 row: OLD counted all 369 active, NEW keeps 2 (apex + 1 distinct host) = 367 FP removed. Live-confirmed IDN: probe muenchen.de returns domain xn--mnchen-3ya.de and resolves. 19 new table-driven tests; build/test/vet/gofmt green.",
-    "coolify_app_uuid": "qhxo952d5vz3vjbsm3qq2lwl"
+    "trl_evidence": "v1.6.0 adds wildcard-DNS suppression to the passive-source liveness pass (probe a random nonce label; under a catch-all *.apex record count a candidate active only when its A/AAAA answer introduces an IP the wildcard set does not; apex never suppressed) plus golang.org/x/net/idna (IDNA2008 lookup) so Unicode hosts/subdomains normalize to punycode instead of being dropped by the ASCII-only validator. domainscope showed 16,831 stored rows with active_count==total_count>=10 (407,922 claimed-active) - the dominant FP class; 5/5 worst offenders (domainloud.com, alyssalow.com...) confirmed wildcarded via nonce-label dig. Fixture reproducing domainloud.com's 369/369 row: OLD counted all 369 active, NEW keeps 2 (apex + 1 distinct host) = 367 FP removed. Live-confirmed IDN: probe muenchen.de returns domain xn--mnchen-3ya.de and resolves. 19 new table-driven tests; build/test/vet/gofmt green."
   },
   "subdomain-takeover": {
     "container_port": 8223,
