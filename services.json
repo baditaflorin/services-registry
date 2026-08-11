@@ -1058,7 +1058,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -1066,7 +1066,7 @@
     "url": "https://cookie-checker.0crawl.com",
     "health_url": "https://cookie-checker.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_cookie_checker",
-    "example_path": "/go_cookie_checker?url=https://example.com",
+    "example_path": "/go_cookie_checker?target=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -1082,8 +1082,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8226,
     "container_port": 8226,
-    "proxy_egress": true,
-    "coolify_app_uuid": "fqmqklxqrf710ryv77xlriao"
+    "proxy_egress": true
   },
   {
     "id": "cors-scanner",
@@ -6578,7 +6577,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6586,7 +6585,7 @@
     "url": "https://subdomain-finder.0crawl.com",
     "health_url": "https://subdomain-finder.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_subdomain_finder",
-    "example_path": "/go_subdomain_finder?url=https://example.com",
+    "example_path": "/go_subdomain_finder?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6602,8 +6601,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8348,
     "container_port": 8348,
-    "proxy_egress": true,
-    "coolify_app_uuid": "qhxo952d5vz3vjbsm3qq2lwl"
+    "proxy_egress": true
   },
   {
     "id": "subdomain-takeover",
