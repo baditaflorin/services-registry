@@ -13047,15 +13047,16 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
-    "trl": 7,
+    "trl": 6,
     "trl_ceiling": 8,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-2026-08-20-fleet-trl-audit",
     "host_port": 18150,
     "container_port": 18150,
     "proxy_egress": true,
     "coolify_app_uuid": "q2ovt9m5sn859aqsgeji5kf5",
-    "access_tier": "vetted-pentest"
+    "access_tier": "vetted-pentest",
+    "trl_evidence": "2026-08-20 fresh-clone audit (origin/main @ b4ed921, go-common@v0.88.0 post-fleet-bump). Confirmed the fleet-wide safehttp fetch-cache bug class DOES apply here (unlike some siblings): proberOutbound was built via safehttp.NewClient() with no .WithoutFetchCache(), and this service's own pollOOBPage (probe_poll.go) cursor-polls the OOB collector on a 500ms cadence during collectHits -- exactly the kind of call that must never be served stale. Once a fleet deployment sets FLEET_FETCH_CACHE_URL, server.New auto-wires a process-wide DefaultFetchDelegate (go-common/server/fetchcache.go) that transparently intercepts this GET; a cached response for the same token+cursor would repeat the last page forever, so a real live confirmed_ssrf callback landing after the cache warmed could go entirely unobserved -- silently downgrading a genuine finding to a false clean/suspected verdict, the worst failure mode for a vuln scanner. Separately confirmed a real secrets-handling bug: this service's own metadata-class payloads deliberately target credential-issuing endpoints (AWS IMDS iam/security-credentials, GCP/Azure service-account token endpoints, file:///proc/self/environ), but Finding.BodyExcerpt persisted the raw response body verbatim with no redaction, so a successful probe against a real vulnerable target would hand the live SecretAccessKey / session Token / OAuth access_token / PEM private key straight back in this service's own /probe JSON response. Scope-guard and OOB-alloc calls are POST (not cache-eligible) and were unaffected; the paired-control WAF differential, single-use run-scoped correlation IDs, and body-signal reflection-check logic are all sound -- the local 30-case corpus eval (TestCorpus_FPRate: 15 TP incl. adversarial, 15 TN incl. adversarial) passes 100% both before and after this fix, confirming the fix didn't regress detection. Fixed both: added safehttp.WithoutFetchCache() to newProberClient; added redactSecrets() to scrub credential values while preserving evidentiary fields (AccessKeyId, Expiration, field names). Added TestNewProberClientBypassesFetchCache (fails without the fix, verified) and TestRedactSecrets_*/TestRecordHTTPResponse_RedactsBodyExcerpt covering AWS/GCP/Azure/PEM shapes. Bumped 0.3.3->0.3.4. Fix opened as github.com/baditaflorin/go-pentest-ssrf-prober PR #10 (fix/prober-fetchcache-and-secret-redaction, NOT merged). Lowering TRL 7->6 because the deployed main branch still carries both bugs as of this assessment -- restore to 7 once PR #10 merges."
   },
   {
     "id": "pentest-subfinder",
