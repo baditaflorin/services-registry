@@ -12532,17 +12532,18 @@
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
     "trl": 7,
-    "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks.",
+    "trl_evidence": "Wraps containrrr/shoutrrr v0.8 (20+ sinks). Default-from-env, per-request URL override, secret-hiding /sinks.\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (519d4d5) reviewed end-to-end. Confirmed a real, live-verified SSRF vulnerability: the `generic` (and `generic+<scheme>`) shoutrrr scheme POSTs to a caller-supplied host via a bare net/http.DefaultClient with zero SSRF protection (containrrr/shoutrrr pkg/services/generic/generic.go doSend), so any caller holding a vetted-pentest keystore key could direct this service's outbound POST /send traffic at loopback/RFC1918/CGNAT/link-local addresses, including the cloud metadata IP 169.254.169.254. Reverted the fix locally and confirmed the pre-fix handler made real outbound TCP connection attempts to every host in safehttp.TestBlockedHosts and hung until timeout instead of rejecting them. Fixed in https://github.com/baditaflorin/go-pentest-notify/pull/7 (open, not merged): each request-supplied `generic` webhook URL's host is now validated with safehttp.GuardHost before the URL set reaches shoutrrr.CreateSender; other schemes (telegram/discord/slack/...) hit a fixed vendor API host and aren't affected the same way. Added TestSend_RejectsSSRFViaGenericWebhook, TestSend_AllowsGenericWebhookToPublicHost, TestRejectUnsafeGenericSink_IgnoresOtherSchemes; verified the blocked-host test hangs on live network calls against pre-fix code and passes cleanly after. Bumped 0.1.1->0.1.2. TRL 7 reaffirmed, not lowered -- the shoutrrr wrapper, sink-count, and secret-hiding /sinks behavior are all sound, and the SSRF gap was scoped to one scheme and is now closed pending PR merge. Note: smtp/ntfy/gotify/mattermost/matrix/rocketchat/zulip schemes also let the caller pick a self-hosted target host and share the same class of risk -- not yet guarded, flagged as a follow-up.",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-trl-audit-2026-08-20",
     "host_port": 18108,
     "container_port": 18108,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "access_tier": "vetted-pentest"
+    "access_tier": "vetted-pentest",
+    "version": "0.1.2"
   },
   {
     "id": "pentest-nuclei",
