@@ -3042,11 +3042,11 @@
       "go",
       "security"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": 6,
-    "trl_ceiling_reason": "True IDOR proof requires authenticated sessions and object ownership context.",
+    "trl": 7,
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-fleet-trl-audit-2026-08-20",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "True IDOR proof for unauthenticated scans still requires an external verifier/manual confirmation; TRL 8 (field-proven) needs sustained production incident history without the fetch-cache staleness class of bug.",
     "url": "https://idor-finder.0crawl.com"
   },
   {
