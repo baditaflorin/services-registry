@@ -1204,11 +1204,11 @@
       "go",
       "security"
     ],
-    "trl": 6,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
-    "trl_ceiling": 6,
-    "trl_ceiling_reason": null,
+    "trl": 5,
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-fleet-trl-audit-2026-08-20",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "TRL 6 once PR #8 (false-positive fix) is merged and re-verified live; TRL 7 would need sustained production false-positive-rate history across diverse real targets, not just the one live-reproduced case.",
     "url": "https://debug-detector.0crawl.com"
   },
   {
