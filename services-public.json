@@ -10559,10 +10559,11 @@
     "tags": [
       "go-pentest"
     ],
-    "trl": 7,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "trl": 6,
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-2026-08-20-session-state-audit",
     "trl_ceiling": 8,
+    "trl_ceiling_reason": "TRL 8 requires encrypted-at-rest (SQLite + key-from-go-fleet-secrets) and cross-instance replication (v0.2, not yet landed).",
     "url": "https://pentest-session-state.0exec.com"
   },
   {
