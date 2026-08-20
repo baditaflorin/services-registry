@@ -4123,14 +4123,14 @@
   "pentest-favicon-hash": {
     "access_tier": "vetted-pentest",
     "container_port": 18117,
-    "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~15 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
+    "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~60 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
     "example_path": "/lookup?hash=-1996286744",
     "host_port": 18117,
     "trl": 7,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-session-2026-08-20",
     "trl_ceiling": 9,
-    "trl_evidence": "mmh3 via spaolacci/murmur3, Python-compatible base64.encodebytes (76-char wrap), embedded lookup. Tests on determinism + sensitivity.",
+    "trl_evidence": "2026-08-20 re-audit against fresh clone of origin/main (ec848c8): mmh3 via twmb/murmur3 (race-safe, replaced spaolacci), Python-compatible base64.encodebytes (76-char wrap) hashing -- algorithm independently re-verified correct by hashing a live target's real favicon (https://ci.jenkins.io/favicon.ico) and matching a known reference value. Found and fixed 2 real bugs in the shipped ~60-entry fingerprint DB: (1) hash 81586312 was mislabeled \"Grafana\" -- it is actually Jenkins's real, version-stable default favicon.ico hash, confirmed via ci.jenkins.io (live) and jenkinsci/jenkins git history back to tag jenkins-1.625.3 (2016); the stale -247388890 \"Jenkins\" entry matched neither product and was replaced with Grafana's actual hash 2123863676 (grafana/grafana public/img/fav32.png, stable across main and v10.4.0). (2) httpClient used bare safehttp.NewClient() without .WithoutFetchCache(), risking a stale/cross-caller-cached favicon body instead of the live one when a fleet fetch-cache delegate is installed -- this defeats the tool's purpose (fingerprinting the CURRENT favicon of a target). Both fixed + regression-tested in PR #9 (https://github.com/baditaflorin/go-pentest-favicon-hash/pull/9, not yet merged as of this assessment -- TRL held at 7 pending merge/deploy; algorithm correctness and evidence-trail quality otherwise support 7). Remaining ~58 DB entries are still unverified OSINT-trend claims (source: shodan-trend), not independently cross-checked.",
     "coolify_app_uuid": "jnajpnv9r9dsmfc89e5og0qg"
   },
   "pentest-finding-triage": {
