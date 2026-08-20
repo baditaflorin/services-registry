@@ -4198,12 +4198,12 @@
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
     "host_port": 18113,
-    "trl": 7,
-    "trl_assessed_at": "2026-05-14",
-    "trl_assessor": "claude-session-2026-05-14",
+    "trl": 6,
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-2026-08-20-fleet-fetch-cache-audit",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Wrap wappalyzergo for full 3000+ fingerprint DB.",
-    "trl_evidence": "Single+batch probes, parallel with worker cap, TLS extract, ~25 tech-detection signatures (CDNs, frameworks, CMS, front-end libs). safehttp-protected. Tested.",
+    "trl_evidence": "2026-08-20: code audit + live re-test found httpClient (probe.go) built via safehttp.NewClient(...) WITHOUT .WithoutFetchCache(). Confirmed via go-common@v0.88.0 source (server/server.go:83-85) that server.New auto-installs a process-wide safehttp.DefaultFetchDelegate whenever FLEET_FETCH_CACHE_URL is set, so this tool's live probes would transparently route through the shared fleet fetch cache and could silently return stale status/title/tech/TLS data -- a correctness bug for a tool whose entire purpose is real-time fingerprinting. Added regression test TestProbe_BypassesFleetFetchCache (fails pre-fix: returns stub delegate's stale title instead of hitting origin; passes post-fix) and fixed by adding safehttp.WithoutFetchCache(). Live-verified core probe logic (status/title/server/TLS/tech) against https://example.com, correct. Redirect-chain handling already reports every hop explicitly (not swallowed by auto-follow, unlike the go_redirect_tracer bug class) and TLS verification is not disabled anywhere in safehttp -- no other correctness bugs found. Fix is in open PR https://github.com/baditaflorin/go-pentest-httpx/pull/10 (unmerged as of this evidence), so the previously self-reported \"Tested\" claim did not hold for the actual fleet-wide operational environment (FLEET_FETCH_CACHE_URL set) until this PR merges/deploys -- lowering TRL 7 -> 6 pending merge.",
     "coolify_app_uuid": "fb9gk4en12bhh1e7ya5aptkt"
   },
   "pentest-job-queue": {
