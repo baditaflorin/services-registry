@@ -14873,6 +14873,28 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   {
+    "id": "mesh-privacy-drop",
+    "name": "Mesh Privacy Drop",
+    "description": "QR-paired, short-lived encrypted file transfer directly between browsers.",
+    "category": "peer_to_peer",
+    "mesh": "pages",
+    "kind": "static",
+    "language": "html",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-privacy-drop/",
+    "health_url": "https://baditaflorin.github.io/mesh-privacy-drop/",
+    "repo_url": "https://github.com/baditaflorin/mesh-privacy-drop",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "pages_url": "https://baditaflorin.github.io/mesh-privacy-drop/"
+  },
+  {
     "id": "mesh-queue",
     "name": "Mesh Queue",
     "description": "A shared take-a-number queue that works directly between browsers.",
