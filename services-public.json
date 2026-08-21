@@ -6055,8 +6055,7 @@
     "trl_assessor": "claude-sonnet-5-trl-audit-2026-08-20",
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
-    "url": "https://websocket-analyzer.0crawl.com",
-    "trl_evidence": "4 probes (origin/auth/subprotocol/framesize) with hard 1MiB cap, in-process WS fixtures for /selftest, safehttpAllowLoopback() toggle for test-time SSRF guard\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (68f7ee9) reviewed end-to-end against its stated purpose (WS endpoint discovery + CSWSH/auth/subprotocol/frame-size probing via nhooyr.io/websocket). Confirmed a real, live-verified correctness bug: dial.go's dialWS, probes.go's dialProbe, and discover.go's httpClient all built safehttp.NewClient() bare. A WebSocket handshake is a plain GET with Upgrade headers and no body -- eligible for the fleet-wide fetch-cache delegate the same as any ordinary GET -- but the cache has no notion of a 101 Switching Protocols upgrade and can only hand back a synthetic HTTP response, so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0) every origin/auth/subprotocol probe would dial-error on a non-101 status and silently report 'no finding' against a genuinely vulnerable target -- defeating this tool's entire purpose under a normal fleet deploy. Fixed in PR https://github.com/baditaflorin/go_websocket_analyzer/pull/10 (open, not merged) by adding .WithoutFetchCache() to all three clients. Added TestDialProbe_BypassesFetchCache: installs a stub FetchDelegate as the process-wide default and asserts it is never consulted and the missing-origin-check finding still surfaces against the open fixture; verified this test fails on the pre-fix code (delegate called, finding suppressed) and passes after. Bumped 0.2.3->0.2.4. TRL 7 reaffirmed post-fix -- probe architecture and detection logic are sound once the cache bypass is in place; PR is pending merge."
+    "url": "https://websocket-analyzer.0crawl.com"
   },
   {
     "auth": {
@@ -10163,8 +10162,7 @@
     "trl_assessor": "claude-sonnet-5-trl-audit-2026-08-20",
     "trl_ceiling": 9,
     "trl_ceiling_reason": "Ceiling = shoutrrr sink count + HMAC webhook auth.",
-    "url": "https://pentest-notify.0exec.com",
-    "version": "0.1.2"
+    "url": "https://pentest-notify.0exec.com"
   },
   {
     "access_tier": "vetted-pentest",
@@ -10602,8 +10600,7 @@
     "trl_assessed_at": "2026-08-20",
     "trl_assessor": "claude-sonnet-5-2026-08-20-fleet-trl-audit",
     "trl_ceiling": 8,
-    "url": "https://pentest-ssrf-prober.0exec.com",
-    "trl_evidence": "2026-08-20 fresh-clone audit (origin/main @ b4ed921, go-common@v0.88.0 post-fleet-bump). Confirmed the fleet-wide safehttp fetch-cache bug class DOES apply here (unlike some siblings): proberOutbound was built via safehttp.NewClient() with no .WithoutFetchCache(), and this service's own pollOOBPage (probe_poll.go) cursor-polls the OOB collector on a 500ms cadence during collectHits -- exactly the kind of call that must never be served stale. Once a fleet deployment sets FLEET_FETCH_CACHE_URL, server.New auto-wires a process-wide DefaultFetchDelegate (go-common/server/fetchcache.go) that transparently intercepts this GET; a cached response for the same token+cursor would repeat the last page forever, so a real live confirmed_ssrf callback landing after the cache warmed could go entirely unobserved -- silently downgrading a genuine finding to a false clean/suspected verdict, the worst failure mode for a vuln scanner. Separately confirmed a real secrets-handling bug: this service's own metadata-class payloads deliberately target credential-issuing endpoints (AWS IMDS iam/security-credentials, GCP/Azure service-account token endpoints, file:///proc/self/environ), but Finding.BodyExcerpt persisted the raw response body verbatim with no redaction, so a successful probe against a real vulnerable target would hand the live SecretAccessKey / session Token / OAuth access_token / PEM private key straight back in this service's own /probe JSON response. Scope-guard and OOB-alloc calls are POST (not cache-eligible) and were unaffected; the paired-control WAF differential, single-use run-scoped correlation IDs, and body-signal reflection-check logic are all sound -- the local 30-case corpus eval (TestCorpus_FPRate: 15 TP incl. adversarial, 15 TN incl. adversarial) passes 100% both before and after this fix, confirming the fix didn't regress detection. Fixed both: added safehttp.WithoutFetchCache() to newProberClient; added redactSecrets() to scrub credential values while preserving evidentiary fields (AccessKeyId, Expiration, field names). Added TestNewProberClientBypassesFetchCache (fails without the fix, verified) and TestRedactSecrets_*/TestRecordHTTPResponse_RedactsBodyExcerpt covering AWS/GCP/Azure/PEM shapes. Bumped 0.3.3->0.3.4. Fix opened as github.com/baditaflorin/go-pentest-ssrf-prober PR #10 (fix/prober-fetchcache-and-secret-redaction, NOT merged). Lowering TRL 7->6 because the deployed main branch still carries both bugs as of this assessment -- restore to 7 once PR #10 merges."
+    "url": "https://pentest-ssrf-prober.0exec.com"
   },
   {
     "access_tier": "vetted-pentest",
@@ -12250,6 +12247,28 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
     "trl_ceiling": 6,
     "url": "https://baditaflorin.github.io/mesh-picker/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A shared take-a-number queue that works directly between browsers.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-queue/",
+    "id": "mesh-queue",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Queue",
+    "pages_url": "https://baditaflorin.github.io/mesh-queue/",
+    "repo_url": "https://github.com/baditaflorin/mesh-queue",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-queue/"
   },
   {
     "auth": {
