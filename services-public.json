@@ -24,8 +24,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "A real, infra-backed JS-render fallback (wired to the fleet's live go-js-proxy/chromedp) exists since 2026-06-01, but on a 700-domain live sample (151 independently-confirmed CSR domains) it fired 0/151 times -- practically inert on real traffic. trl held at 6 rather than 7 until the SPA-shell heuristic is shown to actually trigger at a meaningful rate, or the evidence text is corrected to acknowledge the ~0% real-world activation rate.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "url": "https://a11y-quick.0crawl.com"
   },
   {
@@ -83,7 +83,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Static + cost-bounded conditional JS-render analyzer without a full headless-browser-by-default pipeline; remaining gap to 8/9 is computed-style contrast for every page (not just SPA-shell fallback cases), full axe-core-class rule breadth, and cross-origin stylesheet handling.",
+    "trl_ceiling_reason": "Reaches TRL 8 with WCAG 2.2 full corpus + CSS-derived contrast estimation.",
     "url": "https://accessibility-score.0crawl.com"
   },
   {
@@ -112,6 +112,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "url": "https://ad-density.0crawl.com"
   },
   {
@@ -122,7 +123,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
-    "description": "Microservice for Address Extractor",
+    "description": "Multi-locale address extractor with coherent component validation and localized schema.org evidence.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://address-extractor.0crawl.com/health",
     "id": "address-extractor",
@@ -139,7 +140,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": null,
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "url": "https://address-extractor.0crawl.com"
   },
   {
@@ -179,7 +181,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
-    "description": "Microservice for Analyze Headers",
+    "description": "Browser-facing security-header auditor with deterministic duplicate handling, HEAD/GET comparison, and edge attribution.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://analyze-headers.0crawl.com/health",
     "id": "analyze-headers",
@@ -196,8 +198,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Stateless tool with no persisted per-URL history/diff trail and no independent cross-scanner check -- both need a DB/telemetry layer it shouldn't own, per this repo's own ADR 0001.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://analyze-headers.0crawl.com"
   },
   {
@@ -254,7 +256,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://api-first.0crawl.com"
   },
   {
@@ -340,7 +343,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://biz-classifier.0crawl.com"
   },
   {
@@ -398,7 +402,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://brand-color-palette.0crawl.com"
   },
   {
@@ -427,7 +430,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://brand-logo-extractor.0crawl.com"
   },
   {
@@ -456,6 +458,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://broken-links.0crawl.com"
   },
   {
@@ -570,8 +573,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-29",
     "trl_assessor": "claude-trl-audit-2026-07-29-real-data-900-domain-sample",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "CPU-only, no headless browser or JS execution. Client-side-rendered SPAs (React/Vue apps that ship an empty server-rendered <div id=\"root\">) and bot-challenge/CAPTCHA interstitials (Cloudflare, Incapsula, sgcaptcha) return empty or challenge HTML with no visible CTAs to extract. In this audit's real-domain sample, SPA rendering and challenge pages together accounted for ~29% of the pages that returned zero CTAs (20% SPA, 8.6% challenge) and cannot be fixed without a rendering engine.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://cas.0crawl.com"
   },
   {
@@ -687,8 +690,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Remaining gaps are documented heuristic-approximation limits, not unknowns: the passive-voice regex over/under-counts without a POS tagger; the syllable counter is an ASCII-vowel-cluster heuristic (non-Latin-script text now correctly excluded via analysis_available=false rather than mis-scored); SMOG's canonical form assumes >=30 sentences. TRL 8 needs either a bundled CMU-grade dictionary/POS tagger, or a validated multi-script readability model.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://cognitive-load.0crawl.com"
   },
   {
@@ -776,6 +779,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "url": "https://company-size.0crawl.com"
   },
   {
@@ -932,7 +936,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "domains",
-    "description": "BFS web crawler with robots.txt, scope control, per-host rate limiting, and SSRF-safe HTTP.",
+    "description": "Microservice for Crawl Web Application",
     "example_path": "/?url=https://example.com",
     "health_url": "https://crawl-web-application.0crawl.com/health",
     "id": "crawl-web-application",
@@ -950,6 +954,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://crawl-web-application.0crawl.com"
   },
   {
@@ -1094,6 +1099,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": null,
     "url": "https://currency-detector.0crawl.com"
   },
   {
@@ -1122,6 +1128,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": "CPU-only DOM heuristics plateau at principled multilingual structural extraction; exact brand disambiguation / image recognition (vs structural alt/anchor/grid signals) and SLA-grade live verdicts would need a browser engine or paid logo-recognition feed. No persisted logo-detail table exists to certify live accuracy against.",
     "url": "https://customer-logos.0crawl.com"
   },
   {
@@ -1150,7 +1157,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 9,
     "url": "https://data-format-converter.0crawl.com"
   },
   {
@@ -1178,8 +1184,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Deterministic RE2 keyword/regex classifier over scraped HTML, not an NLP/LLM understanding of legal language, and no ground-truth privacy-policy corpus to cross-validate against -- caps quality at 'real, evidence-backed, well-tested' (7).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://data-inventory.0crawl.com"
   },
   {
@@ -1265,7 +1271,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://dir-listing.0crawl.com"
   },
@@ -1294,7 +1300,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://dns-record.0crawl.com"
   },
@@ -1336,7 +1342,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "Ad-network detector - ads.txt + AdSense/Taboola/Outbrain/Criteo/Media.net/etc.",
+    "description": "Ad-network detector with validated ads.txt seller records and executable-context matching for 18 in-page advertising providers.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-ad-network.0crawl.com/health",
     "id": "domain-ad-network",
@@ -1354,8 +1360,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "No headless/JS rendering -- homepage HTML fetched statically, so client-side-only ad injection (SPA hydration, JS-only tag managers) is structurally undetectable; RenderJS was tried and reverted after breaking /selftest.",
     "url": "https://domain-ad-network.0crawl.com"
   },
   {
@@ -1366,7 +1370,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "AMP (Accelerated Mobile Pages) presence detector \u2014 link rel=amphtml + canonical AMP HTML.",
+    "description": "Strict AMP detector requiring the root marker, official runtime, same-site canonical, and verified AMP alternatives.",
     "example_path": "/?domain=www.bbc.com",
     "health_url": "https://domain-amp-detector.0crawl.com/health",
     "id": "domain-amp-detector",
@@ -1380,8 +1384,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Production egress routes through the shared fleet fetch-cache with unverified staleness policy for a periodically-rechecked signal; also no independent recall oracle since some sampled domains show cloaking/rotating content across requests.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://domain-amp-detector.0crawl.com"
   },
   {
@@ -1436,7 +1440,6 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 6,
     "url": "https://domain-anycast-footprint.0crawl.com"
   },
   {
@@ -1465,7 +1468,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": null,
     "url": "https://domain-app-render-mode.0crawl.com"
   },
   {
@@ -1494,7 +1496,6 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 4,
     "url": "https://domain-backlink-profile.0crawl.com"
   },
   {
@@ -1519,8 +1520,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "VMC chain-of-trust needs a curated MVA root bundle not available in this fleet; SVG Tiny PS profile check is structural-only; DMARC check is exact-domain-only, no organizational rollup.",
     "url": "https://domain-bimi-checker.0crawl.com"
   },
   {
@@ -1549,7 +1548,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": null,
     "url": "https://domain-breadcrumb-schema.0crawl.com"
   },
   {
@@ -1578,8 +1576,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Single-fetch header inspection only -- never verifies caches/CDNs actually enforce the declared directives, the same structural limit this service's own honest pre-July self-assessment already noted before being later rubber-stamped to 7 without evidence.",
     "url": "https://domain-cache-policy.0crawl.com"
   },
   {
@@ -1634,8 +1630,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "No independent DNSSEC chain validation (trusts the resolver's AD bit over plain UDP), no STARTTLS for mail ports, possible resolver/dial inconsistency for multi-CDN domains.",
     "url": "https://domain-dane-tlsa.0crawl.com"
   },
   {
@@ -1664,7 +1658,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
     "url": "https://domain-deployment-fingerprint.0crawl.com"
   },
   {
@@ -1692,7 +1685,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://domain-details.0crawl.com"
   },
@@ -1722,8 +1715,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Signature/heuristic fingerprinting has an inherent recall ceiling -- new/custom/headless storefronts and anti-bot content variance served to datacenter IPs will always cost some recall, ruling out SLA-grade 9 without ruling out further hardening toward 8.",
     "url": "https://domain-ecommerce-platform.0crawl.com"
   },
   {
@@ -1782,8 +1773,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Single homepage-snapshot scope (no crawl), no JS-render escalation for SPA-only embeds, and no independent cross-check of extracted ids against platform APIs -- real parser/evidence-trail/tested but not SLA-grade without an architecture change.",
     "url": "https://domain-events-platform.0crawl.com"
   },
   {
@@ -1842,8 +1831,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Static-fetch-only architecture cannot see JS-hydrated/streamed JSON-LD, confirmed against 3 live Next.js domains injecting FAQ schema via client-hydration streaming -- closing it needs a headless-render step, out of scope for this detector.",
     "url": "https://domain-faq-schema.0crawl.com"
   },
   {
@@ -1872,7 +1859,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": null,
     "url": "https://domain-favicon-completeness.0crawl.com"
   },
   {
@@ -1901,8 +1887,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "No JS execution -- 7/19 real Adobe Fonts detections in the sample are JS-driven kit loaders, permanently invisible without a headless browser; single-external-stylesheet-fetch design also caps completeness.",
     "url": "https://domain-font-stack.0crawl.com"
   },
   {
@@ -1931,8 +1915,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 6,
-    "trl_ceiling_reason": "Static-HTML-only fetch (no JS execution) plus a curated, finite probe-slug/anchor taxonomy caps recall on real merchants (~0.26 measured) -- some SPA-hydrated nav is invisible without headless rendering, and enterprise anti-bot systems block a non-browser client outright; evading bot-detection is out of policy scope. Precision is strong (1.00 measured); ceiling is a recall problem, not a correctness problem.",
     "url": "https://domain-gift-card.0crawl.com"
   },
   {
@@ -1989,8 +1971,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Static-HTML-only fetch (no headless browser) -- lazy-loaded/JS-injected images and CSS background-images are structurally invisible by design; WCAG 1.1.1 is one criterion among many; domain-parking detection is a fixed hostname allowlist, not exhaustive.",
     "url": "https://domain-image-alt-coverage.0crawl.com"
   },
   {
@@ -2049,7 +2029,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": null,
     "url": "https://domain-interactive-demo.0crawl.com"
   },
   {
@@ -2074,7 +2053,6 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
     "url": "https://domain-liveness-state.0crawl.com"
   },
   {
@@ -2103,7 +2081,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Cold heavy-SPA rendering can exceed the enrichment budget and bot/consent gates hide some client-injected tools.",
     "url": "https://domain-martech-stack.0crawl.com"
   },
@@ -2133,8 +2111,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "No live non-defunct ENUM test corpus available; single-level NAPTR resolution rather than full RFC 3958 chain-walking.",
     "url": "https://domain-naptr-enum.0crawl.com"
   },
   {
@@ -2163,7 +2139,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": null,
     "url": "https://domain-pagination-rel.0crawl.com"
   },
   {
@@ -2192,7 +2167,6 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync",
-    "trl_ceiling": 7,
     "url": "https://domain-podcast-presence.0crawl.com"
   },
   {
@@ -2203,7 +2177,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "E-commerce catalog SKU-count estimator (sitemap + JSON-LD + Shopify probe).",
+    "description": "E-commerce catalog lower-bound estimator with canonicalized sitemap, JSON-LD, Shopify, and homepage product signals.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-product-count.0crawl.com/health",
     "id": "domain-product-count",
@@ -2221,8 +2195,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Sitemap/JSON-LD/anchor heuristics are lower-bound-by-design; WooCommerce (incl. localized slugs) and Shopify are now well covered, but BigCommerce, Magento, PrestaShop, Squarespace, and Wix still rely on the same generic heuristics with no platform-native catalog API.",
     "url": "https://domain-product-count.0crawl.com"
   },
   {
@@ -2233,7 +2205,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
-    "description": "RateLimit-* / Retry-After header detector + parser.",
+    "description": "Validated RateLimit and Retry-After detector with evidence-driven endpoint discovery and HEAD-to-GET fallback.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://domain-ratelimit-headers.0crawl.com/health",
     "id": "domain-ratelimit-headers",
@@ -2251,8 +2223,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "The fetch-cache fix hasn't been observed live in production yet, so the ~988k historical rows can't be trusted as clean operational evidence until a post-deploy monitoring window confirms correct behavior.",
     "url": "https://domain-ratelimit-headers.0crawl.com"
   },
   {
@@ -2281,8 +2251,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Direct-fetch-only (no JS execution): cannot observe trackers injected post-hydration by client-side JS, confirmed on a real React SPA scoring near-zero during this audit. Reaching TRL 9 needs RenderJS integration plus an independent cross-check against a second detection method.",
     "url": "https://domain-tracker-density.0crawl.com"
   },
   {
@@ -2311,8 +2279,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Mobile-friendliness scoring from a static meta tag can never verify actual rendered reflow (WCAG 1.4.10) without a headless browser -- a structural, permanent limit.",
     "url": "https://domain-viewport-meta.0crawl.com"
   },
   {
@@ -2341,7 +2307,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 7,
     "url": "https://domain-wikidata-entity.0crawl.com"
   },
   {
@@ -2369,8 +2334,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Structural, not fixable in this codebase without switching data providers. (1) rdap.org has no documented per-IP rate quota; token-bucket tuning was calibrated empirically against a 900-domain real-data pass and eliminates 429s there, but production traffic shape is unverified. (2) rdap.org does not proxy every ccTLD registry: 20.3% of the real sample got a genuine 404. (3) archive.org/wayback is intermittently slow or unreachable (11.9-18.2% of probes indeterminate across two real passes). (4) DKIM detection guesses 10 common selector names; non-standard selectors are an unavoidable false negative. (5) No persisted go_dtss results table exists in production to validate long-run behavior at real traffic volumes/concurrency.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://dtss.0crawl.com"
   },
   {
@@ -2398,7 +2363,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://email-extractor.0crawl.com"
   },
   {
@@ -2486,6 +2452,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 5,
+    "trl_ceiling_reason": "CPU-only lexicon/cue method: no sarcasm/irony/syntactic context, and per-language cue lists are necessarily positive-skewed; reaching 6 needs RFC-grade evidence trails + production cross-checks beyond a lexicon.",
     "url": "https://emotional-tone.0crawl.com"
   },
   {
@@ -2571,7 +2538,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 5,
     "trl_ceiling_reason": "needs auth state for deeper testing",
     "url": "https://file-inclusion.0crawl.com"
   },
@@ -2600,8 +2567,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": "TRL 8 requires real-time funding data integration, but funding_signal's only available source (Crunchbase is unprovisioned fleet-wide -- 299/299 real captures confirm degraded:[crunchbase_unavailable]) is a news/press keyword matcher that was wrong in 10/10 manually-audited non-zero hits; wiring it in would trade the TRL for a new false-positive class. Structured output validation is now wired in (go-common/validate, response-boundary backstop) -- that half of the original ceiling reason is closed.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Reaches TRL 8 with real-time funding data integration and structured output validation.",
     "url": "https://firmographic-profile.0crawl.com"
   },
   {
@@ -2630,7 +2597,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Structural: bot-hostile mega-brand fetch blocking and an untestable JS-render fallback in this environment, not an extraction-quality gap.",
+    "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "url": "https://founding-year.0crawl.com"
   },
   {
@@ -2658,8 +2625,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 9,
-    "trl_ceiling_reason": "Both prior structural blockers (RenderJS 502s and no stored-output table) are now resolved -- ceiling raised from 8 to 9 pending fleet-scale re-measurement.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Production-grade LIVE detection rate is bounded by the upstream fleetfetch RenderJS render-cache (HTTP 502 'no pages reachable' on every probe today, confirmed against stripe/google/github/microsoft), and there is no stored-output table to measure against. Detector logic is sound and fully unit-tested; TRL 8 (SLA-grade live) is not provable without a warmer fetch tier or a persisted output table.",
     "url": "https://funding-detector.0crawl.com"
   },
   {
@@ -2688,8 +2655,6 @@
     "trl": 4,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "Crunchbase (source a) is unprovisioned fleet-wide (0 of hundreds of thousands of real captures ever resolved a Crunchbase org page -- same finding as go_firmographic_profile's audit). The two remaining free sources (Google News RSS relevance matching + a fixed keyword list) mean real fleet inputs will remain near zero by design even after this fix.",
     "url": "https://funding-signal.0crawl.com"
   },
   {
@@ -2717,8 +2682,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "An open detection-recall question: known consent-management-platform sites still show zero detection even after the write-timeout and localization fixes below; root cause unclear, possibly in a shared fetch-cache dependency.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://gdpr-compliance.0crawl.com"
   },
   {
@@ -2784,6 +2749,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://google-taxonomy.0crawl.com"
   },
   {
@@ -3016,8 +2982,6 @@
     "trl": 8,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "ISO 9362 (BIC/SWIFT) defines no check digit, so offline syntax validation of a BIC-shaped string can never fully distinguish a genuine bank code from a coincidental run of letters whose 5th/6th characters happen to form a real ISO 3166 country code, without a live SWIFT directory lookup (network egress, out of scope for this offline-design service).",
     "url": "https://iban-bic-validator.0crawl.com"
   },
   {
@@ -3077,6 +3041,43 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "url": "https://iframe-analyzer.0crawl.com"
+  },
+  {
+    "alias_urls": [
+      "go-information-leakage.0exec.com"
+    ],
+    "aliases": [
+      "go-information-leakage"
+    ],
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "security",
+    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
+    "example_path": "/?url=https://example.com",
+    "health_url": "https://information-leakage.0crawl.com/health",
+    "id": "information-leakage",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Information Leakage",
+    "rename_retire_at": "2026-06-18",
+    "rename_status": "redirect",
+    "repo_url": "https://github.com/baditaflorin/go_information_leakage",
+    "runtime": "coolify",
+    "tags": [
+      "go",
+      "infoleak"
+    ],
+    "trl": 6,
+    "trl_assessed_at": "2026-08-20",
+    "trl_assessor": "claude-sonnet-5-session-2026-08-20",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
+    "url": "https://information-leakage.0crawl.com"
   },
   {
     "auth": {
@@ -3162,7 +3163,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "url": "https://jsonp-finder.0crawl.com"
   },
@@ -3191,8 +3192,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Fresh audit against 5,242 real-production-domain-derived cases found and fixed 3 real bugs (2 security-relevant false negatives) that existed at the previously-claimed TRL 6. Ceiling of 7 blocked on: this PR merging and baking, redeploying the (3-commits-stale) production container, and a fleet-level decision on the proxy_egress/SSRF-guard tradeoff in the JWKS-fetch code path.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://jwt-debugger.0crawl.com"
   },
   {
@@ -3221,7 +3222,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
     "url": "https://keyphrase-extractor.0crawl.com"
   },
   {
@@ -3249,7 +3249,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://keyword-density.0crawl.com"
   },
   {
@@ -3338,6 +3339,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": "Authoritative existence-validation needs jurisdiction-specific registries or paid company-data feeds; CPU-only/no-outbound forbids them, so the service can detect/classify suffixes and validate identifier form but cannot prove a company exists.",
     "url": "https://legal-entity.0crawl.com"
   },
   {
@@ -3514,7 +3516,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Cart/checkout PAGE DISCOVERY (existence + reachability of /cart, /checkout, and localized variants) is now implemented and validated live against real e-commerce sites. Reaches TRL 7 once guest-checkout vs. account-required is classified from JS-rendered/post-add-to-cart page state instead of a static unauthenticated GET (current passive probe correctly reports \"unknown\" rather than guessing).",
+    "trl_ceiling_reason": "Reaches TRL 7 with checkout-flow detection.",
     "url": "https://merchant-profile.0crawl.com"
   },
   {
@@ -3601,8 +3603,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Catalog's prior ceiling:6 was stale relative to this repo's own ADR (ceiling:7, JS-render fallback already implemented). Held at trl:6 rather than 7: a headline TRL-evidence claim (dual-UA probe for server-side mobile redirects) is structurally inert -- the shared fetch client strips User-Agent by design, confirmed 0 delta on 312/316 domains.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "url": "https://mobile-friendly.0crawl.com"
   },
   {
@@ -3631,7 +3633,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
     "url": "https://named-entity-recognizer.0crawl.com"
   },
   {
@@ -3660,7 +3661,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "A fresh 500-domain live audit (2026-07-31) found two new precision leaks (alpha-3 country-code passthrough, heuristic legal-suffix/unit-as-city false positives on 5.8% of extracted addresses, now fixed in PR #15) -- SLA-grade band-8 needs a broader precision sweep plus independent recall validation under production-realistic (proxied) conditions.",
+    "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "url": "https://office-locations.0crawl.com"
   },
   {
@@ -3718,6 +3719,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://outlink-graph.0crawl.com"
   },
   {
@@ -3746,7 +3748,7 @@
     "trl_assessed_at": "2026-07-29",
     "trl_assessor": "claude-trl-uplift-2026-07-29-real-data-validation",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "Requires a headless browser / DOM rendering to measure real paint/layout metrics; this service is an HTTP-level probe (fetch + httptrace timings + structural HTML parse). It already reaches this ceiling: RFC 7230-compliant content-decoding, an evidence-trail scorer, and a reachability taxonomy validated against real production data.",
+    "trl_ceiling_reason": "Requires a headless browser / DOM rendering to measure real paint/layout metrics; this service is an HTTP-level probe.",
     "url": "https://page-load-metrics.0crawl.com"
   },
   {
@@ -3805,11 +3807,10 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "Production-grade now depends on wiring output into the existing but unpopulated domain_commerce_signals.raw_payment_detector column for longitudinal accuracy tracking, plus a broader audit of the remaining ~54 method-table entries for the bare-brand-name collision class fixed here (only 4 of ~58 audited).",
+    "trl_ceiling_reason": "Production-grade live detection-rate is bounded by the upstream fleetfetch RenderJS cache (502 context-deadline on every probe) \u2014 when it times out the detector never sees a page body, so live correctness can't be proven without a faster/warmer fetch tier or a stored-output table. Detector logic itself is sound and fully unit-tested.",
     "url": "https://payment-detector.0crawl.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -3840,7 +3841,6 @@
     "url": "https://pentest-bounty-pilot.0crawl.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -3871,7 +3871,6 @@
     "url": "https://pentest-cookie-pwn.0crawl.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -3902,7 +3901,6 @@
     "url": "https://pentest-js-bundle-scanner.0crawl.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -3933,7 +3931,6 @@
     "url": "https://pentest-reflection-hunter.0crawl.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -4078,6 +4075,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": "full coverage needs JS-render/browser for SPA-rendered press strips + paid media-monitoring feeds; static-HTML CPU parsing is at its ceiling",
     "url": "https://press-mentions.0crawl.com"
   },
   {
@@ -4105,8 +4103,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Reliability and the currency accuracy bug are now fixed and validated against real traffic, meeting the existing ceiling; going past 7 needs the corpus-level precision/recall eval the original TRL-5 ADR already flagged as the next step.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://price-range.0crawl.com"
   },
   {
@@ -4223,8 +4221,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Static single-pass analysis (no real browser engine) can't confirm Chrome's actual installability decision (service-worker activation, real icon-byte dimensions, post-JS DOM manifest recognition).",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://pwa-manifest.0crawl.com"
   },
   {
@@ -4429,8 +4427,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "No headless-browser tier for JS-rendered pricing pages, plus a known multi-SKU price-attribution gap (documented, e.g. twilio.com) beyond a text/regex rule engine.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://revenue-model.0crawl.com"
   },
   {
@@ -4489,7 +4487,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Trustpilot/G2/Capterra/Glassdoor profile pages still hard-403 every server-side request; authoritative third-party star rating/review count still structurally requires a headless browser or paid platform API, out of scope for this CPU-only fetch-path service.",
+    "trl_ceiling_reason": "Authoritative third-party rating and review counts require a headless browser or paid platform APIs because major profile pages hard-block server-side fetches.",
     "url": "https://review-presence.0crawl.com"
   },
   {
@@ -4546,7 +4544,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://robots-parser.0crawl.com"
   },
   {
@@ -4574,7 +4573,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://scan-port.0crawl.com"
   },
@@ -4662,7 +4661,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "The conditional JS-render fallback only covers a curated marker/threshold set, and the shared JS-render proxy is itself documented as degraded fleet-wide, so full post-JS coverage can't be guaranteed for every framework.",
+    "trl_ceiling_reason": "full structural complexity for SPAs needs post-JS DOM rendering, which a CPU-only static fetch cannot do",
     "url": "https://scc.0crawl.com"
   },
   {
@@ -4748,7 +4747,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://search-duck-go.0crawl.com"
   },
@@ -4778,7 +4777,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "CPU-only heuristic detector; full production detection-rate confidence still limited by fetch reliability on some regional sites.",
+    "trl_ceiling_reason": "TRL 7 needs proof on live production traffic with cross-checks; deterministic + multi-script unit proof landed, but sparse live seasonal copy in late May blocked a production detection-rate before/after.",
     "url": "https://seasonal-detector.0crawl.com"
   },
   {
@@ -4864,7 +4863,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "8-9 needs a real browser engine for post-JS-render header capture plus a persistent cross-check/SLA tier; structurally above a CPU-only RFC header-parser",
     "url": "https://security-headers.0crawl.com"
   },
@@ -5010,7 +5009,6 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://services-dashboard.0crawl.com"
   },
   {
@@ -5068,6 +5066,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://shipping-regions.0crawl.com"
   },
   {
@@ -5124,7 +5123,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://sitemap-finder.0crawl.com"
   },
@@ -5182,7 +5181,8 @@
     "trl": 7,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://social-graph.0crawl.com"
   },
   {
@@ -5417,7 +5417,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Pure Go + CPU-only structurally cannot reach TRL 7 without a headless browser (Chromium/Playwright) for JS-rendered DOM -- reverted from a later commit that quietly moved this same goalpost to 'TRL 8+' with zero new capability added.",
+    "trl_ceiling_reason": null,
     "url": "https://svi.0crawl.com"
   },
   {
@@ -5475,7 +5475,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://table-extractor.0crawl.com"
   },
   {
@@ -5533,7 +5532,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://team-size.0crawl.com"
   },
   {
@@ -5679,7 +5679,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "No JS render engine: JS-rendered SPA footers (e.g. naver.com) carry no static legal anchors and stay unreachable for a CPU-only pure-Go fetcher -- unchanged and still real. A stored evidence store (domain_legal_docs/domain_legal_doc_items, 3.1M rows) DOES exist and is actively populated from this tool's output, satisfying the persistence half of the original ceiling reason -- but it's implemented outside this repo (by the calling enrichment pipeline, not by go_tos_finder's own code) and is latest-state-only with no independent cross-source corroboration. TRL is bumped to 6, not the ceiling of 7, on that basis: real measured detection-quality improvement plus real (if externally-owned) persistence evidence, but no cross-source corroboration logic owned by this service, and the JS-render limitation is unchanged.",
+    "trl_ceiling_reason": "No JS render engine: JS-rendered SPA footers (e.g. naver.com) carry no static legal anchors and stay unreachable for a CPU-only pure-Go fetcher; plus no persistence / cross-source corroboration. Closing either needs a headless browser or a stored evidence store, out of scope for this service shape.",
     "url": "https://tos-finder.0crawl.com"
   },
   {
@@ -5707,8 +5707,8 @@
     "trl": 8,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Held at 8 rather than higher: dead TLS signal pipeline fix and re-validation against 800 fresh real production domains give concrete before/after measurements, but self-signed/expired/host-mismatch detection was only observed via a single audit pass, not sustained production track record.",
+    "trl_ceiling": null,
+    "trl_ceiling_reason": null,
     "url": "https://trust-decay.0crawl.com"
   },
   {
@@ -5766,7 +5766,7 @@
     "trl_assessed_at": "2026-08-08",
     "trl_assessor": "claude-trl-audit-2026-08-08-ugc-detector",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Architecture (schema.org Review/QAPage parsing + moderation-system fingerprints, no headless-browser/JS execution) can reach TRL 7 once the reddit-signature false positive is fixed and re-validated against a broader live-page sample. trl lowered 7->6 on 2026-08-08: the prior TRL 7 self-report cited only synthetic table-driven tests with no live-sample validation, and a first real-world sample run immediately surfaced a reproducible false positive on an ordinary non-UGC page (see trl_evidence) -- the demonstrated-in-operational-environment bar for TRL 7 was not actually met. Recommend re-promoting to 7 only after the reddit substring-match signature is scoped to actual embed markers (e.g. embed.redditmedia.com, not bare reddit.com/r/ links) and re-tested live.",
+    "trl_ceiling_reason": "Reaches TRL 7 with schema.org Review parsing + moderation-system fingerprints.",
     "url": "https://ugc-detector.0crawl.com"
   },
   {
@@ -5795,7 +5795,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 8,
-    "trl_ceiling_reason": "TRL 8 requires (1) distributed-trace deduplication of multi-feed/syndicated sites so genuine cross-site content mirroring/syndication doesn't get double-counted as independent per-site update activity, and (2) a paid historical-content feed (or equivalent commercial API) to disambiguate cosmetic re-crawls from genuine content edits at scale for domains with thin or no Wayback coverage. Neither item was addressed by the 2026-07-29 ground-truth pass, which focused on sitemap/feed cadence-math correctness; TRL is held at 7, not raised to 8, pending real measured progress on either ceiling item. (Corrected 2026-07-29: this field previously also listed a language-aware date scraping gap that had already shipped 2026-06-01 -- the stale claim is removed.)",
+    "trl_ceiling_reason": "TRL 8 requires distributed-trace deduplication of multi-feed sites, language-aware date scraping for non-English homepages, and a paid historical-content feed to disambiguate cosmetic re-crawls from genuine content edits at scale.",
     "url": "https://update-frequency.0crawl.com"
   },
   {
@@ -5824,7 +5824,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_ceiling": 5,
-    "trl_ceiling_reason": "Pure-HTTP redirect walker + HTML anchor scan, no JS execution -- cannot follow JS/meta-refresh-based redirects or preview content requiring rendering.",
+    "trl_ceiling_reason": "needs real browser DOM for URL preview",
     "url": "https://url-shortener.0crawl.com"
   },
   {
@@ -5852,8 +5852,8 @@
     "trl": 8,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 9,
-    "trl_ceiling_reason": "Geographic/currency-keyword inference has now been hardened against two confirmed ambiguous-word collision classes (ISO codes doubling as ordinary words; country names doubling as common nouns), but the underlying single-fetch methodology still has an open multi-vantage-point fetching gap to close before 9. The prior ceiling blocker (fleetfetch/RenderJS 502) is resolved and has been for two months.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single-fetch homepage inference cannot reach production-grade (TRL 8+) audience certainty without persistence/cross-checks; also gated by the shared fleetfetch tier (RenderJS 502 fleet-wide).",
     "url": "https://user-demographics.0crawl.com"
   },
   {
@@ -5881,7 +5881,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with CVSS-weighted aggregate score and remediation guidance.",
     "url": "https://vendor-security-scorecard.0crawl.com"
   },
@@ -5938,7 +5938,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
     "url": "https://voice-search.0crawl.com"
   },
   {
@@ -5966,7 +5965,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://wayback-checker.0crawl.com"
   },
@@ -6024,8 +6023,8 @@
     "trl": 8,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
-    "trl_ceiling": 9,
-    "trl_ceiling_reason": "Green-hosting detection's authoritative source (Green Web Foundation) publishes only a SQLite dataset with no CGO-free Go reader; the live GWF API + curated ASN/suffix fallback are best-effort until go-common/greenhost lands a shared, refreshable dataset (tracked in this repo's ADR 0001). This gates only the green-hosting dimension, not the byte/CO2 measurement pipeline validated in this pass.",
+    "trl_ceiling": 5,
+    "trl_ceiling_reason": "needs authenticated session for extended carbon source data",
     "url": "https://website-carbon.0crawl.com"
   },
   {
@@ -6141,7 +6140,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Static-analysis signals are now measured correctly; real browser timing (LCP/CLS/INP/TBT) remains structurally out of reach for a non-browser prober.",
+    "trl_ceiling_reason": "Lab-grade Core Web Vitals require real browser timings rather than static analysis.",
     "url": "https://wps.0crawl.com"
   },
   {
@@ -6169,7 +6168,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://xss-payload.0crawl.com"
   },
@@ -6199,6 +6198,7 @@
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 5,
+    "trl_ceiling_reason": "Real XSS confirmation requires DOM canary injection (headless browser). Reflection regex isn't real XSS.",
     "url": "https://xss-scanner.0crawl.com"
   },
   {
@@ -6226,12 +6226,11 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://zone-transfer.0crawl.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -6253,11 +6252,9 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://agent-approval.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -6279,11 +6276,9 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://agent-mailbox.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -6305,7 +6300,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://agent-quorum.0exec.com"
   },
   {
@@ -6330,7 +6324,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://agent-tools.0exec.com"
   },
   {
@@ -6388,7 +6381,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://c-proxy.0exec.com"
   },
@@ -6478,7 +6471,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://d3-graph.0exec.com"
   },
@@ -6506,7 +6499,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://db-geo-geocode.0exec.com"
   },
@@ -6535,7 +6528,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://domain-abuse-contact-rollup.0exec.com"
   },
   {
@@ -6563,7 +6555,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://domain-ai-bot-policy-scanner.0exec.com"
   },
@@ -6650,7 +6642,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "Single public validating resolver. Lifting to 8 needs multi-resolver quorum (a second independent validating resolver) and a full root-anchored walk (.->TLD->zone verifying RRSIGs at every cut). That is breadth, not the core crypto check, which is already real.",
     "url": "https://domain-dnssec-validator.0exec.com"
   },
@@ -6679,7 +6671,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": null,
     "url": "https://domain-documentation-platform-detector.0exec.com"
   },
   {
@@ -6707,7 +6698,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "No live SMTP-delivery / inbox-placement / sending-reputation feed; DKIM selector discovery is gazetteer-bounded, not exhaustive \u2014 the production-grade deliverability signals require paid feeds.",
     "url": "https://domain-email-deliverability-score.0exec.com"
   },
@@ -6736,7 +6727,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "Single CPU-only probe; true TRL 8 needs independent QUIC cross-checks / IP-path diversity / persistence, out of scope for one detector.",
     "url": "https://domain-http3-quic-detector.0exec.com"
   },
@@ -6765,7 +6756,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaching TRL 8 needs a paid/queryable cross-store feed (or JS-rendered fetch tier) to confirm an app truly exists in each regional store rather than parsing the advertised link; outside the CPU-only / no-paid-feed / no-new-outbound-call envelope.",
     "url": "https://domain-mobile-app-resolver.0exec.com"
   },
@@ -6823,7 +6814,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 8,
     "url": "https://domain-open-source-presence.0exec.com"
   },
   {
@@ -6880,7 +6870,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "DNSBL verdicts are bounded by free public blocklist coverage and the shared resolver vantage point; SLA-grade reputation (TRL 8-9) needs paid/commercial threat feeds, multiple resolver vantage points, and historical listing persistence that this CPU-only DNS-query service cannot provide.",
     "url": "https://domain-rbl-reputation.0exec.com"
   },
@@ -6909,7 +6899,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "Fingerprint-only (DNS+HTTP-header) detection; an origin behind a generic CDN/anycast front (Cloudflare, AWS Global Accelerator) is structurally undeterminable without a browser engine or paid host-intel feed.",
     "url": "https://domain-saas-host-mapper.0exec.com"
   },
@@ -6967,7 +6957,6 @@
     "trl": 8,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 9,
     "url": "https://domain-support-stack-detector.0exec.com"
   },
   {
@@ -6995,7 +6984,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative, continuously-fresh EOL dating needs a live lifecycle/CVE feed (endoflife.date); a CPU-only offline gazetteer is correct-at-curation-date but cannot guarantee freshness for TRL 7+.",
     "url": "https://domain-tech-eol-flagger.0exec.com"
   },
@@ -7054,6 +7043,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "trl_ceiling": 7,
+    "trl_ceiling_reason": "Self-contained protocol-hygiene heuristic (RDAP age via IANA bootstrap, DNSSEC, SPF/DMARC, MTA-STS, TLS, RFC 9116 security.txt) with real RFC-compliant parsing and a measured-vs-unmeasured evidence trail, but no external reputation/threat-intel signal, no historical-trend component, and no empirically-calibrated ground truth for its 90-point weighting scheme -- structurally cannot reach SLA-grade (8-9) as designed.",
     "url": "https://domain-trust-composite-grader.0exec.com"
   },
   {
@@ -7064,7 +7054,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
-    "description": "/.well-known/ coverage scanner for the domainscope enricher pipeline",
+    "description": "Semantic /.well-known/ coverage scanner that rejects wildcard routes, soft 404s, malformed documents, and wrong redirects.",
     "example_path": "/?target=example.com",
     "health_url": "https://domain-well-known-catalog.0exec.com/health",
     "id": "domain-well-known-catalog",
@@ -7081,7 +7071,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 8,
     "url": "https://domain-well-known-catalog.0exec.com"
   },
   {
@@ -7423,7 +7412,6 @@
     "url": "https://fleet-discovery.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "alias_urls": [
       "go-fleet-dns-sync.0exec.com"
     ],
@@ -7495,7 +7483,6 @@
     "url": "https://fleet-engagement-timeline.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7517,11 +7504,9 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 6,
     "url": "https://fleet-eventlog.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7543,7 +7528,6 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 6,
     "url": "https://fleet-exec.0exec.com"
   },
   {
@@ -7568,7 +7552,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance fake-data utility, no persistence/auth/SLA",
     "url": "https://fleet-fake.0exec.com"
   },
@@ -7633,7 +7617,6 @@
     "url": "https://fleet-grafana.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "alias_urls": [
       "go-fleet-graph.0exec.com"
     ],
@@ -7755,7 +7738,6 @@
     "url": "https://fleet-ip.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7777,8 +7759,35 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://fleet-lock.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
+    "example_path": "/gateway/tools",
+    "health_url": "https://fleet-mcp-gateway.0exec.com/health",
+    "id": "fleet-mcp-gateway",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Mcp Gateway",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-mcp-gateway",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-mcp-phase2",
+    "url": "https://fleet-mcp-gateway.0exec.com"
   },
   {
     "auth": {
@@ -7802,12 +7811,11 @@
     "trl": 8,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "single-instance stateless renderer, no auth/SLA/persistence",
     "url": "https://fleet-md.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -7829,7 +7837,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
     "url": "https://fleet-memory.0exec.com"
   },
   {
@@ -7859,7 +7866,6 @@
     "url": "https://fleet-notify.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-fleet-payload-corpus.0exec.com"
     ],
@@ -7891,7 +7897,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": 8,
     "url": "https://fleet-payload-corpus.0exec.com"
   },
   {
@@ -8158,7 +8164,7 @@
     "trl": 8,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
-    "trl_ceiling": 9,
+    "trl_ceiling": 7,
     "trl_ceiling_reason": "unauthenticated stateless utility with no SLA/observability commitments",
     "url": "https://fleet-pwgen.0exec.com"
   },
@@ -8320,7 +8326,6 @@
     "url": "https://fleet-schema-validator.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
     "alias_urls": [
       "go-fleet-secrets.0exec.com"
     ],
@@ -8488,6 +8493,30 @@
     "url": "https://fleet-tech-inferrer.0exec.com"
   },
   {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "infrastructure",
+    "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
+    "example_path": "/v1/balance",
+    "health_url": "https://fleet-token-ledger.0exec.com/health",
+    "id": "fleet-token-ledger",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Token Ledger",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-token-ledger",
+    "runtime": "compose",
+    "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-08-05",
+    "trl_assessor": "claude-sonnet-5-token-ledger",
+    "url": "https://fleet-token-ledger.0exec.com"
+  },
+  {
     "alias_urls": [
       "go-fleet-vendor-disclosure-tracker.0exec.com"
     ],
@@ -8641,7 +8670,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://geo-geocode.0exec.com"
   },
@@ -8669,12 +8698,11 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://geo-places.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "session-fixation.0exec.com"
     ],
@@ -8745,49 +8773,11 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://html-proxy.0exec.com"
   },
   {
-    "alias_urls": [
-      "go-information-leakage.0exec.com"
-    ],
-    "aliases": [
-      "go-information-leakage"
-    ],
-    "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "category": "security",
-    "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
-    "example_path": "/?url=https://example.com",
-    "health_url": "https://information-leakage.0crawl.com/health",
-    "id": "information-leakage",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0crawl",
-    "name": "Information Leakage",
-    "rename_retire_at": "2026-06-18",
-    "rename_status": "redirect",
-    "repo_url": "https://github.com/baditaflorin/go_information_leakage",
-    "runtime": "coolify",
-    "tags": [
-      "go",
-      "infoleak"
-    ],
-    "trl": 6,
-    "trl_assessed_at": "2026-08-20",
-    "trl_assessor": "claude-sonnet-5-session-2026-08-20",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
-    "url": "https://information-leakage.0crawl.com"
-  },
-  {
-    "access_tier": "infra-privileged",
     "alias_urls": [
       "go-infrastructure-fetch-cache.0exec.com"
     ],
@@ -8817,7 +8807,6 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync",
-    "trl_ceiling": 7,
     "url": "https://infrastructure-fetch-cache.0exec.com"
   },
   {
@@ -8853,7 +8842,7 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://js-proxy.0exec.com"
   },
@@ -8895,7 +8884,6 @@
     "url": "https://js-proxy-network.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -8926,7 +8914,6 @@
     "url": "https://jsbundle-routes.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -8957,7 +8944,6 @@
     "url": "https://jsbundle-secrets.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -9011,7 +8997,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://linkedin-attributes.0exec.com"
   },
@@ -9039,7 +9025,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://nlp-extractinfo.0exec.com"
   },
@@ -9068,7 +9054,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://node-js-proxy.0exec.com"
   },
@@ -9097,7 +9083,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://node-proxy.0exec.com"
   },
@@ -9126,7 +9112,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://node-search-bing.0exec.com"
   },
@@ -9155,7 +9141,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://node-search-duck.0exec.com"
   },
@@ -9183,7 +9169,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://ocr-pdf.0exec.com"
   },
@@ -9211,12 +9197,11 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://ocr-pdf-express.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-agent-state.0exec.com"
     ],
@@ -9253,7 +9238,6 @@
     "url": "https://pentest-agent-state.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-asset-inventory.0exec.com"
     ],
@@ -9290,7 +9274,6 @@
     "url": "https://pentest-asset-inventory.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-asset-scope-resolver.0exec.com"
     ],
@@ -9327,7 +9310,6 @@
     "url": "https://pentest-asset-scope-resolver.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-attack-chainer.0exec.com"
     ],
@@ -9365,7 +9347,6 @@
     "url": "https://pentest-attack-chainer.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-audit-log.0exec.com"
     ],
@@ -9401,7 +9382,6 @@
     "url": "https://pentest-audit-log.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-authz-matrix.0exec.com"
     ],
@@ -9473,7 +9453,6 @@
     "url": "https://pentest-bounty-scope-checker.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-cert-transparency.0exec.com"
     ],
@@ -9581,7 +9560,6 @@
     "url": "https://pentest-codec.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-continuous-monitor.0exec.com"
     ],
@@ -9618,7 +9596,6 @@
     "url": "https://pentest-continuous-monitor.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-cors-misconfig-prober.0exec.com"
     ],
@@ -9762,7 +9739,6 @@
     "url": "https://pentest-dependency-cve.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-disclosure-policy-finder.0exec.com"
     ],
@@ -9799,7 +9775,6 @@
     "url": "https://pentest-disclosure-policy-finder.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-exploit-verifier.0exec.com"
     ],
@@ -9836,7 +9811,6 @@
     "url": "https://pentest-exploit-verifier.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-favicon-hash.0exec.com"
     ],
@@ -9944,7 +9918,6 @@
     "url": "https://pentest-findings-store.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-github-dorks.0exec.com"
     ],
@@ -9981,7 +9954,6 @@
     "url": "https://pentest-github-dorks.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-http-replay.0exec.com"
     ],
@@ -10018,7 +9990,6 @@
     "url": "https://pentest-http-replay.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-httpx.0exec.com"
     ],
@@ -10055,7 +10026,6 @@
     "url": "https://pentest-httpx.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-job-queue.0exec.com"
     ],
@@ -10128,7 +10098,6 @@
     "url": "https://pentest-leak-bounty-policy.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-notify.0exec.com"
     ],
@@ -10165,7 +10134,6 @@
     "url": "https://pentest-notify.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-nuclei.0exec.com"
     ],
@@ -10238,7 +10206,6 @@
     "url": "https://pentest-oob-collector.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-orchestrator.0exec.com"
     ],
@@ -10311,7 +10278,6 @@
     "url": "https://pentest-payloads.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-payoff-tracker.0exec.com"
     ],
@@ -10348,7 +10314,6 @@
     "url": "https://pentest-payoff-tracker.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-rate-coordinator.0exec.com"
     ],
@@ -10457,7 +10422,6 @@
     "url": "https://pentest-scope-guard.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-screenshot.0exec.com"
     ],
@@ -10494,7 +10458,6 @@
     "url": "https://pentest-screenshot.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-secrets-scanner.0exec.com"
     ],
@@ -10567,7 +10530,6 @@
     "url": "https://pentest-session-state.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-ssrf-prober.0exec.com"
     ],
@@ -10603,7 +10565,6 @@
     "url": "https://pentest-ssrf-prober.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-subfinder.0exec.com"
     ],
@@ -10676,7 +10637,6 @@
     "url": "https://pentest-submit-bot.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-takeover-checker.0exec.com"
     ],
@@ -10819,7 +10779,6 @@
     "url": "https://pentest-triager-listener.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-trufflehog.0exec.com"
     ],
@@ -10856,7 +10815,6 @@
     "url": "https://pentest-trufflehog.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-walkthrough.0exec.com"
     ],
@@ -10893,7 +10851,6 @@
     "url": "https://pentest-walkthrough.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "alias_urls": [
       "go-pentest-wayback-urls.0exec.com"
     ],
@@ -10988,7 +10945,6 @@
     "url": "http://dockerhost:18204"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -11019,7 +10975,6 @@
     "url": "https://postmessage.0exec.com"
   },
   {
-    "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -11082,7 +11037,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://proxy.0exec.com"
   },
@@ -11111,7 +11066,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://python-proxy.0exec.com"
   },
@@ -11139,7 +11094,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 8,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://random-proxy.0exec.com"
   },
@@ -11176,7 +11131,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://search-duck.0exec.com"
   },
@@ -11241,7 +11196,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://utils-readcontent.0exec.com"
   },
@@ -11266,7 +11221,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/accent-coach/"
   },
@@ -11291,7 +11246,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/anon-conf-poll/"
   },
@@ -11316,7 +11271,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 4,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/audience-field-sculpture/"
   },
@@ -11341,7 +11296,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/audio-repair-lab/"
   },
@@ -11370,7 +11325,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 7,
     "url": "https://baditaflorin.github.io/automata-lab/"
   },
   {
@@ -11419,7 +11373,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/castle-archive-memory-vault/"
   },
@@ -11448,7 +11402,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 8,
     "url": "https://baditaflorin.github.io/chatwrapped/"
   },
   {
@@ -11472,7 +11425,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/complete-gardener-planner/"
   },
@@ -11497,7 +11450,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "http://drivendata.github.io/cookiecutter-data-science/"
   },
@@ -11522,7 +11475,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 4,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/crystal-growth-simulator/"
   },
@@ -11547,7 +11500,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/cursorparty/"
   },
@@ -11572,7 +11525,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://zilliztech.github.io/deep-searcher/"
   },
@@ -11597,7 +11550,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/earthquake-wave-propagation/"
   },
@@ -11622,7 +11575,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/elder-care-coordinator/"
   },
@@ -11674,7 +11627,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/field-recording-mirror/"
   },
@@ -11726,7 +11679,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/gentle-adhd-flow/"
   },
@@ -11751,7 +11704,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/granular-physics-lab/"
   },
@@ -11776,7 +11729,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/group-theory-visualizer/"
   },
@@ -11801,7 +11754,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/highlight-recall/"
   },
@@ -11826,7 +11779,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/implemment-the-following-time-displaced-ears/"
   },
@@ -11855,7 +11808,6 @@
     "trl": 7,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 8,
     "url": "https://baditaflorin.github.io/life-in-weeks/"
   },
   {
@@ -11879,7 +11831,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/little-voice-stories"
   },
@@ -11904,7 +11856,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 4,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/local-proofreader/"
   },
@@ -11929,7 +11881,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/localhuman-mail/"
   },
@@ -11954,7 +11906,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/localingo/"
   },
@@ -11983,7 +11935,6 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 3,
     "url": "https://baditaflorin.github.io/mandala-studio/"
   },
   {
@@ -12007,9 +11958,53 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-bench-archive/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A browser-local lending board for things neighbours can borrow and return.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-borrow-board/",
+    "id": "mesh-borrow-board",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Borrow Board",
+    "pages_url": "https://baditaflorin.github.io/mesh-borrow-board/",
+    "repo_url": "https://github.com/baditaflorin/mesh-borrow-board",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-borrow-board/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "Facilitator-led peer breakout rotations for small group conversations.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-breakout-pairs/",
+    "id": "mesh-breakout-pairs",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Breakout Pairs",
+    "pages_url": "https://baditaflorin.github.io/mesh-breakout-pairs/",
+    "repo_url": "https://github.com/baditaflorin/mesh-breakout-pairs",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-breakout-pairs/"
   },
   {
     "auth": {
@@ -12032,7 +12027,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-carpool-bingo/"
   },
@@ -12062,8 +12057,117 @@
     "trl": 3,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 4,
     "url": "https://baditaflorin.github.io/mesh-codenames/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "productivity",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-cohort-scheduler/",
+    "id": "mesh-cohort-scheduler",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Cohort Scheduler",
+    "pages_url": "https://baditaflorin.github.io/mesh-cohort-scheduler/",
+    "repo_url": "https://github.com/baditaflorin/mesh-cohort-scheduler",
+    "runtime": "github-pages",
+    "tags": [
+      "rootless-computing"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-cohort-scheduler/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A privacy-safe shared board for coarse, short-lived observations.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-crowd-map/",
+    "id": "mesh-crowd-map",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Crowd Map",
+    "pages_url": "https://baditaflorin.github.io/mesh-crowd-map/",
+    "repo_url": "https://github.com/baditaflorin/mesh-crowd-map",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-crowd-map/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A browser-local peer commitment room with shared deadlines and check-ins.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-deadline-pact/",
+    "id": "mesh-deadline-pact",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Deadline Pact",
+    "pages_url": "https://baditaflorin.github.io/mesh-deadline-pact/",
+    "repo_url": "https://github.com/baditaflorin/mesh-deadline-pact",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-deadline-pact/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "productivity",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-decision-room/",
+    "id": "mesh-decision-room",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Decision Room",
+    "pages_url": "https://baditaflorin.github.io/mesh-decision-room/",
+    "repo_url": "https://github.com/baditaflorin/mesh-decision-room",
+    "runtime": "github-pages",
+    "tags": [
+      "rootless-computing"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-decision-room/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "education",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-exit-ticket/",
+    "id": "mesh-exit-ticket",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Exit Ticket",
+    "pages_url": "https://baditaflorin.github.io/mesh-exit-ticket/",
+    "repo_url": "https://github.com/baditaflorin/mesh-exit-ticket",
+    "runtime": "github-pages",
+    "tags": [
+      "rootless-computing"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-exit-ticket/"
   },
   {
     "auth": {
@@ -12086,9 +12190,163 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-firefly-walk/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A fast, peer-to-peer answer game where every voice gets five seconds.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-five-second-rule/",
+    "id": "mesh-five-second-rule",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Five Second Rule",
+    "pages_url": "https://baditaflorin.github.io/mesh-five-second-rule/",
+    "repo_url": "https://github.com/baditaflorin/mesh-five-second-rule",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-five-second-rule/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A browser-local peer-authored flashcard review room.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-flashcard-swarm/",
+    "id": "mesh-flashcard-swarm",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Flashcard Swarm",
+    "pages_url": "https://baditaflorin.github.io/mesh-flashcard-swarm/",
+    "repo_url": "https://github.com/baditaflorin/mesh-flashcard-swarm",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-flashcard-swarm/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "productivity",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-focus-sprint/",
+    "id": "mesh-focus-sprint",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Focus Sprint",
+    "pages_url": "https://baditaflorin.github.io/mesh-focus-sprint/",
+    "repo_url": "https://github.com/baditaflorin/mesh-focus-sprint",
+    "runtime": "github-pages",
+    "tags": [
+      "rootless-computing"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-focus-sprint/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A fair, private gift draw that stays directly between the people in your room.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-gift-exchange/",
+    "id": "mesh-gift-exchange",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Gift Exchange",
+    "pages_url": "https://baditaflorin.github.io/mesh-gift-exchange/",
+    "repo_url": "https://github.com/baditaflorin/mesh-gift-exchange",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-gift-exchange/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A time-boxed peer-to-peer habit challenge with shared check-ins and progress.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-habit-sprint/",
+    "id": "mesh-habit-sprint",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Habit Sprint",
+    "pages_url": "https://baditaflorin.github.io/mesh-habit-sprint/",
+    "repo_url": "https://github.com/baditaflorin/mesh-habit-sprint",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-habit-sprint/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A peer-to-peer idea market where every participant invests a shared budget.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-idea-market/",
+    "id": "mesh-idea-market",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Idea Market",
+    "pages_url": "https://baditaflorin.github.io/mesh-idea-market/",
+    "repo_url": "https://github.com/baditaflorin/mesh-idea-market",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-idea-market/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A browser-local shared prompt director for accessible improv sessions.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-improv-director/",
+    "id": "mesh-improv-director",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Improv Director",
+    "pages_url": "https://baditaflorin.github.io/mesh-improv-director/",
+    "repo_url": "https://github.com/baditaflorin/mesh-improv-director",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-improv-director/"
   },
   {
     "auth": {
@@ -12121,6 +12379,28 @@
     },
     "auth_help": "no auth",
     "category": "peer_to_peer",
+    "description": "A browser-local shared missing and found board with private claimant flow.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-lost-found/",
+    "id": "mesh-lost-found",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Lost Found",
+    "pages_url": "https://baditaflorin.github.io/mesh-lost-found/",
+    "repo_url": "https://github.com/baditaflorin/mesh-lost-found",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-lost-found/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
     "description": "Peer-to-peer Werewolf: phones are role cards assigned via cryptographic commit-reveal; no server ever learns who's the wolf.",
     "example_path": "/",
     "health_url": "https://baditaflorin.github.io/mesh-mafia/",
@@ -12146,6 +12426,28 @@
     },
     "auth_help": "no auth",
     "category": "peer_to_peer",
+    "description": "An accessible browser-local matching game for small groups.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-memory-match/",
+    "id": "mesh-memory-match",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Memory Match",
+    "pages_url": "https://baditaflorin.github.io/mesh-memory-match/",
+    "repo_url": "https://github.com/baditaflorin/mesh-memory-match",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-memory-match/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
     "description": "Peer-to-peer mesh: 4 phones become a polyrhythm grid, each playing a clock-synced subdivision of the same BPM.",
     "example_path": "/",
     "health_url": "https://baditaflorin.github.io/mesh-metronome/",
@@ -12161,7 +12463,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-metronome/"
   },
@@ -12186,119 +12488,9 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/mesh-mirror/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A shared, peer-to-peer typing sprint with a live WPM leaderboard.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-speed-type/",
-    "id": "mesh-speed-type",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Speed Type",
-    "pages_url": "https://baditaflorin.github.io/mesh-speed-type/",
-    "repo_url": "https://github.com/baditaflorin/mesh-speed-type",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-speed-type/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A peer-to-peer clue game with shared turns, timer, and taboo flags.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-taboo-clues/",
-    "id": "mesh-taboo-clues",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Taboo Clues",
-    "pages_url": "https://baditaflorin.github.io/mesh-taboo-clues/",
-    "repo_url": "https://github.com/baditaflorin/mesh-taboo-clues",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-taboo-clues/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local peer commitment room with shared deadlines and check-ins.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-deadline-pact/",
-    "id": "mesh-deadline-pact",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Deadline Pact",
-    "pages_url": "https://baditaflorin.github.io/mesh-deadline-pact/",
-    "repo_url": "https://github.com/baditaflorin/mesh-deadline-pact",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-deadline-pact/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A fast, peer-to-peer answer game where every voice gets five seconds.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-five-second-rule/",
-    "id": "mesh-five-second-rule",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Five Second Rule",
-    "pages_url": "https://baditaflorin.github.io/mesh-five-second-rule/",
-    "repo_url": "https://github.com/baditaflorin/mesh-five-second-rule",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-five-second-rule/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local shared missing and found board with private claimant flow.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-lost-found/",
-    "id": "mesh-lost-found",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Lost Found",
-    "pages_url": "https://baditaflorin.github.io/mesh-lost-found/",
-    "repo_url": "https://github.com/baditaflorin/mesh-lost-found",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-lost-found/"
   },
   {
     "auth": {
@@ -12326,8 +12518,29 @@
     "trl": 2,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 3,
     "url": "https://baditaflorin.github.io/mesh-most-likely/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A browser-local rotating prompt game for a room of peers.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-pass-the-phone/",
+    "id": "mesh-pass-the-phone",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Pass The Phone",
+    "pages_url": "https://baditaflorin.github.io/mesh-pass-the-phone/",
+    "repo_url": "https://github.com/baditaflorin/mesh-pass-the-phone",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-pass-the-phone/"
   },
   {
     "auth": {
@@ -12355,7 +12568,6 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 6,
     "url": "https://baditaflorin.github.io/mesh-picker/"
   },
   {
@@ -12386,292 +12598,6 @@
     },
     "auth_help": "no auth",
     "category": "peer_to_peer",
-    "description": "A shared take-a-number queue that works directly between browsers.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-queue/",
-    "id": "mesh-queue",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Queue",
-    "pages_url": "https://baditaflorin.github.io/mesh-queue/",
-    "repo_url": "https://github.com/baditaflorin/mesh-queue",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-queue/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A quick peer-to-peer word chain with shared turns and a round clock.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-word-chain/",
-    "id": "mesh-word-chain",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Word Chain",
-    "pages_url": "https://baditaflorin.github.io/mesh-word-chain/",
-    "repo_url": "https://github.com/baditaflorin/mesh-word-chain",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-word-chain/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A fair, private gift draw that stays directly between the people in your room.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-gift-exchange/",
-    "id": "mesh-gift-exchange",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Gift Exchange",
-    "pages_url": "https://baditaflorin.github.io/mesh-gift-exchange/",
-    "repo_url": "https://github.com/baditaflorin/mesh-gift-exchange",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-gift-exchange/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A peer-to-peer idea market where every participant invests a shared budget.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-idea-market/",
-    "id": "mesh-idea-market",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Idea Market",
-    "pages_url": "https://baditaflorin.github.io/mesh-idea-market/",
-    "repo_url": "https://github.com/baditaflorin/mesh-idea-market",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-idea-market/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "Facilitator-led peer breakout rotations for small group conversations.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-breakout-pairs/",
-    "id": "mesh-breakout-pairs",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Breakout Pairs",
-    "pages_url": "https://baditaflorin.github.io/mesh-breakout-pairs/",
-    "repo_url": "https://github.com/baditaflorin/mesh-breakout-pairs",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-breakout-pairs/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local lending board for things neighbours can borrow and return.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-borrow-board/",
-    "id": "mesh-borrow-board",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Borrow Board",
-    "pages_url": "https://baditaflorin.github.io/mesh-borrow-board/",
-    "repo_url": "https://github.com/baditaflorin/mesh-borrow-board",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-borrow-board/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A time-boxed peer-to-peer habit challenge with shared check-ins and progress.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-habit-sprint/",
-    "id": "mesh-habit-sprint",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Habit Sprint",
-    "pages_url": "https://baditaflorin.github.io/mesh-habit-sprint/",
-    "repo_url": "https://github.com/baditaflorin/mesh-habit-sprint",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-habit-sprint/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A privacy-safe shared board for coarse, short-lived observations.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-crowd-map/",
-    "id": "mesh-crowd-map",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Crowd Map",
-    "pages_url": "https://baditaflorin.github.io/mesh-crowd-map/",
-    "repo_url": "https://github.com/baditaflorin/mesh-crowd-map",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-crowd-map/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local daily question room for one thoughtful answer per peer.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-daily-question/",
-    "id": "mesh-daily-question",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Daily Question",
-    "pages_url": "https://baditaflorin.github.io/mesh-daily-question/",
-    "repo_url": "https://github.com/baditaflorin/mesh-daily-question",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-daily-question/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local book-club lottery with one nomination per peer and a transparent draw.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-book-club-lottery/",
-    "id": "mesh-book-club-lottery",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Book Club Lottery",
-    "pages_url": "https://baditaflorin.github.io/mesh-book-club-lottery/",
-    "repo_url": "https://github.com/baditaflorin/mesh-book-club-lottery",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-book-club-lottery/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local two-peer drawing race with a shared timer and accessible fallback controls.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-quick-draw-duel/",
-    "id": "mesh-quick-draw-duel",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Quick Draw Duel",
-    "pages_url": "https://baditaflorin.github.io/mesh-quick-draw-duel/",
-    "repo_url": "https://github.com/baditaflorin/mesh-quick-draw-duel",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-quick-draw-duel/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local rotating prompt game for a room of peers.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-pass-the-phone/",
-    "id": "mesh-pass-the-phone",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Pass the Phone",
-    "pages_url": "https://baditaflorin.github.io/mesh-pass-the-phone/",
-    "repo_url": "https://github.com/baditaflorin/mesh-pass-the-phone",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-pass-the-phone/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local, turn-based recipe relay with one safe step per peer.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-recipe-relay/",
-    "id": "mesh-recipe-relay",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Recipe Relay",
-    "pages_url": "https://baditaflorin.github.io/mesh-recipe-relay/",
-    "repo_url": "https://github.com/baditaflorin/mesh-recipe-relay",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-recipe-relay/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
     "description": "A browser-local staged discussion prompt ladder for groups.",
     "example_path": "/",
     "health_url": "https://baditaflorin.github.io/mesh-prompt-ladder/",
@@ -12694,131 +12620,49 @@
     },
     "auth_help": "no auth",
     "category": "peer_to_peer",
-    "description": "A browser-local, time-boxed remote standup with one validated update per peer.",
+    "description": "A shared take-a-number queue that works directly between browsers.",
     "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-remote-retro-standup/",
-    "id": "mesh-remote-retro-standup",
+    "health_url": "https://baditaflorin.github.io/mesh-queue/",
+    "id": "mesh-queue",
     "kind": "static",
     "language": "html",
     "mesh": "pages",
-    "name": "Mesh Remote Retro Standup",
-    "pages_url": "https://baditaflorin.github.io/mesh-remote-retro-standup/",
-    "repo_url": "https://github.com/baditaflorin/mesh-remote-retro-standup",
+    "name": "Mesh Queue",
+    "pages_url": "https://baditaflorin.github.io/mesh-queue/",
+    "repo_url": "https://github.com/baditaflorin/mesh-queue",
     "runtime": "github-pages",
     "tags": [
       "typescript"
     ],
-    "url": "https://baditaflorin.github.io/mesh-remote-retro-standup/"
+    "url": "https://baditaflorin.github.io/mesh-queue/"
   },
   {
     "auth": {
       "type": "none"
     },
     "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local clue passing game for a room of peers.",
+    "category": "app",
+    "description": "",
     "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-heads-up/",
-    "id": "mesh-heads-up",
+    "health_url": "https://baditaflorin.github.io/mesh-reaction/",
+    "id": "mesh-reaction",
     "kind": "static",
     "language": "html",
     "mesh": "pages",
-    "name": "Mesh Heads Up",
-    "pages_url": "https://baditaflorin.github.io/mesh-heads-up/",
-    "repo_url": "https://github.com/baditaflorin/mesh-heads-up",
+    "name": "Mesh Reaction",
+    "pages_url": "https://baditaflorin.github.io/mesh-reaction/",
+    "repo_url": "https://github.com/baditaflorin/mesh-reaction",
     "runtime": "github-pages",
     "tags": [
-      "typescript"
+      "kind-static",
+      "language-html",
+      "peer-to-peer",
+      "runtime-github-pages"
     ],
-    "url": "https://baditaflorin.github.io/mesh-heads-up/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "An accessible browser-local matching game with a shared, peer-to-peer card board.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-memory-match/",
-    "id": "mesh-memory-match",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Memory Match",
-    "pages_url": "https://baditaflorin.github.io/mesh-memory-match/",
-    "repo_url": "https://github.com/baditaflorin/mesh-memory-match",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-memory-match/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "An accessible browser-local shared matching-symbol race.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-spot-it/",
-    "id": "mesh-spot-it",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Spot It",
-    "pages_url": "https://baditaflorin.github.io/mesh-spot-it/",
-    "repo_url": "https://github.com/baditaflorin/mesh-spot-it",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-spot-it/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local peer-authored flashcard review room with shared rounds.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-flashcard-swarm/",
-    "id": "mesh-flashcard-swarm",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Flashcard Swarm",
-    "pages_url": "https://baditaflorin.github.io/mesh-flashcard-swarm/",
-    "repo_url": "https://github.com/baditaflorin/mesh-flashcard-swarm",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-flashcard-swarm/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local shared prompt director for accessible improv sessions.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-improv-director/",
-    "id": "mesh-improv-director",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Improv Director",
-    "pages_url": "https://baditaflorin.github.io/mesh-improv-director/",
-    "repo_url": "https://github.com/baditaflorin/mesh-improv-director",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-improv-director/"
+    "trl": 3,
+    "trl_assessed_at": "2026-08-04",
+    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
+    "url": "https://baditaflorin.github.io/mesh-reaction/"
   },
   {
     "auth": {
@@ -12848,51 +12692,7 @@
     },
     "auth_help": "no auth",
     "category": "peer_to_peer",
-    "description": "An accessible browser-local shared sound and emoji clue guessing game.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-sound-guess/",
-    "id": "mesh-sound-guess",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Sound Guess",
-    "pages_url": "https://baditaflorin.github.io/mesh-sound-guess/",
-    "repo_url": "https://github.com/baditaflorin/mesh-sound-guess",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-sound-guess/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "An accessible browser-local board for small shared skill challenges.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-skill-challenge/",
-    "id": "mesh-skill-challenge",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Skill Challenge",
-    "pages_url": "https://baditaflorin.github.io/mesh-skill-challenge/",
-    "repo_url": "https://github.com/baditaflorin/mesh-skill-challenge",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-skill-challenge/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local shared assigned checklist for small groups.",
+    "description": "A shared, assigned checklist for small groups.",
     "example_path": "/",
     "health_url": "https://baditaflorin.github.io/mesh-shared-checklist/",
     "id": "mesh-shared-checklist",
@@ -12907,57 +12707,6 @@
       "typescript"
     ],
     "url": "https://baditaflorin.github.io/mesh-shared-checklist/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "peer_to_peer",
-    "description": "A browser-local, accessible shared social-energy check-in.",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-social-battery/",
-    "id": "mesh-social-battery",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Social Battery",
-    "pages_url": "https://baditaflorin.github.io/mesh-social-battery/",
-    "repo_url": "https://github.com/baditaflorin/mesh-social-battery",
-    "runtime": "github-pages",
-    "tags": [
-      "typescript"
-    ],
-    "url": "https://baditaflorin.github.io/mesh-social-battery/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "app",
-    "description": "",
-    "example_path": "/",
-    "health_url": "https://baditaflorin.github.io/mesh-reaction/",
-    "id": "mesh-reaction",
-    "kind": "static",
-    "language": "html",
-    "mesh": "pages",
-    "name": "Mesh Reaction",
-    "pages_url": "https://baditaflorin.github.io/mesh-reaction/",
-    "repo_url": "https://github.com/baditaflorin/mesh-reaction",
-    "runtime": "github-pages",
-    "tags": [
-      "kind-static",
-      "language-html",
-      "peer-to-peer",
-      "runtime-github-pages"
-    ],
-    "trl": 3,
-    "trl_assessed_at": "2026-08-04",
-    "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 4,
-    "url": "https://baditaflorin.github.io/mesh-reaction/"
   },
   {
     "auth": {
@@ -13015,6 +12764,138 @@
     },
     "auth_help": "no auth",
     "category": "peer_to_peer",
+    "description": "An accessible browser-local board for small shared skill challenges.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-skill-challenge/",
+    "id": "mesh-skill-challenge",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Skill Challenge",
+    "pages_url": "https://baditaflorin.github.io/mesh-skill-challenge/",
+    "repo_url": "https://github.com/baditaflorin/mesh-skill-challenge",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-skill-challenge/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A browser-local, accessible shared social-energy check-in.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-social-battery/",
+    "id": "mesh-social-battery",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Social Battery",
+    "pages_url": "https://baditaflorin.github.io/mesh-social-battery/",
+    "repo_url": "https://github.com/baditaflorin/mesh-social-battery",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-social-battery/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "An accessible browser-local shared sound and emoji clue guessing game.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-sound-guess/",
+    "id": "mesh-sound-guess",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Sound Guess",
+    "pages_url": "https://baditaflorin.github.io/mesh-sound-guess/",
+    "repo_url": "https://github.com/baditaflorin/mesh-sound-guess",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-sound-guess/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A shared, peer-to-peer typing sprint with a live WPM leaderboard.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-speed-type/",
+    "id": "mesh-speed-type",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Speed Type",
+    "pages_url": "https://baditaflorin.github.io/mesh-speed-type/",
+    "repo_url": "https://github.com/baditaflorin/mesh-speed-type",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-speed-type/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "An accessible browser-local shared matching-symbol race.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-spot-it/",
+    "id": "mesh-spot-it",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Spot It",
+    "pages_url": "https://baditaflorin.github.io/mesh-spot-it/",
+    "repo_url": "https://github.com/baditaflorin/mesh-spot-it",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-spot-it/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A peer-to-peer clue game with shared turns, timer, and taboo flags.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-taboo-clues/",
+    "id": "mesh-taboo-clues",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Taboo Clues",
+    "pages_url": "https://baditaflorin.github.io/mesh-taboo-clues/",
+    "repo_url": "https://github.com/baditaflorin/mesh-taboo-clues",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-taboo-clues/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "peer_to_peer",
     "description": "Peer-to-peer mesh: each phone is one drum; 30 seconds of taps records a synced loop that replays on every phone.",
     "example_path": "/",
     "health_url": "https://baditaflorin.github.io/mesh-tap-symphony/",
@@ -13060,8 +12941,29 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": null,
     "url": "https://baditaflorin.github.io/mesh-tug-of-war/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "community",
+    "description": "",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-volunteer-desk/",
+    "id": "mesh-volunteer-desk",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Volunteer Desk",
+    "pages_url": "https://baditaflorin.github.io/mesh-volunteer-desk/",
+    "repo_url": "https://github.com/baditaflorin/mesh-volunteer-desk",
+    "runtime": "github-pages",
+    "tags": [
+      "rootless-computing"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-volunteer-desk/"
   },
   {
     "auth": {
@@ -13093,6 +12995,28 @@
       "type": "none"
     },
     "auth_help": "no auth",
+    "category": "peer_to_peer",
+    "description": "A quick peer-to-peer word chain with shared turns and a round clock.",
+    "example_path": "/",
+    "health_url": "https://baditaflorin.github.io/mesh-word-chain/",
+    "id": "mesh-word-chain",
+    "kind": "static",
+    "language": "html",
+    "mesh": "pages",
+    "name": "Mesh Word Chain",
+    "pages_url": "https://baditaflorin.github.io/mesh-word-chain/",
+    "repo_url": "https://github.com/baditaflorin/mesh-word-chain",
+    "runtime": "github-pages",
+    "tags": [
+      "typescript"
+    ],
+    "url": "https://baditaflorin.github.io/mesh-word-chain/"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
     "category": "app",
     "description": "Local-first writing desk for researching, drafting, polishing, and repurposing newsletters without SaaS bloat.",
     "example_path": "/",
@@ -13109,7 +13033,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/newsletter-flow/"
   },
@@ -13134,7 +13058,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/numen/"
   },
@@ -13159,7 +13083,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/open-indie-studio/"
   },
@@ -13184,7 +13108,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/open-school-lab/"
   },
@@ -13209,7 +13133,7 @@
     "trl": 5,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/openphoto-studio/"
   },
@@ -13234,7 +13158,7 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 7,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/osm-poster/"
   },
@@ -13311,7 +13235,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 5,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/physical-kanban-sync/"
   },
@@ -13361,7 +13285,7 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 6,
+    "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/polyglot-nlp-toolkit/"
   },
@@ -13635,7 +13559,6 @@
     "trl": 6,
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
-    "trl_ceiling": 7,
     "url": "https://baditaflorin.github.io/string-portrait/"
   },
   {
@@ -13893,59 +13816,5 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/z3-smt-game/"
-  },
-  {
-    "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "category": "infrastructure",
-    "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
-    "example_path": "/gateway/tools",
-    "health_url": "https://fleet-mcp-gateway.0exec.com/health",
-    "id": "fleet-mcp-gateway",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0exec",
-    "name": "Fleet MCP Gateway",
-    "repo_url": "https://github.com/baditaflorin/go-fleet-mcp-gateway",
-    "runtime": "compose",
-    "tags": [
-      "kind-container",
-      "language-go",
-      "runtime-compose"
-    ],
-    "trl": 4,
-    "trl_assessed_at": "2026-08-05",
-    "trl_assessor": "claude-sonnet-5-mcp-phase2",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
-    "url": "https://fleet-mcp-gateway.0exec.com"
-  },
-  {
-    "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "category": "infrastructure",
-    "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
-    "example_path": "/v1/balance",
-    "health_url": "https://fleet-token-ledger.0exec.com/health",
-    "id": "fleet-token-ledger",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0exec",
-    "name": "Fleet Token Ledger",
-    "repo_url": "https://github.com/baditaflorin/go-fleet-token-ledger",
-    "runtime": "compose",
-    "tags": [],
-    "trl": 4,
-    "trl_assessed_at": "2026-08-05",
-    "trl_assessor": "claude-sonnet-5-token-ledger",
-    "url": "https://fleet-token-ledger.0exec.com"
   }
 ]
