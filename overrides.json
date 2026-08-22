@@ -3287,14 +3287,16 @@
     "container_port": 8080,
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
-    "mem_limit": "2g",
+    "mem_limit": "6g",
     "name": "Proxy (Go+JS)",
     "trl": 7,
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "First-pass safety audit of this fleet-wide JS-rendering proxy: found and fixed the most severe security gap of this session -- zero SSRF protection on a caller-supplied ?url= that gets full headless-Chrome navigation with JS execution and cookies (no scheme check, no block on private/loopback/link-local/CGNAT/cloud-metadata hosts). Worse than a typical SSRF gap since the target is fully rendered, not just fetched. The fleet already has the canonical fix (safehttp.CheckURL, already used by sibling go-html-proxy) -- this service simply never adopted it. Fixed by gating both the direct and Chrome engines before dispatch; one honest residual gap documented (Chrome does its own DNS resolution outside the guarded dialer, so a DNS-rebind between check and navigation isn't fully closed -- flagged as follow-up). Separately confirmed no resource-leak/crash-loop bug in this service specifically via a real (non-stubbed) Chrome instance stress test -- hung pages/redirect loops/resource-heavy pages all tear down cleanly, Chrome process count stable. No data races under go test -race; two concurrent tabs confirmed isolated (separate CDP realms). trl held at 7; trl_ceiling=7 added -- otherwise well-engineered (solid pool/tab management, good test coverage) but a JS-execution proxy that had zero SSRF protection until this fix caps how much higher it can honestly go before production burn-in and closing the DNS-rebind gap. See PR #4 (merged)."
+    "trl_evidence": "First-pass safety audit of this fleet-wide JS-rendering proxy: found and fixed the most severe security gap of this session -- zero SSRF protection on a caller-supplied ?url= that gets full headless-Chrome navigation with JS execution and cookies (no scheme check, no block on private/loopback/link-local/CGNAT/cloud-metadata hosts). Worse than a typical SSRF gap since the target is fully rendered, not just fetched. The fleet already has the canonical fix (safehttp.CheckURL, already used by sibling go-html-proxy) -- this service simply never adopted it. Fixed by gating both the direct and Chrome engines before dispatch; one honest residual gap documented (Chrome does its own DNS resolution outside the guarded dialer, so a DNS-rebind between check and navigation isn't fully closed -- flagged as follow-up). Separately confirmed no resource-leak/crash-loop bug in this service specifically via a real (non-stubbed) Chrome instance stress test -- hung pages/redirect loops/resource-heavy pages all tear down cleanly, Chrome process count stable. No data races under go test -race; two concurrent tabs confirmed isolated (separate CDP realms). trl held at 7; trl_ceiling=7 added -- otherwise well-engineered (solid pool/tab management, good test coverage) but a JS-execution proxy that had zero SSRF protection until this fix caps how much higher it can honestly go before production burn-in and closing the DNS-rebind gap. See PR #4 (merged).",
+    "cpus": 8.0,
+    "pids_limit": 4096
   },
   "js-proxy-network": {
     "auth": {
