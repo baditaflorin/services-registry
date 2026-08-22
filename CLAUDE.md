@@ -314,11 +314,19 @@ Request flow at the gateway:
 
 1. **nginx vhost** captures the key into `$api_key_in` (Bearer regex →
    X-API-Key header → ?api_key query, in that order).
-2. **Static fallback** — if `$api_key_in` matches the universal demo
-   key (`$default_token`, from `/etc/nginx/conf.d/_default_token.conf`),
-   accept immediately and set `X-Auth-User: demo`. Survives keystore
-   outages for the public demo path. The default token is rate-limited
-   to 1 req/s and ~60 req/h per IP at this layer.
+2. ~~**Static fallback**~~ — **sunset 2026-08-22 (security risk).** This
+   step previously accepted the universal demo key (`$default_token`,
+   from `/etc/nginx/conf.d/_default_token.conf`) immediately and set
+   `X-Auth-User: demo`, surviving keystore outages for the public demo
+   path. A static, undifferentiated, rate-limit-only gate in front of
+   every service was judged too broad a bypass and has been removed
+   from the gateway. `$api_key_in == default_token` now falls through to
+   step 3 like any other value and gets a normal 401 from the keystore.
+   There is currently no public, unauthenticated demo path — every
+   caller needs a real keystore-issued key. Don't reference
+   `default_token` as a working example in service docs; if you find one,
+   fix it the same way this passage was fixed (mark it sunset, point at
+   real auth) rather than leaving it looking live.
 3. Otherwise nginx POSTs `X-Verify-Key: $api_key_in` to the keystore's
    `/verify` via `auth_request`.
 4. Keystore checks SQLite → returns 200 + `X-Auth-User` / `X-Auth-Scope`,

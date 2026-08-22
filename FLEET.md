@@ -146,36 +146,32 @@ whatever the keystore says.
      - `https://<slug>.0crawl.com/t/<key>/...` (legacy shape, kept working)
   2. nginx extracts the candidate key from query / header / path
      and runs `auth_request` → `_verify_key` location.
-  3. Static fallback first: if the candidate matches the universal
-     demo key `$default_token` (sourced from `/etc/nginx/conf.d/_default_token.conf`
-     on the gateway, NOT from any repo), accept immediately and set
-     `X-Auth-User: demo`. The demo path is rate-limited to 1 req/s
-     and ~60 req/h per IP at the gateway.
-  4. Otherwise POST `X-Verify-Key=<key>` to `/verify` on the keystore.
+  3. ~~Static fallback first: if the candidate matches the universal
+     demo key `$default_token`, accept immediately.~~ **Sunset
+     2026-08-22 (security risk)** — a static, undifferentiated,
+     rate-limit-only bypass in front of every service was judged too
+     broad. Every candidate now falls straight through to step 4; there
+     is no public unauthenticated demo path anymore.
+  4. POST `X-Verify-Key=<key>` to `/verify` on the keystore.
   5. Keystore checks SQLite → returns 200 + `X-Auth-User`/`X-Auth-Scope`,
      or 401.
-- **Why two layers**: the static fallback means a brief keystore
-  outage doesn't kill the public demo path. Real per-user keys still
-  flow through the dynamic check.
-- **Rotating the default token without touching repos**: see the
-  "Default-token rotation" section below.
+- **Why there were two layers** (historical): the static fallback meant
+  a brief keystore outage didn't kill the public demo path. That
+  tradeoff was retired in favor of the dynamic check always applying —
+  see "Default-token sunset" below.
 
-### Default-token rotation
+### Default-token sunset (2026-08-22)
 
-The universal demo key is **never** committed to a public repo. The
-canonical store is `/etc/nginx/conf.d/_default_token.conf` on the
-webgateway, included by every container-mesh vhost. To rotate:
-
-```bash
-fleet-runner rotate-default-token "<new-value>"   # gateway-only, instant
-fleet-runner default-token                        # prints current value
-```
-
-The hub (`hub_scrapetheworld_org`) and catalog (`go-catalog-service`)
-fetch the current value at boot from the **private**
-`fleet-state/secrets/default_token.txt`; the rotation command updates
-both atomically (gateway file + private secret). No public commit, no
-per-repo edit, no service restart required.
+The universal demo key and its static-fallback bypass have been
+**removed fleet-wide as a security risk**, not merely rotated — do not
+document, script against, or rely on a value called `default_token`
+anywhere in this fleet going forward. Every caller (human or
+automated) needs a real keystore-issued key via the normal
+`fleet-runner key provision <slug>` flow. If you find `default_token`
+referenced elsewhere as if it still grants access — a README, a
+runbook command, a dashboard default — treat it as stale documentation
+and flag/fix it the same way this section was fixed, rather than
+assuming it still works.
 
 ### Clients MUST use `go-common/apikey`, not handroll HTTP calls
 
@@ -604,8 +600,9 @@ external (non-fleet) targets. The pattern:
 # inside the container
 env | grep -E '^HTTPS_PROXY=' # must show http://...:...@p.webshare.io:80
 
-# end-to-end through the gateway
-curl -s 'https://<scanner>.0exec.com/probe?url=https://httpbin.org/ip&api_key=default_token'
+# end-to-end through the gateway (default_token sunset 2026-08-22 — use a
+# real keystore-issued key here, not the retired public demo key)
+curl -s 'https://<scanner>.0exec.com/probe?url=https://httpbin.org/ip&api_key=<KEY>'
 # → "origin": some Webshare residential IP, NOT 176.x.x.x (Hetzner)
 ```
 

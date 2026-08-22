@@ -120,13 +120,15 @@ git push
 registry entries and creates A records. To skip the wait:
 
 ```bash
-curl -s -X POST 'https://go-fleet-dns-sync.0exec.com/sync?api_key=default_token' | jq
+# default_token (the public demo key) was sunset fleet-wide 2026-08-22
+# (security risk) — substitute a real keystore-issued key below.
+curl -s -X POST 'https://go-fleet-dns-sync.0exec.com/sync?api_key=<KEY>' | jq
 ```
 
 ### 7. Verify with preflight
 
 ```bash
-curl -fsS 'https://go-fleet-preflight.0exec.com/preflight/<id>?api_key=default_token' | jq
+curl -fsS 'https://go-fleet-preflight.0exec.com/preflight/<id>?api_key=<KEY>' | jq
 ```
 
 - **200 + `{"ok": true, ...}`** → ready to deploy
@@ -153,8 +155,10 @@ repos, NEVER in `services.json` or `overrides.json`.
 ### Seed a secret (admin)
 
 ```bash
+# default_token (the public demo key) was sunset fleet-wide 2026-08-22
+# (security risk) — substitute a real keystore-issued key below.
 ADMIN=$(cat /root/.fleet-secrets-admin.token)
-curl -s -X POST 'https://go-fleet-secrets.0exec.com/secrets?api_key=default_token' \
+curl -s -X POST 'https://go-fleet-secrets.0exec.com/secrets?api_key=<KEY>' \
   -H "X-Admin-Token: $ADMIN" \
   -d '{
     "name": "hcloud_token",
@@ -182,7 +186,8 @@ resp, _ := http.DefaultClient.Do(req)
 1. Generate a new value at the source (Hetzner console, GitHub, etc.).
 2. Patch the vault:
    ```bash
-   curl -s -X POST 'https://go-fleet-secrets.0exec.com/secrets?api_key=default_token' \
+   # default_token sunset 2026-08-22 (security risk) — use a real key.
+   curl -s -X POST 'https://go-fleet-secrets.0exec.com/secrets?api_key=<KEY>' \
      -H "X-Admin-Token: $ADMIN" \
      -d '{"name":"hcloud_token","value":"<NEW>","consumers":["go-fleet-dns-sync"]}'
    ```
@@ -229,7 +234,8 @@ without these, the vault's data is unrecoverable.
 
 ```bash
 # 1. preflight returns 200 (all green)?
-curl -fsS "https://go-fleet-preflight.0exec.com/preflight/<id>?api_key=default_token" \
+# default_token sunset fleet-wide 2026-08-22 (security risk) — use a real key.
+curl -fsS "https://go-fleet-preflight.0exec.com/preflight/<id>?api_key=<KEY>" \
   | jq -e '.ok' || { echo "preflight failed"; exit 1; }
 
 # 2. If red, see which check

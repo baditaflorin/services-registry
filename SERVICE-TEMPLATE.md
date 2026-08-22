@@ -67,8 +67,15 @@ looks like:
 | Mesh         | `api.endpoint`     | Auth header / param                                |
 |--------------|--------------------|----------------------------------------------------|
 | `mesh-0exec` | `/` (or `/v1/...`) | `?api_key=…` or `X-API-Key`                        |
-| `mesh-0crawl`| `/t/{token}/`      | path token; default `default_token` for public demo |
+| `mesh-0crawl`| `/`                | `Authorization: Bearer …`, `X-API-Key`, or `?api_key=…` — the legacy `/t/{token}/` path form is deprecated fleet-wide (410/404) |
 | `mesh-pages` | `/`                | none                                               |
+
+The `default_token` public demo key (previously a static, undifferentiated
+bypass in the nginx gateway in front of the keystore) has been **sunset
+fleet-wide as a security risk** and no longer authenticates against any
+hosted `*.0crawl.com`/`*.0exec.com` endpoint. Don't reference it in new
+service READMEs/service.yaml as a working example — either omit the demo
+curl entirely or note that a real provisioned key is required.
 
 ---
 
@@ -414,7 +421,7 @@ One-paragraph description of what the service does.
 
 curl 'https://<slug>.0exec.com/?q=example&api_key=<KEY>'
 # or for mesh-0crawl:
-curl 'https://<slug>.0crawl.com/t/default_token/?q=example'
+curl 'https://<slug>.0crawl.com/?q=example&api_key=<KEY>'
 
 Response: JSON, fields documented below.
 

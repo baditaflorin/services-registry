@@ -573,7 +573,12 @@ All pentest and domain tools call them rather than reimplementing.
      │                        │                            │
 ```
 
-### Demo token path (rate-limited fallback)
+### Demo token path (rate-limited fallback) — SUNSET 2026-08-22
+
+This static bypass was removed fleet-wide as a security risk. Kept below
+as a historical record of the pre-sunset flow, not a working path — every
+request now goes through the dynamic keystore check regardless of the
+`api_key` value.
 
 ```
   Browser                Nginx gateway
@@ -581,13 +586,15 @@ All pentest and domain tools call them rather than reimplementing.
      │  GET /analyze           │
      │  ?api_key=demo_default  │
      │ ───────────────────────►│
-     │                        │ match $default_token
-     │                        │ skip keystore call
-     │                        │ set X-Auth-User: demo
-     │                        │ rate-limit 1 req/s / 60 req/h
+     │                        │ [REMOVED] match $default_token
+     │                        │ [REMOVED] skip keystore call
+     │                        │ [REMOVED] set X-Auth-User: demo
+     │                        │ [REMOVED] rate-limit 1 req/s / 60 req/h
+     │                        │ → now always falls through to the
+     │                        │   dynamic keystore /verify check
      │                        │
      │                  forward to service
-     │ ◄───────────────────────│  200 {"result": ...}
+     │ ◄───────────────────────│  200 {"result": ...} or 401
 ```
 
 ### Service-to-service (intra-mesh)

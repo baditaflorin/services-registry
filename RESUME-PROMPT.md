@@ -82,7 +82,10 @@ READ THE PUBLIC TWO BEFORE ASKING THE USER FOR ANYTHING.
 ## The dashboard
 
 Live at: https://baditaflorin.github.io/go-pentest-dashboard/
-api_key field defaults to default_token (rate-limited public demo key).
+api_key field defaults to default_token — **stale**: that public demo key
+was sunset fleet-wide 2026-08-22 (security risk) and no longer
+authenticates; the dashboard's own default value needs updating in its
+own repo (not fixed here) to stop pointing users at a dead key.
 Tabs: Preflight | Programs | Recon | Scan | Findings | Report
 Header shows build SHA + age (from GitHub API) so you can confirm freshness.
 Recon shows every probed host with status + title + tech, or the error if dead.
@@ -120,8 +123,8 @@ Recon shows every probed host with status + title + tech, or the error if dead.
 - fleet-runner from your Mac: `/Users/live/bin/fleet-runner` (shim that
   forwards to the build LXC). Full help on `--help`.
 - Service-to-service auth: each fleet service requires an api_key. The demo
-  default_token works against the public gateway (rate-limited). For real
-  scans use a keystore-issued key.
+  default_token was sunset fleet-wide 2026-08-22 (security risk) and no
+  longer works against the public gateway. Use a keystore-issued key.
 - Hetzner Cloud API token for DNS: lives in user env as HCLOUD_TOKEN
   (canonical name). Older HETZNER_DNS_API_TOKEN is for the DEPRECATED DNS
   Console API — DO NOT use that, dns.hetzner.com is deprecated. Use
