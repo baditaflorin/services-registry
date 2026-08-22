@@ -612,10 +612,10 @@ service).
 
 ## Temporary degradations — read before deploying
 
-The fleet has two TEMPORARY workarounds active as of 2026-05-21. Both
-are tracked, both have separate fixes in flight, both must be removed
-from this doc when the underlying issue ships. Treat them as known
-degradations, NOT "this is fine".
+The fleet has one TEMPORARY workaround active. It is tracked, has a
+separate fix in flight, and must be removed from this doc when the
+underlying issue ships. Treat it as a known degradation, NOT "this is
+fine".
 
 ### `fleet-runner new-service` is broken — DO NOT USE (until further notice)
 
@@ -653,20 +653,6 @@ gh repo edit --add-topic mesh-0crawl \
 
 Remove this section when `fleet-runner new-service` is fixed and the
 LXC 108 binary is updated.
-
-### `--skip-cosign` is the temporary norm (vault key empty)
-
-Cosign signing is currently disabled fleet-wide because the vault's
-`cosign-signing-key` is empty (separate investigation in flight).
-Until it's restored, deploy with `--skip-cosign`:
-
-```bash
-fleet-runner deploy go_<repo> --skip-cosign
-```
-
-**Production images going through `deploy` right now are NOT
-cosign-verified.** This is a security degradation, not a stylistic
-choice — re-enable cosign as soon as the vault key is restored.
 
 ## fleet-runner
 
@@ -1053,24 +1039,28 @@ Tag *after* the commit, push *both*.
 **Canonical (only one right answer):**
 
 ```bash
-fleet-runner deploy go_<repo> \
-  --services /root/workspace/services-registry/services.json \
-  --skip-cosign
+fleet-runner deploy go_<repo>
 ```
 
-Two non-obvious flags above, both TEMPORARY (see "Temporary
-degradations" near the top of this file):
+No extra flags needed on Builder LXC 108 — both historical workarounds
+are resolved as of 2026-08-23:
 
-- `--services /root/workspace/services-registry/services.json` —
-  `raw.githubusercontent.com/.../services.json` is Fastly-cached with
-  `max-age=300`, so after a freshly-pushed `overrides.json` the
-  registry slice can lag 3–5 minutes. Pointing at the local copy on
-  LXC 108 sidesteps the cache. Apply the same flag to `nginx-render`
-  and any other subcommand that reads the registry. Remove when
-  `fleet-runner` defaults to the local copy.
-- `--skip-cosign` — vault's `cosign-signing-key` is currently empty;
-  signing is disabled fleet-wide. Remove when the vault key is
-  restored.
+- **Registry cache race** — `raw.githubusercontent.com/.../services.json`
+  is still Fastly-cached with `max-age=300`, but `fleet-runner` now
+  resolves the registry source itself: when `--services` isn't passed
+  and `/root/workspace/services-registry/services.json` exists, it
+  prefers that local working copy over the CDN automatically
+  (`ResolveServicesSource`, shipped 2026-05-21). An explicit
+  `--services <path>` still works if you ever need to force a
+  different source.
+- **Cosign signing** — restored fleet-wide; the vault's
+  `cosign-signing-key`, `cosign-signing-key-password`, and
+  `cosign-public-key` are all populated again (verified directly
+  against `go-fleet-secrets` on 2026-08-23). A plain `deploy` signs on
+  push and verifies on pull with no flag. `--skip-cosign` still exists
+  as an emergency-only bypass (vault unreachable, key mid-rotation) —
+  don't pass it by default; it prints a loud bypass warning and lands
+  an audit-log row precisely so it's never silently routine.
 
 **Post-deploy: re-render the vhost.** The embedded `nginx-render`
 step inside `deploy` often misses the new vhost due to the same
@@ -1078,9 +1068,7 @@ registry-fetch race. Until `fleet-runner deploy` folds in the local
 fetch (separate fix in flight), follow every new-service deploy with:
 
 ```bash
-fleet-runner nginx-render \
-  --services /root/workspace/services-registry/services.json \
-  --filter <slug> --push --reload
+fleet-runner nginx-render --filter <slug> --push --reload
 ```
 
 `fleet-runner deploy` is idempotent end-to-end. The pipeline is built
@@ -1159,15 +1147,17 @@ container is running. Don't declare done until both succeed.
 ### Recipe — Self-check before declaring "done"
 
 Three commands. Run all three. If anything in the category you touched
-is flagged, fix it before stopping. Pass `--services
-/root/workspace/services-registry/services.json` so a just-registered
-service doesn't get missed because of the 5-minute Fastly cache on
-`raw.githubusercontent.com`:
+is flagged, fix it before stopping. **Do not pass `--services`** to any
+of these three — `converge`, `audit`, and `state snapshot` don't accept
+that flag (confirmed on v0.7.11: `flag provided but not defined:
+-services`). They already read the registry correctly without it — see
+"Recipe — Deploying a service" above for why the local-copy race no
+longer needs a flag at all:
 
 ```bash
-fleet-runner converge       --services /root/workspace/services-registry/services.json
-fleet-runner audit --all    --services /root/workspace/services-registry/services.json
-fleet-runner state snapshot --services /root/workspace/services-registry/services.json
+fleet-runner converge
+fleet-runner audit --all
+fleet-runner state snapshot
 ```
 
 ### Recipe — Rolling out a blast-radius change (shared lib / shared dep)
