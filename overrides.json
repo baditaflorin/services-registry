@@ -3289,6 +3289,10 @@
     "container_port": 18205,
     "cpus": 4,
     "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
+    "env": {
+      "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10",
+      "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "scrapetheworld.org,okssh.com,0own.com,0prx.com,badita.org"
+    },
     "example_path": "/fetch?url=https://example.com/",
     "host_port": 18205,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
