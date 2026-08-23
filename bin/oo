@@ -77,10 +77,11 @@
 #       that container logged right around it. --before/--after default
 #       2m/2m.
 #
-#   oo compare <container1> <container2> [--since DURATION] [--limit N]
+#   oo compare <container1> <container2> [--since DURATION] [--limit N] [--host HOST]
 #       Interleave two containers' log lines in one timestamp-ordered
-#       stream, each tagged <name>. For correlating a request across
-#       two services (api + its proxy, prod + staging, etc).
+#       stream, each tagged [host] <name>. For correlating a request across
+#       two services (api + its proxy, prod + staging, etc). --host applies
+#       to both containers — use it if either name is ambiguous across hosts.
 #
 #   oo restarts <container_name> [--since DURATION] [--gap DURATION] [--host HOST]
 #       Infers apparent restarts by finding gaps larger than --gap
@@ -612,20 +613,33 @@ for h in hits:
 }
 
 cmd_compare() {
-  local c1="${1:?usage: oo compare <container1> <container2> [--since 15m] [--limit 100]}"; shift || true
-  local c2="${1:?usage: oo compare <container1> <container2> [--since 15m] [--limit 100]}"; shift || true
-  local since="15m" limit="100"
+  local c1="${1:?usage: oo compare <container1> <container2> [--since 15m] [--limit 100] [--host HOST]}"; shift || true
+  local c2="${1:?usage: oo compare <container1> <container2> [--since 15m] [--limit 100] [--host HOST]}"; shift || true
+  local since="15m" limit="100" host_filter=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --since) since="$2"; shift 2 ;;
       --limit) limit="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
       *) echo "unknown flag: $1" >&2; exit 1 ;;
     esac
   done
   require_creds
   c1=$(sql_escape "$c1")
   c2=$(sql_escape "$c2")
-  local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE container_name IN ('${c1}', '${c2}') ORDER BY _timestamp ASC LIMIT ${limit}"
+  host_filter=$(sql_escape "$host_filter")
+  local where="container_name IN ('${c1}', '${c2}')"
+  # Every other per-container command (logs/grep/errors/since-redeploy/
+  # context/restarts/rate/versions/check/tail) takes --host, because
+  # container names aren't globally unique across the fleet (see the
+  # header docs). compare was missing it — found live 2026-08-24 (third
+  # independent review, hunting for flag-consistency gaps rather than the
+  # already-fixed SQL-escaping/_oo_error classes). It also silently
+  # dropped `host` from its own output, so even without the filter there
+  # was no way to tell which host an ambiguous line came from; both are
+  # fixed together here the same way logs/grep already do it.
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE ${where} ORDER BY _timestamp ASC LIMIT ${limit}"
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
@@ -634,12 +648,13 @@ if "_oo_error" in d:
     sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
-    print("(no matching log lines)", file=sys.stderr)
+    print("(no matching log lines — check --since / --host / container names)", file=sys.stderr)
 for h in hits:
     ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
     name = h.get("container_name", "?")
     msg = h.get("message", "")
-    print(f"{ts} <{name}> {msg}")
+    print(f"{ts} [{host}] <{name}> {msg}")
 '
 }
 
@@ -858,14 +873,48 @@ cmd_save() {
   local sql="${1:?usage: oo save <name> <sql>}"; shift || true
   mkdir -p "$OO_SAVE_DIR"
   [[ -f "$OO_SAVE_FILE" ]] || echo '{}' > "$OO_SAVE_FILE"
+  # Locked, atomic read-modify-write. The pre-fix version did a bare
+  # `open(path, "w"); json.dump(...)`, which truncates the file the instant
+  # it's opened — two concurrent `oo save` calls (two terminals, two
+  # scripted agents) interleave their writes into that same truncated
+  # file and corrupt queries.json outright, not just lose one update.
+  # Reproduced live 2026-08-24 (third independent review): 20 concurrent
+  # `oo save` calls left the file unparseable ("Extra data" / "Expecting
+  # value" JSONDecodeError), and every subsequent save/saved/run then
+  # crashed with a raw traceback instead of the tool's usual clean error.
+  # Fix: hold an flock(2) exclusive lock on a sibling .lock file for the
+  # whole read-modify-write (serializes the critical section so no save is
+  # silently lost), and write the new content to a temp file in the same
+  # directory then os.replace() it into place — os.replace is an atomic
+  # rename on POSIX, so even a reader that takes no lock at all (cmd_saved,
+  # cmd_run) only ever sees a fully-old or fully-new file, never a torn one.
   python3 -c '
-import json, sys
+import json, sys, os, fcntl, tempfile
 path, name, sql = sys.argv[1], sys.argv[2], sys.argv[3]
-with open(path) as f:
-    d = json.load(f)
-d[name] = sql
-with open(path, "w") as f:
-    json.dump(d, f, indent=2)
+lock_path = path + ".lock"
+with open(lock_path, "a+") as lockf:
+    fcntl.flock(lockf.fileno(), fcntl.LOCK_EX)
+    try:
+        try:
+            with open(path) as f:
+                d = json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError) as e:
+            print(f"error: {path} is missing or corrupted ({e}) — refusing to "
+                  "overwrite blindly; inspect/fix it by hand, or delete it to "
+                  "start fresh", file=sys.stderr)
+            sys.exit(1)
+        d[name] = sql
+        dir_ = os.path.dirname(path) or "."
+        fd, tmp = tempfile.mkstemp(dir=dir_, prefix=".queries.", suffix=".tmp")
+        try:
+            with os.fdopen(fd, "w") as f:
+                json.dump(d, f, indent=2)
+            os.replace(tmp, path)
+        except BaseException:
+            os.unlink(tmp)
+            raise
+    finally:
+        fcntl.flock(lockf.fileno(), fcntl.LOCK_UN)
 print(f"saved {name!r}")
 ' "$OO_SAVE_FILE" "$name" "$sql"
 }
@@ -877,8 +926,12 @@ cmd_saved() {
   fi
   python3 -c '
 import json, sys
-with open(sys.argv[1]) as f:
-    d = json.load(f)
+try:
+    with open(sys.argv[1]) as f:
+        d = json.load(f)
+except json.JSONDecodeError as e:
+    print(f"error: {sys.argv[1]} is corrupted ({e})", file=sys.stderr)
+    sys.exit(1)
 if not d:
     print("no saved queries yet — oo save <name> <sql>")
 for name, sql in d.items():
@@ -904,8 +957,12 @@ cmd_run() {
   local sql
   sql=$(python3 -c '
 import json, sys
-with open(sys.argv[1]) as f:
-    d = json.load(f)
+try:
+    with open(sys.argv[1]) as f:
+        d = json.load(f)
+except json.JSONDecodeError as e:
+    print(f"error: {sys.argv[1]} is corrupted ({e})", file=sys.stderr)
+    sys.exit(1)
 name = sys.argv[2]
 if name not in d:
     print(f"no saved query named {name!r} — see oo saved", file=sys.stderr)
