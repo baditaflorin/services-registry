@@ -2600,9 +2600,6 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-port": {
-    "auth": {
-      "type": "none"
-    },
     "category": "fleet_infra",
     "container_port": 18280,
     "host_port": 18280,
@@ -2696,6 +2693,7 @@
     "auth": {
       "type": "none"
     },
+    "scope": "internal-only",
     "category": "fleet_infra",
     "container_port": 18283,
     "host_port": 18283,
