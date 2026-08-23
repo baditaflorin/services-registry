@@ -2228,6 +2228,9 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
+  "fleet-discovery": {
+    "compose_service_name": "discovery"
+  },
   "fleet-dns-sync": {
     "access_tier": "infra-privileged",
     "container_port": 18141,
@@ -2336,6 +2339,9 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+  },
+  "fleet-grafana": {
+    "compose_service_name": "grafana"
   },
   "fleet-graph": {
     "access_tier": "infra-privileged",
@@ -2668,6 +2674,9 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+  },
+  "fleet-prometheus": {
+    "compose_service_name": "prometheus"
   },
   "fleet-q": {
     "auth": {
