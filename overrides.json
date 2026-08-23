@@ -702,6 +702,9 @@
     "trl_evidence": "First-pass audit of this local-first voice-reflection vault for retreats (Whisper + WebLLM, both running fully client-side via ONNX/WASM in Web Workers -- only model *weights* are fetched remotely, never audio/text): privacy/local-first claim verified genuinely holds up via full network-call trace. Data persistence (IndexedDB/OPFS) sound, no bug found there. Found and fixed a real data-corruption bug: embed() and transcribe() each lazily create one shared Worker reused by every caller with no request-correlation id, so if a user switched to the Search tab while a reflection was still saving in the background, a search query's embedding could silently get attached to the wrong saved entry (or vice versa), permanently corrupting that entry's semantic-search ranking with no visible error. Fixed with per-request correlation ids. trl held at 3 (a real, previously-unnoticed correctness bug just surfaced in the core search pipeline, and no evidence of real-world multi-attendee usage yet); trl_ceiling=6 added -- solo-maintainer project, no CI pipeline, manual/technical key-sharing UX that's a real support burden for non-technical retreat attendees, Whisper-tiny is a low-accuracy tradeoff. See PR #15 (merged)."
   },
   "catalog-service": {
+    "auth": {
+      "type": "none"
+    },
     "container_port": 18022,
     "depends_on": [],
     "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",

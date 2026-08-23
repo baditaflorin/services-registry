@@ -7970,11 +7970,9 @@
     "repo_url": "https://github.com/baditaflorin/go-catalog-service",
     "example_path": "/",
     "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
+      "type": "none"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "no auth",
     "cert_domain": "wildcard.0exec.com",
     "aliases": [
       "go-catalog-service"

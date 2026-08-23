@@ -6400,11 +6400,9 @@
       "go-catalog-service"
     ],
     "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
+      "type": "none"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "no auth",
     "category": "visualization",
     "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
     "example_path": "/",
