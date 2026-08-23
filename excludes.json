@@ -9,6 +9,10 @@
     {
       "repo": "go_go_pentest_attack_chainer",
       "reason": "orphan workspace on builder LXC with double \"go_go_pentest_\" prefix (likely typo of \"go_pentest_attack_chainer\"); no remote, no registry entry. Excluded until reclaimed or removed."
+    },
+    {
+      "repo": "cookiecutter-data-science",
+      "reason": "public data-science project template, not a fleet service. Its own origin/master already deliberately removed fleet docs (\"chore: remove misapplied fleet-service docs (CLAUDE.md, SERVICE-TEMPLATE.md, .githooks) #1\"). Without this exclude, the next CLAUDE.md sweep re-adds them via inject/push and collides with that decision (hit during the 2026-08-23 cosign/--services doc fix propagation)."
     }
   ]
 }
