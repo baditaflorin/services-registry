@@ -264,12 +264,30 @@ sql_escape() {
 # "hits" — copy that pattern for any new command you add.
 oo_search_range() {
   local sql="$1" start_us="$2" end_us="$3" limit="$4"
-  local payload
+  local payload rc=0
+  # Found live 2026-08-24 (second independent review): a non-numeric
+  # --limit (or a corrupted start/end) used to blow up the int() cast
+  # below with an UNCAUGHT traceback — which broke the "always valid
+  # JSON on stdout" contract this function documents, and left every
+  # downstream formatter (none of which try/except json.load) to choke
+  # on the resulting empty stdin with a second, unrelated traceback of
+  # its own. Catch it here and fold it into the same _oo_error shape as
+  # every other failure mode in this function, so a fat-fingered
+  # `--limit abc` (or an injection attempt using --limit as the vector)
+  # fails exactly like a malformed --since or bad creds does.
   payload=$(python3 -c '
 import json, sys
-sql, start, end, size = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
+try:
+    sql, start, end, size = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
+except ValueError as e:
+    print(json.dumps({"_oo_error": "invalid numeric argument (--limit or time range): " + str(e)}))
+    sys.exit(1)
 print(json.dumps({"query": {"sql": sql, "start_time": start, "end_time": end, "size": size}}))
-' "$sql" "$start_us" "$end_us" "$limit")
+' "$sql" "$start_us" "$end_us" "$limit") || rc=$?
+  if [[ "$rc" -ne 0 ]]; then
+    printf '%s\n' "$payload"
+    return 0
+  fi
   ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload" | python3 -c '
 import json, sys
 raw = sys.stdin.read()
@@ -494,7 +512,18 @@ print(fs if fs is not None else "")
   fi
 
   local first_seen_human before_secs after_secs first_secs now_secs start_us end_us
-  first_seen_human=$(python3 -c "import datetime; print(datetime.datetime.fromtimestamp(${first_seen}/1e6, datetime.UTC).isoformat())")
+  # $first_seen goes to python via argv, not interpolated into the script
+  # text — matches the argv-passing fix applied to cmd_stream_info. The
+  # old version spliced ${first_seen} directly into a bash DOUBLE-quoted
+  # -c string, which meant a value containing backticks/$(...) would be
+  # expanded and executed by bash before python ever saw it. In normal
+  # operation $first_seen is a numeric _timestamp from OpenObserve's own
+  # min() aggregate, not free-form user text, so this was low practical
+  # exploitability — but it's the same unsafe shape, closed the same way.
+  first_seen_human=$(python3 -c '
+import sys, datetime
+print(datetime.datetime.fromtimestamp(int(sys.argv[1]) / 1e6, datetime.UTC).isoformat())
+' "$first_seen")
   echo "# earliest line found at ${first_seen_human} UTC — showing --before ${before} through --after ${after} around it" >&2
   before_secs=$(duration_to_seconds "$before")
   after_secs=$(duration_to_seconds "$after")
@@ -909,6 +938,9 @@ cmd_summary() {
   oo_search "$sql" "$since" 8 | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no error-looking lines fleet-wide)")
@@ -1012,6 +1044,16 @@ cmd_tail() {
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   local last_printed=""
+  # Cursor file uses mktemp (mode 0600, unpredictable name) rather than a
+  # fixed /tmp/.oo_tail_cursor.$$ path — found live 2026-08-24 (second
+  # independent review): a PID-based name in shared /tmp is guessable and
+  # symlink-attackable by another local user on the same box (classic
+  # TOCTOU: pre-create the path as a symlink to a file this user can
+  # write, before `oo tail` starts). mktemp closes that off the same way
+  # every other temp-file-needing tool should.
+  local cursor_file
+  cursor_file=$(mktemp "${TMPDIR:-/tmp}/oo_tail_cursor.XXXXXXXX")
+  trap 'rm -f "$cursor_file"' EXIT INT TERM
   while true; do
     local sql="SELECT _timestamp, host, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT 200"
     local since_secs=$(( interval * 4 + 5 ))
@@ -1021,10 +1063,10 @@ d = json.load(sys.stdin)
 if "_oo_error" in d:
     # stdout, not stderr: this function repurposes stderr as a side
     # channel to pass the cursor timestamp back to the bash loop (see the
-    # 2>/tmp/.oo_tail_cursor.$$ redirect below) — printing the error there
-    # would silently corrupt that instead of showing it. Skip this poll
-    # cycle (no cursor update) rather than crash the whole tail loop, so
-    # a transient blip does not lose the "resume from here" position.
+    # 2>"$cursor_file" redirect below) — printing the error there would
+    # silently corrupt that instead of showing it. Skip this poll cycle
+    # (no cursor update) rather than crash the whole tail loop, so a
+    # transient blip does not lose the "resume from here" position.
     print("error (will retry next poll): " + d["_oo_error"])
     sys.exit(0)
 hits = list(reversed(d.get("hits", [])))
@@ -1042,11 +1084,11 @@ for h in hits:
     print(f"{ts} [{host}] {msg}")
 if hits:
     print(hits[-1]["_timestamp"], file=sys.stderr, end="")
-' "$last_printed" 2>/tmp/.oo_tail_cursor.$$
-    if [[ -s /tmp/.oo_tail_cursor.$$ ]]; then
-      last_printed=$(cat /tmp/.oo_tail_cursor.$$)
+' "$last_printed" 2>"$cursor_file"
+    if [[ -s "$cursor_file" ]]; then
+      last_printed=$(cat "$cursor_file")
     fi
-    rm -f /tmp/.oo_tail_cursor.$$
+    : > "$cursor_file"
     sleep "$interval"
   done
 }
