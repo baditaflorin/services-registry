@@ -2153,6 +2153,10 @@
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (G9, 2026-05-19). /selftest exercises the full aggregator path against an in-process httptest fleet. Unit-tested: container-only filter, per-service-error-no-drop, selftest 200/503/404 each counted, worker pool ceiling honoured, summary counts internally consistent, /refresh admin-gated, /capabilities.json served with Cache-Control max-age=300."
   },
+  "fleet-cert-watch": {
+    "container_port": 18208,
+    "host_port": 18208
+  },
   "fleet-content-normalizer": {
     "container_port": 18172,
     "description": "MIME/charset/encoding normalizer (5MB cap)",

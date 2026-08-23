@@ -14665,5 +14665,30 @@
       "small groups"
     ],
     "url": "https://baditaflorin.github.io/mesh-bingo-blitz/"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "observability",
+    "description": "Periodic raw-TLS-handshake probe of the fleet registry's own cert expiry, exposed as Prometheus metrics for fleet-prometheus/fleet-grafana.",
+    "example_path": "/",
+    "health_url": "https://fleet-cert-watch.0exec.com/health",
+    "id": "fleet-cert-watch",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Cert Watch",
+    "repo_url": "https://github.com/baditaflorin/fleet-cert-watch",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://fleet-cert-watch.0exec.com"
   }
 ]

@@ -16834,5 +16834,33 @@
     "auth": {"type": "none"},
     "auth_help": "no auth",
     "pages_url": "https://baditaflorin.github.io/mesh-bingo-blitz/"
+  },
+  {
+    "id": "fleet-cert-watch",
+    "name": "Fleet Cert Watch",
+    "description": "Periodic raw-TLS-handshake probe of the fleet registry's own cert expiry, exposed as Prometheus metrics for fleet-prometheus/fleet-grafana.",
+    "category": "observability",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://fleet-cert-watch.0exec.com",
+    "health_url": "https://fleet-cert-watch.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/fleet-cert-watch",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18208,
+    "container_port": 18208
   }
 ]

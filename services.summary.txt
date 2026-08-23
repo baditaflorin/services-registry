@@ -1,18 +1,19 @@
 # Registry summary
-total: 469
+total: 510
 
 ## by kind
-  372  container
-   97  static
+  373  container
+  137  static
 
 ## by mesh
   215  0crawl
-  157  0exec
-   97  pages
+  158  0exec
+  137  pages
 
 ## by language
-  358  go
-   97  html
+  359  go
+  107  html
+   30  typescript
    11  node
     1  c
     1  other
@@ -20,6 +21,7 @@ total: 469
 
 ## by category
    73  security
+   72  peer_to_peer
    64  domains
    59  app
    51  infrastructure
@@ -27,9 +29,8 @@ total: 469
    38  content
    37  recon
    32  fleet_infra
-   32  peer_to_peer
     9  proxy
-    6  observability
+    7  observability
     5  search
     4  nlp
     4  visualization
