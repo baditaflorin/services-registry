@@ -655,7 +655,17 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # services. go_fleet_runner/deploy_coolify.go needs this to
               # know which Coolify app to redeploy. Same drop bug as
               # access_tier above — fixed 2026-08-23.
-              "coolify_app_uuid"):
+              "coolify_app_uuid",
+              # Catalog-display version, hand-set per slug by TRL-audit
+              # commits. NOTE: this is informational only — deploy
+              # drift-detection reads `service.yaml` `version` from
+              # origin/main via `git show`, not this field (see
+              # CLAUDE.md "Recipe — Deploying a service"). Never had a
+              # generate.py copy path at all (175 overrides.json slugs
+              # set it; only pentest-notify carried it in services.json,
+              # via a hand-edit made specifically to dodge a full regen
+              # — see commit 93e93cb). Fixed 2026-08-23.
+              "version"):
         if k in ov:
             entry[k] = ov[k]
 
