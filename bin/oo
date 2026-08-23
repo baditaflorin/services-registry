@@ -156,14 +156,41 @@ OO_SAVE_DIR="${OO_SAVE_DIR:-$HOME/.oo}"
 OO_SAVE_FILE="${OO_SAVE_DIR}/queries.json"
 
 # Heuristic "this line looks like an error" match, shared by errors/check/
-# summary. Excludes known high-volume false positives found empirically on
-# 2026-08-23 — this fleet's own structured-logging idioms for "no error"
-# (JSON "error":null, Go's error=<nil> logfmt convention) both literally
-# contain the substring "error". Not exhaustive — a log shape nobody's hit
-# yet could still slip through either direction — but measurably better
-# than the naive substring match (domainscope-api alone was ~80%
-# false-positive on the naive version, from "error":null DEBUG lines).
-ERROR_LIKE_CLAUSE="(message ILIKE '%error%' OR message ILIKE '%fatal%' OR message ILIKE '%panic%') AND message NOT ILIKE '%\"error\":null%' AND message NOT ILIKE '%error=<nil>%' AND message NOT ILIKE '%error: <nil>%'"
+# summary. Tuned twice against REAL fleet data (2026-08-23), not just
+# domainscope-api:
+#
+#   Excludes (false positives found by sampling matches across the top
+#   error-count containers fleet-wide, not just the one that motivated
+#   the tool):
+#     - "error":null / error=<nil> / error: <nil> — this fleet's own
+#       structured-logging idiom for "no error occurred" (JSON and Go
+#       logfmt both literally contain the substring "error" even when
+#       stating its absence). domainscope-api alone was ~80%
+#       false-positive on the naive version before this exclusion.
+#     - state=Error — Grafana's alerting engine uses "Error" as one
+#       enum value of an alert's evaluation state; "Detected stale
+#       state entry ... state=Error" is routine INFO-level cache
+#       housekeeping, not an active problem. 46% of go-fleet-grafana's
+#       naive matches were this one shape.
+#
+#   Adds (false negatives found by grep-ing for other common failure
+#   words NOT already covered, then sampling the matches to check they
+#   were genuine — "failed to" and "crash" were tried and REJECTED here
+#   because they matched high-volume benign noise instead: "failed to"
+#   is dominated by a benign `DEBUG: Failed to open service.yaml`
+#   boilerplate line shared by dozens of pentest-tool containers on
+#   startup, and "crash" matched a proxied page's URL containing the
+#   word as part of a GitHub repo name, not an actual crash):
+#     - refused — real ECONNREFUSED monitor-down alerts from
+#       0init-uptime-kuma, a single clean source with zero observed
+#       false positives in this sample.
+#
+# Not exhaustive — a log shape nobody's tested against yet could still
+# slip through in either direction; re-validate the same way (sample
+# top containers under `errors`/`summary`, grep for un-covered failure
+# words, check volume + a real sample before adding/excluding anything)
+# rather than guessing.
+ERROR_LIKE_CLAUSE="(message ILIKE '%error%' OR message ILIKE '%fatal%' OR message ILIKE '%panic%' OR message ILIKE '%refused%') AND message NOT ILIKE '%\"error\":null%' AND message NOT ILIKE '%error=<nil>%' AND message NOT ILIKE '%error: <nil>%' AND message NOT ILIKE '%state=Error%'"
 
 usage() {
   sed -n '2,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'
