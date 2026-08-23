@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+# bin/oo — deterministic CLI for the fleet's OpenObserve instance (LXC 106).
+#
+# WHY this exists: 2026-08-23 incident response needed "what did this
+# container print before it got redeployed" — `docker logs` only shows the
+# CURRENT container instance's output, so a redeploy silently loses
+# history. Every docker host now runs a Vector shipper
+# (/opt/observability/vector-log-shipper/ on each host) that forwards
+# every container's stdout/stderr into OpenObserve's `docker_logs` stream,
+# tagged with container_name/host/image/compose labels — independent of
+# container lifecycle. This script is the deterministic way to query it,
+# so nobody has to hand-roll curl + inline python timestamp math again.
+#
+# All requests are proxied through the bastion via SSH — OpenObserve's
+# LAN address (see fleet-state/OPS.md) is only reachable from inside
+# the 0docker.com private LAN, not from an operator's workstation
+# directly.
+#
+# USAGE:
+#   oo query <sql> [--since DURATION] [--limit N] [--org ORG]
+#       Run an arbitrary SQL query against a stream (default org "default").
+#       The stream name goes in the SQL's FROM clause, e.g.
+#       'SELECT * FROM docker_logs WHERE ...'.
+#
+#   oo logs <container_name> [--since DURATION] [--grep PATTERN] [--limit N] [--host HOST]
+#       Convenience wrapper: every log line for one container, newest
+#       first. --grep does a substring match on the message field.
+#       --host disambiguates if the same container name exists on more
+#       than one docker host (rare, but container names aren't globally
+#       unique across the fleet).
+#
+#   oo tail <container_name> [--interval SECONDS] [--host HOST]
+#       Polling tail (default 3s interval) — not a true push/websocket
+#       stream. Good enough for "watch this thing after I redeploy it";
+#       for a real live-tail UI, use https://openobserve.0docker.com
+#       directly (ZO_WEBSOCKET_ENABLED is on).
+#
+#   oo streams
+#       List every stream in the org with doc count / time range / size.
+#
+# DURATION: Ns / Nm / Nh / Nd (default: 1h). Examples: 30s, 15m, 2h, 3d.
+#
+# ENV (required): OPENOBSERVE_USER, OPENOBSERVE_PASSWORD, OPENOBSERVE_HOST
+#   — see bin/fleet-runner.env.example. Real values live in
+#   fleet-state/OPS.md (private) — never hardcode them here, this repo
+#   is public.
+# ENV (optional): FLEET_BASTION (default root@0docker.com),
+#   OPENOBSERVE_PORT (default 5080).
+#
+# Known limitation: credentials are passed to curl via -u on the bastion's
+# command line, so they're briefly visible in that host's `ps aux` output
+# during the request — acceptable for this internal, bastion-only admin
+# path (same pattern used ad hoc throughout the 2026-08-23 incident), but
+# don't reuse this pattern for anything internet-facing.
+
+set -euo pipefail
+
+BASTION="${FLEET_BASTION:-root@0docker.com}"
+OO_HOST="${OPENOBSERVE_HOST:-}"
+OO_PORT="${OPENOBSERVE_PORT:-5080}"
+OO_ORG="${OPENOBSERVE_ORG:-default}"
+
+usage() {
+  sed -n '2,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'
+}
+
+require_creds() {
+  : "${OPENOBSERVE_USER:?OPENOBSERVE_USER is not set — see bin/fleet-runner.env.example}"
+  : "${OPENOBSERVE_PASSWORD:?OPENOBSERVE_PASSWORD is not set — see bin/fleet-runner.env.example}"
+  : "${OO_HOST:?OPENOBSERVE_HOST is not set — see bin/fleet-runner.env.example / fleet-state/OPS.md}"
+  BASE_URL="http://${OO_HOST}:${OO_PORT}"
+}
+
+duration_to_seconds() {
+  local d="$1" num unit
+  unit="${d: -1}"
+  num="${d%[smhd]}"
+  if ! [[ "$num" =~ ^[0-9]+$ ]]; then
+    echo "invalid duration: $d (use Ns/Nm/Nh/Nd, e.g. 30s, 15m, 2h, 3d)" >&2
+    exit 1
+  fi
+  case "$unit" in
+    s) echo "$num" ;;
+    m) echo $((num * 60)) ;;
+    h) echo $((num * 3600)) ;;
+    d) echo $((num * 86400)) ;;
+    *) echo "invalid duration: $d (use Ns/Nm/Nh/Nd, e.g. 30s, 15m, 2h, 3d)" >&2; exit 1 ;;
+  esac
+}
+
+# oo_search SQL SINCE_DURATION LIMIT
+oo_search() {
+  local sql="$1" since="$2" limit="$3"
+  local end_us start_us secs
+  secs=$(duration_to_seconds "$since")
+  end_us=$(( $(date +%s) * 1000000 ))
+  start_us=$(( end_us - secs * 1000000 ))
+  local payload
+  payload=$(python3 -c '
+import json, sys
+sql, start, end, size = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
+print(json.dumps({"query": {"sql": sql, "start_time": start, "end_time": end, "size": size}}))
+' "$sql" "$start_us" "$end_us" "$limit")
+  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload"
+}
+
+cmd_query() {
+  local sql="${1:?usage: oo query <sql> [--since 1h] [--limit 100]}"; shift || true
+  local since="1h" limit="100"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  oo_search "$sql" "$since" "$limit" | python3 -m json.tool
+}
+
+cmd_logs() {
+  local container="${1:?usage: oo logs <container_name> [--since 1h] [--grep pattern] [--limit 100] [--host HOST]}"; shift || true
+  local since="1h" limit="100" grep_pat="" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      --grep) grep_pat="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  [[ -n "$grep_pat" ]] && where="${where} AND message LIKE '%${grep_pat}%'"
+  local sql="SELECT _timestamp, host, container_name, stream, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no matching log lines — check --since / --host / container name)", file=sys.stderr)
+for h in reversed(hits):
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{host}] {msg}")
+'
+}
+
+cmd_tail() {
+  local container="${1:?usage: oo tail <container_name> [--interval 3] [--host HOST]}"; shift || true
+  local interval="3" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --interval) interval="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  echo "# polling tail of '${container}' every ${interval}s (Ctrl-C to stop) — re-queries a sliding window each cycle, so a line can repeat once at the boundary; for a true live stream use https://openobserve.0docker.com" >&2
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local last_printed=""
+  while true; do
+    local sql="SELECT _timestamp, host, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT 200"
+    local since_secs=$(( interval * 4 + 5 ))
+    oo_search "$sql" "${since_secs}s" 200 | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = list(reversed(d.get("hits", [])))
+last_printed = sys.argv[1]
+skip = bool(last_printed)
+for h in hits:
+    key = str(h["_timestamp"])
+    if skip:
+        if key == last_printed:
+            skip = False
+        continue
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{host}] {msg}")
+if hits:
+    print(hits[-1]["_timestamp"], file=sys.stderr, end="")
+' "$last_printed" 2>/tmp/.oo_tail_cursor.$$
+    if [[ -s /tmp/.oo_tail_cursor.$$ ]]; then
+      last_printed=$(cat /tmp/.oo_tail_cursor.$$)
+    fi
+    rm -f /tmp/.oo_tail_cursor.$$
+    sleep "$interval"
+  done
+}
+
+cmd_streams() {
+  require_creds
+  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+for s in d["list"]:
+    st = s["stats"]
+    tmin = datetime.datetime.fromtimestamp(st["doc_time_min"]/1e6, datetime.UTC).isoformat() if st["doc_time_min"] else "-"
+    tmax = datetime.datetime.fromtimestamp(st["doc_time_max"]/1e6, datetime.UTC).isoformat() if st["doc_time_max"] else "-"
+    name = s["name"]
+    docs = st["doc_num"]
+    mb = st["compressed_size"]
+    print(f"{name:<24} docs={docs:>12}  compressed_mb={mb:>10.1f}  {tmin} .. {tmax}")
+'
+}
+
+cmd_stream_info() {
+  local stream="${1:?usage: oo stream-info <stream_name>}"
+  require_creds
+  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+for s in d['list']:
+    if s['name'] == '${stream}':
+        print(json.dumps(s, indent=2))
+        break
+else:
+    print('stream not found: ${stream}', file=sys.stderr)
+    sys.exit(1)
+"
+}
+
+main() {
+  local cmd="${1:-}"; shift || true
+  case "$cmd" in
+    query) cmd_query "$@" ;;
+    logs) cmd_logs "$@" ;;
+    tail) cmd_tail "$@" ;;
+    streams) cmd_streams "$@" ;;
+    stream-info) cmd_stream_info "$@" ;;
+    -h|--help|help|"") usage ;;
+    *) echo "unknown command: $cmd" >&2; usage >&2; exit 1 ;;
+  esac
+}
+
+main "$@"

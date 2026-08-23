@@ -805,38 +805,57 @@ or health-check a static Pages site.
 - **OpenObserve LXC 106** (same SSH access pattern as Builder LXC 108
   above, just a different `pct exec` target id; image
   `openobserve/openobserve:v0.14.7` + bitnami/postgresql metastore) is
-  a real, actively-ingesting log aggregator — verified 2026-08-23: 122M+
-  documents, 90-day retention,
-  data current to the minute. Query via its HTTP API (`POST
-  /api/default/_search`, SQL against the `default` stream, `_timestamp`
-  in **microseconds** epoch) or the web UI. Root creds live in the LXC's
-  own `docker-compose.yml` — see private `fleet-state/OPS.md`, never
-  repeat them in a service repo.
+  the fleet's log aggregator. Root creds live in the LXC's own
+  `docker-compose.yml` — see private `fleet-state/OPS.md` under
+  "OpenObserve root credentials", never repeat them in a service repo.
+  Retention is `ZO_COMPACT_DATA_RETENTION_DAYS = 30` (dropped from 90
+  on 2026-08-23 — no SLA requires longer right now; it applies fleet-
+  wide across every stream and takes effect promptly on restart, not
+  gradually).
 
-  **What it actually covers — narrower than "all docker logs on the
-  fleet":** ingestion is plain `rsyslog` forwarding (`omfwd` in
-  `/etc/rsyslog.d/*.conf` on each source host), which only carries
-  whatever a host writes to its own syslog/journald — OS daemons (sshd,
-  kernel, dockerd's own daemon-level events, cron) and any **systemd**
-  service that logs via journald. It does **NOT** capture arbitrary
-  Docker container stdout/stderr — containers on the default
-  `json-file` logging driver (the fleet default; every `fleet-runner
-  deploy`-managed service) never reach rsyslog at all, so `docker logs`
-  losing a redeployed container's history is **not** currently
-  recoverable via OpenObserve. As of the 2026-08-23 check only the
-  Dockerhost VM, the nginx proxy manager VM, and the OpenObserve LXC
-  itself forward to it — **the prod docker host is not wired in at
-  all**, which is exactly where a redeployed container's pre-redeploy
-  logs are most likely to matter for post-incident forensics.
+  **Query it with `bin/oo`, not hand-rolled curl.** `services-registry/bin/oo`
+  is the deterministic CLI — `oo logs <container_name>`, `oo query <sql>`,
+  `oo tail <container_name>`, `oo streams`. Needs `OPENOBSERVE_USER` /
+  `OPENOBSERVE_PASSWORD` set (see `bin/fleet-runner.env.example`; real
+  values in `fleet-state/OPS.md`). Run `bin/oo` with no args for full
+  usage. It proxies every request through the bastion via SSH — LXC 106
+  is only reachable from inside the `0docker.com` private LAN.
 
-  To close that gap for a given repo, either (a) point that container's
-  Docker logging driver at syslog/gelf targeting the OpenObserve LXC's
-  `5514` port (see `fleet-state/OPS.md` for the address), or (b) add an
-  rsyslog forward rule on the host it runs on — neither is done
-  automatically today, and doing it fleet-wide (especially for the prod
-  host) is a real infrastructure change: confirm with the user before
-  wiring a new host or service into it, same as any other shared-system
-  change.
+  **Two streams**, both queryable the same way:
+  - `default` — OS-level syslog/journald, forwarded via plain `rsyslog`
+    (`omfwd` in `/etc/rsyslog.d/*.conf`) from the dockerhost VM, the
+    nginx proxy manager VM, and the LXC itself. sshd, kernel, cron,
+    dockerd's own daemon events, and any systemd service that logs via
+    journald.
+  - `docker_logs` — **every container's stdout/stderr, fleet-wide**,
+    tagged `container_name` / `host` / `image` / compose labels. Added
+    2026-08-23 to close exactly the gap that bit an agent that night:
+    `docker logs` only shows the CURRENT container instance, so a
+    redeploy silently discards history. `docker logs` and the
+    `json-file` driver are UNCHANGED on every service — this is a
+    second, independent path, not a replacement.
+
+  **How `docker_logs` gets populated**: a small Vector (`timberio/vector`,
+  pinned by digest) container named `vector-log-shipper` runs at
+  `/opt/observability/vector-log-shipper/` on every docker host (as of
+  2026-08-23: the dockerhost VM and the prod docker host). It reads
+  every container's logs via the Docker socket — the same read path
+  `docker logs` uses — and ships a copy to OpenObserve; it does not
+  touch each container's own logging driver or config, so nothing about
+  existing services changes, and no per-service compose edits were
+  needed. New containers are picked up automatically. **Gotcha found
+  wiring this up**: Vector 0.57.0's `${VAR}` env-var interpolation does
+  not reliably substitute inside the `http` sink's `uri`/`auth.*`
+  fields in this image — config loads fine but every request fails
+  with "invalid uri character" / 401. Don't fight it: render
+  `vector.toml` with real values baked in before deploying (a plain
+  template + `sed`/similar is enough) rather than relying on Vector's
+  own interpolation for those fields.
+
+  Adding a **new** docker host to the fleet should get a
+  `vector-log-shipper` too, following the same compose shape (see the
+  existing deployments as the reference) — this isn't automated by
+  `fleet-runner` yet.
 - **Webgateway** runs nginx (the public TLS terminator) and the
   keystore-aware `auth_request` flow. vhosts live as **regular files**
   in `/etc/nginx/sites-enabled/<host>.{http,https}.conf` (NOT symlinks
