@@ -144,8 +144,11 @@
 #       List every stream in the org with doc count / time range / size.
 #
 #   oo stream-info <stream_name>
-#       Full JSON detail (stats + settings) for one stream — the drill-
-#       down when `oo streams`' one-line summary isn't enough.
+#       Full schema for one stream — every field name + type (e.g.
+#       container_name: Utf8, _timestamp: Int64) plus stats — the
+#       drill-down when `oo streams`' one-line summary isn't enough,
+#       and the answer to "what fields can I write a WHERE clause
+#       against" before hand-writing an `oo query`.
 #
 # DURATION: Ns / Nm / Nh / Nd (default: 1h). Examples: 30s, 15m, 2h, 3d.
 #
@@ -303,14 +306,41 @@ print(json.dumps({"query": {"sql": sql, "start_time": start, "end_time": end, "s
     printf '%s\n' "$payload"
     return 0
   fi
-  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload" | python3 -c '
+  # --connect-timeout / --max-time: found live 2026-08-24 (scenario-plan
+  # review, garbage-input case) — with no timeout at all, a wrong/
+  # unreachable OPENOBSERVE_HOST hung for 132s (the OS's own TCP connect
+  # timeout) before curl finally gave up, with zero feedback the whole
+  # time. 10s to establish the connection and 60s total is generous for
+  # every query this file issues in practice (all observed well under
+  # 5s) while bounding the worst case to "fails within a minute with a
+  # clear error" instead of "silently hangs for two-plus minutes."
+  ssh "$BASTION" "curl -sS --connect-timeout 10 --max-time 60 -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload" | python3 -c '
 import json, sys
 raw = sys.stdin.read()
 try:
     d = json.loads(raw)
     if "hits" not in d:
         raise ValueError(d.get("message", raw)[:500])
-except (json.JSONDecodeError, ValueError) as e:
+except json.JSONDecodeError:
+    # Found live 2026-08-24 (garbage-input scenario review): the old
+    # except (json.JSONDecodeError, ValueError) as e: print(str(e))
+    # shape surfaced the JSON decoder own complaint ("Expecting value:
+    # line 1 column 1 (char 0)") for BOTH a non-JSON response body (bad
+    # creds, where OpenObserve returns the plain-text "Unauthorized
+    # Access") and a completely empty body (curl itself failed before
+    # any response came back, e.g. connection refused/timed out --- its
+    # diagnostic goes to stderr, not this stdin) --- neither case told
+    # the operator anything about what actually went wrong. Split it
+    # out: echo the real (truncated) response body when there is one,
+    # and call out "empty response" (pointing at the curl error likely
+    # already printed above, and at network/host config) when not.
+    body = raw.strip()
+    if body:
+        msg = "non-JSON response from OpenObserve: " + body[:300]
+    else:
+        msg = "empty response (connection/timeout failure talking to OpenObserve — check OPENOBSERVE_HOST/network, and any curl error printed above)"
+    print(json.dumps({"_oo_error": msg}))
+except ValueError as e:
     print(json.dumps({"_oo_error": str(e)}))
 else:
     sys.stdout.write(raw)
@@ -702,10 +732,19 @@ hits = d.get("hits", [])
 gap_secs = int(sys.argv[1])
 container = sys.argv[2]
 since_label = sys.argv[3]
+limit = int(sys.argv[4])
 gap_us = gap_secs * 1000000
 if len(hits) < 2:
     print("not enough data to detect gaps (need >=2 lines) — check --since / --host / container name", file=sys.stderr)
     sys.exit(0)
+# Same truncation risk as `rate` (see its comment): ORDER BY _timestamp
+# ASC LIMIT <limit> means a container noisier than --limit rows within
+# --since only gets gap-checked up through wherever the row cap landed,
+# not through "now" — so "no gaps found" can mean "genuinely up the
+# whole time" OR "we stopped looking before the window ended." Warn
+# rather than let a truncated scan read as a clean bill of health.
+if len(hits) >= limit:
+    print(f"warning: hit --limit ({limit}) rows before reaching the end of --since — gap-checking only covered up to the last returned line, not the full window; increase --limit to check the rest", file=sys.stderr)
 prev = hits[0]["_timestamp"]
 found = 0
 for h in hits[1:]:
@@ -719,7 +758,7 @@ for h in hits[1:]:
     prev = cur
 if found == 0:
     print(f"no gaps > {gap_secs}s found in the last {since_label} — {container} looks continuously up")
-' "$gap_secs" "$container" "$since"
+' "$gap_secs" "$container" "$since" "$limit"
 }
 
 cmd_rate() {
@@ -750,9 +789,22 @@ if "_oo_error" in d:
     sys.exit(1)
 hits = d.get("hits", [])
 bucket_us = int(sys.argv[1]) * 1000000
+limit = int(sys.argv[2])
 if not hits:
     print("no data in window — check --since / --host / container name", file=sys.stderr)
     sys.exit(0)
+# Found live 2026-08-24 (scenario-plan review, "is traffic dropping or
+# spiking" scenario): the query is ORDER BY _timestamp ASC LIMIT
+# <limit>, so for a container noisier than --limit rows within --since,
+# the result silently stops at whatever moment the row cap was hit --
+# NOT at "now". Confirmed live: go-html-proxy over --since 6h at the
+# default --limit 10000 rendered a histogram that dropped to nothing
+# after ~90 minutes, looking exactly like a traffic collapse; bumping
+# --limit 10x revealed traffic had actually INCREASED for the next
+# hour. Warn instead of presenting a truncated tail as if it were the
+# real recent trend.
+if len(hits) >= limit:
+    print(f"warning: hit --limit ({limit}) rows before reaching the end of --since — the last bucket(s) below likely do NOT reflect the full window; increase --limit for the true recent trend", file=sys.stderr)
 counts = collections.Counter()
 for h in hits:
     counts[h["_timestamp"] // bucket_us] += 1
@@ -762,7 +814,7 @@ for k in sorted(counts):
     n = counts[k]
     bar = "#" * max(1, int(n / maxc * 40))
     print(f"{t}  {n:>6}  {bar}")
-' "$bucket_secs"
+' "$bucket_secs" "$limit"
 }
 
 cmd_versions() {
@@ -1166,7 +1218,7 @@ if hits:
 
 cmd_streams() {
   require_creds
-  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c '
+  ssh "$BASTION" "curl -sS --connect-timeout 10 --max-time 60 -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c '
 import json, sys, datetime
 raw = sys.stdin.read()
 try:
@@ -1188,14 +1240,35 @@ for s in d["list"]:
 cmd_stream_info() {
   local stream="${1:?usage: oo stream-info <stream_name>}"
   require_creds
-  # $stream goes to python via argv, not interpolated into the script
-  # text — the old version built the python source as a bash
-  # DOUBLE-quoted string with ${stream} spliced in directly, which meant
-  # a stream name containing a backtick or $(...) would run as a shell
-  # command (bash still expands those inside "..."), not just break the
-  # python syntax. argv passing (like every other command in this file)
-  # closes that off entirely rather than trying to escape around it.
-  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c '
+  # Found live 2026-08-24 (scenario-plan review, "before writing raw SQL
+  # what fields exist" scenario): the old version fetched the same
+  # /streams LIST endpoint `oo streams` already uses and filtered it
+  # client-side by name — but that endpoint reports total_fields: 0 and
+  # empty settings.index_fields/full_text_search_keys for a
+  # dynamic-schema stream like docker_logs, so it never actually told
+  # the caller what fields exist. OpenObserve has a dedicated
+  # /streams/{name}/schema endpoint that returns the real
+  # [{name,type}, ...] field list (confirmed live: 43 fields for
+  # docker_logs, including container_name/host/message/image) — use
+  # that instead.
+  #
+  # $stream goes into the URL path this time, which (unlike every other
+  # user-controlled value in this file) has no argv-passing indirection
+  # available — curl needs it in the URL it is given on the bastion's
+  # command line, and that command line is built as a bash
+  # DOUBLE-quoted string handed to ssh, so anything containing
+  # backticks/$(...) would be shell-expanded before curl ever saw it
+  # (the exact class of bug the old code above was already careful to
+  # avoid for the *python* side). Close it off the same way sql_escape
+  # closes off SQL injection elsewhere: validate against a strict
+  # allowlist charset before it ever reaches the ssh command string. A
+  # real OpenObserve stream name is always [A-Za-z0-9_], never anything
+  # that could break out of the quoting.
+  if [[ ! "$stream" =~ ^[A-Za-z0-9_]+$ ]]; then
+    echo "error: invalid stream name '${stream}' (expected letters/digits/underscore only)" >&2
+    exit 1
+  fi
+  ssh "$BASTION" "curl -sS --connect-timeout 10 --max-time 60 -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams/${stream}/schema" | python3 -c '
 import json, sys
 raw = sys.stdin.read()
 stream = sys.argv[1]
@@ -1204,13 +1277,10 @@ try:
 except json.JSONDecodeError:
     print("OpenObserve request failed (non-JSON response): " + raw.strip()[:300], file=sys.stderr)
     sys.exit(1)
-for s in d.get("list", []):
-    if s["name"] == stream:
-        print(json.dumps(s, indent=2))
-        break
-else:
-    print("stream not found: " + stream, file=sys.stderr)
+if "schema" not in d:
+    print("stream not found: " + stream + " (" + json.dumps(d)[:300] + ")", file=sys.stderr)
     sys.exit(1)
+print(json.dumps(d, indent=2))
 ' "$stream"
 }
 
