@@ -17,10 +17,16 @@
 # directly.
 #
 # USAGE:
-#   oo query <sql> [--since DURATION] [--limit N] [--org ORG]
+#   oo query <sql> [--since DURATION] [--limit N] [--pretty]
 #       Run an arbitrary SQL query against a stream (default org "default").
 #       The stream name goes in the SQL's FROM clause, e.g.
-#       'SELECT * FROM docker_logs WHERE ...'.
+#       'SELECT * FROM docker_logs WHERE ...'. Output is compact JSON with
+#       OpenObserve's own response metadata stripped by default (this is
+#       the escape hatch most likely to be parsed by a script/agent, not
+#       eyeballed — compact + stripped runs ~17-25% smaller than the old
+#       always-pretty-printed shape); pass --pretty for indented JSON with
+#       full metadata (took_detail, trace_id, etc) when a human wants to
+#       read it directly.
 #
 #   oo logs <container_name> [--since DURATION] [--grep PATTERN] [--limit N] [--host HOST]
 #       Convenience wrapper: every log line for one container, newest
@@ -100,16 +106,22 @@
 #
 #   oo check <container_name> [--since DURATION] [--host HOST]
 #       Scriptable health check: exit 0 + "OK" if no error-looking lines
-#       in --since (default 15m), exit 1 + "FAIL" (with count) otherwise.
-#       Built for `if oo check X; then …`, not for reading — no
-#       pretty-printing, one line of output.
+#       in --since (default 15m), exit 1 + "FAIL" (with count) if there
+#       are, exit 2 + "UNKNOWN" if the check itself couldn't run (bad
+#       creds, malformed query, etc) — deliberately distinct from FAIL so
+#       a caller that cares can tell "definitely has errors" apart from
+#       "couldn't tell"; `if oo check X` treats either as not-confirmed-
+#       healthy either way, which is the safe default. Built for
+#       scripting, not for reading — no pretty-printing, one line of
+#       output.
 #
 #   oo save <name> <sql>
 #   oo saved
-#   oo run <name> [--since DURATION] [--limit N]
+#   oo run <name> [--since DURATION] [--limit N] [--pretty]
 #       Bookmark a query once (locally, in ~/.oo/queries.json — never
 #       synced or committed), list what's saved, re-run one by name
-#       instead of retyping SQL every session.
+#       instead of retyping SQL every session. `run`'s output follows
+#       `query`'s same compact-by-default / --pretty convention.
 #
 #   oo summary [--since DURATION]
 #       One-shot fleet orientation: host breakdown, top 8 noisiest
@@ -129,6 +141,10 @@
 #
 #   oo streams
 #       List every stream in the org with doc count / time range / size.
+#
+#   oo stream-info <stream_name>
+#       Full JSON detail (stats + settings) for one stream — the drill-
+#       down when `oo streams`' one-line summary isn't enough.
 #
 # DURATION: Ns / Nm / Nh / Nd (default: 1h). Examples: 30s, 15m, 2h, 3d.
 #
@@ -220,8 +236,32 @@ duration_to_seconds() {
   esac
 }
 
+# sql_escape VALUE — standard SQL string-literal escaping (' -> ''). Apply
+# to every user-controlled value interpolated into a WHERE clause built by
+# this script (container names, host labels, grep/errors patterns) BEFORE
+# building the clause. Do NOT apply this to raw SQL the user hands in
+# directly (`query`/`save`/`run`/`link` take arbitrary SQL by design).
+#
+# Found live 2026-08-23 (independent review): before this existed, a
+# container name or grep pattern containing a single quote (e.g. grepping
+# for "can't connect") broke the generated SQL and — worse — the broken
+# query's error response was indistinguishable from "zero results" to
+# every formatter below, so the tool silently told the operator "nothing
+# found" instead of "your query was malformed". See the _oo_error
+# mechanism in oo_search_range for the other half of that fix.
+sql_escape() {
+  printf '%s' "${1//\'/\'\'}"
+}
+
 # oo_search_range SQL START_US END_US LIMIT — the primitive: an absolute
-# microsecond-epoch time range.
+# microsecond-epoch time range. ALWAYS prints valid JSON to stdout: either
+# OpenObserve's real response (which has a "hits" key), or, on any
+# failure (malformed SQL, auth failure, a non-JSON response like the
+# plain-text "Unauthorized Access" OpenObserve returns on bad creds),
+# {"_oo_error": "<message>"} — never a raw traceback, and never silence
+# that a caller could mistake for "zero results". Every downstream
+# formatter in this file checks for "_oo_error" first, before touching
+# "hits" — copy that pattern for any new command you add.
 oo_search_range() {
   local sql="$1" start_us="$2" end_us="$3" limit="$4"
   local payload
@@ -230,31 +270,78 @@ import json, sys
 sql, start, end, size = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
 print(json.dumps({"query": {"sql": sql, "start_time": start, "end_time": end, "size": size}}))
 ' "$sql" "$start_us" "$end_us" "$limit")
-  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload"
+  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload" | python3 -c '
+import json, sys
+raw = sys.stdin.read()
+try:
+    d = json.loads(raw)
+    if "hits" not in d:
+        raise ValueError(d.get("message", raw)[:500])
+except (json.JSONDecodeError, ValueError) as e:
+    print(json.dumps({"_oo_error": str(e)}))
+else:
+    sys.stdout.write(raw)
+'
 }
 
 # oo_search SQL SINCE_DURATION LIMIT — the common case: relative to now.
+# Same "always valid JSON, _oo_error on failure" contract as
+# oo_search_range — an invalid --since duration is normalized into the
+# same shape rather than a bare `exit 1`, which (found live 2026-08-23)
+# only killed the subshell running this function's half of the caller's
+# pipe, not the caller itself, leaving the downstream formatter to choke
+# on empty stdin with a raw Python traceback instead of a clean message.
 oo_search() {
   local sql="$1" since="$2" limit="$3"
   local end_us start_us secs
-  secs=$(duration_to_seconds "$since")
+  if ! secs=$(duration_to_seconds "$since" 2>&1); then
+    python3 -c 'import json, sys; print(json.dumps({"_oo_error": sys.argv[1]}))' "$secs"
+    return 0
+  fi
   end_us=$(( $(date +%s) * 1000000 ))
   start_us=$(( end_us - secs * 1000000 ))
   oo_search_range "$sql" "$start_us" "$end_us" "$limit"
 }
 
+# format_search_result — shared by query/run: prints _oo_error to stderr
+# and exits 1, otherwise prints the result either compact (default — this
+# is the raw-JSON escape hatch most likely to be consumed by an agent, not
+# a human eyeballing a terminal, and pretty-printing plus OpenObserve's own
+# response metadata roughly doubles the byte count for no benefit to a
+# parser) or pretty + full metadata with --pretty.
+format_search_result() {
+  local pretty="$1"
+  python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
+pretty = sys.argv[1] == "1"
+if pretty:
+    print(json.dumps(d, indent=4))
+else:
+    noise = ("took", "took_detail", "trace_id", "cached_ratio", "scan_size",
+              "idx_scan_size", "scan_records", "result_cache_ratio",
+              "is_partial", "from", "order_by")
+    compact = {k: v for k, v in d.items() if k not in noise}
+    print(json.dumps(compact, separators=(",", ":")))
+' "$pretty"
+}
+
 cmd_query() {
-  local sql="${1:?usage: oo query <sql> [--since 1h] [--limit 100]}"; shift || true
-  local since="1h" limit="100"
+  local sql="${1:?usage: oo query <sql> [--since 1h] [--limit 100] [--pretty]}"; shift || true
+  local since="1h" limit="100" pretty="0"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --since) since="$2"; shift 2 ;;
       --limit) limit="$2"; shift 2 ;;
+      --pretty) pretty="1"; shift ;;
       *) echo "unknown flag: $1" >&2; exit 1 ;;
     esac
   done
   require_creds
-  oo_search "$sql" "$since" "$limit" | python3 -m json.tool
+  oo_search "$sql" "$since" "$limit" | format_search_result "$pretty"
 }
 
 cmd_logs() {
@@ -270,6 +357,9 @@ cmd_logs() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
+  grep_pat=$(sql_escape "$grep_pat")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   [[ -n "$grep_pat" ]] && where="${where} AND message LIKE '%${grep_pat}%'"
@@ -277,6 +367,9 @@ cmd_logs() {
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no matching log lines — check --since / --host / container name)", file=sys.stderr)
@@ -301,6 +394,9 @@ cmd_grep() {
     esac
   done
   require_creds
+  pattern=$(sql_escape "$pattern")
+  container_filter=$(sql_escape "$container_filter")
+  host_filter=$(sql_escape "$host_filter")
   local where="message LIKE '%${pattern}%'"
   [[ -n "$container_filter" ]] && where="${where} AND container_name = '${container_filter}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
@@ -308,6 +404,9 @@ cmd_grep() {
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no matches — check --since / --container / --host / pattern)", file=sys.stderr)
@@ -334,6 +433,8 @@ cmd_errors() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="${ERROR_LIKE_CLAUSE}"
   [[ -n "$container" ]] && where="${where} AND container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
@@ -341,6 +442,9 @@ cmd_errors() {
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no error-looking lines — check --since / container / --host)", file=sys.stderr)
@@ -367,6 +471,8 @@ cmd_since_redeploy() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
 
@@ -375,6 +481,9 @@ cmd_since_redeploy() {
   first_seen=$(oo_search "SELECT min(_timestamp) as first_seen FROM docker_logs WHERE ${where}" "$window" 1 | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 fs = hits[0].get("first_seen") if hits else None
 print(fs if fs is not None else "")
@@ -399,6 +508,9 @@ print(fs if fs is not None else "")
   oo_search_range "$sql" "$start_us" "$end_us" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no log lines in that window)", file=sys.stderr)
@@ -424,6 +536,8 @@ cmd_context() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
 
@@ -454,6 +568,9 @@ except ValueError:
   oo_search_range "$sql" "$start_us" "$end_us" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no log lines in that window)", file=sys.stderr)
@@ -477,10 +594,15 @@ cmd_compare() {
     esac
   done
   require_creds
+  c1=$(sql_escape "$c1")
+  c2=$(sql_escape "$c2")
   local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE container_name IN ('${c1}', '${c2}') ORDER BY _timestamp ASC LIMIT ${limit}"
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("(no matching log lines)", file=sys.stderr)
@@ -505,6 +627,8 @@ cmd_restarts() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   local gap_secs
@@ -513,6 +637,9 @@ cmd_restarts() {
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 gap_secs = int(sys.argv[1])
 container = sys.argv[2]
@@ -550,6 +677,8 @@ cmd_rate() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   local bucket_secs
@@ -558,6 +687,9 @@ cmd_rate() {
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime, collections
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 bucket_us = int(sys.argv[1]) * 1000000
 if not hits:
@@ -586,12 +718,17 @@ cmd_versions() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   local sql="SELECT image, min(_timestamp) as first_seen, max(_timestamp) as last_seen, count(*) as n FROM docker_logs WHERE ${where} GROUP BY image ORDER BY last_seen DESC"
   oo_search "$sql" "$since" 100 | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 if not hits:
     print("no data — check container name / --since / --host", file=sys.stderr)
@@ -628,6 +765,12 @@ cmd_new() {
 import json, sys
 recent = json.loads(sys.argv[1])
 baseline = json.loads(sys.argv[2])
+if "_oo_error" in recent:
+    print("error: " + recent["_oo_error"], file=sys.stderr)
+    sys.exit(1)
+if "_oo_error" in baseline:
+    print("error: " + baseline["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 recent_names = {h["container_name"] for h in recent.get("hits", [])}
 baseline_names = {h["container_name"] for h in baseline.get("hits", [])}
 new_names = sorted(recent_names - baseline_names)
@@ -649,15 +792,31 @@ cmd_check() {
     esac
   done
   require_creds
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}' AND ${ERROR_LIKE_CLAUSE}"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
-  local n
-  n=$(oo_search "SELECT count(*) as n FROM docker_logs WHERE ${where}" "$since" 1 | python3 -c '
+  local result n
+  result=$(oo_search "SELECT count(*) as n FROM docker_logs WHERE ${where}" "$since" 1 | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("_ERR:" + d["_oo_error"])
+    sys.exit(0)
 hits = d.get("hits", [])
 print(hits[0].get("n", 0) if hits else 0)
 ')
+  # UNKNOWN (exit 2) is distinct from OK (0) / FAIL (1) on purpose: a
+  # scripted `if oo check X` treats any non-zero as "not confirmed
+  # healthy" either way, but a caller that cares can tell "definitely
+  # has errors" apart from "couldn't even run the check" (e.g. bad
+  # creds) — silently reporting OK because the request itself failed
+  # would be the exact wrong default for a health check.
+  if [[ "$result" == _ERR:* ]]; then
+    echo "UNKNOWN: ${container} check failed to run — ${result#_ERR:}" >&2
+    exit 2
+  fi
+  n="$result"
   if [[ "$n" -gt 0 ]]; then
     echo "FAIL: ${container} logged ${n} error-looking line(s) in the last ${since}"
     exit 1
@@ -699,12 +858,13 @@ for name, sql in d.items():
 }
 
 cmd_run() {
-  local name="${1:?usage: oo run <name> [--since 1h] [--limit 100]}"; shift || true
-  local since="1h" limit="100"
+  local name="${1:?usage: oo run <name> [--since 1h] [--limit 100] [--pretty]}"; shift || true
+  local since="1h" limit="100" pretty="0"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --since) since="$2"; shift 2 ;;
       --limit) limit="$2"; shift 2 ;;
+      --pretty) pretty="1"; shift ;;
       *) echo "unknown flag: $1" >&2; exit 1 ;;
     esac
   done
@@ -724,7 +884,7 @@ if name not in d:
 print(d[name])
 ' "$OO_SAVE_FILE" "$name")
   require_creds
-  oo_search "$sql" "$since" "$limit" | python3 -m json.tool
+  oo_search "$sql" "$since" "$limit" | format_search_result "$pretty"
 }
 
 cmd_summary() {
@@ -789,12 +949,16 @@ cmd_containers() {
     esac
   done
   require_creds
+  host_filter=$(sql_escape "$host_filter")
   local where="1=1"
   [[ -n "$host_filter" ]] && where="host = '${host_filter}'"
   local sql="SELECT container_name, host, count(*) as n, max(_timestamp) as last_seen FROM docker_logs WHERE ${where} GROUP BY container_name, host ORDER BY n DESC LIMIT ${limit}"
   oo_search "$sql" "$since" "$limit" | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 for h in hits:
     name = h.get("container_name", "?")
@@ -819,6 +983,9 @@ cmd_hosts() {
   oo_search "$sql" "$since" 100 | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
 hits = d.get("hits", [])
 for h in hits:
     host = h.get("host", "?")
@@ -840,6 +1007,8 @@ cmd_tail() {
   done
   require_creds
   echo "# polling tail of '${container}' every ${interval}s (Ctrl-C to stop) — re-queries a sliding window each cycle, so a line can repeat once at the boundary; for a true live stream use https://openobserve.0docker.com" >&2
+  container=$(sql_escape "$container")
+  host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   local last_printed=""
@@ -849,6 +1018,15 @@ cmd_tail() {
     oo_search "$sql" "${since_secs}s" 200 | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
+if "_oo_error" in d:
+    # stdout, not stderr: this function repurposes stderr as a side
+    # channel to pass the cursor timestamp back to the bash loop (see the
+    # 2>/tmp/.oo_tail_cursor.$$ redirect below) — printing the error there
+    # would silently corrupt that instead of showing it. Skip this poll
+    # cycle (no cursor update) rather than crash the whole tail loop, so
+    # a transient blip does not lose the "resume from here" position.
+    print("error (will retry next poll): " + d["_oo_error"])
+    sys.exit(0)
 hits = list(reversed(d.get("hits", [])))
 last_printed = sys.argv[1]
 skip = bool(last_printed)
@@ -877,7 +1055,12 @@ cmd_streams() {
   require_creds
   ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c '
 import json, sys, datetime
-d = json.load(sys.stdin)
+raw = sys.stdin.read()
+try:
+    d = json.loads(raw)
+except json.JSONDecodeError:
+    print("OpenObserve request failed (non-JSON response): " + raw.strip()[:300], file=sys.stderr)
+    sys.exit(1)
 for s in d["list"]:
     st = s["stats"]
     tmin = datetime.datetime.fromtimestamp(st["doc_time_min"]/1e6, datetime.UTC).isoformat() if st["doc_time_min"] else "-"
@@ -892,17 +1075,30 @@ for s in d["list"]:
 cmd_stream_info() {
   local stream="${1:?usage: oo stream-info <stream_name>}"
   require_creds
-  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c "
+  # $stream goes to python via argv, not interpolated into the script
+  # text — the old version built the python source as a bash
+  # DOUBLE-quoted string with ${stream} spliced in directly, which meant
+  # a stream name containing a backtick or $(...) would run as a shell
+  # command (bash still expands those inside "..."), not just break the
+  # python syntax. argv passing (like every other command in this file)
+  # closes that off entirely rather than trying to escape around it.
+  ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' ${BASE_URL}/api/${OO_ORG}/streams" | python3 -c '
 import json, sys
-d = json.load(sys.stdin)
-for s in d['list']:
-    if s['name'] == '${stream}':
+raw = sys.stdin.read()
+stream = sys.argv[1]
+try:
+    d = json.loads(raw)
+except json.JSONDecodeError:
+    print("OpenObserve request failed (non-JSON response): " + raw.strip()[:300], file=sys.stderr)
+    sys.exit(1)
+for s in d.get("list", []):
+    if s["name"] == stream:
         print(json.dumps(s, indent=2))
         break
 else:
-    print('stream not found: ${stream}', file=sys.stderr)
+    print("stream not found: " + stream, file=sys.stderr)
     sys.exit(1)
-"
+' "$stream"
 }
 
 main() {

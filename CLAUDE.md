@@ -814,32 +814,25 @@ or health-check a static Pages site.
   gradually).
 
   **Query it with `bin/oo`, not hand-rolled curl.** `services-registry/bin/oo`
-  is the deterministic CLI, 18 commands deep — run it with no args for
-  full usage rather than treating this list as exhaustive. Core reads:
-  `oo logs <name>` (one container's history), `oo grep <pattern>`
-  (full-text search across every container fleet-wide, not just one you
-  already know the name of), `oo errors [name]` (shortcut for the #1
-  incident query — excludes this fleet's own `"error":null`/`error=<nil>`
-  false-positive idioms), `oo since-redeploy <name>` (the command this
-  tool exists for — finds the current instance's earliest log line and
-  shows what happened right around it), `oo context <name> <ts>` (same
-  window logic at any timestamp you already found interesting), `oo
-  compare <a> <b>` (interleave two containers). Discovery/analysis: `oo
-  containers` / `oo hosts` (what's logging, sorted noisiest-first), `oo
-  restarts <name>` (infer restarts from timestamp gaps — no docker
-  inspect/SSH needed), `oo rate <name>` (volume histogram), `oo versions
-  <name>` (image-tag history == deploy history), `oo new` (containers
-  that appeared since a baseline — unexpected churn), `oo check <name>`
-  (exit-code health check, scriptable). Utility: `oo save`/`saved`/`run`
-  (bookmark queries locally instead of retyping SQL), `oo summary` (one-
-  shot orientation instead of four round trips), `oo link <sql>` (URL +
-  query as copy-paste handoff text), `oo tail <name>` (polling tail),
-  `oo query <sql>` (raw SQL escape hatch), `oo streams`. Needs
-  `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` / `OPENOBSERVE_HOST` set
-  (see `bin/fleet-runner.env.example`; real values in
-  `fleet-state/OPS.md`). It proxies every request through the bastion
-  via SSH — LXC 106
-  is only reachable from inside the `0docker.com` private LAN.
+  is the deterministic CLI (`logs`, `grep`, `errors`, `since-redeploy`,
+  `context`, `compare`, `restarts`, `rate`, `versions`, `new`, `check`,
+  `save`/`saved`/`run`, `summary`, `link`, `containers`, `hosts`, `tail`,
+  `query`, `streams`, `stream-info`) — run `bin/oo` with no args for full
+  usage rather than duplicating it here; the script's own header comment
+  is the source of truth for what each command does and its defaults, and
+  this list will drift if a command gets added/renamed without this line
+  being touched too. Needs `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` /
+  `OPENOBSERVE_HOST` set (see `bin/fleet-runner.env.example`; real values
+  in `fleet-state/OPS.md`). Proxies every request through the bastion via
+  SSH — LXC 106 is only reachable from inside the `0docker.com` private
+  LAN. `query`/`run` default to compact JSON with OpenObserve's own
+  response metadata stripped (pass `--pretty` for indented + full
+  metadata) — the other commands already print hand-formatted plain text,
+  no JSON envelope. Every user-supplied value going into a WHERE clause is
+  SQL-escaped (`sql_escape` in the script) and every request normalizes
+  failures into a consistent, non-silent error shape (`_oo_error` — never
+  a raw traceback, never indistinguishable from "zero results") — copy
+  both patterns if you add a new command that talks to OpenObserve.
 
   **Two streams**, both queryable the same way:
   - `default` — OS-level syslog/journald, forwarded via plain `rsyslog`
