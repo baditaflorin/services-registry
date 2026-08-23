@@ -2093,7 +2093,7 @@
     "category": "observability",
     "container_port": 18208,
     "description": "F6 fleet backup orchestrator. Every 6h snapshots configured sources (SQLite, git, files, directories), encrypts with age (multiple recipients for key rotation), pushes to URI-shaped destination (initial: local:///opt/backups; future: storage-box:// rsync over SSH). Verifies every write by decrypt+tar-diff round-trip; mismatch = FAILED run, retention prune skipped. Per-instance SQLite audit log enforces \"never delete what we didn't create\" invariant. 7-daily / 4-weekly / 12-monthly retention. POST /restore always dry-run; actual restore is operator-driven with offline age identity (daemon never holds the decrypting key).",
-    "host_port": 18208,
+    "host_port": 18311,
     "internal": true,
     "trl": 4,
     "trl_assessed_at": "2026-05-19",

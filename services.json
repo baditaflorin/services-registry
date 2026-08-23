@@ -9013,7 +9013,7 @@
     "trl_ceiling_reason": "Verify-after-write in production is byte-equality on the encrypted blob (daemon holds no decrypting identity, by design). Full encrypt+decrypt+tar-diff verify only runs in tests + when an operator opts a verifying identity into the daemon. Lift to 7+ would either issue the daemon a dedicated verify-only identity or require every restore retrieval to verify before exposing bytes.",
     "trl_assessed_at": "2026-05-19",
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-backup-scaffold",
-    "host_port": 18208,
+    "host_port": 18311,
     "container_port": 18208,
     "version": "0.1.0"
   },
