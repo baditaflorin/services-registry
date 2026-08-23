@@ -1054,11 +1054,11 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 4,
-    "trl_evidence": "First ship. Reject/accept control classification covers common English + German phrasing and a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only.",
+    "trl_evidence": "First ship + first real batch test 2026-08-24 (109 diverse EU domains, not the original Austria-gambling sample). Reject/accept control classification now covers EN/DE/FR/IT/ES/NL/PL/PT/SV/DA/FI canonical phrasing plus a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only. Known gap: Didomi-fronted sites (orf.at, kurier.at, nrc.nl confirmed) did not render their consent banner in this hosting environment even after 25s wait -- see README Scope and limitations. proxy_read_timeout raised 120s->200s to match the service-side timeout increase (serverWriteTimeout now 175s).",
     "host_port": 18208,
     "container_port": 18208,
     "proxy_egress": true,
-    "proxy_read_timeout": "120s",
+    "proxy_read_timeout": "200s",
     "version": "0.1.0"
   },
   {
