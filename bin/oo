@@ -158,10 +158,24 @@
 #   `oo save`/`oo run` keep bookmarked queries, local to your machine).
 #
 # Known limitation: credentials are passed to curl via -u on the bastion's
-# command line, so they're briefly visible in that host's `ps aux` output
-# during the request — acceptable for this internal, bastion-only admin
-# path (same pattern used ad hoc throughout the 2026-08-23 incident), but
-# don't reuse this pattern for anything internet-facing.
+# command line. Verified 2026-08-24 (fourth independent review): the
+# bastion's curl (7.88.1, Debian 12) has built-in -u argument-hiding — per
+# `man curl`, it overwrites that option's argv value in its own process
+# memory right after parsing, before the request goes out. Live-tested
+# against real traffic: 20 concurrent `oo query` calls sampled by a tight,
+# sleepless `ps` loop on the bastion (62 curl-process snapshots captured)
+# never once caught the credentials in cleartext. So actual exposure is far
+# smaller than "visible during the request" suggests — though curl's own
+# docs stop short of a zero-exposure guarantee ("still be visible for a
+# moment before cleared"), and the mitigation lives in the REMOTE curl
+# binary, not this script — it silently stops applying if FLEET_BASTION
+# ever points at a host with an older/different curl. No script-level fix
+# was layered on top: a netrc-file alternative would need its own remote
+# temp file over SSH (stdin here already carries the query payload via
+# --data-binary @-), adding real complexity for a risk that's already
+# near-zero in practice, on a bastion reachable only by the fleet's small
+# trusted operator set (see services-registry/CLAUDE.md). Still, don't
+# reuse this -u pattern for anything internet-facing.
 
 set -euo pipefail
 
