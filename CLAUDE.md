@@ -814,19 +814,31 @@ or health-check a static Pages site.
   gradually).
 
   **Query it with `bin/oo`, not hand-rolled curl.** `services-registry/bin/oo`
-  is the deterministic CLI: `oo logs <name>` (one container's history),
-  `oo grep <pattern>` (full-text search across every container fleet-
-  wide, not just one you already know the name of), `oo errors [name]`
-  (shortcut for the #1 incident query), `oo since-redeploy <name>` (the
-  command this tool exists for — finds the current instance's earliest
-  log line and shows what happened right around it, closing the exact
-  "docker logs lost history on redeploy" gap), `oo containers` / `oo
-  hosts` (discover what's logging, sorted noisiest-first), `oo tail
-  <name>` (polling tail), `oo query <sql>` (raw SQL escape hatch), `oo
-  streams`. Needs `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` /
-  `OPENOBSERVE_HOST` set (see `bin/fleet-runner.env.example`; real
-  values in `fleet-state/OPS.md`). Run `bin/oo` with no args for full
-  usage. It proxies every request through the bastion via SSH — LXC 106
+  is the deterministic CLI, 18 commands deep — run it with no args for
+  full usage rather than treating this list as exhaustive. Core reads:
+  `oo logs <name>` (one container's history), `oo grep <pattern>`
+  (full-text search across every container fleet-wide, not just one you
+  already know the name of), `oo errors [name]` (shortcut for the #1
+  incident query — excludes this fleet's own `"error":null`/`error=<nil>`
+  false-positive idioms), `oo since-redeploy <name>` (the command this
+  tool exists for — finds the current instance's earliest log line and
+  shows what happened right around it), `oo context <name> <ts>` (same
+  window logic at any timestamp you already found interesting), `oo
+  compare <a> <b>` (interleave two containers). Discovery/analysis: `oo
+  containers` / `oo hosts` (what's logging, sorted noisiest-first), `oo
+  restarts <name>` (infer restarts from timestamp gaps — no docker
+  inspect/SSH needed), `oo rate <name>` (volume histogram), `oo versions
+  <name>` (image-tag history == deploy history), `oo new` (containers
+  that appeared since a baseline — unexpected churn), `oo check <name>`
+  (exit-code health check, scriptable). Utility: `oo save`/`saved`/`run`
+  (bookmark queries locally instead of retyping SQL), `oo summary` (one-
+  shot orientation instead of four round trips), `oo link <sql>` (URL +
+  query as copy-paste handoff text), `oo tail <name>` (polling tail),
+  `oo query <sql>` (raw SQL escape hatch), `oo streams`. Needs
+  `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` / `OPENOBSERVE_HOST` set
+  (see `bin/fleet-runner.env.example`; real values in
+  `fleet-state/OPS.md`). It proxies every request through the bastion
+  via SSH — LXC 106
   is only reachable from inside the `0docker.com` private LAN.
 
   **Two streams**, both queryable the same way:
