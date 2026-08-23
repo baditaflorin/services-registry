@@ -643,7 +643,19 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # Never hand-set true; a service earns it by actually
               # serving /agent.json and showing up in the gateway's
               # aggregation.
-              "mcp_ready", "mcp_tool_count", "mcp_assessed_at"):
+              "mcp_ready", "mcp_tool_count", "mcp_assessed_at",
+              # Gated-tool trust tier (PUBLIC_FIELDS already exposes it —
+              # see comment there). Set by operator review in
+              # overrides.json; was defined as a public field but never
+              # actually copied from overrides into the built entry,
+              # so every real regen silently dropped it. Fixed 2026-08-23.
+              "access_tier",
+              # Coolify application UUID, written into overrides.json by
+              # bin/backfill-coolify-uuids.py for runtime=coolify
+              # services. go_fleet_runner/deploy_coolify.go needs this to
+              # know which Coolify app to redeploy. Same drop bug as
+              # access_tier above — fixed 2026-08-23.
+              "coolify_app_uuid"):
         if k in ov:
             entry[k] = ov[k]
 
