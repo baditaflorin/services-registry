@@ -81,6 +81,33 @@
       ],
       "url": "http://dockerhost:18204",
       "why": "Plausible is fleet-pixel's optional upstream (see overrides.json: fleet-pixel). Running unregistered on 2026-05-19 caused fleet-runner allocate-port to re-hand-out 18204; the subsequent fleet-persona deploy clobbered /opt/services/plausible/docker-compose.yml. Registering it is the metadata fix — runtime: external keeps fleet-runner deploy/build off the compose dir."
+    },
+    {
+      "auth": {
+        "type": "none"
+      },
+      "category": "content",
+      "container_port": 8765,
+      "description": "Personal pilot project (not a fleet repo) — a hand-built Python/Flask app serving FTS5 search + browse over a private set of Romanian-language grammar textbooks, with stemming and fuzzy-match query expansion. Lives at /opt/services/claudia/ with its own docker-compose.yml but has no git remote and no service.yaml — built locally from a Dockerfile, not via GHCR/fleet-runner. Registered here so allocate-port and audit registry-host-port-set know host_port 18312 is claimed.",
+      "external_compose_dir": "/opt/services/claudia/",
+      "external_image": "claudia-app (built locally, not published to any registry)",
+      "health_url": "http://dockerhost:18312/",
+      "host_port": 18312,
+      "id": "claudia",
+      "kind": "container",
+      "language": "python",
+      "mesh": "0exec",
+      "name": "Claudia",
+      "repo_url": "file:///opt/services/claudia",
+      "runtime": "external",
+      "scope": "internal-only",
+      "tags": [
+        "external",
+        "personal-project",
+        "non-fleet"
+      ],
+      "url": "http://dockerhost:18312",
+      "why": "Discovered 2026-08-23 while allocating a port for fleet-cert-watch: `fleet-runner allocate-port` returned 18312 as free (correct per the registry), but `docker ps` showed a live container named claudia already bound to it, invisible to `audit registry-host-port-set` (that audit only checks known fleet repos, not real dockerhost port usage against unregistered containers). Not touched — owner should decide whether to keep or retire it; this entry only stops the allocator from re-handing out its port."
     }
   ],
   "$rules": [

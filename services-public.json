@@ -6425,6 +6425,29 @@
   },
   {
     "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "content",
+    "description": "Personal pilot project (not a fleet repo) \u2014 a hand-built Python/Flask app serving FTS5 search + browse over a private set of Romanian-language grammar textbooks, with stemming and fuzzy-match query expansion. Lives at /opt/services/claudia/ with its own docker-compose.yml but has no git remote and no service.yaml \u2014 built locally from a Dockerfile, not via GHCR/fleet-runner. Registered here so allocate-port and audit registry-host-port-set know host_port 18312 is claimed.",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18312/",
+    "id": "claudia",
+    "kind": "container",
+    "language": "python",
+    "mesh": "0exec",
+    "name": "Claudia",
+    "repo_url": "file:///opt/services/claudia",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "personal-project"
+    ],
+    "url": "http://dockerhost:18312"
+  },
+  {
+    "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
       "type": "api_key"

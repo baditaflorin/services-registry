@@ -8113,6 +8113,34 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   {
+    "id": "claudia",
+    "name": "Claudia",
+    "description": "Personal pilot project (not a fleet repo) \u2014 a hand-built Python/Flask app serving FTS5 search + browse over a private set of Romanian-language grammar textbooks, with stemming and fuzzy-match query expansion. Lives at /opt/services/claudia/ with its own docker-compose.yml but has no git remote and no service.yaml \u2014 built locally from a Dockerfile, not via GHCR/fleet-runner. Registered here so allocate-port and audit registry-host-port-set know host_port 18312 is claimed.",
+    "category": "content",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "python",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "personal-project"
+    ],
+    "url": "http://dockerhost:18312",
+    "health_url": "http://dockerhost:18312/",
+    "repo_url": "file:///opt/services/claudia",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18312,
+    "container_port": 8765,
+    "external_compose_dir": "/opt/services/claudia/",
+    "external_image": "claudia-app (built locally, not published to any registry)",
+    "scope": "internal-only"
+  },
+  {
     "id": "composite-runner",
     "name": "Composite Runner",
     "description": "Generic composite fan-out engine. GET /?recipe=<name>&target=<domain> runs any named recipe concurrently across N fleet analyzers; returns a merged envelope with summary + per-source fields. Add a recipe row in recipes.go \u2014 no new code.",
@@ -9199,7 +9227,7 @@
     "cert_domain": "wildcard.0exec.com",
     "host_port": 18320,
     "container_port": 18320,
-    "version": "0.2.1"
+    "version": "0.2.2"
   },
   {
     "id": "fleet-content-normalizer",
