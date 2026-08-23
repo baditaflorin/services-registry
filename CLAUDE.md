@@ -814,9 +814,17 @@ or health-check a static Pages site.
   gradually).
 
   **Query it with `bin/oo`, not hand-rolled curl.** `services-registry/bin/oo`
-  is the deterministic CLI — `oo logs <container_name>`, `oo query <sql>`,
-  `oo tail <container_name>`, `oo streams`. Needs `OPENOBSERVE_USER` /
-  `OPENOBSERVE_PASSWORD` set (see `bin/fleet-runner.env.example`; real
+  is the deterministic CLI: `oo logs <name>` (one container's history),
+  `oo grep <pattern>` (full-text search across every container fleet-
+  wide, not just one you already know the name of), `oo errors [name]`
+  (shortcut for the #1 incident query), `oo since-redeploy <name>` (the
+  command this tool exists for — finds the current instance's earliest
+  log line and shows what happened right around it, closing the exact
+  "docker logs lost history on redeploy" gap), `oo containers` / `oo
+  hosts` (discover what's logging, sorted noisiest-first), `oo tail
+  <name>` (polling tail), `oo query <sql>` (raw SQL escape hatch), `oo
+  streams`. Needs `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` /
+  `OPENOBSERVE_HOST` set (see `bin/fleet-runner.env.example`; real
   values in `fleet-state/OPS.md`). Run `bin/oo` with no args for full
   usage. It proxies every request through the bastion via SSH — LXC 106
   is only reachable from inside the `0docker.com` private LAN.

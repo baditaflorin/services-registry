@@ -29,6 +29,39 @@
 #       than one docker host (rare, but container names aren't globally
 #       unique across the fleet).
 #
+#   oo grep <pattern> [--since DURATION] [--container NAME] [--host HOST] [--limit N]
+#       Full-text search across EVERY container fleet-wide (not just one
+#       you already know the name of) — the actual "grep the fleet"
+#       capability. Scope with --container / --host if you already know
+#       where to look; omit both to search everywhere.
+#
+#   oo errors [container_name] [--since DURATION] [--host HOST] [--limit N]
+#       Shortcut for the #1 incident-response query: lines whose message
+#       looks like an error (case-insensitive match on error/fatal/
+#       panic). Omit container_name to scan the whole fleet.
+#
+#   oo since-redeploy <container_name> [--host HOST] [--window DURATION] [--before DURATION] [--after DURATION] [--limit N]
+#       THE command this tool exists for: finds the earliest log line
+#       for the container's CURRENT instance within the lookback
+#       --window (default 24h — widen it if the container has been up
+#       longer than that and this comes back empty), then shows
+#       everything from --before that point through --after it
+#       (defaults 5m / 10m). That's the exact "what happened right when
+#       this thing (re)started" view that redeploying blind loses.
+#       Approximate, not exact: it's the earliest line seen in the
+#       window, not a real process-start timestamp — good enough for
+#       "did this come up clean" in practice.
+#
+#   oo containers [--since DURATION] [--host HOST] [--limit N]
+#       Discover what's actually logging: container_name + host, line
+#       count, and last-seen time, sorted noisiest-first. Answers "what
+#       containers exist" and "what's chatty" in one shot.
+#
+#   oo hosts [--since DURATION]
+#       Which docker hosts are shipping to docker_logs, with line count
+#       and distinct-container count per host. Sanity-check after adding
+#       a new host's vector-log-shipper.
+#
 #   oo tail <container_name> [--interval SECONDS] [--host HOST]
 #       Polling tail (default 3s interval) — not a true push/websocket
 #       stream. Good enough for "watch this thing after I redeploy it";
@@ -88,13 +121,10 @@ duration_to_seconds() {
   esac
 }
 
-# oo_search SQL SINCE_DURATION LIMIT
-oo_search() {
-  local sql="$1" since="$2" limit="$3"
-  local end_us start_us secs
-  secs=$(duration_to_seconds "$since")
-  end_us=$(( $(date +%s) * 1000000 ))
-  start_us=$(( end_us - secs * 1000000 ))
+# oo_search_range SQL START_US END_US LIMIT — the primitive: an absolute
+# microsecond-epoch time range.
+oo_search_range() {
+  local sql="$1" start_us="$2" end_us="$3" limit="$4"
   local payload
   payload=$(python3 -c '
 import json, sys
@@ -102,6 +132,16 @@ sql, start, end, size = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), int(sys
 print(json.dumps({"query": {"sql": sql, "start_time": start, "end_time": end, "size": size}}))
 ' "$sql" "$start_us" "$end_us" "$limit")
   ssh "$BASTION" "curl -sS -u '${OPENOBSERVE_USER}:${OPENOBSERVE_PASSWORD}' -X POST ${BASE_URL}/api/${OO_ORG}/_search -H 'Content-Type: application/json' --data-binary @-" <<<"$payload"
+}
+
+# oo_search SQL SINCE_DURATION LIMIT — the common case: relative to now.
+oo_search() {
+  local sql="$1" since="$2" limit="$3"
+  local end_us start_us secs
+  secs=$(duration_to_seconds "$since")
+  end_us=$(( $(date +%s) * 1000000 ))
+  start_us=$(( end_us - secs * 1000000 ))
+  oo_search_range "$sql" "$start_us" "$end_us" "$limit"
 }
 
 cmd_query() {
@@ -146,6 +186,178 @@ for h in reversed(hits):
     host = h.get("host", "?")
     msg = h.get("message", "")
     print(f"{ts} [{host}] {msg}")
+'
+}
+
+cmd_grep() {
+  local pattern="${1:?usage: oo grep <pattern> [--since 1h] [--container NAME] [--host HOST] [--limit 100]}"; shift || true
+  local since="1h" limit="100" container_filter="" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      --container) container_filter="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="message LIKE '%${pattern}%'"
+  [[ -n "$container_filter" ]] && where="${where} AND container_name = '${container_filter}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no matches — check --since / --container / --host / pattern)", file=sys.stderr)
+for h in reversed(hits):
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
+    name = h.get("container_name", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{host}/{name}] {msg}")
+'
+}
+
+cmd_errors() {
+  local container="" since="1h" limit="100" host_filter=""
+  if [[ $# -gt 0 && "${1:0:2}" != "--" ]]; then
+    container="$1"; shift
+  fi
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="(message ILIKE '%error%' OR message ILIKE '%fatal%' OR message ILIKE '%panic%')"
+  [[ -n "$container" ]] && where="${where} AND container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no error-looking lines — check --since / container / --host)", file=sys.stderr)
+for h in reversed(hits):
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
+    name = h.get("container_name", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{host}/{name}] {msg}")
+'
+}
+
+cmd_since_redeploy() {
+  local container="${1:?usage: oo since-redeploy <container_name> [--host HOST] [--window 24h] [--before 5m] [--after 10m] [--limit 500]}"; shift || true
+  local window="24h" before="5m" after="10m" limit="500" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --host) host_filter="$2"; shift 2 ;;
+      --window) window="$2"; shift 2 ;;
+      --before) before="$2"; shift 2 ;;
+      --after) after="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+
+  echo "# finding the earliest log line for '${container}' in the last ${window} (approximates its current instance's start — widen --window if it's been up longer than that)" >&2
+  local first_seen
+  first_seen=$(oo_search "SELECT min(_timestamp) as first_seen FROM docker_logs WHERE ${where}" "$window" 1 | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+fs = hits[0].get("first_seen") if hits else None
+print(fs if fs is not None else "")
+')
+  if [[ -z "$first_seen" ]]; then
+    echo "no log lines found for '${container}' in the last ${window} — check the container name / --host, or widen --window" >&2
+    exit 1
+  fi
+
+  local first_seen_human before_secs after_secs first_secs now_secs start_us end_us
+  first_seen_human=$(python3 -c "import datetime; print(datetime.datetime.fromtimestamp(${first_seen}/1e6, datetime.UTC).isoformat())")
+  echo "# earliest line found at ${first_seen_human} UTC — showing --before ${before} through --after ${after} around it" >&2
+  before_secs=$(duration_to_seconds "$before")
+  after_secs=$(duration_to_seconds "$after")
+  first_secs=$(( first_seen / 1000000 ))
+  now_secs=$(date +%s)
+  start_us=$(( (first_secs - before_secs) * 1000000 ))
+  end_us=$(( (first_secs + after_secs) * 1000000 ))
+  (( end_us > now_secs * 1000000 )) && end_us=$(( now_secs * 1000000 ))
+
+  local sql="SELECT _timestamp, host, message FROM docker_logs WHERE ${where} ORDER BY _timestamp ASC LIMIT ${limit}"
+  oo_search_range "$sql" "$start_us" "$end_us" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no log lines in that window)", file=sys.stderr)
+for h in hits:
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{host}] {msg}")
+'
+}
+
+cmd_containers() {
+  local since="1h" limit="50" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="1=1"
+  [[ -n "$host_filter" ]] && where="host = '${host_filter}'"
+  local sql="SELECT container_name, host, count(*) as n, max(_timestamp) as last_seen FROM docker_logs WHERE ${where} GROUP BY container_name, host ORDER BY n DESC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+for h in hits:
+    name = h.get("container_name", "?")
+    host = h.get("host", "?")
+    n = h.get("n", 0)
+    last = h.get("last_seen")
+    last_s = datetime.datetime.fromtimestamp(last/1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S") if last else "-"
+    print(f"{name:<40} {host:<24} lines={n:>8}  last_seen={last_s}")
+'
+}
+
+cmd_hosts() {
+  local since="1h"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local sql="SELECT host, count(*) as n, count(distinct container_name) as containers FROM docker_logs GROUP BY host ORDER BY n DESC"
+  oo_search "$sql" "$since" 100 | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+for h in hits:
+    host = h.get("host", "?")
+    n = h.get("n", 0)
+    c = h.get("containers", 0)
+    print(f"{host:<24} lines={n:>10}  distinct_containers={c}")
 '
 }
 
@@ -231,6 +443,11 @@ main() {
   case "$cmd" in
     query) cmd_query "$@" ;;
     logs) cmd_logs "$@" ;;
+    grep) cmd_grep "$@" ;;
+    errors) cmd_errors "$@" ;;
+    since-redeploy) cmd_since_redeploy "$@" ;;
+    containers) cmd_containers "$@" ;;
+    hosts) cmd_hosts "$@" ;;
     tail) cmd_tail "$@" ;;
     streams) cmd_streams "$@" ;;
     stream-info) cmd_stream_info "$@" ;;
