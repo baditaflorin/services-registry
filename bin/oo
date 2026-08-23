@@ -38,7 +38,9 @@
 #   oo errors [container_name] [--since DURATION] [--host HOST] [--limit N]
 #       Shortcut for the #1 incident-response query: lines whose message
 #       looks like an error (case-insensitive match on error/fatal/
-#       panic). Omit container_name to scan the whole fleet.
+#       panic, excluding the "error":null / error=<nil> false positives
+#       this fleet's own logging idioms produce — see ERROR_LIKE_CLAUSE).
+#       Omit container_name to scan the whole fleet.
 #
 #   oo since-redeploy <container_name> [--host HOST] [--window DURATION] [--before DURATION] [--after DURATION] [--limit N]
 #       THE command this tool exists for: finds the earliest log line
@@ -62,6 +64,63 @@
 #       and distinct-container count per host. Sanity-check after adding
 #       a new host's vector-log-shipper.
 #
+#   oo context <container_name> <timestamp> [--before DURATION] [--after DURATION] [--host HOST] [--limit N]
+#       Generalizes since-redeploy's window logic to any point in time,
+#       not just a container's start: given a timestamp you already
+#       found interesting (epoch seconds or ISO8601), show what else
+#       that container logged right around it. --before/--after default
+#       2m/2m.
+#
+#   oo compare <container1> <container2> [--since DURATION] [--limit N]
+#       Interleave two containers' log lines in one timestamp-ordered
+#       stream, each tagged <name>. For correlating a request across
+#       two services (api + its proxy, prod + staging, etc).
+#
+#   oo restarts <container_name> [--since DURATION] [--gap DURATION] [--host HOST]
+#       Infers apparent restarts by finding gaps larger than --gap
+#       (default 30s) in the container's log timeline within --since
+#       (default 24h) — no docker inspect / SSH-to-host needed. A real
+#       gap means either a crash/restart or a genuinely quiet period;
+#       cross-check with --gap tuned to the container's normal chattiness.
+#
+#   oo rate <container_name> [--since DURATION] [--bucket DURATION] [--host HOST]
+#       Lines-per-bucket histogram (default: 1h window, 5m buckets) —
+#       spot volume spikes or drops at a glance without hand-writing a
+#       GROUP BY.
+#
+#   oo versions <container_name> [--since DURATION] [--host HOST]
+#       Distinct `image` values seen for a container, each with
+#       first/last-seen and line count — an image tag change is a
+#       deploy; this is deploy history without touching git or GHCR.
+#
+#   oo new [--since DURATION] [--baseline DURATION]
+#       container_names seen in the last --since (default 1h) that were
+#       NOT seen in the --baseline period before that (default 24h) —
+#       flags unexpected churn: a container that just started existing.
+#
+#   oo check <container_name> [--since DURATION] [--host HOST]
+#       Scriptable health check: exit 0 + "OK" if no error-looking lines
+#       in --since (default 15m), exit 1 + "FAIL" (with count) otherwise.
+#       Built for `if oo check X; then …`, not for reading — no
+#       pretty-printing, one line of output.
+#
+#   oo save <name> <sql>
+#   oo saved
+#   oo run <name> [--since DURATION] [--limit N]
+#       Bookmark a query once (locally, in ~/.oo/queries.json — never
+#       synced or committed), list what's saved, re-run one by name
+#       instead of retyping SQL every session.
+#
+#   oo summary [--since DURATION]
+#       One-shot fleet orientation: host breakdown, top 8 noisiest
+#       containers, top 8 error-containers. Start an investigation here
+#       instead of four separate round trips.
+#
+#   oo link <sql> [--since DURATION]
+#       Prints the web UI URL plus the query and resolved time range as
+#       copy-paste text, for handing a query off to a human instead of
+#       (or in addition to) reading the CLI output yourself.
+#
 #   oo tail <container_name> [--interval SECONDS] [--host HOST]
 #       Polling tail (default 3s interval) — not a true push/websocket
 #       stream. Good enough for "watch this thing after I redeploy it";
@@ -78,7 +137,8 @@
 #   fleet-state/OPS.md (private) — never hardcode them here, this repo
 #   is public.
 # ENV (optional): FLEET_BASTION (default root@0docker.com),
-#   OPENOBSERVE_PORT (default 5080).
+#   OPENOBSERVE_PORT (default 5080), OO_SAVE_DIR (default ~/.oo — where
+#   `oo save`/`oo run` keep bookmarked queries, local to your machine).
 #
 # Known limitation: credentials are passed to curl via -u on the bastion's
 # command line, so they're briefly visible in that host's `ps aux` output
@@ -92,6 +152,18 @@ BASTION="${FLEET_BASTION:-root@0docker.com}"
 OO_HOST="${OPENOBSERVE_HOST:-}"
 OO_PORT="${OPENOBSERVE_PORT:-5080}"
 OO_ORG="${OPENOBSERVE_ORG:-default}"
+OO_SAVE_DIR="${OO_SAVE_DIR:-$HOME/.oo}"
+OO_SAVE_FILE="${OO_SAVE_DIR}/queries.json"
+
+# Heuristic "this line looks like an error" match, shared by errors/check/
+# summary. Excludes known high-volume false positives found empirically on
+# 2026-08-23 — this fleet's own structured-logging idioms for "no error"
+# (JSON "error":null, Go's error=<nil> logfmt convention) both literally
+# contain the substring "error". Not exhaustive — a log shape nobody's hit
+# yet could still slip through either direction — but measurably better
+# than the naive substring match (domainscope-api alone was ~80%
+# false-positive on the naive version, from "error":null DEBUG lines).
+ERROR_LIKE_CLAUSE="(message ILIKE '%error%' OR message ILIKE '%fatal%' OR message ILIKE '%panic%') AND message NOT ILIKE '%\"error\":null%' AND message NOT ILIKE '%error=<nil>%' AND message NOT ILIKE '%error: <nil>%'"
 
 usage() {
   sed -n '2,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'
@@ -235,7 +307,7 @@ cmd_errors() {
     esac
   done
   require_creds
-  local where="(message ILIKE '%error%' OR message ILIKE '%fatal%' OR message ILIKE '%panic%')"
+  local where="${ERROR_LIKE_CLAUSE}"
   [[ -n "$container" ]] && where="${where} AND container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT ${limit}"
@@ -309,6 +381,374 @@ for h in hits:
     msg = h.get("message", "")
     print(f"{ts} [{host}] {msg}")
 '
+}
+
+cmd_context() {
+  local container="${1:?usage: oo context <container_name> <timestamp> [--before 2m] [--after 2m] [--host HOST] [--limit 500]}"; shift || true
+  local ts="${1:?usage: oo context <container_name> <timestamp> [--before 2m] [--after 2m] [--host HOST] [--limit 500]}"; shift || true
+  local before="2m" after="2m" host_filter="" limit="500"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --before) before="$2"; shift 2 ;;
+      --after) after="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+
+  local center_secs
+  center_secs=$(python3 -c '
+import sys, datetime
+v = sys.argv[1]
+try:
+    print(int(v))
+except ValueError:
+    try:
+        dt = datetime.datetime.fromisoformat(v.replace("Z", "+00:00"))
+        print(int(dt.timestamp()))
+    except Exception:
+        print(f"invalid timestamp: {v} (use epoch seconds or ISO8601)", file=sys.stderr)
+        sys.exit(1)
+' "$ts")
+
+  local before_secs after_secs start_us end_us now_us
+  before_secs=$(duration_to_seconds "$before")
+  after_secs=$(duration_to_seconds "$after")
+  start_us=$(( (center_secs - before_secs) * 1000000 ))
+  end_us=$(( (center_secs + after_secs) * 1000000 ))
+  now_us=$(( $(date +%s) * 1000000 ))
+  (( end_us > now_us )) && end_us=$now_us
+
+  local sql="SELECT _timestamp, host, message FROM docker_logs WHERE ${where} ORDER BY _timestamp ASC LIMIT ${limit}"
+  oo_search_range "$sql" "$start_us" "$end_us" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no log lines in that window)", file=sys.stderr)
+for h in hits:
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    host = h.get("host", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{host}] {msg}")
+'
+}
+
+cmd_compare() {
+  local c1="${1:?usage: oo compare <container1> <container2> [--since 15m] [--limit 100]}"; shift || true
+  local c2="${1:?usage: oo compare <container1> <container2> [--since 15m] [--limit 100]}"; shift || true
+  local since="15m" limit="100"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local sql="SELECT _timestamp, host, container_name, message FROM docker_logs WHERE container_name IN ('${c1}', '${c2}') ORDER BY _timestamp ASC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no matching log lines)", file=sys.stderr)
+for h in hits:
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    name = h.get("container_name", "?")
+    msg = h.get("message", "")
+    print(f"{ts} <{name}> {msg}")
+'
+}
+
+cmd_restarts() {
+  local container="${1:?usage: oo restarts <container_name> [--since 24h] [--gap 30s] [--host HOST] [--limit 5000]}"; shift || true
+  local since="24h" gap="30s" host_filter="" limit="5000"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --gap) gap="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local gap_secs
+  gap_secs=$(duration_to_seconds "$gap")
+  local sql="SELECT _timestamp FROM docker_logs WHERE ${where} ORDER BY _timestamp ASC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+gap_secs = int(sys.argv[1])
+container = sys.argv[2]
+since_label = sys.argv[3]
+gap_us = gap_secs * 1000000
+if len(hits) < 2:
+    print("not enough data to detect gaps (need >=2 lines) — check --since / --host / container name", file=sys.stderr)
+    sys.exit(0)
+prev = hits[0]["_timestamp"]
+found = 0
+for h in hits[1:]:
+    cur = h["_timestamp"]
+    if cur - prev > gap_us:
+        gap_s = (cur - prev) / 1e6
+        t1 = datetime.datetime.fromtimestamp(prev/1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        t2 = datetime.datetime.fromtimestamp(cur/1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+        print(f"gap of {gap_s:.0f}s: {t1} .. {t2} UTC (likely restart or quiet period)")
+        found += 1
+    prev = cur
+if found == 0:
+    print(f"no gaps > {gap_secs}s found in the last {since_label} — {container} looks continuously up")
+' "$gap_secs" "$container" "$since"
+}
+
+cmd_rate() {
+  local container="${1:?usage: oo rate <container_name> [--since 1h] [--bucket 5m] [--host HOST] [--limit 10000]}"; shift || true
+  local since="1h" bucket="5m" host_filter="" limit="10000"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --bucket) bucket="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local bucket_secs
+  bucket_secs=$(duration_to_seconds "$bucket")
+  local sql="SELECT _timestamp FROM docker_logs WHERE ${where} ORDER BY _timestamp ASC LIMIT ${limit}"
+  oo_search "$sql" "$since" "$limit" | python3 -c '
+import json, sys, datetime, collections
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+bucket_us = int(sys.argv[1]) * 1000000
+if not hits:
+    print("no data in window — check --since / --host / container name", file=sys.stderr)
+    sys.exit(0)
+counts = collections.Counter()
+for h in hits:
+    counts[h["_timestamp"] // bucket_us] += 1
+maxc = max(counts.values())
+for k in sorted(counts):
+    t = datetime.datetime.fromtimestamp(k * bucket_us / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M")
+    n = counts[k]
+    bar = "#" * max(1, int(n / maxc * 40))
+    print(f"{t}  {n:>6}  {bar}")
+' "$bucket_secs"
+}
+
+cmd_versions() {
+  local container="${1:?usage: oo versions <container_name> [--since 7d] [--host HOST]}"; shift || true
+  local since="7d" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}'"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local sql="SELECT image, min(_timestamp) as first_seen, max(_timestamp) as last_seen, count(*) as n FROM docker_logs WHERE ${where} GROUP BY image ORDER BY last_seen DESC"
+  oo_search "$sql" "$since" 100 | python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("no data — check container name / --since / --host", file=sys.stderr)
+for h in hits:
+    img = h.get("image", "?")
+    fs = datetime.datetime.fromtimestamp(h["first_seen"]/1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+    ls = datetime.datetime.fromtimestamp(h["last_seen"]/1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+    n = h.get("n", 0)
+    print(f"{img}\n  first_seen={fs}  last_seen={ls}  lines={n}")
+'
+}
+
+cmd_new() {
+  local since="1h" baseline="24h"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --baseline) baseline="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local since_secs baseline_secs now_secs now_us recent_start_us baseline_start_us
+  since_secs=$(duration_to_seconds "$since")
+  baseline_secs=$(duration_to_seconds "$baseline")
+  now_secs=$(date +%s)
+  now_us=$(( now_secs * 1000000 ))
+  recent_start_us=$(( (now_secs - since_secs) * 1000000 ))
+  baseline_start_us=$(( (now_secs - since_secs - baseline_secs) * 1000000 ))
+  local recent_json baseline_json
+  recent_json=$(oo_search_range "SELECT DISTINCT container_name FROM docker_logs" "$recent_start_us" "$now_us" 2000)
+  baseline_json=$(oo_search_range "SELECT DISTINCT container_name FROM docker_logs" "$baseline_start_us" "$recent_start_us" 2000)
+  python3 -c '
+import json, sys
+recent = json.loads(sys.argv[1])
+baseline = json.loads(sys.argv[2])
+recent_names = {h["container_name"] for h in recent.get("hits", [])}
+baseline_names = {h["container_name"] for h in baseline.get("hits", [])}
+new_names = sorted(recent_names - baseline_names)
+if not new_names:
+    print("no container names in the recent window that weren'\''t already in the baseline window", file=sys.stderr)
+for n in new_names:
+    print(n)
+' "$recent_json" "$baseline_json"
+}
+
+cmd_check() {
+  local container="${1:?usage: oo check <container_name> [--since 15m] [--host HOST]}"; shift || true
+  local since="15m" host_filter=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local where="container_name = '${container}' AND ${ERROR_LIKE_CLAUSE}"
+  [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
+  local n
+  n=$(oo_search "SELECT count(*) as n FROM docker_logs WHERE ${where}" "$since" 1 | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+print(hits[0].get("n", 0) if hits else 0)
+')
+  if [[ "$n" -gt 0 ]]; then
+    echo "FAIL: ${container} logged ${n} error-looking line(s) in the last ${since}"
+    exit 1
+  fi
+  echo "OK: ${container} — no error-looking lines in the last ${since}"
+}
+
+cmd_save() {
+  local name="${1:?usage: oo save <name> <sql>}"; shift || true
+  local sql="${1:?usage: oo save <name> <sql>}"; shift || true
+  mkdir -p "$OO_SAVE_DIR"
+  [[ -f "$OO_SAVE_FILE" ]] || echo '{}' > "$OO_SAVE_FILE"
+  python3 -c '
+import json, sys
+path, name, sql = sys.argv[1], sys.argv[2], sys.argv[3]
+with open(path) as f:
+    d = json.load(f)
+d[name] = sql
+with open(path, "w") as f:
+    json.dump(d, f, indent=2)
+print(f"saved {name!r}")
+' "$OO_SAVE_FILE" "$name" "$sql"
+}
+
+cmd_saved() {
+  if [[ ! -f "$OO_SAVE_FILE" ]]; then
+    echo "no saved queries yet — oo save <name> <sql>"
+    return 0
+  fi
+  python3 -c '
+import json, sys
+with open(sys.argv[1]) as f:
+    d = json.load(f)
+if not d:
+    print("no saved queries yet — oo save <name> <sql>")
+for name, sql in d.items():
+    print(f"{name}: {sql}")
+' "$OO_SAVE_FILE"
+}
+
+cmd_run() {
+  local name="${1:?usage: oo run <name> [--since 1h] [--limit 100]}"; shift || true
+  local since="1h" limit="100"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      --limit) limit="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  if [[ ! -f "$OO_SAVE_FILE" ]]; then
+    echo "no saved queries yet — oo save <name> <sql>" >&2
+    exit 1
+  fi
+  local sql
+  sql=$(python3 -c '
+import json, sys
+with open(sys.argv[1]) as f:
+    d = json.load(f)
+name = sys.argv[2]
+if name not in d:
+    print(f"no saved query named {name!r} — see oo saved", file=sys.stderr)
+    sys.exit(1)
+print(d[name])
+' "$OO_SAVE_FILE" "$name")
+  require_creds
+  oo_search "$sql" "$since" "$limit" | python3 -m json.tool
+}
+
+cmd_summary() {
+  local since="1h"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  echo "=== OpenObserve docker_logs summary (last ${since}) ==="
+  echo
+  echo "--- hosts ---"
+  cmd_hosts --since "$since"
+  echo
+  echo "--- top 8 noisiest containers ---"
+  cmd_containers --since "$since" --limit 8
+  echo
+  echo "--- top 8 error-containers ---"
+  local sql="SELECT container_name, count(*) as n FROM docker_logs WHERE ${ERROR_LIKE_CLAUSE} GROUP BY container_name ORDER BY n DESC LIMIT 8"
+  oo_search "$sql" "$since" 8 | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+hits = d.get("hits", [])
+if not hits:
+    print("(no error-looking lines fleet-wide)")
+for h in hits:
+    name = h.get("container_name", "?")
+    n = h.get("n", 0)
+    print(f"{name:<40} error_lines={n}")
+'
+}
+
+cmd_link() {
+  local sql="${1:?usage: oo link <sql> [--since 1h]}"; shift || true
+  local since="1h"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --since) since="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  require_creds
+  local secs end_us start_us
+  secs=$(duration_to_seconds "$since")
+  end_us=$(( $(date +%s) * 1000000 ))
+  start_us=$(( end_us - secs * 1000000 ))
+  echo "Web UI:     https://openobserve.0docker.com/web/logs?org_identifier=${OO_ORG}"
+  echo "Query:      ${sql}"
+  echo "Time range: ${start_us} .. ${end_us} (microsecond epoch — paste into the UI's custom range picker), i.e. last ${since}"
 }
 
 cmd_containers() {
@@ -446,6 +886,18 @@ main() {
     grep) cmd_grep "$@" ;;
     errors) cmd_errors "$@" ;;
     since-redeploy) cmd_since_redeploy "$@" ;;
+    context) cmd_context "$@" ;;
+    compare) cmd_compare "$@" ;;
+    restarts) cmd_restarts "$@" ;;
+    rate) cmd_rate "$@" ;;
+    versions) cmd_versions "$@" ;;
+    new) cmd_new "$@" ;;
+    check) cmd_check "$@" ;;
+    save) cmd_save "$@" ;;
+    saved) cmd_saved "$@" ;;
+    run) cmd_run "$@" ;;
+    summary) cmd_summary "$@" ;;
+    link) cmd_link "$@" ;;
     containers) cmd_containers "$@" ;;
     hosts) cmd_hosts "$@" ;;
     tail) cmd_tail "$@" ;;
