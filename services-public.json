@@ -818,6 +818,31 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Active consent-reject simulation: clicks a page's cookie-reject control in a real browser and checks whether trackers keep firing",
+    "example_path": "/?target=example.com",
+    "health_url": "https://consent-simulator.0crawl.com/health",
+    "id": "consent-simulator",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Consent Simulator",
+    "repo_url": "https://github.com/baditaflorin/go_consent_simulator",
+    "runtime": "compose",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "trl": 4,
+    "url": "https://consent-simulator.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "content",
     "description": "Near-duplicate-detection fingerprints for a web page or raw text \u2014 a 64-bit Charikar SimHash over k-gram word shingles, a 64-permutation MinHash signature for Jaccard estimation, and a normalized SHA-256 exact-match digest, plus shingle and token counts.",
     "example_path": "/?url=https://example.com",

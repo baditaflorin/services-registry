@@ -1030,6 +1030,37 @@
     "version": "1.5.0"
   },
   {
+    "id": "consent-simulator",
+    "name": "Consent Simulator",
+    "description": "Active consent-reject simulation: clicks a page's cookie-reject control in a real browser and checks whether trackers keep firing",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domains",
+      "go"
+    ],
+    "url": "https://consent-simulator.0crawl.com",
+    "health_url": "https://consent-simulator.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_consent_simulator",
+    "example_path": "/?target=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 4,
+    "trl_evidence": "First ship. Reject/accept control classification covers common English + German phrasing and a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only.",
+    "host_port": 18208,
+    "container_port": 18208,
+    "proxy_egress": true,
+    "version": "0.1.0"
+  },
+  {
     "id": "content-fingerprint",
     "name": "Content Fingerprint",
     "description": "Near-duplicate-detection fingerprints for a web page or raw text \u2014 a 64-bit Charikar SimHash over k-gram word shingles, a 64-permutation MinHash signature for Jaccard estimation, and a normalized SHA-256 exact-match digest, plus shingle and token counts.",
@@ -9414,7 +9445,8 @@
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": 7,
-    "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-prometheus entries for shared repo-wide findings). Found and fixed a real observability gap: the refresh loop's success/failure/staleness was only visible via a JSON /debug/targets endpoint Prometheus can't scrape or alert on -- /health stayed 200 ok even if the registry fetch had been silently broken for hours, with /sd serving stale targets undetected. Fixed by adding 3 correctly-typed Prometheus metrics (refresh_total Counter, last_success_timestamp_seconds Gauge, targets Gauge), already picked up by the existing scrape job. Confirmed no lost updates under 300 concurrent writes with go test -race (shared state behind sync.RWMutex, verified with a new stress test), and malformed/hostile catalog entries fail closed without crashing (6 new test cases). trl bumped 4->6 -- real, race-clean, well-tested code that fails closed on hostile external input and now has correct self-observability; trl_ceiling held at 7 -- structurally trusts an unversioned external catalog, a deliberately thin sd-shim. See PR #3 (merged)."
+    "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-prometheus entries for shared repo-wide findings). Found and fixed a real observability gap: the refresh loop's success/failure/staleness was only visible via a JSON /debug/targets endpoint Prometheus can't scrape or alert on -- /health stayed 200 ok even if the registry fetch had been silently broken for hours, with /sd serving stale targets undetected. Fixed by adding 3 correctly-typed Prometheus metrics (refresh_total Counter, last_success_timestamp_seconds Gauge, targets Gauge), already picked up by the existing scrape job. Confirmed no lost updates under 300 concurrent writes with go test -race (shared state behind sync.RWMutex, verified with a new stress test), and malformed/hostile catalog entries fail closed without crashing (6 new test cases). trl bumped 4->6 -- real, race-clean, well-tested code that fails closed on hostile external input and now has correct self-observability; trl_ceiling held at 7 -- structurally trusts an unversioned external catalog, a deliberately thin sd-shim. See PR #3 (merged).",
+    "compose_service_name": "discovery"
   },
   {
     "id": "fleet-dns-sync",
@@ -9679,7 +9711,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": 8,
     "trl_evidence": "First-pass audit of go-fleet-metrics-hub (covers all 3 catalog entries: fleet-grafana/fleet-prometheus/fleet-discovery in one repo). Found a real security issue: a live-shaped API key was hardcoded into a Grafana dashboard's link params in this PUBLIC repo, committed since an earlier commit and exposed the whole time -- replaced with the documented public demo token, but that specific key should be treated as compromised and rotated/revoked via the keystore independent of this fix, since a git fix can't undo its history exposure. Confirmed no unbounded-cardinality metrics-label risk (discovery's labels come from the curated ~250-entry registry, not raw/user input) and no other secrets anywhere in the repo (broad grep). trl bumped 4->5 -- provisioning is correct and now secret-free, but the leaked key sitting undetected is direct evidence there's no dashboard-JSON validation/secret-scanning gate in this repo's process; trl_ceiling held at 8. See PR #3 (merged).",
-    "ui_cookie_bridge": true
+    "ui_cookie_bridge": true,
+    "compose_service_name": "grafana"
   },
   {
     "id": "fleet-graph",
@@ -10364,7 +10397,10 @@
     "trl_assessed_at": "2026-08-02",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": 8,
-    "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-discovery entries for the shared repo-wide findings -- leaked API key removed, no unbounded-cardinality risk). Confirmed correct counter/gauge/histogram typing throughout the scrape/rule config, but fleet-alerts.yml claims 'promtool runs in CI on PR' and there is no CI in this repo at all -- that claim is stale, no automated config validation exists. trl bumped 4->5; trl_ceiling held at 8. See PR #3 (merged)."
+    "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-discovery entries for the shared repo-wide findings -- leaked API key removed, no unbounded-cardinality risk). Confirmed correct counter/gauge/histogram typing throughout the scrape/rule config, but fleet-alerts.yml claims 'promtool runs in CI on PR' and there is no CI in this repo at all -- that claim is stale, no automated config validation exists. trl bumped 4->5; trl_ceiling held at 8. See PR #3 (merged).",
+    "compose_service_name": "prometheus",
+    "compose_skip_networks": true,
+    "mem_limit": "2g"
   },
   {
     "id": "fleet-pwgen",

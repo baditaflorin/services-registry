@@ -6206,5 +6206,12 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this DNS AXFR zone-transfer checker. Live-tested against zonetransfer.me (known-vulnerable), google.com, and a 150-domain live production sample. Found and fixed 4 real bugs: (1) leaked_records silently doubled/tripled per mirrored leaking nameserver (104 entries for 51 actually-distinct records on zonetransfer.me) -- fixed with proper dedup; (2) no bound on transfer duration/record count let a slow-drip server hold a connection open well past the request timeout -- fixed with a 20s/1000-record cap; (3) any mid-transfer error discarded already-captured evidence, turning a real leak interrupted by a network blip into a false negative -- fixed to preserve partial evidence; (4) three distinct real-world AXFR-refusal shapes (TCP reset/EOF, bare-SOA-close, NOERROR-empty-answer) were misclassified as generic errors instead of 'refused' -- confirmed on 89/91 pre-fix 'error' entries in the live sample, now down to 2 (98% drop) with zero regressions in true leak detection. trl bumped 5->7; trl_ceiling=7 (no glue/delegation-consistency check, no TSIG support, unverified IPv6 outbound in some environments). See github.com/baditaflorin/go_zone_transfer PR #5 (merged).",
     "coolify_app_uuid": "iqn0l00ac6ya7aaelcdfg6mt"
+  },
+  "consent-simulator": {
+    "host_port": 18208,
+    "container_port": 18208,
+    "version": "0.1.0",
+    "trl": 4,
+    "trl_evidence": "First ship. Reject/accept control classification covers common English + German phrasing and a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only."
   }
 }
