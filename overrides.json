@@ -2704,7 +2704,8 @@
   },
   "fleet-prometheus": {
     "compose_service_name": "prometheus",
-    "compose_skip_networks": true
+    "compose_skip_networks": true,
+    "mem_limit": "2g"
   },
   "fleet-q": {
     "auth": {
