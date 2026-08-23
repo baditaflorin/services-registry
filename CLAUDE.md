@@ -802,6 +802,41 @@ or health-check a static Pages site.
 - **Dockerhost VM** runs the service containers. Compose dirs:
   `/opt/services/<repo>/`, `/opt/security/<repo>/`,
   `/home/ubuntu_vm/pentest/<repo>/`.
+- **OpenObserve LXC 106** (same SSH access pattern as Builder LXC 108
+  above, just a different `pct exec` target id; image
+  `openobserve/openobserve:v0.14.7` + bitnami/postgresql metastore) is
+  a real, actively-ingesting log aggregator — verified 2026-08-23: 122M+
+  documents, 90-day retention,
+  data current to the minute. Query via its HTTP API (`POST
+  /api/default/_search`, SQL against the `default` stream, `_timestamp`
+  in **microseconds** epoch) or the web UI. Root creds live in the LXC's
+  own `docker-compose.yml` — see private `fleet-state/OPS.md`, never
+  repeat them in a service repo.
+
+  **What it actually covers — narrower than "all docker logs on the
+  fleet":** ingestion is plain `rsyslog` forwarding (`omfwd` in
+  `/etc/rsyslog.d/*.conf` on each source host), which only carries
+  whatever a host writes to its own syslog/journald — OS daemons (sshd,
+  kernel, dockerd's own daemon-level events, cron) and any **systemd**
+  service that logs via journald. It does **NOT** capture arbitrary
+  Docker container stdout/stderr — containers on the default
+  `json-file` logging driver (the fleet default; every `fleet-runner
+  deploy`-managed service) never reach rsyslog at all, so `docker logs`
+  losing a redeployed container's history is **not** currently
+  recoverable via OpenObserve. As of the 2026-08-23 check only the
+  Dockerhost VM, the nginx proxy manager VM, and the OpenObserve LXC
+  itself forward to it — **the prod docker host is not wired in at
+  all**, which is exactly where a redeployed container's pre-redeploy
+  logs are most likely to matter for post-incident forensics.
+
+  To close that gap for a given repo, either (a) point that container's
+  Docker logging driver at syslog/gelf targeting the OpenObserve LXC's
+  `5514` port (see `fleet-state/OPS.md` for the address), or (b) add an
+  rsyslog forward rule on the host it runs on — neither is done
+  automatically today, and doing it fleet-wide (especially for the prod
+  host) is a real infrastructure change: confirm with the user before
+  wiring a new host or service into it, same as any other shared-system
+  change.
 - **Webgateway** runs nginx (the public TLS terminator) and the
   keystore-aware `auth_request` flow. vhosts live as **regular files**
   in `/etc/nginx/sites-enabled/<host>.{http,https}.conf` (NOT symlinks
