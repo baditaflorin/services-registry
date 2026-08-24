@@ -3797,6 +3797,7 @@
     "proxy_egress": true,
     "mem_limit": "4g",
     "cpus": 4,
+    "proxy_read_timeout": "270s",
     "trl": 7,
     "trl_evidence": "First-pass audit (production runs a real ONNX transformer, dslim/bert-base-NER via hugot v0.7.4, with a prose+gazetteer fallback): found a major silent-degradation bug -- 62%% (135/217) of real production pages were silently falling back to the much weaker rule-based engine, with the response still claiming engine:hugot_bert_ner_onnx and degraded:[], completely invisible to any consumer. Root cause is an upstream hugot tokenizer byte-offset-drift bug on multi-byte UTF-8 text, not fixable from this repo -- made it observable instead with proper per-request degraded tags. Also fixed nationalities (French/German/American) mislabeled PRODUCT at >99.9%% confidence (added a curated demonym stoplist) and corrupted/truncated entity text leaking through from the same upstream offset bug (added a word-boundary check that drops misaligned spans, confirmed on real pages like 'porary Music' instead of 'Contemporary Music'). Confirmed fetch-cache masking does not apply. trl held at 7 (this fix itself is the evidence-trail upgrade); trl_ceiling=7 added -- capped by the unresolved upstream tokenizer bug plus structural English-centricity of both engines. See PR #2 (merged).",
     "trl_assessed_at": "2026-08-02",
