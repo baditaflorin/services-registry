@@ -634,6 +634,28 @@ endpoint catalog, and isn't a bug-bounty target, set `proxy_egress:
 false`. Keep the proxy on for anything probing third-party
 *production* infra (HTTP fuzzing, takeover, screenshot, etc.).
 
+**A bare-host process outside the container-deploy path needs a manual
+copy, not `proxy_egress`.** `proxy_egress` only materializes
+`HTTP_PROXY`/`HTTPS_PROXY` into a service's compose `.env` — it has no
+effect on a plain binary running directly on a host (no compose, no
+`generate.py` render step). Builder LXC 108's `fleet-runner` is exactly
+this case: `remediate cve --plan`'s CISA KEV feed fetch
+(`www.cisa.gov`) got a 403 from Akamai on 108's Hetzner egress IP
+(confirmed 2026-08-24 — GitHub/Docker Hub/Quay are all reachable
+direct, so it's Akamai blocking the ASN for this one CDN, not a
+blanket provider block). The fix: a scoped copy of the same Webshare
+creds at `/root/.fleet-runner-egress.env` on 108 (chmod 600,
+`NO_PROXY` excludes the registries above plus the internal mesh, so
+only unrecognized external hosts — currently just the KEV feed — route
+through the proxy), sourced explicitly before the command:
+`. /root/.fleet-runner-egress.env && fleet-runner remediate cve --plan`.
+Nothing else on 108 (docker pulls, apt, other fleet-runner verbs)
+picks this up unless it's sourced the same way — deliberately not a
+host-wide `/etc/environment` change. `nvd.nist.gov` is fronted by
+Cloudflare, not Akamai, and stayed blocked even through the proxy
+(different vendor, different block) — noted as a known gap, not fixed,
+since no fleet-runner code depends on it today.
+
 **Lesson:** when an entire fleet egresses from one DC IP, the
 egress-routing decision is a fleet-level invariant, not a per-call
 choice. Wire it in compose + go-common defaults, not in each
