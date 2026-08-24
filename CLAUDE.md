@@ -34,6 +34,26 @@ canonical per-service scaffold (file-by-file templates for `main.go`,
 prompt you can feed Claude / ChatGPT / Gemini). Propagated to every
 fleet repo next to this file.
 
+## Risk tier — what needs extra care before you touch it
+
+Most changes are low-risk: the fleet's own tooling (probe-first
+deploy, rollback-on-`/selftest`-fail) is the safety net, so a plain
+`fleet-runner deploy <repo>` is enough. A few categories aren't
+covered by that net — check the relevant section *before* you act,
+not after something breaks fleet-wide:
+
+| Touching...                                             | Do this first |
+|-----------------------------------------------------------|----------------|
+| One `go_<thing>` service, no shared code                  | Just `fleet-runner deploy <repo>` — you're covered. |
+| `safehttp`, middleware, auth, or the gateway               | `fleet-runner canary <repo>` first (bake + structured health/latency verdict) — see "Fleet-wide changes — modify 130 repos at once" in `FLEET.md`. Never a fleet-wide rollout on first touch here. |
+| `go-common` or a `go-fleet-*` primitive (has >1 consumer)   | See "Fleet-wide changes — change go-common, not consumers" below — one bad edit breaks every consumer at once. |
+| DNS records or secrets                                     | Read `RUNBOOK-UNATTENDED.md` first. DNS only via Hetzner Cloud API (`HCLOUD_TOKEN`) — never `dns.hetzner.com`. Secrets only live in `go-fleet-secrets` — never in env, repos, or `services.json`. |
+| `proxy_egress` in `overrides.json`                          | Read the `proxy_egress` section in `FLEET.md` first — it's not simply "on = safer": some upstreams 403 the proxy IPs, some services need it on to get an internet route at all. Direction depends on the upstream. |
+| A SQLite-backed service                                    | The three mandatory rules under "SQLite safety" below aren't optional — read them first. |
+
+Not sure which tier something is? Default one tier higher and reach
+for `canary` before a broad rollout.
+
 ## Fleet at a glance
 
 ~220 service repos under `github.com/baditaflorin/*`. The canonical
