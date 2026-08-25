@@ -871,12 +871,16 @@ or health-check a static Pages site.
   **How `docker_logs` gets populated**: a small Vector (`timberio/vector`,
   pinned by digest) container named `vector-log-shipper` runs at
   `/opt/observability/vector-log-shipper/` on every docker host (as of
-  2026-08-23: the dockerhost VM and the prod docker host). It reads
-  every container's logs via the Docker socket — the same read path
-  `docker logs` uses — and ships a copy to OpenObserve; it does not
-  touch each container's own logging driver or config, so nothing about
-  existing services changes, and no per-service compose edits were
-  needed. New containers are picked up automatically. **Gotcha found
+  2026-08-26: the 0docker dockerhost/prod VMs and the 0mcp Docker runtime
+  rollout). It is an always-on production control, not a temporary debug
+  switch. It reads every container's logs via the Docker socket — the same
+  read path `docker logs` uses — and ships a copy to the single central
+  OpenObserve instance; it does not touch each container's own logging driver
+  or config, so nothing about existing services changes, and no per-service
+  compose edits are needed. New containers are picked up automatically. The
+  0mcp fleet reaches the same instance through its public TLS endpoint because
+  its private LAN is independent. See `docs/observability/CENTRAL-OPENOBSERVE.md`
+  for the host contract, disk buffering, and rollout procedure. **Gotcha found
   wiring this up**: Vector 0.57.0's `${VAR}` env-var interpolation does
   not reliably substitute inside the `http` sink's `uri`/`auth.*`
   fields in this image — config loads fine but every request fails

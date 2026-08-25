@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Install the always-on Docker log shipper on the 0mcp Docker hosts.
+# Credentials are supplied by the caller and are written only to the
+# root-owned Vector config on the target; they are never printed.
+
+: "${OPENOBSERVE_USER:?set OPENOBSERVE_USER from the private fleet secret path}"
+: "${OPENOBSERVE_PASSWORD:?set OPENOBSERVE_PASSWORD from the private fleet secret path}"
+
+readonly image="timberio/vector@sha256:e4fc19efb7f817f28d06a9a67fab9e1ccc60d57080115c291b06deb6daea7d7a"
+readonly endpoint="https://openobserve.0docker.com/api/default/docker_logs/_json"
+
+install_host() {
+  local alias="$1" host="$2" role="$3"
+  printf 'installing host=%s role=%s\n' "$host" "$role"
+
+  ssh -o BatchMode=yes "$alias" \
+    'sudo install -d -m 0750 /opt/observability/vector-log-shipper && sudo tee /opt/observability/vector-log-shipper/vector.toml >/dev/null' <<EOF
+# Rendered by services-registry/bin/observability-install-0mcp.
+data_dir = "/var/lib/vector"
+
+[sources.docker]
+type = "docker_logs"
+exclude_containers = ["vector-log-shipper"]
+
+[transforms.enrich]
+type = "remap"
+inputs = ["docker"]
+source = '''
+.fleet = "0mcp"
+.host = "$host"
+.role = "$role"
+.collector = "vector-log-shipper"
+.observability_schema = "1"
+'''
+
+[sinks.openobserve]
+type = "http"
+inputs = ["enrich"]
+uri = "$endpoint"
+method = "post"
+auth.strategy = "basic"
+auth.user = "$OPENOBSERVE_USER"
+auth.password = "$OPENOBSERVE_PASSWORD"
+compression = "gzip"
+encoding.codec = "json"
+encoding.timestamp_format = "rfc3339"
+healthcheck.enabled = false
+
+[sinks.openobserve.batch]
+max_events = 500
+timeout_secs = 5
+
+[sinks.openobserve.buffer]
+type = "disk"
+max_size = 1073741824
+when_full = "block"
+EOF
+
+  ssh -o BatchMode=yes "$alias" \
+    'sudo tee /opt/observability/vector-log-shipper/docker-compose.yml >/dev/null' <<EOF
+services:
+  vector-log-shipper:
+    image: $image
+    container_name: vector-log-shipper
+    command: ["--config", "/etc/vector/vector.toml"]
+    network_mode: host
+    restart: always
+    logging:
+      driver: json-file
+      options:
+        max-size: 20m
+        max-file: 2
+    volumes:
+      - ./vector.toml:/etc/vector/vector.toml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - vector_data:/var/lib/vector
+
+volumes:
+  vector_data:
+EOF
+
+  ssh -o BatchMode=yes "$alias" \
+    "sudo sh -c 'cd /opt/observability/vector-log-shipper && docker run --rm --network host -v \"\$PWD/vector.toml:/etc/vector/vector.toml:ro\" $image validate --no-environment /etc/vector/vector.toml && docker compose up -d --force-recreate'"
+}
+
+case "${1:-all}" in
+  all)
+    install_host 0mcp_docker docker-runtime-lv3 docker-runtime
+    install_host 0mcp_docker_build docker-build-lv3 docker-build
+    install_host 0mcp_comms runtime-comms-lv3 runtime-comms
+    install_host 0mcp_runtime_general runtime-general-lv3 runtime-general
+    install_host 0mcp_runtime_control runtime-control runtime-control
+    install_host 0mcp_coolify_apps coolify-apps-lv3 coolify-apps
+    ;;
+  coolify-apps)
+    install_host 0mcp_coolify_apps coolify-apps-lv3 coolify-apps
+    ;;
+  docker-build)
+    install_host 0mcp_docker_build docker-build-lv3 docker-build
+    ;;
+  docker-runtime)
+    install_host 0mcp_docker docker-runtime-lv3 docker-runtime
+    ;;
+  comms)
+    install_host 0mcp_comms runtime-comms-lv3 runtime-comms
+    ;;
+  runtime-general)
+    install_host 0mcp_runtime_general runtime-general-lv3 runtime-general
+    ;;
+  runtime-control)
+    install_host 0mcp_runtime_control runtime-control runtime-control
+    ;;
+  *)
+    printf 'usage: %s [all|coolify-apps]\n' "$0" >&2
+    exit 2
+    ;;
+esac

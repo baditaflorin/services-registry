@@ -1,0 +1,41 @@
+# Render this file with concrete OpenObserve credentials before deployment.
+# Vector 0.57.0 does not reliably interpolate ${VAR} inside HTTP sink fields.
+
+data_dir = "/var/lib/vector"
+
+[sources.docker]
+type = "docker_logs"
+exclude_containers = ["vector-log-shipper"]
+
+[transforms.enrich]
+type = "remap"
+inputs = ["docker"]
+source = '''
+.fleet = "FLEET_NAME"
+.host = "HOST_NAME"
+.role = "HOST_ROLE"
+.collector = "vector-log-shipper"
+.observability_schema = "1"
+'''
+
+[sinks.openobserve]
+type = "http"
+inputs = ["enrich"]
+uri = "https://OPENOBSERVE_HOST/api/default/docker_logs/_json"
+method = "post"
+auth.strategy = "basic"
+auth.user = "OPENOBSERVE_USER"
+auth.password = "OPENOBSERVE_PASSWORD"
+compression = "gzip"
+encoding.codec = "json"
+encoding.timestamp_format = "rfc3339"
+healthcheck.enabled = false
+
+[sinks.openobserve.batch]
+max_events = 500
+timeout_secs = 5
+
+[sinks.openobserve.buffer]
+type = "disk"
+max_size = 1073741824
+when_full = "block"
