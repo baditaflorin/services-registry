@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+# fleet-safe-apply -- idempotent, validated, self-healing apply for the two
+# most dangerous manual operations on this fleet: nftables reload and
+# docker-compose apply on a host that ALSO runs other Docker workloads.
+#
+# Born from the 2026-08-25 incident: `nft -f /etc/nftables.conf` (which
+# starts with `flush ruleset`) silently wiped Docker's own iptables-nft
+# chains on docker-runtime, and `systemctl restart docker` alone did not
+# fully recover it -- some bridge networks needed a full
+# `docker compose down && up -d` to stop crash-looping with ENETUNREACH.
+# See fleet-state/OPS.md "INCIDENT (2026-08-25)" for the full writeup.
+#
+# This script codifies the safe sequence so nobody (human or agent) has to
+# remember it by hand again:
+#   nft-apply     backup -> nft -c -f (syntax check) -> apply -> restart
+#                 docker if present -> sweep every container for
+#                 ENETUNREACH-shaped errors -> auto-heal affected compose
+#                 stacks -> report PASS/FAIL.
+#   compose-apply validate (docker compose config) -> apply -> health-wait
+#                 -> report PASS/FAIL.
+#   pvefw-apply   backup -> push -> pve-firewall compile -> report.
+#
+# Usage:
+#   fleet-safe-apply nft-apply <ssh-host> <local-file>
+#   fleet-safe-apply compose-apply <ssh-host> <remote-compose-dir>
+#   fleet-safe-apply pvefw-apply <bastion-ssh-host> <vmid> <local-file>
+#
+# Exit code is 0 only if every step, including the post-apply health
+# sweep, passed. Non-zero on any failure -- the caller must not treat a
+# "backup taken" state as "safe to move on".
+
+set -euo pipefail
+
+TS="$(date +%Y%m%dT%H%M%SZ)"
+log() { printf '[fleet-safe-apply] %s\n' "$*" >&2; }
+fail() { log "FAIL: $*"; exit 1; }
+
+# ---------------------------------------------------------------------------
+sweep_docker_health() {
+  # Runs on the remote host. Prints one line per unhealthy/restarting
+  # container with its compose project working_dir (if known), so the
+  # caller can auto-heal each one. Emits nothing (and exits 0) when clean.
+  local host="$1"
+  ssh "$host" '
+    set -euo pipefail
+    bad=0
+    while IFS= read -r cid; do
+      status=$(docker inspect -f "{{.State.Status}}" "$cid" 2>/dev/null || echo unknown)
+      health=$(docker inspect -f "{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}" "$cid" 2>/dev/null || echo unknown)
+      if [ "$status" != "running" ] || [ "$health" = "unhealthy" ]; then
+        wd=$(docker inspect -f "{{ index .Config.Labels \"com.docker.compose.project.working_dir\" }}" "$cid" 2>/dev/null || true)
+        name=$(docker inspect -f "{{.Name}}" "$cid" 2>/dev/null | sed "s#^/##")
+        echo "BAD ${name} status=${status} health=${health} workdir=${wd}"
+        bad=1
+      fi
+    done < <(docker ps -a -q)
+    # Separately: any container whose recent logs show the ENETUNREACH
+    # signature is suspect even if docker currently reports it healthy
+    # (it may be mid-crash-loop between snapshots).
+    while IFS= read -r cid; do
+      name=$(docker inspect -f "{{.Name}}" "$cid" 2>/dev/null | sed "s#^/##")
+      if docker logs --since 2m "$cid" 2>&1 | grep -qE "ENETUNREACH|network is unreachable"; then
+        wd=$(docker inspect -f "{{ index .Config.Labels \"com.docker.compose.project.working_dir\" }}" "$cid" 2>/dev/null || true)
+        echo "BAD ${name} status=enetunreach-in-logs workdir=${wd}"
+        bad=1
+      fi
+    done < <(docker ps -q)
+    exit $bad
+  '
+}
+
+heal_compose_stack() {
+  local host="$1" workdir="$2"
+  [ -n "$workdir" ] || { log "  no compose workdir known, cannot auto-heal -- manual intervention needed"; return 1; }
+  log "  healing: docker compose down && up -d in ${workdir}"
+  ssh "$host" "cd '$workdir' && sudo -n docker compose down && sudo -n docker compose up -d" >&2
+}
+
+cmd_nft_apply() {
+  local host="$1" localfile="$2"
+  [ -f "$localfile" ] || fail "local file not found: $localfile"
+
+  log "backing up remote /etc/nftables.conf on $host"
+  ssh "$host" "sudo -n cp /etc/nftables.conf /etc/nftables.conf.bak.${TS}"
+
+  log "pushing candidate config to $host:/etc/nftables.conf.new"
+  cat "$localfile" | ssh "$host" "sudo -n tee /etc/nftables.conf.new > /dev/null"
+
+  log "syntax-checking (nft -c -f)"
+  ssh "$host" "sudo -n nft -c -f /etc/nftables.conf.new" || fail "nft syntax check failed on $host -- not applied"
+
+  log "applying"
+  ssh "$host" "sudo -n mv /etc/nftables.conf.new /etc/nftables.conf && sudo -n nft -f /etc/nftables.conf" \
+    || fail "nft -f failed on $host after mv -- config file is now live but ruleset apply errored, investigate immediately"
+
+  if ssh "$host" "command -v docker >/dev/null 2>&1"; then
+    log "$host runs Docker -- flush ruleset in nft -f wipes Docker's own chains (2026-08-25 incident). Restarting dockerd to reprogram them."
+    ssh "$host" "sudo -n systemctl restart docker"
+    log "waiting for Docker to settle"
+    sleep 8
+
+    log "sweeping every container on $host for unhealthy/restarting/ENETUNREACH"
+    local bad_lines
+    bad_lines="$(sweep_docker_health "$host" || true)"
+    if [ -z "$bad_lines" ]; then
+      log "sweep clean -- all containers healthy"
+    else
+      log "sweep found issues, attempting auto-heal per affected stack:"
+      echo "$bad_lines" | while IFS= read -r line; do
+        log "  $line"
+        workdir="$(echo "$line" | sed -n 's/.*workdir=//p')"
+        name="$(echo "$line" | awk '{print $2}')"
+        heal_compose_stack "$host" "$workdir" || log "  auto-heal FAILED for ${name} -- needs manual attention"
+      done
+      log "re-sweeping after auto-heal"
+      bad_lines="$(sweep_docker_health "$host" || true)"
+      if [ -n "$bad_lines" ]; then
+        fail "still unhealthy after auto-heal attempt on $host: $bad_lines"
+      fi
+      log "re-sweep clean"
+    fi
+  else
+    log "$host does not run Docker -- skipping Docker-specific recovery/sweep"
+  fi
+
+  log "PASS: nft-apply on $host"
+}
+
+cmd_compose_apply() {
+  local host="$1" dir="$2"
+  log "validating compose config in $dir on $host"
+  ssh "$host" "cd '$dir' && sudo -n docker compose config >/dev/null" || fail "docker compose config invalid in $dir on $host"
+
+  log "applying"
+  ssh "$host" "cd '$dir' && sudo -n docker compose up -d" || fail "docker compose up -d failed in $dir on $host"
+
+  log "waiting for containers to report health"
+  sleep 6
+  local bad_lines
+  bad_lines="$(sweep_docker_health "$host" || true)"
+  if [ -n "$bad_lines" ]; then
+    log "unhealthy after apply, attempting one auto-heal pass"
+    heal_compose_stack "$host" "$dir" || true
+    sleep 6
+    bad_lines="$(sweep_docker_health "$host" || true)"
+    [ -z "$bad_lines" ] || fail "still unhealthy after compose-apply + heal in $dir on $host: $bad_lines"
+  fi
+  log "PASS: compose-apply in $dir on $host"
+}
+
+cmd_pvefw_apply() {
+  local bastion="$1" vmid="$2" localfile="$3"
+  [ -f "$localfile" ] || fail "local file not found: $localfile"
+  log "backing up /etc/pve/firewall/${vmid}.fw on $bastion"
+  ssh "$bastion" "cp /etc/pve/firewall/${vmid}.fw /etc/pve/firewall/${vmid}.fw.bak.${TS}"
+  log "pushing new rules"
+  cat "$localfile" | ssh "$bastion" "cat > /etc/pve/firewall/${vmid}.fw"
+  log "compiling (pmxcfs propagates automatically, this just forces + surfaces errors)"
+  ssh "$bastion" "pve-firewall compile" >&2
+  log "PASS: pvefw-apply for vmid $vmid on $bastion"
+}
+
+# ---------------------------------------------------------------------------
+case "${1:-}" in
+  nft-apply)     shift; cmd_nft_apply "$@" ;;
+  compose-apply) shift; cmd_compose_apply "$@" ;;
+  pvefw-apply)   shift; cmd_pvefw_apply "$@" ;;
+  *)
+    echo "usage: fleet-safe-apply {nft-apply|compose-apply|pvefw-apply} ..." >&2
+    exit 2
+    ;;
+esac
