@@ -46,6 +46,21 @@
           "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
           "trl_ceiling": 8,
           "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-discovery entries for the shared repo-wide findings -- leaked API key removed, no unbounded-cardinality risk). Confirmed correct counter/gauge/histogram typing throughout the scrape/rule config, but fleet-alerts.yml claims 'promtool runs in CI on PR' and there is no CI in this repo at all -- that claim is stale, no automated config validation exists. trl bumped 4->5; trl_ceiling held at 8. See PR #3 (merged)."
+        },
+        {
+          "category": "observability",
+          "container_port": 18321,
+          "description": "Alertmanager routing the 18 rules in prometheus/rules/fleet-alerts.yml to fleet-notify. Runs in host network mode, --web.listen-address=:18321. No browser UI use case of its own -- reached only by Prometheus, locally.",
+          "example_path": "/-/healthy",
+          "health_path": "/-/healthy",
+          "host_port": 18321,
+          "id": "fleet-alertmanager",
+          "name": "Fleet Alertmanager",
+          "trl": 5,
+          "trl_assessed_at": "2026-08-26",
+          "trl_assessor": "claude-sonnet-5",
+          "trl_ceiling": 8,
+          "trl_evidence": "Stock prom/alertmanager:v0.34.0 wired to route Prometheus-native alerts (previously had no delivery path at all -- see fleet-prometheus entry's note on fleet-alerts.yml) through fleet-notify's no-auth webhook. Config is a single static route + one webhook receiver, not independently tested beyond confirming delivery live post-deploy. trl set to match the fleet-grafana/fleet-prometheus siblings in this same repo (config-driven third-party binary, no CI); trl_ceiling held at 8 for the same reason."
         }
       ],
       "name": "go-fleet-metrics-hub-children",

@@ -9005,6 +9005,36 @@
     "version": "0.2.0"
   },
   {
+    "id": "fleet-alertmanager",
+    "name": "Fleet Alertmanager",
+    "description": "Alertmanager routing the 18 rules in prometheus/rules/fleet-alerts.yml to fleet-notify. Runs in host network mode, --web.listen-address=:18321. No browser UI use case of its own -- reached only by Prometheus, locally.",
+    "category": "observability",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-alertmanager.0exec.com",
+    "health_url": "https://fleet-alertmanager.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-metrics-hub",
+    "example_path": "/-/healthy",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "container_port": 18321,
+    "health_path": "/-/healthy",
+    "host_port": 18321,
+    "trl": 5,
+    "trl_assessed_at": "2026-08-26",
+    "trl_assessor": "claude-sonnet-5",
+    "trl_ceiling": 8,
+    "trl_evidence": "Stock prom/alertmanager:v0.34.0 wired to route Prometheus-native alerts (previously had no delivery path at all -- see fleet-prometheus entry's note on fleet-alerts.yml) through fleet-notify's no-auth webhook. Config is a single static route + one webhook receiver, not independently tested beyond confirming delivery live post-deploy. trl set to match the fleet-grafana/fleet-prometheus siblings in this same repo (config-driven third-party binary, no CI); trl_ceiling held at 8 for the same reason."
+  },
+  {
     "id": "fleet-backoff-coordinator",
     "name": "Fleet Backoff Coordinator",
     "description": "response-driven backoff coordinator",
