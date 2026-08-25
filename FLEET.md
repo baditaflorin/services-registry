@@ -217,11 +217,11 @@ the keystore container; clients read it from `APIKEY_SERVICE_ADMIN_TOKEN`.
 `mcp_ready` is a fleet-wide on/off switch (is this service exposed via
 MCP at all?). `access_tier` is the orthogonal, newer axis: **which
 caller trust tier does this service require**, e.g. `"open"`, `"free"`,
-or `"vetted-pentest"`. Like `scope`, this is an override-only field —
-it's never computed by `generate.py` and doesn't appear in
-`schema/v1.json`'s declared properties; it's set per-slug in
-`overrides.json` (or via a `$rules` bulk match) and rides through
-`resolved_overrides_for()`'s shallow merge same as any other override.
+or `"vetted-pentest"`. This is an override-only field — it's never
+computed by `generate.py` and doesn't appear in `schema/v1.json`'s
+declared properties; it's set per-slug in `overrides.json` (or via a
+`$rules` bulk match) and rides through `resolved_overrides_for()`'s
+shallow merge same as any other override.
 
 Absence means "no tier required beyond whatever the key's own scope/
 auth already gates" — don't default it to `"open"` on write; leave it
@@ -236,6 +236,46 @@ The caller's side of this — which tier a given API key was actually
 granted — lives in `go-apikey-service` (`tier` column, `X-Auth-Tier` on
 `/verify`), not here. This repo only ever states the *requirement*, never
 a caller's *grant*.
+
+### `network_exposure` — computed reachability classification (ADR-0038)
+
+Replaces the old binary `scope` (`unset` | `"internal-only"`) field.
+Five values, formalized in `schema/v1.json`:
+
+| value                    | meaning                                                                 |
+|---------------------------|-------------------------------------------------------------------------|
+| `loopback`                | `127.0.0.1`-only, unreachable even from the private LAN                 |
+| `lan-internal`             | host-network/`0.0.0.0`-bound, reachable fleet-wide over `10.10.10.x`, never proxied through nginx — no vhost, no public DNS |
+| `gateway-ip-allowlisted`   | public vhost + DNS, gated only by an nginx IP allowlist (no real auth) — successor to `scope: internal-only` |
+| `gateway-authenticated`    | public vhost + DNS, keystore `auth_request`-gated — the common case     |
+| `gateway-public`           | public vhost + DNS, `auth.type: none`, genuinely open                   |
+
+Unlike `access_tier` above, this is **not** hand-declared per slug for
+most services — `bin/generate.py`'s `compute_network_exposure()` derives
+it from fields the registry already has (`cert_domain`, `auth.type`,
+and the legacy `scope` override as an input signal, never as an output
+field anymore):
+
+- `kind: static` → not applicable, omitted (it's not a listening
+  service at all — a GitHub Pages site).
+- `cert_domain` set (a vhost gets rendered) → derived from `scope` /
+  `auth.type`, never hand-set.
+- No `cert_domain` (no vhost intent declared at all) → registry data
+  alone can't tell `loopback` from `lan-internal`; requires an explicit
+  manual `network_exposure` override in `overrides.json` (today: just
+  `claudia` and `plausible`, both external, non-vhost containers). A
+  container entry that hits this branch with no override at all gets a
+  `WARN:` on stderr from every `bin/generate.py` run rather than a
+  silent guess.
+
+Why computed instead of declared: it's a pure function of signals that
+already drive `fleet-runner nginx-render`'s template, so it structurally
+can't drift from what actually gets rendered — the failure mode ADR-0038
+was written to close. Excluded from `services-public.json` (allowlist
+is fail-closed by default) for the same reason `scope` was: which
+exposure class a service is in is itself an attack signal. Cross-checked
+against live gateway state by `fleet-runner audit vhost-drift`, not just
+registry intent — see that command's docs in `go_fleet_runner`.
 
 ## Fleet-wide changes — modify 130 repos at once
 
