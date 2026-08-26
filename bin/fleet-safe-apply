@@ -94,7 +94,18 @@ set -euo pipefail
 TS="$(date +%Y%m%dT%H%M%SZ)"
 RECEIPT_LOG="${HOME}/.fleet-safe-apply-receipts.log"
 BREAK_GLASS=""
-REVERT_WAIT_SECS=90
+# [1] Must comfortably exceed the WORST CASE time from arm_auto_revert to
+# confirm_revert -- docker restart + wait_for_docker_ready + the health
+# sweep + a potential compose-down/up heal cycle. Found live 2026-08-26 at
+# 90s: on a host with 60+ containers, that full sequence can itself take
+# close to or over 90s, so the background revert timer fired WHILE the
+# apply was still finishing successfully, undoing it moments before
+# confirm_revert would have cancelled it -- a genuine race, not a fluke,
+# reproduced twice. 240s gives real margin above the ~90-120s observed
+# worst case; the tradeoff (a real SSH-lockout takes up to 4 min to
+# self-heal instead of 90s) is clearly worth it against this apply
+# clobbering itself.
+REVERT_WAIT_SECS=240
 BACKUP_KEEP=5
 
 log()  { printf '[fleet-safe-apply] %s\n' "$*" >&2; }
@@ -194,6 +205,29 @@ confirm_revert() {
 }
 
 # ---- [6] enhanced sweep: negative pattern match + before/after churn ------
+# [1b] active readiness wait, not a blind sleep -- found live 2026-08-26:
+# a fixed `sleep 8` after `systemctl restart docker` is NOT reliably long
+# enough. With enough existing containers/networks (64+ containers, 20
+# networks was the case that caught this), dockerd can report its systemd
+# unit "active" before it has finished reprogramming every network's
+# iptables/nft state, so an immediate network-create attempt right after
+# can still hit "No chain/target/match by that name" -- the exact original
+# incident's symptom, self-inflicted by the fix for it. Poll for the
+# DOCKER chain actually existing instead of guessing a delay.
+wait_for_docker_ready() {
+  local host="$1" max_wait="${2:-45}" waited=0
+  while [ "$waited" -lt "$max_wait" ]; do
+    if ssh "$host" "sudo -n iptables -t nat -L DOCKER -n >/dev/null 2>&1"; then
+      log "Docker chain ready on $host after ${waited}s"
+      return 0
+    fi
+    sleep 3
+    waited=$((waited + 3))
+  done
+  warn "Docker chain still not ready on $host after ${max_wait}s -- proceeding anyway, but the sweep below is likely to find real problems"
+  return 1
+}
+
 snapshot_container_starts() {
   # host -> "name<TAB>startedAt" per line, for later diffing
   local host="$1"
@@ -276,7 +310,10 @@ run_docker_recovery_sweep() {
   done
   log "re-sweeping after auto-heal"
   bad_lines="$(sweep_docker_health "$host" || true)"
-  [ -z "$bad_lines" ] || fail "still unhealthy after auto-heal attempt on $host: $bad_lines"
+  if [ -n "$bad_lines" ]; then
+    warn "still unhealthy after auto-heal attempt on $host: $bad_lines"
+    return 1
+  fi
   log "re-sweep clean"
 }
 
@@ -312,8 +349,17 @@ cmd_nft_apply() {
     return 0
   fi
 
-  # [1] arm the SSH-lockout safety net before we do anything that could cut us off
-  arm_auto_revert "$host" "/etc/nftables.conf" "/etc/nftables.conf.bak.${TS}" "nft -f /etc/nftables.conf"
+  # [1] arm the SSH-lockout safety net before we do anything that could cut us off.
+  # The revert command itself restarts docker and waits for it, not just `nft -f` --
+  # found live 2026-08-26: a revert that only re-runs `nft -f` (flush ruleset) without
+  # the docker-restart-and-wait follow-up REINTRODUCES the exact chain-wipe bug this
+  # whole tool exists to guard against, on the very next thing that needs a docker
+  # network. Any revert of this file must be as docker-safe as a forward apply is.
+  local revert_cmd="nft -f /etc/nftables.conf"
+  if $has_docker; then
+    revert_cmd="nft -f /etc/nftables.conf && systemctl restart docker"
+  fi
+  arm_auto_revert "$host" "/etc/nftables.conf" "/etc/nftables.conf.bak.${TS}" "$revert_cmd"
 
   log "applying"
   ssh "$host" "sudo -n mv /etc/nftables.conf.new /etc/nftables.conf && sudo -n nft -f /etc/nftables.conf" \
@@ -322,15 +368,27 @@ cmd_nft_apply() {
   if $has_docker; then
     log "$host runs Docker -- flush ruleset in nft -f wipes Docker's own chains (2026-08-25 incident). Restarting dockerd to reprogram them."
     ssh "$host" "sudo -n systemctl restart docker"
-    log "waiting for Docker to settle"
-    sleep 8
+    wait_for_docker_ready "$host"
     # NOTE: no check_unexpected_churn here -- restarting dockerd restarts
     # EVERY container on the host by design, so a before/after churn diff
     # would flag 100% of containers every single time. Not diagnostic for
     # this path; the health sweep below is the real signal here. (The
     # churn check earns its keep in compose-apply, where only the target
     # stack is expected to move.)
-    run_docker_recovery_sweep "$host"
+    if ! run_docker_recovery_sweep "$host"; then
+      # [1]/[9] the sweep failed even after auto-heal. We are NOT going to
+      # silently leave the 90s auto-revert timer armed here -- found live
+      # 2026-08-26: an unconfirmed timer from a failed run fires completely
+      # independently later, on its own clock, oblivious to anything the
+      # operator does to fix things by hand in the meantime -- it clobbered
+      # a manually-restored good state ~10 minutes after this exact failure
+      # mode was first hit, reintroducing the incident this tool exists to
+      # prevent. Cancel it now: the operator has been told synchronously
+      # that this failed and can decide what to do next themselves, rather
+      # than have a stale timer decide for them later.
+      confirm_revert "$host"
+      fail "still unhealthy on $host after nft-apply + auto-heal -- the new config IS live (auto-revert cancelled, NOT reverted automatically -- decide by hand: fix forward, or re-run with the previous config as input). See the BAD lines logged above."
+    fi
   else
     log "$host does not run Docker -- skipping Docker-specific recovery/sweep"
   fi
@@ -410,8 +468,14 @@ cmd_pvefw_apply() {
   arm_auto_revert "$bastion" "/etc/pve/firewall/${vmid}.fw" "/etc/pve/firewall/${vmid}.fw.bak.${TS}" "pve-firewall compile"
 
   log "compiling (pmxcfs propagates automatically, this just forces + surfaces errors)"
-  ssh "$bastion" "pve-firewall compile" >&2 \
-    || fail "pve-firewall compile errored on $bastion; the auto-revert armed above will restore the backup in ~${REVERT_WAIT_SECS}s if you don't intervene first"
+  if ! ssh "$bastion" "pve-firewall compile" >&2; then
+    # [1]/[9] same fix as cmd_nft_apply: don't leave an unconfirmed timer
+    # armed on a path we've already reported as failed -- cancel it now so
+    # it can't fire independently later, disconnected from whatever manual
+    # recovery happens next.
+    confirm_revert "$bastion"
+    fail "pve-firewall compile errored on $bastion; the new rules ARE live (auto-revert cancelled, NOT reverted automatically) -- decide by hand"
+  fi
 
   confirm_revert "$bastion"
   log "PASS: pvefw-apply for vmid $vmid on $bastion"
