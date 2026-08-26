@@ -1,6 +1,6 @@
 # ADR-0035 — Self-hosted push-triggered CI (Woodpecker) on Builder LXC 108
 
-* **Status**: Proposed
+* **Status**: Accepted (2026-08-26 — see "Rollout status" below)
 * **Date**: 2026-08-06
 * **Authors**: baditaflorin + claude-sonnet-5
 * **Tags**: ci, infra, builder-lxc, ops
@@ -110,10 +110,50 @@ network access to the dockerhost fleet for a follow-on deploy trigger).
    propagate `CLAUDE.md` — one canonical `.woodpecker.yml` template,
    not 220 hand-written copies.
 5. Flip this ADR's `Status` to `Accepted` in the same PR that lands
-   the working pilot (per ADR-0001's workflow).
+   the working pilot (per ADR-0001's workflow). **Not what actually
+   happened** — the pilot scaled to fleet-wide over the following
+   three weeks without this step ever landing; `Status` sat at
+   `Proposed` long after rollout was materially complete. Flipped
+   2026-08-26, alongside the rollout-status audit below, once a
+   session doing an unrelated task noticed the drift. Lesson for
+   future ADRs: step 5 needs a concrete trigger (e.g. "when N% of
+   eligible repos are onboarded"), not "in the same PR" for a rollout
+   that's intentionally incremental across many small PRs, none of
+   which is "the" pilot-landing PR.
 6. Deferred, not in scope of the pilot: wiring a green pipeline to
    auto-trigger `fleet-runner deploy` — for now, CI reports status only;
    deploy stays a separate, explicit `fleet-runner deploy` invocation.
+
+## Rollout status (as of 2026-08-26)
+
+No separate rollout ledger exists (per this repo's `CLAUDE.md`: "tracked
+via `git log` on this file / repo PRs") — this section is a point-in-time
+snapshot, not a maintained tracker; don't treat a stale copy of these
+numbers as current.
+
+- **334 of 369 locally-checked-out, registered `kind=container` repos**
+  had `.woodpecker.yml` as of this audit (90.5%). Of the 35 without it,
+  22 lack `go.mod` (composite-pattern/non-Go services — correctly out of
+  scope per this ADR's step 3) and 13 were eligible but missing.
+- All 13 are now accounted for: 2 (`domain-abuse-contact-rollup`,
+  `domain-trust-composite-grader`) were onboarded independently,
+  concurrently, by a separate session between the initial count and
+  this fix; the other 11 got `.woodpecker.yml` added same-day as part
+  of this audit.
+- **Adding `.woodpecker.yml` alone does not activate CI.** Woodpecker's
+  GitHub webhook carries a repo-specific signed token
+  (`repo-forge-remote-id` embedded in the JWT); confirmed live that this
+  can only be minted by Woodpecker's own API, authenticated as the
+  OAuth-connected GitHub user — there is no stored `WOODPECKER_TOKEN` on
+  Builder LXC 108, and none of this session's SSH/API access could
+  generate one. **Activating the newly-onboarded repos requires ~2
+  minutes in the `ci.0exec.com` web UI** (or a personal Woodpecker token
+  handed to a future automated session) — the file being on `main` just
+  means a repo is *ready* the moment that happens.
+- Verification method: `gh api repos/baditaflorin/<repo>/hooks` — an
+  activated repo shows a `web` hook with `config.url` starting
+  `https://ci.0exec.com/api/hook?access_token=...`; an inactive one
+  returns `[]`. No Woodpecker credential needed for this read.
 
 ## Alternatives considered
 
