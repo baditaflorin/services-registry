@@ -113,6 +113,11 @@
     "mcp_assessed_at": {
       "type": "string", "format": "date-time",
       "description": "Timestamp of the audit_mcp_ready.py run that last confirmed mcp_ready."
+    },
+    "network_exposure": {
+      "type": "string",
+      "enum": ["loopback", "lan-internal", "gateway-ip-allowlisted", "gateway-authenticated", "gateway-public"],
+      "description": "How reachable this service actually is, computed by bin/generate.py from cert_domain/auth.type/scope (see compute_network_exposure) — not hand-declared for entries with a rendered vhost, so it can't drift from what nginx-render actually emits. 'loopback' = 127.0.0.1-only, unreachable even fleet-wide. 'lan-internal' = host-network/0.0.0.0-bound, reachable over the private LAN but never proxied through nginx (no vhost, no public DNS) — set via a manual overrides.json override since the registry alone can't distinguish this from loopback. 'gateway-ip-allowlisted' = public vhost + DNS, gated only by an nginx IP allowlist (successor to the old `scope: internal-only` flag). 'gateway-authenticated' = public vhost + DNS, keystore auth_request-gated (the common case). 'gateway-public' = public vhost + DNS, auth.type=none, genuinely open. Absent for kind=static (not a listening service). Excluded from services-public.json — see PUBLIC_FIELDS in bin/generate.py."
     }
   },
   "additionalProperties": false

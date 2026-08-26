@@ -244,7 +244,7 @@ class TestPublicMirror(unittest.TestCase):
         "cert_domain": "wildcard.0crawl.com",
         "proxy_egress": True,
         "ui_cookie_bridge": True,
-        "scope": "internal-only",
+        "network_exposure": "gateway-ip-allowlisted",
         "extra_server_names": ["alt.0crawl.com"],
         "vhost": {"proxy_buffering": "off"},
         "depends_on": ["other-svc"],
@@ -259,7 +259,7 @@ class TestPublicMirror(unittest.TestCase):
     def test_drops_all_internal_fields(self):
         pub = generate.to_public_entry(self.FULL_ENTRY)
         for forbidden in ("host_port", "container_port", "cert_domain",
-                          "proxy_egress", "ui_cookie_bridge", "scope",
+                          "proxy_egress", "ui_cookie_bridge", "network_exposure",
                           "extra_server_names", "vhost", "depends_on",
                           "trl_evidence"):
             self.assertNotIn(forbidden, pub,
@@ -344,6 +344,65 @@ class TestMCPProjection(unittest.TestCase):
         entry = {"id": "not-ready", "name": "Not Ready", "url": "https://x",
                   "access_tier": "vetted-pentest"}
         self.assertIsNone(project(entry))
+
+
+class TestComputeNetworkExposure(unittest.TestCase):
+    """compute_network_exposure() derives network_exposure from the same
+    signals that drive nginx-render's template — regression guard for the
+    services.json migration off the old binary `scope` field. Ratios below
+    match the real 519-entry registry at migration time (2026-08-26):
+    346 gateway-authenticated / 15 gateway-public / 13 gateway-ip-allowlisted
+    / 143 static (omitted) / 2 manual lan-internal overrides."""
+
+    def test_static_kind_is_not_applicable(self):
+        entry = {"kind": "static", "cert_domain": None, "auth": {"type": "none"}}
+        self.assertIsNone(generate.compute_network_exposure(entry, {}))
+
+    def test_cert_domain_with_api_key_is_gateway_authenticated(self):
+        entry = {"kind": "container", "cert_domain": "wildcard.0exec.com",
+                  "auth": {"type": "api_key"}}
+        self.assertEqual(generate.compute_network_exposure(entry, {}),
+                          "gateway-authenticated")
+
+    def test_cert_domain_with_path_token_is_gateway_authenticated(self):
+        entry = {"kind": "container", "cert_domain": "wildcard.0crawl.com",
+                  "auth": {"type": "path_token"}}
+        self.assertEqual(generate.compute_network_exposure(entry, {}),
+                          "gateway-authenticated")
+
+    def test_cert_domain_with_no_auth_is_gateway_public(self):
+        entry = {"kind": "container", "cert_domain": "wildcard.0exec.com",
+                  "auth": {"type": "none"}}
+        self.assertEqual(generate.compute_network_exposure(entry, {}),
+                          "gateway-public")
+
+    def test_scope_internal_only_wins_over_auth_type(self):
+        """scope: internal-only is the exact successor signal for
+        gateway-ip-allowlisted — it must win even when auth.type would
+        otherwise imply gateway-authenticated (13 real entries do both)."""
+        entry = {"kind": "container", "cert_domain": "wildcard.0exec.com",
+                  "auth": {"type": "api_key"}}
+        ov = {"scope": "internal-only"}
+        self.assertEqual(generate.compute_network_exposure(entry, ov),
+                          "gateway-ip-allowlisted")
+
+    def test_no_cert_domain_uses_manual_override(self):
+        """No vhost intent declared — registry data alone can't tell
+        loopback from lan-internal, so it must come from an explicit
+        overrides.json value (the claudia/plausible case)."""
+        entry = {"kind": "container", "cert_domain": None, "auth": {"type": "none"}}
+        ov = {"network_exposure": "lan-internal"}
+        self.assertEqual(generate.compute_network_exposure(entry, ov),
+                          "lan-internal")
+
+    def test_no_cert_domain_no_override_is_none(self):
+        entry = {"kind": "container", "cert_domain": None, "auth": {"type": "none"}}
+        self.assertIsNone(generate.compute_network_exposure(entry, {}))
+
+    def test_invalid_manual_override_is_ignored(self):
+        entry = {"kind": "container", "cert_domain": None, "auth": {"type": "none"}}
+        ov = {"network_exposure": "definitely-not-a-real-value"}
+        self.assertIsNone(generate.compute_network_exposure(entry, ov))
 
 
 if __name__ == "__main__":

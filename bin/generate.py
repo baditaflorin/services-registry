@@ -57,10 +57,13 @@ SUMMARY_TXT          = ROOT / "services.summary.txt"
 #                                           (Webshare residential proxy);
 #                                           security-relevant op detail
 #   ui_cookie_bridge                      — nginx-render knob; internal
-#   scope                                 — `internal-only` is itself an
-#                                           attack signal (advertises
-#                                           the box is firewalled, names
-#                                           it, invites probing)
+#   network_exposure                      — which of the 5 exposure states
+#                                           (loopback/lan-internal/gateway-
+#                                           ip-allowlisted/-authenticated/
+#                                           -public) a service is in is
+#                                           itself an attack signal, same
+#                                           reasoning as the old `scope`
+#                                           field it replaced
 #   extra_server_names                    — gateway-side aliasing; an
 #                                           internal nginx vhost knob
 #   vhost                                 — render-time vhost knobs
@@ -492,6 +495,55 @@ def wildcard_cert_domain(mesh: str) -> str:
     return f"wildcard.{apex}" if apex else ""
 
 
+# Valid `network_exposure` values, in roughly increasing order of surface
+# area. Kept in one place so make_entry / make_external_entry / the schema
+# comment / any future audit tooling agree on the exact vocabulary.
+NETWORK_EXPOSURE_VALUES = frozenset({
+    "loopback", "lan-internal", "gateway-ip-allowlisted",
+    "gateway-authenticated", "gateway-public",
+})
+
+
+def compute_network_exposure(entry: dict, ov: dict) -> str | None:
+    """Derive `network_exposure` from the same signals that already drive
+    fleet-runner nginx-render's template — never hand-declared for the
+    ~370 entries where it's a pure function of existing fields. This is
+    what keeps the classification from silently drifting out of sync with
+    what actually gets rendered (the failure mode that motivated this
+    field over the old binary `scope`).
+
+    - kind=static: not a listening service at all — no value applies.
+    - cert_domain set (a vhost gets rendered): `scope: internal-only` in
+      the resolved overrides ⇒ gateway-ip-allowlisted (exact successor to
+      the old scope flag); otherwise derived from auth.type — api_key /
+      path_token ⇒ gateway-authenticated, none ⇒ gateway-public.
+    - No cert_domain (no vhost intent declared at all): registry data
+      alone can't distinguish loopback from lan-internal — that needs
+      live evidence (see `fleet-runner audit vhost-drift`). Falls back to
+      an explicit manual `network_exposure` override in overrides.json.
+    """
+    if entry.get("kind") == "static":
+        return None
+    if entry.get("cert_domain"):
+        if ov.get("scope") == "internal-only":
+            return "gateway-ip-allowlisted"
+        auth_type = (entry.get("auth") or {}).get("type")
+        return "gateway-authenticated" if auth_type in ("api_key", "path_token") else "gateway-public"
+    manual = ov.get("network_exposure")
+    if manual in NETWORK_EXPOSURE_VALUES:
+        return manual
+    if manual:
+        print(f"WARN: {entry.get('id')} has network_exposure={manual!r} in "
+              f"overrides.json, not one of {sorted(NETWORK_EXPOSURE_VALUES)} "
+              f"— ignoring.", file=sys.stderr)
+    else:
+        print(f"WARN: {entry.get('id')} has no cert_domain and no "
+              f"network_exposure override in overrides.json — left unset. "
+              f"Add one (loopback or lan-internal) so audit tooling isn't "
+              f"guessing.", file=sys.stderr)
+    return None
+
+
 def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     topics = normalize_topics(repo.get("repositoryTopics") or [])
     mesh = mesh_of(topics)
@@ -624,11 +676,11 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # auth fallback + Upgrade/Connection headers in the nginx
               # template. Per-slug or expand-child override only.
               "ui_cookie_bridge",
-              # `scope: internal-only` flips the nginx-render template
-              # to emit an allow/deny block restricting the https vhost
-              # to the internal mesh (ADR-0018 + ADR-0023 gap 4).
-              # Sole consumer today: go-fleet-sandbox-targets.
-              "scope",
+              # NOTE: `scope` is deliberately NOT copied through anymore —
+              # it's consumed as an input signal by compute_network_exposure()
+              # below (13 slugs still set `scope: internal-only` in
+              # overrides.json), but the output field is `network_exposure`.
+              # See docs/adr/0032-network-exposure.md.
               # Per-service nginx proxy_read_timeout override (ADR 0230
               # follow-up #1). Fleet default is 60s; slow page-scrapers
               # set "120s", python-proxy sets "300s". Consumed by
@@ -668,6 +720,10 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               "version"):
         if k in ov:
             entry[k] = ov[k]
+
+    ne = compute_network_exposure(entry, ov)
+    if ne:
+        entry["network_exposure"] = ne
 
     return entry
 
@@ -883,9 +939,19 @@ def make_external_entry(spec: dict) -> dict:
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
               "external_compose_dir", "external_image",
-              "depends_on", "scope"):
+              "depends_on"):
         if k in spec:
             entry[k] = spec[k]
+
+    # External entries never get a cert_domain (no fleet-managed vhost),
+    # so this always falls to the manual-override branch — see
+    # compute_network_exposure(). `scope` is intentionally excluded from
+    # the copy-through above; it's an input to that computation, not an
+    # output field.
+    ne = compute_network_exposure(entry, spec)
+    if ne:
+        entry["network_exposure"] = ne
+
     return entry
 
 
