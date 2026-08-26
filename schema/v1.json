@@ -90,6 +90,11 @@
       "type": "string",
       "description": "Who/what assessed: 'claude-session-YYYY-MM-DD' for AI-assisted, 'human' for manual review."
     },
+    "placement": {
+      "type": "string",
+      "enum": ["pinned", "replicable"],
+      "description": "Whether this service is a safe dynamic-placement candidate. See ADR-0039. 'pinned' = holds state that doesn't trivially move with it (a data volume, a database, anything where starting it elsewhere loses or orphans data) — never route dynamically as-is. 'replicable' = safe to start on any capacity-eligible host. Optional, same convention as `trl`: absence means not yet assessed, NOT a default of either value — do not assume unset means replicable just because most kind=container entries are. Declared per-slug in overrides.json."
+    },
     "depends_on": {
       "type": "array",
       "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },

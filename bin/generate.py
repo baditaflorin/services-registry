@@ -94,6 +94,9 @@ PUBLIC_FIELDS: frozenset[str] = frozenset({
     "pages_url", "pages_source_branch",
     "trl", "trl_ceiling", "trl_ceiling_reason",
     "trl_assessed_at", "trl_assessor",
+    # placement (ADR-0039) -- scheduling metadata (pinned vs replicable),
+    # not a disclosure risk, same reasoning as trl.
+    "placement",
     # Rename records — old hostnames are already in public DNS as 301
     # redirect targets, so exposing the alias map is informational not
     # disclosure. Lets external bookmark-followers resolve old slugs.
