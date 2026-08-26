@@ -56,6 +56,8 @@ SUMMARY_TXT          = ROOT / "services.summary.txt"
 #   proxy_egress                          — internal egress-routing flag
 #                                           (Webshare residential proxy);
 #                                           security-relevant op detail
+#   internal_direct                        — reviewed private consumer route;
+#                                           authorization capability
 #   ui_cookie_bridge                      — nginx-render knob; internal
 #   network_exposure                      — which of the 5 exposure states
 #                                           (loopback/lan-internal/gateway-
@@ -648,6 +650,11 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
               "host_port", "container_port", "port",
+              # Private producer-to-service routing approval. This is
+              # deny-by-default (absence means proxy via the public mesh),
+              # and must be set in overrides.json after a functional,
+              # self-authenticated direct-call check.
+              "internal_direct",
               # Declared service-to-service dependency edges. Static
               # counterpart to the live graph in go-fleet-graph. Set
               # via overrides.json; fleet-runner audit-graph diffs
