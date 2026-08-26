@@ -93,6 +93,8 @@ case "${1:-all}" in
     install_host 0mcp_runtime_general runtime-general-lv3 runtime-general
     install_host 0mcp_runtime_control runtime-control runtime-control
     install_host 0mcp_coolify_apps coolify-apps-lv3 coolify-apps
+    install_host 0mcp_monitoring monitoring monitoring
+    install_host 0mcp_coolify coolify-lv3 coolify-control
     ;;
   coolify-apps)
     install_host 0mcp_coolify_apps coolify-apps-lv3 coolify-apps
@@ -112,8 +114,14 @@ case "${1:-all}" in
   runtime-control)
     install_host 0mcp_runtime_control runtime-control runtime-control
     ;;
+  monitoring)
+    install_host 0mcp_monitoring monitoring monitoring
+    ;;
+  coolify-control)
+    install_host 0mcp_coolify coolify-lv3 coolify-control
+    ;;
   *)
-    printf 'usage: %s [all|coolify-apps]\n' "$0" >&2
+    printf 'usage: %s [all|coolify-apps|monitoring|coolify-control|docker-build|docker-runtime|comms|runtime-general|runtime-control]\n' "$0" >&2
     exit 2
     ;;
 esac
