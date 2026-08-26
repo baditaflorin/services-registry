@@ -3312,6 +3312,9 @@
     "cpus": 4,
     "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
     "env": {
+      "DEAD_DOMAIN_TTL_SECONDS": "300",
+      "MAX_FETCH_INFLIGHT": "256",
+      "MAX_RENDER_INFLIGHT": "12",
       "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10",
       "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "scrapetheworld.org,okssh.com,0own.com,0prx.com,badita.org"
     },
@@ -3357,6 +3360,10 @@
     "container_port": 8080,
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
+    "env": {
+      "MAX_CONCURRENT_BROWSERS": "3",
+      "MAX_CONCURRENT_RENDERS": "8"
+    },
     "mem_limit": "6g",
     "name": "Proxy (Go+JS)",
     "trl": 7,
