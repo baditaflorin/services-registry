@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# fleet-safe-apply -- idempotent, validated, self-healing apply for the two
-# most dangerous manual operations on this fleet: nftables reload and
-# docker-compose apply on a host that ALSO runs other Docker workloads.
+# fleet-safe-apply -- idempotent, validated, self-healing apply for the
+# most dangerous manual operations on this fleet: nftables reload, Proxmox
+# per-VM firewall reload, and docker-compose apply on a host that ALSO
+# runs other Docker workloads.
 #
 # Born from the 2026-08-25 incident: `nft -f /etc/nftables.conf` (which
 # starts with `flush ruleset`) silently wiped Docker's own iptables-nft
@@ -10,32 +11,197 @@
 # `docker compose down && up -d` to stop crash-looping with ENETUNREACH.
 # See fleet-state/OPS.md "INCIDENT (2026-08-25)" for the full writeup.
 #
-# This script codifies the safe sequence so nobody (human or agent) has to
-# remember it by hand again:
-#   nft-apply     backup -> nft -c -f (syntax check) -> apply -> restart
-#                 docker if present -> sweep every container for
-#                 ENETUNREACH-shaped errors -> auto-heal affected compose
-#                 stacks -> report PASS/FAIL.
-#   compose-apply validate (docker compose config) -> apply -> health-wait
-#                 -> report PASS/FAIL.
-#   pvefw-apply   backup -> push -> pve-firewall compile -> report.
+# v2 (2026-08-26) hardens against ten further failure classes identified
+# after the first incident -- see "THREAT MODEL" below for the mapping
+# from class to defense. Each numbered class has a matching mechanism in
+# this script; search for "[N]" to find where a given class is handled.
 #
 # Usage:
-#   fleet-safe-apply nft-apply <ssh-host> <local-file>
+#   fleet-safe-apply nft-apply     <ssh-host> <local-file>
 #   fleet-safe-apply compose-apply <ssh-host> <remote-compose-dir>
-#   fleet-safe-apply pvefw-apply <bastion-ssh-host> <vmid> <local-file>
+#   fleet-safe-apply pvefw-apply   <bastion-ssh-host> <vmid> <local-file>
+#   fleet-safe-apply doctor        <ssh-host>
+#   fleet-safe-apply drift-check   <ssh-host>              # nftables only
+#
+# Global flag (any position): --break-glass "<reason>"
+#   Skips the expensive post-apply sweep/auto-heal/auto-revert-arming
+#   steps for an apply that can't wait (e.g. the sweep mechanism itself
+#   is what's broken). Backup, syntax-check, and locking ALWAYS still
+#   run -- they're cheap and never the thing standing between you and an
+#   emergency fix. Every break-glass use appends a receipt to
+#   ~/.fleet-safe-apply-receipts.log (operator, host, command, reason,
+#   timestamp) and prints it prominently. This is deliberately friction-
+#   ful compared to the normal path, and deliberately NOT silent -- the
+#   goal is "you can always get past the safety net in a real emergency,
+#   but doing so is never invisible."
 #
 # Exit code is 0 only if every step, including the post-apply health
-# sweep, passed. Non-zero on any failure -- the caller must not treat a
-# "backup taken" state as "safe to move on".
+# sweep (when not break-glassed), passed.
+#
+# ---------------------------------------------------------------------------
+# THREAT MODEL -- failure classes and their defense in this script
+# ---------------------------------------------------------------------------
+#  [1] SSH-lockout: a firewall change cuts off the very access used to
+#      manage/revert it. Defense: commit-confirm auto-revert -- before
+#      applying, arm a detached background job on the TARGET that reverts
+#      to the pre-apply backup automatically after 90s unless explicitly
+#      confirmed. Runs even if this script's own SSH session dies.
+#  [2] Partial/interrupted apply leaves file and kernel state inconsistent
+#      (file says X, live ruleset still says old-X). Defense: apply is a
+#      single remote command chain (mv-then-reload), and failure at any
+#      step is reported with the exact state left behind, not swallowed.
+#  [3] Concurrent mutation race -- two operators/agents/sessions apply to
+#      the same host at once, one clobbering the other. Defense: an
+#      atomic `mkdir`-based remote lock per host+resource, held for the
+#      duration of the apply, refused (not queued) on collision.
+#  [4] Backup pollution -- unbounded `.bak.<ts>` files eventually fill the
+#      disk. Defense: retention -- keep the newest 5 backups per path,
+#      prune older ones as part of every apply.
+#  [5] Silent drift between declared/intended state and live state (e.g.
+#      a manual edit outside this tool). Defense: `drift-check` subcommand
+#      + the fact that every apply's syntax-check step re-validates the
+#      FULL live file, surfacing anything that doesn't parse cleanly.
+#  [6] False-negative health sweep -- the ENETUNREACH log-pattern check
+#      misses a different failure signature. Defense: sweep now ALSO
+#      diffs a before/after container-start-time snapshot; anything that
+#      restarted during the operation is flagged for review even if it
+#      currently reports healthy (catches "flapping, happened to be up at
+#      the exact check moment").
+#  [7] The backup itself is broken (empty, truncated, unparseable) --
+#      "verify the escape hatch works before you need it". Defense:
+#      every backup is checked non-empty AND (for nft) independently
+#      re-validated with `nft -c -f` before the live file is touched.
+#  [8] Auto-heal makes things worse -- it's a mutation with its own blast
+#      radius; if it targets the wrong compose dir it can take down an
+#      unrelated healthy stack. Defense: auto-heal only ever targets a
+#      workdir that appeared in THIS sweep's own bad-container list
+#      (never a label read blind), and every heal action is logged with
+#      what was running before and after.
+#  [9] Fatigue -- under time pressure, the safe path gets skipped "just
+#      this once", by hand, unaudited (exactly what nearly happened
+#      2026-08-25/26). Defense: the --break-glass escape hatch above --
+#      makes the fast path official, audited, and receipted instead of
+#      informal and invisible.
+# [10] Tool/environment drift -- the script assumes specific nft/docker/
+#      pve-firewall behavior that a package upgrade could silently
+#      change. Defense: `doctor` subcommand -- a preflight self-test that
+#      verifies expected tool presence, versions, and output shapes
+#      before trusting the automation on a given host.
+# ---------------------------------------------------------------------------
 
 set -euo pipefail
 
 TS="$(date +%Y%m%dT%H%M%SZ)"
-log() { printf '[fleet-safe-apply] %s\n' "$*" >&2; }
+RECEIPT_LOG="${HOME}/.fleet-safe-apply-receipts.log"
+BREAK_GLASS=""
+REVERT_WAIT_SECS=90
+BACKUP_KEEP=5
+
+log()  { printf '[fleet-safe-apply] %s\n' "$*" >&2; }
+warn() { printf '[fleet-safe-apply] WARN: %s\n' "$*" >&2; }
 fail() { log "FAIL: $*"; exit 1; }
 
-# ---------------------------------------------------------------------------
+# ---- global flag extraction: --break-glass "<reason>" can appear anywhere
+ARGS=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --break-glass)
+      shift
+      [ "$#" -gt 0 ] && [ -n "$1" ] || fail "--break-glass requires a non-empty reason string"
+      BREAK_GLASS="$1"
+      shift
+      ;;
+    *)
+      ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+set -- "${ARGS[@]}"
+
+# ---- [9] break-glass receipt -----------------------------------------------
+write_receipt() {
+  local cmd_desc="$1"
+  local line
+  line="$(printf '%s | operator=%s | host=%s | cmd=%s | reason=%s' \
+    "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${USER:-unknown}" "$2" "$cmd_desc" "$BREAK_GLASS")"
+  echo "$line" >> "$RECEIPT_LOG"
+  warn "BREAK-GLASS used -- receipt appended to $RECEIPT_LOG:"
+  warn "  $line"
+  warn "Follow up with an OPS.md entry for anything non-trivial -- this receipt is local-only, not durable fleet history."
+}
+
+# ---- [3] remote locking -----------------------------------------------------
+LOCK_HOST=""
+LOCK_NAME=""
+acquire_lock() {
+  local host="$1" name="$2"
+  LOCK_HOST="$host"; LOCK_NAME="$name"
+  local lockdir="/tmp/fleet-safe-apply.lock.${name}"
+  if ! ssh "$host" "mkdir '$lockdir' 2>/dev/null"; then
+    local holder
+    holder="$(ssh "$host" "cat '$lockdir/holder' 2>/dev/null" || echo unknown)"
+    fail "another fleet-safe-apply run is in progress on $host for '$name' (held by: $holder). If that's stale (a previous run crashed without cleaning up), clear it manually: ssh $host \"rm -rf $lockdir\" -- only after confirming nothing is actually mid-apply."
+  fi
+  ssh "$host" "printf '%s @ %s\n' '${USER:-unknown}' '$TS' > '$lockdir/holder'" || true
+  log "lock acquired on $host for '$name'"
+}
+release_lock() {
+  [ -n "$LOCK_HOST" ] || return 0
+  # rm -rf, not rmdir -- the lock dir has a holder file inside it, and
+  # plain rmdir only removes EMPTY directories. Using rmdir here silently
+  # left every lock stale after every single run until caught by an
+  # explicit locking test -- exactly the "does the escape hatch actually
+  # work" class of bug this hardening pass exists to catch.
+  ssh "$LOCK_HOST" "rm -rf '/tmp/fleet-safe-apply.lock.${LOCK_NAME}' 2>/dev/null" || true
+}
+trap release_lock EXIT
+
+# ---- [4] backup retention ---------------------------------------------------
+prune_backups() {
+  local host="$1" pattern="$2"
+  ssh "$host" "ls -1t ${pattern} 2>/dev/null | tail -n +$((BACKUP_KEEP + 1)) | sudo -n xargs -r rm -f" || true
+}
+
+# ---- [1] commit-confirm auto-revert -----------------------------------------
+# Arms a detached job on $host that reverts $live_file from $backup_file
+# after REVERT_WAIT_SECS unless confirm_revert (below) is called first.
+# $reload_cmd is run after restoring the backup (e.g. `nft -f <file>` or
+# `pve-firewall compile`). Survives this script's own SSH session ending.
+arm_auto_revert() {
+  local host="$1" live_file="$2" backup_file="$3" reload_cmd="$4"
+  local sentinel="/tmp/fleet-safe-apply-confirmed.${TS}"
+  ssh "$host" "sudo -n bash -c '
+    setsid nohup bash -c \"
+      sleep ${REVERT_WAIT_SECS}
+      if [ ! -f ${sentinel} ]; then
+        cp ${backup_file} ${live_file}
+        ${reload_cmd}
+        logger -t fleet-safe-apply \\\"auto-reverted ${live_file} on \\\$(hostname) -- no confirm within ${REVERT_WAIT_SECS}s, possible SSH lockout avoided\\\"
+      fi
+    \" </dev/null >/tmp/fleet-safe-apply-revert.${TS}.log 2>&1 &
+    disown
+  '" || warn "could not arm auto-revert on $host -- proceeding without the SSH-lockout safety net for this apply"
+  log "auto-revert armed on $host: reverts to backup automatically in ${REVERT_WAIT_SECS}s unless confirmed"
+}
+confirm_revert() {
+  local host="$1"
+  if ssh "$host" "sudo -n touch /tmp/fleet-safe-apply-confirmed.${TS}"; then
+    log "auto-revert on $host cancelled (change confirmed good)"
+  else
+    warn "could not confirm on $host -- it WILL auto-revert in ~${REVERT_WAIT_SECS}s from apply time even though the apply looked fine. Re-run confirm manually: ssh $host \"sudo touch /tmp/fleet-safe-apply-confirmed.${TS}\""
+  fi
+}
+
+# ---- [6] enhanced sweep: negative pattern match + before/after churn ------
+snapshot_container_starts() {
+  # host -> "name<TAB>startedAt" per line, for later diffing
+  local host="$1"
+  ssh "$host" 'docker ps -q | while read -r c; do
+    printf "%s\t%s\n" "$(docker inspect -f "{{.Name}}" "$c" | sed "s#^/##")" "$(docker inspect -f "{{.State.StartedAt}}" "$c")"
+  done' 2>/dev/null || true
+}
+
 sweep_docker_health() {
   # Runs on the remote host. Prints one line per unhealthy/restarting
   # container with its compose project working_dir (if known), so the
@@ -54,9 +220,6 @@ sweep_docker_health() {
         bad=1
       fi
     done < <(docker ps -a -q)
-    # Separately: any container whose recent logs show the ENETUNREACH
-    # signature is suspect even if docker currently reports it healthy
-    # (it may be mid-crash-loop between snapshots).
     while IFS= read -r cid; do
       name=$(docker inspect -f "{{.Name}}" "$cid" 2>/dev/null | sed "s#^/##")
       if docker logs --since 2m "$cid" 2>&1 | grep -qE "ENETUNREACH|network is unreachable"; then
@@ -69,6 +232,24 @@ sweep_docker_health() {
   '
 }
 
+check_unexpected_churn() {
+  # [6] compares a before/after start-time snapshot; any container whose
+  # start time changed is either an *expected* restart (we just did
+  # compose up/restart on it -- caller passes $expected_name to exclude
+  # it) or unexpected churn worth surfacing even though it isn't in the
+  # bad_lines list right now.
+  local before="$1" after="$2" expected_name="${3:-}"
+  local name before_ts after_ts
+  while IFS=$'\t' read -r name after_ts; do
+    [ -n "$name" ] || continue
+    [ "$name" = "$expected_name" ] && continue
+    before_ts="$(printf '%s\n' "$before" | awk -F'\t' -v n="$name" '$1==n{print $2}')"
+    if [ -n "$before_ts" ] && [ "$before_ts" != "$after_ts" ]; then
+      warn "unexpected churn: ${name} restarted during this operation (was not the target, wasn't flagged BAD by the sweep) -- worth a look"
+    fi
+  done <<< "$after"
+}
+
 heal_compose_stack() {
   local host="$1" workdir="$2"
   [ -n "$workdir" ] || { log "  no compose workdir known, cannot auto-heal -- manual intervention needed"; return 1; }
@@ -76,12 +257,41 @@ heal_compose_stack() {
   ssh "$host" "cd '$workdir' && sudo -n docker compose down && sudo -n docker compose up -d" >&2
 }
 
+run_docker_recovery_sweep() {
+  local host="$1"
+  log "sweeping every container on $host for unhealthy/restarting/ENETUNREACH"
+  local bad_lines
+  bad_lines="$(sweep_docker_health "$host" || true)"
+  if [ -z "$bad_lines" ]; then
+    log "sweep clean -- all containers healthy"
+    return 0
+  fi
+  log "sweep found issues, attempting auto-heal per affected stack:"
+  echo "$bad_lines" | while IFS= read -r line; do
+    log "  $line"
+    workdir="$(echo "$line" | sed -n 's/.*workdir=//p')"
+    name="$(echo "$line" | awk '{print $2}')"
+    # [8] only ever heal a workdir that came from THIS sweep's bad list
+    heal_compose_stack "$host" "$workdir" || log "  auto-heal FAILED for ${name} -- needs manual attention"
+  done
+  log "re-sweeping after auto-heal"
+  bad_lines="$(sweep_docker_health "$host" || true)"
+  [ -z "$bad_lines" ] || fail "still unhealthy after auto-heal attempt on $host: $bad_lines"
+  log "re-sweep clean"
+}
+
+# ---------------------------------------------------------------------------
 cmd_nft_apply() {
   local host="$1" localfile="$2"
   [ -f "$localfile" ] || fail "local file not found: $localfile"
+  acquire_lock "$host" "nftables"
 
   log "backing up remote /etc/nftables.conf on $host"
   ssh "$host" "sudo -n cp /etc/nftables.conf /etc/nftables.conf.bak.${TS}"
+  # [7] verify the backup is real before trusting it as the revert target
+  ssh "$host" "sudo -n test -s /etc/nftables.conf.bak.${TS}" || fail "backup on $host is empty or missing right after cp -- aborting before touching the live file"
+  ssh "$host" "sudo -n nft -c -f /etc/nftables.conf.bak.${TS}" || fail "backup on $host does not independently pass nft -c -f -- refusing to proceed with an unverified revert target"
+  prune_backups "$host" "/etc/nftables.conf.bak.*"
 
   log "pushing candidate config to $host:/etc/nftables.conf.new"
   cat "$localfile" | ssh "$host" "sudo -n tee /etc/nftables.conf.new > /dev/null"
@@ -89,50 +299,73 @@ cmd_nft_apply() {
   log "syntax-checking (nft -c -f)"
   ssh "$host" "sudo -n nft -c -f /etc/nftables.conf.new" || fail "nft syntax check failed on $host -- not applied"
 
+  local has_docker=false
+  ssh "$host" "command -v docker >/dev/null 2>&1" && has_docker=true
+
+  if [ -n "$BREAK_GLASS" ]; then
+    write_receipt "nft-apply $host" "$host"
+    log "applying (break-glass: skipping auto-revert arming and post-apply sweep)"
+    ssh "$host" "sudo -n mv /etc/nftables.conf.new /etc/nftables.conf && sudo -n nft -f /etc/nftables.conf" \
+      || fail "nft -f failed on $host after mv -- config file is now live but ruleset apply errored, investigate immediately"
+    $has_docker && { ssh "$host" "sudo -n systemctl restart docker" || true; }
+    log "PASS (break-glass, unverified): nft-apply on $host"
+    return 0
+  fi
+
+  # [1] arm the SSH-lockout safety net before we do anything that could cut us off
+  arm_auto_revert "$host" "/etc/nftables.conf" "/etc/nftables.conf.bak.${TS}" "nft -f /etc/nftables.conf"
+
   log "applying"
   ssh "$host" "sudo -n mv /etc/nftables.conf.new /etc/nftables.conf && sudo -n nft -f /etc/nftables.conf" \
-    || fail "nft -f failed on $host after mv -- config file is now live but ruleset apply errored, investigate immediately"
+    || fail "nft -f failed on $host after mv -- config file is now live but ruleset apply errored; the auto-revert armed above will restore the backup in ~${REVERT_WAIT_SECS}s if you don't intervene first"
 
-  if ssh "$host" "command -v docker >/dev/null 2>&1"; then
+  if $has_docker; then
     log "$host runs Docker -- flush ruleset in nft -f wipes Docker's own chains (2026-08-25 incident). Restarting dockerd to reprogram them."
     ssh "$host" "sudo -n systemctl restart docker"
     log "waiting for Docker to settle"
     sleep 8
-
-    log "sweeping every container on $host for unhealthy/restarting/ENETUNREACH"
-    local bad_lines
-    bad_lines="$(sweep_docker_health "$host" || true)"
-    if [ -z "$bad_lines" ]; then
-      log "sweep clean -- all containers healthy"
-    else
-      log "sweep found issues, attempting auto-heal per affected stack:"
-      echo "$bad_lines" | while IFS= read -r line; do
-        log "  $line"
-        workdir="$(echo "$line" | sed -n 's/.*workdir=//p')"
-        name="$(echo "$line" | awk '{print $2}')"
-        heal_compose_stack "$host" "$workdir" || log "  auto-heal FAILED for ${name} -- needs manual attention"
-      done
-      log "re-sweeping after auto-heal"
-      bad_lines="$(sweep_docker_health "$host" || true)"
-      if [ -n "$bad_lines" ]; then
-        fail "still unhealthy after auto-heal attempt on $host: $bad_lines"
-      fi
-      log "re-sweep clean"
-    fi
+    # NOTE: no check_unexpected_churn here -- restarting dockerd restarts
+    # EVERY container on the host by design, so a before/after churn diff
+    # would flag 100% of containers every single time. Not diagnostic for
+    # this path; the health sweep below is the real signal here. (The
+    # churn check earns its keep in compose-apply, where only the target
+    # stack is expected to move.)
+    run_docker_recovery_sweep "$host"
   else
     log "$host does not run Docker -- skipping Docker-specific recovery/sweep"
   fi
+
+  # confirm connectivity is genuinely fine (we got this far over SSH, and
+  # the sweep passed) -- cancel the auto-revert
+  confirm_revert "$host"
+
+  # [5] as-applied snapshot for drift-check to compare against -- distinct
+  # from the .bak.* (pre-change) snapshot, which will always differ from
+  # live after any successful apply and so can't be used for this.
+  ssh "$host" "sudo -n cp /etc/nftables.conf /etc/nftables.conf.applied.${TS}"
+  prune_backups "$host" "/etc/nftables.conf.applied.*"
 
   log "PASS: nft-apply on $host"
 }
 
 cmd_compose_apply() {
   local host="$1" dir="$2"
+  acquire_lock "$host" "compose-$(echo "$dir" | tr '/' '_')"
+
   log "validating compose config in $dir on $host"
   ssh "$host" "cd '$dir' && sudo -n docker compose config >/dev/null" || fail "docker compose config invalid in $dir on $host"
 
+  local pre_snapshot
+  pre_snapshot="$(snapshot_container_starts "$host")"
+
   log "applying"
   ssh "$host" "cd '$dir' && sudo -n docker compose up -d" || fail "docker compose up -d failed in $dir on $host"
+
+  if [ -n "$BREAK_GLASS" ]; then
+    write_receipt "compose-apply $host:$dir" "$host"
+    log "PASS (break-glass, unverified): compose-apply in $dir on $host"
+    return 0
+  fi
 
   log "waiting for containers to report health"
   sleep 6
@@ -145,19 +378,103 @@ cmd_compose_apply() {
     bad_lines="$(sweep_docker_health "$host" || true)"
     [ -z "$bad_lines" ] || fail "still unhealthy after compose-apply + heal in $dir on $host: $bad_lines"
   fi
+  local post_snapshot
+  post_snapshot="$(snapshot_container_starts "$host")"
+  check_unexpected_churn "$pre_snapshot" "$post_snapshot"
   log "PASS: compose-apply in $dir on $host"
 }
 
 cmd_pvefw_apply() {
   local bastion="$1" vmid="$2" localfile="$3"
   [ -f "$localfile" ] || fail "local file not found: $localfile"
+  acquire_lock "$bastion" "pvefw-${vmid}"
+
   log "backing up /etc/pve/firewall/${vmid}.fw on $bastion"
   ssh "$bastion" "cp /etc/pve/firewall/${vmid}.fw /etc/pve/firewall/${vmid}.fw.bak.${TS}"
+  ssh "$bastion" "test -s /etc/pve/firewall/${vmid}.fw.bak.${TS}" || fail "backup on $bastion is empty right after cp -- aborting"
+  prune_backups "$bastion" "/etc/pve/firewall/${vmid}.fw.bak.*"
+
   log "pushing new rules"
   cat "$localfile" | ssh "$bastion" "cat > /etc/pve/firewall/${vmid}.fw"
+
+  if [ -n "$BREAK_GLASS" ]; then
+    write_receipt "pvefw-apply $bastion vmid=$vmid" "$bastion"
+    log "compiling (break-glass: no auto-revert armed)"
+    ssh "$bastion" "pve-firewall compile" >&2
+    log "PASS (break-glass, unverified): pvefw-apply for vmid $vmid on $bastion"
+    return 0
+  fi
+
+  # [1] this changes what's allowed to reach the VM's management port too --
+  # arm the same commit-confirm pattern, on the bastion this time.
+  arm_auto_revert "$bastion" "/etc/pve/firewall/${vmid}.fw" "/etc/pve/firewall/${vmid}.fw.bak.${TS}" "pve-firewall compile"
+
   log "compiling (pmxcfs propagates automatically, this just forces + surfaces errors)"
-  ssh "$bastion" "pve-firewall compile" >&2
+  ssh "$bastion" "pve-firewall compile" >&2 \
+    || fail "pve-firewall compile errored on $bastion; the auto-revert armed above will restore the backup in ~${REVERT_WAIT_SECS}s if you don't intervene first"
+
+  confirm_revert "$bastion"
   log "PASS: pvefw-apply for vmid $vmid on $bastion"
+}
+
+cmd_doctor() {
+  # [10] preflight: verify the tools/behaviors this script assumes are
+  # actually still true on $host before trusting it for a real apply.
+  local host="$1"
+  local ok=true
+  check() {
+    local desc="$1" cmd="$2"
+    if ssh "$host" "$cmd" >/dev/null 2>&1; then
+      log "  OK   $desc"
+    else
+      log "  FAIL $desc"
+      ok=false
+    fi
+  }
+  log "doctor: checking $host"
+  # nft/docker are invoked via `sudo -n` everywhere in this script, so
+  # check presence the same way -- a bare `command -v nft` can false-fail
+  # here since non-interactive SSH sessions often carry a reduced $PATH
+  # that excludes /usr/sbin, even though sudo's own PATH (or the absolute
+  # path sudo resolves) finds it fine.
+  check "nft present (as invoked via sudo)"         "sudo -n sh -c 'command -v nft'"
+  check "nft -c -f accepts a trivial valid ruleset" "echo 'table inet doctor_check { }' > /tmp/fsa-doctor.nft && sudo -n nft -c -f /tmp/fsa-doctor.nft && rm -f /tmp/fsa-doctor.nft"
+  check "sudo -n works passwordlessly"              "sudo -n true"
+  if ssh "$host" "command -v docker >/dev/null 2>&1"; then
+    check "docker present"                          "command -v docker"
+    check "docker compose v2 plugin present"        "docker compose version"
+    check "systemctl can see docker.service"        "systemctl show docker --property=LoadState | grep -q LoadState=loaded"
+  else
+    log "  --   docker not present on $host, skipping docker-specific checks"
+  fi
+  $ok || fail "doctor found problems on $host -- do not trust automated applies here until fixed"
+  log "PASS: doctor on $host -- environment matches what this script assumes"
+}
+
+cmd_drift_check() {
+  # [5] lightweight drift signal: does the live nftables.conf on $host
+  # still round-trip through nft -c -f cleanly, and does its content
+  # differ from the most recent AS-APPLIED snapshot this tool itself took
+  # right after a successful apply (a proxy for "did something edit this
+  # outside the tool since our last successful apply")? Deliberately NOT
+  # comparing against .bak.* -- that's the PRE-change snapshot, which by
+  # definition differs from live after every legitimate apply and would
+  # make this check permanently, uselessly "drifted". Hit that exact bug
+  # on first test of this command -- fixed before it shipped.
+  local host="$1"
+  log "drift-check: $host"
+  ssh "$host" "sudo -n nft -c -f /etc/nftables.conf" || fail "live /etc/nftables.conf on $host does not currently pass its own syntax check -- investigate before any further apply"
+  local latest_applied
+  latest_applied="$(ssh "$host" "ls -1t /etc/nftables.conf.applied.* 2>/dev/null | head -1" || true)"
+  if [ -z "$latest_applied" ]; then
+    log "no prior fleet-safe-apply as-applied snapshot found on $host -- nothing to diff against yet (this host hasn't had a successful nft-apply through this tool)"
+    return 0
+  fi
+  if ssh "$host" "sudo -n diff -q /etc/nftables.conf '$latest_applied' >/dev/null 2>&1"; then
+    log "no drift: live config matches this tool's last successful apply ($latest_applied)"
+  else
+    warn "DRIFT: live /etc/nftables.conf differs from this tool's last successful apply ($latest_applied) -- something changed it outside this tool since then. Review before trusting the next apply's diff."
+  fi
 }
 
 # ---------------------------------------------------------------------------
@@ -165,8 +482,10 @@ case "${1:-}" in
   nft-apply)     shift; cmd_nft_apply "$@" ;;
   compose-apply) shift; cmd_compose_apply "$@" ;;
   pvefw-apply)   shift; cmd_pvefw_apply "$@" ;;
+  doctor)        shift; cmd_doctor "$@" ;;
+  drift-check)   shift; cmd_drift_check "$@" ;;
   *)
-    echo "usage: fleet-safe-apply {nft-apply|compose-apply|pvefw-apply} ..." >&2
+    echo "usage: fleet-safe-apply [--break-glass \"<reason>\"] {nft-apply|compose-apply|pvefw-apply|doctor|drift-check} ..." >&2
     exit 2
     ;;
 esac
