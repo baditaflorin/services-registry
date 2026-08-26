@@ -19,7 +19,10 @@
 # Usage:
 #   fleet-safe-apply nft-apply     <ssh-host> <local-file>
 #   fleet-safe-apply compose-apply <ssh-host> <remote-compose-dir>
-#   fleet-safe-apply pvefw-apply   <bastion-ssh-host> <vmid> <local-file>
+#   fleet-safe-apply pvefw-apply   <bastion-ssh-host> <vmid|cluster> <local-file>
+#     (pass the literal word "cluster" instead of a vmid to manage
+#     /etc/pve/firewall/cluster.fw, the datacenter-wide file -- same path
+#     convention Proxmox itself uses, no special-casing needed here)
 #   fleet-safe-apply doctor        <ssh-host>
 #   fleet-safe-apply drift-check   <ssh-host>              # nftables only
 #
