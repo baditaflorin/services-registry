@@ -9,12 +9,17 @@ Docker host runs a `vector-log-shipper` agent that reads Docker's existing
 
 ```text
 Docker host (0docker or 0mcp)
-  └─ Vector agent + local disk buffer
+  └─ Vector Docker agent + local disk buffer
        └─ HTTPS ingest (gzip, batches, retry/backoff)
             └─ OpenObserve LXC 106 on the 0docker fleet
                  ├─ docker_logs  — container stdout/stderr
-                 ├─ default      — syslog/journald
+                 ├─ host_logs    — non-Docker journald
                  └─ metrics      — future metrics bridge
+
+Non-Docker host (0mcp)
+  └─ Vector native systemd service + local disk buffer
+       └─ HTTPS ingest (gzip, batches, retry/backoff)
+            └─ OpenObserve `host_logs` stream
 ```
 
 The 0mcp fleet uses the public TLS endpoint because its private `10.10.10.x`
@@ -36,6 +41,11 @@ Do not put credentials, full environment files, or authorization headers into
 application log messages. If a future redaction transform is introduced, it
 must preserve the original event timestamp and the container identity.
 
+Native host records use the same `fleet`, `host`, `role`, `collector`, and
+`observability_schema` fields, plus `source_type=journald`; they are kept in
+`host_logs` so system/service records remain distinguishable from container
+stdout/stderr.
+
 ## Reliability requirements
 
 - The agent is `restart: always` and must be enabled on every Docker host.
@@ -46,6 +56,14 @@ must preserve the original event timestamp and the container identity.
 - Exclude only the shipper itself to avoid a self-ingestion loop.
 - Validate the rendered Vector configuration before replacing a running agent.
 - Query the central store with `bin/oo`; do not create ad-hoc query scripts.
+
+For non-Docker hosts, install the pinned native collector with
+`bin/observability-install-host-logs`. It runs as a systemd service named
+`vector-host-logs`, reads journald as root, and uses the same disk-buffer and
+TLS contract as the Docker collector. The initial rollout can set
+`VECTOR_HOST_LOGS_SKIP_HISTORY=1` to preserve the old journal cursor and start
+at the current journal tail; the installer stores that old cursor under
+`/var/backups/vector-host-logs/`.
 
 ## Adding a host
 

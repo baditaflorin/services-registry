@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Install the always-on native Vector journald collector on 0mcp hosts that
+# do not run Docker. Credentials are rendered only into the root-owned target
+# config and are never printed.
+
+: "${OPENOBSERVE_USER:?set OPENOBSERVE_USER from the private fleet secret path}"
+: "${OPENOBSERVE_PASSWORD:?set OPENOBSERVE_PASSWORD from the private fleet secret path}"
+
+readonly vector_version="0.57.0"
+readonly vector_sha256="4d156e6859e235b366f5b77121ae59d5440c93acab215c45f30f3fc839d20f65"
+readonly vector_archive="vector-${vector_version}-x86_64-unknown-linux-gnu.tar.gz"
+readonly vector_url="https://github.com/vectordotdev/vector/releases/download/v${vector_version}/${vector_archive}"
+readonly endpoint="https://openobserve.0docker.com/api/default/host_logs/_json"
+readonly skip_history="${VECTOR_HOST_LOGS_SKIP_HISTORY:-0}"
+
+install_host() {
+  local alias="$1" host="$2" role="$3"
+  printf 'installing host=%s role=%s\n' "$host" "$role"
+
+  ssh -o ClearAllForwardings=yes -o BatchMode=yes -o ConnectTimeout=10 "$alias" \
+    "sudo sh -s" <<EOF
+set -eu
+umask 077
+test "\$(uname -m)" = x86_64
+tmp=/tmp/${vector_archive}
+curl -fsSL --retry 3 --connect-timeout 10 --max-time 120 '${vector_url}' -o "\$tmp"
+printf '%s  %s\n' '${vector_sha256}' "\$tmp" | sha256sum -c -
+rm -rf /tmp/vector-${vector_version}-x86_64-unknown-linux-gnu
+tar -xzf "\$tmp" -C /tmp
+install -d -m 0755 /usr/local/lib/vector/${vector_version}
+install -m 0755 /tmp/vector-x86_64-unknown-linux-gnu/bin/vector /usr/local/lib/vector/${vector_version}/vector
+ln -sfn /usr/local/lib/vector/${vector_version}/vector /usr/local/bin/vector
+rm -f "\$tmp"
+rm -rf /tmp/vector-x86_64-unknown-linux-gnu
+EOF
+
+  ssh -o ClearAllForwardings=yes -o BatchMode=yes "$alias" \
+    'sudo install -d -m 0750 /etc/vector /var/lib/vector-host-logs && sudo tee /tmp/vector-host-logs.toml >/dev/null' <<EOF
+data_dir = "/var/lib/vector-host-logs"
+
+[sources.journald]
+type = "journald"
+current_boot_only = true
+since_now = true
+
+[transforms.enrich]
+type = "remap"
+inputs = ["journald"]
+source = '''
+.fleet = "0mcp"
+.host = "$host"
+.role = "$role"
+.collector = "vector-host-logs"
+.observability_schema = "1"
+.source_type = "journald"
+'''
+
+[sinks.openobserve]
+type = "http"
+inputs = ["enrich"]
+uri = "$endpoint"
+method = "post"
+auth.strategy = "basic"
+auth.user = "$OPENOBSERVE_USER"
+auth.password = "$OPENOBSERVE_PASSWORD"
+compression = "gzip"
+encoding.codec = "json"
+encoding.timestamp_format = "rfc3339"
+healthcheck.enabled = false
+
+[sinks.openobserve.batch]
+max_events = 250
+timeout_secs = 5
+
+[sinks.openobserve.buffer]
+type = "disk"
+max_size = 1073741824
+when_full = "block"
+EOF
+
+  ssh -o ClearAllForwardings=yes -o BatchMode=yes "$alias" \
+    'sudo tee /tmp/vector-host-logs.service >/dev/null' <<'EOF'
+[Unit]
+Description=Vector host journald log shipper
+Documentation=https://github.com/baditaflorin/services-registry/blob/main/docs/observability/CENTRAL-OPENOBSERVE.md
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/vector --config /etc/vector/host-logs.toml
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  ssh -o ClearAllForwardings=yes -o BatchMode=yes "$alias" \
+    "sudo env VECTOR_HOST_LOGS_SKIP_HISTORY='$skip_history' sh -s" <<'EOF'
+set -eu
+sudo install -o root -g root -m 0640 /tmp/vector-host-logs.toml /etc/vector/host-logs.toml
+sudo install -o root -g root -m 0644 /tmp/vector-host-logs.service /etc/systemd/system/vector-host-logs.service
+sudo /usr/local/bin/vector validate --no-environment /etc/vector/host-logs.toml
+sudo rm -f /tmp/vector-host-logs.toml /tmp/vector-host-logs.service
+if [ "${VECTOR_HOST_LOGS_SKIP_HISTORY:-0}" = "1" ]; then
+  sudo install -d -m 0750 /var/backups/vector-host-logs /var/lib/vector-host-logs/journald
+  if [ -f /var/lib/vector-host-logs/journald/checkpoint.txt ]; then
+    sudo cp -p /var/lib/vector-host-logs/journald/checkpoint.txt \
+      "/var/backups/vector-host-logs/checkpoint-$(date -u +%Y%m%dT%H%M%SZ).txt"
+  fi
+  cursor="$(sudo journalctl -n 0 --show-cursor --no-pager | sed -n 's/^-- cursor: //p')"
+  if [ -n "${cursor}" ]; then
+    printf '%s\n' "${cursor}" | sudo tee /var/lib/vector-host-logs/journald/checkpoint.txt >/dev/null
+  fi
+fi
+sudo systemctl daemon-reload
+sudo systemctl enable vector-host-logs.service
+sudo systemctl stop --no-block vector-host-logs.service || true
+sleep 1
+state="$(sudo systemctl is-active vector-host-logs.service || true)"
+if [ "${state}" != inactive ] && [ "${state}" != failed ]; then
+  sudo systemctl kill -s SIGKILL vector-host-logs.service || true
+  sleep 1
+fi
+sudo systemctl reset-failed vector-host-logs.service || true
+sudo systemctl start vector-host-logs.service
+sudo systemctl is-active --quiet vector-host-logs.service
+sudo systemctl show -p ActiveState -p SubState -p NRestarts vector-host-logs.service
+EOF
+}
+
+case "${1:-all}" in
+  all)
+    install_host 0mcp_nginx nginx nginx
+    install_host 0mcp_apps runtime-apps-lv3 runtime-apps
+    install_host 0mcp_postgres postgres postgres-primary
+    install_host 0mcp_postgres_replica postgres-replica-lv3 postgres-replica
+    install_host 0mcp_postgres_apps postgres-apps-lv3 postgres-apps
+    install_host 0mcp_postgres_data postgres-data-lv3 postgres-data
+    install_host 0mcp_backup backup-lv3 backup
+    install_host 0mcp_runtime_ai runtime-ai-lv3 runtime-ai
+    ;;
+  nginx) install_host 0mcp_nginx nginx nginx ;;
+  apps) install_host 0mcp_apps runtime-apps-lv3 runtime-apps ;;
+  postgres) install_host 0mcp_postgres postgres postgres-primary ;;
+  postgres-replica) install_host 0mcp_postgres_replica postgres-replica-lv3 postgres-replica ;;
+  postgres-apps) install_host 0mcp_postgres_apps postgres-apps-lv3 postgres-apps ;;
+  postgres-data) install_host 0mcp_postgres_data postgres-data-lv3 postgres-data ;;
+  backup) install_host 0mcp_backup backup-lv3 backup ;;
+  runtime-ai) install_host 0mcp_runtime_ai runtime-ai-lv3 runtime-ai ;;
+  *)
+    printf 'usage: %s [all|nginx|apps|postgres|postgres-replica|postgres-apps|postgres-data|backup|runtime-ai]\n' "$0" >&2
+    exit 2
+    ;;
+esac
