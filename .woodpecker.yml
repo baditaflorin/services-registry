@@ -10,10 +10,13 @@ steps:
       # imported data needs a separate baseline for its known false positives.
       - >-
         for path in bin/ci_authority_audit.py
+        bin/ci_execution_report.py
         bin/woodpecker_load_controller.py
         bin/test_ci_authority_audit.py
+        bin/test_ci_execution_report.py
         bin/test_woodpecker_load_controller.py
         ci-authorities.json
+        ci-execution-report.json
         templates/woodpecker-load-controller.example.json;
         do gitleaks detect --source "$path" --config .gitleaks.toml
         --redact --no-banner --no-git || exit 1; done
@@ -22,4 +25,4 @@ steps:
     image: python:3.13-alpine
     commands:
       - python3 -m unittest discover -s bin -p 'test_*.py'
-      - python3 -m py_compile bin/ci_authority_audit.py bin/woodpecker_load_controller.py
+      - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py

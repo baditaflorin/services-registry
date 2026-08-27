@@ -92,6 +92,19 @@ GH_TOKEN="$(gh auth token)" \
   python3 bin/ci_authority_audit.py --all baditaflorin --json
 ```
 
+Attribute the 100 most recent completed gates across both control planes to
+their physical execution hosts:
+
+```bash
+python3 bin/ci_execution_report.py --limit 100
+```
+
+The reporter resolves pipeline workflows to Woodpecker agent IDs and then uses
+the explicit host mapping in `ci-execution-report.json`; it does not infer the
+execution server from the webhook/control-plane hostname. Historical agent IDs
+that Woodpecker has deleted from its live agent API remain explicitly mapped in
+that file so old gates do not silently become unattributed.
+
 Run one load-controller observation without changing scheduling:
 
 ```bash
