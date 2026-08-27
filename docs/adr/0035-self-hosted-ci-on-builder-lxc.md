@@ -142,14 +142,32 @@ numbers as current.
   of this audit.
 - **Adding `.woodpecker.yml` alone does not activate CI.** Woodpecker's
   GitHub webhook carries a repo-specific signed token
-  (`repo-forge-remote-id` embedded in the JWT); confirmed live that this
-  can only be minted by Woodpecker's own API, authenticated as the
-  OAuth-connected GitHub user — there is no stored `WOODPECKER_TOKEN` on
-  Builder LXC 108, and none of this session's SSH/API access could
-  generate one. **Activating the newly-onboarded repos requires ~2
-  minutes in the `ci.0exec.com` web UI** (or a personal Woodpecker token
-  handed to a future automated session) — the file being on `main` just
-  means a repo is *ready* the moment that happens.
+  (`repo-forge-remote-id` embedded in the JWT); this can only be minted
+  by Woodpecker's own API, authenticated as the OAuth-connected GitHub
+  user. **RESOLVED 2026-08-27**: the user logged into `ci.0exec.com`
+  once (the one human step that can't be automated away — OAuth
+  requires it by design) and generated a personal API token via
+  Settings → CLI, which was then used to activate all 11 repos
+  unattended via `POST /api/repos?forge_remote_id=<github-repo-id>`
+  (Woodpecker's real activation endpoint — note this is NOT
+  `/api/repos/{owner}/{name}`, which silently 200s with the SPA's HTML
+  shell instead of erroring, an easy trap). Verified independently via
+  the `gh api .../hooks` method below for all 11.
+  - **A red herring worth recording**: before finding the right
+    endpoint, `GET /api/user/repos?all=true` (meant to list every
+    forge-visible repo) did not include these 11 repos, or several
+    known-public ones like `services-registry`/`go-common` either —
+    this looked exactly like a GitHub App with a curated,
+    selectively-granted repository list (a real and common pattern),
+    and momentarily was reported to the user as the blocker. It
+    wasn't — the user's own "Installed GitHub Apps" page had no
+    Woodpecker entry at all, and once the correct `forge_remote_id`
+    activation call was used directly, every one of the 11 activated
+    immediately with no GitHub-side permission grant needed. That
+    listing endpoint's incompleteness (confirmed separately to also be
+    a pagination artifact, capped well under the fleet's real repo
+    count, not a `perPage`-respecting cap) is a real, still-open
+    Woodpecker rough edge — just not this one.
 - Verification method: `gh api repos/baditaflorin/<repo>/hooks` — an
   activated repo shows a `web` hook with `config.url` starting
   `https://ci.0exec.com/api/hook?access_token=...`; an inactive one
