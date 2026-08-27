@@ -52,6 +52,9 @@ after writing `services.json`.
 | `services.summary.txt`     | counts by mesh + category, rebuilt by `bin/build.py`               |
 | `bin/generate.py`          | rebuild `services.json` + slices from GitHub topics + `overrides.json` |
 | `bin/notify-consumers.sh`  | tell the catalog + hub to re-fetch (run after `git push`)          |
+| `ci-authorities.json`      | authoritative Woodpecker hostname per owner/repository             |
+| `bin/ci_authority_audit.py`| fail-closed audit for missing, duplicate, or wrong CI webhooks      |
+| `bin/woodpecker_load_controller.py` | drain/restore agents from node-exporter pressure signals |
 | `overrides.json`           | per-slug patches (curated names, descriptions, custom example URLs)|
 | `bin/sync.sh`              | (legacy) snapshot the previous three sources                       |
 | `bin/build.py`             | (legacy) merge those snapshots — superseded by `generate.py`       |

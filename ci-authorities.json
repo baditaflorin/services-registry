@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "known_ci_hosts": [
+    "ci.0exec.com",
+    "ci.0mcp.com"
+  ],
+  "owners": {
+    "baditaflorin": {
+      "default": "ci.0exec.com",
+      "overrides": {
+        "mcp-site-service": "ci.0mcp.com"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+when:
+  - event: [pull_request, push]
+
+steps:
+  secrets:
+    image: ghcr.io/gitleaks/gitleaks:v8.30.1
+    commands:
+      - gitleaks detect --source . --redact --no-banner
+
+  tests:
+    image: python:3.13-alpine
+    commands:
+      - python3 -m unittest discover -s bin -p 'test_*.py'
+      - python3 -m py_compile bin/ci_authority_audit.py bin/woodpecker_load_controller.py

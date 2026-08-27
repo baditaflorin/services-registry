@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "woodpecker_url": "https://ci.example.com",
+  "interval_seconds": 30,
+  "minimum_schedulable_agents": 1,
+  "stop_samples": 10,
+  "resume_samples": 20,
+  "thresholds": {
+    "cpu_stop_pct": 85,
+    "cpu_resume_pct": 60,
+    "memory_stop_pct": 15,
+    "memory_resume_pct": 30,
+    "disk_stop_pct": 10,
+    "disk_resume_pct": 15
+  },
+  "agents": [
+    {
+      "name": "builder-a",
+      "metrics_url": "http://builder-a.example.internal:9100/metrics",
+      "filesystem_mountpoint": "/"
+    },
+    {
+      "name": "builder-b",
+      "metrics_url": "http://builder-b.example.internal:9100/metrics",
+      "filesystem_mountpoint": "/"
+    }
+  ]
+}
