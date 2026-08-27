@@ -70,10 +70,17 @@ killed; `no_schedule` only controls admission of new work.
 On 2026-08-28, `ci.0mcp.com` registered the remote
 `0exec-builder-mcp-agent` alongside its two existing agents. A real rerun of
 the `mcp-site-service` test pipeline completed successfully on that remote
-agent. The controller then observed sustained CPU and disk pressure, drained
-the most constrained agents, and kept the configured minimum of one agent
-eligible. The authority audit independently confirmed that
-`mcp-site-service` has exactly one active known CI webhook, on `ci.0mcp.com`.
+agent. Reciprocally, `ci.0exec.com` registered
+`0mcp-docker-exec-agent` alongside stable local agents
+`0docker-builder-agent-a` and `0docker-builder-agent-b`. Pipeline 20 for
+`services-registry` completed successfully on the remote 0mcp agent while both
+local agents were drained for the placement test; the local agents were then
+restored and the capacity controller resumed management of all three.
+
+Both controller instances observed sustained CPU pressure across their pools,
+kept the configured minimum of one agent eligible, and left running workflows
+untouched. The authority audit independently confirmed that `mcp-site-service`
+has exactly one active known CI webhook, on `ci.0mcp.com`.
 
 ## Operational checks
 
