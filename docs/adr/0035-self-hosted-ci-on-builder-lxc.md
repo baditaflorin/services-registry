@@ -199,6 +199,9 @@ numbers as current.
 
 - `services-registry/CLAUDE.md` — "Local workflow" (CI stance) and
   "Infrastructure topology" (Builder LXC 108 role).
+- [ADR-0040](0040-single-ci-authority-multi-agent-routing.md) — keeps one
+  webhook/control plane per repository while pooling execution capacity across
+  multiple agent hosts.
 - `services-registry/host-conventions.yaml` — the 2026-05-29
   fork-bomb incident and resource-cap precedent this ADR's mitigation
   section follows.
