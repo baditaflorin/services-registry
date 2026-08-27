@@ -56,6 +56,21 @@ container_defaults:
     APIKEY_SERVICE_URL: "http://host.docker.internal:18021"
     # Default log level. Per-service overrides via overrides.json.
     LOG_LEVEL: "info"
+    # go-common/proxysupplier's default outbound-egress mode. Fleet audit
+    # 2026-08-27 found 164 proxy_egress:true services carrying
+    # WEBSHARE_API_KEY but no PROXY_SUPPLIER override, so they fell back
+    # to the old naive shared p.webshare.io rotating gateway (single opaque
+    # IP pool, no per-IP cooldown) instead of proxysupplier's
+    # webshare_direct mode (deterministic round-robin across Webshare's
+    # full IP list + per-IP failure cooldown, already proven in
+    # go-search-duck-go against the DDG bot-detection incident). That gap
+    # produced intermittent 10-20s hangs -> upstream 502/504s on a
+    # meaningful fraction of requests (observed live on cdn-detector,
+    # domain-cms-version, domain-martech-stack). Safe as a fleet-wide
+    # default: NewFromConfig's webshare_direct case falls back to a no-op
+    # supplier when WEBSHARE_API_KEY is empty, so this is inert for every
+    # service that doesn't have proxy_egress:true.
+    PROXY_SUPPLIER: "webshare_direct"
 
   # Always restart unless the operator stops the container.
   restart: "always"
