@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "control_planes": [
+    {
+      "name": "ci.0exec.com",
+      "url": "https://ci.0exec.com",
+      "token_env": "WOODPECKER_0EXEC_TOKEN",
+      "token_file": "/etc/ci-execution-report/ci.0exec.token",
+      "default_execution_host": "0docker",
+      "agent_hosts": {},
+      "agent_id_hosts": {
+        "12": "0docker"
+      }
+    },
+    {
+      "name": "ci.0mcp.com",
+      "url": "https://ci.0mcp.com",
+      "token_env": "WOODPECKER_0MCP_TOKEN",
+      "token_file": "/etc/woodpecker-load-controller/token",
+      "default_execution_host": "0mcp",
+      "agent_hosts": {
+        "0exec-builder-mcp-agent": "0docker"
+      },
+      "agent_id_hosts": {}
+    }
+  ]
+}
