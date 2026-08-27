@@ -77,15 +77,18 @@ class WoodpeckerClient:
 
     def repositories(self) -> list[dict[str, Any]]:
         repositories = []
+        seen_ids = set()
         page = 1
         while True:
             rows = self.get(
                 "/repos",
-                {"all": "true", "perPage": 100, "page": page},
+                {"active": "true", "perPage": 100, "page": page},
             )
-            repositories.extend(row for row in rows if row.get("active") is True)
-            if len(rows) < 100:
+            new_rows = [row for row in rows if int(row["id"]) not in seen_ids]
+            if not new_rows:
                 return repositories
+            seen_ids.update(int(row["id"]) for row in new_rows)
+            repositories.extend(row for row in new_rows if row.get("active") is True)
             page += 1
 
     def repo_candidates(
@@ -95,13 +98,22 @@ class WoodpeckerClient:
         include_active: bool,
     ) -> list[Candidate]:
         candidates = []
+        seen_numbers = set()
         page = 1
         while len(candidates) < limit:
             rows = self.get(
                 f"/repos/{repository['id']}/pipelines",
                 {"perPage": min(100, limit), "page": page},
             )
-            for pipeline in rows:
+            new_rows = [
+                pipeline
+                for pipeline in rows
+                if int(pipeline["number"]) not in seen_numbers
+            ]
+            if not new_rows:
+                break
+            seen_numbers.update(int(pipeline["number"]) for pipeline in new_rows)
+            for pipeline in new_rows:
                 status = str(pipeline.get("status", "unknown"))
                 if include_active or status in TERMINAL_STATUSES:
                     candidates.append(
@@ -115,8 +127,6 @@ class WoodpeckerClient:
                             event=str(pipeline.get("event", "unknown")),
                         )
                     )
-            if len(rows) < min(100, limit):
-                break
             page += 1
         return candidates[:limit]
 
