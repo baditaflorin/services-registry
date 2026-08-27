@@ -7,9 +7,23 @@
       "token_env": "WOODPECKER_0EXEC_TOKEN",
       "token_file": "/etc/ci-execution-report/ci.0exec.token",
       "default_execution_host": "0docker",
-      "agent_hosts": {},
+      "agent_hosts": {
+        "0docker-builder-agent-a": "0docker",
+        "0docker-builder-agent-b": "0docker",
+        "0mcp-docker-exec-agent": "0mcp"
+      },
       "agent_id_hosts": {
-        "12": "0docker"
+        "1": "0docker",
+        "8": "0docker",
+        "9": "0docker",
+        "11": "0docker",
+        "12": "0docker",
+        "13": "0docker",
+        "14": "0docker",
+        "15": "0docker",
+        "16": "0mcp",
+        "17": "0docker",
+        "18": "0docker"
       }
     },
     {
