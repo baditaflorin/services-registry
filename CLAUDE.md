@@ -702,6 +702,7 @@ fleet-runner scaffold-service-yaml <repo>... # write canonical service.yaml from
 fleet-runner render-compose <repo>           # print canonical docker-compose.yml to stdout (no write — read-only preview)
 fleet-runner audit compose-drift             # surface compose files diverging from the canonical fleet shape
 fleet-runner audit registry-host-port-set    # services without a registered host_port (silent squatter discovery)
+fleet-runner audit orphaned-listeners        # SSH to the dockerhost, diff live `ss -tlnp` listeners against registered host_ports (v0.7.36+; --json goes AFTER the subcommand name, same as compose-drift)
 fleet-runner stats                           # audit log + token usage summary
 ```
 
