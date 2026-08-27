@@ -1,0 +1,21 @@
+[Unit]
+Description=Woodpecker load-aware admission controller for %i
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=woodpecker-controller
+Group=woodpecker-controller
+ExecStart=/usr/bin/python3 /usr/local/libexec/woodpecker-load-controller --config /etc/woodpecker-load-controller/%i.json --state /var/lib/woodpecker-load-controller/%i-state.json --token-file /etc/woodpecker-load-controller/%i.token --apply
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/woodpecker-load-controller
+
+[Install]
+WantedBy=multi-user.target
+

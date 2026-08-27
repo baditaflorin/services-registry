@@ -167,4 +167,7 @@ output has been validated against the Woodpecker UI and node-exporter.
 - [ADR-0035](0035-self-hosted-ci-on-builder-lxc.md) — original Woodpecker fleet rollout.
 - `ci-authorities.json` — repository-to-control-plane policy.
 - `templates/woodpecker-load-controller.example.json` — public-safe controller example.
+- `docs/runbooks/woodpecker-cross-host-capacity.md` — deployed topology, installation, verification and rollback.
+- `templates/woodpecker-cross-host-agent.compose.yml` — stable remote-agent Compose template.
+- `templates/woodpecker-load-controller@.service` — one supervised controller instance per control plane.
 - Woodpecker agent API: `GET/PATCH /api/agents/{id}` and `GET /api/queue/info`.

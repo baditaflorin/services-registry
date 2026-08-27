@@ -1,0 +1,15 @@
+[Unit]
+Description=Private route for a remote Woodpecker execution agent
+After=network-online.target tailscaled.service
+Wants=network-online.target
+Requires=tailscaled.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/woodpecker-private-route start
+ExecStop=/usr/local/sbin/woodpecker-private-route stop
+
+[Install]
+WantedBy=multi-user.target
+

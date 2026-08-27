@@ -17,7 +17,15 @@ steps:
         bin/test_woodpecker_load_controller.py
         ci-authorities.json
         ci-execution-report.json
-        templates/woodpecker-load-controller.example.json;
+        docs/runbooks/woodpecker-cross-host-capacity.md
+        templates/woodpecker-agent-secret.env.example
+        templates/woodpecker-cross-host-agent.compose.yml
+        templates/woodpecker-load-controller.example.json
+        templates/woodpecker-load-controller@.service
+        templates/woodpecker-private-proxy@.service.tmpl
+        templates/woodpecker-private-proxy@.socket.tmpl
+        templates/woodpecker-private-route.service
+        templates/woodpecker-private-route.sh.tmpl;
         do gitleaks detect --source "$path" --config .gitleaks.toml
         --redact --no-banner --no-git || exit 1; done
 
