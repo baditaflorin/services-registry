@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+
+SOURCE_CIDR="{{AGENT_SOURCE_CIDR}}"
+DESTINATION_CIDR="{{PROXY_TAILSCALE_CIDR}}"
+
+apply_rule() {
+    port="$1"
+    if ! /usr/sbin/iptables -t nat -C POSTROUTING -s "$SOURCE_CIDR" -d "$DESTINATION_CIDR" -o tailscale0 -p tcp --dport "$port" -j MASQUERADE 2>/dev/null; then
+        /usr/sbin/iptables -t nat -A POSTROUTING -s "$SOURCE_CIDR" -d "$DESTINATION_CIDR" -o tailscale0 -p tcp --dport "$port" -j MASQUERADE
+    fi
+}
+
+remove_rule() {
+    port="$1"
+    while /usr/sbin/iptables -t nat -C POSTROUTING -s "$SOURCE_CIDR" -d "$DESTINATION_CIDR" -o tailscale0 -p tcp --dport "$port" -j MASQUERADE 2>/dev/null; do
+        /usr/sbin/iptables -t nat -D POSTROUTING -s "$SOURCE_CIDR" -d "$DESTINATION_CIDR" -o tailscale0 -p tcp --dport "$port" -j MASQUERADE
+    done
+}
+
+case "${1:-start}" in
+    start)
+        apply_rule 9000
+        apply_rule 9100
+        ;;
+    stop)
+        remove_rule 9000
+        remove_rule 9100
+        ;;
+    *)
+        echo "usage: $0 {start|stop}" >&2
+        exit 2
+        ;;
+esac
+

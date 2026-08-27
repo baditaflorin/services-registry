@@ -1,0 +1,16 @@
+services:
+  woodpecker-cross-host-agent:
+    image: woodpeckerci/woodpecker-agent:v3.17.0
+    restart: always
+    command: agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - ./.agent-secret.env
+    environment:
+      WOODPECKER_SERVER: ${WOODPECKER_SERVER:?set the private gRPC endpoint}
+      WOODPECKER_HOSTNAME: ${WOODPECKER_AGENT_NAME:?set a stable agent name}
+      WOODPECKER_MAX_WORKFLOWS: ${WOODPECKER_MAX_WORKFLOWS:-1}
+      WOODPECKER_BACKEND: docker
+      WOODPECKER_AGENT_LABELS: site=${WOODPECKER_AGENT_SITE:?set the physical site},repo=*,backend=docker
+

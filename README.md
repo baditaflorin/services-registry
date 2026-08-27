@@ -56,6 +56,8 @@ after writing `services.json`.
 | `bin/ci_authority_audit.py`| fail-closed audit for missing, duplicate, or wrong CI webhooks      |
 | `bin/woodpecker_load_controller.py` | drain/restore agents from node-exporter pressure signals |
 | `bin/ci_execution_report.py` | deterministically attribute recent CI gates to physical hosts    |
+| `docs/runbooks/woodpecker-cross-host-capacity.md` | reproduce the load-aware cross-host CI pool safely |
+| `templates/woodpecker-*` | public-safe agent, controller and private-route deployment templates |
 | `overrides.json`           | per-slug patches (curated names, descriptions, custom example URLs)|
 | `bin/sync.sh`              | (legacy) snapshot the previous three sources                       |
 | `bin/build.py`             | (legacy) merge those snapshots — superseded by `generate.py`       |
