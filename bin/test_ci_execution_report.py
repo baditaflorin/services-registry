@@ -83,6 +83,23 @@ class ConfigTests(unittest.TestCase):
             path.unlink(missing_ok=True)
 
 
+class PaginationTests(unittest.TestCase):
+    def test_repository_pagination_stops_on_no_new_ids(self):
+        client = object.__new__(report.WoodpeckerClient)
+        client.name = "test"
+        pages = {
+            1: [{"id": 1, "active": True, "full_name": "o/a"}],
+            2: [{"id": 2, "active": True, "full_name": "o/b"}],
+            3: [{"id": 2, "active": True, "full_name": "o/b"}],
+        }
+
+        def fake_get(_path, query):
+            return pages[query["page"]]
+
+        client.get = fake_get
+        self.assertEqual([row["id"] for row in client.repositories()], [1, 2])
+
+
 def json_dumps(value):
     import json
 
