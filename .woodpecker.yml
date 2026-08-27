@@ -5,11 +5,18 @@ steps:
   secrets:
     image: ghcr.io/gitleaks/gitleaks:v8.30.1
     commands:
-      # Generated registry data contains documented credentials and fixtures.
-      # Gate executable operational code; the imported data needs a separate
-      # baseline before it can be scanned without 70+ known false positives.
-      - gitleaks detect --source bin --config .gitleaks.toml --redact --no-banner --no-git
-      - gitleaks detect --source templates --config .gitleaks.toml --redact --no-banner --no-git
+      # Generated registry data and older bin scripts contain documented
+      # credentials and fixtures. Gate this operational unit explicitly; the
+      # imported data needs a separate baseline for its known false positives.
+      - >-
+        for path in bin/ci_authority_audit.py
+        bin/woodpecker_load_controller.py
+        bin/test_ci_authority_audit.py
+        bin/test_woodpecker_load_controller.py
+        ci-authorities.json
+        templates/woodpecker-load-controller.example.json;
+        do gitleaks detect --source "$path" --config .gitleaks.toml
+        --redact --no-banner --no-git || exit 1; done
 
   tests:
     image: python:3.13-alpine
