@@ -6507,6 +6507,37 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "geo",
+    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 code. Unicode-normalizing, accent- and case-insensitive matcher over a curated corpus of 183 countries plus their multilingual aliases, served entirely from memory. NOTE: iso3Code currently mirrors iso2Code -- the default CSV corpus carries no alpha-3 column.",
+    "example_path": "/api/convert?country=Germany",
+    "health_url": "https://country-iso-matcher.0exec.com/health",
+    "id": "country-iso-matcher",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Country Iso Matcher",
+    "repo_url": "https://github.com/baditaflorin/country-iso-matcher",
+    "runtime": "compose",
+    "tags": [
+      "geo",
+      "iso3166",
+      "kind-container",
+      "runtime-compose"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-08-29",
+    "trl_assessor": "claude-opus-5-2026-08-29-fleet-onboarding",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Ceiling is set by corpus quality, not by architecture. Reaching 6 needs a real ISO 3166-1 source of truth (alpha-3 backfilled, subdivisions, official/short/UN names, withdrawn-code history) rather than a 183-row hand-curated CSV with 59 alias rows.",
+    "url": "https://country-iso-matcher.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "visualization",
     "description": "d3-graph \u2014 d3-graph.0exec.com",
     "example_path": "/",

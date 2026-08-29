@@ -973,6 +973,18 @@
     "version": "1.4.0",
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
+  "country-iso-matcher": {
+    "container_port": 18315,
+    "host_port": 18315,
+    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 code. Unicode-normalizing, accent- and case-insensitive matcher over a curated corpus of 183 countries plus their multilingual aliases, served entirely from memory. NOTE: iso3Code currently mirrors iso2Code -- the default CSV corpus carries no alpha-3 column.",
+    "example_path": "/api/convert?country=Germany",
+    "trl": 4,
+    "trl_assessed_at": "2026-08-29",
+    "trl_assessor": "claude-opus-5-2026-08-29-fleet-onboarding",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Ceiling is set by corpus quality, not by architecture. Reaching 6 needs a real ISO 3166-1 source of truth (alpha-3 backfilled, subdivisions, official/short/UN names, withdrawn-code history) rather than a 183-row hand-curated CSV with 59 alias rows.",
+    "trl_evidence": "First fleet-registered release (0.1.0, 2026-08-29). Verified live against the built amd64 image: /health, /version, /metrics (154 series) and /api/convert all 200; \"Germany\" -> DE, \"Deutschland\" -> DE (alias hit), \"United States\" -> US, unknown input -> 404 with a structured error. Real logic beyond a regex (Unicode NFD normalization, case/accent folding, alias table) and unit tests exist, but two known gaps hold it at 4: iso3Code is a documented fallback to iso2 under the default CSV source (csv_loader.go:72), and coverage is 183 of 249 assigned alpha-2 codes. Two of the repo's three test files had not compiled since the src/ restructure and were repaired as part of this onboarding."
+  },
   "crawl-web-application": {
     "container_port": 8082,
     "description": "Microservice for Crawl Web Application",

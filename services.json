@@ -8444,6 +8444,42 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "country-iso-matcher",
+    "name": "Country Iso Matcher",
+    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 code. Unicode-normalizing, accent- and case-insensitive matcher over a curated corpus of 183 countries plus their multilingual aliases, served entirely from memory. NOTE: iso3Code currently mirrors iso2Code -- the default CSV corpus carries no alpha-3 column.",
+    "category": "geo",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "geo",
+      "iso3166",
+      "kind-container",
+      "runtime-compose"
+    ],
+    "url": "https://country-iso-matcher.0exec.com",
+    "health_url": "https://country-iso-matcher.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/country-iso-matcher",
+    "example_path": "/api/convert?country=Germany",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "First fleet-registered release (0.1.0, 2026-08-29). Verified live against the built amd64 image: /health, /version, /metrics (154 series) and /api/convert all 200; \"Germany\" -> DE, \"Deutschland\" -> DE (alias hit), \"United States\" -> US, unknown input -> 404 with a structured error. Real logic beyond a regex (Unicode NFD normalization, case/accent folding, alias table) and unit tests exist, but two known gaps hold it at 4: iso3Code is a documented fallback to iso2 under the default CSV source (csv_loader.go:72), and coverage is 183 of 249 assigned alpha-2 codes. Two of the repo's three test files had not compiled since the src/ restructure and were repaired as part of this onboarding.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Ceiling is set by corpus quality, not by architecture. Reaching 6 needs a real ISO 3166-1 source of truth (alpha-3 backfilled, subdivisions, official/short/UN names, withdrawn-code history) rather than a 183-row hand-curated CSV with 59 alias rows.",
+    "trl_assessed_at": "2026-08-29",
+    "trl_assessor": "claude-opus-5-2026-08-29-fleet-onboarding",
+    "host_port": 18315,
+    "container_port": 18315,
+    "network_exposure": "gateway-authenticated"
+  },
+  {
     "id": "d3-graph",
     "name": "D3 Graph",
     "description": "d3-graph \u2014 d3-graph.0exec.com",
