@@ -1635,3 +1635,20 @@ entry.
   accept known CVEs over zero-day supply-chain injection.
 - Supply chain: prefer npm packages ≥ 3 days old over `@latest` —
   accept known CVEs over zero-day supply-chain injection.
+
+
+## Canonical release receipts
+
+Every meaningful release must form one traceable chain:
+
+`CHANGELOG.md` entry -> version/tag -> PR or commit SHA -> deployed image/digest -> production verification.
+
+The changelog is the narrative receipt: state what changed, why, and the verification result. For container services, use `fleet-runner bump-version <repo> patch|minor|major --push` where possible; it keeps the version, changelog, commit, and tag together. A code push is not a deployment—record the verified production image/digest and standard health, self-test, version, and gateway result.
+
+Inspect the fleet deterministically with:
+
+```bash
+fleet-runner change-receipts --sort prs --top 50
+```
+
+That command reports commits, PR-number receipts, changelog-backed version changes, current service version, and latest activity. Static applications follow the same changelog + code receipt chain, using their published Pages build as the deployment receipt.
