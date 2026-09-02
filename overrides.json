@@ -2844,10 +2844,6 @@
     "depends_on": [
       "fleet-preflight"
     ],
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "POLL_SERVICE_ALLOWLIST": "fleet-preflight"
-    },
     "host_port": 18165,
     "trl": 6,
     "trl_assessed_at": "2026-05-16",
