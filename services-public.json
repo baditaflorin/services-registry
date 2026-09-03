@@ -7769,7 +7769,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug>, and reader-authenticated /context/<service> (bounded canonical agent context with source-labelled runtime evidence), plus /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
     "example_path": "/summary?since=1h",
     "health_url": "https://fleet-graph.0exec.com/health",
     "id": "fleet-graph",

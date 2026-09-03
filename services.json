@@ -10061,7 +10061,7 @@
   {
     "id": "fleet-graph",
     "name": "Fleet Graph",
-    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug>, and reader-authenticated /context/<service> (bounded canonical agent context with source-labelled runtime evidence), plus /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -10099,7 +10099,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {

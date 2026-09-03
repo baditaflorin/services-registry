@@ -2410,7 +2410,7 @@
     "depends_on": [
       "go-apikey-service"
     ],
-    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug> (powers graph.Lookup), /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug>, and reader-authenticated /context/<service> (bounded canonical agent context with source-labelled runtime evidence), plus /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
     "example_path": "/summary?since=1h",
     "host_port": 18143,
     "scope": "internal-only",
@@ -2420,7 +2420,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "First-pass audit of this shared fleet-infra call-graph collector (ingests caller/target HTTP-call events, aggregates into 1m/1h/1d edge buckets in SQLite, serves fleet topology/dependency-drift APIs): confirmed sound directed cycle-tolerant multigraph semantics, correct input validation, DOT/SQL-injection safety, and no lost updates under 300 concurrent writes with go test -race. Found and fixed 2 real bugs: (1) /selftest was unreachable dead code -- main.go used the server.Run(...) shorthand, which never registers an exact /selftest mux pattern, so the deploy smoke gate has been silently reading a fake always-green default response instead of the real ingest-pipeline health check; fixed by switching to explicit mux registration matching a sibling repo's correct pattern. (2) The services_seen table grows unbounded, keyed by attacker/bug-controlled caller/target strings with nothing ever reading it back and no eviction path unlike sibling tables; fixed by evicting rows past the same 365-day cutoff already used elsewhere. trl bumped to 7 (now honestly earned rather than assumed -- neither bug was severe enough to lower the ceiling, and both are now fixed with regression tests); trl_ceiling held at 8. See PR #4 (merged).",
-    "version": "0.2.6"
+    "version": "0.2.7"
   },
   "fleet-har-builder": {
     "container_port": 18157,
