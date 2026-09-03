@@ -50,6 +50,12 @@ container_defaults:
   # Fleet-wide environment defaults. Per-service overrides via
   # services-registry/overrides.json win.
   env:
+    # Graph observation is opt-in by an exact per-service registry override.
+    # Keeping the fleet default false prevents stale compose/.env state from
+    # turning unrelated services into writer clients with expired or
+    # mismatched credentials. The bounded selftest-aggregator pilot is the
+    # sole current true override.
+    GRAPH_ENABLED: "false"
     # The keystore (go-apikey-service) listens on the dockerhost
     # at port 18021. Every container reaches it via the
     # host.docker.internal alias above.
