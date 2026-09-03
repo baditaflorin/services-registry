@@ -27,6 +27,32 @@ the repo's own `service.yaml` + `deploy.yaml` + `README.md`. This file
 is intentionally generic — it explains the *fleet*, not any one
 service.
 
+## Graph-first orientation
+
+Before planning a change to a registered service, run:
+
+```bash
+fleet-runner graph-context <service-id>
+```
+
+This produces the bounded, reader-authenticated graph context for one
+canonical service ID:
+
+- **identity and declared topology** come from `services-registry` and
+  are the authoritative source for ownership, repository, mesh, kind,
+  and declared `depends_on` relationships;
+- **observed incoming/outgoing calls** are runtime evidence, labelled
+  with their source and time window; they help assess impact but do not
+  grant permission or replace the registry; and
+- the context is deliberately read-only and excludes credentials,
+  headers, payloads, and raw request paths.
+
+Use this brief before broad searches or a deploy plan. Treat a missing
+runtime edge as “not observed in this window,” not proof that no caller
+exists. Never put a graph-reader credential in a prompt, source file,
+shell history, or commit; the runner loads its reader access through the
+approved vault path.
+
 **Building a new service?** See
 [`services-registry/SERVICE-TEMPLATE.md`](SERVICE-TEMPLATE.md) — the
 canonical per-service scaffold (file-by-file templates for `main.go`,
