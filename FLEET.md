@@ -525,6 +525,7 @@ The runner binary is private; this is a public-safe pointer list.
 |-----------------------------------------|-----------------------------------------------------------|
 | `fleet-runner health`                   | `GET /health` across every live service                   |
 | `fleet-runner smoke`                    | `GET <example_url>` across every service                  |
+| `fleet-runner graph-context <service-id>`| canonical identity/dependencies plus bounded observed-call context for an agent |
 | `fleet-runner build-test`               | `go test ./...` across every workspace                    |
 | `fleet-runner update-dep <mod@ver>`     | bulk dep bump across repos                                |
 | `fleet-runner inject <src> <dest>`      | copy a file into every repo (this FLEET.md was injected)  |
