@@ -2844,6 +2844,12 @@
     "depends_on": [
       "fleet-preflight"
     ],
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "POLL_SERVICE_ALLOWLIST": "fleet-preflight",
+      "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "fleet-preflight.0exec.com",
+      "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10"
+    },
     "host_port": 18165,
     "trl": 6,
     "trl_assessed_at": "2026-05-16",
