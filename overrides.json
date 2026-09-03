@@ -5719,6 +5719,7 @@
     "coolify_app_uuid": "ydqmdzvdgkaw3mxb21y0lvg5"
   },
   "substack-scraper": {
+    "compose_dir": "/opt/services/go_substack_scraper",
     "container_port": 8236,
     "description": "Public-metadata scraper for Substack publications: posts, cadence, recommendations, authors.",
     "example_path": "/?url=https://example.substack.com",
@@ -5993,6 +5994,7 @@
     "trl_evidence": "farm planning app, seasonal calendar"
   },
   "url-categorizer-api": {
+    "compose_dir": "/opt/services/url-categorizer-api",
     "container_port": 8080,
     "description": "URL categorization API - classifies URLs by topic/category",
     "example_path": "/?url=https://example.com",
