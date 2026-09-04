@@ -10088,7 +10088,7 @@
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
     "trl": 7,
-    "trl_evidence": "First-pass audit of this shared fleet-infra call-graph collector (ingests caller/target HTTP-call events, aggregates into 1m/1h/1d edge buckets in SQLite, serves fleet topology/dependency-drift APIs): confirmed sound directed cycle-tolerant multigraph semantics, correct input validation, DOT/SQL-injection safety, and no lost updates under 300 concurrent writes with go test -race. Found and fixed 2 real bugs: (1) /selftest was unreachable dead code -- main.go used the server.Run(...) shorthand, which never registers an exact /selftest mux pattern, so the deploy smoke gate has been silently reading a fake always-green default response instead of the real ingest-pipeline health check; fixed by switching to explicit mux registration matching a sibling repo's correct pattern. (2) The services_seen table grows unbounded, keyed by attacker/bug-controlled caller/target strings with nothing ever reading it back and no eviction path unlike sibling tables; fixed by evicting rows past the same 365-day cutoff already used elsewhere. trl bumped to 7 (now honestly earned rather than assumed -- neither bug was severe enough to lower the ceiling, and both are now fixed with regression tests); trl_ceiling held at 8. See PR #4 (merged).",
+    "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_assessed_at": "2026-08-01",
@@ -10099,7 +10099,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
