@@ -2700,6 +2700,10 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
+    "depends_on": [
+      "fleet-dns-sync",
+      "fleet-secrets"
+    ],
     "version": "0.3.3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
