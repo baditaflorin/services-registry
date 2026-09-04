@@ -2695,8 +2695,12 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Each new check is one goroutine. Lift bound is breadth of checks.",
-    "trl_evidence": "check:image (crane HEAD ghcr.io), check:nginx (HTTPS+TLS expiry warn at 30d), 60s ETag-aware registry cache, /selftest against embedded service.yaml fixture with stubbed crane+DNS+HTTPS",
-    "version": "0.2.0",
+    "trl_evidence": "check:image (crane HEAD ghcr.io), check:nginx (HTTPS+TLS expiry warn at 30d), 60s ETag-aware registry cache, /selftest against embedded service.yaml fixture with stubbed crane+DNS+HTTPS. 2026-09-04: second bounded Fleet Graph writer canary; source declares a dedicated finite vault credential and registry opt-in only observes preflight's own inbound calls.",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "0.3.3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
