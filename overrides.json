@@ -2698,13 +2698,14 @@
     "trl_evidence": "check:image (crane HEAD ghcr.io), check:nginx (HTTPS+TLS expiry warn at 30d), 60s ETag-aware registry cache, /selftest against embedded service.yaml fixture with stubbed crane+DNS+HTTPS. 2026-09-04: second bounded Fleet Graph writer canary; source declares a dedicated finite vault credential and registry opt-in only observes preflight's own inbound calls.",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_TARGET_ALIASES": "go-fleet-dns-sync=fleet-dns-sync,go-fleet-secrets=fleet-secrets"
     },
     "depends_on": [
       "fleet-dns-sync",
       "fleet-secrets"
     ],
-    "version": "0.3.3",
+    "version": "0.3.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"

@@ -10677,18 +10677,14 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 18142,
     "container_port": 18142,
-    "mcp_ready": true,
-    "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.3",
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    },
     "depends_on": [
       "fleet-dns-sync",
       "fleet-secrets"
     ],
+    "mcp_ready": true,
+    "mcp_tool_count": 1,
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.3.4",
     "network_exposure": "gateway-authenticated"
   },
   {
