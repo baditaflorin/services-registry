@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""Ship the last fleet-edge-probe run into OpenObserve.
+
+Reads the --state file written by fleet-edge-probe and POSTs:
+  - one {kind:"summary"} row (probed / ok / warn / hard_fail_total)
+  - one {kind:"service"} row per NON-ok service (fails[], hard_fail)
+
+Config from env / /etc/default/fleet-edge-probe:
+  EDGE_PROBE_OO_URL    e.g. http://10.10.10.106:5080/api/default/fleet_edge_probe/_json
+  EDGE_PROBE_OO_AUTH   user:pass  (basic auth)
+  EDGE_PROBE_VANTAGE   label (default: hostname)
+  EDGE_PROBE_STATE     state file (default: /var/lib/fleet-edge-probe/state.json)
+
+Fails quietly (exit 0) so it never breaks the probe unit.
+"""
+import base64, json, os, socket, sys, urllib.request
+
+url = os.environ.get("EDGE_PROBE_OO_URL", "").strip()
+auth = os.environ.get("EDGE_PROBE_OO_AUTH", "").strip()
+vantage = os.environ.get("EDGE_PROBE_VANTAGE", socket.gethostname())
+state = os.environ.get("EDGE_PROBE_STATE", "/var/lib/fleet-edge-probe/state.json")
+
+if not url:
+    sys.exit(0)
+try:
+    d = json.load(open(state))
+except Exception as e:
+    print(f"ship-oo: cannot read {state}: {e}", file=sys.stderr)
+    sys.exit(0)
+
+res = d.get("results", [])
+ts = d.get("ts")
+hard = [r for r in res if r.get("hard_fail")]
+warn = [r for r in res if r.get("fails") and not r.get("hard_fail")]
+
+rows = [{
+    "kind": "summary", "vantage": vantage, "ts": ts,
+    "probed": len(res), "ok": len(res) - len(hard) - len(warn),
+    "warn": len(warn), "hard_fail_total": len(hard),
+}]
+for r in res:
+    if r.get("ok"):
+        continue
+    rows.append({
+        "kind": "service", "vantage": vantage, "ts": ts,
+        "slug": r["slug"], "host": r["host"], "runtime": r.get("runtime", ""),
+        "hard_fail": bool(r.get("hard_fail")),
+        "fails": ",".join(r.get("fails", [])),
+        "cert_err": r.get("meta", {}).get("cert_err", ""),
+        "health_code": r.get("meta", {}).get("health_code"),
+    })
+
+req = urllib.request.Request(
+    url, data=json.dumps(rows).encode(), method="POST",
+    headers={"Content-Type": "application/json"},
+)
+if auth:
+    req.add_header("Authorization", "Basic " + base64.b64encode(auth.encode()).decode())
+try:
+    with urllib.request.urlopen(req, timeout=15) as r:
+        print(f"ship-oo: {r.status} rows={len(rows)}")
+except Exception as e:
+    print(f"ship-oo: POST failed: {e}", file=sys.stderr)
+sys.exit(0)

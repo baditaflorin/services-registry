@@ -277,13 +277,54 @@ def notify_ntfy(url: str, newly_broken, recovered):
         lines.append("🟢 recovered: " + ", ".join(r["slug"] for r in recovered))
     if not lines:
         return
-    body = "\n".join(lines).encode()
+    # allow https://user:pass@host/topic
+    parts = urlsplit(url)
+    headers = {"Title": "fleet-edge-probe", "Priority": "high", "Tags": "warning"}
+    if parts.username:
+        import base64
+        tok = base64.b64encode(f"{parts.username}:{parts.password or ''}".encode()).decode()
+        headers["Authorization"] = f"Basic {tok}"
+        url = parts._replace(netloc=parts.hostname + (f":{parts.port}" if parts.port else "")).geturl()
     try:
-        req = urllib.request.Request(url, data=body, method="POST",
-                                     headers={"Title": "fleet-edge-probe", "Priority": "high"})
+        req = urllib.request.Request(url, data="\n".join(lines).encode(), method="POST", headers=headers)
         urllib.request.urlopen(req, timeout=10)
     except OSError as e:
         log(f"ntfy post failed: {e}")
+
+
+PROM_HELP = {
+    "fleet_edge_probe_up": "1 if the probe ran to completion",
+    "fleet_edge_probe_service_ok": "1 if the service passed all edge assertions",
+    "fleet_edge_probe_service_hard_fail": "1 if the service has a page-worthy edge failure",
+    "fleet_edge_probe_fail_code": "1 per (service, assertion code) that failed",
+    "fleet_edge_probe_hard_fail_total": "count of services with a hard edge failure",
+    "fleet_edge_probe_last_run": "unix ts of the last completed run",
+}
+
+
+def write_prom(path: str, results: list[dict], vantage: str):
+    def esc(s):
+        return str(s).replace("\\", "\\\\").replace('"', '\\"')
+    hard = sum(1 for r in results if r["hard_fail"])
+    lines = []
+    for m, h in PROM_HELP.items():
+        lines.append(f"# HELP {m} {h}")
+        lines.append(f"# TYPE {m} gauge")
+    v = f'vantage="{esc(vantage)}"'
+    lines.append(f"fleet_edge_probe_up{{{v}}} 1")
+    lines.append(f"fleet_edge_probe_last_run{{{v}}} {int(time.time())}")
+    lines.append(f"fleet_edge_probe_hard_fail_total{{{v}}} {hard}")
+    for r in results:
+        lbl = f'{v},slug="{esc(r["slug"])}",host="{esc(r["host"])}",runtime="{esc(r["runtime"])}"'
+        lines.append(f"fleet_edge_probe_service_ok{{{lbl}}} {1 if r['ok'] else 0}")
+        lines.append(f"fleet_edge_probe_service_hard_fail{{{lbl}}} {1 if r['hard_fail'] else 0}")
+        for code in r["fails"]:
+            sev = SEVERITY.get(code, "fail")
+            lines.append(f'fleet_edge_probe_fail_code{{{lbl},code="{esc(code)}",severity="{sev}"}} 1')
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    os.replace(tmp, path)
 
 
 def main():
@@ -300,7 +341,13 @@ def main():
     ap.add_argument("--all", action="store_true", help="human mode: also list passing services")
     ap.add_argument("--state", default=None, help="state file for alert-on-transition")
     ap.add_argument("--ntfy", default=os.environ.get("EDGE_PROBE_NTFY", ""),
-                    help="ntfy topic URL to POST newly-broken/recovered (only with --state)")
+                    help="ntfy topic URL (https://[user:pass@]host/topic) to POST "
+                         "newly-broken/recovered (only with --state)")
+    ap.add_argument("--prom", default=os.environ.get("EDGE_PROBE_PROM", ""),
+                    help="write Prometheus textfile-collector metrics to this path "
+                         "(e.g. /var/lib/prometheus/node-exporter/fleet_edge_probe.prom)")
+    ap.add_argument("--vantage", default=os.environ.get("EDGE_PROBE_VANTAGE", socket.gethostname()),
+                    help="label for where this probe ran (default: hostname)")
     args = ap.parse_args()
 
     src = args.services
@@ -394,6 +441,12 @@ def main():
             log(f"recovered: {[r['slug'] for r in recovered]}")
         if args.ntfy and (newly_broken or recovered):
             notify_ntfy(args.ntfy, newly_broken, recovered)
+
+    if args.prom:
+        try:
+            write_prom(args.prom, results, args.vantage)
+        except OSError as e:
+            log(f"cannot write prom textfile {args.prom}: {e}")
 
     return 1 if hard else 0
 

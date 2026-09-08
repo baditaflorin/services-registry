@@ -76,3 +76,33 @@ Ship `/var/log/fleet-edge-probe.jsonl` into OpenObserve (stream
 - `compose`  services → gateway `176.9.123.221` (0docker webgateway, `wildcard.*` certs, `fleet-runner nginx-render`)
 - `coolify`  services → gateway `65.108.75.123` (0mcp edge `nginx-lv3` → Coolify Traefik `10.20.10.71:443`)
 - `external` / `network_exposure: internal` → skipped
+
+## Deployed (2026-09-09) — two vantages, one per fleet
+
+Each fleet's edge is only truly *external* from the **other** fleet's network
+(a box inside a fleet hairpin-NATs to its own edge IP → `ECONNREFUSED`). So
+the probe runs on one box per fleet, each filtered to the services the *other*
+fleet hosts:
+
+| vantage host | `EDGE_PROBE_RUNTIME` | covers | schedule | alert path |
+|---|---|---|---|---|
+| `monitoring-lv3` (0mcp) | `compose` | 0docker-hosted services (→ `176.9.123.221`) | `*:02/15` | node_exporter textfile → Prometheus job `fleet-edge-probe` → rules in `/etc/prometheus/rules/fleet-edge-probe.yml` → Alertmanager `ntfy-critical` + `mattermost-critical` |
+| Builder LXC 108 (0docker) | `coolify` | 0mcp-hosted services (→ `65.108.75.123`) | `*:09/15` | textfile (`/var/lib/prometheus-node-exporter/textfile/`) **+** `fleet-edge-probe-ship-oo` → OpenObserve stream `fleet_edge_probe` on LXC 106 |
+
+Artifacts in `bin/fleet-edge-probe.deploy/`:
+
+- `fleet-edge-probe.service` / `.timer` — systemd oneshot + timer. Config via
+  `/etc/default/fleet-edge-probe` (`EDGE_PROBE_SRC_URL`, `EDGE_PROBE_PROM`,
+  `EDGE_PROBE_VANTAGE`, `EDGE_PROBE_RUNTIME`, `EDGE_PROBE_NTFY`, and on the
+  0docker box `EDGE_PROBE_OO_URL` / `EDGE_PROBE_OO_AUTH`).
+- `prom-rule-fleet-edge-probe.yml` — 3 alert rules: `FleetServiceEdgeDown`
+  (per-service hard fail, `for: 15m`, critical), `FleetEdgeManyDown` (≥5 at
+  once → batch cert/DNS/vhost failure, critical), `FleetEdgeProbeStale`
+  (no run in >1h, warning).
+- `fleet-edge-probe-ship-oo` — pushes each run's `state.json` (summary +
+  one row per failing service) into OpenObserve for the 0docker vantage,
+  where there is no local Prometheus.
+
+**Still open:** the OpenObserve alert rule for the 0docker vantage (stream
+`fleet_edge_probe`, `kind='summary' AND hard_fail_total > 0`, destination
+`fleet_email`) — create in the OO UI or via API.

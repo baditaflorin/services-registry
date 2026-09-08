@@ -1,0 +1,17 @@
+[Unit]
+Description=Fleet edge probe — strict external synthetic prober (services.json driven)
+Documentation=https://github.com/baditaflorin/services-registry/blob/main/bin/fleet-edge-probe.README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/default/fleet-edge-probe
+StateDirectory=fleet-edge-probe
+ExecStartPre=-/bin/sh -c 'curl -fsSL --max-time 25 "$EDGE_PROBE_SRC_URL" -o /var/lib/fleet-edge-probe/services.json.new && mv -f /var/lib/fleet-edge-probe/services.json.new /var/lib/fleet-edge-probe/services.json'
+ExecStart=/usr/local/bin/fleet-edge-probe --services /var/lib/fleet-edge-probe/services.json --state /var/lib/fleet-edge-probe/state.json --prom=${EDGE_PROBE_PROM} --vantage=${EDGE_PROBE_VANTAGE} --ntfy=${EDGE_PROBE_NTFY} --runtime=${EDGE_PROBE_RUNTIME} --timeout 15 --concurrency 16
+# exit 1 == "a probed service is failing" (signal is in the metric / ntfy), not a unit failure.
+# exit 2 == usage/registry-fetch error == real unit failure.
+SuccessExitStatus=0 1
+Nice=10
+IOSchedulingClass=idle
