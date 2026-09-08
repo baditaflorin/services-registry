@@ -1,0 +1,78 @@
+# fleet-edge-probe
+
+Strict external synthetic prober for every fleet service's **public edge**
+(DNS → TLS → redirects → body), driven by `services.json`. Built after the
+2026-09-09 cookie-checker outage, where a whole batch of Coolify-hosted
+services served the wrong TLS cert / redirected cross-domain to
+`nginx.0mcp.com/health` (→ HTTP 200) and stayed undetected for days because
+the existing checks follow redirects, only assert `200`, and
+`fleet-runner smoke` can run with `-insecure`.
+
+## What it asserts (per `kind: container` service with a public `https://` url)
+
+| code | meaning |
+|---|---|
+| `dns_nxdomain` | hostname does not resolve |
+| `gateway_drift` *(warn)* | A record not in the expected gateway set for `runtime` (compose → 176.9.123.221, coolify → 65.108.75.123) |
+| `tls_untrusted` | TLS chain does not validate against the system trust store (no `-k`) |
+| `cert_host_mismatch` | leaf cert SAN does not cover this hostname |
+| `cert_registry_mismatch` | SAN does not match registry `cert_domain` (`wildcard.0crawl.com` ⇒ SAN must include `*.0crawl.com`) |
+| `cert_expiring` *(warn)* | cert `notAfter` < now + `--expiry-days` (default 14) |
+| `offsite_redirect` | health check ended on a different host than requested |
+| `health_status` | health check returned `000` / `5xx` (real outage). Uses registry `health_url`, else `/health` |
+| `health_forbidden` *(warn)* | health check returned `401`/`403` — edge up, endpoint gated (infra services) |
+| `health_notfound` *(warn)* | health check returned `404` — wrong path / missing `health_url` in registry |
+| `health_body` | `2xx` but body is not JSON `status:ok` / `service` / `version`, nor a plain `ok`/`healthy` |
+| `fallback_vhost` | body matches a known default-vhost fingerprint (`<title>LV3`, `nginx.0mcp.com`, …) |
+| `example_unreachable` *(warn)* | `GET <url><example_path>` ∉ {200,401,403} or landed off-host — usually a stale `example_path` in the registry |
+
+Exit `0` = all probed pass · `1` = ≥1 hard fail · `2` = usage/fetch error.
+Warn-severity codes do not affect exit code.
+
+## Run
+
+```bash
+# whole fleet, human output (failures + summary only)
+bin/fleet-edge-probe.py
+
+# everything, incl. passing rows
+bin/fleet-edge-probe.py --all
+
+# one mesh / a few slugs / a quick sample
+bin/fleet-edge-probe.py --runtime coolify
+bin/fleet-edge-probe.py --only cookie-checker,asn-lookup
+bin/fleet-edge-probe.py --sample 40
+
+# machine output
+bin/fleet-edge-probe.py --json > /var/lib/fleet-edge-probe/last.json
+```
+
+`--services` defaults to a local `services.json` next to the script, else
+`raw.githubusercontent.com/.../main/services.json`.
+
+## Schedule it (the point — external vantage, every few minutes)
+
+Run from a host **outside both fleet LANs** so it exercises real public DNS +
+TLS + edge (a small VPS in a third DC, or a GitHub Actions cron). Example
+cron with alert-on-transition:
+
+```cron
+*/10 * * * *  /opt/services-registry/bin/fleet-edge-probe.py \
+  --services /opt/services-registry/services.json \
+  --state /var/lib/fleet-edge-probe/state.json \
+  --ntfy https://ntfy.0mcp.com/fleet-edge \
+  --json >> /var/log/fleet-edge-probe.jsonl 2>>/var/log/fleet-edge-probe.err
+```
+
+`--state` diffs against the previous run; `--ntfy` (or `EDGE_PROBE_NTFY`)
+POSTs only **newly-broken** and **recovered** services, so a persistent
+failure pages once, not every 10 minutes.
+
+Ship `/var/log/fleet-edge-probe.jsonl` into OpenObserve (stream
+`fleet_edge_probe`) for history / dashboards, same as `docker_logs`.
+
+## Topology assumptions (edit `GATEWAY_IPS` in the script when this changes)
+
+- `compose`  services → gateway `176.9.123.221` (0docker webgateway, `wildcard.*` certs, `fleet-runner nginx-render`)
+- `coolify`  services → gateway `65.108.75.123` (0mcp edge `nginx-lv3` → Coolify Traefik `10.20.10.71:443`)
+- `external` / `network_exposure: internal` → skipped
