@@ -1,0 +1,34 @@
+# templates/woodpecker-boot-smoke.yml — opt-in image boot-smoke step.
+#
+# `go build ./... && go test ./...` (the standard fleet CI gate) runs against
+# the REPO CHECKOUT. It cannot see Dockerfile-level breakage: a missing `COPY`,
+# a bad ENTRYPOINT, a wrong EXPOSE, a base-image change that drops a runtime
+# dep. The 2026-09-09 python-proxy outage was exactly this — `main.py` imported
+# a module that was in the repo but never COPYed into the image, so the
+# container `ModuleNotFoundError`-crash-looped for 3 weeks while CI stayed green.
+#
+# Drop this `boot-smoke` step into a repo's `.woodpecker.yml` when the service
+# has had (or is likely to have) image-level breakage. It is deliberately NOT
+# fleet-wide: `docker build` on every PR is heavier and the Woodpecker box is
+# capped at 2 concurrent workflows.
+#
+# Per-repo knobs: the `-e` flags on `docker run` (dummy env the entrypoint
+# needs to start) and the `sleep` (raise for slow boots).
+
+  boot-smoke:
+    image: docker:27-cli
+    commands:
+      - N="bsci-${CI_PIPELINE_NUMBER}"
+      - docker build -t "$N" .
+      # add -e FOO=bar for any env the entrypoint requires just to start:
+      - docker run -d --name "$N" "$N"
+      - sleep 15
+      - RUNNING=$(docker inspect -f '{{.State.Running}}' "$N")
+      - HEALTH=$(docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' "$N")
+      - CODE=$(docker inspect -f '{{.State.ExitCode}}' "$N")
+      - echo "running=$RUNNING health=$HEALTH exitcode=$CODE"
+      - docker logs "$N" 2>&1 | tail -30 || true
+      - docker rm -f "$N" >/dev/null 2>&1 || true
+      - docker rmi "$N" >/dev/null 2>&1 || true
+      - test "$RUNNING" = "true"       # crash-loop / exits-on-start
+      - test "$HEALTH" != "unhealthy"  # starts but HEALTHCHECK never passes
