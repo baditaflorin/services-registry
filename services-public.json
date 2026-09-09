@@ -7793,7 +7793,7 @@
     },
     "auth_help": "Reader access requires an X-API-Key header; query-string credentials are refused.",
     "category": "infrastructure",
-    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection joins bounded runtime call/error/freshness evidence with declared topology; /viewer is its interactive, no-data browser shell. Also serves /events (writer ingest), /graph + /summary, /context/<service> (bounded agent context), /service/<slug>/{callers,calls}, /lookup/<slug>, and /drift. No reader route exposes request paths, payloads, headers, credentials, or authority.",
+    "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, bounded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
     "example_path": "/viewer",
     "health_url": "https://fleet-graph.0exec.com/health",
     "id": "fleet-graph",
