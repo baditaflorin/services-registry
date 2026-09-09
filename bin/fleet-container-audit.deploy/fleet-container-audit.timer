@@ -1,0 +1,10 @@
+[Unit]
+Description=Run fleet-container-audit every 10 minutes
+
+[Timer]
+OnCalendar=*:05/10
+RandomizedDelaySec=30
+Persistent=true
+
+[Install]
+WantedBy=timers.target
