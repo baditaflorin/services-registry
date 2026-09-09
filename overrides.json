@@ -123,6 +123,60 @@
       ],
       "url": "http://dockerhost:18312",
       "why": "Discovered 2026-08-23 while allocating a port for fleet-cert-watch: `fleet-runner allocate-port` returned 18312 as free (correct per the registry), but `docker ps` showed a live container named claudia already bound to it, invisible to `audit registry-host-port-set` (that audit only checks known fleet repos, not real dockerhost port usage against unregistered containers). Not touched — owner should decide whether to keep or retire it; this entry only stops the allocator from re-handing out its port."
+    },
+    {
+      "auth": { "type": "none" },
+      "category": "infrastructure",
+      "container_port": 18318,
+      "description": "hermes-agent SSH reverse tunnel — user `tunnel`, key `hermes-agent@hermes-agent`, forwarding 127.0.0.1:18318-18320 on the dockerhost (up since 2026-09-08). Not a fleet container and not managed by fleet-runner.",
+      "host_port": 18318,
+      "id": "hermes-agent-tunnel-18318",
+      "kind": "container",
+      "language": "other",
+      "mesh": "0exec",
+      "name": "hermes-agent tunnel :18318",
+      "network_exposure": "lan-internal",
+      "repo_url": "https://hermes.lv3.org",
+      "runtime": "external",
+      "tags": ["external", "ssh-tunnel", "non-fleet"],
+      "url": "http://dockerhost:18318",
+      "why": "Third of three ports (18318-18320) held by an `ssh -R` tunnel invisible to `audit registry-host-port-set`. Collided with fleet-cert-watch on 18320 on 2026-09-08 (container stuck Created / exit 128, 502 for ~1 day until fleet-edge-probe flagged it). fleet-cert-watch moved to 18316; these entries stop allocate-port from handing 18318-18320 out."
+    },
+    {
+      "auth": { "type": "none" },
+      "category": "infrastructure",
+      "container_port": 18319,
+      "description": "hermes-agent SSH reverse tunnel — see hermes-agent-tunnel-18318.",
+      "host_port": 18319,
+      "id": "hermes-agent-tunnel-18319",
+      "kind": "container",
+      "language": "other",
+      "mesh": "0exec",
+      "name": "hermes-agent tunnel :18319",
+      "network_exposure": "lan-internal",
+      "repo_url": "https://hermes.lv3.org",
+      "runtime": "external",
+      "tags": ["external", "ssh-tunnel", "non-fleet"],
+      "url": "http://dockerhost:18319",
+      "why": "See hermes-agent-tunnel-18318."
+    },
+    {
+      "auth": { "type": "none" },
+      "category": "infrastructure",
+      "container_port": 18320,
+      "description": "hermes-agent SSH reverse tunnel — see hermes-agent-tunnel-18318. This is the port that collided with fleet-cert-watch.",
+      "host_port": 18320,
+      "id": "hermes-agent-tunnel-18320",
+      "kind": "container",
+      "language": "other",
+      "mesh": "0exec",
+      "name": "hermes-agent tunnel :18320",
+      "network_exposure": "lan-internal",
+      "repo_url": "https://hermes.lv3.org",
+      "runtime": "external",
+      "tags": ["external", "ssh-tunnel", "non-fleet"],
+      "url": "http://dockerhost:18320",
+      "why": "See hermes-agent-tunnel-18318."
     }
   ],
   "$rules": [
@@ -2215,8 +2269,8 @@
     "trl_evidence": "NEW fleet primitive (G9, 2026-05-19). /selftest exercises the full aggregator path against an in-process httptest fleet. Unit-tested: container-only filter, per-service-error-no-drop, selftest 200/503/404 each counted, worker pool ceiling honoured, summary counts internally consistent, /refresh admin-gated, /capabilities.json served with Cache-Control max-age=300."
   },
   "fleet-cert-watch": {
-    "container_port": 18320,
-    "host_port": 18320,
+    "container_port": 18316,
+    "host_port": 18316,
     "version": "0.2.2"
   },
   "fleet-content-normalizer": {
