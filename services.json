@@ -10090,7 +10090,7 @@
   {
     "id": "fleet-graph",
     "name": "Fleet Graph",
-    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into 1m/1h/1d buckets in SQLite. Serves /events (ingest), /graph + /summary (queries), /service/<slug>/{callers,calls}, /lookup/<slug>, a public no-data /viewer shell for visual exploration with an in-memory reader key, reader-authenticated /context/<service> (bounded canonical agent context with source-labelled runtime evidence), and /drift (declared-vs-observed). Mirror of services-registry refreshes every 5min.",
+    "description": "Fleet graph collector. Aggregates service-to-service call observations emitted by go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection joins bounded runtime call/error/freshness evidence with declared topology; /viewer is its interactive, no-data browser shell. Also serves /events (writer ingest), /graph + /summary, /context/<service> (bounded agent context), /service/<slug>/{callers,calls}, /lookup/<slug>, and /drift. No reader route exposes request paths, payloads, headers, credentials, or authority.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -10100,13 +10100,12 @@
     "url": "https://fleet-graph.0exec.com",
     "health_url": "https://fleet-graph.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-graph",
-    "example_path": "/summary?since=1h",
+    "example_path": "/viewer",
     "auth": {
       "type": "api_key",
-      "query_param": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "Reader access requires an X-API-Key header; query-string credentials are refused.",
     "cert_domain": "wildcard.0exec.com",
     "aliases": [
       "go-fleet-graph"
@@ -10128,7 +10127,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "network_exposure": "gateway-authenticated"
   },
   {
