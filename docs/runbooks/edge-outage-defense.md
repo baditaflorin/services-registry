@@ -9,7 +9,7 @@ nothing noticed.** These are the layers now in place.
 |---|---|---|---|
 | 1. External edge probe | `bin/fleet-edge-probe.py` (`fleet-edge-probe.timer`, 15 min) | wrong/expired cert, cert SAN ≠ `cert_domain`, cross-domain redirect, default-vhost fallback body, gateway-IP drift | `monitoring-lv3` (compose) + Builder LXC 108 (coolify) → Prometheus/Alertmanager + OpenObserve `fleet_edge_probe` |
 | 2. Dockerhost container audit | `bin/fleet-container-audit.py` (`fleet-container-audit.timer`, 10 min) | `no_container`, `not_running`, `restarting`, `restart_storm`, `unhealthy`, `port_foreign`, `image_tag_latest`, `image_version_mismatch` | each dockerhost → OpenObserve `fleet_container_audit`, alert `fleet_container_bad` |
-| 3. CI image boot-smoke | `templates/woodpecker-boot-smoke.yml` (opt-in per repo) | Dockerfile-level breakage the checkout can't see — missing `COPY`, bad `ENTRYPOINT`, dropped runtime dep | Woodpecker `.woodpecker.yml`, PR-time |
+| 3. CI image boot-smoke | `templates/woodpecker-boot-smoke.yml` (opt-in per repo) | Dockerfile-level breakage the checkout can't see — missing `COPY`, bad `ENTRYPOINT`, dropped runtime dep | Woodpecker `.woodpecker.yml`, PR-time. **Live on python-proxy + fleet-cert-watch** (repos activated in `ci.0exec.com`, `trusted.volumes=true` for the socket mount). |
 | 4. Pre-deploy edge gate | `go-fleet-preflight` `edge` check (≥ 0.3.6) | the migration class — vhost removed on a `runtime` flip and never recreated; probes `/health` **without following redirects** | `POST /preflight/<repo>` before every deploy |
 
 ### Deploy discipline (#4)
@@ -25,6 +25,12 @@ but NOT `docker-compose.override.yml` (the canonical port binding from
 `render-compose`). After a registry port change, follow the deploy with
 `fleet-runner render-compose --filter <slug> --push --restart`. (fleet-cert-watch
 18320→18316, 2026-09-09.)
+
+### Enabling boot-smoke on another repo (#3)
+
+1. Activate the repo in `ci.0exec.com` (repo list → enable, or `POST /api/repos?forge_remote_id=<gh_repo_id>` with a user token). This creates the GitHub webhook.
+2. `PATCH /api/repos/<repo_id> {"trusted":{"volumes":true}}` — boot-smoke bind-mounts the docker socket.
+3. Add the `boot-smoke` step from `templates/woodpecker-boot-smoke.yml` to the repo's `.woodpecker.yml`, tuning the dummy `-e` env.
 
 ### Wiring the preflight gate into deploy (#6, remaining)
 

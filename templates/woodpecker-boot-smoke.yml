@@ -7,17 +7,25 @@
 # a module that was in the repo but never COPYed into the image, so the
 # container `ModuleNotFoundError`-crash-looped for 3 weeks while CI stayed green.
 #
-# Drop this `boot-smoke` step into a repo's `.woodpecker.yml` when the service
-# has had (or is likely to have) image-level breakage. It is deliberately NOT
+# Drop this `boot-smoke` step into a repo's `.woodpecker.yml`. It is NOT
 # fleet-wide: `docker build` on every PR is heavier and the Woodpecker box is
 # capped at 2 concurrent workflows.
+#
+# PREREQ: the step bind-mounts the host docker socket, so the Woodpecker repo
+# must have `trusted.volumes = true`:
+#   PATCH /api/repos/<repo_id> {"trusted":{"network":false,"volumes":true,"security":false}}
+# (or toggle "Trusted → Volumes" in the repo settings UI). Without it the step
+# fails with "Cannot connect to the Docker daemon".
 #
 # Per-repo knobs: the `-e` flags on `docker run` (dummy env the entrypoint
 # needs to start) and the `sleep` (raise for slow boots).
 
   boot-smoke:
     image: docker:27-cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     commands:
+      - for i in $(seq 1 15); do docker info >/dev/null 2>&1 && break; sleep 1; done
       - N="bsci-${CI_PIPELINE_NUMBER}"
       - docker build -t "$N" .
       # add -e FOO=bar for any env the entrypoint requires just to start:
