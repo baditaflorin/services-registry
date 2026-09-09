@@ -9590,8 +9590,8 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
-    "host_port": 18320,
-    "container_port": 18320,
+    "host_port": 18316,
+    "container_port": 18316,
     "version": "0.2.2",
     "network_exposure": "gateway-authenticated"
   },
@@ -11532,6 +11532,84 @@
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "d53fvns2b33ml5z1scbjd1y7",
     "network_exposure": "gateway-authenticated"
+  },
+  {
+    "id": "hermes-agent-tunnel-18318",
+    "name": "hermes-agent tunnel :18318",
+    "description": "hermes-agent SSH reverse tunnel \u2014 user `tunnel`, key `hermes-agent@hermes-agent`, forwarding 127.0.0.1:18318-18320 on the dockerhost (up since 2026-09-08). Not a fleet container and not managed by fleet-runner.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "other",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "ssh-tunnel"
+    ],
+    "url": "http://dockerhost:18318",
+    "health_url": "http://dockerhost:18318/health",
+    "repo_url": "https://hermes.lv3.org",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18318,
+    "container_port": 18318,
+    "network_exposure": "lan-internal"
+  },
+  {
+    "id": "hermes-agent-tunnel-18319",
+    "name": "hermes-agent tunnel :18319",
+    "description": "hermes-agent SSH reverse tunnel \u2014 see hermes-agent-tunnel-18318.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "other",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "ssh-tunnel"
+    ],
+    "url": "http://dockerhost:18319",
+    "health_url": "http://dockerhost:18319/health",
+    "repo_url": "https://hermes.lv3.org",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18319,
+    "container_port": 18319,
+    "network_exposure": "lan-internal"
+  },
+  {
+    "id": "hermes-agent-tunnel-18320",
+    "name": "hermes-agent tunnel :18320",
+    "description": "hermes-agent SSH reverse tunnel \u2014 see hermes-agent-tunnel-18318. This is the port that collided with fleet-cert-watch.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "other",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "ssh-tunnel"
+    ],
+    "url": "http://dockerhost:18320",
+    "health_url": "http://dockerhost:18320/health",
+    "repo_url": "https://hermes.lv3.org",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18320,
+    "container_port": 18320,
+    "network_exposure": "lan-internal"
   },
   {
     "id": "html-proxy",

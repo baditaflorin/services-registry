@@ -8887,6 +8887,75 @@
     "url": "https://go-session-fixation.0exec.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "hermes-agent SSH reverse tunnel \u2014 user `tunnel`, key `hermes-agent@hermes-agent`, forwarding 127.0.0.1:18318-18320 on the dockerhost (up since 2026-09-08). Not a fleet container and not managed by fleet-runner.",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18318/health",
+    "id": "hermes-agent-tunnel-18318",
+    "kind": "container",
+    "language": "other",
+    "mesh": "0exec",
+    "name": "hermes-agent tunnel :18318",
+    "repo_url": "https://hermes.lv3.org",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "ssh-tunnel"
+    ],
+    "url": "http://dockerhost:18318"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "hermes-agent SSH reverse tunnel \u2014 see hermes-agent-tunnel-18318.",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18319/health",
+    "id": "hermes-agent-tunnel-18319",
+    "kind": "container",
+    "language": "other",
+    "mesh": "0exec",
+    "name": "hermes-agent tunnel :18319",
+    "repo_url": "https://hermes.lv3.org",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "ssh-tunnel"
+    ],
+    "url": "http://dockerhost:18319"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "hermes-agent SSH reverse tunnel \u2014 see hermes-agent-tunnel-18318. This is the port that collided with fleet-cert-watch.",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18320/health",
+    "id": "hermes-agent-tunnel-18320",
+    "kind": "container",
+    "language": "other",
+    "mesh": "0exec",
+    "name": "hermes-agent tunnel :18320",
+    "repo_url": "https://hermes.lv3.org",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet",
+      "ssh-tunnel"
+    ],
+    "url": "http://dockerhost:18320"
+  },
+  {
     "alias_urls": [
       "go-html-proxy.0exec.com"
     ],
