@@ -199,46 +199,42 @@ The registry is regenerated from GitHub topics on every run of
    bin/notify-consumers.sh    # tells the live dashboards to re-fetch
    ```
 
-## Propagating CLAUDE.md / SERVICE-TEMPLATE.md after a change here
+## Propagating AI-agent guidance after a change here
 
-`CLAUDE.md` and `SERVICE-TEMPLATE.md` in this repo are the **canonical**
-copies; per-repo copies in the ~274 fleet workspaces are propagated
-snapshots, not independent edits. After merging a change to either file
-**you must re-run propagation** — there is no automation today (see
-[issue #2](https://github.com/baditaflorin/services-registry/issues/2)).
+`CLAUDE.md` and `AGENTS.md` in this repository are the canonical
+fleet guidance. Per-repository copies are managed snapshots, not
+independent edits. The rollout helper creates an isolated worktree at
+the current `origin/main` of each target, changes only guidance files
+(and a compatible docs-only Woodpecker path filter where needed), then
+commits and pushes that repository. It never uses a shared-workspace
+`git add -A` sweep.
 
-From any machine with SSH to the bastion:
-
-```bash
-ssh root@0docker.com 'pct exec 108 -- bash -lc "
-  cd /root/workspace/services-registry &&
-  git pull --ff-only &&
-  /usr/local/bin/fleet-runner inject services-registry/CLAUDE.md CLAUDE.md &&
-  /usr/local/bin/fleet-runner push \"docs(CLAUDE.md): propagate from services-registry\"
-"'
-```
-
-Repeat with `SERVICE-TEMPLATE.md` if that file changed. The
-`fleet-runner push` step uses `git add -A` per workspace — confirm all
-workspaces are clean first with:
+Always start with a dry run from a fresh registry worktree. Roll out
+the graph services as the reference pilot, inspect the three
+documentation-only commits, then continue in batches of at most three:
 
 ```bash
-ssh root@0docker.com 'pct exec 108 -- bash -lc "
-  cd /root/workspace && for d in */; do [ -d \$d/.git ] || continue;
-  out=\$(cd \$d && git status --porcelain); [ -n \"\$out\" ] && echo \"DIRTY: \$d\"; done
-"'
+python3 bin/propagate_agent_guidance.py \
+  --workspace /root/workspace \
+  --repos go-fleet-preflight,go-fleet-graph,go-fleet-selftest-aggregator \
+  --batch-size 3 \
+  --state /var/lib/fleet-runner/agent-guidance-graph-pilot.json
+
+# Repeat only after reviewing the dry-run output.
+python3 bin/propagate_agent_guidance.py \
+  --workspace /root/workspace \
+  --repos go-fleet-preflight,go-fleet-graph,go-fleet-selftest-aggregator \
+  --batch-size 3 \
+  --state /var/lib/fleet-runner/agent-guidance-graph-pilot.json \
+  --apply
 ```
 
-If any workspace shows dirty output unrelated to your propagation,
-resolve it before running push (otherwise the sweep commits unrelated
-files into that repo). Empty output = safe to propagate.
-
-**Why this is manual:** [issue #2](https://github.com/baditaflorin/services-registry/issues/2)
-tracks options to automate (GitHub Action on merge, daily cron, etc.).
-The current consensus is that the cost of forgetting is low — per-repo
-copies are ~99% identical to canonical even when stale, and AI agents
-read whichever version they get at session start — so a documented
-manual step beats fleet-wide auto-push for now.
+For the broader fleet, omit `--repos`, retain the default batch size
+of three, and use a dedicated state file. The rollout is idempotent:
+it maintains explicit graph-guidance markers so future canonical
+changes replace the prior managed block rather than appending
+duplicates. Re-run `SERVICE-TEMPLATE.md` propagation separately when
+that template changes.
 
 ## Topic conventions
 
