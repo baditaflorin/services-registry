@@ -125,3 +125,12 @@ restored to 15m/120m.
 
 Drill-down when it fires:
 `SELECT slug,host,fails,cert_err FROM fleet_edge_probe WHERE kind != 'summary' ORDER BY _timestamp DESC`
+
+## Dashboard
+
+`bin/fleet-edge-probe.deploy/grafana-dashboard.json` — provisioned on
+`monitoring-lv3` by dropping it in `/etc/grafana/dashboards/` (the
+`node-exporter` file provider there auto-loads it, 30s). uid `fleet-edge-probe`,
+datasource uid `0mpc-prometheus`. Shows the **compose** vantage (this
+Prometheus only has that one). For the coolify vantage see
+`openobserve-dashboard-panels.md`.
