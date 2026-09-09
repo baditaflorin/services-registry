@@ -103,6 +103,25 @@ Artifacts in `bin/fleet-edge-probe.deploy/`:
   one row per failing service) into OpenObserve for the 0docker vantage,
   where there is no local Prometheus.
 
-**Still open:** the OpenObserve alert rule for the 0docker vantage (stream
-`fleet_edge_probe`, `kind='summary' AND hard_fail_total > 0`, destination
-`fleet_email`) — create in the OO UI or via API.
+### OpenObserve alert (0docker vantage) — live
+
+Created 2026-09-09 on the LXC 106 OpenObserve (`v0.14.7`) via
+`POST /api/v2/default/alerts`:
+
+- **name:** `fleet_edge_hard_fail`  (folder `default`, scheduled)
+- **stream:** `fleet_edge_probe`
+- **condition (SQL):** `SELECT vantage, hard_fail_total FROM fleet_edge_probe WHERE hard_fail_total > 0`
+  — only `kind:"summary"` rows carry `hard_fail_total`, so this matches
+  a run that found ≥1 hard failure without needing a string literal
+  (OO normalises quotes out of stored SQL).
+- **trigger:** period 20m, `>= 1` matching row, evaluated every 15m,
+  `silence` 120m.
+- **destination:** `fleet_email` → admin@0docker.com (template `fleet_email_default`).
+
+Test-fired by ingesting a synthetic `{kind:"summary",vantage:"test-fire",hard_fail_total:7}`
+row and briefly setting frequency=1m: OO logged `Alert conditions satisfied`
+→ `Alert notification sent`, `last_satisfied_at` populated. Config then
+restored to 15m/120m.
+
+Drill-down when it fires:
+`SELECT slug,host,fails,cert_err FROM fleet_edge_probe WHERE kind != 'summary' ORDER BY _timestamp DESC`
