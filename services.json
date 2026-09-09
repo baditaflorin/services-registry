@@ -2524,6 +2524,35 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "domain-geo-anchor",
+    "name": "Domain Geo Anchor",
+    "description": "Resolve a domain to country/admin1/admin2/city with per-level confidence (CPU-only, GeoNames); downstream of the domainscope LLM call",
+    "category": "domain_intelligence",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-geo-anchor.0crawl.com",
+    "health_url": "https://domain-geo-anchor.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_geo_anchor",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18317,
+    "container_port": 8080,
+    "network_exposure": "gateway-authenticated"
+  },
+  {
     "id": "domain-gift-card",
     "name": "Domain Gift Card",
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",

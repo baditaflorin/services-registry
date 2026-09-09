@@ -1921,6 +1921,31 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domain_intelligence",
+    "description": "Resolve a domain to country/admin1/admin2/city with per-level confidence (CPU-only, GeoNames); downstream of the domainscope LLM call",
+    "example_path": "/",
+    "health_url": "https://domain-geo-anchor.0crawl.com/health",
+    "id": "domain-geo-anchor",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Domain Geo Anchor",
+    "repo_url": "https://github.com/baditaflorin/go_domain_geo_anchor",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://domain-geo-anchor.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "web_analysis",
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "example_path": "/?url=https://example.com",
