@@ -27,31 +27,51 @@ the repo's own `service.yaml` + `deploy.yaml` + `README.md`. This file
 is intentionally generic — it explains the *fleet*, not any one
 service.
 
-## Graph-first orientation
+## Graph-first workflow
 
-Before planning a change to a registered service, run:
+For every change to a registered service, establish the graph boundary
+before broad code search, planning, or a deploy:
 
 ```bash
-fleet-runner graph-context <service-id>
+# Canonical registry / graph service ID.
+fleet-runner graph-context fleet-preflight --json
+fleet-runner deps fleet-preflight --depth 1 --top 10 --since 24h --json
+
+# Workspace repository name; ctx normalizes it to the graph service ID.
+fleet-runner ctx go-fleet-preflight --callers 3 --callees 3 --graph-since 24h --budget 1500 --workdir /root/workspace
 ```
 
-This produces the bounded, reader-authenticated graph context for one
-canonical service ID:
+Use the result in this order:
 
-- **identity and declared topology** come from `services-registry` and
-  are the authoritative source for ownership, repository, mesh, kind,
-  and declared `depends_on` relationships;
-- **observed incoming/outgoing calls** are runtime evidence, labelled
-  with their source and time window; they help assess impact but do not
-  grant permission or replace the registry; and
-- the context is deliberately read-only and excludes credentials,
-  headers, payloads, and raw request paths.
+1. **Scope** with `graph-context`: identity, owner/repository, mesh,
+   kind, and declared topology.
+2. **Assess blast radius** with `deps`: declared dependencies and
+   dependents first, then bounded observed callers/callees for the
+   stated time window.
+3. **Read only the needed source context** with `ctx`; do not start
+   with the much broader `ai-context` unless the graph brief shows
+   that source-specific detail is necessary.
+4. **Close the loop after deploy** with
+   `fleet-runner explain <canonical-service-id> --since 24h --json`,
+   alongside the normal build, health, self-test, version, and gateway
+   checks.
 
-Use this brief before broad searches or a deploy plan. Treat a missing
-runtime edge as “not observed in this window,” not proof that no caller
-exists. Never put a graph-reader credential in a prompt, source file,
-shell history, or commit; the runner loads its reader access through the
-approved vault path.
+`graph-context`, `deps`, and `explain` use the canonical
+registry/graph ID (for example `fleet-preflight`). `ctx` accepts a
+workspace repository name (for example `go-fleet-preflight`) and
+normalizes it. Identity and declared `depends_on` relationships come
+from `services-registry` and are authoritative design intent.
+Observed incoming/outgoing calls are runtime evidence, labelled with
+their source and time window; they help assess impact but never replace
+the registry or grant permission. A missing runtime edge means “not
+observed in this window,” not “no caller exists.”
+
+The graph reader is deliberately read-only and excludes credentials,
+headers, payloads, and raw request paths. Never put its credential in a
+prompt, source file, shell history, or commit; the runner loads reader
+access through the approved vault path. Record the graph query window,
+declared dependencies/dependents, relevant observed callers/callees,
+and post-deploy verification in the change receipt.
 
 **Building a new service?** See
 [`services-registry/SERVICE-TEMPLATE.md`](SERVICE-TEMPLATE.md) — the
