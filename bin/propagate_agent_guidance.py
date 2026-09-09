@@ -7,6 +7,7 @@ from pathlib import Path
 MARKER = "<!-- fleet-release-receipts:managed -->"
 GRAPH_START = "<!-- fleet-graph-first-workflow:managed:start -->"
 GRAPH_END = "<!-- fleet-graph-first-workflow:managed:end -->"
+GUIDANCE_REVISION = 2
 def run(args, cwd=None, check=True):
     return subprocess.run(args, cwd=cwd, check=check, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 def atomic_json(path, value):
@@ -15,6 +16,13 @@ def atomic_json(path, value):
     os.chmod(tmp, 0o600); tmp.replace(path)
 def load_json(path, default):
     return json.loads(path.read_text()) if path.exists() else default
+def load_rollout_state(path):
+    state = load_json(path, {"version": 3, "guidance_revision": GUIDANCE_REVISION, "completed": {}, "runs": []})
+    if state.get("guidance_revision") != GUIDANCE_REVISION:
+        state["version"] = 3
+        state["guidance_revision"] = GUIDANCE_REVISION
+        state["completed"] = {}
+    return state
 def supports_docs_only_ci(text):
     return "path:" in text and "CLAUDE.md" in text and "AGENTS.md" in text
 def add_docs_only_ci(path):
@@ -107,7 +115,7 @@ def main():
     requested={repo.strip() for repo in args.repos.split(",") if repo.strip()} if args.repos else set()
     available={repo for _,repo in all_targets}; unknown=sorted(requested-available)
     if unknown: p.error("unknown or unavailable workspace repositories: " + ", ".join(unknown))
-    state=load_json(args.state,{"version":2,"completed":{},"runs":[]}); pending=[(sid,repo) for sid,repo in all_targets if (not requested or repo in requested) and repo not in state["completed"]]; batch=pending[:args.batch_size]; results=[]
+    state=load_rollout_state(args.state); pending=[(sid,repo) for sid,repo in all_targets if (not requested or repo in requested) and repo not in state["completed"]]; batch=pending[:args.batch_size]; results=[]
     for sid,repo in batch:
         status,detail=update_one(repo,args.workspace,agents_base,agents_graph,clause,claude_graph,args.apply); results.append({"service":sid,"repo":repo,"status":status,"detail":detail})
         if status in {"updated","already_current","blocked_ci_shape","blocked_ci_missing"}: state["completed"][repo]=status

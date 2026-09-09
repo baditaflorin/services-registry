@@ -233,8 +233,10 @@ For the broader fleet, omit `--repos`, retain the default batch size
 of three, and use a dedicated state file. The rollout is idempotent:
 it maintains explicit graph-guidance markers so future canonical
 changes replace the prior managed block rather than appending
-duplicates. Re-run `SERVICE-TEMPLATE.md` propagation separately when
-that template changes.
+duplicates. A new guidance revision intentionally clears only the
+rollout-completion list once, so repositories completed under older
+guidance are revisited. Re-run `SERVICE-TEMPLATE.md` propagation
+separately when that template changes.
 
 ## Topic conventions
 
