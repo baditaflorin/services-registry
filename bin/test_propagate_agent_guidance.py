@@ -72,6 +72,27 @@ class GuidanceTests(unittest.TestCase):
                 [("fleet-graph", "go-fleet-graph")],
             )
 
+    def test_rollout_state_retries_old_guidance_revision_once(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "state.json"
+            path.write_text(
+                '{"version":1,"completed":{"old-repo":"updated"},'
+                '"runs":[{"at":"earlier","results":[]}]}'
+            )
+            migrated = guidance.load_rollout_state(path)
+            self.assertEqual(migrated["version"], 3)
+            self.assertEqual(migrated["guidance_revision"], guidance.GUIDANCE_REVISION)
+            self.assertEqual(migrated["completed"], {})
+            self.assertEqual(len(migrated["runs"]), 1)
+            path.write_text(
+                '{"version":3,"guidance_revision":2,'
+                '"completed":{"current-repo":"updated"},"runs":[]}'
+            )
+            self.assertEqual(
+                guidance.load_rollout_state(path)["completed"],
+                {"current-repo": "updated"},
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
