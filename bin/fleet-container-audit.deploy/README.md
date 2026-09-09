@@ -34,6 +34,11 @@ Live on `ubuntuvm1` (0docker dockerhost) → OpenObserve stream
 | `restart_storm` | `RestartCount >= 20` (crash-looped a lot) |
 | `unhealthy` | docker HEALTHCHECK == unhealthy |
 | `port_foreign` | the registered host_port is published by a **different** container, or (no container matched) held by a non-docker listener that isn't a registered `$external` |
+| `image_tag_latest` *(warn)* | container runs `:latest` — ADR-0028 wants `:<short-sha>` in prod (drift-prone, a hand `docker compose up`) |
+| `image_version_mismatch` *(warn)* | container runs `:<semver>` ≠ the registry `version` — running stale code, deploy never happened |
+
+`fail` findings count toward `bad` (the OO alert threshold); `warn` findings
+(`image_*`) surface on the dashboard but don't page.
 
 Host-networked containers (Prometheus, Alertmanager) publish no docker
 port mapping; the port check only trusts the docker-proxy mapping, so

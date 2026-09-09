@@ -157,8 +157,9 @@ def audit(reg, args):
                     cname = n
                     break
 
-        def add(check, detail=""):
+        def add(check, detail="", severity="fail"):
             findings.append({"slug": slug, "check": check, "detail": detail,
+                             "severity": severity,
                              "container": cname or "", "host_port": hp})
 
         if not cname:
@@ -183,6 +184,19 @@ def audit(reg, args):
         elif st.get("restarts", 0) >= args.restart_storm:
             add("restart_storm", f"{cname} RestartCount={st['restarts']}")
 
+        # image pin — ADR-0028: prod pins :<short-sha>. A running :latest or a
+        # stale :<semver> is a hand `docker compose up` / drift that no deploy
+        # gate saw (the "I pushed so it's deployed" anti-pattern that let
+        # python-proxy crash-loop for 3 weeks).
+        img = by_name.get(cname, {}).get("Image", "")
+        tag = img.rsplit(":", 1)[1] if ":" in img.rsplit("/", 1)[-1] else ""
+        if tag == "latest":
+            add("image_tag_latest", f"{cname} runs {img} — ADR-0028 wants :<short-sha>",
+                severity="warn")
+        elif re.fullmatch(r"v?\d+\.\d+\.\d+", tag) and e.get("version") and tag.lstrip("v") != str(e["version"]):
+            add("image_version_mismatch", f"{cname} runs :{tag}, registry version={e['version']}",
+                severity="warn")
+
         # port ownership — only trust the docker-proxy mapping here. A running
         # matched container with no mapping is normally host-networked and binds
         # the port itself; ss can't tell that apart without sudo, so don't guess.
@@ -191,15 +205,18 @@ def audit(reg, args):
             if owner and owner != cname:
                 add("port_foreign", f"host_port {hp} bound by {owner}, expected {cname}")
 
+    bad = sum(1 for f in findings if f.get("severity", "fail") == "fail")
+    warn = len(findings) - bad
     return {
         "ts": datetime.now(timezone.utc).isoformat(), "host": hostname,
-        "checked": checked, "findings": findings, "bad": len(findings),
+        "checked": checked, "findings": findings, "bad": bad, "warn": warn,
     }
 
 
 def push_oo(url, auth, result):
     rows = [{"kind": "summary", "host": result["host"], "ts": result["ts"],
-             "checked": result["checked"], "bad": result["bad"]}]
+             "checked": result["checked"], "bad": result["bad"],
+             "warn": result.get("warn", 0)}]
     for f in result["findings"]:
         rows.append({"kind": "finding", "host": result["host"], "ts": result["ts"], **f})
     req = urllib.request.Request(url, data=json.dumps(rows).encode(), method="POST",
@@ -227,7 +244,8 @@ def write_prom(path, result):
     ]
     for f in result["findings"]:
         lines.append(
-            f'fleet_container_bad{{host="{h}",slug="{f["slug"]}",check="{f["check"]}"}} 1')
+            f'fleet_container_bad{{host="{h}",slug="{f["slug"]}",'
+            f'check="{f["check"]}",severity="{f.get("severity", "fail")}"}} 1')
     tmp = path + ".tmp"
     open(tmp, "w").write("\n".join(lines) + "\n")
     os.replace(tmp, path)
@@ -255,8 +273,10 @@ def main():
         print(json.dumps(result, indent=2))
     else:
         for f in result["findings"]:
-            print(f"BAD  {f['slug']:<32} {f['check']:<14} {f['detail']}")
-        print(f"\n{result['ts']}  host={result['host']}  checked={result['checked']}  bad={result['bad']}")
+            tag = "BAD " if f.get("severity", "fail") == "fail" else "warn"
+            print(f"{tag} {f['slug']:<32} {f['check']:<20} {f['detail']}")
+        print(f"\n{result['ts']}  host={result['host']}  checked={result['checked']}  "
+              f"bad={result['bad']}  warn={result.get('warn', 0)}")
 
     if args.oo_url:
         push_oo(args.oo_url, args.oo_auth, result)
@@ -266,7 +286,7 @@ def main():
         except OSError as e:
             log(f"prom write failed: {e}")
 
-    return 1 if result["findings"] else 0
+    return 1 if result["bad"] else 0
 
 
 if __name__ == "__main__":
