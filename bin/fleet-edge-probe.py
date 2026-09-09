@@ -244,13 +244,15 @@ def probe(svc: dict, args) -> dict:
     if any(fp in hbody.lower() for fp in FALLBACK_FINGERPRINTS):
         add("fallback_vhost")
 
-    # 11 example path
+    # 11 example path — the point is "a request reaches the app", not "the
+    # registered example is still accurate". Any <500 same-host response proves
+    # the edge is wired; only 5xx / 000 / an off-host redirect is an edge fault.
     ex = svc.get("example_path") or svc.get("example_url")
     if ex:
         ex_url = ex if ex.startswith("http") else url.rstrip("/") + "/" + ex.lstrip("/")
         ecode, efinal, _ = curl(ex_url, args.timeout, want_body=False)
         ehost = urlsplit(efinal).hostname or ""
-        if ecode not in (200, 401, 403) or (ehost and ehost != host):
+        if ecode == 0 or ecode >= 500 or (ehost and ehost != host):
             add("example_unreachable")
 
     meta = {"a": sorted(a), "san": san, "health_code": hcode, "health_final": hfinal,

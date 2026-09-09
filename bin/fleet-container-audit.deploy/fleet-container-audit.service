@@ -1,0 +1,15 @@
+[Unit]
+Description=Fleet container audit — dockerhost-side container health + port-owner check
+Documentation=https://github.com/baditaflorin/services-registry/blob/main/bin/fleet-container-audit.py
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/default/fleet-container-audit
+StateDirectory=fleet-container-audit
+ExecStartPre=-/bin/sh -c 'curl -fsSL --max-time 25 "https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.json" -o /var/lib/fleet-container-audit/services.json.new && mv -f /var/lib/fleet-container-audit/services.json.new /var/lib/fleet-container-audit/services.json'
+ExecStart=/usr/local/bin/fleet-container-audit --services /var/lib/fleet-container-audit/services.json --oo-url=${CA_OO_URL} --oo-auth=${CA_OO_AUTH} --prom=${CA_PROM}
+SuccessExitStatus=0 1
+User=root
+Nice=10
