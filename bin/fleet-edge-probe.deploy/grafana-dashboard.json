@@ -1,0 +1,112 @@
+{
+  "uid": "fleet-edge-probe",
+  "title": "Fleet — Edge Probe",
+  "tags": ["fleet", "edge", "tls", "probe"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "1m",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "vantage",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "query": "label_values(fleet_edge_probe_up, vantage)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "current": { "text": "All", "value": "$__all" }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1, "title": "Hard failures (page-worthy)", "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "fieldConfig": { "defaults": {
+        "thresholds": { "mode": "absolute", "steps": [
+          { "color": "green", "value": null }, { "color": "red", "value": 1 } ] },
+        "color": { "mode": "thresholds" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "area" },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "sum(fleet_edge_probe_hard_fail_total{vantage=~\"$vantage\"})", "instant": true } ]
+    },
+    {
+      "id": 2, "title": "Services OK", "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "green" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "graphMode": "none" },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "sum(fleet_edge_probe_service_ok{vantage=~\"$vantage\"})", "instant": true } ]
+    },
+    {
+      "id": 3, "title": "Warn (registry / data hygiene)", "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "fixed", "fixedColor": "yellow" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "graphMode": "none" },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "count(count by (slug) (fleet_edge_probe_fail_code{severity=\"warn\",vantage=~\"$vantage\"})) OR on() vector(0)", "instant": true } ]
+    },
+    {
+      "id": 4, "title": "Last run age", "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s",
+        "thresholds": { "mode": "absolute", "steps": [
+          { "color": "green", "value": null }, { "color": "yellow", "value": 1200 }, { "color": "red", "value": 2400 } ] },
+        "color": { "mode": "thresholds" } }, "overrides": [] },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "time() - max(fleet_edge_probe_last_run{vantage=~\"$vantage\"})", "instant": true } ]
+    },
+    {
+      "id": 5, "title": "Hard failures over time", "type": "timeseries",
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "fieldConfig": { "defaults": { "custom": { "drawStyle": "line", "fillOpacity": 20, "stepAfter": true } }, "overrides": [] },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "fleet_edge_probe_hard_fail_total{vantage=~\"$vantage\"}", "legendFormat": "{{vantage}}" } ]
+    },
+    {
+      "id": 6, "title": "Failure reasons (current)", "type": "barchart",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "options": { "orientation": "horizontal", "xTickLabelRotation": 0 },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "sum by (code) (fleet_edge_probe_fail_code{vantage=~\"$vantage\"})", "legendFormat": "{{code}}", "instant": true } ]
+    },
+    {
+      "id": 7, "title": "Failing services now (hard)", "type": "table",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 12 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "options": { "showHeader": true, "sortBy": [ { "displayName": "slug", "desc": false } ] },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "fleet_edge_probe_fail_code{severity=\"fail\",vantage=~\"$vantage\"}", "format": "table", "instant": true } ],
+      "transformations": [
+        { "id": "filterFieldsByName", "options": { "include": { "names": ["slug", "host", "runtime", "code", "vantage"] } } },
+        { "id": "organize", "options": { "excludeByName": {}, "renameByName": {} } }
+      ]
+    },
+    {
+      "id": 8, "title": "Warnings — registry data to clean up", "type": "table",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 21 },
+      "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+      "options": { "showHeader": true },
+      "targets": [ { "datasource": { "type": "prometheus", "uid": "0mpc-prometheus" },
+        "expr": "fleet_edge_probe_fail_code{severity=\"warn\",vantage=~\"$vantage\"}", "format": "table", "instant": true } ],
+      "transformations": [
+        { "id": "filterFieldsByName", "options": { "include": { "names": ["slug", "host", "runtime", "code"] } } }
+      ]
+    },
+    {
+      "id": 9, "title": "About", "type": "text",
+      "gridPos": { "h": 4, "w": 24, "x": 0, "y": 29 },
+      "options": { "mode": "markdown", "content": "**fleet-edge-probe** — strict external edge assertions per `services.json` (TLS chain + SAN vs `cert_domain`, no cross-domain redirect, real `/health` body, gateway-IP drift). Tool: `services-registry/bin/fleet-edge-probe`.\n\nThis Prometheus holds the **`monitoring-lv3-0mcp`** vantage = **compose** services (0docker-hosted). The **coolify** vantage (0mcp-hosted, Builder LXC 108) ships to **OpenObserve** stream `fleet_edge_probe` on LXC 106 — alert `fleet_edge_hard_fail`." }
+    }
+  ]
+}
