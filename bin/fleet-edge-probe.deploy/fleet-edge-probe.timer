@@ -1,0 +1,10 @@
+[Unit]
+Description=Run fleet-edge-probe on a schedule
+
+[Timer]
+OnCalendar=__ONCALENDAR__
+RandomizedDelaySec=45
+Persistent=true
+
+[Install]
+WantedBy=timers.target
