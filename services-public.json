@@ -3094,10 +3094,12 @@
   },
   {
     "alias_urls": [
-      "go-information-leakage.0exec.com"
+      "go-information-leakage.0exec.com",
+      "information-leakage.0exec.com"
     ],
     "aliases": [
-      "go-information-leakage"
+      "go-information-leakage",
+      "information-leakage-0exec-legacy"
     ],
     "auth": {
       "header": "X-API-Key",
@@ -7789,9 +7791,10 @@
     ],
     "auth": {
       "header": "X-API-Key",
+      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "Reader access requires an X-API-Key header; query-string credentials are refused.",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
     "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, bounded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
     "example_path": "/viewer",

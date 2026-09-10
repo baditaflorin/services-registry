@@ -337,11 +337,21 @@
       "from_id": "go-information-leakage",
       "to_id": "information-leakage",
       "from_url": "go-information-leakage.0exec.com",
-      "to_url": "information-leakage.0exec.com",
+      "to_url": "information-leakage.0crawl.com",
       "renamed_at": "2026-05-19",
       "retire_at": "2026-06-18",
       "renamed_by": "slug-strip-unification",
       "reason": "Unify slug-derivation: strip leading `go-` for both 0exec and 0crawl.",
+      "status": "redirect"
+    },
+    {
+      "from_id": "information-leakage-0exec-legacy",
+      "to_id": "information-leakage",
+      "from_url": "information-leakage.0exec.com",
+      "to_url": "information-leakage.0crawl.com",
+      "renamed_at": "2026-09-10",
+      "renamed_by": "fleet-incident-repair",
+      "reason": "Retire the stale 0exec vhost that points at an old Dockerhost port; the canonical Coolify service is information-leakage.0crawl.com.",
       "status": "redirect"
     },
     {
