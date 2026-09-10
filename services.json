@@ -1678,6 +1678,13 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "aliases": [
+      "directory-listing-legacy"
+    ],
+    "alias_urls": [
+      "directory-listing.0crawl.com"
+    ],
+    "rename_status": "redirect",
     "trl": 7,
     "trl_evidence": "First-pass audit (250-domain sample, two independent live before/after runs, ~1000 live HTTP calls): found and fixed 3 real bugs -- fetch-cache masking; a hard failure on HTTPS transport errors that gave up entirely instead of retrying over HTTP, missing real live Apache directory listings on a domain whose HTTPS timed out (confirmed live, opensimulator.org); and classic (non-table) Apache mod_autoindex output being misclassified as nginx (confirmed on 2 live production Apache servers). trl bumped 6->7; trl_ceiling=8 added -- known gaps (custom-themed autoindex tools, cloud storage bucket listings, IIS only synthetically tested) are real but bounded. See PR #3 (merged).",
     "trl_ceiling": null,

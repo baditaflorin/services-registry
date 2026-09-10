@@ -1272,6 +1272,12 @@
     "url": "https://dependency-counter.0crawl.com"
   },
   {
+    "alias_urls": [
+      "directory-listing.0crawl.com"
+    ],
+    "aliases": [
+      "directory-listing-legacy"
+    ],
     "auth": {
       "header": "X-API-Key",
       "query_param": "api_key",
@@ -1287,6 +1293,7 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Dir Listing",
+    "rename_status": "redirect",
     "repo_url": "https://github.com/baditaflorin/go_dir_listing",
     "runtime": "coolify",
     "tags": [
