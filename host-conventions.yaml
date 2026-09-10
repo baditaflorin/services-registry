@@ -143,6 +143,10 @@ mesh_defaults:
       GOMAXPROCS: ""  # let Go pick from cgroup limits
   0exec:
     env: {}
+  # Legacy 0docker.com endpoints retain their own certificate and gateway
+  # controls, but participate in the same container safety backstop.
+  0docker:
+    env: {}
 
 # Reserved for future expansion. Document here, don't shoehorn into
 # container_defaults:

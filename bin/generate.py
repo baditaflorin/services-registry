@@ -3,7 +3,7 @@
 Topic-driven registry generator.
 
 Queries the GitHub API for every repo under baditaflorin/* with a
-mesh-{0exec,0crawl,pages} topic, then derives a services.json entry per
+mesh-{0exec,0crawl,0docker,pages} topic, then derives a services.json entry per
 repo from the topics + repo metadata. Replaces the old three-source merge
 in bin/build.py — no more snapshotting hub-app.js or 0crawl-services.json.
 
@@ -221,7 +221,7 @@ PROJECTIONS = {
     ),
 }
 
-MESHES = ("0exec", "0crawl", "pages")
+MESHES = ("0exec", "0crawl", "0docker", "pages")
 
 # kind = what kind of deployable this is (orthogonal to mesh).
 #   container = runs as a Docker service (port, /health, Dockerfile, workspace).
@@ -231,6 +231,7 @@ MESHES = ("0exec", "0crawl", "pages")
 KIND_BY_MESH = {
     "0exec":  "container",
     "0crawl": "container",
+    "0docker": "container",
     "pages":  "static",
 }
 
@@ -243,6 +244,7 @@ KIND_BY_MESH = {
 AUTH_DEFAULTS = {
     "0exec":  {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
     "0crawl": {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
+    "0docker": {"type": "none"},
     "pages":  {"type": "none"},
 }
 
@@ -251,6 +253,7 @@ AUTH_DEFAULTS = {
 LANG_DEFAULTS = {
     "0exec":  "go",
     "0crawl": "go",
+    "0docker": "go",
     "pages":  "html",
 }
 
@@ -464,6 +467,7 @@ def humanize(slug: str) -> str:
 def service_url(slug: str, mesh: str, repo: dict) -> str:
     if mesh == "0exec":  return f"https://{slug}.0exec.com"
     if mesh == "0crawl": return f"https://{slug}.0crawl.com"
+    if mesh == "0docker": return f"https://{slug}.0docker.com"
     if mesh == "pages":
         # Prefer repo homepage if set, else github.io fallback.
         return repo.get("homepageUrl") or f"https://baditaflorin.github.io/{repo['name']}/"
@@ -487,6 +491,7 @@ def health_url(base: str, mesh: str) -> str:
 APEX_FOR_MESH = {
     "0exec":  "0exec.com",
     "0crawl": "0crawl.com",
+    "0docker": "0docker.com",
 }
 
 
@@ -574,7 +579,10 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     ov, _ = resolved_overrides_for(probe, by_slug, rules)
 
     cat   = ov.get("category") or category_of(topics)
-    base  = service_url(slug, mesh, repo)
+    # A small number of established services pre-date topic-driven
+    # hostname derivation. Their explicit canonical URL is still the
+    # authority; the mesh continues to describe their deployment realm.
+    base  = ov.get("url") or service_url(slug, mesh, repo)
     auth  = ov.get("auth") or AUTH_DEFAULTS[mesh]
     desc  = ov.get("description") or (repo.get("description") or "").strip()
     name  = ov.get("name") or humanize(slug)
@@ -610,7 +618,7 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
         "runtime":      runtime,
         "tags":         sorted(set(tags)),
         "url":          base,
-        "health_url":   health_url(base, mesh),
+        "health_url":   ov.get("health_url") or health_url(base, mesh),
         "repo_url":     repo["url"],
         "example_path": exp,
         "auth":         dict(auth),

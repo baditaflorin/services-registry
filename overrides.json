@@ -6367,5 +6367,33 @@
     "container_port": 8080,
     "cpus": 2,
     "mem_limit": "2g"
+  },
+  "kokoro-ovms-adapter": {
+    "auth": {
+      "type": "none"
+    },
+    "access_tier": "infra-privileged",
+    "cert_domain": "kokoro.voice.0docker.com",
+    "compose_self_managed": true,
+    "container_port": 17101,
+    "depends_on": [],
+    "description": "Restricted compatibility adapter for the existing Octopus voice bridge. It validates requests, pins the approved OpenVINO Kokoro model and language, and streams WAV responses without retaining prompts or audio.",
+    "example_path": "/health",
+    "health_url": "https://kokoro.voice.0docker.com/health",
+    "host_port": 18323,
+    "name": "Kokoro OpenVINO Adapter",
+    "proxy_read_timeout": "300s",
+    "scope": "internal-only",
+    "trl": 6,
+    "trl_assessed_at": "2026-09-10",
+    "trl_assessor": "codex-2026-09-10",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single Dockerhost and CPU-only inference sidecar; lift after a replicated model-serving deployment with automated canary rollback.",
+    "trl_evidence": "Validated in a production-shaped Dockerhost canary using the existing bridge request shape: the pinned OpenVINO Model Server returned a valid WAV in under four seconds. Production promotion remains gated on the adapter image, model artifact, restricted gateway cutover, and end-to-end bridge smoke.",
+    "url": "https://kokoro.voice.0docker.com",
+    "version": "0.1.0",
+    "vhost": {
+      "proxy_buffering": "off"
+    }
   }
 }

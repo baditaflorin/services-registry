@@ -8189,6 +8189,44 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "kokoro-ovms-adapter",
+    "name": "Kokoro OpenVINO Adapter",
+    "description": "Restricted compatibility adapter for the existing Octopus voice bridge. It validates requests, pins the approved OpenVINO Kokoro model and language, and streams WAV responses without retaining prompts or audio.",
+    "category": "infrastructure",
+    "mesh": "0docker",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-kokoro"
+    ],
+    "url": "https://kokoro.voice.0docker.com",
+    "health_url": "https://kokoro.voice.0docker.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_kokoro_ovms_adapter",
+    "example_path": "/health",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "kokoro.voice.0docker.com",
+    "trl": 6,
+    "trl_evidence": "Validated in a production-shaped Dockerhost canary using the existing bridge request shape: the pinned OpenVINO Model Server returned a valid WAV in under four seconds. Production promotion remains gated on the adapter image, model artifact, restricted gateway cutover, and end-to-end bridge smoke.",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single Dockerhost and CPU-only inference sidecar; lift after a replicated model-serving deployment with automated canary rollback.",
+    "trl_assessed_at": "2026-09-10",
+    "trl_assessor": "codex-2026-09-10",
+    "host_port": 18323,
+    "container_port": 17101,
+    "depends_on": [],
+    "vhost": {
+      "proxy_buffering": "off"
+    },
+    "proxy_read_timeout": "300s",
+    "access_tier": "infra-privileged",
+    "version": "0.1.0",
+    "network_exposure": "gateway-ip-allowlisted"
+  },
+  {
     "id": "agent-approval",
     "name": "Agent Approval",
     "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
@@ -10489,8 +10527,8 @@
     "tags": [
       "fleet-infra"
     ],
-    "url": "https://fleet-persona.0exec.com",
-    "health_url": "https://fleet-persona.0exec.com/health",
+    "url": "https://persona.0exec.com",
+    "health_url": "https://persona.0exec.com/v1/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-persona",
     "example_path": "/v1/health",
     "auth": {
@@ -10563,8 +10601,8 @@
     "tags": [
       "fleet-infra"
     ],
-    "url": "https://fleet-pixel.0exec.com",
-    "health_url": "https://fleet-pixel.0exec.com/health",
+    "url": "https://pixel.0exec.com",
+    "health_url": "https://pixel.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go-fleet-pixel",
     "example_path": "/pix.gif?app=mesh-test&event=pv",
     "auth": {
