@@ -6391,7 +6391,7 @@
     "trl_ceiling_reason": "Single Dockerhost and CPU-only inference sidecar; lift after a replicated model-serving deployment with automated canary rollback.",
     "trl_evidence": "Validated in a production-shaped Dockerhost canary using the existing bridge request shape: the pinned OpenVINO Model Server returned a valid WAV in under four seconds. Production promotion remains gated on the adapter image, model artifact, restricted gateway cutover, and end-to-end bridge smoke.",
     "url": "https://kokoro.voice.0docker.com",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "vhost": {
       "proxy_buffering": "off"
     }
