@@ -4094,10 +4094,12 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
     "aliases": [
-      "go-information-leakage"
+      "go-information-leakage",
+      "information-leakage-0exec-legacy"
     ],
     "alias_urls": [
-      "go-information-leakage.0exec.com"
+      "go-information-leakage.0exec.com",
+      "information-leakage.0exec.com"
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
@@ -10103,9 +10105,10 @@
     "example_path": "/viewer",
     "auth": {
       "type": "api_key",
+      "query_param": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "Reader access requires an X-API-Key header; query-string credentials are refused.",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
     "aliases": [
       "go-fleet-graph"
