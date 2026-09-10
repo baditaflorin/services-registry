@@ -820,6 +820,7 @@
     "auth": {
       "type": "none"
     },
+    "access_tier": "infra-privileged",
     "container_port": 18022,
     "depends_on": [],
     "description": "Renders services.json into the public catalog at catalog.0exec.com. Reads the registry's JSON slices and presents browsable tables of all fleet services with auth-help, TRL, mesh, and links.",
