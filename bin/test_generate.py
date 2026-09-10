@@ -153,6 +153,29 @@ class TestExpandEntry(unittest.TestCase):
             generate.expand_entry(PARENT_FIXTURE, bad_spec, by_slug={}, rules=[])
 
 
+class Test0DockerMesh(unittest.TestCase):
+    def test_legacy_hostname_override_keeps_its_actual_edge(self):
+        repo = {
+            "name": "go_kokoro_ovms_adapter",
+            "description": "adapter",
+            "homepageUrl": "",
+            "url": "https://github.com/baditaflorin/go_kokoro_ovms_adapter",
+            "repositoryTopics": [
+                {"name": "mesh-0docker"},
+                {"name": "category-infrastructure"},
+            ],
+        }
+        override = {
+            "url": "https://kokoro.voice.0docker.com",
+            "health_url": "https://kokoro.voice.0docker.com/health",
+        }
+        entry = generate.make_entry(repo, {"kokoro-ovms-adapter": override}, [])
+        self.assertEqual(entry["mesh"], "0docker")
+        self.assertEqual(entry["url"], override["url"])
+        self.assertEqual(entry["health_url"], override["health_url"])
+        self.assertEqual(entry["cert_domain"], "wildcard.0docker.com")
+
+
 class TestExternalEntry(unittest.TestCase):
     """$external is the registry's hook for third-party / upstream
     containers that run on the dockerhost but aren't in the fleet repo

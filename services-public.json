@@ -6295,6 +6295,32 @@
     "url": "https://zone-transfer.0crawl.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "Restricted compatibility adapter for the existing Octopus voice bridge. It validates requests, pins the approved OpenVINO Kokoro model and language, and streams WAV responses without retaining prompts or audio.",
+    "example_path": "/health",
+    "health_url": "https://kokoro.voice.0docker.com/health",
+    "id": "kokoro-ovms-adapter",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0docker",
+    "name": "Kokoro OpenVINO Adapter",
+    "repo_url": "https://github.com/baditaflorin/go_kokoro_ovms_adapter",
+    "runtime": "compose",
+    "tags": [
+      "fleet-kokoro"
+    ],
+    "trl": 6,
+    "trl_assessed_at": "2026-09-10",
+    "trl_assessor": "codex-2026-09-10",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single Dockerhost and CPU-only inference sidecar; lift after a replicated model-serving deployment with automated canary rollback.",
+    "url": "https://kokoro.voice.0docker.com"
+  },
+  {
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
@@ -8084,7 +8110,7 @@
     "category": "fleet_infra",
     "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet \u2014 L2 tier of fleetPersona in mesh-common",
     "example_path": "/v1/health",
-    "health_url": "https://fleet-persona.0exec.com/health",
+    "health_url": "https://persona.0exec.com/v1/health",
     "id": "fleet-persona",
     "kind": "container",
     "language": "go",
@@ -8099,7 +8125,7 @@
     "trl_assessed_at": "2026-05-19",
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-persona",
     "trl_ceiling": 7,
-    "url": "https://fleet-persona.0exec.com"
+    "url": "https://persona.0exec.com"
   },
   {
     "auth": {
@@ -8141,7 +8167,7 @@
     "category": "fleet_infra",
     "description": "1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet",
     "example_path": "/pix.gif?app=mesh-test&event=pv",
-    "health_url": "https://fleet-pixel.0exec.com/health",
+    "health_url": "https://pixel.0exec.com/health",
     "id": "fleet-pixel",
     "kind": "container",
     "language": "go",
@@ -8158,7 +8184,7 @@
     "trl_assessed_at": "2026-07-01",
     "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "trl_ceiling": 6,
-    "url": "https://fleet-pixel.0exec.com"
+    "url": "https://pixel.0exec.com"
   },
   {
     "alias_urls": [

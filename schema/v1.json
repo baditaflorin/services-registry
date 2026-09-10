@@ -9,7 +9,7 @@
     "name":         { "type": "string", "description": "Human display name" },
     "description":  { "type": "string", "description": "One-line summary" },
     "category":     { "type": "string", "description": "One of: proxy, search, ocr, geo, nlp, content, domains, security, recon, infrastructure, web_analysis, visualization, registry, dashboard" },
-    "mesh":         { "type": "string", "enum": ["0exec", "0crawl", "pages"], "description": "Which service mesh / domain root" },
+    "mesh":         { "type": "string", "enum": ["0exec", "0crawl", "0docker", "pages"], "description": "Which service mesh / domain root" },
     "kind": {
       "type": "string",
       "enum": ["container", "static"],
