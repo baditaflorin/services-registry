@@ -10138,7 +10138,7 @@
   {
     "id": "fleet-graph",
     "name": "Fleet Graph",
-    "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, bounded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
+    "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, a compact evidence-backed agent brief, expanded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
     "category": "infrastructure",
     "mesh": "0exec",
     "kind": "container",
@@ -10176,7 +10176,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.4.1",
+    "version": "0.4.4",
     "network_exposure": "gateway-authenticated"
   },
   {

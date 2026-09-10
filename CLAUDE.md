@@ -35,23 +35,30 @@ before broad code search, planning, or a deploy:
 ```bash
 # Canonical registry / graph service ID.
 fleet-runner graph-context fleet-preflight --json
+
+# Run only when graph-context names inspect_bounded_dependencies as a next action.
 fleet-runner deps fleet-preflight --depth 1 --top 10 --since 24h --json
 
 # Workspace repository name; ctx normalizes it to the graph service ID.
 fleet-runner ctx go-fleet-preflight --callers 3 --callees 3 --graph-since 24h --budget 1500 --workdir /root/workspace
 ```
 
+The `graph-context` result is a token-bounded, review-only agent brief. It
+contains the service identity, declared topology, bounded runtime evidence,
+attention signals, and typed next actions. It can recommend investigation;
+it never authorizes a code, configuration, secret, or deployment change.
+
 Use the result in this order:
 
-1. **Scope** with `graph-context`: identity, owner/repository, mesh,
-   kind, and declared topology.
-2. **Assess blast radius** with `deps`: declared dependencies and
-   dependents first, then bounded observed callers/callees for the
-   stated time window.
+1. **Scope and review attention** with `graph-context`: identity,
+   declared topology, bounded runtime evidence, and its typed next actions.
+2. **Assess blast radius only when requested** with `deps`: declared
+   dependencies and dependents first, then bounded observed callers/callees
+   for the stated time window.
 3. **Read only the needed source context** with `ctx`; do not start
-   with the much broader `ai-context` unless the graph brief shows
-   that source-specific detail is necessary.
-4. **Close the loop after deploy** with
+   with the much broader `ai-context` unless the brief or investigation
+   shows that source-specific detail is necessary.
+4. **Close the loop after a human-approved deploy** with
    `fleet-runner explain <canonical-service-id> --since 24h --json`,
    alongside the normal build, health, self-test, version, and gateway
    checks.

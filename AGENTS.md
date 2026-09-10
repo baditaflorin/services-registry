@@ -11,8 +11,8 @@ This repository is part of the baditaflorin fleet. Project-specific instructions
 
 ## Graph-first workflow
 
-- Before scoping, searching, or changing a registered service, run `fleet-runner graph-context <canonical-service-id> --json`, then `fleet-runner deps <canonical-service-id> --depth 1 --top 10 --since 24h --json`.
-- Use `fleet-runner ctx <workspace-repo> --callers 3 --callees 3 --graph-since 24h --budget 1500 --workdir /root/workspace` only for the bounded source context needed after that graph brief. Do not begin with broad `ai-context`.
+- Before scoping, searching, or changing a registered service, run `fleet-runner graph-context <canonical-service-id> --json`. It returns a compact, review-only brief: identity, bounded runtime evidence, declared topology, attention signals, and typed next actions.
+- Call `fleet-runner deps <canonical-service-id> --depth 1 --top 10 --since 24h --json` only when the brief says `inspect_bounded_dependencies`. Use `fleet-runner ctx <workspace-repo> --callers 3 --callees 3 --graph-since 24h --budget 1500 --workdir /root/workspace` only for the bounded source context then needed. Do not begin with broad `ai-context`.
 - `graph-context`, `deps`, and `explain` use the canonical registry ID (for example `fleet-preflight`); `ctx` accepts the repository name (for example `go-fleet-preflight`) and normalizes it.
 - Declared `depends_on` topology is design intent from `services-registry`. Observed calls are window-scoped runtime evidence; an absent observed edge is not proof that no caller exists.
 - After deploy, run `fleet-runner explain <canonical-service-id> --since 24h --json` plus the normal health, self-test, version, and gateway checks. Put the graph window, relevant declared/observed edges, and verification result in the change receipt.
