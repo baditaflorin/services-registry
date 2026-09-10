@@ -355,6 +355,16 @@
       "status": "redirect"
     },
     {
+      "from_id": "directory-listing-legacy",
+      "to_id": "dir-listing",
+      "from_url": "directory-listing.0crawl.com",
+      "to_url": "dir-listing.0crawl.com",
+      "renamed_at": "2026-09-10",
+      "renamed_by": "fleet-incident-repair",
+      "reason": "Retire the stale Dockerhost vhost that points at an absent port; the canonical Coolify service is dir-listing.0crawl.com.",
+      "status": "redirect"
+    },
+    {
       "from_id": "go-infrastructure-fetch-cache",
       "to_id": "infrastructure-fetch-cache",
       "from_url": "go-infrastructure-fetch-cache.0exec.com",
