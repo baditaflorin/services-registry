@@ -1478,6 +1478,10 @@
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
     "host_port": 18198,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/?target=stripe.com",
     "trl": 6,
     "trl_evidence": "Live production-DB audit (~3.5M rows) found a sharp spike at pages_scanned_count=6 (233,741 rows, ~25% of all non-zero counts) across every shipped version. Root-caused, confirmed live via direct curl/md5: parked-domain and soft-404/SPA-catch-all sites return byte-identical HTTP 200 bodies at every one of the scanner's 6 candidate paths, so one page fetched under 6 URLs was counted as 6 distinct pages scanned -- and, more materially, caused claim extraction to rerun on the same content once per duplicate URL, multiplying recorded claims. Fixed (v0.4.6) with content-based de-duplication, reproduced before/after against live domains. See github.com/baditaflorin/go_domain_compliance_claim_scanner PR #15 (merged). Rows with tool_version<0.4.6 are re-crawl candidates.",
@@ -1727,6 +1731,10 @@
   "domain-http3-quic-detector": {
     "container_port": 18190,
     "host_port": 18190,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found apple.com/amazon.com/microsoft.com/facebook.com/wikipedia.org all falsely graded F (https_available=false) in the same batch google.com/cloudflare.com/github.com correctly passed. Cross-validated against an independent table (domain_tls) confirming no real outage. Root-caused: classifyProbeError checked the 'tls' substring before checking timeout-ness, so Go's literal error string 'net/http: TLS handshake timeout' got misfiled as a non-retryable TLS error instead of a retryable connect timeout -- major CDN/WAF-fronted domains with heavier handshakes got zero retries. Fixed (v0.4.5) by checking timeout-ness first; confirmed the fleet's safehttp fetch-cache bug does not apply here (this is a HEAD-only availability check, not GET). See github.com/baditaflorin/go_domain_http3_quic_detector PR #10 (merged). Rows with tool_version<0.4.5 are re-crawl candidates.",
     "trl_ceiling": 7,
@@ -1847,6 +1855,10 @@
     "proxy_read_timeout": "75s",
     "container_port": 18193,
     "host_port": 18193,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 7,
     "trl_evidence": "Investigated the same 'false written on failed fetch' pattern (18.4% of rows, substack.com itself affected). Found this repo's own contract was already fixed in-repo back on 2026-06-09 (a prior, unrelated commit adopted go-common/meshresult and switched failure paths to omit the data field entirely rather than assert false) -- confirmed via git history. The corruption continues accruing daily regardless, proof the root cause lives entirely in the separate ingestion/orchestrator component, not this repo. No fix forced, no PR opened. Second of 4 sibling services confirming the same root cause -- see the fleet-wide note below.",
     "trl_ceiling": 7,
@@ -2000,6 +2012,10 @@
     "proxy_read_timeout": "75s",
     "container_port": 18192,
     "host_port": 18192,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 8,
     "trl_evidence": "Live production-DB audit found primary_vendor='reamaze' as the single largest detected vendor (1,191 rows), with 49.5% being spam/parked .info domains. Traced the residual (post-earlier-fix) cases via live browser reproduction to GoDaddy Website Builder unconditionally loading Reamaze's shared JS bundle via a GoDaddy-specific loader file, whose bundled CSS/DOM boilerplate satisfied the detector's 'activation' marker regardless of merchant intent -- verified against reamaze.com's own genuine install, which never carries that GoDaddy-specific loader filename. Fixed (v0.3.8) with a targeted confidence cap keyed to the GoDaddy loader marker, with regression tests for both the false-positive and true-positive cases. See github.com/baditaflorin/go_domain_support_stack_detector PR #14 (merged). Rows with tool_version<0.3.8 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
@@ -2057,6 +2073,10 @@
   "domain-trust-composite-grader": {
     "container_port": 18199,
     "host_port": 18199,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 6,
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Self-contained protocol-hygiene heuristic (RDAP age via IANA bootstrap, DNSSEC, SPF/DMARC, MTA-STS, TLS, RFC 9116 security.txt) with real RFC-compliant parsing and a measured-vs-unmeasured evidence trail, but no external reputation/threat-intel signal, no historical-trend component, and no empirically-calibrated ground truth for its 90-point weighting scheme -- structurally cannot reach SLA-grade (8-9) as designed.",
@@ -2084,6 +2104,10 @@
     "container_port": 18194,
     "description": "Semantic /.well-known/ coverage scanner that rejects wildcard routes, soft 404s, malformed documents, and wrong redirects.",
     "host_port": 18194,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
