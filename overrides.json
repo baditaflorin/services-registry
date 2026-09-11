@@ -6363,6 +6363,10 @@
     "proxy_read_timeout": "200s"
   },
   "domain-geo-anchor": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18317,
     "container_port": 8080,
     "cpus": 2,
