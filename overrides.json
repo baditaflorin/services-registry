@@ -1497,6 +1497,10 @@
   },
   "domain-dane-tlsa": {
     "container_port": 18219,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "description": "DANE/TLSA record presence + cert binding validation (RFC 6698).",
     "host_port": 18219,
     "trl": 6,
@@ -1685,6 +1689,10 @@
   },
   "domain-glue-records": {
     "container_port": 18237,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
     "host_port": 18237,
     "trl": 7,
@@ -1796,6 +1804,10 @@
   },
   "domain-naptr-enum": {
     "container_port": 18236,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "description": "NAPTR + ENUM (E.164) record discovery (RFC 3403/2916/6116).",
     "host_port": 18236,
     "trl": 6,
