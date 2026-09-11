@@ -1947,6 +1947,10 @@
   "domain-rbl-reputation": {
     "container_port": 18182,
     "host_port": 18182,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found grade F essentially never fires (0/10,757 current-version rows; only 40 F rows exist fleet-wide, all stale). Root-caused: 2 of 7 configured DNSBL zones (SORBS) have been completely dead since the provider was decommissioned on 2026-06-05 (over two years live-verified as NXDOMAIN against 3 independent resolvers) -- every lookup against them silently returns 'not listed' with no error signal, degrading real IP-reputation coverage. Fixed (v0.4.4) by removing the dead zones, matching a prior same-class fix for uribl.com. False-positive handling (RBL timeout/rate-limit misread as a hit) independently verified correct against a live 120-domain sample. See github.com/baditaflorin/go_domain_rbl_reputation PR #12 (merged). Rows with tool_version<0.4.4 are re-crawl candidates.",
     "trl_ceiling": 7,
@@ -1960,6 +1964,10 @@
   "domain-saas-host-mapper": {
     "container_port": 18191,
     "host_port": 18191,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 7,
     "trl_evidence": "Live production-DB audit found 143,413 wordpress_com-classified rows, but only 0.07% have real wordpress.com CNAME evidence -- appearing to be a live false-positive bug. Investigated and found the opposite: a prior 'Pass 3' fix (merged 2026-05-31) that correctly reserves wordpress_com for real CNAME matches is genuinely deployed and correct -- live-verified against the currently-deployed v0.3.7 binary and confirmed 28/28 post-fix-tool_version rows are all genuine matches. Root cause of the bad aggregate: 99.98% of wordpress_com rows carry a blank tool_version, meaning they predate the fix and have never been reprocessed -- a pipeline backfill gap, not a code or deployment defect. No code change made. Priority re-crawl target: all domain_saas_host rows with blank/NULL tool_version (~2.88M rows fleet-wide).",
     "trl_ceiling": 7,
@@ -1973,6 +1981,10 @@
   "domain-structured-data-rollup": {
     "container_port": 18188,
     "host_port": 18188,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "internal_direct": true,
     "trl": 7,
     "trl_evidence": "Rigorous fresh audit: two independent live 200-domain production samples (~320 real JSON-LD blocks parsed total) found zero malformed-JSON-LD parse failures and correct handling of @graph/multi-type-array/embed-segregation on real pages. The one DB-level anomaly flagged (NULL og_title when has_open_graph=true, 1.5% of rows) was live-verified against 10 real affected domains -- all genuinely omit an og:title tag while shipping other OG tags; a duplicate-tag-overwrite theory was also tested and ruled out (0/8 sampled duplicates were empty). No code change needed.",
@@ -2000,6 +2012,10 @@
   "domain-tech-eol-flagger": {
     "container_port": 18186,
     "host_port": 18186,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 7,
     "trl_evidence": "Live production-DB audit found a plausible eol distribution (php-7.4.33, jquery-1.8.3, nginx-1.24.0 dominate, all genuinely EOL) -- the healthiest of a 30-service DB sweep. A source-level audit still found and fixed a real, systemic false negative: jQuery signatures required a version directly adjacent to 'jquery' in the filename, never matching WordPress's own bundled-jQuery shape (wp-includes/js/jquery/jquery.min.js?ver=X.Y.Z) -- live re-fetch of 12 real WordPress sites already flagged with an EOL WP core found 11/12 also carried this exact pattern with a genuinely EOL jQuery 1.x, none previously detected. Fixed (v0.4.3) with a signature scoped to WordPress's script-loader-pinned ver= filename shape, verified not to bleed into jQuery UI/Migrate/Validate. See github.com/baditaflorin/go_domain_tech_eol_flagger PR #13 (merged). Rows with tool_version<0.4.3 are re-crawl candidates.",
     "trl_ceiling": 7,
@@ -2013,6 +2029,10 @@
   "domain-third-party-fetch-map": {
     "container_port": 18185,
     "host_port": 18185,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found no internal contradictions, but a fresh pass found and fixed a real bug: multi-tenant infrastructure CDN hosts (cloudfront.net, s3.amazonaws.com) are PSL 'private' suffixes, so each tenant subdomain was treated as its own registrable domain -- a page pulling assets from 2+ distinct CloudFront distributions (a common real pattern) was reported as referencing multiple distinct third-party vendors. Live query found 1,045 domains (14% of CloudFront users) affected, +1,727 phantom domain counts from CloudFront alone. Fixed (v0.4.6) by folding known multi-tenant infra-CDN hosts to one shared vendor identity for aggregation only, verified against a real 4-distribution production page. See github.com/baditaflorin/go_domain_third_party_fetch_map PR #15 (merged). Rows with tool_version<0.4.6 are re-crawl candidates.",
     "trl_ceiling": 7,
