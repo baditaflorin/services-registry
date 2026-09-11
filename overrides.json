@@ -1329,6 +1329,10 @@
   },
   "domain-ai-bot-policy-scanner": {
     "container_port": 18195,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18195,
     "trl": 7,
     "trl_evidence": "Fresh source-level audit (DB pass found no anomaly) found and fixed a real cross-contamination bug: groupForAgent matched a robots.txt User-agent token against a gazetteer bot's canonical token in both prefix directions, silently cross-matching distinct gazetteer bots whenever one canonical token is a prefix of a sibling (Omgili/Omgilibot, AI2Bot/Ai2Bot-Dolma) -- confirmed live against Cloudflare's managed AI-bot blocklist format and cross-checked against production rows showing the contamination pattern. Fixed (v0.3.7) by dropping the RFC-9309-noncompliant reverse direction; a live 180-domain probe through the real parsing pipeline showed zero panics/contradictions post-fix. See github.com/baditaflorin/go_domain_ai_bot_policy_scanner PR #15 (merged). Rows with tool_version<0.3.7 are re-crawl candidates.",
@@ -1562,6 +1566,10 @@
   "domain-documentation-platform-detector": {
     "proxy_read_timeout": "75s",
     "container_port": 18197,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18197,
     "proxy_egress": true,
     "trl": 7,
@@ -1802,6 +1810,10 @@
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18187,
     "internal_direct": true,
     "trl": 7,
@@ -1848,6 +1860,10 @@
   },
   "domain-open-source-presence": {
     "container_port": 18196,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18196,
     "trl": 6,
     "trl_evidence": "First-pass audit (fresh 250-domain sample + live spot-check of 30 known OSS companies, 27/30 correct): found and fixed 2 real bugs -- an inconsistent length threshold meant exactly-3-character brand tokens (e.g. 'n8n') could never match via containment, confirmed live losing a 200k+-star OSS company entirely (fixed with a careful prefix-anchored rule, not a naive blanket match which a stress test showed would introduce new false positives); and a GitHub API rate-limit quota-doubling bug on failed lookups. Confirmed fetch-cache masking doesn't apply (uses fleetfetch by design) and confirmed a real, live GitHub unauthenticated rate-limit exhaustion (60/hour shared fleet-wide). Flagged (not overridden) a catalog/repo discrepancy: this repo's own service.yaml had self-bumped to trl=7 without a fresh assessor stamp. trl held at 6 pending that reconciliation; trl_ceiling=8 added. See PR #12 (merged).",
