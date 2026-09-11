@@ -1301,6 +1301,10 @@
   },
   "domain-abuse-contact-rollup": {
     "container_port": 18189,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18189,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -1540,6 +1544,10 @@
   },
   "domain-dnssec-validator": {
     "container_port": 18180,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18180,
     "trl": 7,
     "trl_evidence": "Live production-DB audit (~3.7M rows) found grade B statistically unreachable (17/3.7M rows, 0.00046%) versus A=117K and C=40K. Root-caused to dead code in chainVerdict: the AD-bit corroboration downgrade to grade B lived in a switch branch that could never be reached given how rrsigStatus is always populated, so the common rrsigValid outcome always graded A regardless of AD-bit corroboration -- confirmed 68 production rows graded A with authentic=false. Fixed (v0.4.3) by moving the downgrade check into the reachable case, with regression tests pinning the B-grade path. See github.com/baditaflorin/go_domain_dnssec_validator PR #12 (merged). Rows with tool_version<0.4.3 are re-crawl candidates.",
@@ -1578,6 +1586,10 @@
   },
   "domain-email-deliverability-score": {
     "container_port": 18181,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18181,
     "trl": 7,
     "trl_evidence": "Rigorous fresh audit: live 364-domain production sample plus ~3.5M-execution coverage-guided fuzz testing of every record parser (SPF/DMARC/DKIM/BIMI) found zero panics and zero misclassifications. The two anomalies flagged during testing (dual-SPF-record domains) were confirmed to be correct RFC 7208 PermError detections of genuine real-world misconfigurations, not tool bugs. No code change needed -- this service held up cleanly under an independent, adversarial re-verification after 7+ prior audit passes.",
@@ -1861,6 +1873,10 @@
   },
   "domain-passive-dns-history": {
     "container_port": 18183,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "host_port": 18183,
     "trl": 7,
     "trl_evidence": "Live production-DB audit found unique_ips=0 on 57.4% of status=ok rows, mostly explained (96.8% zero-rate) by legacy pre-tool_version bulk-seed rows; filtered to current versions the zero-rate was only ~0.2%. That residual traced to a real silent-data-loss bug: sub-host observations from the HackerTarget source are annotated as '<ip> (host)', but the dedup validation gate ran IP parsing on the whole annotated string, which never parses, so the record was silently dropped -- discarding the majority of real historical address evidence while the domain still reported status=ok. Confirmed live against real affected production domains and a fresh HackerTarget call. Fixed (v0.3.5) to validate only the leading IP token while preserving the host-evidence suffix. See github.com/baditaflorin/go_domain_passive_dns_history PR #12 (merged). Rows with tool_version<0.3.5 are re-crawl candidates.",
