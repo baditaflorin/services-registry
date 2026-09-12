@@ -1496,6 +1496,10 @@
   "domain-ct-log-watcher": {
     "container_port": 18184,
     "host_port": 18184,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "internal_direct": true,
     "trl": 7,
     "trl_evidence": "Live production-DB audit (~3.6M rows) found issuer_churn NULL/0.00 on 100% of rows, including domains with hundreds of certs and multiple issuers -- a dedicated partial index for churn>0.5 could never return a row. Root-caused: handler.go wired the wire field to an unordered distinct-issuer-org list instead of any real computation, a type mismatch (array vs numeric column) guaranteeing null/zero on every write. Fixed (v0.3.7) by implementing a real time-ordered churn-rate algorithm with regression tests proving nonzero output for a genuinely churning history. See github.com/baditaflorin/go_domain_ct_log_watcher PR #12 (merged). Rows with tool_version<0.3.7 are re-crawl candidates.",
