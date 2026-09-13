@@ -8523,7 +8523,7 @@
   {
     "id": "country-iso-matcher",
     "name": "Country Iso Matcher",
-    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 code. Unicode-normalizing, accent- and case-insensitive matcher over a curated corpus of 183 countries plus their multilingual aliases, served entirely from memory. NOTE: iso3Code currently mirrors iso2Code -- the default CSV corpus carries no alpha-3 column.",
+    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 and alpha-3 code. Unicode-normalizing, accent- and case-insensitive matcher over all 249 assigned ISO countries/territories and multilingual aliases, served entirely from memory.",
     "category": "geo",
     "mesh": "0exec",
     "kind": "container",
@@ -8553,6 +8553,17 @@
     "trl_assessed_at": "2026-08-29",
     "trl_assessor": "claude-opus-5-2026-08-29-fleet-onboarding",
     "placement": "replicable",
+    "quality_contract": {
+      "status": "operational",
+      "dataset_url": "https://unstats.un.org/unsd/methodology/m49/",
+      "dataset_revision": "UN M49 country-or-area codes accessed 2026-09-13; ISO alpha-2/alpha-3 crosswalk pinned in repository fixture",
+      "regression_command": "go test ./src/internal/data -run 'TestBundled(CSVProvidesISO3ForEveryCountry|AliasesCoverEveryCountry)$' -count=1",
+      "metrics": [
+        "coverage"
+      ],
+      "last_verified_at": "2026-09-13",
+      "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. The checked regression validates full alpha-3 shape, long-tail alpha-2 codes, and an alias for every country; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
+    },
     "host_port": 18315,
     "container_port": 18315,
     "network_exposure": "gateway-authenticated"

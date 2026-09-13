@@ -6569,7 +6569,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "geo",
-    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 code. Unicode-normalizing, accent- and case-insensitive matcher over a curated corpus of 183 countries plus their multilingual aliases, served entirely from memory. NOTE: iso3Code currently mirrors iso2Code -- the default CSV corpus carries no alpha-3 column.",
+    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 and alpha-3 code. Unicode-normalizing, accent- and case-insensitive matcher over all 249 assigned ISO countries/territories and multilingual aliases, served entirely from memory.",
     "example_path": "/api/convert?country=Germany",
     "health_url": "https://country-iso-matcher.0exec.com/health",
     "id": "country-iso-matcher",

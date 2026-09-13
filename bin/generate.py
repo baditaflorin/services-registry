@@ -663,6 +663,10 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # ADR-0039 explicit placement eligibility. Absence remains
               # meaningful; a declared override must reach services.json.
               "placement",
+              # Quality contracts are deliberately private: their metrics,
+              # regression commands and evidence belong to fleet review, not
+              # the untrusted public catalog projection.
+              "quality_contract",
               "host_port", "container_port", "port",
               # Private producer-to-service routing approval. This is
               # deny-by-default (absence means proxy via the public mesh),
