@@ -4679,7 +4679,7 @@
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Microservice for Scan Port Ssh",
-    "example_path": "/?target=example.com",
+    "example_path": "/?host=scanme.nmap.org&port=22",
     "health_url": "https://scan-port-ssh.0crawl.com/health",
     "id": "scan-port-ssh",
     "kind": "container",
