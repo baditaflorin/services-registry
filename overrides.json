@@ -1048,7 +1048,7 @@
   "country-iso-matcher": {
     "container_port": 18315,
     "host_port": 18315,
-    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 code. Unicode-normalizing, accent- and case-insensitive matcher over a curated corpus of 183 countries plus their multilingual aliases, served entirely from memory. NOTE: iso3Code currently mirrors iso2Code -- the default CSV corpus carries no alpha-3 column.",
+    "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 and alpha-3 code. Unicode-normalizing, accent- and case-insensitive matcher over all 249 assigned ISO countries/territories and multilingual aliases, served entirely from memory.",
     "example_path": "/api/convert?country=Germany",
     "trl": 4,
     "placement": "replicable",
@@ -1056,7 +1056,20 @@
     "trl_assessor": "claude-opus-5-2026-08-29-fleet-onboarding",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Ceiling is set by corpus quality, not by architecture. Reaching 6 needs a real ISO 3166-1 source of truth (alpha-3 backfilled, subdivisions, official/short/UN names, withdrawn-code history) rather than a 183-row hand-curated CSV with 59 alias rows.",
-    "trl_evidence": "First fleet-registered release (0.1.0, 2026-08-29). Verified live against the built amd64 image: /health, /version, /metrics (154 series) and /api/convert all 200; \"Germany\" -> DE, \"Deutschland\" -> DE (alias hit), \"United States\" -> US, unknown input -> 404 with a structured error. Real logic beyond a regex (Unicode NFD normalization, case/accent folding, alias table) and unit tests exist, but two known gaps hold it at 4: iso3Code is a documented fallback to iso2 under the default CSV source (csv_loader.go:72), and coverage is 183 of 249 assigned alpha-2 codes. Two of the repo's three test files had not compiled since the src/ restructure and were repaired as part of this onboarding."
+    "trl_evidence": "First fleet-registered release (0.1.0, 2026-08-29). Verified live against the built amd64 image: /health, /version, /metrics (154 series) and /api/convert all 200; \"Germany\" -> DE, \"Deutschland\" -> DE (alias hit), \"United States\" -> US, unknown input -> 404 with a structured error. Real logic beyond a regex (Unicode NFD normalization, case/accent folding, alias table) and unit tests exist, but two known gaps hold it at 4: iso3Code is a documented fallback to iso2 under the default CSV source (csv_loader.go:72), and coverage is 183 of 249 assigned alpha-2 codes. Two of the repo's three test files had not compiled since the src/ restructure and were repaired as part of this onboarding.",
+    "quality_contract": {
+      "status": "operational",
+      "dataset_url": "https://unstats.un.org/unsd/methodology/m49/",
+      "dataset_revision": "UN M49 country-or-area codes accessed 2026-09-13; ISO alpha-2/alpha-3 crosswalk pinned in repository fixture",
+      "regression_command": "go test ./... -run Golden",
+      "metrics": [
+        "coverage",
+        "false_positive_rate",
+        "false_negative_rate"
+      ],
+      "last_verified_at": "2026-09-13",
+      "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. Operational status requires the repository Golden regression to validate exact alpha-2 and alpha-3 output plus unknown-input rejection; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
+    }
   },
   "crawl-web-application": {
     "container_port": 8082,

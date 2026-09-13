@@ -95,6 +95,21 @@
       "enum": ["pinned", "replicable"],
       "description": "Whether this service is a safe dynamic-placement candidate. See ADR-0039. 'pinned' = holds state that doesn't trivially move with it (a data volume, a database, anything where starting it elsewhere loses or orphans data) — never route dynamically as-is. 'replicable' = safe to start on any capacity-eligible host. Optional, same convention as `trl`: absence means not yet assessed, NOT a default of either value — do not assume unset means replicable just because most kind=container entries are. Declared per-slug in overrides.json."
     },
+    "quality_contract": {
+      "type": "object",
+      "description": "Private, machine-readable label-quality contract for extraction/classification services. Declares the reproducible public golden dataset, regression command, and the most recent precision/recall evidence. Absent means the service has not yet been quality-gated; it is never a claim of quality by default.",
+      "required": ["status", "dataset_url", "regression_command", "last_verified_at"],
+      "properties": {
+        "status": { "type": "string", "enum": ["declared", "operational"], "description": "'operational' requires the regression command to be executed in CI against the pinned dataset revision; 'declared' is documentation only and cannot be used as an evidence signal." },
+        "dataset_url": { "type": "string", "format": "uri", "description": "Public, stable source or repository URL for the golden data." },
+        "dataset_revision": { "type": "string", "description": "Pinned source revision, release date, checksum, or immutable commit." },
+        "regression_command": { "type": "string", "minLength": 1, "description": "Repository-relative command that runs the golden-data regression without production credentials." },
+        "metrics": { "type": "array", "items": { "type": "string", "enum": ["precision", "recall", "f1", "coverage", "false_positive_rate", "false_negative_rate"] }, "uniqueItems": true },
+        "last_verified_at": { "type": "string", "format": "date", "description": "Date the declared command and dataset revision last passed." },
+        "evidence": { "type": "string", "description": "Short result summary; must name known label gaps rather than imply unmeasured quality." }
+      },
+      "additionalProperties": false
+    },
     "depends_on": {
       "type": "array",
       "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },

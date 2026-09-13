@@ -93,6 +93,25 @@ class TestSplitOverrides(unittest.TestCase):
         self.assertEqual(externals[0]["id"], "plausible")
 
 
+class TestQualityContractProjection(unittest.TestCase):
+    def test_generator_keeps_quality_contract_private(self):
+        repo = {
+            "name": "go-quality-example",
+            "url": "https://github.com/baditaflorin/go-quality-example",
+            "description": "fixture",
+            "repositoryTopics": [{"name": "mesh-0crawl"}],
+        }
+        contract = {
+            "status": "operational",
+            "dataset_url": "https://example.test/golden",
+            "regression_command": "go test ./... -run Golden",
+            "last_verified_at": "2026-09-13",
+        }
+        entry = generate.make_entry(repo, {"quality-example": {"quality_contract": contract}}, [])
+        self.assertEqual(entry["quality_contract"], contract)
+        self.assertNotIn("quality_contract", generate.to_public_entry(entry))
+
+
 class TestExpandEntry(unittest.TestCase):
     def test_emits_one_entry_per_child_with_slug_derived_urls(self):
         children = generate.expand_entry(PARENT_FIXTURE, EXPAND_SPEC, by_slug={}, rules=[])
@@ -278,6 +297,7 @@ class TestPublicMirror(unittest.TestCase):
         "trl_ceiling_reason": "needs paid threat intel",
         "trl_assessed_at": "2026-05-16",
         "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+        "quality_contract": {"status": "operational", "dataset_url": "https://example.test/data", "regression_command": "go test ./...", "last_verified_at": "2026-09-13"},
     }
 
     def test_drops_all_internal_fields(self):
@@ -285,7 +305,7 @@ class TestPublicMirror(unittest.TestCase):
         for forbidden in ("host_port", "container_port", "cert_domain",
                           "proxy_egress", "internal_direct", "ui_cookie_bridge", "network_exposure",
                           "extra_server_names", "vhost", "depends_on",
-                          "trl_evidence"):
+                          "trl_evidence", "quality_contract"):
             self.assertNotIn(forbidden, pub,
                 f"public mirror leaked internal field {forbidden!r}")
 
