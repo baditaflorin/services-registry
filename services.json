@@ -1332,7 +1332,7 @@
     "url": "https://crux-field-vitals.0crawl.com",
     "health_url": "https://crux-field-vitals.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_crux_field_vitals",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -1522,7 +1522,7 @@
     "url": "https://data-format-converter.0crawl.com",
     "health_url": "https://data-format-converter.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_data_format_converter",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?to=json&text=%7B%22a%22%3A1%7D",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -1789,7 +1789,7 @@
     "url": "https://domain-ad-network.0crawl.com",
     "health_url": "https://domain-ad-network.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_ad_network",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -1900,7 +1900,7 @@
     "url": "https://domain-anycast-footprint.0crawl.com",
     "health_url": "https://domain-anycast-footprint.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_anycast_footprint",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -1977,7 +1977,7 @@
     "url": "https://domain-backlink-profile.0crawl.com",
     "health_url": "https://domain-backlink-profile.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_backlink_profile",
-    "example_path": "/",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2010,7 +2010,7 @@
     "url": "https://domain-bimi-checker.0crawl.com",
     "health_url": "https://domain-bimi-checker.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_bimi_checker",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2161,7 +2161,7 @@
     "url": "https://domain-dane-tlsa.0crawl.com",
     "health_url": "https://domain-dane-tlsa.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_dane_tlsa",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2547,7 +2547,7 @@
     "url": "https://domain-geo-anchor.0crawl.com",
     "health_url": "https://domain-geo-anchor.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_geo_anchor",
-    "example_path": "/",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2614,7 +2614,7 @@
     "url": "https://domain-glue-records.0crawl.com",
     "health_url": "https://domain-glue-records.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_glue_records",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2844,7 +2844,7 @@
     "url": "https://domain-naptr-enum.0crawl.com",
     "health_url": "https://domain-naptr-enum.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_naptr_enum",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -2958,7 +2958,7 @@
     "url": "https://domain-product-count.0crawl.com",
     "health_url": "https://domain-product-count.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_product_count",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3567,7 +3567,7 @@
     "url": "https://funding-signal.0crawl.com",
     "health_url": "https://funding-signal.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_funding_signal",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -3986,7 +3986,7 @@
     "url": "https://iban-bic-validator.0crawl.com",
     "health_url": "https://iban-bic-validator.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_iban_bic_validator",
-    "example_path": "/?target=example.com",
+    "example_path": "/?iban=GB82WEST12345698765432",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -4139,7 +4139,7 @@
     "url": "https://ipv6-checker.0crawl.com",
     "health_url": "https://ipv6-checker.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_ipv6_checker",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=cloudflare.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -4316,7 +4316,7 @@
     "url": "https://keyword-density.0crawl.com",
     "health_url": "https://keyword-density.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_keyword_density",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?target=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -4827,7 +4827,7 @@
     "url": "https://office-locations.0crawl.com",
     "health_url": "https://office-locations.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_office_locations",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=https://example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -5904,7 +5904,7 @@
     "url": "https://review-presence.0crawl.com",
     "health_url": "https://review-presence.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_review_presence",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6056,7 +6056,7 @@
     "url": "https://scan-port-banner.0crawl.com",
     "health_url": "https://scan-port-banner.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_scan_port_banner",
-    "example_path": "/?target=example.com",
+    "example_path": "/?host=example.com&port=80",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -6963,7 +6963,7 @@
     "url": "https://subdomain-finder.0crawl.com",
     "health_url": "https://subdomain-finder.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_subdomain_finder",
-    "example_path": "/go_subdomain_finder?url=https://example.com",
+    "example_path": "/go_subdomain_finder?domain=example.com",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
@@ -7377,7 +7377,7 @@
     "url": "https://telnet-banner.0crawl.com",
     "health_url": "https://telnet-banner.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_telnet_banner",
-    "example_path": "/?target=example.com",
+    "example_path": "/?host=example.com&port=443",
     "auth": {
       "type": "api_key",
       "query_param": "api_key",
