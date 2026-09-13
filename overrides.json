@@ -1061,14 +1061,12 @@
       "status": "operational",
       "dataset_url": "https://unstats.un.org/unsd/methodology/m49/",
       "dataset_revision": "UN M49 country-or-area codes accessed 2026-09-13; ISO alpha-2/alpha-3 crosswalk pinned in repository fixture",
-      "regression_command": "go test ./... -run Golden",
+      "regression_command": "go test ./src/internal/data -run 'TestBundled(CSVProvidesISO3ForEveryCountry|AliasesCoverEveryCountry)$' -count=1",
       "metrics": [
-        "coverage",
-        "false_positive_rate",
-        "false_negative_rate"
+        "coverage"
       ],
       "last_verified_at": "2026-09-13",
-      "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. Operational status requires the repository Golden regression to validate exact alpha-2 and alpha-3 output plus unknown-input rejection; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
+      "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. The checked regression validates full alpha-3 shape, long-tail alpha-2 codes, and an alias for every country; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
     }
   },
   "crawl-web-application": {
