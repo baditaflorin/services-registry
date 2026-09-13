@@ -660,6 +660,9 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
 
     for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
+              # ADR-0039 explicit placement eligibility. Absence remains
+              # meaningful; a declared override must reach services.json.
+              "placement",
               "host_port", "container_port", "port",
               # Private producer-to-service routing approval. This is
               # deny-by-default (absence means proxy via the public mesh),

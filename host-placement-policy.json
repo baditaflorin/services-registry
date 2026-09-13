@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/host-placement-policy.v1.json",
+  "version": 1,
+  "hosts": {
+    "dockerhost": {
+      "cluster": "0docker",
+      "capacity_label": "dockerhost",
+      "state": "active",
+      "roles": ["fleet-compose-runtime"],
+      "allowed_runtimes": ["compose"],
+      "allowed_placement": ["replicable"]
+    },
+    "domainscope-runtime": {
+      "cluster": "domainscope",
+      "capacity_label": "domainscope-runtime",
+      "state": "restricted",
+      "roles": ["domainscope-runtime"],
+      "allowed_runtimes": ["compose"],
+      "allowed_placement": ["replicable"],
+      "allowed_service_ids": []
+    },
+    "docker-builder": {
+      "cluster": "build",
+      "capacity_label": "docker-builder",
+      "state": "build-only",
+      "roles": ["image-builder", "ci-agent"],
+      "allowed_runtimes": [],
+      "allowed_placement": []
+    }
+  }
+}

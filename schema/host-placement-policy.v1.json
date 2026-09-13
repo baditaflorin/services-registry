@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/host-placement-policy.v1.json",
+  "title": "Fleet host placement policy v1",
+  "type": "object",
+  "required": ["version", "hosts"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"const": 1},
+    "hosts": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/host"}
+    }
+  },
+  "$defs": {
+    "host": {
+      "type": "object",
+      "required": ["cluster", "capacity_label", "state", "roles", "allowed_runtimes", "allowed_placement"],
+      "additionalProperties": false,
+      "properties": {
+        "cluster": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "capacity_label": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+        "state": {"enum": ["active", "restricted", "maintenance", "build-only"]},
+        "roles": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+        "allowed_runtimes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "allowed_placement": {"type": "array", "items": {"enum": ["replicable"]}, "uniqueItems": true},
+        "allowed_service_ids": {"type": "array", "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"}, "uniqueItems": true}
+      }
+    }
+  }
+}
