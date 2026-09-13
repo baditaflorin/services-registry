@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "receipts": [
+    {
+      "id": "2026-09-13-accessibility-audit-live-canary",
+      "service_id": "accessibility-audit",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 200 for the registered real target; no code change was justified by this one-sample pilot.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "9ababc9aff17ac87c7a2ab2d48f49e015b5edcb9294b568854b18e9a7e2c2a75",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      },
+      "baseline": {
+        "name": "e2e_http_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
+    },
+    {
+      "id": "2026-09-13-admin-finder-live-canary",
+      "service_id": "admin-finder",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 503. Investigate the live upstream before attempting a code-change loop; this receipt is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      }
+    },
+    {
+      "id": "2026-09-13-api-extractor-live-canary",
+      "service_id": "api-extractor",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The registered authenticated example route returned HTTP 404. Reconcile the registry route with the deployed service before attempting a code-change loop; this receipt is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      }
+    },
+    {
+      "id": "2026-09-13-asn-lookup-live-canary",
+      "service_id": "asn-lookup",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 503. Investigate the live upstream before attempting a code-change loop; this receipt is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      }
+    },
+    {
+      "id": "2026-09-13-captcha-detector-live-canary",
+      "service_id": "captcha-detector",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 200 for the registered real target; no code change was justified by this one-sample pilot.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      },
+      "baseline": {
+        "name": "e2e_http_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
+    },
+    {
+      "id": "2026-09-13-cdn-detector-live-canary",
+      "service_id": "cdn-detector",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 200 for the registered real target; no code change was justified by this one-sample pilot.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      },
+      "baseline": {
+        "name": "e2e_http_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
+    },
+    {
+      "id": "2026-09-13-domain-cms-version-live-canary",
+      "service_id": "domain-cms-version",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The registered authenticated example route returned HTTP 404. Reconcile the registry route with the deployed service before attempting a code-change loop; this receipt is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      }
+    },
+    {
+      "id": "2026-09-13-domain-http3-quic-detector-live-canary",
+      "service_id": "domain-http3-quic-detector",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 200 for the registered real target; no code change was justified by this one-sample pilot.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      },
+      "baseline": {
+        "name": "e2e_http_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
+    },
+    {
+      "id": "2026-09-13-domain-liveness-state-live-canary",
+      "service_id": "domain-liveness-state",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The registered authenticated example request returned HTTP 400. Determine whether the deployed input contract or example path is stale before attempting a code-change loop; this receipt is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      }
+    },
+    {
+      "id": "2026-09-13-domain-martech-stack-live-canary",
+      "service_id": "domain-martech-stack",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:23:00Z",
+      "finding": "The authenticated production canary returned HTTP 200 for the registered real target; no code change was justified by this one-sample pilot.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated gateway e2e canary against one public target; raw request data is not retained in this public ledger.",
+        "sample_sha256": "100680ad546ce6a577f42f52df33b4cfdca756859e664b8d7de329b150d09ce9",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:23:00Z"
+      },
+      "baseline": {
+        "name": "e2e_http_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
+    }
+  ]
+}
