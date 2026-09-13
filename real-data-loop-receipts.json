@@ -165,6 +165,76 @@
         "value": 1,
         "unit": "ratio"
       }
+    },
+    {
+      "id": "2026-09-13-admin-finder-follow-up-e2e-canary",
+      "service_id": "admin-finder",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:58:51Z",
+      "finding": "A follow-up authenticated production canary still returned HTTP 503. Redacted runtime checks found the auth variables present but the service network could not reach its configured private keystore; this requires an infrastructure reachability repair and is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated e2e canary plus a value-redacted runtime availability probe; no request payload, credential, private endpoint, or response body is retained in this public ledger.",
+        "sample_sha256": "f6819187192f10cea89333f1ca7f1e3b2c2cecde109dfd89b95248c11d601f82",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:58:51Z"
+      }
+    },
+    {
+      "id": "2026-09-13-api-extractor-follow-up-e2e-canary",
+      "service_id": "api-extractor",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:58:51Z",
+      "finding": "The authenticated example route returned structured HTTP 404 no_data for the public target, which is the service's valid semantic outcome; no code change was justified.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated e2e canary; no request payload, credential, or response body is retained in this public ledger.",
+        "sample_sha256": "f42d5a4394f1305e3224e6fc128b9b64ddf2065dacbf102c53a677c7bab70ad5",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:58:51Z"
+      }
+    },
+    {
+      "id": "2026-09-13-asn-lookup-follow-up-e2e-canary",
+      "service_id": "asn-lookup",
+      "status": "blocked",
+      "recorded_at": "2026-09-13T05:58:51Z",
+      "finding": "A follow-up authenticated production canary still returned HTTP 503. Redacted runtime checks found the auth variables present but the service network could not reach its configured private keystore; this requires an infrastructure reachability repair and is not countable.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated e2e canary plus a value-redacted runtime availability probe; no request payload, credential, private endpoint, or response body is retained in this public ledger.",
+        "sample_sha256": "71040631a1e0994f701184aa7371bfed5a352fa85f84f459deff9618498d468c",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:58:51Z"
+      }
+    },
+    {
+      "id": "2026-09-13-domain-cms-version-follow-up-e2e-canary",
+      "service_id": "domain-cms-version",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:58:51Z",
+      "finding": "The authenticated example route returned structured HTTP 404 no_data for the public target, which is the service's valid semantic outcome; no code change was justified.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated e2e canary; no request payload, credential, or response body is retained in this public ledger.",
+        "sample_sha256": "d3935962e30e05cf093f5242f08a0ca01b1ce3c923de0ea4c1e06fe31b268014",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:58:51Z"
+      }
+    },
+    {
+      "id": "2026-09-13-domain-liveness-state-follow-up-e2e-canary",
+      "service_id": "domain-liveness-state",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T05:58:51Z",
+      "finding": "After correcting the registry example input to domain, the authenticated production route returned HTTP 200. The service needs no application-code change from this one-sample canary.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Authenticated e2e canary; no request payload, credential, or response body is retained in this public ledger.",
+        "sample_sha256": "4277ef4fc864e17115a4b4d6d0692f5c73c6c21c9ae16d59b7cdb122a8e9a805",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T05:58:51Z"
+      }
     }
   ]
 }
