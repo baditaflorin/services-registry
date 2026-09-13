@@ -114,6 +114,32 @@ catalog is `services-registry/services.json`; the canonical
 conventions doc is `services-registry/FLEET.md` — **read it first**
 for any fleet-wide task.
 
+## Capacity-aware placement: one source, deterministic gates
+
+Fleet Graph answers **what is related to a service** (declared topology and
+bounded observed calls); it is deliberately not a CPU/RAM scanner. The sole
+authoritative capacity source is `go-fleet-metrics-hub`'s Prometheus API. Before
+considering an already-approved runtime target, run:
+
+```bash
+fleet-runner graph-context <service-id>
+fleet-runner capacity --hosts dockerhost,domainscope-runtime
+```
+
+`capacity` rejects missing/down node telemetry, incomplete CPU/memory metrics,
+excess 1-minute load per core, and insufficient memory. Its selected host is
+capacity-only advice: it never authorizes migration or overrides registry
+cluster/runtime ownership. A real placement/deploy still needs fresh
+`origin/main`, dependency/caller review, `fleet-runner allocate-port`, deploy
+preflight, rollback capture, image/container verification, `/health`,
+`/selftest`, `/version`, and gateway smoke. No telemetry means fail closed.
+
+Do not SSH several hosts to compare `uptime`/`free` when Metrics Hub covers the
+targets. Add a private node-exporter scrape target and wait for `up=1` if a host
+is absent. Prometheus config is a single-file bind mount: after replacing it,
+recreate only Prometheus so it observes the new inode. Capacity reads use a
+dedicated restricted reader credential, never a broad fleet or Graph key.
+
 ### Reading the registry — fetch a slice, not the full blob
 
 `services.json` is ~280 KB / ~250 entries / ~26 fields each. If you
