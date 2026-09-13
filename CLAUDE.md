@@ -140,6 +140,14 @@ is absent. Prometheus config is a single-file bind mount: after replacing it,
 recreate only Prometheus so it observes the new inode. Capacity reads use a
 dedicated restricted reader credential, never a broad fleet or Graph key.
 
+The registry's `host-placement-policy.json` is the companion policy layer: it
+maps a public logical target name to its cluster, Metrics Hub label, state, and
+allowed workload classes. It deliberately never carries private IPs or SSH
+configuration. `active` is eligible for review, `restricted` requires a
+non-empty explicit service allowlist, and `build-only` is excluded from
+placement. Change the policy and its schema in the same PR; do not hand-code a
+host decision in an agent or service repository.
+
 ### Reading the registry — fetch a slice, not the full blob
 
 `services.json` is ~280 KB / ~250 entries / ~26 fields each. If you

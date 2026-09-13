@@ -2028,7 +2028,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.2.10",
+    "version": "0.1.0",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -2547,7 +2547,6 @@
     "url": "https://domain-geo-anchor.0crawl.com",
     "health_url": "https://domain-geo-anchor.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_geo_anchor",
-    "version": "0.1.1",
     "example_path": "/",
     "auth": {
       "type": "api_key",
@@ -8553,6 +8552,7 @@
     "trl_ceiling_reason": "Ceiling is set by corpus quality, not by architecture. Reaching 6 needs a real ISO 3166-1 source of truth (alpha-3 backfilled, subdivisions, official/short/UN names, withdrawn-code history) rather than a 183-row hand-curated CSV with 59 alias rows.",
     "trl_assessed_at": "2026-08-29",
     "trl_assessor": "claude-opus-5-2026-08-29-fleet-onboarding",
+    "placement": "replicable",
     "host_port": 18315,
     "container_port": 18315,
     "network_exposure": "gateway-authenticated"
@@ -8752,7 +8752,6 @@
     "url": "https://domain-ct-log-watcher.0exec.com",
     "health_url": "https://domain-ct-log-watcher.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_ct_log_watcher",
-    "version": "0.3.13",
     "example_path": "/?target=example.com",
     "auth": {
       "type": "api_key",
@@ -8763,7 +8762,6 @@
     "cert_domain": "wildcard.0exec.com",
     "trl": 7,
     "trl_evidence": "Live production-DB audit (~3.6M rows) found issuer_churn NULL/0.00 on 100% of rows, including domains with hundreds of certs and multiple issuers -- a dedicated partial index for churn>0.5 could never return a row. Root-caused: handler.go wired the wire field to an unordered distinct-issuer-org list instead of any real computation, a type mismatch (array vs numeric column) guaranteeing null/zero on every write. Fixed (v0.3.7) by implementing a real time-ordered churn-rate algorithm with regression tests proving nonzero output for a genuinely churning history. See github.com/baditaflorin/go_domain_ct_log_watcher PR #12 (merged). Rows with tool_version<0.3.7 are re-crawl candidates.",
-    "version": "0.3.13",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "single free heavily rate-limited crt.sh upstream (429/502/504), no second CT source or paid feed, no persistence/cross-check",
     "trl_assessed_at": "2026-08-07",
@@ -10179,7 +10177,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.4.7",
+    "version": "0.4.4",
     "network_exposure": "gateway-authenticated"
   },
   {
