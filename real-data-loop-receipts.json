@@ -250,6 +250,44 @@
         "value": 1,
         "unit": "ratio"
       }
+    },
+    {
+      "id": "2026-09-13-admin-finder-relay-repair-e2e-canary",
+      "service_id": "admin-finder",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T06:39:34Z",
+      "finding": "After the scoped private relay firewall repair, the authenticated production canary issued a service-scoped key, returned HTTP 200, found the issue event in the audit log, and revoked the key. The service image required no change.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Digest of the redacted canary outcome descriptor after the relay repair; no request payload, credential, private endpoint, or response body is retained in this public ledger.",
+        "sample_sha256": "913a62b5f4528c42c0c38728d7f67a1b0a9423797596d17c43d2535f9da00538",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T06:39:34Z"
+      },
+      "baseline": {
+        "name": "e2e_semantic_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
+    },
+    {
+      "id": "2026-09-13-asn-lookup-relay-repair-e2e-canary",
+      "service_id": "asn-lookup",
+      "status": "evaluated-no-change",
+      "recorded_at": "2026-09-13T06:39:34Z",
+      "finding": "After the scoped private relay firewall repair, the authenticated production canary issued a service-scoped key, returned HTTP 200, found the issue event in the audit log, and revoked the key. The service image required no change.",
+      "input": {
+        "kind": "public-live-canary",
+        "provenance": "Digest of the redacted canary outcome descriptor after the relay repair; no request payload, credential, private endpoint, or response body is retained in this public ledger.",
+        "sample_sha256": "5a8e6cf607b3e9e266a952d18d1d3830355afc599db9ea37009216bfc9cb0973",
+        "sample_count": 1,
+        "captured_at": "2026-09-13T06:39:34Z"
+      },
+      "baseline": {
+        "name": "e2e_semantic_success_rate",
+        "value": 1,
+        "unit": "ratio"
+      }
     }
   ]
 }
