@@ -2341,6 +2341,16 @@
     "trl_evidence": "Initial scaffold (2026-05-19). 19 unit tests with injectable TarFn/EncryptFn/Destination + :memory: audit DB — tests never touch real disk or run heavy crypto on the hot path. Covered: AGE_RECIPIENTS empty/malformed/blank-only refuses to start (fail-CLOSED on missing crypto); malformed-key error redacts key body (no leak to logs); encrypt+decrypt + tar+untar round-trip; recipient fingerprint never contains raw pubkey; classify retention against 365 daily inputs / sparse inputs / multiple-same-day / zero-bands / non-RFC3339-rejected / deterministic-against-synthetic-clock; orchestrator successful snapshot writes audit row with recipient FP; destination-unreachable writes no blobs AND no audit rows; verify-mismatch marks run FAILED AND skips retention prune (safety invariant: failed run = no safe to delete history); retention-prune respects unowned-snapshot invariant (manually-placed blobs survive); /status JSON shape carries last_run/next_run/runs/audit/recipient_fingerprints/destination_ready; /restore defaults dry-run; /restore dry_run=false rejected without confirm_restore=YES; /run admin-gated (403 without token); /selftest 200 happy path + 503 on destination unreachable; parseSources rejects malformed (missing kind, unknown kind, missing path, duplicate names); LocalDest round-trip on real tmpdir; storage-box:// NotImplemented surfaces cleanly.",
     "version": "0.1.0"
   },
+  "fleet-build-broker": {
+    "access_tier": "infra-privileged",
+    "container_port": 18322,
+    "depends_on": [
+      "fleet-secrets"
+    ],
+    "description": "Keystore-gated broker for approved immutable source bundles. Retrieves allowlisted sources through fleet-secrets and issues short-lived, digest-bound artifact grants to authorized fleet builders; rejects arbitrary URLs, mutable refs, commands, and builders.",
+    "example_path": "/health",
+    "host_port": 18322
+  },
   "fleet-body-redactor": {
     "container_port": 18154,
     "description": "canonical sensitive-data redactor",
