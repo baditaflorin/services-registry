@@ -1377,6 +1377,19 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
+  "domain-ai-catalog-discovery": {
+    "host_port": 18324,
+    "container_port": 18324,
+    "description": "Discovers AI Catalogs and MCP Server Cards via passive crawl detection and well-known probing.",
+    "example_path": "/?target=example.com&probe=false",
+    "version": "0.1.0",
+    "trl": 4,
+    "trl_assessed_at": "2026-09-17",
+    "trl_assessor": "fleet-bot-squatter-recovery",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Passive + well-known probe coverage; TRL 7+ needs sustained production evidence across bot-hostile / JS-heavy sites.",
+    "trl_evidence": "Live on dockerhost host_port 18324 at /opt/services/domain-ai-catalog-discovery (was an unregistered squatter). Registered so allocate-port never reissues 18324. Health returns service=domain-ai-catalog-discovery status=ok version=0.1.0. Repo baditaflorin/go_domain_ai_catalog_discovery; mesh-0exec topics added 2026-09-17."
+  },
   "domain-amp-detector": {
     "container_port": 18222,
     "description": "Strict AMP detector requiring the root marker, official runtime, same-site canonical, and verified AMP alternatives.",

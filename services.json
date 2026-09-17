@@ -8746,6 +8746,43 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "domain-ai-catalog-discovery",
+    "name": "Domain Ai Catalog Discovery",
+    "description": "Discovers AI Catalogs and MCP Server Cards via passive crawl detection and well-known probing.",
+    "category": "domains",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go",
+      "go-domain"
+    ],
+    "url": "https://domain-ai-catalog-discovery.0exec.com",
+    "health_url": "https://domain-ai-catalog-discovery.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ai_catalog_discovery",
+    "example_path": "/?target=example.com&probe=false",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Live on dockerhost host_port 18324 at /opt/services/domain-ai-catalog-discovery (was an unregistered squatter). Registered so allocate-port never reissues 18324. Health returns service=domain-ai-catalog-discovery status=ok version=0.1.0. Repo baditaflorin/go_domain_ai_catalog_discovery; mesh-0exec topics added 2026-09-17.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Passive + well-known probe coverage; TRL 7+ needs sustained production evidence across bot-hostile / JS-heavy sites.",
+    "trl_assessed_at": "2026-09-17",
+    "trl_assessor": "fleet-bot-squatter-recovery",
+    "host_port": 18324,
+    "container_port": 18324,
+    "proxy_egress": true,
+    "version": "0.1.0",
+    "network_exposure": "gateway-authenticated"
+  },
+  {
     "id": "domain-compliance-claim-scanner",
     "name": "Domain Compliance Claim Scanner",
     "description": "Compliance claim scanner for the domainscope enricher pipeline",
