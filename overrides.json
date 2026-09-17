@@ -927,6 +927,19 @@
     "trl_evidence": "Second-pass re-audit (fresh 260-domain sample, 217 successful real fetches, ~9,500 comments extracted): confirmed fetch-cache masking does not apply (uses fleetfetch with cache/render provenance surfaced to callers) and confirmed HTML5-spec-correct tokenizer behavior on IE-conditional-comment/nested-comment/CDATA edge cases (not bugs). Found and fixed a real finding-suppression bug: isBoilerplate()'s escape hatch only re-checked raw text for a bare TODO/FIXME/RFC1918 IP, never the severity ClassifyComment had already computed -- so a genuine credential leak wrapped in JSDoc/license-shaped comment text was correctly classified credential_leak/high internally but then silently dropped from interesting_comments, the exact field the fleet's leak-bounty-policy/findings-store integrations key off. Fixed by trusting the already-computed severity. trl bumped 6->7; trl_ceiling held at 7 -- direct-fetch-only design (RenderJS deliberately reverted due to fleet-wide proxy degradation) is a real structural ceiling for a passive recon tool. See PR #7 (merged).",
     "coolify_app_uuid": "l8lihsf5ayj6qj331n5pqn97"
   },
+  "company-name-extractor": {
+    "host_port": 18324,
+    "container_port": 18324,
+    "description": "Extract organization display name (company/NGO/university/public institution) from a domain or HTML via JSON-LD, og:site_name, title, logo alt, and impressum signals.",
+    "example_path": "/?target=stripe.com",
+    "trl": 4,
+    "trl_assessed_at": "2026-09-17",
+    "trl_assessor": "fleet-bot-manual-port-fallback",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
+    "trl_evidence": "v0.1.3 registered with host_port 18324 via documented manual fallback (allocate-port unreachable from agent box; max reserved host_port was 18323). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics.",
+    "version": "0.1.3"
+  },
   "company-size": {
     "container_port": 8281,
     "description": "Microservice for Company Size",
@@ -981,6 +994,14 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+  },
+  "consent-simulator": {
+    "host_port": 18208,
+    "container_port": 18208,
+    "version": "0.1.0",
+    "trl": 4,
+    "trl_evidence": "First ship + first real batch test 2026-08-24 (109 diverse EU domains, not the original Austria-gambling sample). Reject/accept control classification now covers EN/DE/FR/IT/ES/NL/PL/PT/SV/DA/FI canonical phrasing plus a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only. Known gap: Didomi-fronted sites (orf.at, kurier.at, nrc.nl confirmed) did not render their consent banner in this hosting environment even after 25s wait -- see README Scope and limitations. proxy_read_timeout raised 120s->200s to match the service-side timeout increase (serverWriteTimeout now 175s).",
+    "proxy_read_timeout": "200s"
   },
   "content-fingerprint": {
     "container_port": 18265,
@@ -1714,6 +1735,16 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
+  "domain-geo-anchor": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "host_port": 18317,
+    "container_port": 8080,
+    "cpus": 2,
+    "mem_limit": "2g"
+  },
   "domain-gift-card": {
     "container_port": 18239,
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
@@ -2341,16 +2372,6 @@
     "trl_evidence": "Initial scaffold (2026-05-19). 19 unit tests with injectable TarFn/EncryptFn/Destination + :memory: audit DB — tests never touch real disk or run heavy crypto on the hot path. Covered: AGE_RECIPIENTS empty/malformed/blank-only refuses to start (fail-CLOSED on missing crypto); malformed-key error redacts key body (no leak to logs); encrypt+decrypt + tar+untar round-trip; recipient fingerprint never contains raw pubkey; classify retention against 365 daily inputs / sparse inputs / multiple-same-day / zero-bands / non-RFC3339-rejected / deterministic-against-synthetic-clock; orchestrator successful snapshot writes audit row with recipient FP; destination-unreachable writes no blobs AND no audit rows; verify-mismatch marks run FAILED AND skips retention prune (safety invariant: failed run = no safe to delete history); retention-prune respects unowned-snapshot invariant (manually-placed blobs survive); /status JSON shape carries last_run/next_run/runs/audit/recipient_fingerprints/destination_ready; /restore defaults dry-run; /restore dry_run=false rejected without confirm_restore=YES; /run admin-gated (403 without token); /selftest 200 happy path + 503 on destination unreachable; parseSources rejects malformed (missing kind, unknown kind, missing path, duplicate names); LocalDest round-trip on real tmpdir; storage-box:// NotImplemented surfaces cleanly.",
     "version": "0.1.0"
   },
-  "fleet-build-broker": {
-    "access_tier": "infra-privileged",
-    "container_port": 18322,
-    "depends_on": [
-      "fleet-secrets"
-    ],
-    "description": "Keystore-gated broker for approved immutable source bundles. Retrieves allowlisted sources through fleet-secrets and issues short-lived, digest-bound artifact grants to authorized fleet builders; rejects arbitrary URLs, mutable refs, commands, and builders.",
-    "example_path": "/health",
-    "host_port": 18322
-  },
   "fleet-body-redactor": {
     "container_port": 18154,
     "description": "canonical sensitive-data redactor",
@@ -2375,6 +2396,16 @@
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
     "version": "0.1.0"
+  },
+  "fleet-build-broker": {
+    "access_tier": "infra-privileged",
+    "container_port": 18322,
+    "depends_on": [
+      "fleet-secrets"
+    ],
+    "description": "Keystore-gated broker for approved immutable source bundles. Retrieves allowlisted sources through fleet-secrets and issues short-lived, digest-bound artifact grants to authorized fleet builders; rejects arbitrary URLs, mutable refs, commands, and builders.",
+    "example_path": "/health",
+    "host_port": 18322
   },
   "fleet-call-tracer": {
     "container_port": 18161,
@@ -2910,6 +2941,11 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
+  "fleet-prometheus": {
+    "compose_service_name": "prometheus",
+    "compose_skip_networks": true,
+    "mem_limit": "2g"
+  },
   "fleet-pwgen": {
     "auth": {
       "type": "none"
@@ -2930,11 +2966,6 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
-  },
-  "fleet-prometheus": {
-    "compose_service_name": "prometheus",
-    "compose_skip_networks": true,
-    "mem_limit": "2g"
   },
   "fleet-q": {
     "auth": {
@@ -3701,6 +3732,35 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh ~80-domain sample): explicitly verified the fetch-cache pattern here is deliberate/correct (pinned by a dedicated test, negligible TTL for this one-shot use case). Found and fixed a real bug: extractDoc counted never-rendered <iframe>/<object>/<canvas> HTML fallback text as page content, producing false 'severe keyword stuffing' verdicts on real small-business sites (confirmed on 35 production rows, one example jumping from 89% density on a mangled Maps-embed artifact to a correct 3.55% on the real top term). See PR #9 (merged)."
+  },
+  "kokoro-ovms-adapter": {
+    "auth": {
+      "type": "none"
+    },
+    "access_tier": "infra-privileged",
+    "cert_domain": "kokoro.voice.0docker.com",
+    "compose_self_managed": true,
+    "container_port": 17101,
+    "depends_on": [],
+    "description": "Restricted compatibility adapter for the existing Octopus voice bridge. It validates requests, pins the approved OpenVINO Kokoro model and language, and streams WAV responses without retaining prompts or audio.",
+    "example_path": "/health",
+    "health_url": "https://kokoro.voice.0docker.com/health",
+    "host_port": 18323,
+    "internal_direct": true,
+    "name": "Kokoro OpenVINO Adapter",
+    "proxy_read_timeout": "300s",
+    "scope": "internal-only",
+    "trl": 6,
+    "trl_assessed_at": "2026-09-10",
+    "trl_assessor": "codex-2026-09-10",
+    "trl_ceiling": 8,
+    "trl_ceiling_reason": "Single Dockerhost and CPU-only inference sidecar; lift after a replicated model-serving deployment with automated canary rollback.",
+    "trl_evidence": "Validated in a production-shaped Dockerhost canary using the existing bridge request shape: the pinned OpenVINO Model Server returned a valid WAV in under four seconds. Production promotion remains gated on the adapter image, model artifact, restricted gateway cutover, and end-to-end bridge smoke.",
+    "url": "https://kokoro.voice.0docker.com",
+    "version": "0.1.2",
+    "vhost": {
+      "proxy_buffering": "off"
+    }
   },
   "language-detector": {
     "container_port": 18250,
@@ -6564,52 +6624,5 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this DNS AXFR zone-transfer checker. Live-tested against zonetransfer.me (known-vulnerable), google.com, and a 150-domain live production sample. Found and fixed 4 real bugs: (1) leaked_records silently doubled/tripled per mirrored leaking nameserver (104 entries for 51 actually-distinct records on zonetransfer.me) -- fixed with proper dedup; (2) no bound on transfer duration/record count let a slow-drip server hold a connection open well past the request timeout -- fixed with a 20s/1000-record cap; (3) any mid-transfer error discarded already-captured evidence, turning a real leak interrupted by a network blip into a false negative -- fixed to preserve partial evidence; (4) three distinct real-world AXFR-refusal shapes (TCP reset/EOF, bare-SOA-close, NOERROR-empty-answer) were misclassified as generic errors instead of 'refused' -- confirmed on 89/91 pre-fix 'error' entries in the live sample, now down to 2 (98% drop) with zero regressions in true leak detection. trl bumped 5->7; trl_ceiling=7 (no glue/delegation-consistency check, no TSIG support, unverified IPv6 outbound in some environments). See github.com/baditaflorin/go_zone_transfer PR #5 (merged).",
     "coolify_app_uuid": "iqn0l00ac6ya7aaelcdfg6mt"
-  },
-  "consent-simulator": {
-    "host_port": 18208,
-    "container_port": 18208,
-    "version": "0.1.0",
-    "trl": 4,
-    "trl_evidence": "First ship + first real batch test 2026-08-24 (109 diverse EU domains, not the original Austria-gambling sample). Reject/accept control classification now covers EN/DE/FR/IT/ES/NL/PL/PT/SV/DA/FI canonical phrasing plus a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only. Known gap: Didomi-fronted sites (orf.at, kurier.at, nrc.nl confirmed) did not render their consent banner in this hosting environment even after 25s wait -- see README Scope and limitations. proxy_read_timeout raised 120s->200s to match the service-side timeout increase (serverWriteTimeout now 175s).",
-    "proxy_read_timeout": "200s"
-  },
-  "domain-geo-anchor": {
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    },
-    "host_port": 18317,
-    "container_port": 8080,
-    "cpus": 2,
-    "mem_limit": "2g"
-  },
-  "kokoro-ovms-adapter": {
-    "auth": {
-      "type": "none"
-    },
-    "access_tier": "infra-privileged",
-    "cert_domain": "kokoro.voice.0docker.com",
-    "compose_self_managed": true,
-    "container_port": 17101,
-    "depends_on": [],
-    "description": "Restricted compatibility adapter for the existing Octopus voice bridge. It validates requests, pins the approved OpenVINO Kokoro model and language, and streams WAV responses without retaining prompts or audio.",
-    "example_path": "/health",
-    "health_url": "https://kokoro.voice.0docker.com/health",
-    "host_port": 18323,
-    "internal_direct": true,
-    "name": "Kokoro OpenVINO Adapter",
-    "proxy_read_timeout": "300s",
-    "scope": "internal-only",
-    "trl": 6,
-    "trl_assessed_at": "2026-09-10",
-    "trl_assessor": "codex-2026-09-10",
-    "trl_ceiling": 8,
-    "trl_ceiling_reason": "Single Dockerhost and CPU-only inference sidecar; lift after a replicated model-serving deployment with automated canary rollback.",
-    "trl_evidence": "Validated in a production-shaped Dockerhost canary using the existing bridge request shape: the pinned OpenVINO Model Server returned a valid WAV in under four seconds. Production promotion remains gated on the adapter image, model artifact, restricted gateway cutover, and end-to-end bridge smoke.",
-    "url": "https://kokoro.voice.0docker.com",
-    "version": "0.1.2",
-    "vhost": {
-      "proxy_buffering": "off"
-    }
   }
 }
