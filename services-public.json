@@ -6742,6 +6742,36 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Discovers AI Catalogs and MCP Server Cards via passive crawl detection and well-known probing.",
+    "example_path": "/?target=example.com&probe=false",
+    "health_url": "https://domain-ai-catalog-discovery.0exec.com/health",
+    "id": "domain-ai-catalog-discovery",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Domain Ai Catalog Discovery",
+    "repo_url": "https://github.com/baditaflorin/go_domain_ai_catalog_discovery",
+    "runtime": "compose",
+    "tags": [
+      "domainscope",
+      "go",
+      "go-domain"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-09-17",
+    "trl_assessor": "fleet-bot-squatter-recovery",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Passive + well-known probe coverage; TRL 7+ needs sustained production evidence across bot-hostile / JS-heavy sites.",
+    "url": "https://domain-ai-catalog-discovery.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "security",
     "description": "Compliance claim scanner for the domainscope enricher pipeline",
     "example_path": "/?target=stripe.com",
