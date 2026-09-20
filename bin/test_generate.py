@@ -20,9 +20,12 @@ rather than another dry-run as the only gate.
 """
 from __future__ import annotations
 
+import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import generate  # type: ignore[import]
@@ -252,6 +255,93 @@ class TestExternalEntry(unittest.TestCase):
         self.assertEqual(e["url"], "http://dockerhost.invalid:18204")
         self.assertEqual(e["external_compose_dir"], "/opt/services/plausible/")
         self.assertEqual(e["external_image"], "ghcr.io/plausible/community-edition:v3.2.1")
+
+
+class TestPrivateServiceContract(unittest.TestCase):
+    """Private rows are runner-only opaque metadata, never catalog data."""
+
+    ENTRY = {
+        "id": "fleet-build-broker",
+        "name": "Fleet Build Broker",
+        "description": "Constrained artifact broker for approved fleet builds.",
+        "category": "infrastructure",
+        "kind": "container",
+        "language": "go",
+        "runtime": "compose",
+        "visibility": "private",
+        "cluster": "0mcp",
+        "host_port": 18100,
+        "container_port": 5001,
+    }
+
+    def test_checked_in_private_record_is_schema_shaped_and_explicitly_placed(self):
+        entries = generate.load_private_services()
+        self.assertEqual(entries, [self.ENTRY])
+        generate.validate_private_cluster_placements(entries)
+
+        placement = json.loads((Path(generate.ROOT) / "clusters.json").read_text())
+        self.assertEqual(placement, {"placement": {"fleet-build-broker": "0mcp"}})
+
+        rendered = json.loads((Path(generate.ROOT) / "services.json").read_text())
+        self.assertEqual(
+            [entry for entry in rendered if entry["id"] == "fleet-build-broker"],
+            [self.ENTRY],
+        )
+
+        schema = json.loads((Path(generate.ROOT) / "schema/private-services.v1.json").read_text())
+        item = schema["items"]
+        self.assertFalse(item["additionalProperties"])
+        self.assertEqual(set(item["required"]), generate.PRIVATE_SERVICE_REQUIRED_FIELDS)
+        self.assertEqual(item["properties"]["visibility"], {"const": "private"})
+        self.assertEqual(item["properties"]["cluster"], {"const": "0mcp"})
+
+    def test_rejects_catalog_topology_or_credential_fields(self):
+        for field, value in {
+            "url": "https://not-allowed.example",
+            "health_url": "https://not-allowed.example/health",
+            "repo_url": "https://not-allowed.example/repo",
+            "auth": {"type": "api_key"},
+            "cert_domain": "not-allowed.example",
+            "server_name": "not-allowed.example",
+            "key_file": "/not-allowed/key",
+        }.items():
+            with self.subTest(field=field):
+                bad = dict(self.ENTRY, **{field: value})
+                with self.assertRaises(SystemExit):
+                    generate.validate_private_service_entry(bad)
+
+    def test_rejects_missing_or_non_0mcp_placement(self):
+        bad = dict(self.ENTRY)
+        bad.pop("cluster")
+        with self.assertRaises(SystemExit):
+            generate.validate_private_service_entry(bad)
+
+    def test_rejects_a_missing_or_divergent_cluster_map(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "clusters.json"
+            path.write_text('{"placement":{"fleet-build-broker":"0docker"}}')
+            with self.assertRaises(SystemExit):
+                generate.validate_private_cluster_placements([self.ENTRY], path)
+
+        bad = dict(self.ENTRY, cluster="0docker")
+        with self.assertRaises(SystemExit):
+            generate.validate_private_service_entry(bad)
+
+    def test_every_catalog_projection_starts_from_the_shared_private_filter(self):
+        public = dict(PARENT_FIXTURE)
+        private = dict(self.ENTRY)
+        self.assertEqual(generate.catalog_entries([public, private]), [public])
+        for name, projection in generate.PROJECTIONS.items():
+            projected = [value for value in (projection(entry) for entry in generate.catalog_entries([public, private])) if value is not None]
+            self.assertNotIn("fleet-build-broker", str(projected), name)
+
+    def test_public_mirror_omits_the_private_record(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "services-public.json"
+            with patch.object(generate, "SERVICES_PUBLIC_JSON", target):
+                count, _ = generate.write_public_mirror([PARENT_FIXTURE, self.ENTRY])
+            self.assertEqual(count, 1)
+            self.assertEqual([entry["id"] for entry in json.loads(target.read_text())], ["go-fleet-metrics-hub"])
 
 
 class TestPublicMirror(unittest.TestCase):

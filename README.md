@@ -47,8 +47,11 @@ after writing `services.json`.
 | file                       | purpose                                                            |
 |----------------------------|--------------------------------------------------------------------|
 | `services.json`            | the registry (array of entries)                                    |
+| `private-services.json`    | opaque private-service rows included only in `services.json`; never catalog or projection output |
+| `clusters.json`            | explicit private-service → logical-cluster placement map; no transport topology |
 | `services.<slice>.json`    | seven projection files (see "Sliced URLs" above) — auto-derived    |
 | `schema/v1.json`           | JSON Schema for an entry                                           |
+| `schema/private-services.v1.json` | strict schema for opaque private-service rows                |
 | `services.summary.txt`     | counts by mesh + category, rebuilt by `bin/build.py`               |
 | `bin/generate.py`          | rebuild `services.json` + slices from GitHub topics + `overrides.json` |
 | `bin/notify-consumers.sh`  | tell the catalog + hub to re-fetch (run after `git push`)          |
@@ -86,6 +89,28 @@ after writing `services.json`.
 ```
 
 See [`schema/v1.json`](schema/v1.json) for the full contract.
+
+## Private services
+
+`private-services.json` is the deliberately narrow exception for a reviewed
+first-party service that has no catalog URL and must not enter discovery. Its
+row includes only an opaque ID, display metadata, container ports,
+`visibility: "private"`, and an explicit `cluster: "0mcp"`. The matching
+`clusters.json` placement map repeats that cluster so the runner fails closed
+rather than falling back to its default cluster. The generator rejects a
+missing, divergent, or topology-bearing `clusters.json`.
+
+The generator includes the row in the full operational `services.json`, but
+excludes it from `services-public.json`, every `services.*.json` projection
+(including deploy), and the summary. Do not use `$external`, a mesh topic, or
+a placeholder public URL for a private service.
+
+Private rows must not contain URLs, hostnames, IP addresses, health endpoints,
+auth data, certificate names, credential paths, or source-repository URLs.
+Root-owned Builder/IaC state holds the mTLS probe and SSH transport contracts;
+the registry only expresses the logical placement. The generator enforces the
+same strict allowlist as
+[`schema/private-services.v1.json`](schema/private-services.v1.json).
 
 ## Bootstrap a new builder / ops machine
 

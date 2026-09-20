@@ -1,0 +1,15 @@
+[
+  {
+    "id": "fleet-build-broker",
+    "name": "Fleet Build Broker",
+    "description": "Constrained artifact broker for approved fleet builds.",
+    "category": "infrastructure",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "visibility": "private",
+    "cluster": "0mcp",
+    "host_port": 18100,
+    "container_port": 5001
+  }
+]

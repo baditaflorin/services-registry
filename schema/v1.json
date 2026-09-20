@@ -3,7 +3,41 @@
   "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/v1.json",
   "title": "Service Registry Entry v1",
   "type": "object",
-  "required": ["id", "name", "category", "mesh", "kind", "url", "health_url", "repo_url", "auth"],
+  "required": ["id", "name", "category", "kind"],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "visibility": { "const": "private" }
+        },
+        "required": ["visibility"]
+      },
+      "then": {
+        "required": ["language", "runtime", "visibility", "cluster", "host_port", "container_port"],
+        "not": {
+          "anyOf": [
+            { "required": ["mesh"] },
+            { "required": ["url"] },
+            { "required": ["health_url"] },
+            { "required": ["repo_url"] },
+            { "required": ["auth"] },
+            { "required": ["auth_help"] },
+            { "required": ["example_path"] },
+            { "required": ["pages_url"] },
+            { "required": ["pages_source_branch"] },
+            { "required": ["cert_domain"] },
+            { "required": ["alias_urls"] },
+            { "required": ["extra_server_names"] },
+            { "required": ["vhost"] },
+            { "required": ["network_exposure"] }
+          ]
+        }
+      },
+      "else": {
+        "required": ["mesh", "url", "health_url", "repo_url", "auth"]
+      }
+    }
+  ],
   "properties": {
     "id":           { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "Stable slug; kebab-case; unique across all meshes" },
     "name":         { "type": "string", "description": "Human display name" },
@@ -24,6 +58,15 @@
       "type": "string",
       "enum": ["compose", "systemd", "binary", "k8s", "github-pages", "external"],
       "description": "How the service is started/managed. Orthogonal to kind and language — gates deploy logic (compose: `docker compose up -d`; systemd: `systemctl restart`; github-pages: trigger Pages rebuild). Default for kind=container is 'compose'; default for kind=static is 'github-pages'. Adding a new runtime is how the fleet absorbs deployment shapes without forking every audit."
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "private"],
+      "description": "Public is the default catalog and gateway lane. Private is an explicit direct-mTLS deployment lane: its record must omit all URL, auth, endpoint, and source-location fields, declare cluster=0mcp, and is excluded from every catalog/projection output."
+    },
+    "cluster": {
+      "type": "string",
+      "description": "Explicit runner placement target. Private services must declare the only approved private cluster, 0mcp; endpoint transport details are held in root-owned Builder state rather than this registry."
     },
     "tags":         { "type": "array", "items": { "type": "string" } },
     "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },

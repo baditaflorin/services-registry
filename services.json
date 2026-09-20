@@ -18378,5 +18378,18 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-haiku-trl-batch"
+  },
+  {
+    "id": "fleet-build-broker",
+    "name": "Fleet Build Broker",
+    "description": "Constrained artifact broker for approved fleet builds.",
+    "category": "infrastructure",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "visibility": "private",
+    "cluster": "0mcp",
+    "host_port": 18100,
+    "container_port": 5001
   }
 ]
