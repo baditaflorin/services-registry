@@ -28,6 +28,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SERVICES_JSON        = ROOT / "services.json"
 SERVICES_PUBLIC_JSON = ROOT / "services-public.json"
+PRIVATE_SERVICES_JSON = ROOT / "private-services.json"
+CLUSTERS_JSON        = ROOT / "clusters.json"
 OVERRIDES_JSON       = ROOT / "overrides.json"
 SLUG_JSON            = ROOT / "slug.json"
 RENAMES_JSON         = ROOT / "renames.json"
@@ -117,6 +119,120 @@ PUBLIC_AUTH_FIELDS: frozenset[str] = frozenset({
     "type", "query_param", "header", "path_template",
 })
 
+# Private services remain in the full operational registry only so
+# fleet-runner can resolve their opaque ID, ports, visibility, and explicit
+# cluster placement. They are never a catalog/discovery surface. Keep this
+# contract deliberately small: actual network topology, certificate material,
+# credential mechanisms, source URLs, and health URLs live in privileged
+# Builder/IaC state, not here.
+PRIVATE_SERVICE_REQUIRED_FIELDS: frozenset[str] = frozenset({
+    "id", "name", "description", "category", "kind", "language",
+    "runtime", "visibility", "cluster", "host_port", "container_port",
+})
+PRIVATE_SERVICE_ALLOWED_FIELDS: frozenset[str] = PRIVATE_SERVICE_REQUIRED_FIELDS
+PRIVATE_SERVICE_FORBIDDEN_FIELDS: frozenset[str] = frozenset({
+    "url", "health_url", "repo_url", "auth", "auth_help", "example_path",
+    "pages_url", "pages_source_branch", "cert_domain", "alias_urls",
+    "extra_server_names", "vhost", "network_exposure",
+})
+
+
+def validate_private_service_entry(entry: dict) -> None:
+    """Reject private-service metadata that would create a catalog or
+    topology disclosure.
+
+    This mirrors schema/private-services.v1.json at the generator boundary,
+    where CI already validates every source record without installing a JSON
+    Schema dependency. Private services are intentionally independent of the
+    topic-derived public catalog and must declare the one reviewed cluster.
+    """
+    if not isinstance(entry, dict):
+        sys.exit("ERROR: private service entry must be an object")
+    fields = set(entry)
+    missing = PRIVATE_SERVICE_REQUIRED_FIELDS - fields
+    if missing:
+        sys.exit(f"ERROR: private service is missing required fields: {sorted(missing)}")
+    forbidden = fields & PRIVATE_SERVICE_FORBIDDEN_FIELDS
+    if forbidden:
+        sys.exit(f"ERROR: private service contains forbidden catalog/topology fields: {sorted(forbidden)}")
+    unknown = fields - PRIVATE_SERVICE_ALLOWED_FIELDS
+    if unknown:
+        sys.exit(f"ERROR: private service has unsupported fields: {sorted(unknown)}")
+    if not isinstance(entry["id"], str) or not re.fullmatch(r"[a-z][a-z0-9-]*", entry["id"]):
+        sys.exit("ERROR: private service id must be a stable kebab-case slug")
+    for field in ("name", "description", "category", "kind", "language", "runtime"):
+        if not isinstance(entry[field], str) or not entry[field].strip():
+            sys.exit(f"ERROR: private service {field} must be a non-empty string")
+    if entry["visibility"] != "private":
+        sys.exit("ERROR: private service visibility must be 'private'")
+    if entry["cluster"] != "0mcp":
+        sys.exit("ERROR: private service cluster must explicitly be '0mcp'")
+    if entry["kind"] != "container" or entry["runtime"] != "compose":
+        sys.exit("ERROR: private service must use the reviewed container/compose deployment shape")
+    if entry["language"] not in LANG_VALUES:
+        sys.exit(f"ERROR: private service language must be one of {sorted(LANG_VALUES)}")
+    for field in ("host_port", "container_port"):
+        value = entry[field]
+        if not isinstance(value, int) or isinstance(value, bool) or not 1 <= value <= 65535:
+            sys.exit(f"ERROR: private service {field} must be an integer in 1..65535")
+
+
+def load_private_services(path: Path = PRIVATE_SERVICES_JSON) -> list[dict]:
+    """Load the small opaque private-service set.
+
+    The file itself contains no private endpoint or credential material; it
+    only prevents the runner from treating a reviewed private service as a
+    public catalog entry or silently defaulting it to another cluster.
+    """
+    if not path.exists():
+        return []
+    try:
+        raw = json.loads(path.read_text())
+    except json.JSONDecodeError as exc:
+        sys.exit(f"ERROR: {path} is not valid JSON: {exc}")
+    if not isinstance(raw, list):
+        sys.exit(f"ERROR: {path} must be a JSON array")
+    seen: set[str] = set()
+    out: list[dict] = []
+    for entry in raw:
+        validate_private_service_entry(entry)
+        if entry["id"] in seen:
+            sys.exit(f"ERROR: duplicate private service id {entry['id']!r}")
+        seen.add(entry["id"])
+        out.append(dict(entry))
+    return out
+
+
+def validate_private_cluster_placements(entries: list[dict], path: Path = CLUSTERS_JSON) -> None:
+    """Require the runner's canonical placement map to agree with each
+    private row without allowing transport topology into the registry."""
+    try:
+        raw = json.loads(path.read_text())
+    except FileNotFoundError:
+        sys.exit(f"ERROR: {path} is required for private service placement")
+    except json.JSONDecodeError as exc:
+        sys.exit(f"ERROR: {path} is not valid JSON: {exc}")
+    if not isinstance(raw, dict) or set(raw) != {"placement"}:
+        sys.exit(f"ERROR: {path} may contain only the placement map")
+    placement = raw["placement"]
+    if not isinstance(placement, dict):
+        sys.exit(f"ERROR: {path} placement must be an object")
+    for entry in entries:
+        if placement.get(entry["id"]) != entry["cluster"]:
+            sys.exit(
+                f"ERROR: private service {entry['id']!r} requires explicit "
+                f"placement {entry['cluster']!r} in {path}"
+            )
+
+
+def catalog_entries(entries: list[dict]) -> list[dict]:
+    """Return only entries allowed in catalog-facing outputs.
+
+    Keep this gate shared by every projection writer so a future slice cannot
+    accidentally become a discovery route for a private service.
+    """
+    return [entry for entry in entries if entry.get("visibility") != "private"]
+
 
 def to_public_entry(entry: dict) -> dict:
     """Sanitize one full registry entry into its public projection.
@@ -143,7 +259,7 @@ def write_public_mirror(entries: list[dict]) -> tuple[int, int]:
     """Emit services-public.json: sanitized list, 2-space indent, sorted
     keys for diff-stability. Returns (entry_count, byte_size) for the
     main() summary line."""
-    sanitized = [to_public_entry(e) for e in entries]
+    sanitized = [to_public_entry(e) for e in catalog_entries(entries)]
     blob = json.dumps(sanitized, indent=2, sort_keys=True) + "\n"
     SERVICES_PUBLIC_JSON.write_text(blob)
     return len(sanitized), len(blob)
@@ -1037,16 +1153,28 @@ def build(overrides: dict) -> list[dict]:
             continue
         seen[entry["id"]] = entry
 
-    return sorted(seen.values(), key=lambda e: (e["mesh"], e["id"]))
+    # This is deliberately not an $external entry: private services are
+    # first-party, runner-managed workloads with an explicit private
+    # deployment lane. Their source records carry no public URLs or auth
+    # metadata, and all public projections drop them below.
+    private_entries = load_private_services()
+    validate_private_cluster_placements(private_entries)
+    for entry in private_entries:
+        if entry["id"] in seen:
+            sys.exit(f"ERROR: private service id {entry['id']!r} duplicates a public registry entry")
+        seen[entry["id"]] = entry
+
+    return sorted(seen.values(), key=lambda e: (e.get("mesh", "private"), e["id"]))
 
 
 def write_summary(entries: list[dict]) -> str:
     from collections import Counter
-    by_mesh = Counter(e["mesh"] for e in entries)
-    by_kind = Counter(e["kind"] for e in entries)
-    by_lang = Counter(e["language"] for e in entries)
-    by_cat  = Counter(e["category"] for e in entries)
-    lines = ["# Registry summary", f"total: {len(entries)}", "", "## by kind"]
+    visible_entries = catalog_entries(entries)
+    by_mesh = Counter(e["mesh"] for e in visible_entries)
+    by_kind = Counter(e["kind"] for e in visible_entries)
+    by_lang = Counter(e["language"] for e in visible_entries)
+    by_cat  = Counter(e["category"] for e in visible_entries)
+    lines = ["# Registry summary", f"total: {len(visible_entries)}", "", "## by kind"]
     lines += [f"  {n:3d}  {k}" for k, n in by_kind.most_common()]
     lines += ["", "## by mesh"]
     lines += [f"  {n:3d}  {m}" for m, n in by_mesh.most_common()]
@@ -1064,9 +1192,10 @@ def write_slices(entries: list[dict]) -> list[tuple[str, int, int]]:
     services.json. Returns (filename, entry_count, byte_size) per slice
     so main() can print a summary. Slices are pure derivatives — never
     hand-edit; rerun `bin/generate.py [--slices-only]` to rebuild."""
+    visible_entries = catalog_entries(entries)
     out = []
     for fname, proj in PROJECTIONS.items():
-        sliced = [v for v in (proj(e) for e in entries) if v is not None]
+        sliced = [v for v in (proj(e) for e in visible_entries) if v is not None]
         blob = json.dumps(sliced, separators=(",", ":")) + "\n"
         (ROOT / fname).write_text(blob)
         out.append((fname, len(sliced), len(blob)))

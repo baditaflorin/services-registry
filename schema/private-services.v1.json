@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/baditaflorin/services-registry/main/schema/private-services.v1.json",
+  "title": "Private service registry entries v1",
+  "description": "Opaque operational records for services intentionally excluded from catalog and projection outputs. Endpoint topology, credential material, URL fields, and source URLs are forbidden.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "name",
+      "description",
+      "category",
+      "kind",
+      "language",
+      "runtime",
+      "visibility",
+      "cluster",
+      "host_port",
+      "container_port"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": {
+        "type": "string",
+        "minLength": 1
+      },
+      "category": {
+        "type": "string",
+        "minLength": 1
+      },
+      "kind": {
+        "const": "container"
+      },
+      "language": {
+        "enum": ["go", "node", "python", "rust", "c", "html", "wasm", "other"]
+      },
+      "runtime": {
+        "const": "compose"
+      },
+      "visibility": {
+        "const": "private"
+      },
+      "cluster": {
+        "const": "0mcp"
+      },
+      "host_port": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      },
+      "container_port": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 65535
+      }
+    }
+  }
+}
