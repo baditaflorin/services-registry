@@ -8605,7 +8605,7 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "infrastructure",
-    "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub PAT, SMTP, platform API keys). NaCl secretbox at rest, per-secret nonce, scoped reads via gateway-injected X-Auth-User against consumers allowlist, separate X-Admin-Token for writes. Audit log per access.",
+    "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub App credentials, SMTP, platform API keys). Secretbox encryption at rest, consumer allowlists, and separate admin writes. The service data path is privately bound; only the trusted gateway peer may honor injected identity.",
     "example_path": "/",
     "health_url": "https://fleet-secrets.0exec.com/health",
     "id": "fleet-secrets",
@@ -8621,8 +8621,8 @@
       "go-fleet"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-05-16",
-    "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
+    "trl_assessed_at": "2026-09-20",
+    "trl_assessor": "fleet-release-verification-2026-09-20",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "url": "https://fleet-secrets.0exec.com"
