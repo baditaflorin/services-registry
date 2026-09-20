@@ -9654,37 +9654,6 @@
     "network_exposure": "gateway-authenticated"
   },
   {
-    "id": "fleet-build-broker",
-    "name": "Fleet Build Broker",
-    "description": "Keystore-gated broker for approved immutable source bundles. Retrieves allowlisted sources through fleet-secrets and issues short-lived, digest-bound artifact grants to authorized fleet builders; rejects arbitrary URLs, mutable refs, commands, and builders.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "fleet-build"
-    ],
-    "url": "https://fleet-build-broker.0exec.com",
-    "health_url": "https://fleet-build-broker.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go-fleet-build-broker",
-    "example_path": "/health",
-    "auth": {
-      "type": "api_key",
-      "query_param": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0exec.com",
-    "host_port": 18322,
-    "container_port": 18322,
-    "depends_on": [
-      "fleet-secrets"
-    ],
-    "access_tier": "infra-privileged",
-    "network_exposure": "gateway-authenticated"
-  },
-  {
     "id": "fleet-call-tracer",
     "name": "Fleet Call Tracer",
     "description": "per-request call trace collector (Speedscope flamegraph output)",

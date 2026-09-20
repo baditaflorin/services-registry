@@ -2410,16 +2410,6 @@
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
     "version": "0.1.0"
   },
-  "fleet-build-broker": {
-    "access_tier": "infra-privileged",
-    "container_port": 18322,
-    "depends_on": [
-      "fleet-secrets"
-    ],
-    "description": "Keystore-gated broker for approved immutable source bundles. Retrieves allowlisted sources through fleet-secrets and issues short-lived, digest-bound artifact grants to authorized fleet builders; rejects arbitrary URLs, mutable refs, commands, and builders.",
-    "example_path": "/health",
-    "host_port": 18322
-  },
   "fleet-call-tracer": {
     "container_port": 18161,
     "description": "per-request call trace collector (Speedscope flamegraph output)",

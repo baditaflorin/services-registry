@@ -7436,30 +7436,6 @@
     "url": "https://fleet-budget-tracker.0exec.com"
   },
   {
-    "access_tier": "infra-privileged",
-    "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "category": "infrastructure",
-    "description": "Keystore-gated broker for approved immutable source bundles. Retrieves allowlisted sources through fleet-secrets and issues short-lived, digest-bound artifact grants to authorized fleet builders; rejects arbitrary URLs, mutable refs, commands, and builders.",
-    "example_path": "/health",
-    "health_url": "https://fleet-build-broker.0exec.com/health",
-    "id": "fleet-build-broker",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0exec",
-    "name": "Fleet Build Broker",
-    "repo_url": "https://github.com/baditaflorin/go-fleet-build-broker",
-    "runtime": "compose",
-    "tags": [
-      "fleet-build"
-    ],
-    "url": "https://fleet-build-broker.0exec.com"
-  },
-  {
     "alias_urls": [
       "go-fleet-call-tracer.0exec.com"
     ],
