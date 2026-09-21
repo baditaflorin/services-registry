@@ -13,7 +13,10 @@
         "required": ["visibility"]
       },
       "then": {
-        "required": ["language", "runtime", "visibility", "cluster", "host_port", "container_port"],
+        "required": ["language", "runtime", "visibility", "cluster", "deployment_mode", "host_port", "container_port"],
+        "properties": {
+          "deployment_mode": { "const": "iac-rendered" }
+        },
         "not": {
           "anyOf": [
             { "required": ["mesh"] },
@@ -67,6 +70,10 @@
     "cluster": {
       "type": "string",
       "description": "Explicit runner placement target. Private services must declare the only approved private cluster, 0mcp; endpoint transport details are held in root-owned Builder state rather than this registry."
+    },
+    "deployment_mode": {
+      "type": "string",
+      "description": "Deployment lifecycle owner. Private services must declare iac-rendered so generic fleet-runner compose deployment fails before it can modify runtime state."
     },
     "tags":         { "type": "array", "items": { "type": "string" } },
     "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },

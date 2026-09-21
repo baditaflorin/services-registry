@@ -270,6 +270,7 @@ class TestPrivateServiceContract(unittest.TestCase):
         "runtime": "compose",
         "visibility": "private",
         "cluster": "0mcp",
+        "deployment_mode": "iac-rendered",
         "host_port": 18100,
         "container_port": 5001,
     }
@@ -294,6 +295,15 @@ class TestPrivateServiceContract(unittest.TestCase):
         self.assertEqual(set(item["required"]), generate.PRIVATE_SERVICE_REQUIRED_FIELDS)
         self.assertEqual(item["properties"]["visibility"], {"const": "private"})
         self.assertEqual(item["properties"]["cluster"], {"const": "0mcp"})
+        self.assertEqual(item["properties"]["deployment_mode"]["const"], "iac-rendered")
+
+        schema_v1 = json.loads((Path(generate.ROOT) / "schema/v1.json").read_text())
+        private_rule = schema_v1["allOf"][0]["then"]
+        self.assertIn("deployment_mode", private_rule["required"])
+        self.assertEqual(
+            private_rule["properties"]["deployment_mode"],
+            {"const": "iac-rendered"},
+        )
 
     def test_rejects_catalog_topology_or_credential_fields(self):
         for field, value in {
@@ -315,6 +325,16 @@ class TestPrivateServiceContract(unittest.TestCase):
         bad.pop("cluster")
         with self.assertRaises(SystemExit):
             generate.validate_private_service_entry(bad)
+
+    def test_rejects_missing_or_non_iac_rendered_deployment_mode(self):
+        missing = dict(self.ENTRY)
+        missing.pop("deployment_mode")
+        with self.assertRaises(SystemExit):
+            generate.validate_private_service_entry(missing)
+
+        wrong = dict(self.ENTRY, deployment_mode="runner-compose")
+        with self.assertRaises(SystemExit):
+            generate.validate_private_service_entry(wrong)
 
     def test_rejects_a_missing_or_divergent_cluster_map(self):
         with tempfile.TemporaryDirectory() as tmp:
