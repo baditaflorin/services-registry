@@ -626,7 +626,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
     "trl_evidence": "20 -race test funcs, audit_log table with prefix-only redaction, /audit admin-gated, /selftest",
-    "version": "0.2.1"
+    "version": "0.4.6"
   },
   "asn-lookup": {
     "container_port": 8337,
@@ -3065,7 +3065,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "v0.3.5 release: go-fleet-secrets PRs #14 and #15 hardened trusted-proxy identity handling and made /selftest an explicit unauthenticated health contract; deployed image f5fafff passed direct /health, /selftest, and /version smoke checks, followed by a gateway vhost render and reload. Existing audit-log redaction, consumer-ACL, rotation, and concurrency tests remain required.",
-    "version": "0.3.5"
+    "version": "0.3.6"
   },
   "fleet-selftest-aggregator": {
     "container_port": 18165,
