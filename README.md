@@ -95,10 +95,13 @@ See [`schema/v1.json`](schema/v1.json) for the full contract.
 `private-services.json` is the deliberately narrow exception for a reviewed
 first-party service that has no catalog URL and must not enter discovery. Its
 row includes only an opaque ID, display metadata, container ports,
-`visibility: "private"`, and an explicit `cluster: "0mcp"`. The matching
-`clusters.json` placement map repeats that cluster so the runner fails closed
-rather than falling back to its default cluster. The generator rejects a
-missing, divergent, or topology-bearing `clusters.json`.
+`visibility: "private"`, an explicit `cluster: "0mcp"`, and
+`deployment_mode: "iac-rendered"`. The matching `clusters.json` placement map
+repeats that cluster so the runner fails closed rather than falling back to its
+default cluster. The deployment mode requires the runner to reject generic
+compose deployment before runtime operations; the reviewed IaC lifecycle owns
+rendering and apply. The generator rejects a missing, divergent, or
+topology-bearing `clusters.json`, or any other private deployment mode.
 
 The generator includes the row in the full operational `services.json`, but
 excludes it from `services-public.json`, every `services.*.json` projection

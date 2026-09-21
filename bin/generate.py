@@ -127,7 +127,8 @@ PUBLIC_AUTH_FIELDS: frozenset[str] = frozenset({
 # Builder/IaC state, not here.
 PRIVATE_SERVICE_REQUIRED_FIELDS: frozenset[str] = frozenset({
     "id", "name", "description", "category", "kind", "language",
-    "runtime", "visibility", "cluster", "host_port", "container_port",
+    "runtime", "visibility", "cluster", "deployment_mode", "host_port",
+    "container_port",
 })
 PRIVATE_SERVICE_ALLOWED_FIELDS: frozenset[str] = PRIVATE_SERVICE_REQUIRED_FIELDS
 PRIVATE_SERVICE_FORBIDDEN_FIELDS: frozenset[str] = frozenset({
@@ -167,6 +168,11 @@ def validate_private_service_entry(entry: dict) -> None:
         sys.exit("ERROR: private service visibility must be 'private'")
     if entry["cluster"] != "0mcp":
         sys.exit("ERROR: private service cluster must explicitly be '0mcp'")
+    if entry["deployment_mode"] != "iac-rendered":
+        sys.exit(
+            "ERROR: private service deployment_mode must explicitly be "
+            "'iac-rendered' so generic fleet-runner compose deployment is blocked"
+        )
     if entry["kind"] != "container" or entry["runtime"] != "compose":
         sys.exit("ERROR: private service must use the reviewed container/compose deployment shape")
     if entry["language"] not in LANG_VALUES:
@@ -1156,7 +1162,9 @@ def build(overrides: dict) -> list[dict]:
     # This is deliberately not an $external entry: private services are
     # first-party, runner-managed workloads with an explicit private
     # deployment lane. Their source records carry no public URLs or auth
-    # metadata, and all public projections drop them below.
+    # metadata, declare the IaC-owned lifecycle that generic runner deploy
+    # must reject before runtime operations, and all public projections drop
+    # them below.
     private_entries = load_private_services()
     validate_private_cluster_placements(private_entries)
     for entry in private_entries:

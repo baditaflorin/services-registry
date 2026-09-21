@@ -16,6 +16,7 @@
       "runtime",
       "visibility",
       "cluster",
+      "deployment_mode",
       "host_port",
       "container_port"
     ],
@@ -51,6 +52,10 @@
       },
       "cluster": {
         "const": "0mcp"
+      },
+      "deployment_mode": {
+        "const": "iac-rendered",
+        "description": "The service lifecycle is rendered and applied by reviewed infrastructure-as-code. Generic fleet-runner compose deployment is prohibited."
       },
       "host_port": {
         "type": "integer",
