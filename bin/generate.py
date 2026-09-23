@@ -3,9 +3,10 @@
 Topic-driven registry generator.
 
 Queries the GitHub API for every repo under baditaflorin/* with a
-mesh-{0exec,0crawl,0docker,pages} topic, then derives a services.json entry per
-repo from the topics + repo metadata. Replaces the old three-source merge
-in bin/build.py — no more snapshotting hub-app.js or 0crawl-services.json.
+mesh-{0exec,0crawl,0docker,pages,custom} topic, then derives a services.json
+entry per repo from the topics + repo metadata. Replaces the old
+three-source merge in bin/build.py — no more snapshotting hub-app.js or
+0crawl-services.json.
 
 Per-service human-curated fields (description, example_path, public demo
 token overrides) live in overrides.json, which IS hand-edited. Anything
@@ -343,7 +344,7 @@ PROJECTIONS = {
     ),
 }
 
-MESHES = ("0exec", "0crawl", "0docker", "pages")
+MESHES = ("0exec", "0crawl", "0docker", "pages", "custom")
 
 # kind = what kind of deployable this is (orthogonal to mesh).
 #   container = runs as a Docker service (port, /health, Dockerfile, workspace).
@@ -355,6 +356,15 @@ KIND_BY_MESH = {
     "0crawl": "container",
     "0docker": "container",
     "pages":  "static",
+    # `custom` = a container service on its own domain, outside the
+    # 0exec.com/0crawl.com/0docker.com apexes (e.g. hub.scrapetheworld.org).
+    # See `domain:` in overrides.json below — added 2026-09-23 after
+    # onboarding hub_scrapetheworld_org needed 4 separate manual overrides
+    # (url, auth, cert_domain, network_exposure) just to describe "this
+    # service lives on its own domain, not a fleet apex". One `domain:`
+    # override now derives all of them consistently, the same way every
+    # other mesh already does — see baditaflorin/hub_scrapetheworld_org#28.
+    "custom": "container",
 }
 
 # Auth defaults per mesh — overridable per-entry in overrides.json.
@@ -368,6 +378,13 @@ AUTH_DEFAULTS = {
     "0crawl": {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
     "0docker": {"type": "none"},
     "pages":  {"type": "none"},
+    # Custom-domain services are, by definition, not behind the shared
+    # 0exec/0crawl keystore gateway -- default to no auth (the service's
+    # own login/auth, if any, is out of the registry's concern) rather
+    # than accidentally wrapping a public login page in a keystore gate
+    # it can never pass. Override per-slug if a given custom domain
+    # *should* sit behind the keystore.
+    "custom": {"type": "none"},
 }
 
 # Language defaults per mesh when no explicit lang-<x> topic is present.
@@ -377,6 +394,7 @@ LANG_DEFAULTS = {
     "0crawl": "go",
     "0docker": "go",
     "pages":  "html",
+    "custom": "go",
 }
 
 # Runtime defaults — how the service is started/managed. Orthogonal to
@@ -586,13 +604,27 @@ def humanize(slug: str) -> str:
     return " ".join(w.capitalize() for w in slug.split("-"))
 
 
-def service_url(slug: str, mesh: str, repo: dict) -> str:
+def service_url(slug: str, mesh: str, repo: dict, domain: str | None = None) -> str:
     if mesh == "0exec":  return f"https://{slug}.0exec.com"
     if mesh == "0crawl": return f"https://{slug}.0crawl.com"
     if mesh == "0docker": return f"https://{slug}.0docker.com"
     if mesh == "pages":
         # Prefer repo homepage if set, else github.io fallback.
         return repo.get("homepageUrl") or f"https://baditaflorin.github.io/{repo['name']}/"
+    if mesh == "custom":
+        # No apex to derive a hostname from -- the whole point of mesh
+        # `custom` is a domain the fleet doesn't otherwise own a pattern
+        # for, so it must be declared explicitly via overrides.json's
+        # `domain:` key (see resolved_overrides_for callsite). Fail loud
+        # rather than silently emitting a garbage URL: an unregistered
+        # custom-domain service is a config gap to fix, not a default to
+        # paper over.
+        if not domain:
+            raise ValueError(
+                f"mesh 'custom' requires a domain override for {slug!r} "
+                f"(set overrides.json[{slug!r}].domain to the real FQDN)"
+            )
+        return f"https://{domain}"
     raise ValueError(f"unknown mesh {mesh}")
 
 
@@ -617,12 +649,37 @@ APEX_FOR_MESH = {
 }
 
 
-def wildcard_cert_domain(mesh: str) -> str:
+def registrable_domain(fqdn: str) -> str:
+    """Best-effort apex (registrable domain) for a dotted hostname: the
+    last two labels, e.g. "hub.scrapetheworld.org" -> "scrapetheworld.org".
+
+    This is a simple heuristic, not a public-suffix-list lookup -- it is
+    wrong for multi-label public suffixes (co.uk, github.io, ...). Every
+    domain this fleet actually owns today is a plain single-label TLD, so
+    the heuristic is deliberately kept simple rather than pulling in a
+    PSL dependency for a case that hasn't happened yet. If a custom
+    domain ever needs the exact apex overridden, set `cert_domain:`
+    directly in overrides.json -- it always wins over this derivation
+    (see the entry-construction copy-through loop)."""
+    labels = fqdn.split(".")
+    return ".".join(labels[-2:]) if len(labels) >= 2 else fqdn
+
+
+def wildcard_cert_domain(mesh: str, domain: str | None = None) -> str:
     """Cert directory name on the gateway for container services in this
     mesh. Convention: `wildcard.<apex>` matches the existing fleet-runner
     audit code (`audit_cert_invariants.go`) and the partial helper in
     `wildcard_helper.go`. One wildcard cert per apex covers every service
-    on that mesh; deploy time no longer needs per-FQDN issuance."""
+    on that mesh; deploy time no longer needs per-FQDN issuance.
+
+    For mesh `custom`, <apex> is derived from the service's own `domain`
+    override via registrable_domain() -- e.g. a service on
+    hub.scrapetheworld.org expects a cert at
+    /etc/letsencrypt/live/wildcard.scrapetheworld.org/ (one such cert
+    covers every service later added under the same apex, same as the
+    fleet's own apexes)."""
+    if mesh == "custom":
+        return f"wildcard.{registrable_domain(domain)}" if domain else ""
     apex = APEX_FOR_MESH.get(mesh)
     return f"wildcard.{apex}" if apex else ""
 
@@ -701,10 +758,16 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     ov, _ = resolved_overrides_for(probe, by_slug, rules)
 
     cat   = ov.get("category") or category_of(topics)
+    # mesh `custom` has no apex to derive a hostname from; overrides.json
+    # must declare the real FQDN via `domain:`. Read once here and reused
+    # below for both the URL and the wildcard-cert-directory derivation
+    # so a single override key drives everything, instead of needing a
+    # separate url/cert_domain override each carrying the same domain.
+    domain = ov.get("domain")
     # A small number of established services pre-date topic-driven
     # hostname derivation. Their explicit canonical URL is still the
     # authority; the mesh continues to describe their deployment realm.
-    base  = ov.get("url") or service_url(slug, mesh, repo)
+    base  = ov.get("url") or service_url(slug, mesh, repo, domain)
     auth  = ov.get("auth") or AUTH_DEFAULTS[mesh]
     desc  = ov.get("description") or (repo.get("description") or "").strip()
     name  = ov.get("name") or humanize(slug)
@@ -764,7 +827,7 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
         # path. Overridable per-slug or via $rules as an escape hatch
         # for any future SAN-bundle holdout, but the default derivation
         # is what every service on the apex should use.
-        entry["cert_domain"] = wildcard_cert_domain(mesh)
+        entry["cert_domain"] = wildcard_cert_domain(mesh, domain)
 
     # Rename log — if this entry is the to_id of one or more renames, emit
     # `aliases` (old slugs) and `alias_urls` (old hostnames) so by-id lookups

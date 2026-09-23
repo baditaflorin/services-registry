@@ -198,6 +198,61 @@ class Test0DockerMesh(unittest.TestCase):
         self.assertEqual(entry["cert_domain"], "wildcard.0docker.com")
 
 
+class TestCustomMesh(unittest.TestCase):
+    """mesh `custom` lets a service register on its own domain (not a
+    fleet apex) with ONE override key instead of separately overriding
+    url + auth + cert_domain + network_exposure and hoping nothing was
+    forgotten. Added 2026-09-23 after onboarding hub_scrapetheworld_org
+    needed exactly that four-field manual override just to describe
+    "this service lives on hub.scrapetheworld.org" -- see
+    baditaflorin/hub_scrapetheworld_org#28."""
+
+    def _repo(self):
+        return {
+            "name": "hub_scrapetheworld_org",
+            "description": "hub dashboard",
+            "homepageUrl": "",
+            "url": "https://github.com/baditaflorin/hub_scrapetheworld_org",
+            "repositoryTopics": [
+                {"name": "mesh-custom"},
+                {"name": "category-dashboard"},
+            ],
+        }
+
+    def test_domain_override_derives_url_auth_and_cert_domain_together(self):
+        override = {"domain": "hub.scrapetheworld.org"}
+        entry = generate.make_entry(self._repo(), {"hub-scrapetheworld-org": override}, [])
+        self.assertEqual(entry["mesh"], "custom")
+        self.assertEqual(entry["url"], "https://hub.scrapetheworld.org")
+        self.assertEqual(entry["health_url"], "https://hub.scrapetheworld.org/health")
+        self.assertEqual(entry["auth"]["type"], "none")
+        self.assertEqual(entry["cert_domain"], "wildcard.scrapetheworld.org")
+        # auth.type=none + cert_domain set -> compute_network_exposure's
+        # existing, mesh-agnostic derivation should land on gateway-public
+        # with zero custom-mesh-specific code in that function.
+        self.assertEqual(entry["network_exposure"], "gateway-public")
+
+    def test_explicit_cert_domain_override_still_wins(self):
+        # The copy-through loop applies ov["cert_domain"] after the
+        # domain-derived default -- confirms mesh `custom` doesn't bypass
+        # that existing escape hatch for a multi-label-TLD apex the
+        # registrable_domain() heuristic would get wrong (e.g. co.uk).
+        override = {"domain": "hub.scrapetheworld.org", "cert_domain": "wildcard.example.co.uk"}
+        entry = generate.make_entry(self._repo(), {"hub-scrapetheworld-org": override}, [])
+        self.assertEqual(entry["cert_domain"], "wildcard.example.co.uk")
+
+    def test_missing_domain_override_is_a_hard_error(self):
+        # Fail loud, not a garbage URL -- an unregistered custom-domain
+        # service is a config gap to fix, never a default to paper over.
+        with self.assertRaises(ValueError):
+            generate.make_entry(self._repo(), {}, [])
+
+    def test_registrable_domain_takes_last_two_labels(self):
+        self.assertEqual(generate.registrable_domain("hub.scrapetheworld.org"), "scrapetheworld.org")
+        self.assertEqual(generate.registrable_domain("a.b.c.example.com"), "example.com")
+        self.assertEqual(generate.registrable_domain("example.com"), "example.com")
+
+
 class TestExternalEntry(unittest.TestCase):
     """$external is the registry's hook for third-party / upstream
     containers that run on the dockerhost but aren't in the fleet repo

@@ -56,7 +56,7 @@ template below.
 
 | Decision      | How to pick                                                                 |
 |---------------|-----------------------------------------------------------------------------|
-| **Mesh**      | Public demo / auth-free dashboard → `mesh-pages`. Path-token recon / domain analysis → `mesh-0crawl`. API-key gated tool → `mesh-0exec`. |
+| **Mesh**      | Public demo / auth-free dashboard → `mesh-pages`. Path-token recon / domain analysis → `mesh-0crawl`. API-key gated tool → `mesh-0exec`. Service on its own domain, not a fleet apex → `mesh-custom` (added 2026-09-23; see below). |
 | **Category**  | Must be one of the enum in `schema/v1.json` (`proxy`, `search`, `ocr`, `geo`, `nlp`, `content`, `domains`, `security`, `recon`, `infrastructure`, `web_analysis`, `visualization`, `registry`, `dashboard`). Don't invent. |
 | **Slug**      | Derived from repo name by the rules in `FLEET.md` §Slug rules. Don't pick by hand — let `bin/generate.py` derive it and verify the result. |
 | **Host port** | `fleet-runner allocate-port --count 1` (reserved range 18100–18999). Never squat. |
@@ -69,6 +69,34 @@ looks like:
 | `mesh-0exec` | `/` (or `/v1/...`) | `?api_key=…` or `X-API-Key`                        |
 | `mesh-0crawl`| `/`                | `Authorization: Bearer …`, `X-API-Key`, or `?api_key=…` — the legacy `/t/{token}/` path form is deprecated fleet-wide (410/404) |
 | `mesh-pages` | `/`                | none                                               |
+| `mesh-custom`| `/`                | none by default (override `auth:` per-slug if this one *should* sit behind the keystore) |
+
+### `mesh-custom` — a service on its own domain
+
+For a container service that lives on a domain the fleet doesn't already
+own a pattern for (not `<slug>.0exec.com` / `.0crawl.com` / `.0docker.com`)
+— e.g. a dedicated ops dashboard on its own domain. Add the `mesh-custom`
+topic, then in `overrides.json`:
+
+```json
+"your-slug": { "domain": "app.yourdomain.com" }
+```
+
+One `domain:` key derives the service's `url`, `health_url`, `cert_domain`
+(`wildcard.<apex>`, apex = last two labels of `domain`), and defaults
+`auth.type` to `none` — all consistently, instead of four separate
+overrides that can each be individually forgotten (the gap that motivated
+this: `auth` defaulting to `api_key` for an unrecognized mesh would have
+put a keystore gate in front of a public login page). `cert_domain` can
+still be set explicitly if the apex-from-`domain` heuristic gets a
+multi-label public suffix wrong (`co.uk` and friends) — an explicit
+override always wins.
+
+The wildcard cert itself (`wildcard.<apex>` in
+`/etc/letsencrypt/live/`) is **not** provisioned automatically for custom
+domains — issue one per apex the same way as any other cert on the
+gateway. See `baditaflorin/hub_scrapetheworld_org#28` for the case that
+motivated this mesh.
 
 The `default_token` public demo key (previously a static, undifferentiated
 bypass in the nginx gateway in front of the keystore) has been **sunset
