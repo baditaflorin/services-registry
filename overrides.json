@@ -6632,6 +6632,7 @@
     "domain": "hub.scrapetheworld.org",
     "host_port": 18023,
     "container_port": 8080,
-    "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set."
+    "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
+    "proxy_read_timeout": "120s"
   }
 }
