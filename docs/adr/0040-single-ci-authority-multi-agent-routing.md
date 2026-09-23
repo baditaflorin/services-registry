@@ -40,11 +40,14 @@ more agents to one server, not by activating a repository on more servers.
    and disk pressure are an admission-control layer, not a replacement
    scheduler.
 5. `bin/woodpecker_load_controller.py` scrapes node-exporter and uses the
-   Woodpecker agent API to set `no_schedule`. It is dry-run by default, requires
-   sustained threshold breaches before draining, requires a longer healthy
-   window before restoring, drains the most pressured candidates first, always
-   leaves a configurable minimum capacity, and only restores agents it drained
-   itself.
+   Woodpecker agent API to set `no_schedule`. Version 2 groups all live agent
+   records by physical host, targets each record by API ID, and counts
+   schedulable hosts rather than agent registrations. It is dry-run by default,
+   requires sustained threshold breaches before draining, requires a longer
+   healthy window before restoring, drains the most pressured candidates first,
+   always leaves a configurable minimum number of hosts schedulable, and only
+   restores exact agent IDs it drained itself. Version 1 remains supported for
+   the existing agent-oriented configuration during migration.
 6. Missing metrics never cause an automatic drain. Telemetry loss is reported
    but scheduling state is left unchanged.
 7. Control-plane API tokens, agent tokens, metrics addresses and private routes

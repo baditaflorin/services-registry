@@ -1,8 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "woodpecker_url": "https://ci.example.com",
   "interval_seconds": 30,
-  "minimum_schedulable_agents": 1,
+  "minimum_schedulable_nodes": 1,
   "stop_samples": 10,
   "resume_samples": 20,
   "thresholds": {
@@ -13,14 +13,16 @@
     "disk_stop_pct": 10,
     "disk_resume_pct": 15
   },
-  "agents": [
+  "nodes": [
     {
       "name": "builder-a",
+      "agent_names": ["builder-a-agent-1", "builder-a-agent-2"],
       "metrics_url": "http://builder-a.example.internal:9100/metrics",
       "filesystem_mountpoint": "/"
     },
     {
       "name": "builder-b",
+      "agent_names": ["builder-b-agent"],
       "metrics_url": "http://builder-b.example.internal:9100/metrics",
       "filesystem_mountpoint": "/"
     }

@@ -86,10 +86,22 @@ systemctl enable --now woodpecker-load-controller@ci.0exec
 systemctl enable --now woodpecker-load-controller@ci.0mcp
 ```
 
-Start with `--once` and without `--apply`. After validating every metrics URL
-and agent name, use the supervised service. The deployed policy samples every
-30 seconds, drains after ten overloaded samples, restores after twenty healthy
-samples, and keeps at least one agent schedulable.
+Use configuration version 2 to group one physical host with all of its
+Woodpecker agent names. Agent names identify membership in a host group; the
+controller tracks and updates every matching live agent ID. Names must be
+unique across host groups. This avoids treating duplicate agent registrations
+as one worker or counting several containers on the same host as separate
+capacity.
+
+Start with `--once` and without `--apply`. Confirm every configured agent name
+appears, each host's metrics URL succeeds, and the host-level observations match
+the physical topology. For a host reachable only through Tailscale userspace
+networking, configure the controller service with an HTTP proxy and an explicit
+`NO_PROXY` list for its Woodpecker API and directly reachable metrics endpoints.
+After validating the dry run and checking the schedulable-host minimum, use the
+supervised service. The default policy samples every 30 seconds, drains after
+ten overloaded samples, restores after twenty healthy samples, and keeps at
+least one physical host schedulable.
 
 ## End-to-end verification
 

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import importlib.util
+import copy
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 MODULE_PATH = Path(__file__).with_name("woodpecker_load_controller.py")
@@ -23,6 +25,78 @@ node_memory_MemTotal_bytes 1000
 node_filesystem_avail_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 200
 node_filesystem_size_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 1000
 """
+
+PRESSURE_METRICS = """
+node_cpu_seconds_total{cpu="0",mode="idle"} 81
+node_cpu_seconds_total{cpu="0",mode="user"} 19
+node_cpu_seconds_total{cpu="0",mode="system"} 10
+node_memory_MemAvailable_bytes 100
+node_memory_MemTotal_bytes 1000
+node_filesystem_avail_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 80
+node_filesystem_size_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 1000
+"""
+
+RECOVERED_METRICS = """
+node_cpu_seconds_total{cpu="0",mode="idle"} 109
+node_cpu_seconds_total{cpu="0",mode="user"} 20
+node_cpu_seconds_total{cpu="0",mode="system"} 11
+node_memory_MemAvailable_bytes 600
+node_memory_MemTotal_bytes 1000
+node_filesystem_avail_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 500
+node_filesystem_size_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 1000
+"""
+
+
+THRESHOLDS = {
+    "cpu_stop_pct": 85,
+    "cpu_resume_pct": 60,
+    "memory_stop_pct": 15,
+    "memory_resume_pct": 30,
+    "disk_stop_pct": 10,
+    "disk_resume_pct": 15,
+}
+
+
+def config_v2():
+    return {
+        "version": 2,
+        "woodpecker_url": "https://ci.example.com",
+        "interval_seconds": 30,
+        "minimum_schedulable_nodes": 1,
+        "stop_samples": 1,
+        "resume_samples": 1,
+        "thresholds": copy.deepcopy(THRESHOLDS),
+        "nodes": [
+            {
+                "name": "builder-a",
+                "agent_names": ["builder-agent"],
+                "metrics_url": "http://builder-a/metrics",
+                "filesystem_mountpoint": "/",
+            },
+            {
+                "name": "builder-b",
+                "agent_names": ["remote-agent"],
+                "metrics_url": "http://builder-b/metrics",
+                "filesystem_mountpoint": "/",
+            },
+        ],
+    }
+
+
+class FakeClient:
+    def __init__(self, agents):
+        self.remote_agents = copy.deepcopy(agents)
+        self.changed = []
+
+    def agents(self):
+        return self.remote_agents
+
+    def queue(self):
+        return {"pending": [], "running": [], "paused": False}
+
+    def set_no_schedule(self, agent, value):
+        self.changed.append((agent["id"], value))
+        next(item for item in self.remote_agents if item["id"] == agent["id"])["no_schedule"] = value
 
 
 class MetricsTests(unittest.TestCase):
@@ -93,6 +167,111 @@ class HysteresisTests(unittest.TestCase):
             controller.drain_priority(cpu_and_disk),
             controller.drain_priority(cpu_only),
         )
+
+
+class HostAdmissionTests(unittest.TestCase):
+    def test_config_v2_requires_unique_node_and_agent_names(self):
+        config = config_v2()
+        controller.validate_config(config)
+        config["nodes"][1]["agent_names"] = ["builder-agent"]
+        with self.assertRaisesRegex(ValueError, "exactly one node"):
+            controller.validate_config(config)
+
+    def test_drains_every_live_duplicate_agent_for_a_pressured_host(self):
+        config = config_v2()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ]
+        )
+        state = {
+            "nodes": {
+                "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        with patch.object(
+            controller,
+            "fetch_text",
+            side_effect=lambda url: PRESSURE_METRICS if "builder-a" in url else METRICS,
+        ):
+            changed = controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertTrue(changed)
+        self.assertEqual(client.changed, [(1, True), (2, True)])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["1", "2"])
+
+    def test_drain_preserves_operator_paused_agent(self):
+        config = config_v2()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "builder-agent", "no_schedule": True},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ]
+        )
+        state = {
+            "nodes": {
+                "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        with patch.object(
+            controller,
+            "fetch_text",
+            side_effect=lambda url: PRESSURE_METRICS if "builder-a" in url else METRICS,
+        ):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, True)])
+        self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
+
+    def test_restore_only_reenables_ids_managed_by_controller(self):
+        config = config_v2()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": True},
+                {"id": 2, "name": "builder-agent", "no_schedule": True},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ]
+        )
+        state = {
+            "nodes": {
+                "builder-a": {
+                    "previous_snapshot": controller.NodeSnapshot(80, 100, 10, 8).__dict__,
+                    "managed_agent_ids": ["1"],
+                    "managed_no_schedule": True,
+                },
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, False)])
+        self.assertFalse(next(agent for agent in client.remote_agents if agent["id"] == 1)["no_schedule"])
+        self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
+
+    def test_controller_keeps_one_schedulable_host(self):
+        config = config_v2()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": True},
+            ]
+        )
+        state = {
+            "nodes": {
+                "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        with patch.object(
+            controller,
+            "fetch_text",
+            side_effect=lambda url: PRESSURE_METRICS if "builder-a" in url else METRICS,
+        ):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [])
 
 
 if __name__ == "__main__":
