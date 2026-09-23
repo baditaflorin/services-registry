@@ -12,9 +12,9 @@ registering stable agents from both sites with that control plane.
 - `0docker-builder-agent-a`
 - `0docker-builder-agent-b`
 - `0mcp-docker-exec-agent`
-- `pve01-fleet-agent` on the dedicated `pve01-amd64-builder` VM
+- `pve01-fleet-agent` on a dedicated remote builder VM
 
-The pve01 worker is a general fleet agent (`repo=*`, Docker backend) with
+The remote worker is a general fleet agent (`repo=*`, Docker backend) with
 `WOODPECKER_MAX_WORKFLOWS=1`. It joins the existing `ci.0exec.com` control
 plane; repositories do not need a new webhook or a repo-specific builder
 configuration. Woodpecker assigns queued workflows to matching agents with
@@ -46,9 +46,10 @@ control-plane hostname never determines the physical execution host; use
    WOODPECKER_MAX_WORKFLOWS=1
    ```
 
-   For a general pve01 fleet worker, use `WOODPECKER_AGENT_NAME=pve01-fleet-agent`
-   and `WOODPECKER_AGENT_SITE=pve01`. Keep `repo=*` and `backend=docker` in its
-   labels. Use the worker only for repositories authorized on `ci.0exec.com`.
+   For a general remote fleet worker, use a stable `WOODPECKER_AGENT_NAME` and
+   a non-sensitive `WOODPECKER_AGENT_SITE` label. Keep `repo=*` and
+   `backend=docker` in its labels. Use the worker only for repositories
+   authorized on `ci.0exec.com`.
 
 4. Validate with `docker compose config --quiet`, start the agent and confirm
    its stable name in `GET /api/agents`.
