@@ -7,6 +7,7 @@ This repository is part of the baditaflorin fleet. Project-specific instructions
 - Before reading, building, or changing source, run `git fetch origin --tags` and work from `origin/main` in an isolated worktree.
 - Do not place credentials, private topology, or secret-bearing environment files in commits or logs.
 - Container services use Woodpecker CI. Do not add GitHub Actions unless explicitly requested.
+- Before changing Woodpecker worker placement or controller behavior, read `docs/runbooks/woodpecker-cross-host-capacity.md`. It documents the `ci.0exec.com` shared worker pool, keeps `lv3=true` repositories on `ci.0mcp.com`, and retains production image builds on the canonical fleet builder.
 - A pushed commit is not a production deployment. Use the fleet deployment path and retain rollback evidence.
 
 ## Graph-first workflow
