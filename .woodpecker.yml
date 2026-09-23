@@ -1,9 +1,6 @@
 when:
   - event: [pull_request, push]
 
-labels:
-  site: pve01
-
 steps:
   secrets:
     image: ghcr.io/gitleaks/gitleaks:v8.30.1
