@@ -14881,6 +14881,33 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "hub-scrapetheworld-org",
+    "name": "Hub Scrapetheworld Org",
+    "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
+    "category": "dashboard",
+    "mesh": "custom",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://hub.scrapetheworld.org",
+    "health_url": "https://hub.scrapetheworld.org/health",
+    "repo_url": "https://github.com/baditaflorin/hub_scrapetheworld_org",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.scrapetheworld.org",
+    "host_port": 18023,
+    "container_port": 8080,
+    "network_exposure": "gateway-public"
+  },
+  {
     "id": "accent-coach",
     "name": "Accent Coach",
     "description": "Private browser-based accent coach that analyzes speech and drills phoneme-level pronunciation.",

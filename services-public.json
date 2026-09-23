@@ -11576,6 +11576,29 @@
       "type": "none"
     },
     "auth_help": "no auth",
+    "category": "dashboard",
+    "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
+    "example_path": "/",
+    "health_url": "https://hub.scrapetheworld.org/health",
+    "id": "hub-scrapetheworld-org",
+    "kind": "container",
+    "language": "go",
+    "mesh": "custom",
+    "name": "Hub Scrapetheworld Org",
+    "repo_url": "https://github.com/baditaflorin/hub_scrapetheworld_org",
+    "runtime": "compose",
+    "tags": [
+      "kind-container",
+      "language-go",
+      "runtime-compose"
+    ],
+    "url": "https://hub.scrapetheworld.org"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
     "category": "wellness",
     "description": "Private browser-based accent coach that analyzes speech and drills phoneme-level pronunciation.",
     "example_path": "/",
