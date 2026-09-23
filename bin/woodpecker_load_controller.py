@@ -249,7 +249,7 @@ def log_event(**fields: Any) -> None:
     print(json.dumps(fields, sort_keys=True), flush=True)
 
 
-def run_cycle(
+def run_cycle_v1(
     config: dict[str, Any],
     state: dict[str, Any],
     client: HTTPClient,
@@ -352,14 +352,208 @@ def run_cycle(
     return changed
 
 
+def run_cycle_v2(
+    config: dict[str, Any],
+    state: dict[str, Any],
+    client: HTTPClient,
+    apply: bool,
+) -> bool:
+    """Apply load admission by physical host, including every matching agent ID."""
+    remote_agents = client.agents()
+    queue = client.queue()
+    log_event(
+        event="queue_observed",
+        pending=len(queue.get("pending", [])),
+        running=len(queue.get("running", [])),
+        paused=bool(queue.get("paused", False)),
+    )
+
+    thresholds = config["thresholds"]
+    nodes_state = state.setdefault("nodes", {})
+    observations = []
+    schedulable_nodes = 0
+    for entry in config["nodes"]:
+        name = entry["name"]
+        configured_names = set(entry["agent_names"])
+        agents = [agent for agent in remote_agents if agent.get("name") in configured_names]
+        present_names = {agent.get("name") for agent in agents}
+        for missing_name in sorted(configured_names - present_names):
+            log_event(event="agent_missing", node=name, agent=missing_name)
+        if not agents:
+            log_event(event="node_missing", node=name)
+            continue
+
+        schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
+        if schedulable:
+            schedulable_nodes += 1
+        node_state = nodes_state.setdefault(name, {})
+        by_id = {str(agent.get("id")): agent for agent in agents if agent.get("id") is not None}
+        previously_managed = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
+        # Forget agents that disappeared or were manually returned to service.
+        managed_ids = {
+            agent_id
+            for agent_id in previously_managed
+            if agent_id in by_id and bool(by_id[agent_id].get("no_schedule"))
+        }
+        node_state["managed_agent_ids"] = sorted(managed_ids)
+
+        try:
+            current = node_snapshot(
+                fetch_text(entry["metrics_url"]),
+                entry.get("filesystem_mountpoint", "/"),
+            )
+            pressure = evaluate_pressure(
+                current,
+                snapshot_from_state(node_state),
+                thresholds,
+            )
+        except (OSError, ValueError, urllib.error.URLError) as exc:
+            # Telemetry loss is not proof of host pressure. Keep this host's
+            # scheduling unchanged and preserve its prior CPU sample.
+            log_event(event="metrics_error", node=name, error=str(exc))
+            continue
+
+        node_state["previous_snapshot"] = current.__dict__
+        node_state["managed_no_schedule"] = bool(managed_ids)
+        action = update_hysteresis(
+            node_state,
+            pressure,
+            no_schedule=not bool(schedulable),
+            stop_samples=int(config["stop_samples"]),
+            resume_samples=int(config["resume_samples"]),
+        )
+        if (
+            managed_ids
+            and pressure.recovered
+            and node_state["recovery_samples"] >= int(config["resume_samples"])
+        ):
+            # A replacement agent may be schedulable while IDs previously
+            # drained by this controller are still paused. Recover those IDs
+            # after the same sustained healthy window.
+            action = "restore"
+        elif (
+            schedulable
+            and pressure.breaches
+            and node_state["overload_samples"] >= int(config["stop_samples"])
+        ):
+            action = "drain"
+        log_event(
+            event="node_observed",
+            node=name,
+            agent_count=len(agents),
+            schedulable_agents=len(schedulable),
+            cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
+            memory_available_pct=round(pressure.memory_available_pct, 2),
+            disk_available_pct=round(pressure.disk_available_pct, 2),
+            breaches=list(pressure.breaches),
+            overload_samples=node_state["overload_samples"],
+            recovery_samples=node_state["recovery_samples"],
+            proposed_action=action,
+            apply=apply,
+        )
+        observations.append((name, agents, schedulable, node_state, pressure, action))
+
+    if not apply:
+        return False
+
+    changed = False
+    minimum_schedulable = int(config.get("minimum_schedulable_nodes", 1))
+    # Restore first so healthy capacity comes back before any pressured host is drained.
+    for name, agents, schedulable, node_state, _pressure, action in observations:
+        if action != "restore":
+            continue
+        managed_ids = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
+        restored = []
+        for agent in agents:
+            agent_id = str(agent.get("id"))
+            if agent_id in managed_ids and bool(agent.get("no_schedule")):
+                client.set_no_schedule(agent, False)
+                restored.append(agent_id)
+                log_event(event="agent_restored", node=name, agent_id=agent.get("id"), agent=agent.get("name"))
+        if restored:
+            node_state["managed_agent_ids"] = sorted(managed_ids - set(restored))
+            node_state["managed_no_schedule"] = bool(node_state["managed_agent_ids"])
+            if not schedulable:
+                schedulable_nodes += 1
+            changed = True
+
+    drains = sorted(
+        (item for item in observations if item[5] == "drain"),
+        key=lambda item: drain_priority(item[4]),
+        reverse=True,
+    )
+    for name, agents, schedulable, node_state, _pressure, _action in drains:
+        if not schedulable:
+            continue
+        if schedulable_nodes <= minimum_schedulable:
+            log_event(
+                event="node_drain_skipped",
+                node=name,
+                reason="minimum_schedulable_nodes",
+                schedulable_nodes=schedulable_nodes,
+                minimum_schedulable_nodes=minimum_schedulable,
+            )
+            continue
+        managed_ids = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
+        drained = []
+        for agent in schedulable:
+            client.set_no_schedule(agent, True)
+            agent_id = str(agent.get("id"))
+            managed_ids.add(agent_id)
+            drained.append(agent_id)
+            log_event(event="agent_drained", node=name, agent_id=agent.get("id"), agent=agent.get("name"))
+        if drained:
+            node_state["managed_agent_ids"] = sorted(managed_ids)
+            node_state["managed_no_schedule"] = True
+            schedulable_nodes -= 1
+            changed = True
+    return changed
+
+
+def run_cycle(
+    config: dict[str, Any],
+    state: dict[str, Any],
+    client: HTTPClient,
+    apply: bool,
+) -> bool:
+    if config["version"] == 1:
+        return run_cycle_v1(config, state, client, apply)
+    return run_cycle_v2(config, state, client, apply)
+
+
 def validate_config(config: dict[str, Any]) -> None:
-    if config.get("version") != 1:
+    version = config.get("version")
+    if version not in {1, 2}:
         raise ValueError("unsupported controller config version")
-    if not config.get("woodpecker_url") or not config.get("agents"):
-        raise ValueError("config must declare woodpecker_url and agents")
-    minimum_schedulable = int(config.get("minimum_schedulable_agents", 1))
-    if minimum_schedulable < 1 or minimum_schedulable > len(config["agents"]):
-        raise ValueError("minimum_schedulable_agents must be between 1 and the agent count")
+    if not config.get("woodpecker_url"):
+        raise ValueError("config must declare woodpecker_url")
+    if version == 1:
+        if not config.get("agents"):
+            raise ValueError("version 1 config must declare agents")
+        minimum_schedulable = int(config.get("minimum_schedulable_agents", 1))
+        if minimum_schedulable < 1 or minimum_schedulable > len(config["agents"]):
+            raise ValueError("minimum_schedulable_agents must be between 1 and the agent count")
+    else:
+        nodes = config.get("nodes")
+        if not isinstance(nodes, list) or not nodes:
+            raise ValueError("version 2 config must declare nodes")
+        minimum_schedulable = int(config.get("minimum_schedulable_nodes", 1))
+        if minimum_schedulable < 1 or minimum_schedulable > len(nodes):
+            raise ValueError("minimum_schedulable_nodes must be between 1 and the node count")
+        if any(not isinstance(node, dict) for node in nodes):
+            raise ValueError("each node configuration must be an object")
+        node_names = [node.get("name") for node in nodes]
+        if any(not isinstance(name, str) or not name for name in node_names):
+            raise ValueError("each node must have a non-empty name")
+        if len(node_names) != len(set(node_names)):
+            raise ValueError("node names must be unique")
+        if any(not isinstance(node.get("agent_names"), list) for node in nodes):
+            raise ValueError("each node must declare agent_names as a list")
+        agent_names = [agent for node in nodes for agent in node["agent_names"]]
+        if any(not isinstance(name, str) or not name for name in agent_names):
+            raise ValueError("each node must declare non-empty agent_names")
+        if len(agent_names) != len(set(agent_names)):
+            raise ValueError("each Woodpecker agent name must belong to exactly one node")
     required = {
         "cpu_stop_pct",
         "cpu_resume_pct",
@@ -407,7 +601,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         config = load_json(args.config)
         validate_config(config)
-        state = load_json(args.state, {"version": 1, "agents": {}})
+        state = load_json(args.state, {"version": config["version"], "agents": {}, "nodes": {}})
         client = HTTPClient(config["woodpecker_url"], token)
         while True:
             try:
