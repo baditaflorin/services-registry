@@ -114,6 +114,30 @@ class TestQualityContractProjection(unittest.TestCase):
         self.assertEqual(entry["quality_contract"], contract)
         self.assertNotIn("quality_contract", generate.to_public_entry(entry))
 
+    def test_gateway_upstream_url_is_operational_not_public_catalog_data(self):
+        origin = "https://domainscope.scrapetheworld.org"
+        repo = {
+            "name": "go-quality-example",
+            "url": "https://github.com/baditaflorin/go-quality-example",
+            "description": "fixture",
+            "repositoryTopics": [{"name": "mesh-0exec"}],
+        }
+        entry = generate.make_entry(repo, {"quality-example": {"gateway_upstream_url": origin}}, [])
+        self.assertEqual(entry["gateway_upstream_url"], origin)
+        self.assertNotIn("gateway_upstream_url", generate.to_public_entry(entry))
+
+    def test_gateway_upstream_url_is_operational_not_public_catalog_data(self):
+        origin = "https://domainscope.scrapetheworld.org"
+        repo = {
+            "name": "go-quality-example",
+            "url": "https://github.com/baditaflorin/go-quality-example",
+            "description": "fixture",
+            "repositoryTopics": [{"name": "mesh-0exec"}],
+        }
+        entry = generate.make_entry(repo, {"quality-example": {"gateway_upstream_url": origin}}, [])
+        self.assertEqual(entry["gateway_upstream_url"], origin)
+        self.assertNotIn("gateway_upstream_url", generate.to_public_entry(entry))
+
 
 class TestExpandEntry(unittest.TestCase):
     def test_emits_one_entry_per_child_with_slug_derived_urls(self):
