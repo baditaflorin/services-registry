@@ -20,6 +20,7 @@ Run:
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import re
 import subprocess
@@ -733,6 +734,47 @@ def compute_network_exposure(entry: dict, ov: dict) -> str | None:
     return None
 
 
+def validate_allowed_source_ips(entry: dict) -> None:
+    """Validate additive nginx source allow rules fail-closed.
+
+    Only canonical exact-host CIDRs are accepted. Broad networks, bare IPs,
+    hostnames, host bits, duplicates, and use outside an IP-allowlisted
+    gateway vhost are rejected before a generated registry can be written.
+    """
+    if "allowed_source_ips" not in entry:
+        return
+    allowed = entry["allowed_source_ips"]
+    service_id = entry.get("id", "<unknown>")
+    if not isinstance(allowed, list) or not allowed:
+        sys.exit(f"ERROR: {service_id} allowed_source_ips must be a non-empty array")
+    if entry.get("network_exposure") != "gateway-ip-allowlisted":
+        sys.exit(
+            f"ERROR: {service_id} allowed_source_ips is valid only for "
+            "network_exposure='gateway-ip-allowlisted'"
+        )
+    auth = entry.get("auth")
+    if not isinstance(auth, dict) or auth.get("type") != "api_key":
+        sys.exit(f"ERROR: {service_id} allowed_source_ips requires api_key auth")
+    if not all(isinstance(value, str) for value in allowed):
+        sys.exit(f"ERROR: {service_id} allowed_source_ips entries must be strings")
+    if len(allowed) != len(set(allowed)):
+        sys.exit(f"ERROR: {service_id} allowed_source_ips must contain unique entries")
+    for value in allowed:
+        try:
+            network = ipaddress.ip_network(value, strict=True)
+        except ValueError:
+            sys.exit(
+                f"ERROR: {service_id} has invalid allowed_source_ips entry "
+                f"{value!r}; use a canonical exact-host CIDR"
+            )
+        required_prefix = 32 if network.version == 4 else 128
+        if network.prefixlen != required_prefix or str(network) != value:
+            sys.exit(
+                f"ERROR: {service_id} allowed_source_ips entry {value!r} "
+                f"must be a canonical /{required_prefix} exact-host CIDR"
+            )
+
+
 def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     topics = normalize_topics(repo.get("repositoryTopics") or [])
     mesh = mesh_of(topics)
@@ -874,6 +916,11 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # `*.<root>` already covers any subdomain, so no per-alias
               # cert is needed; DNS A records must be created separately.
               "extra_server_names",
+              # Additional exact source-IP allow rules for an already
+              # gateway-ip-allowlisted vhost. These are additive: the
+              # renderer retains its standard loopback/LAN/gateway rules.
+              # This is operational metadata and intentionally not public.
+              "allowed_source_ips",
               # Egress routing — `proxy_egress: true` flags services that
               # must route outbound HTTP via the Webshare residential
               # proxy (FLEET.md §6 — active scanners hitting bug-bounty
@@ -1239,7 +1286,10 @@ def build(overrides: dict) -> list[dict]:
             sys.exit(f"ERROR: private service id {entry['id']!r} duplicates a public registry entry")
         seen[entry["id"]] = entry
 
-    return sorted(seen.values(), key=lambda e: (e.get("mesh", "private"), e["id"]))
+    entries = sorted(seen.values(), key=lambda e: (e.get("mesh", "private"), e["id"]))
+    for entry in entries:
+        validate_allowed_source_ips(entry)
+    return entries
 
 
 def write_summary(entries: list[dict]) -> str:
