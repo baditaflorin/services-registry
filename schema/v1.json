@@ -188,6 +188,16 @@
       "type": "string", "format": "date-time",
       "description": "Timestamp of the audit_mcp_ready.py run that last confirmed mcp_ready."
     },
+    "allowed_source_ips": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(?:(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])/32|[0-9A-Fa-f:]+/128)$"
+      },
+      "description": "Operational additional source allow rules for a gateway-ip-allowlisted service. Entries must be exact-host IPv4 /32 or IPv6 /128 CIDRs; these are additive and do not replace standard renderer allow rules. Kept out of services-public.json."
+    },
     "network_exposure": {
       "type": "string",
       "enum": ["loopback", "lan-internal", "gateway-ip-allowlisted", "gateway-authenticated", "gateway-public"],

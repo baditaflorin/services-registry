@@ -8416,6 +8416,9 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 18021,
     "container_port": 8080,
+    "allowed_source_ips": [
+      "65.108.75.123/32"
+    ],
     "version": "0.4.6",
     "network_exposure": "gateway-ip-allowlisted"
   },

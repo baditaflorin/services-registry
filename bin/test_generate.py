@@ -477,6 +477,7 @@ class TestPublicMirror(unittest.TestCase):
         "internal_direct": True,
         "ui_cookie_bridge": True,
         "network_exposure": "gateway-ip-allowlisted",
+        "allowed_source_ips": ["65.108.75.123/32"],
         "extra_server_names": ["alt.0crawl.com"],
         "vhost": {"proxy_buffering": "off"},
         "depends_on": ["other-svc"],
@@ -493,6 +494,7 @@ class TestPublicMirror(unittest.TestCase):
         pub = generate.to_public_entry(self.FULL_ENTRY)
         for forbidden in ("host_port", "container_port", "cert_domain",
                           "proxy_egress", "internal_direct", "ui_cookie_bridge", "network_exposure",
+                          "allowed_source_ips",
                           "extra_server_names", "vhost", "depends_on",
                           "trl_evidence", "quality_contract"):
             self.assertNotIn(forbidden, pub,
@@ -577,6 +579,49 @@ class TestMCPProjection(unittest.TestCase):
         entry = {"id": "not-ready", "name": "Not Ready", "url": "https://x",
                   "access_tier": "vetted-pentest"}
         self.assertIsNone(project(entry))
+
+
+class TestAllowedSourceIPs(unittest.TestCase):
+    BASE = {
+        "id": "apikey-service",
+        "network_exposure": "gateway-ip-allowlisted",
+        "auth": {"type": "api_key"},
+    }
+
+    def test_accepts_only_exact_host_cidrs(self):
+        for value in ("65.108.75.123/32", "2001:db8::1/128"):
+            with self.subTest(value=value):
+                generate.validate_allowed_source_ips({
+                    **self.BASE, "allowed_source_ips": [value]
+                })
+
+    def test_rejects_broad_or_noncanonical_entries(self):
+        for value in (
+            "65.108.75.0/24", "0.0.0.0/0", "65.108.75.123/31",
+            "2001:db8::/64", "65.108.75.123", "65.108.75.123/32/",
+            "example.com/32", "2001:DB8::1/128",
+        ):
+            with self.subTest(value=value), self.assertRaises(SystemExit):
+                generate.validate_allowed_source_ips({
+                    **self.BASE, "allowed_source_ips": [value]
+                })
+
+    def test_rejects_empty_duplicates_non_strings_and_wrong_scope(self):
+        bad_entries = (
+            {"allowed_source_ips": []},
+            {"allowed_source_ips": ["65.108.75.123/32"] * 2},
+            {"allowed_source_ips": [123]},
+            {"allowed_source_ips": ["65.108.75.123/32"],
+             "network_exposure": "gateway-public"},
+            {"allowed_source_ips": ["65.108.75.123/32"],
+             "auth": {"type": "none"}},
+        )
+        for change in bad_entries:
+            with self.subTest(change=change), self.assertRaises(SystemExit):
+                generate.validate_allowed_source_ips({**self.BASE, **change})
+
+    def test_omitted_metadata_remains_valid(self):
+        generate.validate_allowed_source_ips(self.BASE)
 
 
 class TestComputeNetworkExposure(unittest.TestCase):
