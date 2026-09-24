@@ -1355,7 +1355,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "1,266-domain live audit (ads.txt + 18 in-page ad-network signatures). Fixed a real bug: Google Ad Manager out-of-page/interstitial slots were detected but their network code was never extracted. Zero false positives on manual spot-check across the full sample. Independently re-validated this repo's own pre-existing trl:7 self-claim rather than assuming it. See github.com/baditaflorin/go_domain_ad_network PR #5.",
-    "version": "0.3.0",
+    "version": "0.4.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -1630,7 +1630,7 @@
     "trl_evidence": "Fresh audit (DB pass found no anomaly) found and fixed a real, production-confirmed false positive: classify() pinned primary_platform=swagger_ui from swagger-ui-dist's bundled JS filenames alone, with no check the page was ever wired to a real API spec -- a cluster of unrelated small-business sites (several real-estate-agent pages) all serve the byte-identical, never-configured stock demo page pointed at Swagger's own public petstore.swagger.io sample spec. swagger_ui was the #2 most common detected platform (575 domains) fleet-wide. Fixed (v0.4.9) by skipping a swagger_ui match when the body still carries the literal default demo URL; verified live all 7 sampled false positives flip to no_data while genuine installs remain detected. See github.com/baditaflorin/go_domain_documentation_platform_detector PR #14 (merged). Rows with tool_version<0.4.9 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.6"
+    "version": "0.4.20"
   },
   "domain-ecommerce-platform": {
     "container_port": 18212,
@@ -1704,7 +1704,7 @@
     "trl_ceiling_reason": "Server-side experimentation can emit no client-observable fingerprint; measured JS rendering recovered almost no additional vendor signal and remains a flaky upstream.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.0",
+    "version": "0.5.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
