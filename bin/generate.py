@@ -98,6 +98,7 @@ PUBLIC_FIELDS: frozenset[str] = frozenset({
     "pages_url", "pages_source_branch",
     "trl", "trl_ceiling", "trl_ceiling_reason",
     "trl_assessed_at", "trl_assessor",
+    "lifecycle",
     # placement (ADR-0039) -- scheduling metadata (pinned vs replicable),
     # not a disclosure risk, same reasoning as trl.
     "placement",
@@ -310,23 +311,24 @@ def _pick_where(keys: list[str], predicate):
 
 PROJECTIONS = {
     # Bare slug list — smallest possible "what services exist?" answer.
-    "services.ids.json":     lambda e: e["id"],
+    "services.ids.json":     _pick_where(["id"], lambda e: e.get("lifecycle", {}).get("status") != "sunset"),
     # Picker / menu rendering.
-    "services.names.json":   _pick(["id", "name"]),
+    "services.names.json":   _pick(["id", "name", "lifecycle"]),
     # Catalog overview — enough to render a row without auth/port detail.
     "services.minimal.json": _pick(["id", "name", "mesh", "kind", "category",
-                                    "language", "trl", "url"]),
+                                    "language", "trl", "url", "lifecycle"]),
     # "Build an Open link" — URLs + auth hint, no TRL / deploy fields.
     "services.urls.json":    _pick(["id", "url", "health_url", "example_path",
-                                    "auth_help"]),
+                                    "auth_help", "lifecycle"]),
     # TRL audits — claude-haiku-trl-batch and friends only need these.
-    "services.trl.json":     _pick(["id", "trl", "trl_ceiling",
-                                    "trl_assessed_at", "trl_assessor"]),
+    "services.trl.json":     _pick_where(["id", "trl", "trl_ceiling",
+                                    "trl_assessed_at", "trl_assessor", "lifecycle"],
+                                    lambda e: e.get("lifecycle", {}).get("status") != "sunset"),
     # Port allocation — kind=static entries fall out (no host_port).
     "services.ports.json":   _pick(["id", "host_port", "container_port"]),
     # fleet-runner deploy targeting.
     "services.deploy.json":  _pick(["id", "mesh", "kind", "runtime",
-                                    "language", "repo_url"]),
+                                    "language", "repo_url", "lifecycle"]),
     # Declared dependency edges — tiny slice consumed by go-fleet-visualizer
     # and fleet-runner audit-graph. Entries without depends_on are dropped
     # by _pick (since "depends_on" is the only non-id key requested).
@@ -340,8 +342,9 @@ PROJECTIONS = {
     # trust tiers without a second registry fetch.
     "services.mcp.json":     _pick_where(
         ["id", "name", "url", "mcp_ready", "mcp_tool_count", "mcp_assessed_at",
+         "lifecycle",
          "access_tier"],
-        lambda e: e.get("mcp_ready") is True,
+        lambda e: e.get("mcp_ready") is True and e.get("lifecycle", {}).get("status") != "sunset",
     ),
 }
 
@@ -885,7 +888,7 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
         if r.get("retire_at"):
             entry["rename_retire_at"] = r["retire_at"]
 
-    for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
+    for k in ("lifecycle", "trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
               # ADR-0039 explicit placement eligibility. Absence remains
               # meaningful; a declared override must reach services.json.
@@ -1197,7 +1200,7 @@ def make_external_entry(spec: dict) -> dict:
     }
     if "container_port" in spec:
         entry["container_port"] = spec["container_port"]
-    for k in ("trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
+    for k in ("lifecycle", "trl", "trl_evidence", "trl_ceiling", "trl_ceiling_reason",
               "trl_assessed_at", "trl_assessor",
               "external_compose_dir", "external_image",
               "depends_on"):

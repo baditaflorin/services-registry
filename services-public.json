@@ -3709,6 +3709,11 @@
     "id": "named-entity-recognizer",
     "kind": "container",
     "language": "go",
+    "lifecycle": {
+      "reason": "Retired after product review: observed URL extraction took 46.6 seconds and returned no entities; prior audit documented silent fallback on 62% (135/217) of production pages, UTF-8 span corruption, and high-confidence nationality false positives. No replacement has been validated.",
+      "status": "sunset",
+      "sunset_at": "2026-09-27"
+    },
     "mesh": "0crawl",
     "name": "Named Entity Recognizer",
     "repo_url": "https://github.com/baditaflorin/go_named_entity_recognizer",

@@ -620,7 +620,9 @@
     "example_path": "/health",
     "host_port": 18021,
     "scope": "internal-only",
-    "allowed_source_ips": ["65.108.75.123/32"],
+    "allowed_source_ips": [
+      "65.108.75.123/32"
+    ],
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
@@ -4118,7 +4120,12 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "lifecycle": {
+      "status": "sunset",
+      "sunset_at": "2026-09-27",
+      "reason": "Retired after product review: observed URL extraction took 46.6 seconds and returned no entities; prior audit documented silent fallback on 62% (135/217) of production pages, UTF-8 span corruption, and high-confidence nationality false positives. No replacement has been validated."
+    }
   },
   "newsletter-flow": {
     "trl": 4,

@@ -75,6 +75,22 @@
       "type": "string",
       "description": "Deployment lifecycle owner. Private services must declare iac-rendered so generic fleet-runner compose deployment fails before it can modify runtime state."
     },
+    "lifecycle": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["active", "sunset"] },
+        "sunset_at": { "type": "string", "format": "date" },
+        "reason": { "type": "string", "minLength": 1 },
+        "successor": { "type": "string" }
+      },
+      "allOf": [{
+        "if": { "properties": { "status": { "const": "sunset" } }, "required": ["status"] },
+        "then": { "required": ["sunset_at", "reason"] }
+      }],
+      "additionalProperties": false,
+      "description": "Service lifecycle. Sunset records remain in the catalog as tombstones; fleet-runner refuses deployment and MCP discovery excludes them."
+    },
     "tags":         { "type": "array", "items": { "type": "string" } },
     "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },
     "health_url":   { "type": "string", "format": "uri" },
