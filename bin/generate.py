@@ -106,6 +106,10 @@ PUBLIC_FIELDS: frozenset[str] = frozenset({
     # redirect targets, so exposing the alias map is informational not
     # disclosure. Lets external bookmark-followers resolve old slugs.
     "aliases", "alias_urls", "rename_status", "rename_retire_at",
+    # Exact public hostnames accepted as the service's runtime-graph target.
+    # These identify an observed destination; they do not render or change
+    # gateway routing.
+    "graph_target_hosts",
     # access_tier — the opposite of a disclosure risk: this is the field
     # that tells a prospective caller (human or agent) which tier they'd
     # need before a gated tool call will succeed. Withholding it wouldn't
@@ -137,6 +141,7 @@ PRIVATE_SERVICE_ALLOWED_FIELDS: frozenset[str] = PRIVATE_SERVICE_REQUIRED_FIELDS
 PRIVATE_SERVICE_FORBIDDEN_FIELDS: frozenset[str] = frozenset({
     "url", "health_url", "repo_url", "auth", "auth_help", "example_path",
     "pages_url", "pages_source_branch", "cert_domain", "alias_urls",
+    "graph_target_hosts",
     "extra_server_names", "vhost", "network_exposure",
 })
 
@@ -908,6 +913,10 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # via overrides.json; fleet-runner audit-graph diffs
               # declared vs observed.
               "depends_on",
+              # Hostnames that identify this service in bounded runtime
+              # graph events. These are telemetry aliases only and never
+              # alter nginx or request routing.
+              "graph_target_hosts",
               # Render-time vhost knobs (consumed by fleet-runner
               # nginx-render). Per-service patches via overrides.json
               # or via $rules; not derived from any other source.

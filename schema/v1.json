@@ -182,6 +182,15 @@
       "uniqueItems": true,
       "description": "Declared service-to-service dependencies (slugs). Static counterpart to the live edges in go-fleet-graph. fleet-runner audit-graph diffs declared vs observed: declared-not-observed = dead dep (remove) or broken caller; observed-not-declared = undeclared coupling (add or refactor). Optional; absence means 'no declared deps yet'. Edges to non-fleet hosts go in tags, not here."
     },
+    "graph_target_hosts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}$"
+      },
+      "uniqueItems": true,
+      "description": "Exact public hostnames that identify this service when bounded runtime graph telemetry reports an external:<host> destination. Telemetry canonicalization only; this field does not configure DNS, TLS, or gateway routing."
+    },
     "owner": {
       "type": "object",
       "description": "Who is responsible for this service. F4 phase 1 — OPTIONAL while the fleet backfills organically; track compliance via 'fleet-runner audit service-yaml-schema --field owner'. INTERNAL ONLY: not exposed in services-public.json (not added to PUBLIC_FIELDS).",

@@ -481,6 +481,7 @@ class TestPublicMirror(unittest.TestCase):
         "extra_server_names": ["alt.0crawl.com"],
         "vhost": {"proxy_buffering": "off"},
         "depends_on": ["other-svc"],
+        "graph_target_hosts": ["html-proxy.0exec.com"],
         "trl_evidence": "long internal commentary referencing ADR-0018",
         "trl": 6,
         "trl_ceiling": 7,
@@ -504,7 +505,7 @@ class TestPublicMirror(unittest.TestCase):
         pub = generate.to_public_entry(self.FULL_ENTRY)
         for required in ("id", "name", "description", "category",
                          "mesh", "kind", "language", "runtime",
-                         "url", "health_url", "repo_url",
+                         "url", "health_url", "repo_url", "graph_target_hosts",
                          "auth", "auth_help", "trl"):
             self.assertIn(required, pub,
                 f"public mirror dropped canonical field {required!r}")
