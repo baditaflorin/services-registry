@@ -360,9 +360,12 @@ class TestPrivateServiceContract(unittest.TestCase):
         generate.validate_private_cluster_placements(entries)
 
         placement = json.loads((Path(generate.ROOT) / "clusters.json").read_text())
-        self.assertEqual(placement, {"placement": {"fleet-build-broker": "0mcp"}})
+        self.assertEqual(placement.get("placement", {}).get("fleet-build-broker"), "0mcp")
 
         rendered = json.loads((Path(generate.ROOT) / "services.json").read_text())
+        private_ids = {entry["id"] for entry in entries}
+        public_ids = {entry["id"] for entry in generate.catalog_entries(rendered)}
+        self.assertTrue(set(placement["placement"]) - private_ids <= public_ids)
         self.assertEqual(
             [entry for entry in rendered if entry["id"] == "fleet-build-broker"],
             [self.ENTRY],
