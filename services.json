@@ -11824,6 +11824,11 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 3002,
     "container_port": 3002,
+    "graph_target_hosts": [
+      "go.proxy.okssh.com",
+      "proxy.html.go.0prx.com",
+      "proxy-hashmina.go-0proxy.com"
+    ],
     "version": "0.4.0",
     "network_exposure": "gateway-authenticated"
   },

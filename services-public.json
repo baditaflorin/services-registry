@@ -9097,6 +9097,10 @@
     "category": "proxy",
     "description": "Microservice for Go Html Proxy",
     "example_path": "/?url=https://example.com",
+    "graph_target_hosts": [
+      "go.proxy.okssh.com",
+      "proxy.html.go.0prx.com"
+    ],
     "health_url": "https://html-proxy.0exec.com/health",
     "id": "html-proxy",
     "kind": "container",
