@@ -3568,6 +3568,9 @@
   },
   "infrastructure-fetch-cache": {
     "access_tier": "infra-privileged",
+    "allowed_source_ips": [
+      "10.20.10.71/32"
+    ],
     "container_port": 18205,
     "cpus": 4,
     "depends_on": [
