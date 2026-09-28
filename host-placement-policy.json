@@ -26,6 +26,15 @@
       "roles": ["image-builder", "ci-agent"],
       "allowed_runtimes": [],
       "allowed_placement": []
+    },
+    "0mcp-runtime-general": {
+      "cluster": "0mcp",
+      "capacity_label": "0mcp-runtime-general",
+      "state": "active",
+      "roles": ["fleet-compose-runtime"],
+      "allowed_runtimes": ["compose"],
+      "allowed_placement": ["replicable"],
+      "allowed_service_ids": ["embed-iframe-classifier"]
     }
   }
 }
