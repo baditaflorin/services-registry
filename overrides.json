@@ -6712,5 +6712,21 @@
   },
   "fleet-grafana-staging": {
     "health_url": "https://fleet-grafana-staging.0exec.com/_gw_health"
+  },
+  "github-app-token-broker": {
+    "name": "GitHub App Token Broker",
+    "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
+    "auth": {
+      "type": "none"
+    },
+    "host_port": 18329,
+    "container_port": 18141,
+    "example_path": "/health",
+    "trl": 4,
+    "trl_evidence": "Initial scoped pilot implementation with Ed25519 request verification and repository/ref policy tests; not yet deployed or measured in production.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Current Secret Extension cannot signal pipeline completion; installation-token revocation at job end is not implemented, so the one-hour expiry is the cleanup bound.",
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex-gpt-6"
   }
 }

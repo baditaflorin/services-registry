@@ -3673,6 +3673,37 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "github-app-token-broker",
+    "name": "GitHub App Token Broker",
+    "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-fleet"
+    ],
+    "url": "https://github-app-token-broker.0exec.com",
+    "health_url": "https://github-app-token-broker.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-github-app-token-broker",
+    "example_path": "/health",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Initial scoped pilot implementation with Ed25519 request verification and repository/ref policy tests; not yet deployed or measured in production.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Current Secret Extension cannot signal pipeline completion; installation-token revocation at job end is not implemented, so the one-hour expiry is the cleanup bound.",
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex-gpt-6",
+    "host_port": 18329,
+    "container_port": 18141,
+    "network_exposure": "gateway-public"
+  },
+  {
     "id": "go-oauth-mapper",
     "version": "1.5.8",
     "name": "Go Oauth Mapper",
