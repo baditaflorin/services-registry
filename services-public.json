@@ -2773,6 +2773,32 @@
     "url": "https://gdpr-compliance.0crawl.com"
   },
   {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
+    "example_path": "/health",
+    "health_url": "https://github-app-token-broker.0exec.com/health",
+    "id": "github-app-token-broker",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "GitHub App Token Broker",
+    "repo_url": "https://github.com/baditaflorin/go-github-app-token-broker",
+    "runtime": "compose",
+    "tags": [
+      "go-fleet"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex-gpt-6",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Current Secret Extension cannot signal pipeline completion; installation-token revocation at job end is not implemented, so the one-hour expiry is the cleanup bound.",
+    "url": "https://github-app-token-broker.0exec.com"
+  },
+  {
     "alias_urls": [
       "oauth-mapper.0crawl.com"
     ],
@@ -15074,31 +15100,5 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/z3-smt-game/"
-  },
-  {
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "infrastructure",
-    "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
-    "example_path": "/health",
-    "health_url": "https://github-app-token-broker.0exec.com/health",
-    "id": "github-app-token-broker",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0exec",
-    "name": "GitHub App Token Broker",
-    "repo_url": "https://github.com/baditaflorin/go-github-app-token-broker",
-    "runtime": "compose",
-    "tags": [
-      "go-fleet"
-    ],
-    "trl": 4,
-    "trl_assessed_at": "2026-09-29",
-    "trl_assessor": "codex-gpt-6",
-    "trl_ceiling": 6,
-    "trl_ceiling_reason": "Current Secret Extension cannot signal pipeline completion; installation-token revocation at job end is not implemented, so the one-hour expiry is the cleanup bound.",
-    "url": "https://github-app-token-broker.0exec.com"
   }
 ]
