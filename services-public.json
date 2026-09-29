@@ -2904,6 +2904,35 @@
       "type": "api_key"
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "domains",
+    "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
+    "example_path": "/?domain=example.com",
+    "health_url": "https://hiring-footprint.0crawl.com/health",
+    "id": "hiring-footprint",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Hiring Footprint",
+    "repo_url": "https://github.com/baditaflorin/go_hiring_footprint",
+    "runtime": "compose",
+    "tags": [
+      "domains",
+      "go",
+      "hiring",
+      "company-signals"
+    ],
+    "trl": 3,
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex",
+    "url": "https://hiring-footprint.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "category": "recon",
     "description": "Microservice for Hidden Fields",
     "example_path": "/go_hidden_fields?url=https://example.com",
