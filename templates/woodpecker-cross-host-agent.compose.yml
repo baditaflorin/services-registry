@@ -9,6 +9,7 @@ services:
       - ./.agent-secret.env
     environment:
       WOODPECKER_SERVER: ${WOODPECKER_SERVER:?set the private gRPC endpoint}
+      WOODPECKER_GRPC_SECRET: ${WOODPECKER_AGENT_SECRET:?set the control-plane agent secret}
       WOODPECKER_HOSTNAME: ${WOODPECKER_AGENT_NAME:?set a stable agent name}
       WOODPECKER_MAX_WORKFLOWS: ${WOODPECKER_MAX_WORKFLOWS:-1}
       WOODPECKER_BACKEND: docker

@@ -34,8 +34,10 @@ control-plane hostname never determines the physical execution host; use
 1. Copy `templates/woodpecker-cross-host-agent.compose.yml` to a root-owned
    directory on the execution host.
 2. Copy `templates/woodpecker-agent-secret.env.example` to
-   `.agent-secret.env`, populate it from the private secret store and set mode
-   `0600`.
+   `.agent-secret.env`, populate `WOODPECKER_AGENT_SECRET` from the private
+   secret store, and set mode `0600`. The Compose template maps that same
+   value to Woodpecker 3.17's `WOODPECKER_GRPC_SECRET`; these names must carry
+   the same control-plane secret.
 3. Put the non-secret values below in the Compose `.env` file or process
    environment:
 
@@ -51,8 +53,15 @@ control-plane hostname never determines the physical execution host; use
    `backend=docker` in its labels. Use the worker only for repositories
    authorized on `ci.0exec.com`.
 
-4. Validate with `docker compose config --quiet`, start the agent and confirm
-   its stable name in `GET /api/agents`.
+4. Validate and start with both interpolation files loaded so the shared secret
+   alias is resolved without writing another copy into a second file:
+
+   ```bash
+   docker compose --env-file .env --env-file .agent-secret.env config --quiet
+   docker compose --env-file .env --env-file .agent-secret.env up -d
+   ```
+
+   Confirm the stable name in `GET /api/agents`.
 
 Do not use Compose replicas for controller-managed agents. Replica container
 IDs are unstable, so declare explicit services or separate agent stacks with
