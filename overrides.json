@@ -687,7 +687,8 @@
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 650-domain sample): confirmed genuinely differentiated from sibling go_google_taxonomy. Found and fixed 2 new false-friend/alias bugs: German 'Rezept' (medical prescription) misclassifying a real pharmacy as Food&Beverage, and a generic 'technology'/'software' meta/nav-slug alias misclassifying a real measurement-instrument manufacturer as SaaS at high confidence. trl_ceiling was previously unset; added ceiling=8 -- keyword-frequency architecture has a structural ceiling (can't distinguish 'is X' from 'serves/reports on X') requiring semantic understanding to clear toward 9. See PR #14 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "2.8.26"
   },
   "blocklist-checker": {
     "container_port": 8338,
