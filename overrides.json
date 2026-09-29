@@ -1099,7 +1099,8 @@
       ],
       "last_verified_at": "2026-09-13",
       "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. The checked regression validates full alpha-3 shape, long-tail alpha-2 codes, and an alias for every country; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
-    }
+    },
+    "gateway_upstream_url": "http://localhost:18316"
   },
   "crawl-web-application": {
     "container_port": 8082,
