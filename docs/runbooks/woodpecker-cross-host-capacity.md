@@ -33,11 +33,16 @@ control-plane hostname never determines the physical execution host; use
 
 1. Copy `templates/woodpecker-cross-host-agent.compose.yml` to a root-owned
    directory on the execution host.
-2. Copy `templates/woodpecker-agent-secret.env.example` to
-   `.agent-secret.env`, populate it from the private secret store and set mode
-   `0600`.
-3. Put the non-secret values below in the Compose `.env` file or process
-   environment:
+2. Create one Woodpecker agent registration per worker. The API returns a
+   random token; store it in Fleet Secrets with the exact consumer
+   `woodpecker-agent-<registration-id>`, then write the token to a separate
+   root-owned file with mode `0600`. Do not place the server's
+   `WOODPECKER_GRPC_SECRET` on an agent.
+3. Copy `templates/woodpecker-agent-token.path.env.example` to the Compose
+   `.env` file and set the token file path plus the registration ID. The file
+   contains no credential.
+4. Put the remaining non-secret values below in the Compose `.env` file or
+   process environment:
 
    ```text
    WOODPECKER_SERVER=<private-proxy-address>:9000
@@ -51,8 +56,46 @@ control-plane hostname never determines the physical execution host; use
    `backend=docker` in its labels. Use the worker only for repositories
    authorized on `ci.0exec.com`.
 
-4. Validate with `docker compose config --quiet`, start the agent and confirm
+5. Validate with `docker compose config --quiet`, start the agent and confirm
    its stable name in `GET /api/agents`.
+
+Run a rotation from the 0exec builder with its root-only Woodpecker API token
+file and the Fleet Secrets/API-key admin credentials loaded into the process
+environment. Replace one online worker at a time, using its exact agent ID,
+Compose file, and service name:
+
+```sh
+sudo fleet-runner woodpecker agent rotate <registration-id> \
+  --compose-file /opt/woodpecker/<compose-file> \
+  --service <compose-service> --worker-local
+```
+
+For a worker on another host, use `--worker-ssh-target <saved-ssh-target>` and,
+when needed, `--worker-ssh-bastion <saved-ssh-bastion>` instead of
+`--worker-local`. The command checks the complete 0exec queue and the selected
+agent's tasks and heartbeat, creates a no-schedule replacement, writes the
+random token to its registration-specific Vault consumer, installs it through
+stdin, verifies an identity-matched heartbeat, enables the replacement, and
+deletes the old registration. It refuses a paused/nonempty queue or an offline
+worker. It changes only `ci.0exec.com`; do not use it for `ci.0mcp.com`.
+
+If a successful worker cutover leaves the old registration unschedulable because
+the API delete was unavailable, retry its cleanup with
+`sudo fleet-runner woodpecker agent retire <registration-id>` after its
+heartbeat is stale and it has no assigned tasks.
+
+If the replacement heartbeat was not verified, repair the worker's token file
+or Compose connection first. Once its identity-matched heartbeat is fresh and
+the 0exec queue is idle, finish the cutover with
+`sudo fleet-runner woodpecker agent resume <replacement-registration-id>`.
+
+The worker receives only `WOODPECKER_AGENT_SECRET_FILE`; the control-plane JWT
+signing secret remains on the server. The helper never copies secret-bearing
+Compose content. If Compose validation or restart fails inside the helper, it
+restores the original bytes from process memory. If the worker restarted but
+its new heartbeat cannot be verified, the replacement registration and Vault
+token remain unschedulable so recovery can continue forward without reviving a
+shared token.
 
 Do not use Compose replicas for controller-managed agents. Replica container
 IDs are unstable, so declare explicit services or separate agent stacks with

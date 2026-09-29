@@ -18,7 +18,7 @@ steps:
         ci-authorities.json
         ci-execution-report.json
         docs/runbooks/woodpecker-cross-host-capacity.md
-        templates/woodpecker-agent-secret.env.example
+        templates/woodpecker-agent-token.path.env.example
         templates/woodpecker-cross-host-agent.compose.yml
         templates/woodpecker-load-controller.example.json
         templates/woodpecker-load-controller@.service
