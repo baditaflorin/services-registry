@@ -7919,7 +7919,7 @@
     "category": "observability",
     "description": "Isolated staging Grafana for validating provisioned dashboards against production Prometheus data. Viewer-only with a dedicated Grafana database volume and authenticated gateway route.",
     "example_path": "/",
-    "health_url": "https://fleet-grafana-staging.0exec.com/api/health",
+    "health_url": "https://fleet-grafana-staging.0exec.com/_gw_health",
     "id": "fleet-grafana-staging",
     "kind": "container",
     "language": "go",
