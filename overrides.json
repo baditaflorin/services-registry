@@ -6687,7 +6687,8 @@
     "depends_on": [
       "search-duck",
       "search-duck-go",
-      "infrastructure-fetch-cache"
+      "infrastructure-fetch-cache",
+      "apikey-service"
     ],
     "description": "Finds validated public careers-page and ATS hiring evidence using the owned custom search service with a separately scoped owned fallback; homepage reads share the fleet fetch cache.",
     "example_path": "/?domain=example.com",
@@ -6696,6 +6697,6 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex",
     "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
-    "version": "0.1.2"
+    "version": "0.1.3"
   }
 }
