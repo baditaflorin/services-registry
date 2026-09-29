@@ -7920,7 +7920,7 @@
     "category": "observability",
     "description": "Grafana dashboards for the fleet metrics hub. Anonymous viewer-only; admin/signup disabled; keystore-gated at the gateway.",
     "example_path": "/",
-    "health_url": "https://fleet-grafana.0exec.com/health",
+    "health_url": "https://fleet-grafana.0exec.com/_gw_health",
     "id": "fleet-grafana",
     "kind": "container",
     "language": "go",

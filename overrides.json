@@ -2652,7 +2652,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-grafana": {
-    "compose_service_name": "grafana"
+    "compose_service_name": "grafana",
+    "health_url": "https://fleet-grafana.0exec.com/_gw_health"
   },
   "fleet-graph": {
     "access_tier": "infra-privileged",
