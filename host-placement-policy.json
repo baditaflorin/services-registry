@@ -6,26 +6,58 @@
       "cluster": "0docker",
       "capacity_label": "dockerhost",
       "state": "active",
-      "roles": ["fleet-compose-runtime"],
-      "allowed_runtimes": ["compose"],
-      "allowed_placement": ["replicable"]
+      "roles": [
+        "fleet-compose-runtime"
+      ],
+      "allowed_runtimes": [
+        "compose"
+      ],
+      "allowed_placement": [
+        "replicable"
+      ]
     },
     "domainscope-runtime": {
       "cluster": "domainscope",
       "capacity_label": "domainscope-runtime",
       "state": "restricted",
-      "roles": ["domainscope-runtime"],
-      "allowed_runtimes": ["compose"],
-      "allowed_placement": ["replicable"],
+      "roles": [
+        "domainscope-runtime"
+      ],
+      "allowed_runtimes": [
+        "compose"
+      ],
+      "allowed_placement": [
+        "replicable"
+      ],
       "allowed_service_ids": []
     },
     "docker-builder": {
       "cluster": "build",
       "capacity_label": "docker-builder",
       "state": "build-only",
-      "roles": ["image-builder", "ci-agent"],
+      "roles": [
+        "image-builder",
+        "ci-agent"
+      ],
       "allowed_runtimes": [],
       "allowed_placement": []
+    },
+    "0mcp-runtime-general": {
+      "cluster": "lv3",
+      "capacity_label": "0mcp-runtime-general",
+      "state": "active",
+      "roles": [
+        "fleet-compose-runtime"
+      ],
+      "allowed_runtimes": [
+        "compose"
+      ],
+      "allowed_placement": [
+        "replicable"
+      ],
+      "allowed_service_ids": [
+        "country-iso-matcher"
+      ]
     }
   }
 }
