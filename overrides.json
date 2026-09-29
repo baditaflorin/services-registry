@@ -6406,7 +6406,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.6.226 CUSTOM_SEARCH_API_KEY env support added; service running in domainscope staging stack.",
-    "version": "1.98.271"
+    "version": "1.98.273"
   },
   "url-shortener": {
     "container_port": 8320,
@@ -6696,6 +6696,6 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex",
     "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   }
 }
