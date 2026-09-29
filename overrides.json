@@ -6669,5 +6669,20 @@
     "container_port": 8080,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s"
+  },
+  "hiring-footprint": {
+    "container_port": 18322,
+    "depends_on": [
+      "search-duck",
+      "search-duck-go",
+      "infrastructure-fetch-cache"
+    ],
+    "description": "Finds validated public careers-page and ATS hiring evidence using the owned custom search service with a separately scoped owned fallback; homepage reads share the fleet fetch cache.",
+    "example_path": "/?domain=example.com",
+    "host_port": 18328,
+    "trl": 3,
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex",
+    "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated."
   }
 }

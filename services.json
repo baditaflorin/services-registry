@@ -3833,6 +3833,42 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "hiring-footprint",
+    "name": "Hiring Footprint",
+    "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "domains",
+      "go",
+      "hiring",
+      "company-signals"
+    ],
+    "url": "https://hiring-footprint.0crawl.com",
+    "health_url": "https://hiring-footprint.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_hiring_footprint",
+    "example_path": "/?domain=example.com",
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18328,
+    "container_port": 18322,
+    "network_exposure": "gateway-authenticated",
+    "proxy_egress": true,
+    "version": "0.1.0",
+    "trl": 3,
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex",
+    "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated."
+  },
+  {
     "id": "hidden-fields",
     "name": "Hidden Fields",
     "description": "Microservice for Hidden Fields",
