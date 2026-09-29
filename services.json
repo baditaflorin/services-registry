@@ -6844,7 +6844,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "version": "2.2.8"
   },
   {
     "id": "smuggling-probe",
@@ -7219,7 +7220,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "2.1.0",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "sitemap-finder"
+    ]
   },
   {
     "id": "swagger-finder",
@@ -8608,7 +8612,10 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "sitemap-finder"
+    ]
   },
   {
     "id": "country-iso-matcher",
@@ -14886,10 +14893,13 @@
       "funding-detector",
       "gdpr-compliance",
       "google-taxonomy",
+      "heading-outline-extractor",
+      "hiring-footprint",
       "http-protocol",
       "ipv6-checker",
       "language-detector",
       "legal-entity",
+      "menu-extractor",
       "mobile-friendly",
       "office-locations",
       "outlink-graph",
@@ -14897,6 +14907,7 @@
       "phone-extractor",
       "press-mentions",
       "price-range",
+      "pricing-tier-parser",
       "redirect-tracer",
       "remote-detector",
       "review-presence",
@@ -14904,6 +14915,7 @@
       "scc",
       "schema-extractor",
       "security-txt",
+      "sitemap-finder",
       "subdomain-finder",
       "subdomain-takeover",
       "technology-stack",
@@ -14913,7 +14925,7 @@
     ],
     "proxy_egress": true,
     "gateway_upstream_url": "https://domainscope.scrapetheworld.org",
-    "version": "1.98.242",
+    "version": "1.98.271",
     "network_exposure": "gateway-authenticated"
   },
   {
