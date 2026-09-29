@@ -714,7 +714,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.7"
   },
   "brand-logo-extractor": {
     "container_port": 18287,
@@ -726,7 +727,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.9"
   },
   "broken-links": {
     "container_port": 8192,
@@ -741,7 +743,8 @@
     "trl_evidence": "900-domain live audit against the actual scan pipeline. Fixed 4 real bugs: an SSRF gap where the HEAD probe bypassed the fetch-cache's SSRF-safe path entirely; soft-404 false positives from truncated-length collisions on bodies >64KiB (one domain: 100/100 links misclassified); mailto:/tel: redirects misclassified as broken; malformed href resolution. broken_count -51.0%, soft_404 -81.8%, unknown -75.0% across ~23.5K checked links. See github.com/baditaflorin/go_broken_links PR #10.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.6.5"
   },
   "bucket-finder": {
     "container_port": 8339,
@@ -851,7 +854,8 @@
     "trl_evidence": "Re-audited 2026-08-20 on a fresh clone at go_cdn_detector@535f4f3 (go-common@v0.88.0 tip). Confirmed the fleet-wide bare-safehttp.NewClient()/DefaultFetchDelegate stale-cache footgun does NOT apply here: fetch.go uses fleetfetch.NewHTTPClient (WithRender(RenderDefault)+WithFallbackOnTimeout), a distinct, deliberately-cached client whose own fallback path already calls safehttp.WithoutFetchCache() internally (go-common fleetfetch/client.go:271, hardened further in go-common v0.86.0's fallback-recursion fix) -- not the bare-client mis-route pattern. Cache freshness is surfaced, not hidden: every response carries a fetch.render_mode/cache_hit/age_seconds/via_fallback provenance block (fetch.go FetchProvenance) so a stale-cache hit is visible to the caller rather than silently misreported as live. Live-curl-verified (2026-08-20, --max-time 6-8s) header-fingerprint accuracy against real current CDN edges: cloudflare.com (cf-ray), vercel.com (x-vercel-id/x-vercel-cache), netlify.com (x-nf-request-id), bunny.net (cdn-pullzone/cdn-cachedat), and fastly.com/github.io/azure.microsoft.com via the x-served-by cache- prefix rule (fastly.com's Server: 'Artisanal bits' deliberately does not match the server-substring rule, correctly falling through to the x-served-by signal) -- all matched the code's headerRules table with no misattribution observed. go build + go test ./... green on go1.26.5 (9.8s, all pass), no code change required. TRL 8 self-assessment stands: the false-positive corroboration gate (correlate.go), DNS label-boundary fix, and cache/timeout-doubling fixes from prior sessions are all still in place and covered by regression tests plus a /selftest liveness check pinning the FP guard.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.3.16"
   },
   "chatwrapped": {
     "trl": 7,
@@ -872,7 +876,8 @@
     "trl_evidence": "Real DOM walk over a fetched/pasted page (golang.org/x/net/html tokenizer, no regex over HTML structure): prunes script/style/noscript/svg/template/head/iframe subtrees, then runs four ordered passes — (1) reference/bibliography list items: <ol>/<ul> <li> contents inside a section whose heading text or container id/class matches a reference token (references / bibliography / works cited / literature cited / further reading); (2) every <cite> element's text; (3) footnote/endnote <li> targets keyed by id prefix (fn / footnote / endnote / note / cite_note / ref-) with the trailing number lifted into a marker; (4) an inline sweep for structured identifiers in running prose not already captured. Each citation's raw text is matched for identifiers with anchored regexes (pattern-matching within text, not HTML parsing): DOI (10.<4-9 digits>/<suffix>), arXiv new (NNNN.NNNNN[vN]) and old (archive.subclass/NNNNNNN) schemes normalised to arXiv:<id>, PMID (label-required), http/https URLs (DOI-resolver and arXiv URLs de-duplicated against their id forms), and ISBN-10/ISBN-13 validated by their mod-11 / mod-10 checksums (labelled and bare 978/979 forms; checksum-failing candidates dropped). Output is a typed citation list (raw text + detected type + extracted identifiers) plus a by-type + by-identifier summary. Input fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode; 4 MiB body cap. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (no_references, fetch_failed:<err>) instead of failing the response. ~30 unit + handler tests cover DOI extraction, both arXiv id forms, ISBN-10 and ISBN-13 valid + invalid checksums, PMID, <cite> extraction, reference-list detection by heading and by container id/class, URL-in-reference extraction, footnote markers, type classification, summary counts, parse-input aliases, missing-param 400, SSRF rejection, no-references→degraded, and text= mode. TRL-4 ceiling: heuristic section detection (no full CSL / citation-style parsing, no author/title/year field decomposition), English-centric reference-section headings, and no DOI/ISBN registry resolution (checksum validity only, not 'this identifier exists'). /selftest exercises the pure-logic pipeline (DOI/arXiv parse, ISBN checksum, reference-list + <cite> DOM detection, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.11"
   },
   "clickjacking-tester": {
     "container_port": 8225,
@@ -898,7 +903,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Re-earned with new, independently-verified evidence: the previous registry trl=7 rested solely on an unrelated v1.6.0 DOM chrome-exclusion fix and predated the readability-engine bugs found and fixed here (sentence-boundary blindness + non-Latin-script mis-scoring). See github.com/baditaflorin/go_cognitive_load PR #7.",
-    "version": "1.4.0",
+    "version": "1.6.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -916,7 +921,8 @@
     "trl_evidence": "Real WCAG 2.x contrast engine over a golang.org/x/net/html DOM walk (no regex over HTML structure): collects foreground/background color declarations from (1) inline style= attributes and (2) <style>-block CSS rules parsed by a small brace-matching tokenizer that strips /* */ comments and flattens one level of @media/@supports nesting. Colors are resolved by a curated ~148-entry CSS named-color map plus #rgb/#rrggbb (and #rgba/#rrggbbaa alpha-drop) hex and rgb()/rgba() functional notation (comma or space/slash separated, integer or percentage channels, alpha parsed-then-dropped). For each resolved fg+bg pair it computes the exact sRGB relative luminance (channel/255, piecewise <=0.03928 ? /12.92 : ((c+0.055)/1.055)^2.4; L = 0.2126R+0.7152G+0.0722B) and the contrast ratio (L_lighter+0.05)/(L_darker+0.05) — verified against the canonical black-on-white = 21.0 and white-on-white = 1.0. Verdicts use >= thresholds at the WCAG boundaries: AA normal 4.5, AAA normal 7, AA large 3, AAA large 4.5. Output is de-duplicated, sorted worst-ratio-first, with a summary (total pairs, # failing AA normal, skipped/unparseable color count, min ratio). Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers checking the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted HTML with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_color_pairs, unparseable_colors_skipped:<n>) instead of failing the response. Documented TRL-4 ceiling: it scores only directly-declared color pairs on the same element/rule — NO computed-style cascade, inheritance, or specificity resolution, so it does not reconstruct the fg/bg a browser would actually composite; no JS-applied styles; no opacity/alpha compositing; CSS variables, gradients, currentColor, and hsl() are reported as skipped rather than guessed. ~40 table-driven unit + handler tests cover luminance of black/white/mid-gray, the 21.0 and 1.0 anchor ratios, hex (#fff/#ffffff) and rgb()/rgba() parsing, named-color resolution, inline-style and <style>-block pair extraction, AA/AAA verdicts at the boundaries, missing-param 400, SSRF rejection (handler + parseInput), and degraded[] population on a no-colors page. /selftest exercises the pure-logic pipeline (luminance/ratio anchors, parsing, inline + stylesheet extraction, threshold verdicts, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.8"
   },
   "comment-extractor": {
     "container_port": 8340,
@@ -1002,7 +1008,7 @@
   "consent-simulator": {
     "host_port": 18208,
     "container_port": 18208,
-    "version": "0.1.0",
+    "version": "0.1.2",
     "trl": 4,
     "trl_evidence": "First ship + first real batch test 2026-08-24 (109 diverse EU domains, not the original Austria-gambling sample). Reject/accept control classification now covers EN/DE/FR/IT/ES/NL/PL/PT/SV/DA/FI canonical phrasing plus a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only. Known gap: Didomi-fronted sites (orf.at, kurier.at, nrc.nl confirmed) did not render their consent banner in this hosting environment even after 25s wait -- see README Scope and limitations. proxy_read_timeout raised 120s->200s to match the service-side timeout increase (serverWriteTimeout now 175s).",
     "proxy_read_timeout": "200s"
@@ -1020,7 +1026,8 @@
     "trl_evidence": "Near-duplicate fingerprinting over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Computes three standard fingerprints over the normalized lowercased text: a 64-bit Charikar SimHash over k=3 word shingles (FNV-64a per shingle, +1/-1 column sums, sign bit) — near-identical documents have a small Hamming distance, unrelated documents ~half the bits; a 64-permutation MinHash signature (universal-hash multiply-xor scramble with a splitmix64 avalanche per permutation, min per permutation) whose matching-fraction estimates Jaccard similarity (identical sets 1.0, disjoint ~0 within ~12% sampling error); and a whitespace-collapsed, lowercased SHA-256 hex exact-match digest. Shingle and token counts are returned alongside. A hammingDistanceHex helper documents how to compare two SimHash values. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers fingerprinting the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode fingerprints pasted content with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_tokens) instead of failing the response; <20-token inputs flagged as statistically unstable. ~30 unit tests cover SimHash determinism/case-insensitivity/empty, near-duplicate small-Hamming stability and unrelated large-Hamming divergence, the Hamming helper, MinHash signature length/determinism, Jaccard identical=1.0/disjoint~0/similarity-ordering/mismatched-length, normalized SHA-256 exact match plus case/whitespace insensitivity and content-change sensitivity, shingle generation at the k boundary/below-k/dedup, token+shingle counts, parse-input aliases, low-sample degraded, missing-param 400, SSRF rejection, and text= mode. TRL-4 ceiling: fixed k=3 shingle width, no language-aware tokenization, FNV/universal-hash heuristics rather than cryptographic locality-sensitive guarantees, and fingerprints estimate surface/lexical similarity not semantic meaning. /selftest exercises the pure-logic pipeline (identical→identical fingerprints, one-word→small SimHash Hamming distance but different SHA, unrelated→large Hamming, MinHash Jaccard sanity, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.8"
   },
   "cookie-checker": {
     "container_port": 8226,
