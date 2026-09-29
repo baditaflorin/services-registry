@@ -61,12 +61,23 @@
           "trl_assessor": "claude-sonnet-5",
           "trl_ceiling": 8,
           "trl_evidence": "Stock prom/alertmanager:v0.34.0 wired to route Prometheus-native alerts (previously had no delivery path at all -- see fleet-prometheus entry's note on fleet-alerts.yml) through fleet-notify's no-auth webhook. Config is a single static route + one webhook receiver, not independently tested beyond confirming delivery live post-deploy. trl set to match the fleet-grafana/fleet-prometheus siblings in this same repo (config-driven third-party binary, no CI); trl_ceiling held at 8 for the same reason."
+        },
+        {
+          "id": "fleet-grafana-staging",
+          "name": "Fleet Grafana Staging",
+          "category": "observability",
+          "description": "Isolated staging Grafana for validating provisioned dashboards against production Prometheus data. Viewer-only with a dedicated Grafana database volume and authenticated gateway route.",
+          "container_port": 3000,
+          "host_port": 18326,
+          "health_path": "/api/health",
+          "example_path": "/",
+          "ui_cookie_bridge": true
         }
       ],
       "name": "go-fleet-metrics-hub-children",
       "parent_repo": "go-fleet-metrics-hub",
       "replace_parent": true,
-      "why": "go-fleet-metrics-hub is a compose project shipping three independently-addressable services (discovery http_sd, prometheus, grafana). Each gets its own slug + host_port + *.0exec.com domain today; if the children later split into separate repos they keep the same slugs and only repo_url changes. Triggered by a real port-allocation collision on 2026-05-18 (fleet-discovery had claimed 18201 on the dockerhost but was not in the registry, so allocate-port re-handed it out)."
+      "why": "go-fleet-metrics-hub owns four independently addressable production services (discovery, Grafana, Prometheus, and Alertmanager). Its staging Grafana is a fifth registered child on a separate Compose project and data volume so dashboard changes can be validated before production provisioning. Each public Grafana UI has its own gateway hostname and cookie bridge. See the service descriptions for ports and runtime details."
     }
   ],
   "$external": [
@@ -6698,5 +6709,8 @@
     "trl_assessor": "codex",
     "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
     "version": "0.1.3"
+  },
+  "fleet-grafana-staging": {
+    "health_url": "https://fleet-grafana-staging.0exec.com/api/health"
   }
 }

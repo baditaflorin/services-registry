@@ -7910,6 +7910,27 @@
     "url": "https://fleet-grafana.0exec.com"
   },
   {
+    "auth": {
+      "header": "X-API-Key",
+      "query_param": "api_key",
+      "type": "api_key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "category": "observability",
+    "description": "Isolated staging Grafana for validating provisioned dashboards against production Prometheus data. Viewer-only with a dedicated Grafana database volume and authenticated gateway route.",
+    "example_path": "/",
+    "health_url": "https://fleet-grafana-staging.0exec.com/api/health",
+    "id": "fleet-grafana-staging",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Grafana Staging",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-metrics-hub",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-grafana-staging.0exec.com"
+  },
+  {
     "access_tier": "infra-privileged",
     "alias_urls": [
       "go-fleet-graph.0exec.com"

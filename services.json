@@ -10288,6 +10288,33 @@
     "compose_service_name": "grafana"
   },
   {
+    "id": "fleet-grafana-staging",
+    "name": "Fleet Grafana Staging",
+    "description": "Isolated staging Grafana for validating provisioned dashboards against production Prometheus data. Viewer-only with a dedicated Grafana database volume and authenticated gateway route.",
+    "category": "observability",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://fleet-grafana-staging.0exec.com",
+    "health_url": "https://fleet-grafana-staging.0exec.com/api/health",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-metrics-hub",
+    "example_path": "/",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0exec.com",
+    "network_exposure": "gateway-authenticated",
+    "container_port": 3000,
+    "host_port": 18326,
+    "health_path": "/api/health",
+    "ui_cookie_bridge": true
+  },
+  {
     "id": "fleet-graph",
     "name": "Fleet Graph",
     "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, a compact evidence-backed agent brief, expanded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
