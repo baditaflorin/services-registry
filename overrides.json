@@ -986,7 +986,10 @@
     "trl_evidence": "Live on dockerhost 18296; 6 recipes tested end-to-end (firmographic 8/8, seo-audit 8-9/9, vendor-security 6/6, web-vitals 6/6, accessibility 5/5, merchant 6/6) across stripe/shopify/notion/gymshark.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "sitemap-finder"
+    ]
   },
   "compression-tester": {
     "container_port": 8327,
@@ -5892,7 +5895,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 30-domain sample): found and fixed a real fetch-cache-masking bug, live-proved with real timing (21.7s vs ~1s on a cold cache miss, nearly exhausting the 25s budget) and corrupted evidence fields (wrong byte counts, missed gzip detection from the cache silently decompressing responses). Also flagged (not fixed, ops scope) that production is running a 4-week-stale image missing PR #5's relative-sitemap-index-child fix while sibling services redeployed ~20h prior. trl_ceiling was previously unset; added ceiling=8. See PR #7 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "2.2.8"
   },
   "smuggling-probe": {
     "container_port": 8154,
@@ -6060,7 +6064,10 @@
     "version": "2.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "sitemap-finder"
+    ]
   },
   "swagger-finder": {
     "container_port": 8349,
@@ -6358,10 +6365,13 @@
       "funding-detector",
       "gdpr-compliance",
       "google-taxonomy",
+      "heading-outline-extractor",
+      "hiring-footprint",
       "http-protocol",
       "ipv6-checker",
       "language-detector",
       "legal-entity",
+      "menu-extractor",
       "mobile-friendly",
       "office-locations",
       "outlink-graph",
@@ -6369,6 +6379,7 @@
       "phone-extractor",
       "press-mentions",
       "price-range",
+      "pricing-tier-parser",
       "redirect-tracer",
       "remote-detector",
       "review-presence",
@@ -6376,6 +6387,7 @@
       "scc",
       "schema-extractor",
       "security-txt",
+      "sitemap-finder",
       "subdomain-finder",
       "subdomain-takeover",
       "technology-stack",
@@ -6394,7 +6406,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.6.226 CUSTOM_SEARCH_API_KEY env support added; service running in domainscope staging stack.",
-    "version": "1.98.242"
+    "version": "1.98.271"
   },
   "url-shortener": {
     "container_port": 8320,
@@ -6683,6 +6695,7 @@
     "trl": 3,
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex",
-    "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated."
+    "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
+    "version": "0.1.0"
   }
 }
