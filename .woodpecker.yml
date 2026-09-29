@@ -3,6 +3,7 @@ when:
 
 steps:
   secrets:
+    depends_on: []
     image: ghcr.io/gitleaks/gitleaks:v8.30.1
     commands:
       # Generated registry data and older bin scripts contain documented
@@ -30,6 +31,7 @@ steps:
         --redact --no-banner --no-git || exit 1; done
 
   tests:
+    depends_on: []
     image: python:3.13-alpine
     commands:
       - python3 -m unittest discover -s bin -p 'test_*.py'

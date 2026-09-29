@@ -187,10 +187,14 @@ class TestExpandEntry(unittest.TestCase):
              "match": {"mesh": "0exec"},
              "patch": {"cert_domain": "wildcard.0exec.com"}},
         ]
-        by_slug = {"fleet-grafana": {"cert_domain": "fleet-grafana-special.0exec.com"}}
+        by_slug = {"fleet-grafana": {
+            "cert_domain": "fleet-grafana-special.0exec.com",
+            "health_url": "https://fleet-grafana.0exec.com/_gw_health",
+        }}
         children = generate.expand_entry(PARENT_FIXTURE, EXPAND_SPEC, by_slug=by_slug, rules=rules)
         grafana = next(c for c in children if c["id"] == "fleet-grafana")
         self.assertEqual(grafana["cert_domain"], "fleet-grafana-special.0exec.com")
+        self.assertEqual(grafana["health_url"], "https://fleet-grafana.0exec.com/_gw_health")
 
     def test_child_without_id_is_a_hard_error(self):
         bad_spec = {"name": "broken", "parent_repo": "x",
