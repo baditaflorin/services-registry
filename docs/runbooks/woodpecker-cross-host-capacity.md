@@ -72,12 +72,15 @@ sudo fleet-runner woodpecker agent rotate <registration-id> \
 
 For a worker on another host, use `--worker-ssh-target <saved-ssh-target>` and,
 when needed, `--worker-ssh-bastion <saved-ssh-bastion>` instead of
-`--worker-local`. The command checks the complete 0exec queue and the selected
-agent's tasks and heartbeat, creates a no-schedule replacement, writes the
-random token to its registration-specific Vault consumer, installs it through
-stdin, verifies an identity-matched heartbeat, enables the replacement, and
-deletes the old registration. It refuses a paused/nonempty queue or an offline
-worker. It changes only `ci.0exec.com`; do not use it for `ci.0mcp.com`.
+`--worker-local`. The command records global queue counts and checks the
+selected agent's tasks and heartbeat, creates a no-schedule replacement, writes
+the random token to its registration-specific Vault consumer, pauses only the
+selected agent, rechecks its assignments, installs the token through stdin,
+verifies an identity-matched heartbeat, enables the replacement, and deletes
+the old registration. Pending and running jobs on other agents continue. It
+refuses a globally paused queue, assigned work on the selected agent, or an
+offline worker. It changes only `ci.0exec.com`; do not use it for
+`ci.0mcp.com`.
 
 If a successful worker cutover leaves the old registration unschedulable because
 the API delete was unavailable, retry its cleanup with
@@ -85,8 +88,9 @@ the API delete was unavailable, retry its cleanup with
 heartbeat is stale and it has no assigned tasks.
 
 If the replacement heartbeat was not verified, repair the worker's token file
-or Compose connection first. Once its identity-matched heartbeat is fresh and
-the 0exec queue is idle, finish the cutover with
+or Compose connection first. Once its identity-matched heartbeat is fresh, the
+source worker is offline and idle, and the global queue is not paused, finish
+the cutover with
 `sudo fleet-runner woodpecker agent resume <replacement-registration-id>`.
 
 The worker receives only `WOODPECKER_AGENT_SECRET_FILE`; the control-plane JWT
