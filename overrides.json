@@ -3493,6 +3493,14 @@
     "pids_limit": 2048,
     "container_port": 3002,
     "description": "Microservice for Go Html Proxy",
+    "env": {
+      "FEATURE_TRACING": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SAMPLE_RATE": "0.10",
+      "GRAPH_TRUSTED_CALLER_IPS": "10.10.10.10",
+      "OTEL_SAMPLE_RATE": "0.10"
+    },
     "example_path": "/?url=https://example.com",
     "host_port": 3002,
     "graph_target_hosts": [
