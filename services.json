@@ -14846,6 +14846,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 18013,
     "container_port": 3401,
+    "depends_on": [
+      "html-proxy"
+    ],
     "proxy_egress": true,
     "network_exposure": "gateway-authenticated",
     "version": "0.1.6"

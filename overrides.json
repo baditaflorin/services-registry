@@ -5690,6 +5690,9 @@
   },
   "search-duck": {
     "container_port": 3401,
+    "depends_on": [
+      "html-proxy"
+    ],
     "description": "DuckDuckGo SERP scraper in Go (?query=)",
     "host_port": 18013,
     "name": "Search DuckDuckGo (Go)",
