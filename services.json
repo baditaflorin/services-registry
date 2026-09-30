@@ -3703,7 +3703,8 @@
     "placement": "replicable",
     "host_port": 18322,
     "container_port": 18141,
-    "network_exposure": "gateway-public"
+    "network_exposure": "gateway-public",
+    "gateway_upstream_url": "http://10.10.10.30:18322"
   },
   {
     "id": "go-oauth-mapper",
