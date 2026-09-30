@@ -371,6 +371,7 @@ class TestPrivateServiceContract(unittest.TestCase):
                     "fleet-build-broker": "0mcp",
                     "country-iso-matcher": "lv3",
                     "reverse-dns": "lv3",
+                    "github-app-token-broker": "domainscope",
                 }
             },
         )

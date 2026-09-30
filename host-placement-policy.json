@@ -29,7 +29,9 @@
       "allowed_placement": [
         "replicable"
       ],
-      "allowed_service_ids": []
+      "allowed_service_ids": [
+        "github-app-token-broker"
+      ]
     },
     "docker-builder": {
       "cluster": "build",
@@ -57,7 +59,8 @@
       ],
       "allowed_service_ids": [
         "country-iso-matcher",
-        "reverse-dns"
+        "reverse-dns",
+        "github-app-token-broker"
       ]
     }
   }
