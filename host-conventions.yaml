@@ -53,8 +53,9 @@ container_defaults:
     # Graph observation is opt-in by an exact per-service registry override.
     # Keeping the fleet default false prevents stale compose/.env state from
     # turning unrelated services into writer clients with expired or
-    # mismatched credentials. The bounded selftest-aggregator pilot is the
-    # sole current true override.
+    # mismatched credentials. Enable observation only through exact per-service
+    # overrides with a declared graph-writer secret, such as the bounded
+    # selftest-aggregator pilot and html-proxy.
     GRAPH_ENABLED: "false"
     # The keystore (go-apikey-service) listens on the dockerhost
     # at port 18021. Every container reaches it via the
