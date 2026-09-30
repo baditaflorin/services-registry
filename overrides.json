@@ -1358,7 +1358,8 @@
     "trl_evidence": "Real single-pass DOM tree walk over golang.org/x/net/html's tokenizing parser (no regex over HTML structure): malformed markup is normalised into a well-formed tree, then one depth-first traversal in document order computes total element-node count, total text-node count, maximum element-nesting depth, maximum sibling breadth (widest direct-element-child fan at any parent), a per-lowercase-tag frequency histogram, distinct-tag count, average direct-element-children per element, count of elements exceeding the >60-child high-fan-out threshold (threshold echoed in the response), the deepest element path (root-to-deepest tag chain, first-in-document-order on ties), text-to-element ratio, total DOM size in bytes, and a documented combined complexity score (max_depth + max_breadth + element_nodes/100). The whole served document is counted including head/script/style — DOM weight is a property of the markup as a whole, distinct from prose extraction. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode analyses pasted markup with no fetch. Per-failure notes pushed to a non-nil degraded[] (empty_document, fetch_failed, parse_failed) instead of failing the response. ~30 unit tests cover nested-div depth, N-sibling breadth, node counts, tag histogram, distinct-tag count, deepest-path chain (including first-wins-on-tie), high-fan-out threshold boundary (60 vs 61), text-node vs element-node counting, malformed-HTML normalisation, script/style inclusion, average-children and ratio math, complexity-score monotonicity, empty-document degraded, missing-param 400, SSRF rejection, and text= mode. /selftest exercises the pure-logic pipeline (hand-built known depth/breadth, node counts, deepest path, fan-out, empty-document, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: metrics describe the STATIC server-rendered DOM only — no JS-expanded/hydrated DOM, no computed layout/CSSOM, no render-tree or paint cost; a headless-browser engine would be required to advance further.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.2.6"
   },
   "domain-abuse-contact-rollup": {
     "container_port": 18189,
@@ -3513,7 +3514,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit: the repo contains two implementations -- a small unused root-module library using the correct safehttp client, and the ACTUALLY DEPLOYED src/ hexagonal service which hand-rolled its own SSRF/dial/cache stack. Found and fixed a critical bug in the deployed service: an SSRF-checking dialer was built but then unconditionally overridden by a plain DNS-caching dialer with zero SSRF check -- the default client profile never had transport-layer SSRF protection at all. Live-proved: pre-fix, the real factory-built client successfully dialed 127.0.0.1:1. Confirmed real fleet-wide reach -- several domain-analysis services (gdpr-compliance, broken-links, payment-detector, etc) route through this proxy as a fallback tier. Fixed by wiring the checker into the actual dial path for both client profiles, closing SSRF-via-redirect and DNS-rebind gaps too. Also fixed the recurring fetch-cache-masking bug (CacheMiddleware ignored Cache-Control entirely) and an unbounded response-body read for chunked responses (Content-Length -1 fell through to unbounded io.ReadAll). Flagged, not fixed: a credit/auth-bypass path trusts a client-supplied X-Real-IP header, safe only if the gateway always overwrites it -- needs deploy-topology context. trl held at 6; trl_ceiling=7 added, held back specifically because this security control passed its own unit test while the real wiring silently discarded it -- should be integration-verified before trusting above 7. See PR #11 (merged), plus 3 pre-existing stale PRs (#1/#2 dependency bumps, #7 a real headless-Chrome pool leak fix from 2026-06) now CONFLICTING against this fix and left for manual follow-up.",
-    "version": "0.5.17"
+    "version": "0.5.19"
   },
   "http-method-tester": {
     "container_port": 8087,
@@ -6432,7 +6433,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.6.226 CUSTOM_SEARCH_API_KEY env support added; service running in domainscope staging stack.",
-    "version": "1.98.273"
+    "version": "1.98.299"
   },
   "url-shortener": {
     "container_port": 8320,
