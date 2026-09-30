@@ -66,6 +66,26 @@ class ClassificationTests(unittest.TestCase):
 
 
 class ConfigTests(unittest.TestCase):
+    def test_current_exec_agents_keep_physical_host_attribution(self):
+        config_path = MODULE_PATH.parent.parent / "ci-execution-report.json"
+        config = report.load_config(config_path)
+        exec_plane = next(
+            plane for plane in config["control_planes"]
+            if plane["name"] == "ci.0exec.com"
+        )
+
+        expected = {
+            "67": "pve01",
+            "88": "0mcp-runtime",
+            "90": "0mcp",
+            "91": "0docker",
+        }
+        for agent_id, physical_host in expected.items():
+            with self.subTest(agent_id=agent_id):
+                self.assertEqual(
+                    exec_plane["agent_id_hosts"].get(agent_id), physical_host
+                )
+
     def test_duplicate_plane_names_fail(self):
         config = {
             "version": 1,
