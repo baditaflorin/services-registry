@@ -527,8 +527,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "0.1.7"
+    "version": "0.1.7",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "brand-logo-extractor",
@@ -565,8 +565,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "0.1.9"
+    "version": "0.1.9",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "broken-links",
@@ -604,8 +604,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "1.6.5"
+    "version": "1.6.5",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "bucket-finder",
@@ -680,6 +680,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.4.10",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -795,8 +796,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "1.3.16"
+    "version": "1.3.16",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "citation-reference-extractor",
@@ -834,8 +835,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "0.1.11"
+    "version": "0.1.11",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "clickjacking-tester",
@@ -949,8 +950,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "0.1.8"
+    "version": "0.1.8",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "comment-extractor",
@@ -1171,8 +1172,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "0.1.8"
+    "version": "0.1.8",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "cookie-checker",
@@ -3673,42 +3674,7 @@
     "network_exposure": "gateway-authenticated"
   },
   {
-    "id": "github-app-token-broker",
-    "name": "GitHub App Token Broker",
-    "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "go-fleet"
-    ],
-    "url": "https://github-app-token-broker.0exec.com",
-    "health_url": "https://github-app-token-broker.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go-github-app-token-broker",
-    "version": "0.1.2",
-    "example_path": "/health",
-    "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "cert_domain": "wildcard.0exec.com",
-    "trl": 4,
-    "trl_evidence": "Initial scoped pilot implementation with Ed25519 request verification and repository/ref policy tests; not yet deployed or measured in production.",
-    "trl_ceiling": 6,
-    "trl_ceiling_reason": "Current Secret Extension cannot signal pipeline completion; installation-token revocation at job end is not implemented, so the one-hour expiry is the cleanup bound.",
-    "trl_assessed_at": "2026-09-29",
-    "trl_assessor": "codex-gpt-6",
-    "placement": "replicable",
-    "host_port": 18322,
-    "container_port": 18141,
-    "network_exposure": "gateway-public",
-    "gateway_upstream_url": "http://10.10.10.30:18322"
-  },
-  {
     "id": "go-oauth-mapper",
-    "version": "1.5.8",
     "name": "Go Oauth Mapper",
     "description": "Microservice for Oauth Mapper",
     "category": "infrastructure",
@@ -3750,6 +3716,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.5.8",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3867,45 +3834,6 @@
     "network_exposure": "gateway-authenticated"
   },
   {
-    "id": "hiring-footprint",
-    "name": "Hiring Footprint",
-    "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
-    "category": "domains",
-    "mesh": "0crawl",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "domains",
-      "go",
-      "hiring",
-      "company-signals"
-    ],
-    "url": "https://hiring-footprint.0crawl.com",
-    "health_url": "https://hiring-footprint.0crawl.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_hiring_footprint",
-    "example_path": "/?domain=example.com",
-    "auth": {
-      "header": "X-API-Key",
-      "query_param": "api_key",
-      "type": "api_key"
-    },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
-    "cert_domain": "wildcard.0crawl.com",
-    "host_port": 18328,
-    "container_port": 18322,
-    "network_exposure": "gateway-authenticated",
-    "proxy_egress": true,
-    "version": "0.1.3",
-    "trl": 3,
-    "trl_assessed_at": "2026-09-29",
-    "trl_assessor": "codex",
-    "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
-    "depends_on": [
-      "apikey-service"
-    ]
-  },
-  {
     "id": "hidden-fields",
     "name": "Hidden Fields",
     "description": "Microservice for Hidden Fields",
@@ -3940,6 +3868,45 @@
     "proxy_egress": true,
     "coolify_app_uuid": "q122and0425dsjnhw56b2gio",
     "version": "1.4.0",
+    "network_exposure": "gateway-authenticated"
+  },
+  {
+    "id": "hiring-footprint",
+    "name": "Hiring Footprint",
+    "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
+    "category": "domains",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "company-signals",
+      "domains",
+      "go",
+      "hiring"
+    ],
+    "url": "https://hiring-footprint.0crawl.com",
+    "health_url": "https://hiring-footprint.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_hiring_footprint",
+    "example_path": "/?domain=example.com",
+    "auth": {
+      "type": "api_key",
+      "query_param": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 3,
+    "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex",
+    "host_port": 18328,
+    "container_port": 18322,
+    "depends_on": [
+      "apikey-service"
+    ],
+    "proxy_egress": true,
+    "version": "0.1.3",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4894,11 +4861,6 @@
   },
   {
     "id": "named-entity-recognizer",
-    "lifecycle": {
-      "status": "sunset",
-      "sunset_at": "2026-09-27",
-      "reason": "Retired after product review: observed URL extraction took 46.6 seconds and returned no entities; prior audit documented silent fallback on 62% (135/217) of production pages, UTF-8 span corruption, and high-confidence nationality false positives. No replacement has been validated."
-    },
     "name": "Named Entity Recognizer",
     "description": "Named-entity recognizer (PERSON/ORG/LOCATION/PRODUCT/EVENT) \u2014 pure-Go prose statistical NER + curated gazetteer, rune-accurate offsets, SSRF-guarded url fetch",
     "category": "nlp",
@@ -4922,6 +4884,11 @@
     },
     "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0crawl.com",
+    "lifecycle": {
+      "status": "sunset",
+      "sunset_at": "2026-09-27",
+      "reason": "Retired after product review: observed URL extraction took 46.6 seconds and returned no entities; prior audit documented silent fallback on 62% (135/217) of production pages, UTF-8 span corruption, and high-confidence nationality false positives. No replacement has been validated."
+    },
     "trl": 7,
     "trl_evidence": "First-pass audit (production runs a real ONNX transformer, dslim/bert-base-NER via hugot v0.7.4, with a prose+gazetteer fallback): found a major silent-degradation bug -- 62%% (135/217) of real production pages were silently falling back to the much weaker rule-based engine, with the response still claiming engine:hugot_bert_ner_onnx and degraded:[], completely invisible to any consumer. Root cause is an upstream hugot tokenizer byte-offset-drift bug on multi-byte UTF-8 text, not fixable from this repo -- made it observable instead with proper per-request degraded tags. Also fixed nationalities (French/German/American) mislabeled PRODUCT at >99.9%% confidence (added a curated demonym stoplist) and corrupted/truncated entity text leaking through from the same upstream offset bug (added a word-boundary check that drops misaligned spans, confirmed on real pages like 'porary Music' instead of 'Contemporary Music'). Confirmed fetch-cache masking does not apply. trl held at 7 (this fix itself is the evidence-trail upgrade); trl_ceiling=7 added -- capped by the unresolved upstream tokenizer bug plus structural English-centricity of both engines. See PR #2 (merged).",
     "trl_assessed_at": "2026-08-02",
@@ -6004,14 +5971,14 @@
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
+    "placement": "replicable",
     "host_port": 8333,
     "container_port": 8333,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "2.0.0",
-    "network_exposure": "gateway-authenticated",
-    "placement": "replicable"
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "review-presence",
@@ -6883,8 +6850,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "2.2.11"
+    "version": "2.2.11",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "smuggling-probe",
@@ -7254,15 +7221,15 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8313,
     "container_port": 8313,
+    "depends_on": [
+      "sitemap-finder"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "2.1.0",
-    "network_exposure": "gateway-authenticated",
-    "depends_on": [
-      "sitemap-finder"
-    ]
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "swagger-finder",
@@ -8648,13 +8615,13 @@
     "trl_assessor": "claude-opus-4-8-2026-06-02",
     "host_port": 18296,
     "container_port": 18296,
+    "depends_on": [
+      "sitemap-finder"
+    ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "depends_on": [
-      "sitemap-finder"
-    ]
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "country-iso-matcher",
@@ -8702,8 +8669,8 @@
     },
     "host_port": 18315,
     "container_port": 18315,
-    "network_exposure": "gateway-authenticated",
-    "gateway_upstream_url": "http://localhost:18316"
+    "gateway_upstream_url": "http://localhost:18316",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "d3-graph",
@@ -11337,7 +11304,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "access_tier": "infra-privileged",
-    "version": "0.4.0",
+    "version": "0.4.2",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -11778,6 +11745,40 @@
     "host_port": 18010,
     "container_port": 4906,
     "network_exposure": "gateway-authenticated"
+  },
+  {
+    "id": "github-app-token-broker",
+    "name": "GitHub App Token Broker",
+    "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go-fleet"
+    ],
+    "url": "https://github-app-token-broker.0exec.com",
+    "health_url": "https://github-app-token-broker.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-github-app-token-broker",
+    "example_path": "/health",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Initial scoped pilot implementation with Ed25519 request verification and repository/ref policy tests; not yet deployed or measured in production.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Current Secret Extension cannot signal pipeline completion; installation-token revocation at job end is not implemented, so the one-hour expiry is the cleanup bound.",
+    "trl_assessed_at": "2026-09-29",
+    "trl_assessor": "codex-gpt-6",
+    "placement": "replicable",
+    "host_port": 18322,
+    "container_port": 18141,
+    "gateway_upstream_url": "http://10.10.10.30:18322",
+    "version": "0.1.2",
+    "network_exposure": "gateway-public"
   },
   {
     "id": "go-session-fixation",

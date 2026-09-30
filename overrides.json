@@ -787,6 +787,7 @@
     "container_port": 8325,
     "description": "Microservice for Caa Checker",
     "host_port": 8325,
+    "version": "1.4.10",
     "trl": 8,
     "trl_assessed_at": "2026-08-20",
     "trl_assessor": "claude-session-2026-08-20",
@@ -1341,7 +1342,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (fresh 250-domain sample, cross-checked against dig on 3 public resolvers): found and fixed a real bug -- flattenAnswers sorted MX/SRV records lexicographically as strings instead of numerically by preference/priority, scrambling any RRset mixing single- and double-digit values (confirmed on 17% of sampled domains with MX records, e.g. a Google Workspace MX set [1,5,5,10,10] emitted as [1,10,10,5,5]). Confirmed no fetch-cache layer sits in front of DNS lookups, and NXDOMAIN-vs-transient-error handling is already correct. trl bumped 6->7 given the live-validated fix; trl_ceiling=7 added -- structurally capped by dependence on shared public resolvers (1.1.1.1/8.8.8.8/9.9.9.9) for both answers and DNSSEC trust, no local validator. See PR #10 (merged).",
-    "version": "1.4.0",
+    "version": "1.8.9",
     "coolify_app_uuid": "rg33g8wm5fwwxzue83j5y6d9"
   },
   "dom-complexity-metrics": {
@@ -2955,7 +2956,7 @@
       "fleet-dns-sync",
       "fleet-secrets"
     ],
-    "version": "0.3.6",
+    "version": "0.3.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -3095,7 +3096,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "v0.3.5 release: go-fleet-secrets PRs #14 and #15 hardened trusted-proxy identity handling and made /selftest an explicit unauthenticated health contract; deployed image f5fafff passed direct /health, /selftest, and /version smoke checks, followed by a gateway vhost render and reload. Existing audit-log redaction, consumer-ACL, rotation, and concurrency tests remain required.",
-    "version": "0.3.8"
+    "version": "0.4.2"
   },
   "fleet-selftest-aggregator": {
     "container_port": 18165,
@@ -3360,7 +3361,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.7"
+    "version": "1.5.8"
   },
   "go-session-fixation": {
     "access_tier": "vetted-pentest",
@@ -3504,7 +3505,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit: the repo contains two implementations -- a small unused root-module library using the correct safehttp client, and the ACTUALLY DEPLOYED src/ hexagonal service which hand-rolled its own SSRF/dial/cache stack. Found and fixed a critical bug in the deployed service: an SSRF-checking dialer was built but then unconditionally overridden by a plain DNS-caching dialer with zero SSRF check -- the default client profile never had transport-layer SSRF protection at all. Live-proved: pre-fix, the real factory-built client successfully dialed 127.0.0.1:1. Confirmed real fleet-wide reach -- several domain-analysis services (gdpr-compliance, broken-links, payment-detector, etc) route through this proxy as a fallback tier. Fixed by wiring the checker into the actual dial path for both client profiles, closing SSRF-via-redirect and DNS-rebind gaps too. Also fixed the recurring fetch-cache-masking bug (CacheMiddleware ignored Cache-Control entirely) and an unbounded response-body read for chunked responses (Content-Length -1 fell through to unbounded io.ReadAll). Flagged, not fixed: a credit/auth-bypass path trusts a client-supplied X-Real-IP header, safe only if the gateway always overwrites it -- needs deploy-topology context. trl held at 6; trl_ceiling=7 added, held back specifically because this security control passed its own unit test while the real wiring silently discarded it -- should be integration-verified before trusting above 7. See PR #11 (merged), plus 3 pre-existing stale PRs (#1/#2 dependency bumps, #7 a real headless-Chrome pool leak fix from 2026-06) now CONFLICTING against this fix and left for manual follow-up.",
-    "version": "0.5.14"
+    "version": "0.5.17"
   },
   "http-method-tester": {
     "container_port": 8087,
@@ -6699,19 +6700,23 @@
   "hiring-footprint": {
     "container_port": 18322,
     "depends_on": [
-      "search-duck",
-      "search-duck-go",
-      "infrastructure-fetch-cache",
       "apikey-service"
     ],
-    "description": "Finds validated public careers-page and ATS hiring evidence using the owned custom search service with a separately scoped owned fallback; homepage reads share the fleet fetch cache.",
+    "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
     "example_path": "/?domain=example.com",
     "host_port": 18328,
     "trl": 3,
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex",
     "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
-    "version": "0.1.3"
+    "version": "0.1.3",
+    "category": "domains",
+    "tags": [
+      "domains",
+      "go",
+      "hiring",
+      "company-signals"
+    ]
   },
   "fleet-grafana-staging": {
     "health_url": "https://fleet-grafana-staging.0exec.com/_gw_health"
@@ -6732,6 +6737,7 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex-gpt-6",
     "placement": "replicable",
-    "gateway_upstream_url": "http://10.10.10.30:18322"
+    "gateway_upstream_url": "http://10.10.10.30:18322",
+    "version": "0.1.2"
   }
 }
