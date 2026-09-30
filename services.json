@@ -11948,7 +11948,7 @@
       "go.proxy.okssh.com",
       "proxy.html.go.0prx.com"
     ],
-    "version": "0.5.17",
+    "version": "0.5.18",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -14847,7 +14847,8 @@
     "host_port": 18013,
     "container_port": 3401,
     "proxy_egress": true,
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "version": "0.1.6"
   },
   {
     "id": "url-categorizer-api",
