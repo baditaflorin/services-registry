@@ -642,7 +642,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
     "trl_evidence": "20 -race test funcs, audit_log table with prefix-only redaction, /audit admin-gated, /selftest",
-    "version": "0.4.6"
+    "version": "0.4.7"
   },
   "asn-lookup": {
     "container_port": 8337,
@@ -6756,5 +6756,28 @@
     "placement": "replicable",
     "gateway_upstream_url": "http://10.10.10.30:18322",
     "version": "0.1.2"
+  },
+  "task-credential-broker": {
+    "name": "Task Credential Broker",
+    "description": "Shared task identity and short-lived credential lease broker for Go services.",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "host_port": 18327,
+    "container_port": 8080,
+    "example_path": "/health",
+    "depends_on": [
+      "apikey-service"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-10-01",
+    "trl_assessor": "codex-gpt-6",
+    "placement": "pinned",
+    "trl_evidence": "Two-app end-to-end contract test covers task creation/closure, exact scope denial, target use, API-key issue/revoke, and durable audit rows. No live deployment or production credential has been exercised.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "Still needs a live staged deployment, scoped provider delegation, and production-equivalent backup/restore verification.",
+    "version": "0.1.0",
+    "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected."
   }
 }
