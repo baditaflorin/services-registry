@@ -455,7 +455,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "trl_evidence": "Confirmed honestly earned. Found and fixed a real production bug: domain-parking 'for sale' pages return HTML for every path including /ads.txt, and a permissive parser accepted raw HTML/JS as bogus ads.txt data -- 88% of a 400-domain flagged sample had zero real parsed records, 98.6% leaked raw HTML. Fixed with an IAB-directive allowlist + HTML-body rejection; 0/400 false positives after. TCFv2/CMP consent-detection ceiling condition independently re-verified as real. See github.com/baditaflorin/go_ad_density PR #11.",
-    "version": "2.2.0",
+    "version": "2.6.10",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -596,7 +596,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
-    "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8"
+    "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
+    "version": "1.5.11"
   },
   "api-first": {
     "container_port": 8276,
@@ -610,7 +611,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 55-domain sample): found and fixed a real fetch-cache-masking bug, live-proved to silently inflate a real zero-API-surface domain's score from 8 ('no_api') to a fabricated 86 ('api_available') via cache replay. trl_ceiling was previously unset; added ceiling=8 -- this is a heuristic HTTP-probe/regex detector with no JS rendering or ground-truth API registry, structurally capped below 9. See PR #12 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.5.12"
   },
   "apikey-scanner": {
     "container_port": 8230,
@@ -653,7 +655,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Multi-resolver Team Cymru DNS client (1.1.1.1 + 8.8.8.8) via miekg/dns with parallel-fanout / first-non-empty-wins semantics; RDAP fallback via openrdap when Cymru is unreachable; per-IP 24h in-memory TTL cache; bulk endpoint with 10-worker pool, per-lookup 2s and total 30s caps; private/reserved IPs refused unless ALLOW_PRIVATE=1. TRL-7: hosting-attribution guard against CDN/WAF edge IP false positives (Cloudflare, Fastly, Akamai, Incapsula) flagged as hosting_attribution=cdn_fronted with CDN label and LOW confidence; hyperscaler ASNs (AWS/Google/Azure/Alibaba) marked cloud_ambiguous at MEDIUM confidence; honest error taxonomy (status=no_data / status=unreachable, never a service error); transient resolver failures retried once, deadline-bounded; /selftest exercises CDN-attribution guard offline; ≥25 hermetic test cases including CDN-fronted-vs-direct in both directions and full resolve-failure taxonomy. Fleet fetch-cache-opt-out audit (2026-08-08): confirmed the safehttp client's options slice (main.go, extracted into buildSafeHTTPOptions in the fix) omitted WithoutFetchCache()/WithForceHTTP2() -- same bug class as the 2026-07 go_page_load_metrics incident, whereby a client without either opt-out is silently eligible for the fleet-wide DefaultFetchDelegate and gets answered from cached bytes instead of a live origin fetch. Added both options plus a regression test (TestBuildSafeHTTPOptions_OptsOutOfFetchCache) verified to fail without the fix and pass with it. Live-verified against real RIPEStat/Cymru lookups (1.1.1.1, 8.8.8.8, AS13335) post-fix: correct ASN/org/country data returned. IMPORTANT caveat: this service's safeHTTP client is not currently wired into any live call path -- RIPEStat/RDAP/quorum calls all use separate plain http.Client instances (see main.go's pre-existing comment) -- so the fix has zero live blast-radius today; it is pre-work for when those call sites get rewired onto safeHTTP. Bumped 1.5.6->1.5.7. trl/trl_ceiling unchanged (fix doesn't affect current live behavior). See github.com/baditaflorin/go_asn_lookup PR #10 (open, not merged).",
-    "version": "1.4.0",
+    "version": "1.5.13",
     "coolify_app_uuid": "gmhjeope5wg7owardeoio2ae"
   },
   "audience-field-sculpture": {
@@ -712,7 +714,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
     "trl_evidence": "~30 curated DNSBL/RBL/URIBL zones across spam, phishing, malware,\ntor, and open-proxy categories. Per-list 127.0.0.x return-code\ndecode tables (operator-sourced). Concurrent worker-pool fan-out\n(10) using miekg/dns directly so we distinguish NXDOMAIN /\nSERVFAIL / \"got 127.0.0.x\". In-process miekg/dns test server with\n≥10 cases (clean, listed, multi-listed, domain-list, ipv6, private\nIP refusal, ?lists= filter). Reputation score is explainable\n(per-list weight + per-category bonus, capped at 100). See\ndocs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.0",
+    "version": "1.4.5",
     "coolify_app_uuid": "bhyw09mpgmoc4r37en1mq26o"
   },
   "brand-color-palette": {
@@ -768,7 +770,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
     "trl_evidence": "v1.4.0 adds permutation-based discovery (?name=acme): generates a\nbounded candidate set (≤200) from base + corp/inc + role suffixes\n(backup, prod, staging, assets, internal, …), probes every candidate\nacross AWS S3 (vhost + path), GCS (vhost + path), Azure Blob/File,\nand DigitalOcean Spaces (5 regions) in parallel via a 16-worker pool\nwith a 4s per-probe and 90s total budget. Per-provider response\nclassification distinguishes listable / exists / denied / not_exists\n(via NoSuchBucket vs AccessDenied / Azure AuthenticationFailed) and\nattaches sample object keys + counts when a ListBucketResult or\nEnumerationResults body is present. Optional WORDLISTS_URL extension\nhook for go-pentest-wordlists. Test coverage: permute_test.go (8\ncases), detect_test.go (12 cases), handler_test.go (httptest server\nwith canned XML returning listable/denied/NoSuchBucket/404). Backward\ncompatibility preserved for the legacy ?url= page-scan path. Pure Go,\nCGO-free, SSRF-safe via go-common/safehttp. ADR:\ndocs/adr/0001-trl-uplift-to-6.md.\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (ebdd85c) reviewed end-to-end. Confirmed two real, live-verified bugs, both fixed in PR https://github.com/baditaflorin/go_bucket_finder/pull/10 (open, not merged):\n(1) fetch-cache staleness: fetchClient/probeClient in fetch.go were bare safehttp.NewClient() calls with no .WithoutFetchCache(), so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0), every probe GET is eligible for DefaultFetchDelegate and can be served a stale cached response instead of the live origin state -- directly undermining this tool's core promise of reporting CURRENT bucket exposure. This is the documented 'live probe semantics where freshness < cache TTL matters' case go-common/fleetfetch's own doc comment says must not use the cache.\n(2) false-positive classification: verified live against real AWS S3, GCS, DO Spaces, Wasabi, Linode, Vultr, and Backblaze B2 endpoints with curl. Backblaze B2's S3-compatible API (<name>.s3.<region>.backblazeb2.com) returns an identical 403 'Unauthenticated requests are not allowed for this api' for every bucket name -- real, nonexistent, public, or private alike -- so the legacy ?url= page-scan path's bespoke status-code-only classifier (any 403 -> exists_not_listable, any 200 -> public_accessible, no body inspection) reported a false 'bucket exists' finding for every Backblaze reference and every generic 200 fallback page detected in a scanned page. Fixed by having that path reuse the already-tested, evidence-based classifyResponse from the ?name= permutation path, plus a new Backblaze-specific non-signal branch. Two regression tests added (fail on pre-fix code, pass after, confirmed via git stash bisection).\nAll other providers (AWS S3 vhost+path, GCS vhost+path, Azure Blob/File, DO Spaces x5 regions, Wasabi, Linode, Vultr) verified live to behave exactly as the existing classifier expects (404 NoSuchBucket for nonexistent, 200+ListBucketResult for public-listable). TRL left at 6: the permutation-probing architecture and provider matrix work as claimed once these two bugs are patched; PR #10 is the pending fix, not yet on main.",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "coolify_app_uuid": "ioxy3gabe7xoido8gx6574zf"
   },
   "c-proxy": {
@@ -811,7 +813,8 @@
     "trl_evidence": "Sitekey extraction, provider fingerprinting across reCAPTCHA v2/v3/hCaptcha/Turnstile/etc.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.2.10"
   },
   "cas": {
     "container_port": 8279,
@@ -947,7 +950,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 260-domain sample, 217 successful real fetches, ~9,500 comments extracted): confirmed fetch-cache masking does not apply (uses fleetfetch with cache/render provenance surfaced to callers) and confirmed HTML5-spec-correct tokenizer behavior on IE-conditional-comment/nested-comment/CDATA edge cases (not bugs). Found and fixed a real finding-suppression bug: isBoilerplate()'s escape hatch only re-checked raw text for a bare TODO/FIXME/RFC1918 IP, never the severity ClassifyComment had already computed -- so a genuine credential leak wrapped in JSDoc/license-shaped comment text was correctly classified credential_leak/high internally but then silently dropped from interesting_comments, the exact field the fleet's leak-bounty-policy/findings-store integrations key off. Fixed by trusting the already-computed severity. trl bumped 6->7; trl_ceiling held at 7 -- direct-fetch-only design (RenderJS deliberately reverted due to fleet-wide proxy degradation) is a real structural ceiling for a passive recon tool. See PR #7 (merged).",
-    "coolify_app_uuid": "l8lihsf5ayj6qj331n5pqn97"
+    "coolify_app_uuid": "l8lihsf5ayj6qj331n5pqn97",
+    "version": "1.4.5"
   },
   "company-name-extractor": {
     "host_port": 18325,
@@ -1545,7 +1549,7 @@
     "trl_ceiling_reason": "Plugin/theme-level depth needs a Wappalyzer-grade signature database; bot-protected and fingerprint-less sites remain outside reliable CPU-only detection.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.18",
+    "version": "0.4.19",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -1610,7 +1614,7 @@
     "trl_evidence": "Confirmed today's earlier merged fetch-cache fix is genuinely in place, then found and fixed one more real live false negative: the render PaaS rule only recognized a .onrender.com CNAME or an x-render-origin-server header, missing Render-hosted domains behind Cloudflare (CNAME hidden, Server header overwritten) -- live-verified via an independent ground-truth signal (hosting_asn_name='RENDER'), 6/20 (30%) of a targeted sample were misses. Fixed (v0.2.10) by adding Render's own rndr-id request-id header as a strong signal, re-verified live against all 6 domains plus a fresh 150-domain random sample with zero new mismatches. See github.com/baditaflorin/go_domain_deployment_fingerprint PR #17 (merged). Rows with tool_version<0.2.10 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.2.15",
+    "version": "0.2.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
