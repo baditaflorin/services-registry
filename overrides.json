@@ -713,7 +713,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.8.26"
+    "version": "2.8.29",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "blocklist-checker": {
     "container_port": 8338,
@@ -1283,7 +1287,11 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Tested against 200 real domains confirmed to have a privacy_policy page. Fixed a broken word-boundary guard that let 'AWS' match inside 'laws'/'applicable laws' (13%->1% false positive rate), a case-insensitive Spanish regex mismatching the Polish word 'nie' as a sensitive ID-document flag, and a port config drift (8154 vs actual 8284) across 4 files. See github.com/baditaflorin/go_data_inventory PR #7.",
-    "version": "1.4.0",
+    "version": "1.5.6",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
