@@ -1917,6 +1917,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-font-stack": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18221,
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
@@ -1940,6 +1941,7 @@
     "mem_limit": "2g"
   },
   "domain-gift-card": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18239,
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "host_port": 18239,
@@ -1987,6 +1989,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-image-alt-coverage": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18223,
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
     "host_port": 18223,
@@ -2000,6 +2003,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-integration-marketplace": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18243,
     "description": "Integration / marketplace / app-directory page detector with count estimate.",
     "host_port": 18243,
@@ -2016,6 +2020,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-interactive-demo": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18240,
     "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
@@ -2043,6 +2048,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-martech-stack": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18213,
     "description": "Martech stack detector — HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
@@ -2129,6 +2135,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-pagination-rel": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18229,
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
     "host_port": 18229,
@@ -2159,6 +2166,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-podcast-presence": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18227,
     "description": "Podcast presence detector — RSS feed + linked platforms + embedded players.",
@@ -2173,6 +2181,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
   "domain-product-count": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18242,
     "description": "E-commerce catalog lower-bound estimator with canonicalized sitemap, JSON-LD, Shopify, and homepage product signals.",
     "host_port": 18242,
@@ -2186,6 +2195,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-ratelimit-headers": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18234,
     "description": "Validated RateLimit and Retry-After detector with evidence-driven endpoint discovery and HEAD-to-GET fallback.",
     "host_port": 18234,
