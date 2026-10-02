@@ -14888,10 +14888,10 @@
     "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected.",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
-    "trl_evidence": "Two-app end-to-end contract test covers task creation/closure, exact scope denial, target use, API-key issue/revoke, and durable audit rows. No live deployment or production credential has been exercised.",
+    "trl_evidence": "v0.1.9 declares the broker and workload verification endpoints, a 30-second lease ceiling, and two exact read-only dogfood grants. Live staging and production evidence is pending.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Still needs a live staged deployment, scoped provider delegation, and production-equivalent backup/restore verification.",
-    "trl_assessed_at": "2026-10-01",
+    "trl_assessed_at": "2026-10-03",
     "trl_assessor": "codex-gpt-6",
     "placement": "pinned",
     "host_port": 18327,
@@ -14899,7 +14899,7 @@
     "depends_on": [
       "apikey-service"
     ],
-    "version": "0.1.8",
+    "version": "0.1.9",
     "network_exposure": "gateway-authenticated"
   },
   {
