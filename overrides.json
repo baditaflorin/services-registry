@@ -932,7 +932,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.11"
+    "version": "0.1.13",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "clickjacking-tester": {
     "container_port": 8225,
@@ -1071,10 +1075,14 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pass-3 found the prior probe client used fleetfetch.NewHTTPClient(RenderDefault), which despite its name routes every GET through the shared Redis fetch-cache, silently ignoring Transport.DisableCompression and collapsing the five independent Accept-Encoding negotiations into one warm cached body. On 1000 real v1.6.1 rows this produced 344/1000 (34%) recording supports_gzip=false while supports_br=true (implausible; gzip is the universal fallback). Replaced with a direct *http.Transport using safehttp.GuardedDialer (same SSRF/DNS-rebind guard, no new dep) + DisableCompression=true + ProxyFromEnvironment, so each offer and the raw wire bytes reach the origin. Re-probed the FP cohort live against deployed v1.6.2: 18/20 (90%) now correctly report gzip honored, 2 are genuine true negatives. 27 unit tests green.",
-    "version": "1.5.0",
+    "version": "1.6.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "consent-simulator": {
     "host_port": 18208,
@@ -1258,7 +1266,12 @@
     "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the whole document and recursively collects three independent signal families per candidate framework. (1) CDN / linked-stylesheet signal: every <link rel=stylesheet|preload href> and <script src> is matched case-insensitively against a curated needle table (bootstrap, tailwindcss/tailwind, bulma, foundation, materialize, fomantic/semantic-ui, uikit, purecss/pure-min, tachyons, skeleton, milligram) covering jsdelivr/cdnjs/unpkg/self-hosted filenames; this is the strong, author-declared signal and frequently carries an exact pinned version. (2) Class-name signatures: distinctive tokens (navbar, col-*, btn-*, d-flex; tailwind md:/lg:/sm:/pt-/px- prefixes + text-sm/bg-blue-500; bulma columns/is-*; foundation grid-x/callout; materialize waves-effect; uikit uk-*; pure-*; tachyons pa3/f6) are separated from generic shared tokens (container, row, flex, button, column, hero) that are flagged weak so a single one never yields a confident detection; Semantic UI's generic 'ui' token only counts as distinctive when it co-occurs with a real SUI partner (button/grid/menu/segment/...) on the same element. (3) <meta name=generator> naming a framework adds a soft corroborating hint. Version extraction: a single regexp pulls the dotted version from the common CDN shapes bootstrap@5.3.0, /bootstrap/5.3.0/, and bootstrap-5.3.0.min.css (stdlib regexp is used ONLY for class-token/CDN/version pattern matching, never to parse HTML structure). Confidence is a documented heuristic blend (scoreFramework): CDN hit base 0.80 plus 0.15 when a version was extracted; first distinctive class +0.25 with diminishing +0.10 each for the next two (class-only contribution capped at ~0.45 so class signatures alone never reach CDN-level certainty); weak classes +0.05 each capped at 0.10; generator +0.10; clamped to [0,1], 2dp; results below a 0.15 floor (e.g. a lone weak class) are dropped, and the list is sorted by confidence desc with a deterministic framework-order tie-break. Honest TRL-4 ceiling: this is a pure static-markup heuristic over a finite curated framework set; it cannot see browser-computed CSS, and minified / renamed / content-purged class names (e.g. a Tailwind build that purges unused utilities and inlines arbitrary values) can defeat the class-signature path entirely, leaving the CDN/link signal as the reliable one — frameworks outside the curated list are not guessed but reported as an empty frameworks[] with no_framework_detected in degraded[]. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode (static DOM, no JS). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs; the input guard is OUTBOUND-only and never inspects hrefs/srcs embedded in the markup. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to degraded[] (fetch_failed, empty_body, no_framework_detected) instead of failing the response; degraded[] is always a non-nil slice and frameworks[] is always non-nil. 36 unit + handler tests cover bootstrap by CDN and by classes, tailwind by utility classes and by CDN, bulma, foundation, materialize, semantic-ui by distinctive pair (and the bare-ui non-detection), uikit, pure.css, tachyons, skeleton + milligram by CDN, version extraction at @ / path / dash shapes and two-component versions, multiple frameworks on one page, confidence ordering and the class-below-CDN ceiling, the cap-at-one blend, generator meta hint, evidence de-duplication, raw-signal counts, single-weak-class rejection, protocol-relative CDN, garbage/empty input safety, plus handler text-mode, parse-input aliases, missing-param 400, and SSRF rejection. /selftest exercises the pure-logic pipeline (bootstrap CDN+version, tailwind classes, class-below-CDN ceiling, confidence ordering, no-framework, non-nil result, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.9",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "currency-detector": {
     "container_port": 8282,
@@ -1272,7 +1285,12 @@
     "trl_evidence": "Second-pass re-audit (fresh sample, zero commits since prior wave): found and fixed a real fetch-cache-masking bug, confirmed both via docker inspect (FLEET_FETCH_CACHE_URL set in production) and live cache-warming latency signature (7.86s->5.87s->4.23s pre-fix vs flat ~5.8s post-fix). See PR #7 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.4.13",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "cursorparty": {
     "trl": 3,
@@ -1293,10 +1311,14 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "CPU-only DOM heuristics plateau at principled multilingual structural extraction; exact brand disambiguation / image recognition (vs structural alt/anchor/grid signals) and SLA-grade live verdicts would need a browser engine or paid logo-recognition feed. No persisted logo-detail table exists to certify live accuracy against.",
     "trl_evidence": "Confirmed honestly earned; no trl>ceiling contradiction. 720-domain live audit found and fixed 3 real false-positive classes: Wix CDN media-hash leaks (27->0), numbered generic placeholders like 'Client 8' (22->0), color-variant social icon labels like 'Facebook - Black' (3->0). One domain's verdict corrected from social_proof to the honest weak_signal. See github.com/baditaflorin/go_customer_logos PR #15.",
-    "version": "3.0.0",
+    "version": "3.7.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "d3-graph": {
     "container_port": 6003,
