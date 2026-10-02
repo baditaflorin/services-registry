@@ -34,6 +34,7 @@ steps:
     depends_on: []
     image: python:3.13-alpine
     commands:
+      - apk add --no-cache git
       - git fetch --no-tags origin main
       - python3 -m unittest discover -s bin -p 'test_*.py'
       - python3 bin/check_service_version_regressions.py origin/main
