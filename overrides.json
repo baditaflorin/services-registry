@@ -934,10 +934,14 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Re-earned with new, independently-verified evidence: the previous registry trl=7 rested solely on an unrelated v1.6.0 DOM chrome-exclusion fix and predated the readability-engine bugs found and fixed here (sentence-boundary blindness + non-Latin-script mis-scoring). See github.com/baditaflorin/go_cognitive_load PR #7.",
-    "version": "1.6.13",
+    "version": "1.6.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "color-contrast-checker": {
     "container_port": 18261,
@@ -953,7 +957,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.8"
+    "version": "0.1.10",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "comment-extractor": {
     "container_port": 8340,
@@ -1066,7 +1074,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.8"
+    "version": "0.1.10",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "cookie-checker": {
     "container_port": 8226,
