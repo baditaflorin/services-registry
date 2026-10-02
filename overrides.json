@@ -1511,6 +1511,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
   },
   "domain-ad-network": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18214,
     "description": "Ad-network detector with validated ads.txt seller records and executable-context matching for 18 in-page advertising providers.",
     "host_port": 18214,
@@ -1554,6 +1555,7 @@
     "trl_evidence": "Live on dockerhost host_port 18324 at /opt/services/domain-ai-catalog-discovery (was an unregistered squatter). Registered so allocate-port never reissues 18324. Health returns service=domain-ai-catalog-discovery status=ok version=0.1.0. Repo baditaflorin/go_domain_ai_catalog_discovery; mesh-0exec topics added 2026-09-17."
   },
   "domain-amp-detector": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18222,
     "description": "Strict AMP detector requiring the root marker, official runtime, same-site canonical, and verified AMP alternatives.",
     "example_path": "/?domain=www.bbc.com",
@@ -1570,6 +1572,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-analytics-stack": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18215,
     "description": "Analytics stack detector - GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "host_port": 18215,
@@ -1586,6 +1589,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-anycast-footprint": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18220,
     "description": "Anycast vs unicast routing detector (multi-resolver IP convergence + ASN check).",
     "host_port": 18220,
@@ -1601,6 +1605,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-app-render-mode": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18224,
     "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
