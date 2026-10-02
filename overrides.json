@@ -401,7 +401,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "trl_evidence": "700-domain live audit (paired old/HEAD binaries against real fleet JS-render infra). Fixed a UTF-8 truncation bug corrupting non-Latin-script evidence text (verified on 2 real domains). Confirmed production is 3 commits stale with a known live false-negative. See github.com/baditaflorin/go_a11y_quick PR #7.",
-    "version": "1.5.11",
+    "version": "1.5.12",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
