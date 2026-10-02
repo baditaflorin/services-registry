@@ -1620,6 +1620,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-backlink-profile": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18210,
     "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
     "host_port": 18210,
@@ -1648,6 +1649,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-breadcrumb-schema": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18230,
     "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
     "host_port": 18230,
@@ -1661,6 +1663,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-cache-policy": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18235,
     "description": "HTTP cache hygiene scorer (RFC 7234/9111).",
     "host_port": 18235,
@@ -1746,6 +1749,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
   },
   "domain-deployment-fingerprint": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18241,
     "description": "Unified deployment fingerprint (PaaS + serverless + edge-compute detector).",
     "host_port": 18241,
@@ -1805,6 +1809,7 @@
     "version": "0.4.20"
   },
   "domain-ecommerce-platform": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18212,
     "description": "E-commerce platform detector (Shopify/Magento/Woo/BigCommerce/etc.).",
     "host_port": 18212,
@@ -1836,6 +1841,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-error-monitoring": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18225,
     "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "host_port": 18225,
@@ -1852,6 +1858,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-events-platform": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18226,
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
@@ -1866,6 +1873,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-experimentation-stack": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18211,
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
@@ -1882,6 +1890,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-faq-schema": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18231,
     "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
     "host_port": 18231,
