@@ -35,7 +35,14 @@ steps:
     image: python:3.13-alpine
     commands:
       - apk add --no-cache git
-      - git fetch --no-tags origin main
+      - |
+        target="$${CI_COMMIT_TARGET_BRANCH:-$${CI_REPO_DEFAULT_BRANCH}}"
+        source="$${CI_COMMIT_SOURCE_BRANCH:-$${CI_COMMIT_BRANCH}}"
+        if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+          git fetch --unshallow --no-tags origin "$$target" "$$source"
+        else
+          git fetch --no-tags origin "$$target" "$$source"
+        fi
       - python3 -m unittest discover -s bin -p 'test_*.py'
       - python3 bin/check_service_version_regressions.py origin/main
       - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py
