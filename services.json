@@ -10727,7 +10727,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "no auth",
+    "auth_help": "no auth on read (anonId is the read-secret); writes require client-held argon2id-hashed writeToken in body (not keystore-gated)",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
     "trl_evidence": "NEW fleet primitive (2026-05-19). Pairs with mesh-common's fleetPersona (39 vitest tests). Server: 21 Go unit + handler tests covering validation, argon2id verify, fixed-window rate-limit, CORS preflight, read-only kill switch, oversized body. testing/smoke.sh runs the full lifecycle end-to-end against a running container. Strict-ASCII allowlist mirrors the client. Pure-Go SQLite (modernc.org/sqlite), CGO_ENABLED=0.",
@@ -10801,7 +10801,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "no auth",
+    "auth_help": "public endpoint (no keystore) \u2014 beacon-only",
     "cert_domain": "wildcard.0exec.com",
     "aliases": [
       "go-fleet-pixel"
@@ -14899,7 +14899,7 @@
     "depends_on": [
       "apikey-service"
     ],
-    "version": "0.1.7",
+    "version": "0.1.8",
     "network_exposure": "gateway-authenticated"
   },
   {

@@ -913,6 +913,9 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # via overrides.json; fleet-runner audit-graph diffs
               # declared vs observed.
               "depends_on",
+              # A curated auth-help string may be stricter than the generic
+              # auth-type fallback (for example, header-only credentials).
+              "auth_help",
               # Hostnames that identify this service in bounded runtime
               # graph events. These are telemetry aliases only and never
               # alter nginx or request routing.
