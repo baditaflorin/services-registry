@@ -434,6 +434,10 @@
     ]
   },
   "accessibility-score": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8273,
     "description": "Microservice for Accessibility Score",
     "example_path": "/?url=https://example.com",
@@ -490,6 +494,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "admin-finder": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8335,
     "description": "Microservice for Admin Finder",
     "example_path": "/go_admin_finder?url=https://example.com",
@@ -602,6 +610,10 @@
     "trl_evidence": "First-pass audit of this anonymous conference-polling app (real @semaphore-protocol v4.12.1 zk-SNARK library, y-webrtc/Yjs CRDT mesh, libsodium Ed25519 host signing): the anonymity/one-vote claim verified as genuine, not a placeholder -- every vote is independently re-verified by every peer via real verifyProof before tallying, and the one-vote guarantee is enforced through the Semaphore nullifier (deduped in tally logic), not client-side state; confirmed clearing localStorage/incognito/replay all fail to bypass it. Found and fixed a real CRDT bug: tallyVotes/summarizeDuplicateVotes/uniqueQuestions picked the dedup 'winner' by sorting on createdAt alone -- when two records from the same nullifier tied on createdAt (millisecond-identical), the tie-break depended on each peer's local Y.Map iteration order (network-arrival-dependent), so two honest, fully-synced peers could disagree on the tally for a tied pair; reproduced concretely with a standalone multi-peer Yjs simulation. Fixed with a deterministic tie-break keyed on the record's unique id. Vote counts themselves were never wrong -- only which record wins a tie could diverge. trl bumped 3->4; trl_ceiling=5 added -- no server component to hold to a higher bar, anonymity strength is explicitly room-size-dependent per the project's own honest privacy docs, and one-vote enforcement's Sybil-resistance ultimately rests on the host distributing exactly one invite per attendee (an operational trust assumption, not a code flaw). See PR #6 (merged)."
   },
   "api-extractor": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8336,
     "description": "Microservice for Api Extractor",
     "example_path": "/go_api_extractor?url=https://example.com",
@@ -635,6 +647,10 @@
     }
   },
   "apikey-scanner": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8230,
     "description": "Microservice for Apikey Scanner",
     "example_path": "/go_apikey_scanner?url=https://example.com",
