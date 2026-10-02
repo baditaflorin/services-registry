@@ -20,6 +20,11 @@ class VersionRegressionTests(unittest.TestCase):
         ]
         self.assertEqual(version_regressions(base, head), [])
 
+    def test_allows_first_semver_for_previously_unversioned_service(self):
+        base = [{"id": "one", "version": None}]
+        head = [{"id": "one", "version": "2.6.10"}]
+        self.assertEqual(version_regressions(base, head), [])
+
     def test_compares_numeric_components_numerically(self):
         self.assertGreater(semver_precedence("1.10.0"), semver_precedence("1.9.99"))
 
