@@ -681,6 +681,7 @@
     "version": "0.4.7"
   },
   "asn-lookup": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8337,
     "description": "Microservice for Asn Lookup",
     "example_path": "/go_asn_lookup?url=https://example.com",
@@ -744,6 +745,7 @@
     }
   },
   "blocklist-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8338,
     "description": "Microservice for Blocklist Checker",
     "example_path": "/go_blocklist_checker?url=https://example.com",
@@ -812,6 +814,7 @@
     }
   },
   "bucket-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8339,
     "description": "Microservice for Bucket Finder",
     "example_path": "/go_bucket_finder?url=https://example.com",
@@ -877,6 +880,7 @@
     }
   },
   "cas": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8279,
     "description": "Microservice for Cas",
     "host_port": 8279,
@@ -963,6 +967,7 @@
     }
   },
   "clickjacking-tester": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8225,
     "description": "Microservice for Clickjacking Tester",
     "example_path": "/go_clickjacking_tester?target=example.com",
