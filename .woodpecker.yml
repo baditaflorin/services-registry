@@ -34,5 +34,7 @@ steps:
     depends_on: []
     image: python:3.13-alpine
     commands:
+      - git fetch --no-tags origin main
       - python3 -m unittest discover -s bin -p 'test_*.py'
+      - python3 bin/check_service_version_regressions.py origin/main
       - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py
