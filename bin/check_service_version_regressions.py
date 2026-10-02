@@ -62,8 +62,12 @@ def main() -> int:
         return 2
     base_ref = sys.argv[1]
     try:
+        common_base = subprocess.run(
+            ["git", "merge-base", base_ref, "HEAD"],
+            check=True, capture_output=True, text=True,
+        ).stdout.strip()
         base_text = subprocess.run(
-            ["git", "show", f"{base_ref}:services.json"],
+            ["git", "show", f"{common_base}:services.json"],
             check=True, capture_output=True, text=True,
         ).stdout
         base = json.loads(base_text)
