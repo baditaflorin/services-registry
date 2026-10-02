@@ -8223,7 +8223,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "no auth",
+    "auth_help": "no auth on read (anonId is the read-secret); writes require client-held argon2id-hashed writeToken in body (not keystore-gated)",
     "category": "fleet_infra",
     "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet \u2014 L2 tier of fleetPersona in mesh-common",
     "example_path": "/v1/health",
@@ -8280,7 +8280,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "no auth",
+    "auth_help": "public endpoint (no keystore) \u2014 beacon-only",
     "category": "fleet_infra",
     "description": "1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet",
     "example_path": "/pix.gif?app=mesh-test&event=pv",
