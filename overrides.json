@@ -1219,6 +1219,7 @@
     "gateway_upstream_url": "http://localhost:18316"
   },
   "crawl-web-application": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8082,
     "description": "Microservice for Crawl Web Application",
     "example_path": "/?url=https://example.com",
@@ -1249,6 +1250,7 @@
     "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx"
   },
   "crux-field-vitals": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18290,
     "host_port": 18290,
     "proxy_egress": true,
