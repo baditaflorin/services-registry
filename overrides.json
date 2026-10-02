@@ -5600,7 +5600,12 @@
     "trl_evidence": "Second-pass re-audit (fresh 25-domain sample): found and fixed 2 real bugs -- (1) fetch-cache masking, confirmed live via cache-hit timing signature (1.3s->0.25s repeat-request pattern); (2) a UA-group flush bug where parseRobots never flushed a pending User-agent block before a global directive or at EOF, live-reproduced on anythinggos.com and capable of silently merging two UA blocks' Disallow rules. See PR #8 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "1.6.11"
   },
   "room-vj": {
     "trl": 3,
@@ -6592,10 +6597,14 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs authenticated session for extended carbon source data",
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 350-domain sample): found and fixed a real fetch-cache-masking bug in the green-hosting (GWF) check specifically -- since a 'green' verdict zeroes ~40% of the per-visit energy estimate, a masked/stale verdict directly skews the headline co2_grams_per_visit output. Live-proved with a stub cache: a genuinely non-green domain (si-studia.ru) got a fabricated green/Grade-A/0.149g verdict before the fix vs correct non-green/Grade-B/0.25g (+68%) after. Byte-probing paths (HEAD/Range-GET) confirmed unaffected. See PR #11 (merged).",
-    "version": "2.2.0",
+    "version": "2.6.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "websocket-analyzer": {
     "container_port": 8334,
