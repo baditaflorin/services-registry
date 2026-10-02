@@ -587,7 +587,11 @@
     "version": "1.4.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "anon-conf-poll": {
     "trl": 4,
@@ -624,7 +628,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.12"
+    "version": "1.5.13",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "apikey-scanner": {
     "container_port": 8230,
@@ -809,7 +817,7 @@
     "container_port": 8325,
     "description": "Microservice for Caa Checker",
     "host_port": 8325,
-    "version": "1.4.13",
+    "version": "1.4.14",
     "trl": 8,
     "trl_assessed_at": "2026-08-20",
     "trl_assessor": "claude-session-2026-08-20",
@@ -818,7 +826,11 @@
     "trl_evidence": "Fresh-clone audit (go_caa_checker@v1.4.7, go-common@v0.88.0, tip df43b5d). Fetch-cache bug class N/A: service does raw DNS via miekg/dns over UDP/TCP straight to 1.1.1.1/8.8.8.8/9.9.9.9, confirmed zero safehttp/outbound-net-http usage in non-vendor code -- no HTTP fetch path exists to be cached. Live cross-checked RFC 8659 CAA resolution vs dig ground truth on 2026-08-20 for 6 cases, all exact matches: google.com (issue=pki.goog, records/restricted), wikipedia.org (issue=letsencrypt.org+pki.goog), github.com (issue+issuewild across digicert/globalsign/letsencrypt/sectigo, restricted), example.com (climbs example.com->com, correctly no_caa not misreported as error), www.reddit.com (4-hop CNAME chain reddit.map.fastly.net->map.fastly.net->fastly.net, CAA correctly resolved at fastly.net apex per RFC 8659 CNAME-then-climb order), nonexistent domain (nxdomain, correctly not conflated with no_caa). No correctness bug found -- prior hardening (PR#3 TRL3 taxonomy, PR#4 meshresult honesty, PR#5 malformed-issuer sanitization, PR#9 CNAME-before-parent fix, merged through 2026-08-13) already covers the RFC edge cases. No code changes made this pass. TRL raised 7->8: real cross-checks against live DNS ground truth performed, comprehensive existing test coverage (dns_test.go/handler_test.go/trl3_test.go + live-network /selftest), SLA-grade evidence trail.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "captcha-detector": {
     "container_port": 8209,
@@ -834,7 +846,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.2.10"
+    "version": "1.2.11",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "cas": {
     "container_port": 8279,
@@ -890,7 +906,11 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.3.16"
+    "version": "1.3.18",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "chatwrapped": {
     "trl": 7,
