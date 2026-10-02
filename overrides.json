@@ -1904,6 +1904,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-favicon-completeness": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18232,
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "host_port": 18232,
@@ -2035,6 +2036,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-liveness-state": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18217,
     "description": "Domain liveness classifier — live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?domain=example.com",
@@ -2313,6 +2315,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-tracker-density": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18238,
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
@@ -2341,6 +2344,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-viewport-meta": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18233,
     "description": "Viewport meta tag parser + mobile-friendliness scoring.",
     "host_port": 18233,
@@ -2371,6 +2375,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-wikidata-entity": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18228,
     "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
     "host_port": 18228,
@@ -2385,6 +2390,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "dtss": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8286,
     "description": "Microservice for Dtss",
     "host_port": 8286,
@@ -2415,6 +2421,7 @@
     "trl_evidence": "First-pass audit of this local-first elder-care coordination app (meds/appointments/insurance, IndexedDB/Yjs, no backend): privacy/local-first claim verified clean -- no analytics/telemetry anywhere, only non-user-initiated network call is a read-only GitHub commits-endpoint fetch with no care data. Found and fixed 2 real, compounding bugs with genuine safety stakes in the medication-reminder core: (1) the 'due' (overdue) status was practically unreachable -- the scheduler always rolled a passed dose time forward to the next occurrence BEFORE checking confirmation, so a missed dose silently became 'tomorrow, upcoming' instead of flagged overdue, meaning the dashboard's overdue-medication alert essentially never fired. (2) medications store one lastConfirmedAt timestamp per medication, not per dose-time, so confirming a twice-daily medication's 08:00 dose retroactively marked its still-not-given 20:00 dose as confirmed too -- a caregiver could see 'Done' and skip giving it. Fixed both (dose slots stay 'due' until actually confirmed; confirmation now requires the confirmation clock-time to be at/after the specific dose's scheduled time); one existing test was found to have been unknowingly encoding the bug's own symptom, now corrected. trl held at 4 pending this fix landing and CI going green; trl_ceiling=5 added -- genuinely local-first/no-backend/no-telemetry with real schema validation and tests, but no at-rest encryption for local IndexedDB, no DST-transition test coverage. See PR #8 (merged)."
   },
   "email-extractor": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8287,
     "description": "Microservice for Email Extractor",
     "example_path": "/?url=https://example.com",
@@ -2444,6 +2451,7 @@
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e"
   },
   "embed-iframe-classifier": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18255,
     "description": "Inventories and classifies every <iframe>, <embed>, and <object> on a web page or raw HTML: resolved-absolute src/data, host, and a curated provider/category label (youtube/vimeo video, google_maps/openstreetmap maps, twitter/facebook social, spotify/soundcloud audio, google_docs/codepen docs, typeform/airtable forms, ads_analytics), plus per-provider and per-category counts.",
     "example_path": "/?url=https://example.com",
@@ -2459,6 +2467,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "emotional-tone": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8288,
     "description": "Microservice for Emotional Tone",
     "host_port": 8288,
@@ -2494,6 +2503,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   "feed-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8164,
     "description": "Microservice for Feed Finder",
     "example_path": "/go_feed_finder?url=https://example.com",
@@ -3423,6 +3433,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   "founding-year": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8289,
     "description": "Microservice for Founding Year",
     "host_port": 8289,
@@ -3438,6 +3449,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "funding-detector": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8290,
     "description": "Microservice for Funding Detector",
     "host_port": 8290,
