@@ -1908,7 +1908,7 @@
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "host_port": 18232,
     "trl": 6,
-    "version": "0.1.0",
+    "version": "0.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2580,7 +2580,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Verify-after-write in production is byte-equality on the encrypted blob (daemon holds no decrypting identity, by design). Full encrypt+decrypt+tar-diff verify only runs in tests + when an operator opts a verifying identity into the daemon. Lift to 7+ would either issue the daemon a dedicated verify-only identity or require every restore retrieval to verify before exposing bytes.",
     "trl_evidence": "Initial scaffold (2026-05-19). 19 unit tests with injectable TarFn/EncryptFn/Destination + :memory: audit DB — tests never touch real disk or run heavy crypto on the hot path. Covered: AGE_RECIPIENTS empty/malformed/blank-only refuses to start (fail-CLOSED on missing crypto); malformed-key error redacts key body (no leak to logs); encrypt+decrypt + tar+untar round-trip; recipient fingerprint never contains raw pubkey; classify retention against 365 daily inputs / sparse inputs / multiple-same-day / zero-bands / non-RFC3339-rejected / deterministic-against-synthetic-clock; orchestrator successful snapshot writes audit row with recipient FP; destination-unreachable writes no blobs AND no audit rows; verify-mismatch marks run FAILED AND skips retention prune (safety invariant: failed run = no safe to delete history); retention-prune respects unowned-snapshot invariant (manually-placed blobs survive); /status JSON shape carries last_run/next_run/runs/audit/recipient_fingerprints/destination_ready; /restore defaults dry-run; /restore dry_run=false rejected without confirm_restore=YES; /run admin-gated (403 without token); /selftest 200 happy path + 503 on destination unreachable; parseSources rejects malformed (missing kind, unknown kind, missing path, duplicate names); LocalDest round-trip on real tmpdir; storage-box:// NotImplemented surfaces cleanly.",
-    "version": "0.1.0"
+    "version": "0.1.5"
   },
   "fleet-body-redactor": {
     "container_port": 18154,
