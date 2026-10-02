@@ -455,7 +455,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "trl_evidence": "Confirmed honestly earned. Found and fixed a real production bug: domain-parking 'for sale' pages return HTML for every path including /ads.txt, and a permissive parser accepted raw HTML/JS as bogus ads.txt data -- 88% of a 400-domain flagged sample had zero real parsed records, 98.6% leaked raw HTML. Fixed with an IAB-directive allowlist + HTML-body rejection; 0/400 false positives after. TCFv2/CMP consent-detection ceiling condition independently re-verified as real. See github.com/baditaflorin/go_ad_density PR #11.",
-    "version": "2.6.12",
+    "version": "2.6.13",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2383,7 +2383,7 @@
   "firmographic-profile": {
     "container_port": 18297,
     "host_port": 18297,
-    "version": "1.3.4",
+    "version": "1.3.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
