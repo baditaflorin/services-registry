@@ -838,7 +838,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.11",
+    "version": "0.1.13",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1104,7 +1104,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.0",
+    "version": "1.6.14",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1474,6 +1474,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.9",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1512,6 +1513,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.4.13",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1551,7 +1553,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.0.0",
+    "version": "3.7.13",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -14881,7 +14883,7 @@
       "type": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected.",
+    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
     "trl_evidence": "Two-app end-to-end contract test covers task creation/closure, exact scope denial, target use, API-key issue/revoke, and durable audit rows. No live deployment or production credential has been exercised.",
@@ -14895,7 +14897,7 @@
     "depends_on": [
       "apikey-service"
     ],
-    "version": "0.1.7",
+    "version": "0.1.6",
     "network_exposure": "gateway-authenticated"
   },
   {
