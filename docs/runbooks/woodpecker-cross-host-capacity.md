@@ -16,12 +16,12 @@ registering stable agents from both sites with that control plane.
 - `0own-build-agent` on dedicated 0own VM 610
 
 The pve01 worker is a general fleet agent (`repo=*`, Docker backend) with
-`WOODPECKER_MAX_WORKFLOWS=1`. The 0own VM 610 agent also uses the general
-Docker backend and currently has two workflow slots. Both join the existing
-`ci.0exec.com` control plane; repositories do not need a new webhook or a
-repo-specific builder configuration. Woodpecker assigns queued workflows to
-matching agents with free workflow slots. The 0own slot count should stay at
-two until its host metrics are included in the load controller.
+`WOODPECKER_MAX_WORKFLOWS=1`. The 0own VM 610 agent uses the general Docker
+backend with four workflow slots on its 8-vCPU, 32-GiB guest. It joins the
+existing `ci.0exec.com` control plane; repositories do not need a new webhook
+or a repo-specific builder configuration. Woodpecker assigns queued workflows
+to matching agents with free workflow slots. Keep the concurrency cap at four
+until host metrics and sustained resource behavior support a deliberate change.
 `ci.0mcp.com` remains a separate authority for its `lv3=true` pipelines; do
 not register those repositories on the 0exec pool.
 
@@ -144,6 +144,14 @@ unique across host groups. This avoids treating duplicate agent registrations
 as one worker or counting several containers on the same host as separate
 capacity.
 
+Configure the 0exec pool as four physical node groups: `0docker-builder`,
+`0mcp-docker-build`, `pve01-amd64-builder`, and `0own-build-worker`. Keep their
+private metrics URLs and verified agent aliases in the live config at
+`/etc/woodpecker-load-controller/ci.0exec.json`; do not put rendered private
+addresses or tokens in Git. The current controller service is the
+`woodpecker-load-controller@ci.0exec` instance. Keep the separate
+`ci.0mcp.com` controller and its `lv3=true` pool independent.
+
 Start with `--once` and without `--apply`. Confirm every configured agent name
 appears, each host's metrics URL succeeds, and the host-level observations match
 the physical topology. For a host reachable only through Tailscale userspace
@@ -200,7 +208,9 @@ while host storage is still low.
 4. Rerun a safe test-only pipeline and verify its workflow `agent_id` resolves
    to the remote agent.
 5. Restore the local agents in a `finally`/trap path and restart the controller.
-6. Run `python3 bin/ci_execution_report.py --limit 100`.
+6. On Builder LXC 108, run `ci-execution-report --limit 100 --include-active`.
+   The report classifies pipelines by physical host. Unknown agent IDs remain
+   `unattributed`; do not assume they ran on 0docker.
 
 The 2026-08-28 deployment proof reran `services-registry` pipeline 20 on
 `0mcp-docker-exec-agent`; it passed. Both local agents were restored afterward.
