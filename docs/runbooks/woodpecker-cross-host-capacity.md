@@ -154,6 +154,44 @@ supervised service. The default policy samples every 30 seconds, drains after
 ten overloaded samples, restores after twenty healthy samples, and keeps at
 least one physical host schedulable.
 
+### Gate guest-backed workers on hypervisor storage
+
+Guest filesystem metrics do not describe the hypervisor filesystem that stores
+their virtual disks. For each guest whose writes can exhaust shared host
+storage, add an optional backing_storage object to that v2 node entry or v1
+agent entry. It requires a separate node-exporter metrics URL, the exact
+filesystem_mountpoint and filesystem_device labels, disk_stop_pct,
+disk_resume_pct, and a positive minimum_free_bytes floor. See
+templates/woodpecker-load-controller.example.json for a placeholder example.
+The selector accepts exactly one matching available/size metric pair; absent,
+ambiguous, malformed, or mismatched telemetry is treated as unsafe.
+
+The backing filesystem is critical when its available percentage is at or below
+the stop threshold OR its free bytes are at or below the floor. Either condition
+immediately drains the configured v2 node group or v1 agent-name group, even
+when doing so leaves fewer agents schedulable than the configured minimum.
+Missing guest or backing metrics also immediately drains that gated group.
+These urgent actions are limited to the explicitly configured group; normal
+guest CPU, memory, and disk drains retain the minimum-capacity guard. Nodes or
+agents without this gate keep the existing guest-only behavior.
+
+Recovery requires the guest CPU, memory, and filesystem metrics to meet their
+resume thresholds and the backing filesystem to meet both its resume percentage
+and absolute free-byte floor for the complete configured resume_samples
+window. The controller restores only registration IDs it recorded as drained.
+An ID already held with no_schedule by an operator remains held. For v1,
+duplicate live registrations with one configured name are evaluated as a
+single group, but only controller-managed IDs are restored. Drain only stops
+new scheduling; it does not terminate workflows already assigned to those
+agents.
+
+Choose mount/device labels and thresholds from the hypervisor's actual node
+exporter output and expected peak write bursts. Run a dry-run and verify the
+exact labels and observed free bytes before enabling apply. During rollback,
+keep the gated agent group unschedulable until backing storage meets both
+recovery thresholds; do not let an older guest-only controller restore it
+while host storage is still low.
+
 ## End-to-end verification
 
 1. Confirm the queue has no unrelated active workflows.

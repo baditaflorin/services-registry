@@ -46,6 +46,60 @@ node_filesystem_avail_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 500
 node_filesystem_size_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 1000
 """
 
+RECOVERED_METRICS_NEXT = """
+node_cpu_seconds_total{cpu="0",mode="idle"} 139
+node_cpu_seconds_total{cpu="0",mode="user"} 21
+node_cpu_seconds_total{cpu="0",mode="system"} 12
+node_memory_MemAvailable_bytes 600
+node_memory_MemTotal_bytes 1000
+node_filesystem_avail_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 500
+node_filesystem_size_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 1000
+"""
+
+RECOVERED_METRICS_NEXT2 = """
+node_cpu_seconds_total{cpu="0",mode="idle"} 169
+node_cpu_seconds_total{cpu="0",mode="user"} 22
+node_cpu_seconds_total{cpu="0",mode="system"} 13
+node_memory_MemAvailable_bytes 600
+node_memory_MemTotal_bytes 1000
+node_filesystem_avail_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 500
+node_filesystem_size_bytes{device="/dev/vda1",fstype="ext4",mountpoint="/"} 1000
+"""
+
+BACKING_LOW_BY_FLOOR = """
+node_filesystem_avail_bytes{device="/dev/md2",fstype="ext4",mountpoint="/"} 10
+node_filesystem_size_bytes{device="/dev/md2",fstype="ext4",mountpoint="/"} 1000
+node_filesystem_avail_bytes{device="/dev/md3",fstype="ext4",mountpoint="/"} 200
+node_filesystem_size_bytes{device="/dev/md3",fstype="ext4",mountpoint="/"} 1000
+node_filesystem_avail_bytes{device="/dev/md3",fstype="ext4",mountpoint="/var"} 1
+node_filesystem_size_bytes{device="/dev/md3",fstype="ext4",mountpoint="/var"} 1000
+"""
+
+BACKING_HEALTHY = """
+node_filesystem_avail_bytes{device="/dev/md2",fstype="ext4",mountpoint="/"} 1
+node_filesystem_size_bytes{device="/dev/md2",fstype="ext4",mountpoint="/"} 1000
+node_filesystem_avail_bytes{device="/dev/md3",fstype="ext4",mountpoint="/"} 500
+node_filesystem_size_bytes{device="/dev/md3",fstype="ext4",mountpoint="/"} 1000
+"""
+
+BACKING_MISMATCHED = """
+node_filesystem_avail_bytes{device="/dev/md2",fstype="ext4",mountpoint="/"} 5
+node_filesystem_size_bytes{device="/dev/md2",fstype="ext4",mountpoint="/"} 1000
+node_filesystem_avail_bytes{device="/dev/md3",fstype="ext4",mountpoint="/var"} 500
+node_filesystem_size_bytes{device="/dev/md3",fstype="ext4",mountpoint="/var"} 1000
+"""
+
+
+def backing_storage_config():
+    return {
+        "metrics_url": "http://pve-host.example.internal:9100/metrics",
+        "filesystem_mountpoint": "/",
+        "filesystem_device": "/dev/md3",
+        "disk_stop_pct": 10,
+        "disk_resume_pct": 15,
+        "minimum_free_bytes": 300,
+    }
+
 
 THRESHOLDS = {
     "cpu_stop_pct": 85,
@@ -76,6 +130,31 @@ def config_v2():
             {
                 "name": "builder-b",
                 "agent_names": ["remote-agent"],
+                "metrics_url": "http://builder-b/metrics",
+                "filesystem_mountpoint": "/",
+            },
+        ],
+    }
+
+
+def config_v1():
+    return {
+        "version": 1,
+        "woodpecker_url": "https://ci.example.com",
+        "interval_seconds": 30,
+        "minimum_schedulable_agents": 1,
+        "stop_samples": 10,
+        "resume_samples": 2,
+        "thresholds": copy.deepcopy(THRESHOLDS),
+        "agents": [
+            {
+                "name": "builder-agent",
+                "metrics_url": "http://builder-a/metrics",
+                "filesystem_mountpoint": "/",
+                "backing_storage": backing_storage_config(),
+            },
+            {
+                "name": "remote-agent",
                 "metrics_url": "http://builder-b/metrics",
                 "filesystem_mountpoint": "/",
             },
@@ -272,6 +351,190 @@ class HostAdmissionTests(unittest.TestCase):
         ):
             controller.run_cycle_v2(config, state, client, apply=True)
         self.assertEqual(client.changed, [])
+
+
+
+class BackingStorageTests(unittest.TestCase):
+    def test_filesystem_metrics_require_exact_mount_and_device(self):
+        snapshot = controller.filesystem_snapshot(BACKING_LOW_BY_FLOOR, "/", "/dev/md3")
+        self.assertEqual(snapshot.available_bytes, 200)
+        self.assertEqual(snapshot.size_bytes, 1000)
+        self.assertEqual(snapshot.available_pct, 20)
+        with self.assertRaisesRegex(ValueError, "missing or ambiguous"):
+            controller.filesystem_snapshot(BACKING_MISMATCHED, "/", "/dev/md3")
+
+    def test_backing_byte_floor_drains_only_v2_node_even_at_minimum_capacity(self):
+        config = config_v2()
+        config["stop_samples"] = 10
+        config["nodes"][0]["backing_storage"] = backing_storage_config()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": True},
+            ]
+        )
+        state = {
+            "nodes": {
+                "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+
+        def fetch(url):
+            if "pve-host" in url:
+                return BACKING_LOW_BY_FLOOR
+            return METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=fetch):
+            changed = controller.run_cycle_v2(config, state, client, apply=True)
+
+        self.assertTrue(changed)
+        self.assertEqual(client.changed, [(1, True), (2, True)])
+        self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 3)["no_schedule"])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["1", "2"])
+
+    def test_backing_threshold_is_immediate_and_handles_duplicate_v1_registrations(self):
+        config = config_v1()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "builder-agent", "no_schedule": False},
+                {"id": 4, "name": "builder-agent", "no_schedule": False},
+                {"id": 5, "name": "builder-agent", "no_schedule": False},
+                {"id": 6, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": True},
+            ]
+        )
+        state = {
+            "agents": {
+                "builder-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "remote-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+
+        def fetch(url):
+            if "pve-host" in url:
+                return BACKING_LOW_BY_FLOOR
+            return METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=fetch):
+            changed = controller.run_cycle_v1(config, state, client, apply=True)
+
+        self.assertTrue(changed)
+        self.assertEqual(client.changed, [(1, True), (2, True), (4, True), (5, True), (6, True)])
+        self.assertEqual(state["agents"]["builder-agent"]["managed_agent_ids"], ["1", "2", "4", "5", "6"])
+        self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 3)["no_schedule"])
+
+    def test_missing_or_unparseable_v2_metrics_quarantine_only_gated_node(self):
+        for failed_url in ("http://pve-host.example.internal:9100/metrics", "http://builder-a/metrics"):
+            with self.subTest(failed_url=failed_url):
+                config = config_v2()
+                config["nodes"][0]["backing_storage"] = backing_storage_config()
+                client = FakeClient(
+                    [
+                        {"id": 1, "name": "builder-agent", "no_schedule": False},
+                        {"id": 2, "name": "remote-agent", "no_schedule": True},
+                    ]
+                )
+                state = {
+                    "nodes": {
+                        "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                        "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                    }
+                }
+
+                def fetch(url):
+                    if url == failed_url:
+                        if "pve-host" in url:
+                            return BACKING_MISMATCHED
+                        return "node_memory_MemTotal_bytes 1000"
+                    return METRICS
+
+                with patch.object(controller, "fetch_text", side_effect=fetch):
+                    changed = controller.run_cycle_v2(config, state, client, apply=True)
+
+                self.assertTrue(changed)
+                self.assertEqual(client.changed, [(1, True)])
+                self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
+                self.assertEqual(
+                    state["nodes"]["builder-a"]["managed_agent_ids"],
+                    ["1"],
+                )
+                self.assertIsNone(state["nodes"]["builder-a"]["previous_snapshot"])
+
+    def test_v1_telemetry_failure_bypasses_minimum_and_preserves_manual_hold(self):
+        config = config_v1()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "builder-agent", "no_schedule": True},
+                {"id": 3, "name": "remote-agent", "no_schedule": True},
+            ]
+        )
+        state = {
+            "agents": {
+                "builder-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "remote-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+
+        def fetch(url):
+            if "pve-host" in url:
+                return BACKING_MISMATCHED
+            return METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=fetch):
+            changed = controller.run_cycle_v1(config, state, client, apply=True)
+
+        self.assertTrue(changed)
+        self.assertEqual(client.changed, [(1, True)])
+        self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
+        self.assertEqual(state["agents"]["builder-agent"]["managed_agent_ids"], ["1"])
+
+    def test_restore_waits_for_guest_and_backing_recovery_and_keeps_manual_hold(self):
+        config = config_v1()
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": True},
+                {"id": 2, "name": "builder-agent", "no_schedule": True},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ]
+        )
+        state = {
+            "agents": {
+                "builder-agent": {
+                    "previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__,
+                    "managed_agent_ids": ["1"],
+                    "managed_no_schedule": True,
+                },
+                "remote-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+
+        samples = iter(
+            [
+                (RECOVERED_METRICS, BACKING_LOW_BY_FLOOR),
+                (RECOVERED_METRICS_NEXT, BACKING_HEALTHY),
+                (RECOVERED_METRICS_NEXT2, BACKING_HEALTHY),
+            ]
+        )
+
+        def fetch(url):
+            guest, backing = current_samples[0]
+            if "pve-host" in url:
+                return backing
+            return guest
+
+        for expected_changes in ([], [], [(1, False)]):
+            current_samples = [next(samples)]
+            with patch.object(controller, "fetch_text", side_effect=fetch):
+                controller.run_cycle_v1(config, state, client, apply=True)
+            self.assertEqual(client.changed, expected_changes)
+            client.changed.clear()
+
+        self.assertFalse(next(agent for agent in client.remote_agents if agent["id"] == 1)["no_schedule"])
+        self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
@@ -30,6 +31,14 @@ class NodeSnapshot:
     cpu_total_seconds: float
     memory_available_pct: float
     disk_available_pct: float
+    disk_available_bytes: int | None = None
+
+
+@dataclass(frozen=True)
+class FilesystemSnapshot:
+    available_bytes: int
+    size_bytes: int
+    available_pct: float
 
 
 @dataclass(frozen=True)
@@ -39,6 +48,9 @@ class Pressure:
     disk_available_pct: float
     breaches: tuple[str, ...]
     recovered: bool
+    critical_storage_breach: bool = False
+    backing_storage_available_pct: float | None = None
+    backing_storage_available_bytes: int | None = None
 
 
 def parse_labels(raw: str) -> dict[str, str]:
@@ -91,12 +103,64 @@ def node_snapshot(text: str, mountpoint: str = "/") -> NodeSnapshot:
             disk_total = value
     if cpu_total <= 0 or memory_total in {None, 0} or disk_total in {None, 0}:
         raise ValueError("node-exporter response is missing CPU, memory, or filesystem metrics")
-    assert memory_available is not None and disk_available is not None
+    if memory_available is None or disk_available is None:
+        raise ValueError("node-exporter response is missing available memory or filesystem metrics")
+    if (
+        not math.isfinite(memory_available)
+        or not math.isfinite(memory_total)
+        or not math.isfinite(disk_available)
+        or not math.isfinite(disk_total)
+        or memory_available < 0
+        or memory_available > memory_total
+        or disk_available < 0
+        or disk_available > disk_total
+    ):
+        raise ValueError("node-exporter response has invalid memory or filesystem capacity values")
     return NodeSnapshot(
         cpu_idle,
         cpu_total,
         100.0 * memory_available / memory_total,
         100.0 * disk_available / disk_total,
+        int(disk_available),
+    )
+
+
+def filesystem_snapshot(
+    text: str,
+    mountpoint: str,
+    device: str,
+) -> FilesystemSnapshot:
+    """Read one exact filesystem series; ambiguity is an invalid safety signal."""
+    matched: dict[str, list[float]] = {
+        "node_filesystem_avail_bytes": [],
+        "node_filesystem_size_bytes": [],
+    }
+    for name, labels, value in prometheus_samples(text):
+        if (
+            name in matched
+            and labels.get("mountpoint") == mountpoint
+            and labels.get("device") == device
+        ):
+            matched[name].append(value)
+
+    available = matched["node_filesystem_avail_bytes"]
+    size = matched["node_filesystem_size_bytes"]
+    if len(available) != 1 or len(size) != 1:
+        raise ValueError("node-exporter response is missing or ambiguous for the configured filesystem")
+    if (
+        not math.isfinite(available[0])
+        or not math.isfinite(size[0])
+        or available[0] < 0
+        or size[0] <= 0
+        or available[0] > size[0]
+    ):
+        raise ValueError("node-exporter response has invalid filesystem capacity values")
+    available_bytes = int(available[0])
+    size_bytes = int(size[0])
+    return FilesystemSnapshot(
+        available_bytes=available_bytes,
+        size_bytes=size_bytes,
+        available_pct=100.0 * available_bytes / size_bytes,
     )
 
 
@@ -104,6 +168,8 @@ def evaluate_pressure(
     current: NodeSnapshot,
     previous: NodeSnapshot | None,
     thresholds: dict[str, float],
+    backing_storage: dict[str, Any] | None = None,
+    backing_snapshot: FilesystemSnapshot | None = None,
 ) -> Pressure:
     cpu_pct = None
     if previous is not None:
@@ -120,11 +186,32 @@ def evaluate_pressure(
     if current.disk_available_pct <= thresholds["disk_stop_pct"]:
         breaches.append("disk")
 
+    critical_storage_breach = False
+    backing_available_pct = None
+    backing_available_bytes = None
+    backing_recovered = True
+    if backing_storage is not None:
+        if backing_snapshot is None:
+            raise ValueError("required backing-storage metrics are unavailable")
+        backing_available_pct = backing_snapshot.available_pct
+        backing_available_bytes = backing_snapshot.available_bytes
+        critical_storage_breach = (
+            backing_available_pct <= float(backing_storage["disk_stop_pct"])
+            or backing_available_bytes <= int(backing_storage["minimum_free_bytes"])
+        )
+        if critical_storage_breach:
+            breaches.append("backing_storage")
+        backing_recovered = (
+            backing_available_pct >= float(backing_storage["disk_resume_pct"])
+            and backing_available_bytes >= int(backing_storage["minimum_free_bytes"])
+        )
+
     recovered = (
         cpu_pct is not None
         and cpu_pct <= thresholds["cpu_resume_pct"]
         and current.memory_available_pct >= thresholds["memory_resume_pct"]
         and current.disk_available_pct >= thresholds["disk_resume_pct"]
+        and backing_recovered
     )
     return Pressure(
         cpu_pct,
@@ -132,6 +219,9 @@ def evaluate_pressure(
         current.disk_available_pct,
         tuple(breaches),
         recovered,
+        critical_storage_breach,
+        backing_available_pct,
+        backing_available_bytes,
     )
 
 
@@ -255,7 +345,11 @@ def run_cycle_v1(
     client: HTTPClient,
     apply: bool,
 ) -> bool:
-    remote_agents = {agent["name"]: agent for agent in client.agents()}
+    remote_agents: dict[str, list[dict[str, Any]]] = {}
+    for agent in client.agents():
+        name = agent.get("name")
+        if isinstance(name, str):
+            remote_agents.setdefault(name, []).append(agent)
     queue = client.queue()
     log_event(
         event="queue_observed",
@@ -269,8 +363,8 @@ def run_cycle_v1(
     minimum_schedulable = int(config.get("minimum_schedulable_agents", 1))
     schedulable_remaining = sum(
         1
-        for name, agent in remote_agents.items()
-        if name in configured_names and not bool(agent.get("no_schedule"))
+        for name in configured_names
+        if any(not bool(agent.get("no_schedule")) for agent in remote_agents.get(name, []))
     )
     missing = sorted(configured_names - remote_agents.keys())
     for name in missing:
@@ -279,76 +373,152 @@ def run_cycle_v1(
     observations = []
     for entry in config["agents"]:
         name = entry["name"]
-        remote = remote_agents.get(name)
-        if remote is None:
+        agents = remote_agents.get(name, [])
+        if not agents:
             continue
         agent_state = state.setdefault("agents", {}).setdefault(name, {})
+        by_id = {str(agent.get("id")): agent for agent in agents if agent.get("id") is not None}
+        managed_ids = {
+            str(agent_id)
+            for agent_id in agent_state.get("managed_agent_ids", [])
+            if str(agent_id) in by_id and bool(by_id[str(agent_id)].get("no_schedule"))
+        }
+        agent_state["managed_agent_ids"] = sorted(managed_ids)
+        schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
+        backing_config = entry.get("backing_storage")
         try:
             current = node_snapshot(
                 fetch_text(entry["metrics_url"]),
                 entry.get("filesystem_mountpoint", "/"),
             )
-            pressure = evaluate_pressure(current, snapshot_from_state(agent_state), thresholds)
+            backing_snapshot = None
+            if backing_config is not None:
+                backing_snapshot = filesystem_snapshot(
+                    fetch_text(backing_config["metrics_url"]),
+                    backing_config["filesystem_mountpoint"],
+                    backing_config["filesystem_device"],
+                )
+            pressure = evaluate_pressure(
+                current,
+                snapshot_from_state(agent_state),
+                thresholds,
+                backing_config,
+                backing_snapshot,
+            )
         except (OSError, ValueError, urllib.error.URLError) as exc:
-            # Telemetry loss is not proof of host pressure. Leave scheduling
-            # unchanged and alert instead of accidentally draining the fleet.
-            log_event(event="metrics_error", agent=name, error=str(exc))
+            log_event(
+                event="metrics_error",
+                agent=name,
+                fail_closed=backing_config is not None,
+                error=str(exc),
+            )
+            if backing_config is not None:
+                agent_state["previous_snapshot"] = None
+                agent_state["overload_samples"] = 0
+                agent_state["recovery_samples"] = 0
+                agent_state["managed_no_schedule"] = bool(managed_ids)
+                observations.append(
+                    (name, agents, schedulable, agent_state, None, "telemetry_quarantine")
+                )
             continue
 
         agent_state["previous_snapshot"] = current.__dict__
+        agent_state["managed_no_schedule"] = bool(managed_ids)
         action = update_hysteresis(
             agent_state,
             pressure,
-            bool(remote.get("no_schedule")),
+            not bool(schedulable),
             int(config["stop_samples"]),
             int(config["resume_samples"]),
         )
+        if (
+            managed_ids
+            and pressure.recovered
+            and agent_state["recovery_samples"] >= int(config["resume_samples"])
+        ):
+            action = "restore"
+        elif pressure.critical_storage_breach:
+            action = "critical_drain"
         log_event(
             event="agent_observed",
             agent=name,
+            agent_count=len(agents),
+            schedulable_agents=len(schedulable),
             cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
             disk_available_pct=round(pressure.disk_available_pct, 2),
+            backing_storage_available_pct=pressure.backing_storage_available_pct,
+            backing_storage_available_bytes=pressure.backing_storage_available_bytes,
             breaches=list(pressure.breaches),
-            no_schedule=bool(remote.get("no_schedule")),
+            no_schedule=not bool(schedulable),
             overload_samples=agent_state["overload_samples"],
             recovery_samples=agent_state["recovery_samples"],
             proposed_action=action,
             apply=apply,
         )
-        observations.append((name, remote, agent_state, pressure, action))
+        observations.append((name, agents, schedulable, agent_state, pressure, action))
 
-    if apply:
-        # Recover healthy capacity before considering drains. Drain candidates
-        # are ordered by current pressure so the minimum remaining capacity is
-        # the healthiest available agent, not an arbitrary configuration row.
-        restores = [item for item in observations if item[4] == "restore"]
-        drains = sorted(
-            (item for item in observations if item[4] == "drain"),
-            key=lambda item: drain_priority(item[3]),
-            reverse=True,
-        )
-        for name, remote, agent_state, _pressure, _action in restores:
-            client.set_no_schedule(remote, False)
-            agent_state["managed_no_schedule"] = False
-            schedulable_remaining += 1
+    if not apply:
+        return False
+
+    # Restore only IDs this controller actually drained; IDs paused by an
+    # operator are never inferred from a group-level boolean.
+    restores = [item for item in observations if item[5] == "restore"]
+    for name, agents, schedulable, agent_state, _pressure, _action in restores:
+        managed_ids = {str(agent_id) for agent_id in agent_state.get("managed_agent_ids", [])}
+        restored = []
+        for agent in agents:
+            agent_id = str(agent.get("id"))
+            if agent_id in managed_ids and bool(agent.get("no_schedule")):
+                client.set_no_schedule(agent, False)
+                restored.append(agent_id)
+                log_event(event="agent_restored", agent=name, agent_id=agent.get("id"))
+        if restored:
+            agent_state["managed_agent_ids"] = sorted(managed_ids - set(restored))
+            agent_state["managed_no_schedule"] = bool(agent_state["managed_agent_ids"])
+            if not schedulable:
+                schedulable_remaining += 1
             changed = True
-            log_event(event="agent_restored", agent=name)
-        for name, remote, agent_state, _pressure, _action in drains:
-            if not drain_allowed(schedulable_remaining, minimum_schedulable):
-                log_event(
-                    event="agent_drain_skipped",
-                    agent=name,
-                    reason="minimum_schedulable_agents",
-                    schedulable_agents=schedulable_remaining,
-                    minimum_schedulable_agents=minimum_schedulable,
-                )
-                continue
-            client.set_no_schedule(remote, True)
+
+    minimum_schedulable = int(config.get("minimum_schedulable_agents", 1))
+    drains = sorted(
+        (
+            item
+            for item in observations
+            if item[5] in {"drain", "critical_drain", "telemetry_quarantine"}
+        ),
+        key=lambda item: (
+            item[5] not in {"critical_drain", "telemetry_quarantine"},
+            drain_priority(item[4]) if item[4] is not None else (0, 0, 0, 0),
+        ),
+        reverse=True,
+    )
+    for name, agents, schedulable, agent_state, _pressure, action in drains:
+        critical = action in {"critical_drain", "telemetry_quarantine"}
+        if not schedulable:
+            continue
+        if not critical and not drain_allowed(schedulable_remaining, minimum_schedulable):
+            log_event(
+                event="agent_drain_skipped",
+                agent=name,
+                reason="minimum_schedulable_agents",
+                schedulable_agents=schedulable_remaining,
+                minimum_schedulable_agents=minimum_schedulable,
+            )
+            continue
+        managed_ids = {str(agent_id) for agent_id in agent_state.get("managed_agent_ids", [])}
+        drained = []
+        for agent in schedulable:
+            client.set_no_schedule(agent, True)
+            agent_id = str(agent.get("id"))
+            managed_ids.add(agent_id)
+            drained.append(agent_id)
+            log_event(event="agent_drained", agent=name, agent_id=agent.get("id"), reason=action)
+        if drained:
+            agent_state["managed_agent_ids"] = sorted(managed_ids)
             agent_state["managed_no_schedule"] = True
             schedulable_remaining -= 1
             changed = True
-            log_event(event="agent_drained", agent=name)
     return changed
 
 
@@ -397,20 +567,41 @@ def run_cycle_v2(
         }
         node_state["managed_agent_ids"] = sorted(managed_ids)
 
+        backing_config = entry.get("backing_storage")
         try:
             current = node_snapshot(
                 fetch_text(entry["metrics_url"]),
                 entry.get("filesystem_mountpoint", "/"),
             )
+            backing_snapshot = None
+            if backing_config is not None:
+                backing_snapshot = filesystem_snapshot(
+                    fetch_text(backing_config["metrics_url"]),
+                    backing_config["filesystem_mountpoint"],
+                    backing_config["filesystem_device"],
+                )
             pressure = evaluate_pressure(
                 current,
                 snapshot_from_state(node_state),
                 thresholds,
+                backing_config,
+                backing_snapshot,
             )
         except (OSError, ValueError, urllib.error.URLError) as exc:
-            # Telemetry loss is not proof of host pressure. Keep this host's
-            # scheduling unchanged and preserve its prior CPU sample.
-            log_event(event="metrics_error", node=name, error=str(exc))
+            log_event(
+                event="metrics_error",
+                node=name,
+                fail_closed=backing_config is not None,
+                error=str(exc),
+            )
+            if backing_config is not None:
+                node_state["previous_snapshot"] = None
+                node_state["overload_samples"] = 0
+                node_state["recovery_samples"] = 0
+                node_state["managed_no_schedule"] = bool(managed_ids)
+                observations.append(
+                    (name, agents, schedulable, node_state, None, "telemetry_quarantine")
+                )
             continue
 
         node_state["previous_snapshot"] = current.__dict__
@@ -427,16 +618,11 @@ def run_cycle_v2(
             and pressure.recovered
             and node_state["recovery_samples"] >= int(config["resume_samples"])
         ):
-            # A replacement agent may be schedulable while IDs previously
-            # drained by this controller are still paused. Recover those IDs
-            # after the same sustained healthy window.
+            # Restore only IDs this controller managed after all required
+            # guest and backing-storage signals recover for the full window.
             action = "restore"
-        elif (
-            schedulable
-            and pressure.breaches
-            and node_state["overload_samples"] >= int(config["stop_samples"])
-        ):
-            action = "drain"
+        elif pressure.critical_storage_breach:
+            action = "critical_drain"
         log_event(
             event="node_observed",
             node=name,
@@ -445,6 +631,8 @@ def run_cycle_v2(
             cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
             disk_available_pct=round(pressure.disk_available_pct, 2),
+            backing_storage_available_pct=pressure.backing_storage_available_pct,
+            backing_storage_available_bytes=pressure.backing_storage_available_bytes,
             breaches=list(pressure.breaches),
             overload_samples=node_state["overload_samples"],
             recovery_samples=node_state["recovery_samples"],
@@ -458,7 +646,8 @@ def run_cycle_v2(
 
     changed = False
     minimum_schedulable = int(config.get("minimum_schedulable_nodes", 1))
-    # Restore first so healthy capacity comes back before any pressured host is drained.
+    # Restore healthy capacity before drains; only controller-managed IDs can be
+    # restored, so a manual no_schedule hold survives recovery.
     for name, agents, schedulable, node_state, _pressure, action in observations:
         if action != "restore":
             continue
@@ -477,15 +666,28 @@ def run_cycle_v2(
                 schedulable_nodes += 1
             changed = True
 
-    drains = sorted(
+    critical_drains = sorted(
+        (
+            item
+            for item in observations
+            if item[5] in {"critical_drain", "telemetry_quarantine"}
+        ),
+        key=lambda item: (
+            item[5] != "telemetry_quarantine",
+            drain_priority(item[4]) if item[4] is not None else (0, 0, 0, 0),
+        ),
+        reverse=True,
+    )
+    normal_drains = sorted(
         (item for item in observations if item[5] == "drain"),
         key=lambda item: drain_priority(item[4]),
         reverse=True,
     )
-    for name, agents, schedulable, node_state, _pressure, _action in drains:
+    for name, agents, schedulable, node_state, _pressure, action in critical_drains + normal_drains:
         if not schedulable:
             continue
-        if schedulable_nodes <= minimum_schedulable:
+        critical = action in {"critical_drain", "telemetry_quarantine"}
+        if not critical and schedulable_nodes <= minimum_schedulable:
             log_event(
                 event="node_drain_skipped",
                 node=name,
@@ -501,7 +703,13 @@ def run_cycle_v2(
             agent_id = str(agent.get("id"))
             managed_ids.add(agent_id)
             drained.append(agent_id)
-            log_event(event="agent_drained", node=name, agent_id=agent.get("id"), agent=agent.get("name"))
+            log_event(
+                event="agent_drained",
+                node=name,
+                agent_id=agent.get("id"),
+                agent=agent.get("name"),
+                reason=action,
+            )
         if drained:
             node_state["managed_agent_ids"] = sorted(managed_ids)
             node_state["managed_no_schedule"] = True
@@ -521,6 +729,30 @@ def run_cycle(
     return run_cycle_v2(config, state, client, apply)
 
 
+def validate_backing_storage(entry: dict[str, Any]) -> None:
+    backing = entry.get("backing_storage")
+    if backing is None:
+        return
+    if not isinstance(backing, dict):
+        raise ValueError("backing_storage must be an object")
+    for key in ("metrics_url", "filesystem_mountpoint", "filesystem_device"):
+        if not isinstance(backing.get(key), str) or not backing[key]:
+            raise ValueError(f"backing_storage must declare {key}")
+    for key in ("disk_stop_pct", "disk_resume_pct"):
+        value = backing.get(key)
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value <= 100:
+            raise ValueError(f"backing_storage {key} must be between 0 and 100")
+    if backing["disk_resume_pct"] <= backing["disk_stop_pct"]:
+        raise ValueError("backing_storage resume percentage must be higher than stop percentage")
+    minimum_free_bytes = backing.get("minimum_free_bytes")
+    if (
+        isinstance(minimum_free_bytes, bool)
+        or not isinstance(minimum_free_bytes, int)
+        or minimum_free_bytes <= 0
+    ):
+        raise ValueError("backing_storage minimum_free_bytes must be a positive integer")
+
+
 def validate_config(config: dict[str, Any]) -> None:
     version = config.get("version")
     if version not in {1, 2}:
@@ -528,10 +760,20 @@ def validate_config(config: dict[str, Any]) -> None:
     if not config.get("woodpecker_url"):
         raise ValueError("config must declare woodpecker_url")
     if version == 1:
-        if not config.get("agents"):
+        agents = config.get("agents")
+        if not isinstance(agents, list) or not agents:
             raise ValueError("version 1 config must declare agents")
+        if any(not isinstance(entry, dict) for entry in agents):
+            raise ValueError("each version 1 agent configuration must be an object")
+        agent_names = [entry.get("name") for entry in agents]
+        if any(not isinstance(name, str) or not name for name in agent_names):
+            raise ValueError("each version 1 agent must declare a name")
+        if len(agent_names) != len(set(agent_names)):
+            raise ValueError("version 1 agent names must be unique; duplicate live IDs are grouped by name")
+        for entry in agents:
+            validate_backing_storage(entry)
         minimum_schedulable = int(config.get("minimum_schedulable_agents", 1))
-        if minimum_schedulable < 1 or minimum_schedulable > len(config["agents"]):
+        if minimum_schedulable < 1 or minimum_schedulable > len(agents):
             raise ValueError("minimum_schedulable_agents must be between 1 and the agent count")
     else:
         nodes = config.get("nodes")
@@ -554,6 +796,8 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError("each node must declare non-empty agent_names")
         if len(agent_names) != len(set(agent_names)):
             raise ValueError("each Woodpecker agent name must belong to exactly one node")
+        for node in nodes:
+            validate_backing_storage(node)
     required = {
         "cpu_stop_pct",
         "cpu_resume_pct",
@@ -568,6 +812,8 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("cpu resume threshold must be lower than stop threshold")
     if config["thresholds"]["memory_resume_pct"] <= config["thresholds"]["memory_stop_pct"]:
         raise ValueError("memory resume threshold must be higher than stop threshold")
+    if config["thresholds"]["disk_resume_pct"] <= config["thresholds"]["disk_stop_pct"]:
+        raise ValueError("disk resume threshold must be higher than stop threshold")
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
