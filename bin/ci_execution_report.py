@@ -146,7 +146,9 @@ class WoodpeckerClient:
         agents: dict[int, str] = {}
         page = 1
         while True:
-            rows = self.get("/agents", {"perPage": 100, "page": page})
+            rows = self.get("/agents", {"perPage": 100, "page": page}) or []
+            if not isinstance(rows, list):
+                raise ValueError("Woodpecker agent page must be a JSON array")
             new_rows = [row for row in rows if int(row["id"]) not in agents]
             if not new_rows:
                 break
