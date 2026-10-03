@@ -1904,6 +1904,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-favicon-completeness": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18232,
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "host_port": 18232,
@@ -2035,6 +2036,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
   },
   "domain-liveness-state": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18217,
     "description": "Domain liveness classifier — live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?domain=example.com",
@@ -2313,6 +2315,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-tracker-density": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "proxy_read_timeout": "75s",
     "container_port": 18238,
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
@@ -2341,6 +2344,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-viewport-meta": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18233,
     "description": "Viewport meta tag parser + mobile-friendliness scoring.",
     "host_port": 18233,
@@ -2371,6 +2375,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "domain-wikidata-entity": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18228,
     "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
     "host_port": 18228,
@@ -2385,6 +2390,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "dtss": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8286,
     "description": "Microservice for Dtss",
     "host_port": 8286,
@@ -2415,6 +2421,7 @@
     "trl_evidence": "First-pass audit of this local-first elder-care coordination app (meds/appointments/insurance, IndexedDB/Yjs, no backend): privacy/local-first claim verified clean -- no analytics/telemetry anywhere, only non-user-initiated network call is a read-only GitHub commits-endpoint fetch with no care data. Found and fixed 2 real, compounding bugs with genuine safety stakes in the medication-reminder core: (1) the 'due' (overdue) status was practically unreachable -- the scheduler always rolled a passed dose time forward to the next occurrence BEFORE checking confirmation, so a missed dose silently became 'tomorrow, upcoming' instead of flagged overdue, meaning the dashboard's overdue-medication alert essentially never fired. (2) medications store one lastConfirmedAt timestamp per medication, not per dose-time, so confirming a twice-daily medication's 08:00 dose retroactively marked its still-not-given 20:00 dose as confirmed too -- a caregiver could see 'Done' and skip giving it. Fixed both (dose slots stay 'due' until actually confirmed; confirmation now requires the confirmation clock-time to be at/after the specific dose's scheduled time); one existing test was found to have been unknowingly encoding the bug's own symptom, now corrected. trl held at 4 pending this fix landing and CI going green; trl_ceiling=5 added -- genuinely local-first/no-backend/no-telemetry with real schema validation and tests, but no at-rest encryption for local IndexedDB, no DST-transition test coverage. See PR #8 (merged)."
   },
   "email-extractor": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8287,
     "description": "Microservice for Email Extractor",
     "example_path": "/?url=https://example.com",
@@ -2444,6 +2451,7 @@
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e"
   },
   "embed-iframe-classifier": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18255,
     "description": "Inventories and classifies every <iframe>, <embed>, and <object> on a web page or raw HTML: resolved-absolute src/data, host, and a curated provider/category label (youtube/vimeo video, google_maps/openstreetmap maps, twitter/facebook social, spotify/soundcloud audio, google_docs/codepen docs, typeform/airtable forms, ads_analytics), plus per-provider and per-category counts.",
     "example_path": "/?url=https://example.com",
@@ -2459,6 +2467,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "emotional-tone": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8288,
     "description": "Microservice for Emotional Tone",
     "host_port": 8288,
@@ -2494,6 +2503,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   "feed-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8164,
     "description": "Microservice for Feed Finder",
     "example_path": "/go_feed_finder?url=https://example.com",
@@ -3425,6 +3435,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   "founding-year": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8289,
     "description": "Microservice for Founding Year",
     "host_port": 8289,
@@ -3440,6 +3451,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "funding-detector": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8290,
     "description": "Microservice for Funding Detector",
     "host_port": 8290,
@@ -3454,6 +3466,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "funding-signal": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18293,
     "host_port": 18293,
     "internal_direct": true,
@@ -3468,6 +3481,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "gdpr-compliance": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8291,
     "description": "Microservice for Gdpr Compliance",
     "example_path": "/?url=https://example.com",
@@ -3515,6 +3529,7 @@
     "trl_evidence": "First-pass audit (Fastify service over the static geojson-places dataset for administrative-region search/reverse-geocode, confirmed genuinely non-overlapping with both geocode siblings -- opposite direction, no external network call at request time so fetch-cache masking doesn't apply). Found a real bug currently live in production: GET /health actually resolves to /health/health due to a fastify-autoload route-registration mismatch, so Docker's own HEALTHCHECK and the fleet catalog's health_url are both 404ing right now despite the app working fine -- a prior changelog entry claimed to have already fixed this but registered the route at the wrong path. Fixed by registering at / like every other route file. Also fixed a limit<=0 validation gap that silently broke the result cap (100 matches leaking through with no error), and found the service's own smoke-test config has never actually matched the real API (GET /?query= vs the real GET /search?q=). trl held at 6; trl_ceiling=7 added -- entire dataset is a frozen snapshot of a pinned npm package with no freshness/drift-detection pipeline, geometries are simplified so border-adjacent reverse-geocode is inherently approximate, permanently scoped to administrative units only by design. See PR #2 (merged)."
   },
   "go-oauth-mapper": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8330,
     "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
     "deploy_quirk_resolved_at": "2026-05-16",
@@ -3547,6 +3562,7 @@
     "coolify_app_uuid": "d53fvns2b33ml5z1scbjd1y7"
   },
   "google-taxonomy": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8096,
     "description": "Deterministic Google Product Taxonomy lookup, fuzzy search, and TF-IDF classifier with confidence-based abstention.",
     "example_path": "/?url=https://example.com",
@@ -3593,6 +3609,7 @@
     "trl_evidence": "First-pass audit of this interactive finite-group/symmetry explorer (hand-authored WASM table-lookup kernel + Three.js): mathematical correctness verified clean via an independent from-scratch reimplementation (not reusing the app's own algebra.ts/cayley.ts) run against all 18 catalog groups -- full associativity/closure/identity/inverse/Latin-square checks pass for every group, Q8's table matches an independently coded Hamilton quaternion product exactly, S3/A4/S4 element-order distributions match known character-table facts exactly. No math bugs found. Found and fixed a severe rendering bug instead: the 3D-visualization camera was built but camera.lookAt() was never called, so a fresh camera faces local -Z while every group's geometry is centered at the origin (~41 degrees off boresight, well outside the 24-degree half-FOV) -- the '3D' tab silently rendered nothing but background color for EVERY group in the catalog, with no console error and status text still claiming 'live WebGL.' Confirmed live in-browser before/after across C1, D4, and S4 (order 24). The existing e2e smoke test only asserted the canvas was visible, not that it contained real content -- exactly why this shipped unnoticed. Fixed with one camera.lookAt(0,0,0) call. trl bumped 4->5; trl_ceiling=7 added -- solidly 'developing' (curated catalog, multi-step group-theory logic, now-verified real test coverage) but not yet 'real' (6-7) since it has no external/RFC-style input parsing or operational evidence trail; capped below 8-9 since 'battle-tested, SLA-grade' isn't a meaningful target for a static no-backend GitHub Pages demo. See PR #6 (merged)."
   },
   "heading-outline-extractor": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18247,
     "description": "Extracts the heading structure (h1-h6) of a web page or raw HTML and builds a nested document outline plus accessibility diagnostics — per-level counts, max nesting depth, and structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level, empty_heading).",
     "example_path": "/?url=https://example.com",
@@ -3644,6 +3661,7 @@
     "coolify_app_uuid": "likwplvqrfh94dukv1bm5qt7"
   },
   "hsts-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8328,
     "description": "Microservice for Hsts Checker",
     "example_path": "/go_hsts_checker?url=https://example.com",
@@ -3699,6 +3717,7 @@
     "coolify_app_uuid": "o3t4k0qvwf0mskinbdzor4nh"
   },
   "http-protocol": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8241,
     "description": "Microservice for Http Protocol",
     "example_path": "/?url=https://example.com",
@@ -3712,6 +3731,7 @@
     "version": "2.2.0"
   },
   "iban-bic-validator": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18291,
     "host_port": 18291,
     "proxy_egress": false,
@@ -3802,6 +3822,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
   "ipv6-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8244,
     "description": "Microservice for Ipv6 Checker",
     "host_port": 8244,
@@ -6889,6 +6910,7 @@
     "proxy_read_timeout": "120s"
   },
   "hiring-footprint": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18322,
     "depends_on": [
       "apikey-service"
