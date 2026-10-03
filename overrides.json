@@ -1046,7 +1046,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics.",
-    "version": "0.1.18"
+    "version": "0.1.19"
   },
   "company-size": {
     "container_port": 8281,
@@ -3478,7 +3478,7 @@
     "trl_evidence": "40/40 real-world audit: before this fix, the only two live sources were producing 0% correct non-zero hits, requiring a brand-mention-in-headline gate before mining news for funding. Corrected DOWNWARD from a previously-claimed trl=7 that was not supported by real evidence -- catalog showed trl:7 with no trl_ceiling prior to this audit. Post-fix: all 40 false positives correctly suppressed to empty while true positives on well-known companies are preserved. See github.com/baditaflorin/go_funding_signal PR #4.",
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "version": "0.1.23",
+    "version": "0.1.24",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
