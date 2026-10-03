@@ -143,10 +143,18 @@ class WoodpeckerClient:
         return candidates
 
     def agents(self) -> dict[int, str]:
-        return {
-            int(agent["id"]): str(agent["name"])
-            for agent in self.get("/agents", {"perPage": 100})
-        }
+        agents: dict[int, str] = {}
+        page = 1
+        while True:
+            rows = self.get("/agents", {"perPage": 100, "page": page})
+            new_rows = [row for row in rows if int(row["id"]) not in agents]
+            if not new_rows:
+                break
+            agents.update(
+                (int(agent["id"]), str(agent["name"])) for agent in new_rows
+            )
+            page += 1
+        return agents
 
     def pipeline_detail(self, candidate: Candidate) -> dict[str, Any]:
         return self.get(
