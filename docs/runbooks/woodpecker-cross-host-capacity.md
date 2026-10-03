@@ -13,13 +13,17 @@ registering stable agents from both sites with that control plane.
 - `0docker-builder-agent-b`
 - `0mcp-docker-exec-agent`
 - `pve01-fleet-agent` on a dedicated remote builder VM
+- `0own-build-agent` on dedicated 0own VM 610
 
-The remote worker is a general fleet agent (`repo=*`, Docker backend) with
-`WOODPECKER_MAX_WORKFLOWS=1`. It joins the existing `ci.0exec.com` control
-plane; repositories do not need a new webhook or a repo-specific builder
-configuration. Woodpecker assigns queued workflows to matching agents with
-free workflow slots. `ci.0mcp.com` remains a separate authority for its
-`lv3=true` pipelines; do not register those repositories on the 0exec pool.
+The pve01 worker is a general fleet agent (`repo=*`, Docker backend) with
+`WOODPECKER_MAX_WORKFLOWS=1`. The 0own VM 610 agent also uses the general
+Docker backend and currently has two workflow slots. Both join the existing
+`ci.0exec.com` control plane; repositories do not need a new webhook or a
+repo-specific builder configuration. Woodpecker assigns queued workflows to
+matching agents with free workflow slots. The 0own slot count should stay at
+two until its host metrics are included in the load controller.
+`ci.0mcp.com` remains a separate authority for its `lv3=true` pipelines; do
+not register those repositories on the 0exec pool.
 
 This pool executes repository CI workflows. Production image publication and
 `fleet-runner deploy` still follow the fleet deployment contract and use the
