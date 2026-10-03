@@ -5994,7 +5994,11 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "PGP cleartext signatures are detected but not cryptographically verified (no key fetch/validation); true 8-9 needs signature verification + a persistent cross-run history feed, structurally beyond a stateless CPU-only fetcher",
     "trl_evidence": "RFC 9116 fetch+validate with per-field evidence trail, soft-404 masquerade detection, misnamed-field + host-mismatch warnings. Pass-3 adds IDN host normalization via golang.org/x/net/idna (IDNA2008 lookup) before the SSRF-guard resolver: Unicode-form IDN domains (valenca.dev, baslat.net, Cyrillic/CJK/Arabic/Devanagari) reached 0/10 -> 10/10 live, confirmed before=400 'no such host' / after=200. Soft-404 FP class (293/1000 present-but-no-Contact rows) found already-fixed by deployed code and discarded. 30+ multi-script table tests added.",
-    "version": "2.1.0",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "2.4.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
