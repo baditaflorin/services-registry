@@ -6978,7 +6978,7 @@
     "trl_evidence": "v0.1.10 includes gateway-authenticated delegated API-key issuance, required proxy egress, a strict TLS hostname, and a two-app staging harness; live production canary and restore evidence are pending.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Still needs a live staged deployment, scoped provider delegation, and production-equivalent backup/restore verification.",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected."
   }
 }
