@@ -178,6 +178,32 @@ class FakeClient:
         next(item for item in self.remote_agents if item["id"] == agent["id"])["no_schedule"] = value
 
 
+class HTTPClientTests(unittest.TestCase):
+    def test_agents_collects_all_entries_across_api_capped_pages(self):
+        client = controller.HTTPClient("https://ci.example.com", "unused")
+        first_page = [{"id": agent_id} for agent_id in range(1, 51)]
+        second_page = [{"id": agent_id} for agent_id in range(51, 53)]
+
+        with patch.object(
+            client,
+            "_request",
+            side_effect=[first_page, second_page],
+        ) as request:
+            agents = client.agents()
+
+        self.assertEqual([agent["id"] for agent in agents], list(range(1, 53)))
+        self.assertEqual(
+            [call.args[0] for call in request.call_args_list],
+            ["/api/agents?page=1&perPage=50", "/api/agents?page=2&perPage=50"],
+        )
+
+    def test_agents_rejects_non_array_page(self):
+        client = controller.HTTPClient("https://ci.example.com", "unused")
+        with patch.object(client, "_request", return_value={"agents": []}):
+            with self.assertRaisesRegex(ValueError, "JSON array"):
+                client.agents()
+
+
 class MetricsTests(unittest.TestCase):
     def test_snapshot_percentages(self):
         snapshot = controller.node_snapshot(METRICS)
