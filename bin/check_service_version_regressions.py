@@ -49,6 +49,10 @@ def version_regressions(base: list[dict[str, Any]], head: list[dict[str, Any]]) 
             continue
         old_key = semver_precedence(old) if isinstance(old, str) else None
         new_key = semver_precedence(new) if isinstance(new, str) else None
+        if old is None and new_key is not None:
+            # A service may receive its first catalog version after being
+            # published without one. There is no prior SemVer to regress from.
+            continue
         if old_key is None or new_key is None:
             failures.append(f"{service_id}: cannot compare changed non-SemVer version {old!r} -> {new!r}")
         elif new_key < old_key:

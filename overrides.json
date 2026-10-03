@@ -1045,7 +1045,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics.",
-    "version": "0.1.8"
+    "version": "0.1.17"
   },
   "company-size": {
     "container_port": 8281,
@@ -1057,7 +1057,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20.",
-    "version": "3.5.26",
+    "version": "3.5.34",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3475,7 +3475,7 @@
     "trl_evidence": "40/40 real-world audit: before this fix, the only two live sources were producing 0% correct non-zero hits, requiring a brand-mention-in-headline gate before mining news for funding. Corrected DOWNWARD from a previously-claimed trl=7 that was not supported by real evidence -- catalog showed trl:7 with no trl_ceiling prior to this audit. Post-fix: all 40 false positives correctly suppressed to empty while true positives on well-known companies are preserved. See github.com/baditaflorin/go_funding_signal PR #4.",
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "version": "0.1.14",
+    "version": "0.1.23",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -4043,7 +4043,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.15"
+    "version": "1.33.23"
   },
   "license-extractor": {
     "container_port": 18270,
@@ -5700,6 +5700,7 @@
     "trl_evidence": "research tool, workflow pipeline"
   },
   "revenue-model": {
+    "version": "2.6.15",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,

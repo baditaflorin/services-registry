@@ -20,6 +20,26 @@ class VersionRegressionTests(unittest.TestCase):
         ]
         self.assertEqual(version_regressions(base, head), [])
 
+    def test_allows_first_catalog_version_from_null_or_missing(self):
+        base = [
+            {"id": "null-version", "version": None},
+            {"id": "missing-version"},
+        ]
+        head = [
+            {"id": "null-version", "version": "0.1.0"},
+            {"id": "missing-version", "version": "1.2.3"},
+        ]
+        self.assertEqual(version_regressions(base, head), [])
+
+    def test_rejects_invalid_first_catalog_version(self):
+        base = [{"id": "one", "version": None}]
+        for value in ("", "release-1"):
+            with self.subTest(value=value):
+                self.assertIn(
+                    "cannot compare changed non-SemVer",
+                    version_regressions(base, [{"id": "one", "version": value}])[0],
+                )
+
     def test_compares_numeric_components_numerically(self):
         self.assertGreater(semver_precedence("1.10.0"), semver_precedence("1.9.99"))
 
