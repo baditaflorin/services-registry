@@ -3,8 +3,8 @@
 The report classifies recent Woodpecker pipelines by the physical host that ran
 an agent. Keep generated agent names and known stable agent IDs mapped in
 `ci-execution-report.json`. Unknown agent IDs should be marked `unattributed`
-until their host is verified; the default host is only a fallback for genuinely
-unmapped legacy records.
+until their host is verified. The 0exec default is also `unattributed`, so a
+missing mapping cannot incorrectly credit a host.
 
 On Builder LXC 108, run:
 
