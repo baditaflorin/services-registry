@@ -18,7 +18,15 @@
       "name": "builder-a",
       "agent_names": ["builder-a-agent-1", "builder-a-agent-2"],
       "metrics_url": "http://builder-a.example.internal:9100/metrics",
-      "filesystem_mountpoint": "/"
+      "filesystem_mountpoint": "/",
+      "backing_storage": {
+        "metrics_url": "http://hypervisor.example.internal:9100/metrics",
+        "filesystem_mountpoint": "/",
+        "filesystem_device": "/dev/md3",
+        "disk_stop_pct": 10,
+        "disk_resume_pct": 15,
+        "minimum_free_bytes": 53687091200
+      }
     },
     {
       "name": "builder-b",
