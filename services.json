@@ -190,7 +190,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.3.17",
+    "version": "3.3.18",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -606,7 +606,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.7",
+    "version": "1.6.8",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1137,7 +1137,7 @@
     "container_port": 18208,
     "proxy_egress": true,
     "proxy_read_timeout": "200s",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -2425,7 +2425,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.2.18",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -2542,7 +2542,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.3.6",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -9645,7 +9645,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-backup-scaffold",
     "host_port": 18311,
     "container_port": 18208,
-    "version": "0.1.0",
+    "version": "0.1.7",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -10727,7 +10727,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "no auth",
+    "auth_help": "no auth on read (anonId is the read-secret); writes require client-held argon2id-hashed writeToken in body (not keystore-gated)",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
     "trl_evidence": "NEW fleet primitive (2026-05-19). Pairs with mesh-common's fleetPersona (39 vitest tests). Server: 21 Go unit + handler tests covering validation, argon2id verify, fixed-window rate-limit, CORS preflight, read-only kill switch, oversized body. testing/smoke.sh runs the full lifecycle end-to-end against a running container. Strict-ASCII allowlist mirrors the client. Pure-Go SQLite (modernc.org/sqlite), CGO_ENABLED=0.",
@@ -10801,7 +10801,7 @@
     "auth": {
       "type": "none"
     },
-    "auth_help": "no auth",
+    "auth_help": "public endpoint (no keystore) \u2014 beacon-only",
     "cert_domain": "wildcard.0exec.com",
     "aliases": [
       "go-fleet-pixel"
@@ -11314,7 +11314,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "access_tier": "infra-privileged",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -11958,7 +11958,7 @@
       "go.proxy.okssh.com",
       "proxy.html.go.0prx.com"
     ],
-    "version": "0.5.20",
+    "version": "0.5.21",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -14885,13 +14885,13 @@
       "type": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected.",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
-    "trl_evidence": "Two-app end-to-end contract test covers task creation/closure, exact scope denial, target use, API-key issue/revoke, and durable audit rows. No live deployment or production credential has been exercised.",
+    "trl_evidence": "v0.1.9 declares the broker and workload verification endpoints, a 30-second lease ceiling, and two exact read-only dogfood grants. Live staging and production evidence is pending.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Still needs a live staged deployment, scoped provider delegation, and production-equivalent backup/restore verification.",
-    "trl_assessed_at": "2026-10-01",
+    "trl_assessed_at": "2026-10-03",
     "trl_assessor": "codex-gpt-6",
     "placement": "pinned",
     "host_port": 18327,
@@ -14899,7 +14899,7 @@
     "depends_on": [
       "apikey-service"
     ],
-    "version": "0.1.6",
+    "version": "0.1.9",
     "network_exposure": "gateway-authenticated"
   },
   {

@@ -97,6 +97,17 @@ class TestSplitOverrides(unittest.TestCase):
 
 
 class TestQualityContractProjection(unittest.TestCase):
+    def test_explicit_auth_help_overrides_generic_auth_text(self):
+        repo = {
+            "name": "go-quality-example",
+            "url": "https://github.com/baditaflorin/go-quality-example",
+            "description": "fixture",
+            "repositoryTopics": [{"name": "mesh-0exec"}],
+        }
+        auth_help = "Use the X-API-Key header only; query credentials are rejected."
+        entry = generate.make_entry(repo, {"quality-example": {"auth_help": auth_help}}, [])
+        self.assertEqual(entry["auth_help"], auth_help)
+
     def test_generator_keeps_quality_contract_private(self):
         repo = {
             "name": "go-quality-example",
