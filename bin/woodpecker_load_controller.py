@@ -269,6 +269,8 @@ def drain_priority(pressure: Pressure) -> tuple[int, float, float, float]:
 
 
 class HTTPClient:
+    AGENTS_PER_PAGE = 50
+
     def __init__(self, base_url: str, token: str, timeout: float = 10) -> None:
         self.base_url = base_url.rstrip("/")
         self.token = token
@@ -292,7 +294,18 @@ class HTTPClient:
             return json.loads(raw) if raw else None
 
     def agents(self) -> list[dict[str, Any]]:
-        return self._request("/api/agents?perPage=100")
+        agents: list[dict[str, Any]] = []
+        page = 1
+        while True:
+            result = self._request(
+                f"/api/agents?page={page}&perPage={self.AGENTS_PER_PAGE}"
+            )
+            if not isinstance(result, list):
+                raise ValueError("Woodpecker agents response must be a JSON array")
+            agents.extend(result)
+            if len(result) < self.AGENTS_PER_PAGE:
+                return agents
+            page += 1
 
     def queue(self) -> dict[str, Any]:
         return self._request("/api/queue/info")
