@@ -208,7 +208,8 @@ while host storage is still low.
 4. Rerun a safe test-only pipeline and verify its workflow `agent_id` resolves
    to the remote agent.
 5. Restore the local agents in a `finally`/trap path and restart the controller.
-6. On Builder LXC 108, run `ci-execution-report --limit 100 --include-active`.
+6. On Builder LXC 108, run
+   `ci-execution-report --config /etc/ci-execution-report/config.json --limit 100 --include-active`.
    The report classifies pipelines by physical host. Unknown agent IDs remain
    `unattributed`; do not assume they ran on 0docker.
 
