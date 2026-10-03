@@ -3675,7 +3675,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs real browser DOM for verification",
     "trl_evidence": "Pure-Go RFC 6797 directive parser with case-insensitive directive names,\nquoted-string handling, negative/garbage rejection, and whitespace\ntolerance (parse_test.go covers 9 cases). Embedded Chromium HSTS preload\nlist snapshot revision 2026-05-16.1 (~190 entries) with TLD-wide\ntreatment for .gov/.dev/.app/.page/.new and parent-domain inheritance.\nPlaintext HTTP→HTTPS redirect probe captures the full chain (up to 5\nhops) and reports the final scheme. Standalone TLS handshake check\nrecords negotiated version, cipher suite, full chain length, and\nperforms explicit hostname + chain verification against the system\ntrust store. Grading rubric (F/D/C/B/A/A+) per\ndocs/adr/0001-trl-uplift-to-6.md, with A+ requiring corroboration from\nthe bundled snapshot (not just the preload directive on the wire).\nTest surface: parse_test.go + preload_test.go + grade_test.go +\nhandler_test.go (httptest.NewTLSServer for HSTS variants, separate\nhttp test server for the redirect probe).",
-    "version": "1.3.0"
+    "version": "1.3.10"
   },
   "html-proxy": {
     "cpus": 8,
