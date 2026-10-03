@@ -144,7 +144,7 @@ unique across host groups. This avoids treating duplicate agent registrations
 as one worker or counting several containers on the same host as separate
 capacity.
 
-The 0exec pool has four physical node groups: `0docker-builder`,
+Configure the 0exec pool as four physical node groups: `0docker-builder`,
 `0mcp-docker-build`, `pve01-amd64-builder`, and `0own-build-worker`. Keep their
 private metrics URLs and verified agent aliases in the live config at
 `/etc/woodpecker-load-controller/ci.0exec.json`; do not put rendered private
