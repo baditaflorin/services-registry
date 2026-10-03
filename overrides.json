@@ -1035,6 +1035,7 @@
     "version": "1.4.5"
   },
   "company-name-extractor": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "host_port": 18325,
     "container_port": 18325,
     "description": "Extract organization display name (company/NGO/university/public institution) from a domain or HTML via JSON-LD, og:site_name, title, logo alt, and impressum signals.",
@@ -1634,6 +1635,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   "domain-bimi-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18218,
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
     "host_port": 18218,
@@ -2836,6 +2838,7 @@
     "health_url": "https://fleet-grafana.0exec.com/_gw_health"
   },
   "fleet-graph": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "access_tier": "infra-privileged",
     "container_port": 18143,
     "depends_on": [
@@ -3790,6 +3793,7 @@
     "coolify_app_uuid": "dgfll92zgusjswf1nzxpwbmk"
   },
   "infrastructure-fetch-cache": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "access_tier": "infra-privileged",
     "allowed_source_ips": [
       "65.108.75.123/32"
@@ -4134,6 +4138,7 @@
     "trl_evidence": "First-pass audit of this gamified local-first language tutor (local speech/pitch scoring, SM-2-style spaced repetition, no backend): privacy claim verified genuine -- the only outbound network call in the whole app is a GitHub commit-hash display fetch, no learner data involved; speech scoring, review/SRS, and grammar checking are 100%% local computation. SRS scheduler verified correct (ease-factor updates, interval growth/reset, timezone-safe absolute-timestamp dueAt comparisons). Found and fixed a real timezone bug in the streak/gamification logic: updateStreak() computed 'today'/'yesterday' via date.toISOString().slice(0,10) -- the UTC calendar day, not the learner's local day -- so a learner in a timezone ahead of UTC (e.g. Sydney, UTC+10) practicing late at night and again the next morning (two genuinely different local days) would land on the same UTC day and silently fail to increment their streak; live-reproduced before fixing, resolved with a localDateKey() helper used consistently across recordAttempt/reviewCard/updateStreak. trl held at 4; trl_ceiling=5 added -- solid, honest, privacy-correct small app with decent test coverage, but single-maintainer hobby-scale with no dedicated CI workflow and 'pronunciation scoring' is an honest but crude pitch/energy heuristic rather than real ASR. See PR #11 (merged)."
   },
   "login-analyzer": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8170,
     "description": "Microservice for Login Analyzer",
     "example_path": "/go_login_analyzer?url=https://example.com",
@@ -4153,6 +4158,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   "menu-extractor": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18266,
     "description": "Extracts the navigation menu structure of a web page or raw HTML: nav / role=navigation / aria-labelled regions plus header and footer link lists, each as a tree of menu items (label, href, nested submenu children) with region classification and a region/link/depth summary.",
     "example_path": "/?url=https://example.com",
@@ -4298,6 +4304,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a shared ripple/tap-pulse effect across a physical row of phones (Yjs/y-webrtc), not a stroke-drawing canvas. Found and fixed two real bugs: (1) untrusted peer awareness data let NaN/Infinity through a weak typeof check, poisoning the mesh clock offset for the whole room and baking permanent, un-garbage-collectable NaN entries into the shared doc; (2) the periodic ripple GC deleted dead entries by count-from-front rather than by identity, an assumption that breaks under concurrent multi-peer taps and could delete a live ripple while a dead one survived. Both fixed and regression-tested (2 of 3 new tests confirmed to fail pre-fix). Also corrected a false privacy claim: docs claimed encrypted SDP signaling, but y-webrtc's encryption is opt-in and never enabled here, so signaling is plaintext (TLS-in-transit only) -- doc corrected rather than bolting on a false sense of security. trl bumped 3->5. See github.com/baditaflorin/mesh-wave-canvas PR #1 (merged)."
   },
   "microformats2-extractor": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18260,
     "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} — returning items[], rels, rel-urls, and a summary roll-up.",
     "example_path": "/?url=https://example.com",
@@ -4327,6 +4334,7 @@
     "coolify_app_uuid": "t4ikuexuurt9uk3m56laoruv"
   },
   "mobile-friendly": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8294,
     "description": "Microservice for Mobile Friendly",
     "example_path": "/?url=https://example.com",
@@ -4464,6 +4472,7 @@
     "trl_evidence": "First-pass audit (identical ocrmypdf --force-ocr + pdf-parse pipeline as sibling ocr-pdf, confirmed the real distinction is Express/GET-only-plus-stub-POST vs the sibling's working Fastify POST, not a faster/lighter tier): found the service has likely NEVER produced real OCR output in production -- ocrmypdf was never installed in the Docker image at all, every OCR call failed with 'command not found', silently swallowed into a fake 200 success with empty text. Also found: the documented POST / multipart upload literally didn't exist (threw 'not yet implemented'), /health required by the fleet's own deploy gate was never implemented, a fixed temp filename let concurrent requests race and corrupt each other's downloads (reproduced with 16 concurrent requests), no download size/timeout caps, and a real dependency defect in the bundled pdf-parse nondeterministically losing text even when OCR succeeded. npm audit: 2 high + 8 other vulnerable packages fixed. Added a real test suite. trl was effectively 1-2 in practice (silently non-functional); bumped to 5 post-fix; trl_ceiling=7 added -- fundamentally a single-OCR-engine wrapper with no cross-checking/redundancy. See PR #1 (merged)."
   },
   "office-locations": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8295,
     "description": "Microservice for Office Locations",
     "host_port": 8295,
@@ -4526,6 +4535,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this client-side OpenStreetMap poster generator (MapLibre GL + OpenFreeMap tiles + Nominatim geocoding, no backend or API keys, all disclosed). Found and fixed a severe security bug: the shareable-URL feature encodes full app state into the URL hash and rehydrates it on load with zero sanitization -- four fields flowed unescaped into innerHTML that runs automatically on page boot, and a live PoC confirmed a crafted share link executes arbitrary JS with zero clicks (unauthenticated, zero-interaction stored XSS). Fixed by escaping all four sites with the project's existing helper; re-tested the same payloads live post-fix, all blocked. Also found and fixed a domain-correctness bug: the PDF export's hand-authored mm-dimension table had drifted from the live CSS preview (story frame off by ~26%, screen/4K sizes had no mm table at all and silently defaulted to A4-portrait) -- fixed with a single CSS-synced source of truth, verified against the real jsPDF library for all 30 frame x size combinations. trl bumped 4->6 pending merge; trl_ceiling=7. See github.com/baditaflorin/osm-poster PR #2 (merged)."
   },
   "outlink-graph": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8296,
     "description": "Microservice for Outlink Graph",
     "host_port": 8296,
@@ -4541,6 +4551,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "page-load-metrics": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8297,
     "description": "Microservice for Page Load Metrics",
     "example_path": "/?url=https://example.com",
