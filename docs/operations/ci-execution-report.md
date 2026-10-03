@@ -9,7 +9,9 @@ missing mapping cannot incorrectly credit a host.
 On Builder LXC 108, run:
 
 ```sh
-ci-execution-report --limit 100 --include-active
+ci-execution-report \
+  --config /etc/ci-execution-report/config.json \
+  --limit 100 --include-active
 ```
 
 The command reads each Woodpecker token from its configured root-managed token
