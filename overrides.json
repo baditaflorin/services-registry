@@ -1039,13 +1039,14 @@
     "description": "Detect published contact forms, contact routes, booking links, and sales/demo routes from a website homepage and up to two same-site candidate pages. Uses the fleet fetch cache; route evidence is transient.",
     "example_path": "/?url=https://example.com/",
     "host_port": 18329,
+    "placement": "replicable",
     "trl": 4,
     "trl_assessed_at": "2026-10-04",
     "trl_assessor": "Codex",
     "trl_evidence": "Standalone Go microservice with bounded same-site fetches through go-common fleetfetch and conservative route classification. Unit tests cover positive and negative signals, page limits, aliases, SSRF rejection, and cache accounting. Pre-production; no live fleet deployment yet.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "HTML-only inspection misses client-rendered routes and does not validate that a route is currently operational.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "company-name-extractor": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
