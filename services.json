@@ -1168,10 +1168,10 @@
     "trl_assessed_at": "2026-10-04",
     "trl_assessor": "Codex",
     "placement": "replicable",
-    "host_port": 18329,
-    "container_port": 18329,
+    "host_port": 18330,
+    "container_port": 18330,
     "proxy_egress": true,
-    "version": "0.1.1",
+    "version": "0.1.2",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11823,9 +11823,9 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex-gpt-6",
     "placement": "replicable",
-    "host_port": 18322,
+    "host_port": 18329,
     "container_port": 18141,
-    "gateway_upstream_url": "http://10.10.10.30:18322",
+    "gateway_upstream_url": "http://10.10.10.30:18329",
     "version": "0.1.2",
     "network_exposure": "gateway-public"
   },
