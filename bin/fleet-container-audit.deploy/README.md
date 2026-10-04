@@ -21,8 +21,10 @@ sudo systemctl daemon-reload && sudo systemctl enable --now fleet-container-audi
 ```
 
 Live on `ubuntuvm1` (0docker dockerhost) → OpenObserve stream
-`fleet_container_audit` on LXC 106, alert `fleet_container_bad` → `fleet_email`
-(test-fired 2026-09-09). Repeat on the prod dockerhost (10.10.10.30).
+`fleet_container_audit` on 0own at `https://openobserve.0own.com`. The old
+alert `fleet_container_bad` was test-fired on CT 106; recover and verify its
+definition from the PBS snapshot before relying on it on 0own. Repeat on the
+prod dockerhost (10.10.10.30).
 
 ## Findings
 

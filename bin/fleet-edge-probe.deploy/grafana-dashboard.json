@@ -106,7 +106,7 @@
     {
       "id": 9, "title": "About", "type": "text",
       "gridPos": { "h": 4, "w": 24, "x": 0, "y": 29 },
-      "options": { "mode": "markdown", "content": "**fleet-edge-probe** — strict external edge assertions per `services.json` (TLS chain + SAN vs `cert_domain`, no cross-domain redirect, real `/health` body, gateway-IP drift). Tool: `services-registry/bin/fleet-edge-probe`.\n\nThis Prometheus holds the **`monitoring-lv3-0mcp`** vantage = **compose** services (0docker-hosted). The **coolify** vantage (0mcp-hosted, Builder LXC 108) ships to **OpenObserve** stream `fleet_edge_probe` on LXC 106 — alert `fleet_edge_hard_fail`." }
+      "options": { "mode": "markdown", "content": "**fleet-edge-probe** — strict external edge assertions per `services.json` (TLS chain + SAN vs `cert_domain`, no cross-domain redirect, real `/health` body, gateway-IP drift). Tool: `services-registry/bin/fleet-edge-probe`.\n\nThis Prometheus holds the **`monitoring-lv3-0mcp`** vantage = **compose** services (0docker-hosted). The **coolify** vantage (0mcp-hosted, Builder LXC 108) ships to **OpenObserve** stream `fleet_edge_probe` on 0own at `https://openobserve.0own.com`. The former CT 106 alert definition must be recovered and verified on the new instance before being relied on." }
     }
   ]
 }

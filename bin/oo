@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/oo — deterministic CLI for the fleet's OpenObserve instance (LXC 106).
+# bin/oo — deterministic CLI for the fleet's OpenObserve instance on 0own.
 #
 # WHY this exists: 2026-08-23 incident response needed "what did this
 # container print before it got redeployed" — `docker logs` only shows the
@@ -137,7 +137,7 @@
 #   oo tail <container_name> [--interval SECONDS] [--host HOST]
 #       Polling tail (default 3s interval) — not a true push/websocket
 #       stream. Good enough for "watch this thing after I redeploy it";
-#       for a real live-tail UI, use https://openobserve.0docker.com
+#       for a real live-tail UI, use https://openobserve.0own.com
 #       directly (ZO_WEBSOCKET_ENABLED is on).
 #
 #   oo streams
@@ -1088,7 +1088,7 @@ cmd_link() {
   secs=$(duration_to_seconds "$since")
   end_us=$(( $(date +%s) * 1000000 ))
   start_us=$(( end_us - secs * 1000000 ))
-  echo "Web UI:     https://openobserve.0docker.com/web/logs?org_identifier=${OO_ORG}"
+  echo "Web UI:     https://openobserve.0own.com/web/logs?org_identifier=${OO_ORG}"
   echo "Query:      ${sql}"
   echo "Time range: ${start_us} .. ${end_us} (microsecond epoch — paste into the UI's custom range picker), i.e. last ${since}"
 }
@@ -1161,7 +1161,7 @@ cmd_tail() {
     esac
   done
   require_creds
-  echo "# polling tail of '${container}' every ${interval}s (Ctrl-C to stop) — re-queries a sliding window each cycle, so a line can repeat once at the boundary; for a true live stream use https://openobserve.0docker.com" >&2
+  echo "# polling tail of '${container}' every ${interval}s (Ctrl-C to stop) — re-queries a sliding window each cycle, so a line can repeat once at the boundary; for a true live stream use https://openobserve.0own.com" >&2
   container=$(sql_escape "$container")
   host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"

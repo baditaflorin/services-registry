@@ -11,15 +11,17 @@ Docker host runs a `vector-log-shipper` agent that reads Docker's existing
 Docker host (0docker or 0mcp)
   └─ Vector agent + local disk buffer
        └─ HTTPS ingest (gzip, batches, retry/backoff)
-            └─ OpenObserve LXC 106 on the 0docker fleet
+            └─ OpenObserve VM 630 on 0own (`https://openobserve.0own.com`)
                  ├─ docker_logs  — container stdout/stderr
                  ├─ default      — syslog/journald
                  └─ metrics      — future metrics bridge
 ```
 
-The 0mcp fleet uses the public TLS endpoint because its private `10.10.10.x`
-network is independent of the 0docker private network. The endpoint is still
-the same OpenObserve instance and therefore keeps one searchable history.
+The 0mcp fleet uses the public TLS endpoint because its private `10.20.10.x`
+network is independent of 0own's private network. The endpoint is the shared
+0own instance. Historical data and dashboards from the former 0docker CT are
+being recovered from its PBS snapshots; a healthy endpoint alone does not
+confirm that historical data has been imported.
 
 ## Collection contract
 

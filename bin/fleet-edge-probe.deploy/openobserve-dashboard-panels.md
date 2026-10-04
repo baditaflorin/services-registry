@@ -1,6 +1,8 @@
 # OpenObserve dashboard — coolify vantage (manual, 2 min in the OO UI)
 
-The 0docker vantage ships to OpenObserve stream `fleet_edge_probe` (LXC 106).
+The 0docker vantage ships to OpenObserve stream `fleet_edge_probe` on 0own
+(`https://openobserve.0own.com`). Confirm the legacy panels are restored from
+the CT 106 PBS snapshot before relying on them.
 OO's dashboard-panel JSON schema (v0.14.7) is version-specific and fiddly to
 POST blind, so add these panels in the UI (Dashboards → New → Add panel →
 "Custom SQL"). Same three views as the Grafana dashboard:
