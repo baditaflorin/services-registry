@@ -910,16 +910,15 @@ or health-check a static Pages site.
 - **Dockerhost VM** runs the service containers. Compose dirs:
   `/opt/services/<repo>/`, `/opt/security/<repo>/`,
   `/home/ubuntu_vm/pentest/<repo>/`.
-- **OpenObserve LXC 106** (same SSH access pattern as Builder LXC 108
-  above, just a different `pct exec` target id; image
-  `openobserve/openobserve:v0.14.7` + bitnami/postgresql metastore) is
-  the fleet's log aggregator. Root creds live in the LXC's own
-  `docker-compose.yml` — see private `fleet-state/OPS.md` under
-  "OpenObserve root credentials", never repeat them in a service repo.
-  Retention is `ZO_COMPACT_DATA_RETENTION_DAYS = 30` (dropped from 90
-  on 2026-08-23 — no SLA requires longer right now; it applies fleet-
-  wide across every stream and takes effect promptly on restart, not
-  gradually).
+- **OpenObserve VM 630 on 0own** is the current fleet log aggregator and
+  uses `https://openobserve.0own.com`; traces enter through
+  `https://otlp.0exec.com`. The former 0docker CT 106 is absent from the
+  live host. Its PBS snapshots are being recovered for historical data
+  validation; do not treat old CT references as a live rollback endpoint.
+  Credentials are ingestion-only secrets from `go-fleet-secrets`; never
+  place them in a service repo or reuse the root credential for senders.
+  Retention and stream coverage must be verified on VM 630 before pruning
+  old snapshots.
 
   **Query it with `bin/oo`, not hand-rolled curl.** `services-registry/bin/oo`
   is the deterministic CLI (`logs`, `grep`, `errors`, `since-redeploy`,
@@ -932,8 +931,8 @@ or health-check a static Pages site.
   being touched too. Needs `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` /
   `OPENOBSERVE_HOST` set (see `bin/fleet-runner.env.example`; real values
   in `fleet-state/OPS.md`). Proxies every request through the bastion via
-  SSH — LXC 106 is only reachable from inside the `0docker.com` private
-  LAN. `query`/`run` default to compact JSON with OpenObserve's own
+  SSH — use the current private OpenObserve address from `fleet-state/OPS.md`
+  through the bastion. `query`/`run` default to compact JSON with OpenObserve's own
   response metadata stripped (pass `--pretty` for indented + full
   metadata) — the other commands already print hand-formatted plain text,
   no JSON envelope. Every user-supplied value going into a WHERE clause is

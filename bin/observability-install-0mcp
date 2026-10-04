@@ -9,7 +9,7 @@ set -euo pipefail
 : "${OPENOBSERVE_PASSWORD:?set OPENOBSERVE_PASSWORD from the private fleet secret path}"
 
 readonly image="timberio/vector@sha256:e4fc19efb7f817f28d06a9a67fab9e1ccc60d57080115c291b06deb6daea7d7a"
-readonly endpoint="https://openobserve.0docker.com/api/default/docker_logs/_json"
+readonly endpoint="https://openobserve.0own.com/api/default/docker_logs/_json"
 
 install_host() {
   local alias="$1" host="$2" role="$3"

@@ -87,7 +87,7 @@ fleet hosts:
 | vantage host | `EDGE_PROBE_RUNTIME` | covers | schedule | alert path |
 |---|---|---|---|---|
 | `monitoring-lv3` (0mcp) | `compose` | 0docker-hosted services (→ `176.9.123.221`) | `*:02/15` | node_exporter textfile → Prometheus job `fleet-edge-probe` → rules in `/etc/prometheus/rules/fleet-edge-probe.yml` → Alertmanager `ntfy-critical` + `mattermost-critical` |
-| Builder LXC 108 (0docker) | `coolify` | 0mcp-hosted services (→ `65.108.75.123`) | `*:09/15` | textfile (`/var/lib/prometheus-node-exporter/textfile/`) **+** `fleet-edge-probe-ship-oo` → OpenObserve stream `fleet_edge_probe` on LXC 106 |
+| Builder LXC 108 (0docker) | `coolify` | 0mcp-hosted services (→ `65.108.75.123`) | `*:09/15` | textfile (`/var/lib/prometheus-node-exporter/textfile/`) **+** `fleet-edge-probe-ship-oo` → OpenObserve stream `fleet_edge_probe` on 0own (`https://openobserve.0own.com`) |
 
 Artifacts in `bin/fleet-edge-probe.deploy/`:
 
@@ -105,7 +105,7 @@ Artifacts in `bin/fleet-edge-probe.deploy/`:
 
 ### OpenObserve alert (0docker vantage) — live
 
-Created 2026-09-09 on the LXC 106 OpenObserve (`v0.14.7`) via
+Originally created 2026-09-09 on the former 0docker OpenObserve (`v0.14.7`) via
 `POST /api/v2/default/alerts`:
 
 - **name:** `fleet_edge_hard_fail`  (folder `default`, scheduled)
@@ -117,6 +117,9 @@ Created 2026-09-09 on the LXC 106 OpenObserve (`v0.14.7`) via
 - **trigger:** period 20m, `>= 1` matching row, evaluated every 15m,
   `silence` 120m.
 - **destination:** `fleet_email` → admin@0docker.com (template `fleet_email_default`).
+
+The old CT 106 is absent. Recover this alert from its PBS snapshot and verify
+it against the 0own instance before relying on it there.
 
 Test-fired by ingesting a synthetic `{kind:"summary",vantage:"test-fire",hard_fail_total:7}`
 row and briefly setting frequency=1m: OO logged `Alert conditions satisfied`

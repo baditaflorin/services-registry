@@ -6,7 +6,7 @@ Reads the --state file written by fleet-edge-probe and POSTs:
   - one {kind:"service"} row per NON-ok service (fails[], hard_fail)
 
 Config from env / /etc/default/fleet-edge-probe:
-  EDGE_PROBE_OO_URL    e.g. http://10.10.10.106:5080/api/default/fleet_edge_probe/_json
+  EDGE_PROBE_OO_URL    e.g. https://openobserve.0own.com/api/default/fleet_edge_probe/_json
   EDGE_PROBE_OO_AUTH   user:pass  (basic auth)
   EDGE_PROBE_VANTAGE   label (default: hostname)
   EDGE_PROBE_STATE     state file (default: /var/lib/fleet-edge-probe/state.json)
