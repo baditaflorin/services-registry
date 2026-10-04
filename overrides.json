@@ -738,7 +738,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.8.29",
+    "version": "2.8.30",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -6811,7 +6811,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs authenticated session for extended carbon source data",
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 350-domain sample): found and fixed a real fetch-cache-masking bug in the green-hosting (GWF) check specifically -- since a 'green' verdict zeroes ~40% of the per-visit energy estimate, a masked/stale verdict directly skews the headline co2_grams_per_visit output. Live-proved with a stub cache: a genuinely non-green domain (si-studia.ru) got a fabricated green/Grade-A/0.149g verdict before the fix vs correct non-green/Grade-B/0.25g (+68%) after. Byte-probing paths (HEAD/Range-GET) confirmed unaffected. See PR #11 (merged).",
-    "version": "2.6.14",
+    "version": "2.6.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
