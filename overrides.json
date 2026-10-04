@@ -1773,7 +1773,7 @@
     "trl_evidence": "Confirmed today's earlier merged fetch-cache fix is genuinely in place, then found and fixed one more real live false negative: the render PaaS rule only recognized a .onrender.com CNAME or an x-render-origin-server header, missing Render-hosted domains behind Cloudflare (CNAME hidden, Server header overwritten) -- live-verified via an independent ground-truth signal (hosting_asn_name='RENDER'), 6/20 (30%) of a targeted sample were misses. Fixed (v0.2.10) by adding Render's own rndr-id request-id header as a strong signal, re-verified live against all 6 domains plus a fresh 150-domain random sample with zero new mismatches. See github.com/baditaflorin/go_domain_deployment_fingerprint PR #17 (merged). Rows with tool_version<0.2.10 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.2.16",
+    "version": "0.2.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
