@@ -23,6 +23,11 @@ network is independent of 0own's private network. The endpoint is the shared
 being recovered from its PBS snapshots; a healthy endpoint alone does not
 confirm that historical data has been imported.
 
+Docker and host logs use the OpenObserve JSON ingestion API at
+`https://openobserve.0own.com`. Application traces use the separate OTLP
+receiver at `https://otlp.0exec.com`; do not send OTLP traffic to the JSON log
+endpoint.
+
 ## Collection contract
 
 Every Docker log record should carry these stable fields:
