@@ -1384,7 +1384,7 @@
     "trl_evidence": "First-pass audit: found and fixed a real XML-injection bug in the shared go-common/dataformat library (used by ~220 fleet services) -- object keys were written straight into XML element/attribute names with no validation, letting a key like 'a</root><evil>injected' splice arbitrary markup into output. Fixed at the library level (go-common PR #54) plus a consumer-side bump and regression tests (PR #1). Also flagged (not fixed, too broad a blast radius for a single-service audit) a JSON large-integer precision-loss issue affecting 64-bit IDs across every non-JSON output format. trl held at 7; trl_ceiling=9 -- a deterministic, pure in-process converter over mature stdlib/well-established format libraries with no external dependencies, nothing structurally caps it below production-grade. See PR #1 + go-common PR #54 (both merged).",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
