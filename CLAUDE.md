@@ -929,10 +929,10 @@ or health-check a static Pages site.
   is the source of truth for what each command does and its defaults, and
   this list will drift if a command gets added/renamed without this line
   being touched too. Needs `OPENOBSERVE_USER` / `OPENOBSERVE_PASSWORD` /
-  `OPENOBSERVE_HOST` set (see `bin/fleet-runner.env.example`; real values
+  `OPENOBSERVE_URL` set (see `bin/fleet-runner.env.example`; real values
   in `fleet-state/OPS.md`). Proxies every request through the bastion via
-  SSH — use the current private OpenObserve address from `fleet-state/OPS.md`
-  through the bastion. `query`/`run` default to compact JSON with OpenObserve's own
+  SSH to `https://openobserve.0own.com`. Application traces enter through
+  `https://otlp.0exec.com`. `query`/`run` default to compact JSON with OpenObserve's own
   response metadata stripped (pass `--pretty` for indented + full
   metadata) — the other commands already print hand-formatted plain text,
   no JSON envelope. Every user-supplied value going into a WHERE clause is

@@ -11,7 +11,7 @@ fleet-cert-watch port collision) would have tripped it immediately.
 ```bash
 sudo install -m755 bin/fleet-container-audit.py /usr/local/bin/fleet-container-audit
 sudo tee /etc/default/fleet-container-audit >/dev/null <<'ENV'
-CA_OO_URL=http://<openobserve-host>:5080/api/default/fleet_container_audit/_json
+CA_OO_URL=https://openobserve.0own.com/api/default/fleet_container_audit/_json
 CA_OO_AUTH=<user>:<pass>
 CA_PROM=
 ENV

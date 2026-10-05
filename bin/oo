@@ -152,12 +152,14 @@
 #
 # DURATION: Ns / Nm / Nh / Nd (default: 1h). Examples: 30s, 15m, 2h, 3d.
 #
-# ENV (required): OPENOBSERVE_USER, OPENOBSERVE_PASSWORD, OPENOBSERVE_HOST
-#   — see bin/fleet-runner.env.example. Real values live in
+# ENV (required): OPENOBSERVE_USER, OPENOBSERVE_PASSWORD, and either
+#   OPENOBSERVE_URL or OPENOBSERVE_HOST — see bin/fleet-runner.env.example.
+#   Real credentials live in
 #   fleet-state/OPS.md (private) — never hardcode them here, this repo
 #   is public.
 # ENV (optional): FLEET_BASTION (default root@0docker.com),
-#   OPENOBSERVE_PORT (default 5080), OO_SAVE_DIR (default ~/.oo — where
+#   OPENOBSERVE_PORT (default 5080) and OPENOBSERVE_SCHEME (default http)
+#   for legacy host/port configuration, OO_SAVE_DIR (default ~/.oo — where
 #   `oo save`/`oo run` keep bookmarked queries, local to your machine).
 #
 # Known limitation: credentials are passed to curl via -u on the bastion's
@@ -185,6 +187,8 @@ set -euo pipefail
 BASTION="${FLEET_BASTION:-root@0docker.com}"
 OO_HOST="${OPENOBSERVE_HOST:-}"
 OO_PORT="${OPENOBSERVE_PORT:-5080}"
+OO_SCHEME="${OPENOBSERVE_SCHEME:-http}"
+OO_URL="${OPENOBSERVE_URL:-}"
 OO_ORG="${OPENOBSERVE_ORG:-default}"
 OO_SAVE_DIR="${OO_SAVE_DIR:-$HOME/.oo}"
 OO_SAVE_FILE="${OO_SAVE_DIR}/queries.json"
@@ -233,8 +237,20 @@ usage() {
 require_creds() {
   : "${OPENOBSERVE_USER:?OPENOBSERVE_USER is not set — see bin/fleet-runner.env.example}"
   : "${OPENOBSERVE_PASSWORD:?OPENOBSERVE_PASSWORD is not set — see bin/fleet-runner.env.example}"
-  : "${OO_HOST:?OPENOBSERVE_HOST is not set — see bin/fleet-runner.env.example / fleet-state/OPS.md}"
-  BASE_URL="http://${OO_HOST}:${OO_PORT}"
+  if [[ -n "$OO_URL" ]]; then
+    BASE_URL="${OO_URL%/}"
+  else
+    : "${OO_HOST:?set OPENOBSERVE_URL or OPENOBSERVE_HOST — see bin/fleet-runner.env.example}"
+    if [[ ! "$OO_SCHEME" =~ ^https?$ || ! "$OO_HOST" =~ ^[A-Za-z0-9.-]+$ || ! "$OO_PORT" =~ ^[0-9]{1,5}$ ]]; then
+      echo "invalid OpenObserve host, scheme, or port; see bin/fleet-runner.env.example" >&2
+      exit 1
+    fi
+    BASE_URL="${OO_SCHEME}://${OO_HOST}:${OO_PORT}"
+  fi
+  if [[ ! "$BASE_URL" =~ ^https?://[A-Za-z0-9.-]+(:[0-9]{1,5})?$ ]]; then
+    echo "OPENOBSERVE_URL must be an http(s) origin without a path" >&2
+    exit 1
+  fi
 }
 
 duration_to_seconds() {
@@ -338,7 +354,7 @@ except json.JSONDecodeError:
     if body:
         msg = "non-JSON response from OpenObserve: " + body[:300]
     else:
-        msg = "empty response (connection/timeout failure talking to OpenObserve — check OPENOBSERVE_HOST/network, and any curl error printed above)"
+        msg = "empty response (connection/timeout failure talking to OpenObserve — check OPENOBSERVE_URL or OPENOBSERVE_HOST/network, and any curl error printed above)"
     print(json.dumps({"_oo_error": msg}))
 except ValueError as e:
     print(json.dumps({"_oo_error": str(e)}))
