@@ -32,6 +32,16 @@
 
 version: 1
 
+# SPIRE trust domains are assigned centrally per mesh. A workload is only
+# eligible for SPIFFE when its mesh has an explicit trust-domain mapping and
+# the service has `spiffe_workload: true` in overrides.json. Each trust domain
+# needs its own SPIRE server/agent enrollment; this mapping does not enroll or
+# deploy an agent.
+spiffe_trust_domains:
+  0crawl: 0crawl.com
+  0docker: 0docker.com
+  0exec: 0exec.com
+
 container_defaults:
   # Make the dockerhost's gateway IP resolvable from inside the
   # container as `host.docker.internal`. Required by every service
