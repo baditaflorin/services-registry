@@ -3974,6 +3974,11 @@
     "coolify_app_uuid": "pdw49fd7niktinh18cnvjrv9"
   },
   "keyphrase-extractor": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SAMPLE_RATE": "0.10"
+    },
     "container_port": 18286,
     "host_port": 18286,
     "proxy_egress": true,
