@@ -154,6 +154,13 @@ differently named callers are not ruled out by that scan. There is not yet a
 verified production caller to migrate, and this run made no production
 enrollments.
 
+A second read-only Fleet Runner source scan for `credentiallease`,
+`SPIFFE_ENDPOINT_SOCKET`, and `spiffe://` returned zero matches among eligible
+Go container services, with no missing workspaces. This signature-based scan
+does not cover non-Go workloads or runtime-only/dynamically configured
+clients. Combined with the graph and registry results, no production migration
+target was verified.
+
 The previous capacity-reader blocker is resolved: `fleet-runner capacity
 -json` succeeded against fleet Prometheus at `2026-10-06T15:34:31Z`. All three
 reported hosts were up; the report recommended `0mcp-runtime-general`, while
