@@ -668,6 +668,7 @@
     "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE — see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
     "host_port": 18021,
+    "placement": "pinned",
     "scope": "internal-only",
     "allowed_source_ips": [
       "65.108.75.123/32"
