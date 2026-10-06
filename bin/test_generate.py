@@ -125,7 +125,7 @@ class TestQualityContractProjection(unittest.TestCase):
         self.assertEqual(entry["quality_contract"], contract)
         self.assertNotIn("quality_contract", generate.to_public_entry(entry))
 
-    def test_gateway_upstream_url_is_operational_not_public_catalog_data(self):
+    def test_gateway_upstream_url_is_not_copied_from_public_overrides(self):
         origin = "https://domainscope.scrapetheworld.org"
         repo = {
             "name": "go-quality-example",
@@ -134,20 +134,26 @@ class TestQualityContractProjection(unittest.TestCase):
             "repositoryTopics": [{"name": "mesh-0exec"}],
         }
         entry = generate.make_entry(repo, {"quality-example": {"gateway_upstream_url": origin}}, [])
-        self.assertEqual(entry["gateway_upstream_url"], origin)
-        self.assertNotIn("gateway_upstream_url", generate.to_public_entry(entry))
+        self.assertNotIn("gateway_upstream_url", entry)
 
-    def test_gateway_upstream_url_is_operational_not_public_catalog_data(self):
-        origin = "https://domainscope.scrapetheworld.org"
-        repo = {
-            "name": "go-quality-example",
-            "url": "https://github.com/baditaflorin/go-quality-example",
-            "description": "fixture",
-            "repositoryTopics": [{"name": "mesh-0exec"}],
-        }
-        entry = generate.make_entry(repo, {"quality-example": {"gateway_upstream_url": origin}}, [])
-        self.assertEqual(entry["gateway_upstream_url"], origin)
-        self.assertNotIn("gateway_upstream_url", generate.to_public_entry(entry))
+
+class TestGatewayRoutesStayPrivate(unittest.TestCase):
+    def test_public_registry_sources_do_not_contain_gateway_upstreams(self):
+        for filename in ("overrides.json", "services.json"):
+            with self.subTest(filename=filename):
+                payload = json.loads((Path(generate.ROOT) / filename).read_text())
+                self.assertFalse(
+                    _contains_key(payload, "gateway_upstream_url"),
+                    f"{filename} contains operational gateway routing; move it to private fleet-state",
+                )
+
+
+def _contains_key(value: object, key: str) -> bool:
+    if isinstance(value, dict):
+        return key in value or any(_contains_key(child, key) for child in value.values())
+    if isinstance(value, list):
+        return any(_contains_key(child, key) for child in value)
+    return False
 
 
 class TestExpandEntry(unittest.TestCase):
