@@ -136,18 +136,37 @@ credential lease was possible or requested. The first policy-permission,
 deny-all-configuration, and peer-context failures were retained in this
 post-mortem and fixed before declaring the staging canary passed.
 
+This was a bounded integration pass, not the full rollout gate in ADR-0041.
+The canary did not exercise scheduled X.509-SVID rotation, a lease acquire/
+revoke path, or API-key fallback against the live staging listener. Agent
+restart recovery, task creation/close, and rejection of an unapproved broker
+identity are the behaviors actually verified.
+
 No production service, production key, database, gateway, or production
 container was changed. The broker's last fleet graph snapshot reported zero
-observed callers. This run made no production enrollments and does not claim
-production adoption.
-Production capacity still could not be read through Fleet Runner because the
-dedicated `fleet-metrics-reader-fleet-runner` Vault record was absent. VM 102
-also lacks a recorded VM snapshot and has a blocked cross-host TCP path. It is
-not approved as the production control plane. Production migration remains
-gated on an approved Server/Agent placement with backup and recovery, complete
-host/runtime inventory and capacity evidence, then a separately reviewed
-production canary. The central Compose adapter remains default-off; Coolify,
-external, and static entries were not enrolled.
+observed callers in its earlier seven-day window. A fresh read-only Fleet
+Runner discovery at `2026-10-06T15:34Z`, using the canonical service registry,
+found zero graph callers and zero declared `depends_on` consumers. A source
+scan found one `go_apikey_service` match, but inspection of current `origin/main`
+showed that match only in `lease_test.go` using an `httptest` server. This
+targeted source scan found no production call site; dynamically configured or
+differently named callers are not ruled out by that scan. There is not yet a
+verified production caller to migrate, and this run made no production
+enrollments.
+
+The previous capacity-reader blocker is resolved: `fleet-runner capacity
+-json` succeeded against fleet Prometheus at `2026-10-06T15:34:31Z`. All three
+reported hosts were up; the report recommended `0mcp-runtime-general`, while
+`dockerhost` carried a load-per-CPU warning. This capacity snapshot does not
+establish control-plane durability, a private path from the selected runtime
+to each workload, or recovery readiness. VM 102 also lacks a recorded VM
+snapshot and had a blocked cross-host TCP path, so it is not approved as the
+production control plane. Production migration remains gated on identifying a
+real production caller, an approved Server/Agent placement with backup and
+recovery, complete host/runtime and private-path inventory, the remaining
+staging identity/key-path checks, and then a separately reviewed production
+canary. The central Compose adapter remains default-off; Coolify, external,
+and static entries were not enrolled.
 
 The full Fleet Runner suite has two pre-existing environment-sensitive test
 failures on this workstation: tests requiring a root-owned private credential
