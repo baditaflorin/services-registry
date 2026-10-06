@@ -1230,8 +1230,7 @@
       ],
       "last_verified_at": "2026-09-13",
       "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. The checked regression validates full alpha-3 shape, long-tail alpha-2 codes, and an alias for every country; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
-    },
-    "gateway_upstream_url": "http://localhost:18316"
+    }
   },
   "crawl-web-application": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -6690,7 +6689,6 @@
     ],
     "example_path": "/?url=https://example.com",
     "health_path": "/health",
-    "gateway_upstream_url": "https://domainscope.scrapetheworld.org",
     "host_port": 18244,
     "proxy_egress": true,
     "trl": 5,
@@ -7020,7 +7018,6 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex-gpt-6",
     "placement": "replicable",
-    "gateway_upstream_url": "http://10.10.10.30:18329",
     "version": "0.1.2"
   },
   "task-credential-broker": {

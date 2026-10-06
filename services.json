@@ -8714,7 +8714,6 @@
     },
     "host_port": 18315,
     "container_port": 18315,
-    "gateway_upstream_url": "http://localhost:18316",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11821,7 +11820,6 @@
     "placement": "replicable",
     "host_port": 18329,
     "container_port": 18141,
-    "gateway_upstream_url": "http://10.10.10.30:18329",
     "version": "0.1.2",
     "network_exposure": "gateway-public"
   },
@@ -15113,7 +15111,6 @@
       "website-carbon"
     ],
     "proxy_egress": true,
-    "gateway_upstream_url": "https://domainscope.scrapetheworld.org",
     "version": "1.99.79",
     "network_exposure": "gateway-authenticated"
   },

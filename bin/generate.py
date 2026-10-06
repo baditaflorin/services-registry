@@ -953,10 +953,9 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # below (13 slugs still set `scope: internal-only` in
               # overrides.json), but the output field is `network_exposure`.
               # See docs/adr/0032-network-exposure.md.
-              # Public DNS origin override for the gateway renderer. Keep
-              # this out of PUBLIC_FIELDS: it is operational routing metadata,
-              # not catalog data. Defaults remain the standard mesh backend.
-              "gateway_upstream_url",
+              # Gateway upstreams are private deployment policy. They live in
+              # fleet-state/nginx-upstreams.json and must never be generated
+              # from the public service catalog.
               # Per-service nginx proxy_read_timeout override (ADR 0230
               # follow-up #1). Fleet default is 60s; slow page-scrapers
               # set "120s", python-proxy sets "300s". Consumed by
