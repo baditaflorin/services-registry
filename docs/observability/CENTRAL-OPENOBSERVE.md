@@ -1,20 +1,19 @@
 # Central OpenObserve collection
 
-OpenObserve is the central log store for the fleet. Collection is
-continuous in production and is independent of application deploys: each
-Docker host runs a `vector-log-shipper` agent that reads Docker's existing
-`json-file` logs and sends a copy to the central `docker_logs` stream.
+OpenObserve is the central log store for the fleet. On enrolled Docker hosts,
+collection is independent of application deploys: a `vector-log-shipper` reads
+Docker's existing `json-file` logs and sends a copy to the central
+`docker_logs` stream. Verify coverage per host; not every Docker host currently
+has a shipper.
 
 ## Topology
 
 ```text
-Docker host (0docker or 0mcp)
+Enrolled Docker host (0docker or 0mcp)
   └─ Vector agent + local disk buffer
        └─ HTTPS ingest (gzip, batches, retry/backoff)
             └─ OpenObserve VM 630 on 0own (`https://openobserve.0own.com`)
-                 ├─ docker_logs  — container stdout/stderr
-                 ├─ default      — syslog/journald
-                 └─ metrics      — future metrics bridge
+                 └─ configured streams — logs, metrics, and traces
 ```
 
 The 0mcp fleet uses the public TLS endpoint because its private `10.20.10.x`
@@ -27,6 +26,14 @@ Docker and host logs use the OpenObserve JSON ingestion API at
 `https://openobserve.0own.com`. Application traces use the separate OTLP
 receiver at `https://otlp.0exec.com`; do not send OTLP traffic to the JSON log
 endpoint.
+
+On 2026-10-07 the active instance did not have a `default` stream, so do not
+assume host/journald logs are available. Query `docker_logs` by exact host and
+`container_name`; its rows only cover hosts with an active shipper. The GitHub
+email runner host had five running containers and no shipper, and an
+authenticated query found no records for that host in the checked window.
+Treat missing rows as a collection gap, not a clean run. Check the live stream
+inventory and per-host coverage before relying on OpenObserve results.
 
 ## Collection contract
 
@@ -45,7 +52,7 @@ must preserve the original event timestamp and the container identity.
 
 ## Reliability requirements
 
-- The agent is `restart: always` and must be enabled on every Docker host.
+- The agent is `restart: always` and must be enabled on every enrolled Docker host.
 - Use a disk buffer so a temporary OpenObserve outage does not drop logs.
 - Use gzip and bounded batches to keep CPU and network overhead predictable.
 - Keep Docker's `json-file` driver and rotation unchanged; Vector is a second
