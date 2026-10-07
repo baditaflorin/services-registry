@@ -185,7 +185,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.3.18",
+    "version": "3.3.20",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -333,7 +333,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.14",
+    "version": "1.5.15",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3170,7 +3170,6 @@
   },
   {
     "id": "email-extractor",
-    "version": "1.6.18",
     "name": "Email Extractor",
     "description": "Microservice for Email Extractor",
     "category": "domains",
@@ -3206,6 +3205,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.6.18",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -6642,7 +6642,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.0",
+    "version": "1.7.13",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -7641,6 +7641,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "2.5.5",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11809,8 +11810,8 @@
     "repo_url": "https://github.com/baditaflorin/go-js-proxy-network",
     "example_path": "/?url=https://example.com",
     "auth": {
-      "type": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "type": "api_key"
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0exec.com",
@@ -14559,7 +14560,7 @@
       "type": "api_key",
       "header": "X-API-Key"
     },
-    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected.",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
     "trl_evidence": "v0.1.10 includes gateway-authenticated delegated API-key issuance, required proxy egress, a strict TLS hostname, and a two-app staging harness; live production canary and restore evidence are pending.",
