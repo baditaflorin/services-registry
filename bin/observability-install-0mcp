@@ -7,16 +7,14 @@ set -euo pipefail
 # root-owned Vector config on the target. Never accept them from argv/env.
 
 credentials=$(cat)
-readonly openobserve_user="$(printf '%s' "$credentials" | jq -er '.user')"
-readonly openobserve_password="$(printf '%s' "$credentials" | jq -er '.password')"
+readonly user_toml="$(printf '%s' "$credentials" | jq -er '.user | tojson')"
+readonly password_toml="$(printf '%s' "$credentials" | jq -er '.password | tojson')"
 unset credentials
 
 readonly image="timberio/vector@sha256:e4fc19efb7f817f28d06a9a67fab9e1ccc60d57080115c291b06deb6daea7d7a"
 # This Vector sink carries Docker logs as JSON. Application traces use the
 # separate OTLP receiver at https://otlp.0exec.com.
 readonly endpoint="https://openobserve.0own.com/api/default/docker_logs/_json"
-readonly user_toml="$(jq -Rn --arg value "$openobserve_user" '$value')"
-readonly password_toml="$(jq -Rn --arg value "$openobserve_password" '$value')"
 
 install_host() {
   local alias="$1" host="$2" role="$3"
