@@ -22,7 +22,7 @@ each a stable URL at the same path:
 
 | URL suffix                | shape                                                       | size  | use when |
 |---------------------------|-------------------------------------------------------------|-------|----------|
-| `services.ids.json`       | `["a11y-quick", "accessibility-score", …]`                 | ~5 KB | "what services exist?" |
+| `services.ids.json`       | `["a11y-quick", "accessibility-score", …]`                 | ~5 KB | "what services exist" |
 | `services.names.json`     | `[{id, name}]`                                              | ~13 KB | rendering a picker or menu |
 | `services.minimal.json`   | `[{id, name, mesh, kind, category, language, trl, url}]`   | ~44 KB | catalog overview, list views |
 | `services.urls.json`      | `[{id, url, health_url, example_path, auth_help}]`         | ~63 KB | building Open links / smoke targets |
@@ -82,7 +82,6 @@ after writing `services.json`.
   "example_path": "/?url=https://example.com",
   "auth": {
     "type":        "api_key",
-    "query_param": "api_key",
     "header":      "X-API-Key"
   }
 }
@@ -158,42 +157,26 @@ The block is delimited by `# BEGIN fleet-split-horizon` / `# END fleet-split-hor
 
 ## No secrets policy
 
-The registry is **public**. It must never contain real API keys, signed tokens,
-private endpoints, or anything you would not paste on a forum.
+The registry is public. It must never contain real API keys, signed tokens,
+private endpoints, or anything you would not paste on a forum. Both container
+meshes use service-scoped keystore credentials in headers. Never place a key
+in a URL, query string, path, repository example, or browser link.
 
-- For `auth.type = "api_key"` (the `0exec` mesh): consumers obtain a key
-  out-of-band (issued on the docker VM with `apikey new`) and store it in their
-  own browser / config. The registry only tells consumers *how* to send the key
-  (`query_param` and `header`), not *what* it is.
-- For `auth.type = "path_token"` (the `0crawl` mesh): the `public_demo_token`
-  field is allowed and intentionally public. It must not provide privileged
-  access — only enough for a "try it" link on a public dashboard.
-
-If you find a real secret in this repo, treat it as a leak: rotate the credential
+If you find a real secret in this repo, use the approved secret rotation path
 and open a PR to remove the value.
 
-## How a consumer builds an "Open" link
+## Calling a protected service
 
-Given an entry `s` and a user-supplied (or demo) token, construct the URL:
+A browser link must not contain a credential. Use a normal service URL for
+navigation, and send the service-scoped key in an Authorization header when
+calling a protected API:
 
-```js
-function openLink(s, token) {
-  if (s.auth.type === "none") {
-    return s.url + (s.example_path || "");
-  }
-  if (s.auth.type === "path_token") {
-    const t = token || s.auth.public_demo_token;
-    if (!t) return null;
-    const prefix = s.auth.path_template.replace("{token}", encodeURIComponent(t));
-    return s.url + prefix + (s.example_path || "/");
-  }
-  // api_key
-  if (!token) return null;
-  const sep = (s.example_path || "").includes("?") ? "&" : "?";
-  return s.url + (s.example_path || "/") + sep
-       + s.auth.query_param + "=" + encodeURIComponent(token);
-}
-```
+    function serviceRequest(s, path, serviceKey) {
+      const url = new URL(path, s.url);
+      return fetch(url, {
+        headers: { Authorization: "Bearer " + serviceKey }
+      });
+    }
 
 ## How to add a service
 

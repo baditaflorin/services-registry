@@ -2,10 +2,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for A11y Quick",
     "example_path": "/?target=example.com",
@@ -31,10 +30,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "WCAG accessibility audit: a11y quick checks, accessibility score, color contrast ratio, image alt coverage, heading outline \u2014 5 analyzers covering the main WCAG 2.x success criteria.",
     "example_path": "/?target=stripe.com",
@@ -60,10 +58,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Accessibility Score",
     "example_path": "/?url=https://example.com",
@@ -89,10 +86,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Ad Density",
     "example_path": "/?url=https://example.com",
@@ -118,10 +114,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Multi-locale address extractor with coherent component validation and localized schema.org evidence.",
     "example_path": "/?url=https://example.com",
@@ -147,10 +142,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Admin Finder",
     "example_path": "/go_admin_finder?url=https://example.com",
@@ -176,10 +170,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Browser-facing security-header auditor with deterministic duplicate handling, HEAD/GET comparison, and edge attribution.",
     "example_path": "/?url=https://example.com",
@@ -205,10 +198,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Api Extractor",
     "example_path": "/go_api_extractor?url=https://example.com",
@@ -234,10 +226,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Scores domains 0-100 for API-first maturity: OpenAPI/GraphQL spec detection, versioned REST endpoint probing, developer portal/path detection, SDK scanning, evidence trail",
     "example_path": "/?target=example.com",
@@ -263,10 +254,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Apikey Scanner",
     "example_path": "/go_apikey_scanner?url=https://example.com",
@@ -292,10 +282,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Asn Lookup",
     "example_path": "/go_asn_lookup?url=https://example.com",
@@ -321,10 +310,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Biz Classifier",
     "example_path": "/?target=example.com",
@@ -350,10 +338,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Blocklist Checker",
     "example_path": "/go_blocklist_checker?url=https://example.com",
@@ -379,10 +366,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extract a brand colour palette (hex + role) from a site's CSS custom properties, theme-color meta, and logo pixels via k-means",
     "example_path": "/?url=https://example.com",
@@ -407,10 +393,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Resolve a website's primary brand logo URL, dimensions, format and provenance (header DOM + schema.org + web-app-manifest + og:image)",
     "example_path": "/?url=https://example.com",
@@ -435,10 +420,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Broken Links",
     "example_path": "/go_broken_links?target=example.com",
@@ -464,10 +448,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Bucket Finder",
     "example_path": "/go_bucket_finder?url=https://example.com",
@@ -493,10 +476,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Caa Checker",
     "example_path": "/?target=example.com",
@@ -522,10 +504,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Captcha Detector",
     "example_path": "/go_captcha_detector?target=example.com",
@@ -551,10 +532,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Cas",
     "example_path": "/?target=example.com",
@@ -580,10 +560,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Cdn Detector",
     "example_path": "/?url=https://example.com",
@@ -609,10 +588,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extract academic and web citations from a page or raw HTML/text \u2014 <cite> elements, reference/bibliography list items, footnote/endnote targets, and structured identifiers (DOI, arXiv ids, checksum-validated ISBN-10/13, PMID, and reference-context URLs), normalised into typed citation objects with a by-type summary.",
     "example_path": "/?url=https://example.com",
@@ -639,10 +617,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Clickjacking Tester",
     "example_path": "/go_clickjacking_tester?target=example.com",
@@ -668,10 +645,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Cognitive Load",
     "example_path": "/?target=example.com",
@@ -697,10 +673,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "WCAG 2.x color-contrast checker for a web page or raw HTML \u2014 resolves declared foreground/background color pairs (inline style= and <style>-block rules), computes the relative-luminance contrast ratio for each, and reports AA/AAA pass/fail for normal and large text plus a failing-pairs summary.",
     "example_path": "/?url=https://example.com",
@@ -727,10 +702,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Comment Extractor",
     "example_path": "/go_comment_extractor?url=https://example.com",
@@ -756,10 +730,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Extract organization display name (company/NGO/university/public institution) from a domain or HTML via JSON-LD, og:site_name, title, logo alt, and impressum signals.",
     "example_path": "/?target=stripe.com",
@@ -785,10 +758,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Company Size",
     "example_path": "/?target=example.com",
@@ -814,10 +786,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Compression Tester",
     "example_path": "/?url=https://example.com",
@@ -843,10 +814,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Active consent-reject simulation: clicks a page's cookie-reject control in a real browser and checks whether trackers keep firing",
     "example_path": "/?target=example.com",
@@ -868,10 +838,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Detect published contact forms, contact routes, booking links, and sales/demo routes from a website homepage and up to two same-site candidate pages. Uses the fleet fetch cache; route evidence is transient.",
     "example_path": "/?url=https://example.com/",
@@ -895,10 +864,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Near-duplicate-detection fingerprints for a web page or raw text \u2014 a 64-bit Charikar SimHash over k-gram word shingles, a 64-permutation MinHash signature for Jaccard estimation, and a normalized SHA-256 exact-match digest, plus shingle and token counts.",
     "example_path": "/?url=https://example.com",
@@ -925,10 +893,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Cookie Checker",
     "example_path": "/go_cookie_checker?url=https://example.com",
@@ -954,10 +921,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Cors Scanner",
     "example_path": "/go_cors_scanner?target=example.com",
@@ -983,10 +949,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Cors Tester",
     "example_path": "/go_cors_tester?target=example.com",
@@ -1012,10 +977,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Crawl Web Application",
     "example_path": "/?url=https://example.com",
@@ -1041,10 +1005,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Crlf Tester",
     "example_path": "/go_crlf_tester?target=example.com",
@@ -1070,10 +1033,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Real-user p75 LCP/CLS/INP/TTFB + good/needs-improvement/poor histograms from the Chrome UX Report API",
     "example_path": "/?target=example.com",
@@ -1098,10 +1060,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Crypto Finder",
     "example_path": "/go_crypto_finder?url=https://example.com",
@@ -1127,10 +1088,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Detects which CSS framework(s) a web page or raw HTML uses (Bootstrap, Tailwind, Bulma, Foundation, Materialize, Semantic/Fomantic UI, UIkit, Pure.css, Tachyons, Skeleton, Milligram) from three independent static-markup signals: linked-stylesheet / CDN hrefs (strong, often versioned), distinctive class-name signatures, and a generator meta hint. Returns frameworks[] (each name + confidence 0..1 + extracted version + evidence[]) sorted by confidence, the top framework, and a raw-signal summary.",
     "example_path": "/?url=https://example.com",
@@ -1157,10 +1117,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Currency Detector",
     "example_path": "/?target=example.com",
@@ -1186,10 +1145,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Customer Logos",
     "example_path": "/?target=example.com",
@@ -1215,10 +1173,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Convert payloads between CSV/JSON/XML/YAML/TOML (wraps go-common/dataformat)",
     "example_path": "/?url=https://example.com",
@@ -1243,10 +1200,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Data Inventory",
     "example_path": "/?target=example.com",
@@ -1272,10 +1228,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Debug Detector",
     "example_path": "/go_debug_detector?url=https://example.com",
@@ -1301,10 +1256,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Dependency Counter",
     "example_path": "/?target=example.com",
@@ -1336,10 +1290,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Dir Listing",
     "example_path": "/go_dir_listing?url=https://example.com",
@@ -1366,10 +1319,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Dns Record",
     "example_path": "/?target=example.com",
@@ -1395,10 +1347,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Structural DOM-complexity metrics for a web page or raw HTML \u2014 total element-node and text-node counts, maximum nesting depth, maximum sibling breadth, per-tag frequency histogram, distinct-tag count, average children per element, high-fan-out element count, the deepest element path, text-to-element ratio, total DOM size in bytes, and a combined complexity score.",
     "example_path": "/?url=https://example.com",
@@ -1425,10 +1376,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Ad-network detector with validated ads.txt seller records and executable-context matching for 18 in-page advertising providers.",
     "example_path": "/?url=https://example.com",
@@ -1453,10 +1403,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Strict AMP detector requiring the root marker, official runtime, same-site canonical, and verified AMP alternatives.",
     "example_path": "/?domain=www.bbc.com",
@@ -1479,10 +1428,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Analytics stack detector - GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "example_path": "/?url=https://example.com",
@@ -1509,10 +1457,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Anycast vs unicast routing detector (multi-resolver IP convergence + ASN check).",
     "example_path": "/?target=example.com",
@@ -1533,10 +1480,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
     "example_path": "/?url=https://example.com",
@@ -1561,10 +1507,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "seo",
     "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
     "example_path": "/",
@@ -1589,10 +1534,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
     "example_path": "/?target=example.com",
@@ -1613,10 +1557,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
     "example_path": "/?url=https://example.com",
@@ -1641,10 +1584,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "HTTP cache hygiene scorer (RFC 7234/9111).",
     "example_path": "/?url=https://example.com",
@@ -1669,10 +1611,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",
     "example_path": "/?url=https://example.com",
@@ -1699,10 +1640,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "DANE/TLSA record presence + cert binding validation (RFC 6698).",
     "example_path": "/?target=example.com",
@@ -1723,10 +1663,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Unified deployment fingerprint (PaaS + serverless + edge-compute detector).",
     "example_path": "/?url=https://example.com",
@@ -1751,10 +1690,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Domain Details",
     "example_path": "/?target=example.com",
@@ -1780,10 +1718,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "E-commerce platform detector (Shopify/Magento/Woo/BigCommerce/etc.).",
     "example_path": "/?url=https://example.com",
@@ -1808,10 +1745,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "example_path": "/?url=https://example.com",
@@ -1838,10 +1774,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "example_path": "/?url=https://example.com",
@@ -1866,10 +1801,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
     "example_path": "/?url=https://example.com",
@@ -1896,10 +1830,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
     "example_path": "/?url=https://example.com",
@@ -1924,10 +1857,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "example_path": "/?url=https://example.com",
@@ -1952,10 +1884,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "example_path": "/?url=https://example.com",
@@ -1980,10 +1911,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domain_intelligence",
     "description": "Resolve a domain to country/admin1/admin2/city with per-level confidence (CPU-only, GeoNames); downstream of the domainscope LLM call",
     "example_path": "/",
@@ -2005,10 +1935,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "example_path": "/?url=https://example.com",
@@ -2033,10 +1962,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
     "example_path": "/?target=example.com",
@@ -2061,10 +1989,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
     "example_path": "/?url=https://example.com",
@@ -2089,10 +2016,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Integration / marketplace / app-directory page detector with count estimate.",
     "example_path": "/?url=https://example.com",
@@ -2119,10 +2045,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
     "example_path": "/?url=https://example.com",
@@ -2147,10 +2072,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Domain liveness classifier \u2014 live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?domain=example.com",
@@ -2171,10 +2095,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Martech stack detector \u2014 HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
     "example_path": "/?url=https://example.com",
@@ -2201,10 +2124,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "NAPTR + ENUM (E.164) record discovery (RFC 3403/2916/6116).",
     "example_path": "/?target=example.com",
@@ -2229,10 +2151,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
     "example_path": "/?url=https://example.com",
@@ -2257,10 +2178,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Podcast presence detector \u2014 RSS feed + linked platforms + embedded players.",
     "example_path": "/?url=https://example.com",
@@ -2285,10 +2205,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "E-commerce catalog lower-bound estimator with canonicalized sitemap, JSON-LD, Shopify, and homepage product signals.",
     "example_path": "/?url=https://example.com",
@@ -2313,10 +2232,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Validated RateLimit and Retry-After detector with evidence-driven endpoint discovery and HEAD-to-GET fallback.",
     "example_path": "/?url=https://example.com",
@@ -2341,10 +2259,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
     "example_path": "/?url=https://example.com",
@@ -2369,10 +2286,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Viewport meta tag parser + mobile-friendliness scoring.",
     "example_path": "/?url=https://example.com",
@@ -2397,10 +2313,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
     "example_path": "/?url=https://example.com",
@@ -2425,10 +2340,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Dtss",
     "example_path": "/?target=example.com",
@@ -2454,10 +2368,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Email Extractor",
     "example_path": "/?url=https://example.com",
@@ -2483,10 +2396,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Email Harvester",
     "example_path": "/go_email_harvester?url=https://example.com",
@@ -2512,10 +2424,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Inventories and classifies every <iframe>, <embed>, and <object> on a web page or raw HTML: resolved-absolute src/data, host, and a curated provider/category label (youtube/vimeo video, google_maps/openstreetmap maps, twitter/facebook social, spotify/soundcloud audio, google_docs/codepen docs, typeform/airtable forms, ads_analytics), plus per-provider and per-category counts.",
     "example_path": "/?url=https://example.com",
@@ -2542,10 +2453,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Emotional Tone",
     "example_path": "/?target=example.com",
@@ -2571,10 +2481,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Env Finder",
     "example_path": "/go_env_finder?url=https://example.com",
@@ -2600,10 +2509,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Feed Finder",
     "example_path": "/go_feed_finder?url=https://example.com",
@@ -2629,10 +2537,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for File Inclusion",
     "example_path": "/?url=https://example.com",
@@ -2658,10 +2565,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Clearbit-style company firmographic profile: industry, employee band, founding year, legal entity, revenue model, office locations, funding \u2014 8 fleet analyzers merged via composite-runner.",
     "example_path": "/?target=stripe.com",
@@ -2687,10 +2593,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Founding Year",
     "example_path": "/?target=example.com",
@@ -2716,10 +2621,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Funding Detector",
     "example_path": "/?target=example.com",
@@ -2745,10 +2649,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Best-effort funding signal (latest round, total, investors, press) for a brand/domain from Crunchbase + brand press pages + Google News RSS",
     "example_path": "/?target=example.com",
@@ -2773,10 +2676,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Gdpr Compliance",
     "example_path": "/?url=https://example.com",
@@ -2808,10 +2710,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Oauth Mapper",
     "example_path": "/?url=https://example.com",
@@ -2839,10 +2740,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Deterministic Google Product Taxonomy lookup, fuzzy search, and TF-IDF classifier with confidence-based abstention.",
     "example_path": "/?url=https://example.com",
@@ -2868,10 +2768,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Graphql Introspection",
     "example_path": "/go_graphql_introspection?url=https://example.com",
@@ -2897,10 +2796,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts the heading structure (h1-h6) of a web page or raw HTML and builds a nested document outline plus accessibility diagnostics \u2014 per-level counts, max nesting depth, and structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level, empty_heading).",
     "example_path": "/?url=https://example.com",
@@ -2927,10 +2825,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Hidden Fields",
     "example_path": "/go_hidden_fields?url=https://example.com",
@@ -2956,10 +2853,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
     "example_path": "/?domain=example.com",
@@ -2985,10 +2881,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Host Header",
     "example_path": "/go_host_header?target=example.com",
@@ -3014,10 +2909,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Hsts Checker",
     "example_path": "/go_hsts_checker?url=https://example.com",
@@ -3043,10 +2937,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Http Method Tester",
     "example_path": "/?url=https://example.com",
@@ -3072,10 +2965,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Http Protocol",
     "example_path": "/?url=https://example.com",
@@ -3101,10 +2993,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Offline IBAN (ISO 13616 MOD-97) and BIC (ISO 9362) validator \u2014 domains mesh, TRL-7",
     "example_path": "/?target=example.com",
@@ -3129,10 +3020,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Idor Finder",
     "example_path": "/go_idor_finder?url=https://example.com",
@@ -3158,10 +3048,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Iframe Analyzer",
     "example_path": "/go_iframe_analyzer?url=https://example.com",
@@ -3195,10 +3084,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "example_path": "/?url=https://example.com",
@@ -3226,10 +3114,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Ipv6 Checker",
     "example_path": "/?target=example.com",
@@ -3255,10 +3142,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Detects JavaScript frameworks/libraries and their versions from STATIC markup only (no JS execution) on a web page or raw HTML: parses versioned CDN <script src> URLs (react@18.2.0, vue@3.4.21, jquery-3.7.1.min.js, bootstrap, htmx.org, alpinejs, gsap, d3, lodash, three), the exact ng-version attribute (gold case), build-tool/framework fingerprints (Next.js /_next/, Nuxt __NUXT__/_nuxt/, Gatsby /page-data/ + ___gatsby, SvelteKit /_app/, Astro astro-island, React data-reactroot, Vue data-v-*), and <meta name=generator> (Gatsby/WordPress/Hugo). Returns frameworks[] (name, version omitempty, confidence 0..1, evidence[]) sorted by confidence desc, plus top.",
     "example_path": "/?url=https://example.com",
@@ -3285,10 +3171,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Jsonp Finder",
     "example_path": "/go_jsonp_finder?url=https://example.com",
@@ -3314,10 +3199,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Jwt Debugger",
     "example_path": "/go_jwt_debugger?url=https://example.com",
@@ -3343,10 +3227,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "nlp",
     "description": "Rank multi-word keyphrases + topics via RAKE candidate generation re-ranked by a TextRank co-occurrence PageRank (pure Go, no external NLP service)",
     "example_path": "/?url=https://example.com",
@@ -3371,10 +3254,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Keyword Density",
     "example_path": "/?url=https://example.com",
@@ -3400,10 +3282,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Detects the dominant natural language and writing system of a web page or raw text: Unicode-range script detection (Latin, Cyrillic, Greek, CJK, Arabic, Hebrew, Devanagari) plus curated-stopword frequency scoring for en/es/fr/de/it/pt/nl, returning an ISO 639-1 language, confidence, and top-5 scores.",
     "example_path": "/?url=https://example.com",
@@ -3430,10 +3311,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts the leadership/executive team from a web page or raw HTML \u2014 people whose title matches an executive/leadership keyword set \u2014 returning each leader's name, title, normalized rank (c_suite/founder/president/vp/director/board/other_leadership), bio, and profile links, plus a by_rank count map.",
     "example_path": "/?url=https://example.com",
@@ -3460,10 +3340,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Legal Entity",
     "example_path": "/?target=example.com",
@@ -3489,10 +3368,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Detect the software/content license(s) of a web page or raw HTML/text \u2014 walks the DOM for structured signals (link rel=license, license anchors, JSON-LD license fields) and scans extracted text for license names, normalizing to SPDX identifiers (MIT, Apache-2.0, GPL/LGPL/AGPL, BSD, MPL-2.0, ISC, Unlicense, Creative Commons), plus copyright-line extraction.",
     "example_path": "/?url=https://example.com",
@@ -3519,10 +3397,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts HTML lists from a web page or raw HTML: ordered (ol), unordered (ul), and description (dl) lists, with item text, term/definition pairs, nesting depth, and per-list/total counts.",
     "example_path": "/?url=https://example.com",
@@ -3549,10 +3426,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Loadbalancer Detect",
     "example_path": "/go_loadbalancer_detect?url=https://example.com",
@@ -3578,10 +3454,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Login Analyzer",
     "example_path": "/go_login_analyzer?url=https://example.com",
@@ -3607,10 +3482,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts the navigation menu structure of a web page or raw HTML: nav / role=navigation / aria-labelled regions plus header and footer link lists, each as a tree of menu items (label, href, nested submenu children) with region classification and a region/link/depth summary.",
     "example_path": "/?url=https://example.com",
@@ -3637,10 +3511,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "E-commerce merchant profile: platform detection, payment methods, accepted currencies, price range, shipping regions, catalog SKU count \u2014 6 analyzers in one structured record.",
     "example_path": "/?target=gymshark.com",
@@ -3666,10 +3539,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} \u2014 returning items[], rels, rel-urls, and a summary roll-up.",
     "example_path": "/?url=https://example.com",
@@ -3696,10 +3568,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Mime Trap",
     "example_path": "/go_mime_trap?url=https://example.com",
@@ -3725,10 +3596,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Mobile Friendly",
     "example_path": "/?url=https://example.com",
@@ -3754,10 +3624,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "nlp",
     "description": "Named-entity recognizer (PERSON/ORG/LOCATION/PRODUCT/EVENT) \u2014 pure-Go prose statistical NER + curated gazetteer, rune-accurate offsets, SSRF-guarded url fetch",
     "example_path": "/?url=https://example.com",
@@ -3787,10 +3656,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Office Locations",
     "example_path": "/?target=example.com",
@@ -3816,10 +3684,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Open Redirect",
     "example_path": "/go_open_redirect?target=example.com",
@@ -3845,10 +3712,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Outlink Graph",
     "example_path": "/?target=example.com",
@@ -3874,10 +3740,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Page Load Metrics",
     "example_path": "/?url=https://example.com",
@@ -3903,10 +3768,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Passive-voice detection for a web page or raw text \u2014 flags sentences using a be/get auxiliary plus a past participle, reports the matched trigger per sentence, total/passive sentence counts, and the passive-sentence ratio.",
     "example_path": "/?url=https://example.com",
@@ -3933,10 +3797,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Payment Detector",
     "example_path": "/?target=example.com",
@@ -3963,13 +3826,12 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Bounty-hunt orchestrator: POST /hunt drives waf-detect \u2192 cookie-pwn \u2192 js-bundle-scanner \u2192 wayback-urls \u2192 reflection-hunter against given targets, returns consolidated triage JSON.",
-    "example_path": "/?api_key=default_token",
+    "example_path": "/",
     "health_url": "https://pentest-bounty-pilot.0crawl.com/health",
     "id": "pentest-bounty-pilot",
     "kind": "container",
@@ -3994,13 +3856,12 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Parse Set-Cookie, classify cookies (session/Keycloak/F5/CSRF/tracker), flag missing flags, probe session-bearing endpoints, emit runnable PoC tar.gz.",
-    "example_path": "/?url=https://example.com&test_session=1&api_key=default_token",
+    "example_path": "/?url=https://example.com&test_session=1",
     "health_url": "https://pentest-cookie-pwn.0crawl.com/health",
     "id": "pentest-cookie-pwn",
     "kind": "container",
@@ -4025,13 +3886,12 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Fetch URL, recurse script src tags, scan 21 secret-pattern classes (AWS/Stripe/GitHub/Google/Anthropic/RSA-PEM/etc.), extract endpoints, classify sourcemaps as first vs third party (eTLD+1).",
-    "example_path": "/?target=https://example.com&api_key=default_token",
+    "example_path": "/?target=https://example.com",
     "health_url": "https://pentest-js-bundle-scanner.0crawl.com/health",
     "id": "pentest-js-bundle-scanner",
     "kind": "container",
@@ -4056,13 +3916,12 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Brute-fuzz ~40 standard params, classify reflection context (js-string/html-attr/json/url), escalate with composite breakout payloads. Filters WAF-challenge interstitials before classification.",
-    "example_path": "/?url=https://example.com&params=q,promo&escalate=1&api_key=default_token",
+    "example_path": "/?url=https://example.com&params=q,promo&escalate=1",
     "health_url": "https://pentest-reflection-hunter.0crawl.com/health",
     "id": "pentest-reflection-hunter",
     "kind": "container",
@@ -4087,13 +3946,12 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Fingerprint WAF/CDN challenge interstitials (14 vendors, 18 signatures). Used by reflection-hunter and bounty pipeline to drop interstitial false positives.",
-    "example_path": "/?url=https://example.com&api_key=default_token",
+    "example_path": "/?url=https://example.com",
     "health_url": "https://pentest-waf-detect.0crawl.com/health",
     "id": "pentest-waf-detect",
     "kind": "container",
@@ -4117,13 +3975,12 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Pull YWH public program list + scopes from api.yeswehack.com, filter by min-bounty / max-reports / verified, emit bounty-scope-checker seed entries.",
-    "example_path": "/programs?api_key=default_token",
+    "example_path": "/programs",
     "health_url": "https://pentest-ywh-sync.0crawl.com/health",
     "id": "pentest-ywh-sync",
     "kind": "container",
@@ -4147,10 +4004,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Phone Extractor",
     "example_path": "/?url=https://example.com",
@@ -4176,10 +4032,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Segment a legal/policy web page or raw HTML (privacy policy, terms of service, cookie policy, EULA, refund/return, acceptable-use) into clauses keyed by heading and classify each by policy type (data-collection, data-sharing, cookies, retention, user-rights/GDPR, liability, governing-law, termination, refund-return, acceptable-use, contact/DPO), plus a summary roll-up.",
     "example_path": "/?url=https://example.com",
@@ -4206,10 +4061,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Press Mentions",
     "example_path": "/?target=example.com",
@@ -4235,10 +4089,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Price Range",
     "example_path": "/?target=example.com",
@@ -4264,10 +4117,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extract pricing tiers / plan cards from a web page or raw HTML \u2014 per-tier plan name, parsed price (currency + amount + billing period), most-popular flag, and feature list, plus a summary (tier count, currency, price range, billing-toggle detection).",
     "example_path": "/?url=https://example.com",
@@ -4294,10 +4146,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Detect promotional offers and discount/coupon codes on a web page or in raw text \u2014 coupon codes near trigger words (use code, promo, voucher), percentage-off and amount-off offers across currencies, BOGO, free shipping, free trial, plus urgency/expiry hints.",
     "example_path": "/?url=https://example.com",
@@ -4324,10 +4175,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Proxy Fingerprint",
     "example_path": "/?url=https://example.com",
@@ -4353,10 +4203,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Pwa Manifest",
     "example_path": "/go_pwa_manifest?url=https://example.com",
@@ -4382,10 +4231,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts quotations from a web page or raw HTML \u2014 <blockquote> (kind block) and inline <q> elements \u2014 capturing each quote's text, its cite= source URL, and any nested <cite> attribution, with block/inline counts.",
     "example_path": "/?url=https://example.com",
@@ -4412,10 +4260,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Ratelimit Tester",
     "example_path": "/?target=example.com",
@@ -4441,10 +4288,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Readability scoring for a web page or raw text \u2014 Flesch Reading Ease, Flesch-Kincaid Grade, Gunning Fog, SMOG, Coleman-Liau, and ARI, plus a consensus US-grade estimate.",
     "example_path": "/?url=https://example.com",
@@ -4471,10 +4317,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Estimates reading time for a web page or raw text across slow/average/fast WPM bands, plus a Medium-style per-image viewing allowance \u2014 returns words, image count, per-band minutes/seconds, and a humanized 'about N min read' label.",
     "example_path": "/?url=https://example.com",
@@ -4501,10 +4346,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Redirect Tracer",
     "example_path": "/?url=https://example.com",
@@ -4530,10 +4374,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Remote Detector",
     "example_path": "/?target=example.com",
@@ -4559,10 +4402,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Revenue Model",
     "example_path": "/?target=example.com",
@@ -4588,10 +4430,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Reverse Dns",
     "example_path": "/?url=https://example.com",
@@ -4618,10 +4459,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Fetch Trustpilot/G2/Capterra/Glassdoor star rating + review count for a brand by parsing each public profile's JSON-LD AggregateRating",
     "example_path": "/?target=example.com",
@@ -4648,10 +4488,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Robots Analyzer",
     "example_path": "/go_robots_analyzer?target=example.com",
@@ -4677,10 +4516,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Robots Parser",
     "example_path": "/?url=https://example.com",
@@ -4706,10 +4544,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Scan Port",
     "example_path": "/?target=example.com",
@@ -4735,10 +4572,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Scan Port Banner",
     "example_path": "/?target=example.com",
@@ -4764,10 +4600,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Scan Port Ssh",
     "example_path": "/?target=example.com",
@@ -4793,10 +4628,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Scc",
     "example_path": "/?target=example.com",
@@ -4822,10 +4656,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Schema Extractor",
     "example_path": "/go_schema_extractor?url=https://example.com",
@@ -4851,10 +4684,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "search",
     "description": "Microservice for Search Bing Go",
     "example_path": "/?query=anthropic+claude",
@@ -4880,10 +4712,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "search",
     "description": "Microservice for Search Duck Go",
     "example_path": "/?query=anthropic+claude",
@@ -4909,10 +4740,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Seasonal Detector",
     "example_path": "/?target=example.com",
@@ -4938,10 +4768,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Secrets Scanner",
     "example_path": "/go_secrets_scanner?url=https://example.com",
@@ -4967,10 +4796,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Security Header Analyzer",
     "example_path": "/?url=https://example.com",
@@ -4996,10 +4824,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Security Headers",
     "example_path": "/?url=https://example.com",
@@ -5025,10 +4852,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Security Txt",
     "example_path": "/go_security_txt?url=https://example.com",
@@ -5054,10 +4880,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Full SEO site audit: on-page basics, keyword density, heading structure, structured data, sitemap, robots.txt, broken links, mobile-friendliness \u2014 9 analyzers in one call.",
     "example_path": "/?target=stripe.com",
@@ -5083,10 +4908,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Seo Basics",
     "example_path": "/?url=https://example.com",
@@ -5112,10 +4936,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Detects Progressive-Web-App / service-worker signals from the STATIC markup of a web page (or raw HTML): inline navigator.serviceWorker.register() calls with the resolved script URL and scope option, the <link rel=manifest> URL, and PWA meta/link tags (theme-color, apple-mobile-web-app-capable, apple-touch-icon, mobile-web-app-capable, viewport). Returns a flat report with has_service_worker, sw_registrations[], manifest_url, pwa_signals, a pwa_score count, and an evidence[] trail.",
     "example_path": "/?url=https://example.com",
@@ -5142,10 +4965,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "",
     "example_path": "/?target=example.com",
@@ -5169,10 +4991,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Session Management",
     "example_path": "/?url=https://example.com",
@@ -5198,10 +5019,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Shipping Regions",
     "example_path": "/?target=example.com",
@@ -5227,10 +5047,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Simulate Ddos",
     "example_path": "/?target=example.com",
@@ -5256,10 +5075,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Discovers a site's sitemaps via robots.txt + common-path probes, follows sitemapindex chains, decompresses .gz, returns URL inventory sorted by lastmod with an evidence trail.",
     "example_path": "/?target=https://stripe.com",
@@ -5285,10 +5103,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Smuggling Probe",
     "example_path": "/go_smuggling_probe?target=example.com",
@@ -5314,10 +5131,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Social Graph",
     "example_path": "/?url=https://example.com",
@@ -5343,10 +5159,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extract social-proof signals from a web page or raw HTML \u2014 schema.org AggregateRating (JSON-LD + microdata), visible star ratings, review counts, customer/usage counts, testimonial blocks, press mentions, and trust-badge logo counts, plus a one-line summary.",
     "example_path": "/?url=https://example.com",
@@ -5373,10 +5188,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Sourcemap Finder",
     "example_path": "/go_sourcemap_finder?url=https://example.com",
@@ -5402,10 +5216,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Finds and validates a web page's structured data from three sources \u2014 JSON-LD (<script type=application/ld+json>), Microdata (itemscope/itemtype/itemprop), and RDFa (vocab/typeof/property) \u2014 reporting per block its format, the @type/itemtype/typeof values, whether it parsed, any parse errors, and recommended-field warnings for common schema.org types, plus a summary with total/valid/invalid counts, types_seen, and a by_format histogram.",
     "example_path": "/?url=https://example.com",
@@ -5432,10 +5245,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Subdomain Finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
@@ -5461,10 +5273,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Subdomain Takeover",
     "example_path": "/go_subdomain_takeover?domain=example.com",
@@ -5490,10 +5301,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Public-metadata scraper for Substack publications: posts, cadence, recommendations, authors.",
     "example_path": "/?url=https://example.substack.com",
@@ -5519,10 +5329,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Inventories every SVG / icon usage on a web page or raw HTML and classifies by mechanism: inline <svg> elements (with their <symbol> defs and viewBox), sprite references via <use href='#id'> / <use xlink:href='sprite.svg#id'>, <img src='*.svg'>, external SVG via <object data='*.svg'> / <embed src='*.svg'>, and icon-font usage (fa-/material-icons/glyphicon/bi-/icon- class heuristics). Returns icons[] (mechanism, resolved-absolute ref/src, symbol_id, viewBox), a per-mechanism summary, plus deduped unique_symbol_ids[] and external_sprite_urls[].",
     "example_path": "/?url=https://example.com",
@@ -5549,10 +5358,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Svi",
     "example_path": "/?target=example.com",
@@ -5578,10 +5386,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Swagger Finder",
     "example_path": "/go_swagger_finder?url=https://example.com",
@@ -5607,10 +5414,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Parse every HTML table into a dense matrix with full colspan/rowspan expansion and header detection (no regex)",
     "example_path": "/?url=https://example.com",
@@ -5635,10 +5441,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts a roster of team / staff members from an about-us or team page (or raw HTML) \u2014 each member's name, role (job title), short bio, photo_url (resolved absolute), and social/profile links \u2014 preferring schema.org Person (JSON-LD then microdata) and falling back to a conservative repeated-card heuristic. Returns members[] plus count and the detection method.",
     "example_path": "/?url=https://example.com",
@@ -5665,10 +5470,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Team Size",
     "example_path": "/?target=example.com",
@@ -5694,10 +5498,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Microservice for Tech Stack",
     "example_path": "/?url=https://example.com",
@@ -5723,10 +5526,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Technology Stack",
     "example_path": "/?url=https://example.com",
@@ -5752,10 +5554,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Telnet Banner",
     "example_path": "/?target=example.com",
@@ -5781,10 +5582,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extracts testimonials / customer reviews / endorsements from a web page or raw HTML \u2014 schema.org Review JSON-LD first, then <blockquote> with <cite>/<figcaption> attribution, then heuristic testimonial cards \u2014 capturing each testimonial's text, author, author_title, numeric rating (when present), and source_url, plus count and a has_ratings flag.",
     "example_path": "/?url=https://example.com",
@@ -5811,10 +5611,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Tos Finder",
     "example_path": "/?url=https://example.com",
@@ -5840,10 +5639,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Trust Decay",
     "example_path": "/?target=example.com",
@@ -5869,10 +5667,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Typosquat Finder",
     "example_path": "/go_typosquat_finder?url=https://example.com",
@@ -5898,10 +5695,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Ugc Detector",
     "example_path": "/?target=example.com",
@@ -5927,10 +5723,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Update Frequency",
     "example_path": "/?target=example.com",
@@ -5956,10 +5751,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Url Shortener",
     "example_path": "/?url=https://example.com",
@@ -5985,10 +5779,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for User Demographics",
     "example_path": "/?url=https://example.com",
@@ -6014,10 +5807,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Third-party / vendor risk scorecard: HTTP security headers, HSTS, cookie flags, DNSSEC, CORS posture, end-of-life tech \u2014 6 security analyzers merged into one graded report.",
     "example_path": "/?target=stripe.com",
@@ -6043,10 +5835,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
     "example_path": "/?url=https://example.com",
@@ -6072,10 +5863,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "seo",
     "description": "",
     "example_path": "/",
@@ -6098,10 +5888,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Wayback Checker",
     "example_path": "/go_wayback_checker?url=https://example.com",
@@ -6127,10 +5916,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Core Web Vitals and performance report: page-load metrics, CrUX field vitals (p75 LCP/CLS/INP/TTFB), DOM complexity, compression, cache policy, website carbon footprint.",
     "example_path": "/?target=stripe.com",
@@ -6156,10 +5944,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Website Carbon",
     "example_path": "/?url=https://example.com",
@@ -6185,10 +5972,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Microservice for Websocket Analyzer",
     "example_path": "/?url=https://example.com",
@@ -6214,10 +6000,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Wellknown Scanner",
     "example_path": "/go_wellknown_scanner?url=https://example.com",
@@ -6243,10 +6028,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Microservice for Wp Plugins",
     "example_path": "/go_wp_plugins?url=https://example.com",
@@ -6272,10 +6056,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Wps",
     "example_path": "/?target=example.com",
@@ -6301,10 +6084,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Xss Payload",
     "example_path": "/go_xss_payload?url=https://example.com",
@@ -6330,10 +6112,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Xss Scanner",
     "example_path": "/go_xss_scanner?url=https://example.com",
@@ -6359,10 +6140,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Microservice for Zone Transfer",
     "example_path": "/go_zone_transfer?domain=example.com",
@@ -6416,10 +6196,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Human-in-the-loop approval gate. POST /request to submit a risky action for human sign-off; GET /await to block until decided or timed out; POST /decide to record the human decision. Timeout resolves to a configurable default (deny by default). The safe-autonomy keystone.",
     "example_path": "/pending",
@@ -6441,10 +6220,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Addressed request/reply bus for agents: POST /send to enqueue a message for a named agent, GET /inbox to drain it, POST /reply to send a correlated reply, GET /await to block until a reply arrives. Closes the A\u2192B\u2192A gap that fleet-notify (broadcast) and fleet-q (anonymous pull) leave open.",
     "example_path": "/",
@@ -6466,10 +6244,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "k-of-n answer aggregation and voting for redundant agents. Create a round, cast votes, GET /result for the aggregated decision (majority/weighted/unanimous). Productizes the adversarial-verify loop as a fleet primitive.",
     "example_path": "/",
@@ -6490,10 +6267,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Turns the fleet catalog into an LLM function-calling manifest. GET /manifest returns a callable tool spec per service (name, description, base_url, auth, example_path). POST /refresh re-fetches the live catalog. Used by agents to discover how to call any fleet service.",
     "example_path": "/manifest",
@@ -6514,10 +6290,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "API key keystore for the 0exec mesh: issue/verify/revoke/list/purge. SQLite-backed, admin-token-gated. THE FLEET'S SINGLE POINT OF COMPROMISE \u2014 see fleet-state/OPS.md for hardening + rotation. NOT internet-exposed.",
     "example_path": "/health",
@@ -6545,10 +6320,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "C proxy (?url=)",
     "example_path": "/?url=https://example.com",
@@ -6627,10 +6401,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Generic composite fan-out engine. GET /?recipe=<name>&target=<domain> runs any named recipe concurrently across N fleet analyzers; returns a merged envelope with summary + per-source fields. Add a recipe row in recipes.go \u2014 no new code.",
     "example_path": "/?recipe=firmographic&target=stripe.com",
@@ -6656,10 +6429,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "geo",
     "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 and alpha-3 code. Unicode-normalizing, accent- and case-insensitive matcher over all 249 assigned ISO countries/territories and multilingual aliases, served entirely from memory.",
     "example_path": "/api/convert?country=Germany",
@@ -6688,10 +6460,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "visualization",
     "description": "d3-graph \u2014 d3-graph.0exec.com",
     "example_path": "/",
@@ -6717,10 +6488,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "geo",
     "description": "City \u2192 lat/lon with local DB (?text=)",
     "example_path": "/?text=Bucharest",
@@ -6745,10 +6515,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Unified abuse contact rollup (RDAP+security.txt+convention+scrape) for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -6772,10 +6541,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "AI-training opt-out posture scanner for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -6801,10 +6569,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Discovers AI Catalogs and MCP Server Cards via passive crawl detection and well-known probing.",
     "example_path": "/?target=example.com&probe=false",
@@ -6831,10 +6598,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Compliance claim scanner for the domainscope enricher pipeline",
     "example_path": "/?target=stripe.com",
@@ -6860,10 +6626,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Certificate Transparency log inventory (crt.sh) for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -6889,10 +6654,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "DNSSEC validator (DS/DNSKEY/AD-bit) for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -6918,10 +6682,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Docs platform detector for the domainscope enricher pipeline",
     "example_path": "/?url=https://example.com",
@@ -6945,10 +6708,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Composite email-deliverability grader for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -6974,10 +6736,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "HTTP/3 + QUIC handshake probe for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7003,10 +6764,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "iOS/Android mobile app linkage resolver for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7032,10 +6792,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Newsletter platform detector for the domainscope enricher pipeline",
     "example_path": "/?url=https://example.com",
@@ -7061,10 +6820,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Linked source orgs + OSS score for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7088,10 +6846,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Historical passive-DNS observations for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7117,10 +6874,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "RBL reputation check across 8 public blocklists for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7146,10 +6902,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "SaaS hosting platform detector for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7175,10 +6930,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "JSON-LD/OG/Twitter/microdata rollup for the domainscope enricher pipeline",
     "example_path": "/?url=https://example.com",
@@ -7204,10 +6958,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Help desk / live-chat platform detector for the domainscope enricher pipeline",
     "example_path": "/?url=https://example.com",
@@ -7231,10 +6984,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Tech-stack end-of-life flagger (endoflife.date) for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7260,10 +7012,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "web_analysis",
     "description": "Homepage third-party fetch bucketing for the domainscope enricher pipeline",
     "example_path": "/?url=https://example.com",
@@ -7289,10 +7040,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Composite 0-100 trust score for the domainscope enricher pipeline",
     "example_path": "/?target=example.com",
@@ -7318,10 +7068,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Semantic /.well-known/ coverage scanner that rejects wildcard routes, soft 404s, malformed documents, and wrong redirects.",
     "example_path": "/?target=example.com",
@@ -7345,10 +7094,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Alertmanager routing the 18 rules in prometheus/rules/fleet-alerts.yml to fleet-notify. Runs in host network mode, --web.listen-address=:18321. No browser UI use case of its own -- reached only by Prometheus, locally.",
     "example_path": "/-/healthy",
@@ -7376,10 +7124,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "response-driven backoff coordinator",
     "example_path": "/",
@@ -7405,10 +7152,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "F6 fleet backup orchestrator. Every 6h snapshots configured sources (SQLite, git, files, directories), encrypts with age (multiple recipients for key rotation), pushes to URI-shaped destination (initial: local:///opt/backups; future: storage-box:// rsync over SSH). Verifies every write by decrypt+tar-diff round-trip; mismatch = FAILED run, retention prune skipped. Per-instance SQLite audit log enforces \"never delete what we didn't create\" invariant. 7-daily / 4-weekly / 12-monthly retention. POST /restore always dry-run; actual restore is operator-driven with offline age identity (daemon never holds the decrypting key).",
     "example_path": "/",
@@ -7437,10 +7183,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "canonical sensitive-data redactor",
     "example_path": "/",
@@ -7472,10 +7217,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "per-program scan-cost cap (atomic check-and-insert)",
     "example_path": "/",
@@ -7507,10 +7251,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "per-request call trace collector (Speedscope flamegraph output)",
     "example_path": "/",
@@ -7536,10 +7279,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "G9 fleet capability aggregator. Walks the catalog and probes /openapi + /health + /version + /selftest on every kind=container entry in parallel; surfaces one aggregate at /capabilities.json (5-min in-process TTL, served stale during refresh). Plain net/http outbound (ADR-0024). Failed sub-probes recorded in errors[]; we never drop a service silently. Summary rollup (container_reachable, openapi_published, selftest_green/red/not_implemented) for one-glance fleet status.",
     "example_path": "/capabilities.json",
@@ -7561,10 +7303,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Periodic raw-TLS-handshake probe of the fleet registry's own cert expiry, exposed as Prometheus metrics for fleet-prometheus/fleet-grafana.",
     "example_path": "/",
@@ -7592,10 +7333,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "MIME/charset/encoding normalizer (5MB cap)",
     "example_path": "/",
@@ -7653,10 +7393,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "structured diff: http_response|json|html|asset_set|text",
     "example_path": "/",
@@ -7708,10 +7447,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Prometheus http_sd endpoint emitting one target per fleet container service. Refreshes services.json every 60s and probes /metrics via host.docker.internal.",
     "example_path": "/sd",
@@ -7740,10 +7478,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Hetzner DNS reconciler. Targets the Hetzner Cloud API (api.hetzner.cloud/v1, Bearer auth, RRSet-oriented) \u2014 the canonical DNS surface that supersedes the deprecated dns.hetzner.com Console API. Reads services-registry/services.json, diffs against actual zone state, applies the delta. Pulls the Cloud API token from go-fleet-secrets. 30-min ticker. Extras never auto-deleted.",
     "example_path": "/stats",
@@ -7776,10 +7513,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "per-program event timeline aggregator (6 siblings)",
     "example_path": "/",
@@ -7806,10 +7542,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Replayable per-topic event log with monotonic offsets. Publish events to named topics; consumers read from any offset and long-poll for new ones. v0.1 is in-RAM with per-topic retention cap; disk-backed durability is a planned follow-up.",
     "example_path": "/topics",
@@ -7831,10 +7566,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Ephemeral, bounded code/command execution for fleet agents. POST /run {lang, code} executes in an isolated temp dir with a hard timeout, process-group SIGKILL, output caps, and minimal child env. Keystore-gated; NOT internet-exposed. v0.1 TRL 4.",
     "example_path": "/langs",
@@ -7887,10 +7621,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "WAF/soft-404/CDN-noise classifier",
     "example_path": "/",
@@ -7916,10 +7649,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Grafana dashboards for the fleet metrics hub. Anonymous viewer-only; admin/signup disabled; keystore-gated at the gateway.",
     "example_path": "/",
@@ -7941,10 +7673,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Isolated staging Grafana for validating provisioned dashboards against production Prometheus data. Viewer-only with a dedicated Grafana database volume and authenticated gateway route.",
     "example_path": "/",
@@ -7969,10 +7700,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, a compact evidence-backed agent brief, expanded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
     "example_path": "/viewer",
@@ -8003,10 +7733,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_evidence",
     "description": "HAR 1.2 evidence formatter",
     "example_path": "/",
@@ -8032,10 +7761,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression \u2014 flags containers whose slope > 50 MB/h AND R\u00b2 > 0.7.",
     "example_path": "/",
@@ -8085,10 +7813,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Distributed advisory locks, leases, and leader-election over HTTP. Every fresh acquire returns a monotonic fencing token; re-acquire by the same owner refreshes the lease in place (leader renewal). In-RAM, ephemeral by design \u2014 a restart releases every lock.",
     "example_path": "/locks",
@@ -8109,10 +7836,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
     "example_path": "/gateway/tools",
@@ -8164,10 +7890,9 @@
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Cross-session, cross-agent working memory with pure-CPU keyword recall. POST /remember to store a text doc with optional agent/key/tags; GET /recall?q= for TF-overlap ranked retrieval. Generalizes pentest-agent-state into a fleet-wide searchable store.",
     "example_path": "/recall?q=example",
@@ -8221,10 +7946,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
     "example_path": "/?target=example.com",
@@ -8340,10 +8064,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "redacted PoC curl emitter (bash -n parse-gated)",
     "example_path": "/?target=example.com",
@@ -8370,10 +8093,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "Is a host:port reachable from the public internet? (SSRF-guarded check)",
     "example_path": "/",
@@ -8404,10 +8126,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
     "example_path": "/checks",
@@ -8440,10 +8161,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "composite-scored findings priority ranker",
     "example_path": "/",
@@ -8469,10 +8189,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Prometheus instance scraping each fleet container host_port/metrics via the fleet-discovery http_sd endpoint. Runs in host network mode, --web.listen-address=:18203.",
     "example_path": "/-/healthy",
@@ -8578,10 +8297,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "2-of-3 DNS resolver quorum",
     "example_path": "/",
@@ -8613,10 +8331,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "internal-only sandbox vulnerable apps (10 endpoints)",
     "example_path": "/",
@@ -8648,10 +8365,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "JSON Schema catalog + validator (8 baseline schemas)",
     "example_path": "/",
@@ -8684,10 +8400,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub App credentials, SMTP, platform API keys). Secretbox encryption at rest, consumer allowlists, and separate admin writes. The service data path is privately bound; only the trusted gateway peer may honor injected identity.",
     "example_path": "/",
@@ -8720,10 +8435,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "/selftest poll-and-render aggregator",
     "example_path": "/",
@@ -8781,10 +8495,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "target reputation lookup (5 sources)",
     "example_path": "/",
@@ -8816,10 +8529,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "composite tech-stack inferrer (83 signals)",
     "example_path": "/",
@@ -8845,10 +8557,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
     "example_path": "/v1/balance",
@@ -8875,10 +8586,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "vendor disclosure history tracker (PII-redacted)",
     "example_path": "/",
@@ -8910,10 +8620,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "visualization",
     "description": "Fleet graph visualizer. Operator surface (keystore-auth) renders a force-directed live topology with click-to-drill, mesh filter, time-window selector, and a drift dialog comparing declared-vs-observed edges. Public surface at /public shows sanitised (caller -> target) counts only \u2014 no latencies, no internal hosts. Frontend uses vis-network from CDN, vanilla JS, no build step.",
     "example_path": "/public",
@@ -8970,10 +8679,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "fleet_infra",
     "description": "inbound webhook signature verifier (6 platforms)",
     "example_path": "/",
@@ -8999,10 +8707,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "geo",
     "description": "City/address \u2192 lat/lon via TomTom (?text=)",
     "example_path": "/?text=Bucharest",
@@ -9027,10 +8734,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "geo",
     "description": "Place search and details (?query=)",
     "example_path": "/?query=coffee+Bucharest",
@@ -9089,10 +8795,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
     "example_path": "/go_session_fixation?target=https://github.com",
@@ -9196,10 +8901,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "Microservice for Go Html Proxy",
     "example_path": "/?url=https://example.com",
@@ -9238,10 +8942,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Fleet-wide HTTP fetch cache: producers share one upstream fetch per URL instead of each hitting origin. Redis-backed, zstd-compressed, singleflight-deduped. 60s default TTL, falls back to direct fetch when Redis is unreachable.",
     "example_path": "/fetch?url=https://example.com/",
@@ -9270,10 +8973,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "JS-rendering proxy (?url=)",
     "example_path": "/?url=https://example.com",
@@ -9306,10 +9008,10 @@
       "go-js-proxy-network"
     ],
     "auth": {
-      "query_param": "api_key",
+      "header": "X-API-Key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
     "example_path": "/?url=https://example.com",
@@ -9339,10 +9041,9 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
     "example_path": "/go_jsbundle_route_extractor?target=https://stripe.com",
@@ -9370,10 +9071,9 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
     "example_path": "/go_jsbundle_secrets?target=https://stripe.com",
@@ -9401,10 +9101,9 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256\u2194RS256 confusion.",
     "example_path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
@@ -9431,10 +9130,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Scrape LinkedIn profile badge (?url=)",
     "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
@@ -9459,10 +9157,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "nlp",
     "description": "NLP entity extraction from URL (?url=)",
     "example_path": "/?url=https://example.com",
@@ -9487,10 +9184,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "Node JS-rendering proxy (?url=)",
     "example_path": "/?url=https://example.com",
@@ -9516,10 +9212,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "Node proxy (?url=)",
     "example_path": "/?url=https://example.com",
@@ -9545,10 +9240,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "search",
     "description": "Bing SERP scraper in Node (?query=)",
     "example_path": "/?query=anthropic+claude",
@@ -9574,10 +9268,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "search",
     "description": "DuckDuckGo SERP scraper in Node (?query=)",
     "example_path": "/?query=anthropic+claude",
@@ -9603,10 +9296,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "ocr",
     "description": "Extract text from PDFs \u2014 upload or URL",
     "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
@@ -9631,10 +9323,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "ocr",
     "description": "Express-based OCR / PDF (?url=)",
     "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
@@ -9666,10 +9357,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
     "example_path": "/stats",
@@ -9703,10 +9393,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
     "example_path": "/stats",
@@ -9740,10 +9429,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
     "example_path": "/",
@@ -9777,10 +9465,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "uncategorized",
     "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
     "example_path": "/health",
@@ -9815,10 +9502,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
     "example_path": "/stats",
@@ -9851,10 +9537,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Pentest fleet service",
     "example_path": "/?target=example.com",
@@ -9886,10 +9571,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
     "example_path": "/check?target=api.github.com",
@@ -9923,10 +9607,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records (issuer/dates/SANs).",
     "example_path": "/cache/stats",
@@ -9959,10 +9642,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
     "example_path": "/sync/status",
@@ -9995,10 +9677,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
     "example_path": "/encode?algo=base64&input=hello",
@@ -10031,10 +9712,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription \u2014 money compounds with the asset universe, not manpower.",
     "example_path": "/stats",
@@ -10068,10 +9748,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
@@ -10103,10 +9782,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
     "example_path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
@@ -10139,10 +9817,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
     "example_path": "/stats",
@@ -10175,10 +9852,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "CPE -> NVD JSON 2.0 + CISA KEV cross-flag. Per-request fetch (no local cache yet). Composes with go-pentest-httpx tech detection.",
     "example_path": "/",
@@ -10212,10 +9888,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
     "example_path": "/check?target=hackerone.com",
@@ -10249,10 +9924,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
     "example_path": "/capabilities",
@@ -10286,10 +9960,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~60 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
     "example_path": "/lookup?hash=-1996286744",
@@ -10321,10 +9994,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
     "example_path": "/rules",
@@ -10357,10 +10029,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed (pure Go modernc); collapses same finding from multiple scanners via dedup_key with seen_count.",
     "example_path": "/findings?limit=1",
@@ -10394,10 +10065,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "GitHub Search API dorking for leaked credentials: 31 curated patterns (AWS keys, .env, private keys, Slack/Stripe/PAT tokens, kubeconfig, npm/Docker creds). Rate-limit aware; pairs with go-pentest-trufflehog for verification.",
     "example_path": "/dorks",
@@ -10431,10 +10101,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
     "example_path": "/stats",
@@ -10468,10 +10137,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
     "example_path": "/probe?url=https%3A%2F%2Fexample.com",
@@ -10505,10 +10173,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Durable workflow queue. POST jobs, workers /claim \u2192 /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
     "example_path": "/stats",
@@ -10541,10 +10208,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure \u2014 most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
     "example_path": "/search?token=sk_live_xxx",
@@ -10578,10 +10244,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
     "example_path": "/sinks",
@@ -10615,10 +10280,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
     "example_path": "/templates",
@@ -10651,10 +10315,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
     "example_path": "/sessions?limit=1",
@@ -10688,10 +10351,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope\u2192recon\u2192scan\u2192triage\u2192verify\u2192submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default \u2014 the unattended money loop.",
     "example_path": "/stats",
@@ -10724,10 +10386,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
     "example_path": "/classes",
@@ -10761,10 +10422,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
     "example_path": "/stats",
@@ -10798,10 +10458,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing \u2014 prevents multiple scanners from collectively DDoS-ing a target.",
     "example_path": "/stats",
@@ -10834,10 +10493,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Turns a structured Finding into a platform-ready markdown report. Ships HackerOne/Bugcrowd/Intigriti templates. Optional CVSS enrichment via go-pentest-cvss. Highest-leverage service in the fleet.",
     "example_path": "/templates",
@@ -10870,10 +10528,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Hard scope check before any active prober fires. POST /check {target, program_id} -> {allowed, reason, matched_by}. Matches hostname/wildcard/CIDR/regex; exclusions always win. Legal floor of the pentest fleet.",
     "example_path": "/programs",
@@ -10907,10 +10564,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} \u2192 PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
     "example_path": "/shot?url=https://example.com",
@@ -10944,10 +10600,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
     "example_path": "/rules",
@@ -10980,10 +10635,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Pentest fleet service",
     "example_path": "/?target=example.com",
@@ -11017,10 +10671,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Pentest fleet service",
     "example_path": "/?target=example.com",
@@ -11053,10 +10706,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
     "example_path": "/sources",
@@ -11089,10 +10741,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
     "example_path": "/quota",
@@ -11126,10 +10777,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
     "example_path": "/check?host=example.com",
@@ -11161,10 +10811,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
     "example_path": "/fingerprints",
@@ -11196,10 +10845,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR). Returns kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls before doing anything else.",
     "example_path": "/?q=https://EXAMPLE.com/path",
@@ -11232,10 +10880,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
     "example_path": "/stats",
@@ -11269,10 +10916,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). 700+ detectors live-tested against providers. Upgrades go-pentest-secrets-scanner with verification.",
     "example_path": "/",
@@ -11306,10 +10952,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "HTTP equivalent of go-pentest-cli \u2014 single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
     "example_path": "/preflight",
@@ -11343,10 +10988,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "recon",
     "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
     "example_path": "/urls?domain=example.com&limit=5",
@@ -11378,10 +11022,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Serves curated pentest wordlists (dirs, subdomains, params, fuzz) by category with SHA256 integrity. Random-sample API. Designed to grow via SecLists submodule.",
     "example_path": "/lists",
@@ -11432,10 +11075,9 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Static scan for window.postMessage listeners missing origin checks (XS-Leak risk)",
     "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
@@ -11463,10 +11105,9 @@
     "access_tier": "vetted-pentest",
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "security",
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
     "example_path": "/go_prototype_pollution_static?target=https://example.com",
@@ -11499,10 +11140,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "HTTP proxy with rotation (?url=)",
     "example_path": "/?url=https://example.com",
@@ -11530,10 +11170,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "Python proxy (?url=)",
     "example_path": "/?url=https://example.com",
@@ -11559,10 +11198,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "proxy",
     "description": "Routes to a random proxy backend (?url=)",
     "example_path": "/?url=https://example.com",
@@ -11593,10 +11231,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "search",
     "description": "DuckDuckGo SERP scraper in Go (?query=)",
     "example_path": "/?query=anthropic+claude",
@@ -11626,7 +11263,7 @@
       "header": "X-API-Key",
       "type": "api_key"
     },
-    "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected.",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
     "description": "Shared task identity and short-lived credential lease broker for Go services.",
     "example_path": "/health",
@@ -11660,10 +11297,9 @@
     ],
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "nlp",
     "description": "URL categorization API - classifies URLs by topic/category",
     "example_path": "/?url=https://example.com",
@@ -11691,10 +11327,9 @@
   {
     "auth": {
       "header": "X-API-Key",
-      "query_param": "api_key",
       "type": "api_key"
     },
-    "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
     "description": "Extract structured content from URL (?url=)",
     "example_path": "/?url=https://example.com",

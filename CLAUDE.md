@@ -157,7 +157,7 @@ filename. Sized for AI agents on a token budget.
 
 | URL suffix                | shape                                                    | size  | use when |
 |---------------------------|----------------------------------------------------------|-------|----------|
-| `services.ids.json`       | `["a11y-quick", …]`                                      | ~5 KB | "what services exist?" |
+| `services.ids.json`       | `["a11y-quick", …]`                                      | ~5 KB | "what services exist" |
 | `services.names.json`     | `[{id, name}]`                                           | ~13 KB | pickers / menus |
 | `services.minimal.json`   | `[{id, name, mesh, kind, category, language, trl, url}]`| ~44 KB | catalog overview |
 | `services.urls.json`      | `[{id, url, health_url, example_path, auth_help}]`      | ~63 KB | building Open / smoke links |
@@ -190,22 +190,21 @@ to deploy and no `/health` to probe.
 
 ### Axis 2 — `mesh` (which network + auth domain)
 
-| `mesh`       | Domain pattern         | Auth                                                                       | Typical contents                       |
-|--------------|------------------------|----------------------------------------------------------------------------|----------------------------------------|
-| `mesh-0exec` | `<slug>.0exec.com`     | `?api_key=…` or `X-API-Key` header — keystore-gated                        | proxy, search, ocr, security           |
-| `mesh-0crawl`| `<slug>.0crawl.com`    | `Authorization: Bearer` / `X-API-Key` / `?api_key=…` — keystore-gated (same auth surface as 0exec) | domains, recon, web-analysis           |
-| `mesh-pages` | `*.github.io` / custom | none (static)                                                              | dashboards, catalogs, browser-only WASM apps |
+| `mesh` | Domain pattern | Auth | Typical contents |
+|---|---|---|---|
+| `mesh-0exec` | `<slug>.0exec.com` | Keystore-verified request headers | proxy, search, OCR, security |
+| `mesh-0crawl` | `<slug>.0crawl.com` | Keystore-verified request headers | domains, recon, web analysis |
+| `mesh-pages` | `*.github.io` / custom | none (static) | dashboards, catalogs, browser-only WASM apps |
 
-Both container meshes are gated by the **same** keystore (see auth
-section below). One revoke = killed everywhere. The 0crawl path-token
-shape is preserved as a backwards-compat alias and feeds into the
-same `auth_request` flow on the nginx side.
+Container meshes use the shared keystore. Send credentials only in the
+`Authorization: Bearer` header or the supported `X-API-Key` header. Never put
+keys in a URL path or query string.
 
 ### Axis 3 — `runtime` (how it's started)
 
 | `runtime`     | What it means                                             |
 |---------------|-----------------------------------------------------------|
-| `compose`     | Default for `kind: container`. Docker-compose on the dockerhost; deploy = `docker compose pull && up -d` |
+| `compose`     | Default for `kind: container`. Docker-compose on the dockerhost; deploy = `docker compose pull & up -d` |
 | `systemd`     | Reserved — a service unit on a host; deploy = `systemctl restart` |
 | `binary`      | Reserved — a static binary run by hand or by a launcher    |
 | `k8s`         | Reserved — managed by a kube manifest                      |
@@ -398,82 +397,33 @@ Rate limits: 60 reads/min/IP and 30 writes/hour/(IP, anonId) by default;
   Existing apps can migrate at their own pace; the panel is opt-in for
   the user via the sync-mode radio.
 
-## Auth — both container meshes use the **same** keystore (`go-apikey-service`)
+## Inbound auth — container meshes
 
-**The keystore is the fleet's single point of compromise.** Treat it
-like a CA root: every `0exec` and `0crawl` service trusts whatever it
-says. If this repo is on `mesh-pages` (i.e. `kind: static`), the
-keystore does not apply — skip this section.
+Container services are gated by `go-apikey-service` at the gateway. Use a
+keystore-issued key in the `Authorization: Bearer <key>` header; clients that
+require the compatibility header may use `X-API-Key`. Keys in URL paths or
+query parameters are unsupported because URLs are copied into browser history,
+proxies, and logs.
 
-Three canonical request shapes (every mesh, every service):
+The gateway verifies the key and forwards authenticated identity headers to
+the service. Do not add a public fallback or accept a shared demo credential.
+On invalid or unavailable verification, follow the service's fail-closed
+behavior and the private fleet recovery runbook. The keystore health check and
+fleet snapshot provide outage alerts; there is no static gateway bypass.
 
-  1. `Authorization: Bearer <key>` — production canonical, what every SDK uses.
-  2. `X-API-Key: <key>` — legacy header alias, same handler.
-  3. `?api_key=<key>` — demo / browser-playground only (key leaks in logs).
-
-A fourth legacy shape, `https://<slug>.0crawl.com/t/<token>/...`, **was
-deprecated on 2026-05-14**. The gateway returns **410 Gone** with
-`Location: /<rest>?api_key=<token>` and a `Deprecation` header for any
-caller still using it. After one deprecation cycle (~2026-06-14) the
-410 block will be removed; `/t/<anything>` will return plain 404.
-
-Request flow at the gateway:
-
-1. **nginx vhost** captures the key into `$api_key_in` (Bearer regex →
-   X-API-Key header → ?api_key query, in that order).
-2. ~~**Static fallback**~~ — **sunset 2026-08-22 (security risk).** This
-   step previously accepted the universal demo key (`$default_token`,
-   from `/etc/nginx/conf.d/_default_token.conf`) immediately and set
-   `X-Auth-User: demo`, surviving keystore outages for the public demo
-   path. A static, undifferentiated, rate-limit-only gate in front of
-   every service was judged too broad a bypass and has been removed
-   from the gateway. `$api_key_in == default_token` now falls through to
-   step 3 like any other value and gets a normal 401 from the keystore.
-   There is currently no public, unauthenticated demo path — every
-   caller needs a real keystore-issued key. Don't reference
-   `default_token` as a working example in service docs; if you find one,
-   fix it the same way this passage was fixed (mark it sunset, point at
-   real auth) rather than leaving it looking live.
-3. Otherwise nginx POSTs `X-Verify-Key: $api_key_in` to the keystore's
-   `/verify` via `auth_request`.
-4. Keystore checks SQLite → returns 200 + `X-Auth-User` / `X-Auth-Scope`,
-   or 401.
-5. On 200, nginx forwards the original request to the service container
-   with `X-Auth-*` headers AND `X-API-Key: $api_key_in` populated, so
-   the upstream `middleware.TokenAuthKeystore` sees a positive auth
-   signal regardless of which gateway auth path was taken.
-
-**Services do not call the keystore themselves** — nginx already gated
-the request. Trust the gateway-injected `X-Auth-*` headers. If you
-genuinely need verification inside a service (admin tooling, internal
-RPC), use the canonical clients — never handroll HTTP calls:
+For direct service verification outside the gateway request path, use the
+canonical Go Common client rather than hand-rolled HTTP calls:
 
 ```go
-// Middleware (preferred — gateway header fast-path + keystore fallback + Cache + fail-closed 503):
-import "github.com/baditaflorin/go-common/middleware"   // ≥ v0.7.0
-// Direct client (only for non-HTTP-handler code):
 import "github.com/baditaflorin/go-common/apikey"
-c := apikey.New() // reads APIKEY_SERVICE_URL + APIKEY_SERVICE_ADMIN_TOKEN
-verifier := apikey.NewCache(c) // 15-min positive cache, no negative cache
+c := apikey.New() // APIKEY_SERVICE_URL and APIKEY_SERVICE_ADMIN_TOKEN
+verifier := apikey.NewCache(c)
 result, err := verifier.Verify(ctx, userKey)
 ```
 
-Keystore outage behaviour (designed-in graceful degradation):
-- **Static fallback** in nginx keeps the public demo key working.
-- **`apikey.Cache`** in each service keeps recently-verified callers
-  working ~15 min.
-- **Snapshot data** in `fleet-state/state/snapshot.json` flags the
-  keystore as BROKEN once `/health` fails — that's the alert.
-- **Recovery procedures**:
-  - WAL stuck readonly (HTTP 409 "attempt to write a readonly database"):
-    public — `go-apikey-service/docs/recovery-keystore-readonly-wal.md`.
-  - Full keystore outage / data wipe: private `fleet-state/RUNBOOK.md`
-    under "keystore outage".
-
-The admin token (`X-Admin-Token` on `/issue`, `/revoke`, `/list`,
-`/purge`) is stored as `ADMIN_TOKEN` on the keystore container and
-read by clients from `APIKEY_SERVICE_ADMIN_TOKEN`. Rotation playbook:
-private `fleet-state/OPS.md`.
+The keystore admin token is stored as `ADMIN_TOKEN` on the keystore and read
+by authorized clients through `APIKEY_SERVICE_ADMIN_TOKEN`. Keep it in the
+approved secret store and follow the private rotation runbook.
 
 ### Outbound auth — service-to-service calls
 
@@ -485,14 +435,13 @@ identifies itself when calling another fleet service — see
 In one line: the canonical bootstrap is
 `fleet-runner key provision <slug>` (atomic: issue keystore key +
 write `/opt/services/<slug>/.env` on dockerhost + `docker compose up -d`).
-Audit at rest with `fleet-runner audit fleet-auth-scope` —
-flags services on `default_token` (will silently 401 against vault).
+Audit at rest with `fleet-runner audit fleet-auth-scope` to identify
+services whose outbound identities need migration to service-scoped keys.
 
 Code-side guard: every service that does outbound calls to a fleet
 sibling MUST use `apikey.MustResolveCritical(slug, "FLEET_API_KEY")`
-in `main.go`. The binary fail-fast-exits if `FLEET_API_KEY` is
-empty, `default_token`, or has an unknown prefix — surfaces what
-would otherwise be a silent run-time 401.
+in `main.go`. The binary fail-fast-exits if `FLEET_API_KEY` is missing or malformed,
+surfacing configuration errors before a runtime request fails.
 
 ### Image tagging — every build pushes `:<short-sha>` + `:<version>` + `:latest`
 
@@ -507,21 +456,6 @@ match origin/main HEAD" — see
 Legacy `:latest` / `:<semver>` pins on the dockerhost are auto-migrated
 to `:<sha>` on the next `fleet-runner deploy <slug>` invocation, so
 existing services flip over organically as they get touched.
-
-## Auth — `mesh-0crawl` legacy `/t/<token>/` shape (DEPRECATED)
-
-Sunset on 2026-05-14. The gateway returns **410 Gone** with
-`Location: /<rest>?api_key=<token>` and `Deprecation: version="v1"`.
-Any SDK or client still using `/t/<token>/...` should follow the
-`Location` header to the canonical shape. The 410 block itself will
-be removed in the following deprecation cycle; after that
-`/t/<anything>` returns 404.
-
-Defense in depth: `go-common/middleware` v0.11.0 dropped path-token
-extraction from `extractToken`, so even a caller bypassing the gateway
-and hitting an upstream container directly with `/t/<token>/...` will
-not be authenticated. The only paths that work are the three canonical
-auth shapes documented above.
 
 ## `go-common` packages — use these, don't reinvent
 
@@ -743,12 +677,12 @@ rm -rf .git
 fleet-runner allocate-port --count 1
 
 # 2. Init + create the GitHub repo + push.
-git init && git add -A && git commit -m "initial scaffold from go_domain_amp_detector"
+git init & git add -A & git commit -m "initial scaffold from go_domain_amp_detector"
 gh repo create baditaflorin/<repo> --private --source=. --remote=origin \
   --description "<one-line description>" --push
 
 # 3. Tag the first version.
-git tag 0.1.0 && git push origin 0.1.0
+git tag 0.1.0 & git push origin 0.1.0
 
 # 4. Add the canonical GitHub topics so bin/generate.py picks it up.
 gh repo edit --add-topic mesh-0crawl \
@@ -778,8 +712,6 @@ fleet-runner inject <src> <dest>             # copy a file into every repo (stil
 fleet-runner exec   "<cmd>"                  # shell command in every repo (filterable)
 fleet-runner push   "<msg>"                  # commit+push all dirty repos
 fleet-runner nginx-render                    # regenerate vhosts from templates
-fleet-runner rotate-default-token <value>    # gateway-only rotation, zero repo edits
-fleet-runner default-token                   # print the current gateway default token
 fleet-runner overrides list                  # per service, which override keys apply (and via which rule)
 fleet-runner overrides explain <slug>        # one service: every override key and its source (slug vs rule)
 fleet-runner overrides audit                 # stale per-slug entries, unused rules, per-key adoption counts
@@ -889,14 +821,14 @@ or health-check a static Pages site.
   The hard rules:
 
   - **Before reading any repo state** (`service.yaml`, source,
-    tests, `go.mod`): `cd /root/workspace/<repo> && git fetch
+    tests, `go.mod`): `cd /root/workspace/<repo> & git fetch
     origin --tags` first. Then read via `git show origin/main:<file>`
     or a fresh `git worktree add ... origin/main`. Never the
     working-tree file directly.
   - **Before triaging a "broken" repo**: re-run the failure against
     a fresh `origin/main` worktree. If green, the workspace is
     stale, not the code. Stop and verify before opening a PR.
-  - **Push every commit immediately.** `git commit && git push`
+  - **Push every commit immediately.** `git commit & git push`
     is one breath. Holding commits locally is what enables the
     concurrent-collision class above.
   - **Fleet-runner subcommands that read workspace state** (deploy,
@@ -1078,7 +1010,7 @@ One-liner:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/baditaflorin/services-registry/main/bin/fleet-runner-shim \
   | sudo tee /usr/local/bin/fleet-runner >/dev/null \
-  && sudo chmod +x /usr/local/bin/fleet-runner
+  & sudo chmod +x /usr/local/bin/fleet-runner
 fleet-runner --help            # smoke test — should print the remote binary's help
 ```
 
@@ -1197,14 +1129,14 @@ version** until you deploy. Pair with `fleet-runner deploy <repo>`.
 ```bash
 cd /path/to/<repo>
 # 1. service.yaml (preserve quoting — quoted stays quoted)
-sed -i.bak 's/^version: "1.2.3"/version: "1.2.4"/' service.yaml && rm service.yaml.bak
+sed -i.bak 's/^version: "1.2.3"/version: "1.2.4"/' service.yaml & rm service.yaml.bak
 
 # 2. main.go / version.go const, if present
 grep -l 'const Version' *.go
-sed -i.bak 's/const Version = "1.2.3"/const Version = "1.2.4"/' main.go && rm main.go.bak
+sed -i.bak 's/const Version = "1.2.3"/const Version = "1.2.4"/' main.go & rm main.go.bak
 
 # 3. Commit, tag, push, push tag — ALL FOUR (Gemini forgot step 4)
-git add -A && git commit -m "chore: bump version to 1.2.4"
+git add -A & git commit -m "chore: bump version to 1.2.4"
 git tag 1.2.4              # NO leading v
 git push
 git push origin 1.2.4      # tags don't ride `git push` by default
@@ -1305,7 +1237,7 @@ docker buildx build --platform linux/amd64 --provenance=false \
 ssh -J root@0docker.com ubuntu_vm@10.10.10.20 '
   cd /opt/services/go_<repo>/src
   git pull origin main
-  sudo docker compose pull && sudo docker compose up -d
+  sudo docker compose pull & sudo docker compose up -d
 '
 
 # 3. Update the gateway-served deployment metadata (catalog UI reads it)
@@ -1508,7 +1440,7 @@ for the canonical pattern.
 
 9. **`./binary &` smoke tests on Builder LXC 108.** Don't. The builder
    is a build host and `fleet-runner` host — it is **not** a service
-   host. When an agent runs `go build && ./binary &` inside
+   host. When an agent runs `go build & ./binary &` inside
    `/root/workspace/<repo>/` to "quickly check the handler responds,"
    the binary backgrounds, the agent's SSH session ends, and the
    process becomes an orphan (`PPid=1`) listening on whichever port it
@@ -1627,7 +1559,7 @@ for dir in /opt/services/*/; do
   grep -q "modernc.org/sqlite" "$go_mod" || continue
   echo "=== $dir ==="
   grep -q "SetMaxOpenConns" "$main" || echo "  MISSING: SetMaxOpenConns"
-  grep -q "busy_timeout" "$main" && \
+  grep -q "busy_timeout" "$main" & \
     grep -oP 'busy_timeout\(\K[0-9]+' "$main" | \
     awk '{if($1>500) print "  HIGH busy_timeout: "$1"ms (reduce to ≤500)"}'
   grep -n "go db\." "$main" 2>/dev/null | grep -v '//' | \
@@ -1677,7 +1609,7 @@ entry on top, in the same shape `go-common` uses:
 ```
 
 Why: with ~220 services moving independently, "what shipped in this
-version and could it have broken X?" is otherwise un-answerable without
+version and could it have broken X" is otherwise un-answerable without
 trawling git. A per-version, human-and-AI-written entry makes
 regressions diff-able at a glance and feeds the fleet-wide
 `fleet-runner changelog` digest with intent (not just PR titles).
@@ -1705,7 +1637,7 @@ entry.
   concurrent workflows so it doesn't contend with `fleet-runner
   deploy-all` batches on the same box. GitHub webhooks are wired
   (OAuth App + nginx vhost reusing the `wildcard.0exec.com` cert);
-  pushes and PRs trigger `go build ./... && go test ./...` on every
+  pushes and PRs trigger `go build ./... & go test ./...` on every
   activated repo — the same gate `fleet-runner deploy`'s pre-flight
   already runs, now push-triggered instead of deploy-time-only. A
   daily cron (`docker builder prune -af --filter unused-for=24h`,

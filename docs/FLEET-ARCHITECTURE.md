@@ -584,9 +584,9 @@ request now goes through the dynamic keystore check regardless of the
   Browser                Nginx gateway
      │                        │
      │  GET /analyze           │
-     │  ?api_key=demo_default  │
+     │  X-API-Key: <service key> │
      │ ───────────────────────►│
-     │                        │ [REMOVED] match $default_token
+     │                        │ [REMOVED] match $retired shared credential
      │                        │ [REMOVED] skip keystore call
      │                        │ [REMOVED] set X-Auth-User: demo
      │                        │ [REMOVED] rate-limit 1 req/s / 60 req/h

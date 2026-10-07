@@ -23,7 +23,7 @@ offensive surface drifts class-by-class. There is no way to ask "does
 every prober know about this 2026-Q1 SSRF bypass?" — the question
 requires reading six source trees.
 
-The same drift happened with `default_token` rotation (fixed by
+The same drift happened with `retired shared credential` rotation (fixed by
 moving token state to the gateway) and with the JS-bundle source-map
 recovery code (fixed by moving it into `go-common`). The cardinal
 rule applies: **change the library / data, not 130 main.go files**.

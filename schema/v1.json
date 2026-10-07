@@ -100,11 +100,8 @@
       "type": "object",
       "required": ["type"],
       "properties": {
-        "type": { "type": "string", "enum": ["api_key", "path_token", "none"] },
-        "query_param":        { "type": "string", "description": "auth=api_key: query string parameter name (e.g. 'api_key')" },
-        "header":             { "type": "string", "description": "auth=api_key: HTTP header alternative (e.g. 'X-API-Key')" },
-        "path_template":      { "type": "string", "description": "auth=path_token: how the token is embedded in the path, with '{token}' placeholder. Example: '/t/{token}'" },
-        "public_demo_token":  { "type": "string", "description": "auth=path_token: an intentionally-public demo token consumers may default to. NEVER include real secrets here." }
+        "type": { "type": "string", "enum": ["api_key", "none"] },
+        "header":             { "type": "string", "description": "auth=api_key: HTTP header carrying the service API key (e.g. 'X-API-Key')" }
       }
     },
     "auth_help": {

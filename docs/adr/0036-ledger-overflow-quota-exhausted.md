@@ -48,7 +48,7 @@ a real change to the keystore's risk profile, not just a feature add.
   (`HandleBalance`) — the gap is client-side, not service-side. Confirmed
   that `HandleBalance`/`HandleCharge` both read identity from
   `header.AuthUser`, populated by the ledger's own
-  `server.WithKeystoreAuth("default_token")` middleware — so a direct
+  `server.WithKeystoreAuth("retired shared credential")` middleware — so a direct
   client call with `Authorization: Bearer <cred>` (bypassing nginx) is
   verified correctly by the ledger service itself, the same as any other
   `mesh-0exec` backend called directly.

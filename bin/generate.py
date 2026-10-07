@@ -118,12 +118,10 @@ PUBLIC_FIELDS: frozenset[str] = frozenset({
     "access_tier",
 })
 
-# auth sub-fields kept in the public mirror. `public_demo_token` is
-# intentionally NOT in this set even though the schema labels it as
-# "intentionally-public" — fail-closed on disclosure (operator follow-up
-# to lift this if a real consumer ever needs it).
+# Only service-key headers are part of the public auth contract. URL query and
+# path-token credentials are no longer supported.
 PUBLIC_AUTH_FIELDS: frozenset[str] = frozenset({
-    "type", "query_param", "header", "path_template",
+    "type", "header",
 })
 
 # Private services remain in the full operational registry only so
@@ -377,14 +375,9 @@ KIND_BY_MESH = {
 }
 
 # Auth defaults per mesh — overridable per-entry in overrides.json.
-# Both container meshes share the SAME auth surface (Bearer / X-API-Key /
-# ?api_key=), gated by the same keystore. The legacy 0crawl `/t/<token>/`
-# path was 410'd on 2026-05-14 and is no longer advertised here — the
-# nginx template's transitional 410 block (removed 2026-05-19) carried
-# the deprecation; clients have had a deprecation cycle to migrate.
 AUTH_DEFAULTS = {
-    "0exec":  {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
-    "0crawl": {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
+    "0exec":  {"type": "api_key", "header": "X-API-Key"},
+    "0crawl": {"type": "api_key", "header": "X-API-Key"},
     "0docker": {"type": "none"},
     "pages":  {"type": "none"},
     # Custom-domain services are, by definition, not behind the shared
@@ -582,14 +575,10 @@ RENAMES = load_renames()
 
 
 def auth_help_for(auth: dict) -> str:
-    """Canonical short label for what auth a caller needs. UIs render this
-    verbatim instead of re-implementing the if/else (which historically
-    drifts and produces "No auth" for services that actually require auth)."""
+    """Canonical label for the service-scoped header credential a caller needs."""
     t = auth.get("type")
     if t == "api_key":
-        qp = auth.get("query_param") or "api_key"
-        hdr = auth.get("header") or "X-API-Key"
-        return f"api_key required (header {hdr} or ?{qp}=)"
+        return "API key required in X-API-Key or Authorization: Bearer"
     if t == "none":
         return "no auth"
     return "auth: unknown"

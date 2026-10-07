@@ -109,8 +109,8 @@ collects, others react.
 - **Storage growth.** Bounded by `RETENTION_DAYS * services * 24`
   rows ≈ 30 * 220 * 24 ≈ 160 k rows. Negligible at SQLite's scale.
 - **Polling-volume floor.** 220 services every hour = 5280 probes/day
-  flowing through the gateway as `?api_key=default_token` traffic.
-  At the gateway's 1 req/s default-token rate limit per IP this fits,
+  Gateway authentication uses the service-scoped API key header.
+  At the gateway's 1 req/s shared credential rate limit per IP this fits,
   but worth noting for any future cadence tightening.
 
 ## Migration

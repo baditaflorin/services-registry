@@ -11,10 +11,9 @@ Output:
   - services.json          single registry, sorted by mesh then id
   - services.summary.txt   counts by mesh and category
 
-Open-source rule: never copy a real API key into the registry. The hub
-DIRECTORY ships `apiKey: 'fb_…'` per entry; those are stripped here. The
-0crawl `default_token` path segment IS retained (it's an intentionally
-public demo token).
+Open-source rule: never copy credentials into the registry. The hub
+DIRECTORY ships per-entry API keys; those are stripped here. Example URLs
+are normalized to paths without credentials in query strings or paths.
 """
 from __future__ import annotations
 
@@ -22,7 +21,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from urllib.parse import urlparse, parse_qsl
+from urllib.parse import parse_qsl, urlencode, urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCES = ROOT / "sources"
@@ -43,24 +42,23 @@ _SLUG_TO_CATEGORY = {slug: cat for cat, slugs in _OEXEC_CATEGORY.items() for slu
 # Auth conventions per mesh.
 _AUTH_0EXEC = {
     "type": "api_key",
-    "query_param": "api_key",
     "header": "X-API-Key",
 }
-_AUTH_0CRAWL = {
-    "type": "path_token",
-    "path_template": "/t/{token}",
-    "public_demo_token": "default_token",
-}
+_AUTH_0CRAWL = dict(_AUTH_0EXEC)
 
 
-def _strip_default_token(example_url: str) -> str:
-    """Remove '/t/default_token' from a 0crawl example URL and return just the
-    path+query, so the registry stays auth-agnostic."""
+def _sanitize_example_path(example_url: str) -> str:
+    """Return a credential-free path and query for the service catalog."""
     if not example_url:
         return ""
     u = urlparse(example_url)
-    path = re.sub(r"^/t/[^/]+", "", u.path) or "/"
-    return path + (("?" + u.query) if u.query else "")
+    path = re.sub(r"^/t/[^/]+(?=/|$)", "", u.path) or "/"
+    query = [
+        (key, value) for key, value in parse_qsl(u.query, keep_blank_values=True)
+        if key.lower() not in {"api_key", "apikey", "access_token", "auth_token", "token"}
+    ]
+    suffix = "?" + urlencode(query, doseq=True) if query else ""
+    return path + suffix
 
 
 def _0exec_repo(slug: str) -> str:
@@ -89,7 +87,7 @@ def load_0crawl() -> list[dict]:
             "url":          base,
             "health_url":   s.get("health_url") or (base + "/health"),
             "repo_url":     s.get("repo_url") or "",
-            "example_path": _strip_default_token(s.get("example_url", "")),
+            "example_path": _sanitize_example_path(s.get("example_url", "")),
             "auth":         dict(_AUTH_0CRAWL),
             "port":         s.get("port"),
         })
