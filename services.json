@@ -4172,7 +4172,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "host_port": 8244,
     "container_port": 8244,
-    "version": "2.2.0",
+    "version": "2.0.0",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -8841,12 +8841,14 @@
     "trl_ceiling_reason": "No live SMTP-delivery / inbox-placement / sending-reputation feed; DKIM selector discovery is gazetteer-bounded, not exhaustive \u2014 the production-grade deliverability signals require paid feeds.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "placement": "replicable",
     "host_port": 18181,
     "container_port": 18181,
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.3.11",
     "network_exposure": "gateway-authenticated"
   },
   {

@@ -1836,6 +1836,7 @@
   },
   "domain-email-deliverability-score": {
     "container_port": 18181,
+    "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1849,7 +1850,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.3.11"
   },
   "domain-error-monitoring": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
