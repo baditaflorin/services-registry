@@ -2,23 +2,30 @@
 set -euo pipefail
 
 # Install the always-on Docker log shipper on the 0mcp Docker hosts.
-# Credentials are supplied by the caller and are written only to the
-# root-owned Vector config on the target; they are never printed.
+# Read one JSON object from stdin: {"user":"...","password":"..."}.
+# Keep credential values in process memory and write them only to the
+# root-owned Vector config on the target. Never accept them from argv/env.
 
-: "${OPENOBSERVE_USER:?set OPENOBSERVE_USER from the private fleet secret path}"
-: "${OPENOBSERVE_PASSWORD:?set OPENOBSERVE_PASSWORD from the private fleet secret path}"
+credentials=$(cat)
+readonly openobserve_user="$(printf '%s' "$credentials" | jq -er '.user')"
+readonly openobserve_password="$(printf '%s' "$credentials" | jq -er '.password')"
+unset credentials
 
 readonly image="timberio/vector@sha256:e4fc19efb7f817f28d06a9a67fab9e1ccc60d57080115c291b06deb6daea7d7a"
 # This Vector sink carries Docker logs as JSON. Application traces use the
 # separate OTLP receiver at https://otlp.0exec.com.
 readonly endpoint="https://openobserve.0own.com/api/default/docker_logs/_json"
+readonly user_toml="$(jq -Rn --arg value "$openobserve_user" '$value')"
+readonly password_toml="$(jq -Rn --arg value "$openobserve_password" '$value')"
 
 install_host() {
   local alias="$1" host="$2" role="$3"
+  local stamp
+  stamp=$(date -u +%Y%m%dT%H%M%SZ)
   printf 'installing host=%s role=%s\n' "$host" "$role"
 
   ssh -o BatchMode=yes "$alias" \
-    'sudo install -d -m 0750 /opt/observability/vector-log-shipper && sudo tee /opt/observability/vector-log-shipper/vector.toml >/dev/null' <<EOF
+    'sudo install -d -m 0700 /opt/observability/vector-log-shipper && sudo chmod 0700 /opt/observability/vector-log-shipper && sudo sh -c "umask 077; cat > /opt/observability/vector-log-shipper/vector.toml.next"' <<EOF
 # Rendered by services-registry/bin/observability-install-0mcp.
 data_dir = "/var/lib/vector"
 
@@ -43,8 +50,8 @@ inputs = ["enrich"]
 uri = "$endpoint"
 method = "post"
 auth.strategy = "basic"
-auth.user = "$OPENOBSERVE_USER"
-auth.password = "$OPENOBSERVE_PASSWORD"
+auth.user = $user_toml
+auth.password = $password_toml
 compression = "gzip"
 encoding.codec = "json"
 encoding.timestamp_format = "rfc3339"
@@ -61,7 +68,7 @@ when_full = "block"
 EOF
 
   ssh -o BatchMode=yes "$alias" \
-    'sudo tee /opt/observability/vector-log-shipper/docker-compose.yml >/dev/null' <<EOF
+    'sudo tee /opt/observability/vector-log-shipper/docker-compose.yml.next >/dev/null' <<EOF
 services:
   vector-log-shipper:
     image: $image
@@ -83,8 +90,29 @@ volumes:
   vector_data:
 EOF
 
-  ssh -o BatchMode=yes "$alias" \
-    "sudo sh -c 'cd /opt/observability/vector-log-shipper && docker run --rm --network host -v \"\$PWD/vector.toml:/etc/vector/vector.toml:ro\" $image validate --no-environment /etc/vector/vector.toml && docker compose up -d --force-recreate'"
+  ssh -o BatchMode=yes "$alias" 'sudo sh -s' <<EOF
+set -eu
+cd /opt/observability/vector-log-shipper
+previous_running=\$(docker inspect -f '{{.State.Running}}' vector-log-shipper 2>/dev/null || printf false)
+if ! docker run --rm --network host -v "\$PWD/vector.toml.next:/etc/vector/vector.toml:ro" $image validate --no-environment /etc/vector/vector.toml >/dev/null 2>&1; then
+  echo 'Vector config validation failed; current agent left unchanged' >&2
+  exit 1
+fi
+test ! -e vector.toml || cp -a vector.toml vector.toml.rollback-$stamp
+test ! -e docker-compose.yml || cp -a docker-compose.yml docker-compose.yml.rollback-$stamp
+mv -f vector.toml.next vector.toml
+mv -f docker-compose.yml.next docker-compose.yml
+chmod 0600 vector.toml
+if docker compose up -d --force-recreate && [ "\$(docker inspect -f '{{.State.Status}}' vector-log-shipper 2>/dev/null || true)" = running ]; then
+  printf 'Vector is running on %s\n' '$host'
+  exit 0
+fi
+echo 'Vector replacement failed; restoring previous config' >&2
+if test -e vector.toml.rollback-$stamp; then mv -f vector.toml.rollback-$stamp vector.toml; else rm -f vector.toml; fi
+if test -e docker-compose.yml.rollback-$stamp; then mv -f docker-compose.yml.rollback-$stamp docker-compose.yml; else rm -f docker-compose.yml; fi
+if [ "\$previous_running" = true ]; then docker compose up -d --force-recreate || true; else docker rm -f vector-log-shipper >/dev/null 2>&1 || true; fi
+exit 1
+EOF
 }
 
 case "${1:-all}" in

@@ -29,11 +29,14 @@ endpoint.
 
 On 2026-10-07 the active instance did not have a `default` stream, so do not
 assume host/journald logs are available. Query `docker_logs` by exact host and
-`container_name`; its rows only cover hosts with an active shipper. The GitHub
-email runner host had five running containers and no shipper, and an
-authenticated query found no records for that host in the checked window.
-Treat missing rows as a collection gap, not a clean run. Check the live stream
-inventory and per-host coverage before relying on OpenObserve results.
+`container_name`; rows only cover hosts with an active shipper. As of
+2026-10-08, eight active shippers were verified: three Docker hosts on 0docker
+and five of six planned Docker hosts on 0mcp. The GitHub email runner shipper
+is active and sends to the current JSON endpoint above. The 0mcp Docker-runtime
+VM is the remaining 0mcp gap; the 0docker Builder CT and the pve01 and 0own
+Buildx workers are not enrolled. Treat missing rows as a collection gap, not
+a clean run. Check the live stream inventory and per-host coverage before
+relying on OpenObserve results.
 
 ## Collection contract
 
@@ -66,9 +69,14 @@ must preserve the original event timestamp and the container identity.
 Install the pinned Vector compose shape under
 `/opt/observability/vector-log-shipper/`, render `vector.toml` with the
 OpenObserve credentials from the private fleet secret path, and start it with
-`docker compose up -d`. Use a distinct stable `fleet` and `host` value. Verify
-the agent is healthy and that `bin/oo hosts`/`bin/oo containers` show the new
-host before declaring the rollout complete.
+`bin/observability-install-0mcp <host>`, which reads exactly one
+`{"user":"...","password":"..."}` object from stdin. Do not put the
+credentials in command arguments or environment variables. The installer
+creates a root-only (`0600`) config, validates the candidate before replacing
+the active config, and restores the previous config if the new container does
+not start. Use a distinct stable `fleet` and `host` value. Verify the agent is
+running and that `bin/oo hosts`/`bin/oo containers` show the new host before
+declaring the rollout complete.
 
 At approximately 200 hosts, keep the same agent contract but review
 OpenObserve ingest rate, disk growth, retention, and the number of concurrent
