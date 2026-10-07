@@ -5748,7 +5748,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL 6 capability: multi-resolver PTR fanout (1.1.1.1, 8.8.8.8, 9.9.9.9)\nfor IPv4 + IPv6, real FCrDNS forward-confirm via miekg/dns (not the OS\nresolver — so an in-process test server can drive the suite hermetically),\nbulk mode with 10-worker pool over ?ips= (≤50) and ?cidr= (≤/24, 256\nhosts), per-lookup 2s + total 30s timeout, refusal of private/loopback\nunless ALLOW_PRIVATE=1, optional ?include_asn=1 composing the sibling\nasn-lookup service (env ASN_LOOKUP_URL), zone cohesion summary on CIDR\nprobes. Backward-compat: ?host= and ?target=. 13 hermetic tests cover\nFCrDNS pass/fail, NXDOMAIN, IPv6, bulk, CIDR expand limits, and private-IP\nrefusal. Pure Go, CGO-free.",
-    "version": "2.0.0",
+    "version": "2.0.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
