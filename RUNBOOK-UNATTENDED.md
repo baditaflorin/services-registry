@@ -62,7 +62,7 @@ cd <repo-name>
 ### 2. Push to private GitHub
 
 ```bash
-git init -q && git branch -M main && git add -A
+git init -q & git branch -M main & git add -A
 git -c user.email=baditaflorin@gmail.com -c user.name=baditaflorin commit -q -m "feat: scaffold <id> v0.1.0"
 gh repo create "baditaflorin/<id>" --private --source=. --remote=origin --push
 ```
@@ -120,15 +120,16 @@ git push
 registry entries and creates A records. To skip the wait:
 
 ```bash
-# default_token (the public demo key) was sunset fleet-wide 2026-08-22
-# (security risk) — substitute a real keystore-issued key below.
-curl -s -X POST 'https://go-fleet-dns-sync.0exec.com/sync?api_key=<KEY>' | jq
+
+curl -s -X POST -H "X-API-Key: $FLEET_API_KEY" \
+  'https://go-fleet-dns-sync.0exec.com/sync' | jq
 ```
 
 ### 7. Verify with preflight
 
 ```bash
-curl -fsS 'https://go-fleet-preflight.0exec.com/preflight/<id>?api_key=<KEY>' | jq
+curl -fsS -H "X-API-Key: $FLEET_API_KEY" \
+  'https://go-fleet-preflight.0exec.com/preflight/<id>' | jq
 ```
 
 - **200 + `{"ok": true, ...}`** → ready to deploy
@@ -155,11 +156,11 @@ repos, NEVER in `services.json` or `overrides.json`.
 ### Seed a secret (admin)
 
 ```bash
-# default_token (the public demo key) was sunset fleet-wide 2026-08-22
-# (security risk) — substitute a real keystore-issued key below.
+
 ADMIN=$(cat /root/.fleet-secrets-admin.token)
-curl -s -X POST 'https://go-fleet-secrets.0exec.com/secrets?api_key=<KEY>' \
+curl -s -X POST 'http://10.10.10.20:18140/secrets' \
   -H "X-Admin-Token: $ADMIN" \
+  -H "X-API-Key: $FLEET_SECRETS_WRITER_KEY" \
   -d '{
     "name": "hcloud_token",
     "value": "<TOKEN>",
@@ -186,9 +187,10 @@ resp, _ := http.DefaultClient.Do(req)
 1. Generate a new value at the source (Hetzner console, GitHub, etc.).
 2. Patch the vault:
    ```bash
-   # default_token sunset 2026-08-22 (security risk) — use a real key.
-   curl -s -X POST 'https://go-fleet-secrets.0exec.com/secrets?api_key=<KEY>' \
+
+   curl -s -X POST 'http://10.10.10.20:18140/secrets' \
      -H "X-Admin-Token: $ADMIN" \
+     -H "X-API-Key: $FLEET_SECRETS_WRITER_KEY" \
      -d '{"name":"hcloud_token","value":"<NEW>","consumers":["go-fleet-dns-sync"]}'
    ```
 3. Restart the consumer service (or wait 15 min for its keystore cache to TTL out).
@@ -234,8 +236,9 @@ without these, the vault's data is unrecoverable.
 
 ```bash
 # 1. preflight returns 200 (all green)?
-# default_token sunset fleet-wide 2026-08-22 (security risk) — use a real key.
-curl -fsS "https://go-fleet-preflight.0exec.com/preflight/<id>?api_key=<KEY>" \
+
+curl -fsS -H "X-API-Key: $FLEET_API_KEY" \
+  'https://go-fleet-preflight.0exec.com/preflight/<id>' | jq
   | jq -e '.ok' || { echo "preflight failed"; exit 1; }
 
 # 2. If red, see which check

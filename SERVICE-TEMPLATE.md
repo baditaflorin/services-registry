@@ -36,7 +36,7 @@ Constraints:
 - TRL target on first ship: 4 ("developing"). Be honest in trl_evidence.
 - Use go-common/{config,server,safehttp,ua,middleware,apikey}.
 - No GitHub Actions build workflow. Husky + local `go test ./...` is the CI.
-- No secrets in any file. Default tokens must be intentionally public.
+- No secrets in any file. Load service-scoped credentials from Fleet Secrets.
 - Image tag: ghcr.io/baditaflorin/<id>:<version>, no `v` prefix.
 
 Emit these files exactly (skeletons are in SERVICE-TEMPLATE.md):
@@ -56,54 +56,15 @@ template below.
 
 | Decision      | How to pick                                                                 |
 |---------------|-----------------------------------------------------------------------------|
-| **Mesh**      | Public demo / auth-free dashboard → `mesh-pages`. Path-token recon / domain analysis → `mesh-0crawl`. API-key gated tool → `mesh-0exec`. Service on its own domain, not a fleet apex → `mesh-custom` (added 2026-09-23; see below). |
+| **Mesh**      | Public demo / auth-free dashboard → `mesh-pages`. Authenticated recon / domain analysis → `mesh-0crawl`. API-key gated tool → `mesh-0exec`. Service on its own domain, not a fleet apex → `mesh-custom` (added 2026-09-23; see below). |
 | **Category**  | Must be one of the enum in `schema/v1.json` (`proxy`, `search`, `ocr`, `geo`, `nlp`, `content`, `domains`, `security`, `recon`, `infrastructure`, `web_analysis`, `visualization`, `registry`, `dashboard`). Don't invent. |
 | **Slug**      | Derived from repo name by the rules in `FLEET.md` §Slug rules. Don't pick by hand — let `bin/generate.py` derive it and verify the result. |
 | **Host port** | `fleet-runner allocate-port --count 1` (reserved range 18100–18999). Never squat. |
 
-The mesh determines auth, routing, and what `service.yaml.api.endpoint`
-looks like:
-
-| Mesh         | `api.endpoint`     | Auth header / param                                |
-|--------------|--------------------|----------------------------------------------------|
-| `mesh-0exec` | `/` (or `/v1/...`) | `?api_key=…` or `X-API-Key`                        |
-| `mesh-0crawl`| `/`                | `Authorization: Bearer …`, `X-API-Key`, or `?api_key=…` — the legacy `/t/{token}/` path form is deprecated fleet-wide (410/404) |
-| `mesh-pages` | `/`                | none                                               |
-| `mesh-custom`| `/`                | none by default (override `auth:` per-slug if this one *should* sit behind the keystore) |
-
-### `mesh-custom` — a service on its own domain
-
-For a container service that lives on a domain the fleet doesn't already
-own a pattern for (not `<slug>.0exec.com` / `.0crawl.com` / `.0docker.com`)
-— e.g. a dedicated ops dashboard on its own domain. Add the `mesh-custom`
-topic, then in `overrides.json`:
-
-```json
-"your-slug": { "domain": "app.yourdomain.com" }
-```
-
-One `domain:` key derives the service's `url`, `health_url`, `cert_domain`
-(`wildcard.<apex>`, apex = last two labels of `domain`), and defaults
-`auth.type` to `none` — all consistently, instead of four separate
-overrides that can each be individually forgotten (the gap that motivated
-this: `auth` defaulting to `api_key` for an unrecognized mesh would have
-put a keystore gate in front of a public login page). `cert_domain` can
-still be set explicitly if the apex-from-`domain` heuristic gets a
-multi-label public suffix wrong (`co.uk` and friends) — an explicit
-override always wins.
-
-The wildcard cert itself (`wildcard.<apex>` in
-`/etc/letsencrypt/live/`) is **not** provisioned automatically for custom
-domains — issue one per apex the same way as any other cert on the
-gateway. See `baditaflorin/hub_scrapetheworld_org#28` for the case that
-motivated this mesh.
-
-The `default_token` public demo key (previously a static, undifferentiated
-bypass in the nginx gateway in front of the keystore) has been **sunset
-fleet-wide as a security risk** and no longer authenticates against any
-hosted `*.0crawl.com`/`*.0exec.com` endpoint. Don't reference it in new
-service READMEs/service.yaml as a working example — either omit the demo
-curl entirely or note that a real provisioned key is required.
+Both public container meshes require service-scoped keystore credentials for
+protected routes. Do not publish credentials in service READMEs, service.yaml,
+endpoint examples, or URLs. Use a real provisioned key in an Authorization
+header when calling a protected endpoint.
 
 ---
 
@@ -130,8 +91,7 @@ func main() {
 `server.Run` (go-common ≥ v0.9.0) is the canonical entrypoint for both
 0crawl and 0exec services. It loads config, mounts `/health`,
 `/version`, `/metrics`, wraps the mux with `TokenAuthKeystore` (gateway
-X-Auth-User fast path + keystore fallback + `default_token` local
-fallback), and binds `/`, `/<id>`, and the public kebab alias to
+X-Auth-User fast path + keystore verification), and binds `/`, `/<id>`, and the public kebab alias to
 `Handler`. Don't open-code any of that.
 
 Need extra routes or extra middleware? Drop down to the explicit form:
@@ -144,7 +104,7 @@ import (
 
 func main() {
     cfg := config.Load("<id>", version)
-    srv := server.New(cfg, server.WithKeystoreAuth("default_token"))
+    srv := server.New(cfg, server.WithKeystoreAuth())
     srv.Mux.HandleFunc("/", Handler)
     srv.Mux.HandleFunc("/<id>", Handler)
     srv.Mux.HandleFunc("/extra-thing", ExtraHandler)
@@ -232,7 +192,7 @@ owner:
   contact: "baditaflorin@gmail.com"   # canonical contact (email / slack handle)
   github: "baditaflorin"              # optional; default assignee for issues / PRs
 api:
-  endpoint: /                # or /t/{token}/ for mesh-0crawl
+| mesh-0crawl | /                | Authorization: Bearer or X-API-Key |
   method: GET
   params:
     - name: q
@@ -381,7 +341,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
 
 FROM alpine:3.20
 RUN apk add --no-cache ca-certificates wget tini \
- && addgroup -S app && adduser -S -G app app
+ & addgroup -S app & adduser -S -G app app
 WORKDIR /app
 COPY --from=builder /out/<id> /app/<id>
 COPY --from=builder /app/service.yaml /app/service.yaml
@@ -420,7 +380,7 @@ coverage.out
 ```
 
 Add this before the first commit, not after. If you already
-committed a stray binary, `git rm --cached <id> && git commit` first,
+committed a stray binary, `git rm --cached <id> & git commit` first,
 THEN add the `.gitignore` entry, otherwise the file stays tracked.
 
 ### `go.mod`
@@ -447,9 +407,9 @@ One-paragraph description of what the service does.
 
 ## Usage
 
-curl 'https://<slug>.0exec.com/?q=example&api_key=<KEY>'
+curl -H "X-API-Key: $FLEET_API_KEY" 'https://<slug>.0exec.com/?q=example'
 # or for mesh-0crawl:
-curl 'https://<slug>.0crawl.com/?q=example&api_key=<KEY>'
+curl -H "X-API-Key: $FLEET_API_KEY" 'https://<slug>.0crawl.com/?q=example'
 
 Response: JSON, fields documented below.
 
@@ -498,7 +458,7 @@ All notable changes to this service are recorded here, newest first.
 | `GET /metrics` | `go-common/server` automatically  | JSON request counters (Prometheus shape on roadmap)               |
 | `GET /selftest`| You (see below)                   | Liveness probe of real upstreams — consumed by selftest-aggregator |
 | `GET /_gw_health` | nginx vhost template           | **Do not** implement; the gateway adds it                         |
-| Your route(s)  | You                               | `/` for 0exec/pages; `/t/{token}/` plus `/<id>` for 0crawl        |
+| Your route(s)  | You                               | `/` for public service routes; pass the service API key in a header        |
 
 ### `/selftest` — one small round-trip, NOT a full handler invocation
 
@@ -593,7 +553,7 @@ fleet-runner deploy <id>               # DNS → AMD64 build → vhost → cert 
 ```
 
 If you don't have LXC 108 access, **ask the user** to run those two
-commands. Do **not** substitute `docker build && ssh && docker run` —
+commands. Do **not** substitute `docker build & ssh & docker run` —
 the canonical path also updates gateway vhosts, certs, and the
 deployed-version metadata the catalog reads.
 

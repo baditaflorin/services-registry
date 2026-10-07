@@ -113,7 +113,7 @@ meshes) a single auth backend — the keystore:
 
 | Mesh         | `kind`     | Domain pattern              | Auth                                                          | Used for                                     |
 |--------------|------------|-----------------------------|---------------------------------------------------------------|----------------------------------------------|
-| `mesh-0exec` | container  | `<slug>.0exec.com`          | api_key in `?api_key=` or `X-API-Key` — keystore-gated         | proxy, search, ocr, security, infrastructure |
+| `mesh-0exec` | container | `<slug>.0exec.com` | API key in `X-API-Key` or `Authorization: Bearer` — keystore-gated | proxy, search, ocr, security, infrastructure |
 | `mesh-0crawl`| container  | `<slug>.0crawl.com`         | **api_key OR legacy `/t/<token>/…`** — both keystore-gated     | domains, recon, web-analysis                 |
 | `mesh-pages` | static     | varies (homepage or *.github.io) | none                                                     | static dashboards, browser-only WASM apps    |
 
@@ -130,48 +130,17 @@ is derived from the explicit topic `lang-<x>` (preferred) or the
 legacy tag-soup (`node`, `c`, …). Category is declared via
 `category-<x>`.
 
-## Authentication: the keystore (`go-apikey-service`)
+## Authentication: the fleet keystore
 
-**This is the fleet's single point of compromise.** Treat it like a
-CA root. Every **container** service — both 0exec and 0crawl — trusts
-whatever the keystore says.
+Both public container meshes use service-scoped keys verified by
+go-apikey-service. Send keys in Authorization: Bearer or X-API-Key headers;
+never place credentials in URLs, paths, or registry examples. The gateway
+validates protected requests and injects the verified principal. Health,
+version, and selftest routes remain public for probes.
 
-- **What it is**: a Go HTTP service (`baditaflorin/go-apikey-service`)
-  backed by SQLite. Issues, verifies, revokes, lists keys. Runs on the
-  dockerhost, internal-only (not internet-reachable).
-- **How keys flow**:
-  1. Caller hits one of:
-     - `https://<slug>.0exec.com/...?api_key=<key>`
-     - `https://<slug>.0crawl.com/...?api_key=<key>` (new shape)
-     - `https://<slug>.0crawl.com/t/<key>/...` (legacy shape, kept working)
-  2. nginx extracts the candidate key from query / header / path
-     and runs `auth_request` → `_verify_key` location.
-  3. ~~Static fallback first: if the candidate matches the universal
-     demo key `$default_token`, accept immediately.~~ **Sunset
-     2026-08-22 (security risk)** — a static, undifferentiated,
-     rate-limit-only bypass in front of every service was judged too
-     broad. Every candidate now falls straight through to step 4; there
-     is no public unauthenticated demo path anymore.
-  4. POST `X-Verify-Key=<key>` to `/verify` on the keystore.
-  5. Keystore checks SQLite → returns 200 + `X-Auth-User`/`X-Auth-Scope`,
-     or 401.
-- **Why there were two layers** (historical): the static fallback meant
-  a brief keystore outage didn't kill the public demo path. That
-  tradeoff was retired in favor of the dynamic check always applying —
-  see "Default-token sunset" below.
-
-### Default-token sunset (2026-08-22)
-
-The universal demo key and its static-fallback bypass have been
-**removed fleet-wide as a security risk**, not merely rotated — do not
-document, script against, or rely on a value called `default_token`
-anywhere in this fleet going forward. Every caller (human or
-automated) needs a real keystore-issued key via the normal
-`fleet-runner key provision <slug>` flow. If you find `default_token`
-referenced elsewhere as if it still grants access — a README, a
-runbook command, a dashboard default — treat it as stale documentation
-and flag/fix it the same way this section was fixed, rather than
-assuming it still works.
+Services that call fleet siblings use their own FLEET_API_KEY and declare
+the dependency in service.yaml. The keystore fails closed when it cannot
+validate a key. There is no shared public credential or bypass.
 
 ### Clients MUST use `go-common/apikey`, not handroll HTTP calls
 
@@ -302,7 +271,7 @@ repos are never opened. Same pattern for `build-test`, `astedit`,
 
 | Command | What it does |
 |---|---|
-| `fleet-runner update-dep <mod@ver>` | `go get <mod@ver> && go mod tidy` in every repo |
+| `fleet-runner update-dep <mod@ver>` | `go get <mod@ver> & go mod tidy` in every repo |
 | `fleet-runner inject <src> <dest>` | copy a file (e.g. `FLEET.md`) into every repo |
 | `fleet-runner exec "<cmd>"` | run any shell command in every repo (sed, formatter, etc.) |
 | `fleet-runner build-test` | `go test ./...` across every repo — regression gate |
@@ -313,38 +282,23 @@ repos are never opened. Same pattern for `build-test`, `astedit`,
 Today most services use `middleware.TokenAuth(staticList)`. To swap
 that for keystore-backed validation across all 130 repos:
 
-1. **One commit to `go-common`** — already done in v0.7.0:
-   ```go
-   // new in middleware/auth_keystore.go
-   middleware.TokenAuthKeystore(middleware.KeystoreOpts{
-       Verifier:    apikey.NewCache(apikey.New()),
-       LocalTokens: []string{"default_token", "fb_…"},
-   })
-   ```
-   This middleware trusts the gateway's `X-Auth-User` header, has a
-   local fast-path for the static fallback key, calls the keystore
-   for everything else with 15-min stale tolerance, and fails closed
-   on keystore outage.
+1. **Central middleware** in `go-common` verifies credentials through the
+   keystore and trusts gateway identity headers. It has no shared static
+   bypass; keep optional local credentials specific to the service.
 
-2. **One bulk dep bump** — bumps every fleet repo to `go-common@v0.7.0`:
+2. **Bulk dependency update** uses the current approved Go Common release:
    ```bash
-   fleet-runner update-dep github.com/baditaflorin/go-common@v0.7.0
-   fleet-runner build-test          # verify nothing broke
-   fleet-runner push "deps: go-common v0.7.0 (keystore middleware available)"
+   fleet-runner rollout --dep github.com/baditaflorin/go-common@<version>
    ```
+   Review the discovered target set and build/test results before applying.
 
-3. **Per-service swap** is then a 3-line change in each service's
-   `main.go` — but **most services don't need it** because the gateway
-   sets `X-Auth-User` and the new middleware trusts that automatically.
-   Services that still use the legacy `middleware.TokenAuth` keep
-   working unchanged. Migrate the loud ones (high-traffic, security-
-   sensitive) first; let the long tail drain organically when each
-   repo next gets touched.
+3. **Service identities** for outbound calls come from Fleet Secrets and are
+   resolved through `apikey.MustResolveCritical(slug, "FLEET_API_KEY")`.
+   Never put keys in URLs, source, examples, or shell output.
 
-The net effect: a library-level change scales to 130 repos without
-130 individual code reviews. `fleet-runner build-test` is the
-regression gate before `push`. `fleet-runner state snapshot --push`
-after deploys gives you fleet-wide health visibility.
+After rollout, verify gateway auth, service health, and fleet state with the
+canonical runner. A shared-library change can reduce per-service code churn,
+but each rollout cohort still needs CI and runtime verification.
 
 ### Anti-pattern to avoid
 
@@ -365,7 +319,7 @@ verbs that each name their own danger** rather than one big one:
 |-------------------|---------------------------------------------------------------|--------------------------------------------------------------------------|
 | `canary <repo>`   | one service + bake + structured verdict (health, latency Δ)   | high-risk change first touch — `safehttp`, `middleware`, auth, gateway   |
 | `roll <filter>`   | wave-of-N + bake + halt-on-fail + resumable plan              | "deploy everything that drifts" — the normal post-bump fleet rollout     |
-| `converge-deploy` | declarative; only deploys repos whose live state ≠ registry   | catch-up / idempotent re-runs ("did I actually deploy everything?")      |
+| `converge-deploy` | declarative; only deploys repos whose live state ≠ registry   | catch-up / idempotent re-runs ("did I actually deploy everything")      |
 
 All three should:
 - Require `--filter` (even `--filter all=true`); no implicit "all".
@@ -641,9 +595,8 @@ external (non-fleet) targets. The pattern:
 # inside the container
 env | grep -E '^HTTPS_PROXY=' # must show http://...:...@p.webshare.io:80
 
-# end-to-end through the gateway (default_token sunset 2026-08-22 — use a
-# real keystore-issued key here, not the retired public demo key)
-curl -s 'https://<scanner>.0exec.com/probe?url=https://httpbin.org/ip&api_key=<KEY>'
+# end-to-end through the gateway with a real keystore-issued key in the
+# Authorization: Bearer header; never place credentials in the URL
 # → "origin": some Webshare residential IP, NOT 176.x.x.x (Hetzner)
 ```
 
@@ -689,7 +642,7 @@ creds at `/root/.fleet-runner-egress.env` on 108 (chmod 600,
 `NO_PROXY` excludes the registries above plus the internal mesh, so
 only unrecognized external hosts — currently just the KEV feed — route
 through the proxy), sourced explicitly before the command:
-`. /root/.fleet-runner-egress.env && fleet-runner remediate cve --plan`.
+`. /root/.fleet-runner-egress.env & fleet-runner remediate cve --plan`.
 Nothing else on 108 (docker pulls, apt, other fleet-runner verbs)
 picks this up unless it's sourced the same way — deliberately not a
 host-wide `/etc/environment` change. `nvd.nist.gov` is fronted by

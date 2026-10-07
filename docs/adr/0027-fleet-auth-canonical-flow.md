@@ -11,7 +11,7 @@ The 2026-05-17 bootstrap of `go-pentest-leak-bounty-policy` failed because
 `go-fleet-dns-sync`'s reconcile ticker had silently logged 0 syncs for
 >24h. `/health` was green while every outbound vault read returned 403
 "not in consumers list" because `FLEET_API_KEY` defaulted to the public
-demo `default_token`, and `actor=demo` isn't on the consumers allowlist
+demo `retired shared credential`, and `actor=demo` isn't on the consumers allowlist
 for any production secret. The operator manually POSTed to Hetzner's
 Cloud Zones API to unblock and back-filled this ADR + the tooling and
 guards below.
@@ -30,7 +30,7 @@ Adjacent failures uncovered during the cleanup pass:
   until `SAFEHTTP_ALLOW_PRIVATE_IPS=10.10.10.10` was set in compose.
 * **Demo-token defaults at startup** — multiple services defaulted
   outbound auth keys (and one admin token) to the literal
-  `"default_token"`. The Go binary accepted the value at boot, the
+  `"retired shared credential"`. The Go binary accepted the value at boot, the
   ticker failed at run time, no log surfaced because the http client
   just got a 403 it didn't know how to interpret.
 
@@ -62,8 +62,8 @@ Five primitives the flow depends on, each owned by a specific surface:
 |---|---|---|
 | **Service principal** | `service.yaml` `id:` + `auth:` blocks | Identity + declared scope of fleet calls. |
 | **Keystore-issued key** | `go-apikey-service` SQLite at `/data/keys.db` | Maps `ak_*`/`fb_*` value → `(user, scope, exp)`. |
-| **`FLEET_API_KEY` in container** | `/opt/services/<slug>/.env` (mode 600) on the dockerhost | The actual key, refused-empty/refused-default_token at startup. |
-| **`go-common/apikey.MustResolveCritical`** | Service `main.go` | Fail-fast at boot if `FLEET_API_KEY` is empty, `default_token`, or has unknown prefix. |
+| **`FLEET_API_KEY` in container** | `/opt/services/<slug>/.env` (mode 600) on the dockerhost | The actual key, refused-empty/refused-retired shared credential at startup. |
+| **`go-common/apikey.MustResolveCritical`** | Service `main.go` | Fail-fast at boot if `FLEET_API_KEY` is empty, `retired shared credential`, or has unknown prefix. |
 | **Gateway keystore middleware** | nginx + `go-common/server.WithKeystoreAuth` | Translates `X-API-Key` query/header into `X-Auth-User` for downstream services. |
 
 ### The canonical bootstrap
@@ -74,7 +74,7 @@ three steps that previously had to be sequenced by hand:
 
 ```
 fleet-runner key provision go-fleet-dns-sync
-  ├── apikey.Client.Issue(user=go-fleet-dns-sync, scope=…, never_expires=true)
+  ├── apikey.Client.Issue(user=go-fleet-dns-sync, finite TTL, scoped capability)
   │       returns ak_…
   ├── ssh → dockerhost → idempotent sed-or-append on
   │   /opt/services/go-fleet-dns-sync/.env  (mode 600, FLEET_API_KEY=ak_…)
@@ -125,8 +125,8 @@ environment:
   # Refuse-empty guard. Containers fail at compose-interpolation time
   # if FLEET_API_KEY isn't set in /opt/services/<slug>/.env, so an
   # accidental rollback to "no .env" can't silently demote to
-  # default_token.
-  - FLEET_API_KEY=${FLEET_API_KEY:?FLEET_API_KEY must be a keystore-issued key for principal=<slug>; demo default_token rejected}
+  # retired shared credential.
+  - FLEET_API_KEY=${FLEET_API_KEY:?FLEET_API_KEY must be a keystore-issued key for principal=<slug>; demo retired shared credential rejected}
 
   # Public-fleet gateway URL for go-fleet-secrets. Do NOT use the
   # docker-internal hostname http://go-fleet-secrets:18140 — that
@@ -149,7 +149,7 @@ FleetAPIKey: apikey.MustResolveCritical("<slug>", "FLEET_API_KEY"),
 ```
 
 `MustResolveCritical` fatal-exits with a regex-greppable log line if
-`FLEET_API_KEY` is empty, `default_token`, or has an unknown prefix:
+`FLEET_API_KEY` is empty, `retired shared credential`, or has an unknown prefix:
 
 ```
 apikey.critical_key_missing slug=<slug> env=FLEET_API_KEY reason=<reason> fix=`fleet-runner key provision <slug>` docs=https://github.com/baditaflorin/services-registry/blob/main/RUNBOOK-UNATTENDED.md#service-principals
@@ -157,7 +157,7 @@ apikey.critical_key_missing slug=<slug> env=FLEET_API_KEY reason=<reason> fix=`f
 
 For admin tokens (write-endpoint gates, not outbound auth), use the
 per-repo inline helper pattern shown in `go-fleet-priority-queue/main.go`
-(`mustResolveAdminToken`). Refuses unset and `default_token`. Extract
+(`mustResolveAdminToken`). Refuses unset and `retired shared credential`. Extract
 to go-common once there are 3+ callers.
 
 ### Audit at rest
@@ -169,7 +169,7 @@ fleet-runner audit fleet-auth-scope [--json] [--severity warn|fail]
 Shape-only survey of `FLEET_API_KEY` across every running container on
 the dockerhost. Flags:
 
-* `default_token` — **fail**. Container will silently 401 against vault.
+* `retired shared credential` — **fail**. Container will silently 401 against vault.
 * `unset` — **warn**. Only matters if the service does outbound auth.
 * `unknown_prefix` — **warn**. Likely a misconfigured paste.
 * `ak_*` / `fb_*` — info (suppressed from the table).
@@ -195,7 +195,7 @@ v2 should add:
   instead of a three-step ceremony that historically lost steps.
 * Drift at rest is detectable (`audit fleet-auth-scope`). No more "key
   silently wrong for 24h, ticker logged 0 syncs."
-* Demo `default_token` cannot reach production code paths: the compose
+* Demo `retired shared credential` cannot reach production code paths: the compose
   `:?` guard refuses interpolation, `MustResolveCritical` refuses
   startup, and the audit verb flags it post-hoc if both somehow miss.
 
@@ -309,4 +309,4 @@ else.
 * ADR-0023 — pipeline gaps from phase-1 bootstrap
 * ADR-0024 — primitive-to-primitive pattern (internal vs gateway)
 * ADR-0025 — vault-integrated admin tokens (the OTHER class of token)
-* 2026-05-17 incident — silent ticker, default_token + missing consumers
+* 2026-05-17 incident — silent ticker, retired shared credential + missing consumers

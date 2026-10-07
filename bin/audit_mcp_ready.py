@@ -26,12 +26,13 @@ rebuild only the derived slices with --slices-only (pure projection,
 no repo re-scan, cannot regress unrelated fields).
 
 Usage:
-    python3 bin/audit_mcp_ready.py [--gateway-url URL] [--api-key KEY] [--dry-run]
+    python3 bin/audit_mcp_ready.py [--gateway-url URL] [--api-key KEY or FLEET_API_KEY] [--dry-run]
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import urllib.request
@@ -42,12 +43,12 @@ SERVICES_JSON = ROOT / "services.json"
 OVERRIDES_JSON = ROOT / "overrides.json"
 
 DEFAULT_GATEWAY_URL = "https://fleet-mcp-gateway.0exec.com/gateway/tools"
-DEFAULT_API_KEY = "default_token"
 
 
 def fetch_gateway_tools(url: str, api_key: str) -> dict:
-    sep = "&" if "?" in url else "?"
-    req = urllib.request.Request(f"{url}{sep}api_key={api_key}")
+    if not api_key:
+        raise ValueError("API key required; pass --api-key or set FLEET_API_KEY")
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {api_key}"})
     with urllib.request.urlopen(req, timeout=15) as resp:
         return json.load(resp)
 
@@ -87,10 +88,12 @@ def apply_patch(entries: list[dict], counts: dict[str, int], assessed_at: str) -
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--gateway-url", default=DEFAULT_GATEWAY_URL)
-    ap.add_argument("--api-key", default=DEFAULT_API_KEY)
+    ap.add_argument("--api-key", default=os.environ.get("FLEET_API_KEY", ""))
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
+    if not args.api_key:
+        ap.error("pass --api-key or set FLEET_API_KEY")
     payload = fetch_gateway_tools(args.gateway_url, args.api_key)
     counts = tool_counts_by_service(payload)
     assessed_at = payload.get("refreshed_at") or ""

@@ -28,6 +28,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build  # type: ignore[import]
 import generate  # type: ignore[import]
 
 
@@ -42,8 +43,8 @@ PARENT_FIXTURE = {
     "url":        "https://go-fleet-metrics-hub.0exec.com",
     "health_url": "https://go-fleet-metrics-hub.0exec.com/_gw_health",
     "repo_url":   "https://github.com/baditaflorin/go-fleet-metrics-hub",
-    "auth":       {"type": "api_key", "query_param": "api_key", "header": "X-API-Key"},
-    "auth_help":  "api_key required (header X-API-Key or ?api_key=)",
+    "auth":       {"type": "api_key", "header": "X-API-Key"},
+    "auth_help":  "API key required in X-API-Key or Authorization: Bearer",
     "tags":       [],
 }
 
@@ -60,6 +61,20 @@ EXPAND_SPEC = {
          "category": "observability"},
     ],
 }
+
+
+class TestHeaderOnlyAuth(unittest.TestCase):
+    def test_api_key_help_never_advertises_url_auth(self):
+        self.assertEqual(
+            generate.auth_help_for({"type": "api_key", "header": "X-API-Key"}),
+            "API key required in X-API-Key or Authorization: Bearer",
+        )
+
+    def test_source_examples_strip_query_credentials(self):
+        path = build._sanitize_example_path(
+            "https://example.test/t/old-token/search?q=go&api_key=one&token=two&access_token=three&auth_token=four&apikey=five"
+        )
+        self.assertEqual(path, "/search?q=go")
 
 
 class TestSplitOverrides(unittest.TestCase):
@@ -495,11 +510,10 @@ class TestPublicMirror(unittest.TestCase):
         "example_path": "/?target=example.com",
         "auth": {
             "type": "api_key",
-            "query_param": "api_key",
             "header": "X-API-Key",
-            "public_demo_token": "demo-token-must-be-stripped",
+            "key_value": "must-not-be-published",
         },
-        "auth_help": "api_key required (header X-API-Key or ?api_key=)",
+        "auth_help": "API key required in X-API-Key or Authorization: Bearer",
         # Internal / disclosure-risk fields — must be dropped:
         "host_port": 18999,
         "container_port": 8999,
@@ -541,15 +555,11 @@ class TestPublicMirror(unittest.TestCase):
             self.assertIn(required, pub,
                 f"public mirror dropped canonical field {required!r}")
 
-    def test_strips_auth_public_demo_token(self):
-        """public_demo_token in the schema is labeled `intentionally public`
-        but we fail-closed: drop it from the mirror until an operator
-        explicitly lifts the restriction. Auth `type`/`query_param`/`header`
-        survive."""
+    def test_public_auth_projection_drops_key_values_and_query_auth(self):
+        """Public auth metadata keeps only the service key type and header."""
         pub = generate.to_public_entry(self.FULL_ENTRY)
         self.assertEqual(pub["auth"], {
             "type": "api_key",
-            "query_param": "api_key",
             "header": "X-API-Key",
         })
 

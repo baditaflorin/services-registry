@@ -82,7 +82,7 @@ READ THE PUBLIC TWO BEFORE ASKING THE USER FOR ANYTHING.
 ## The dashboard
 
 Live at: https://baditaflorin.github.io/go-pentest-dashboard/
-api_key field defaults to default_token — **stale**: that public demo key
+api_key field defaults to retired shared credential — **stale**: that public demo key
 was sunset fleet-wide 2026-08-22 (security risk) and no longer
 authenticates; the dashboard's own default value needs updating in its
 own repo (not fixed here) to stop pointing users at a dead key.
@@ -123,7 +123,7 @@ Recon shows every probed host with status + title + tech, or the error if dead.
 - fleet-runner from your Mac: `/Users/live/bin/fleet-runner` (shim that
   forwards to the build LXC). Full help on `--help`.
 - Service-to-service auth: each fleet service requires an api_key. The demo
-  default_token was sunset fleet-wide 2026-08-22 (security risk) and no
+  retired shared credential was sunset fleet-wide 2026-08-22 (security risk) and no
   longer works against the public gateway. Use a keystore-issued key.
 - Hetzner Cloud API token for DNS: lives in user env as HCLOUD_TOKEN
   (canonical name). Older HETZNER_DNS_API_TOKEN is for the DEPRECATED DNS
@@ -146,8 +146,8 @@ Recon shows every probed host with status + title + tech, or the error if dead.
 2. Run a TAKEOVER SCAN across the picked program's subdomains. This is the
    single highest-EV passive pattern: one stale CNAME = $500-$5k bounty.
    Pattern that's already tested:
-     GET https://go-pentest-subfinder.0exec.com/enum?domain=X&api_key=...
-     for each host: GET https://go-pentest-takeover-checker.0exec.com/check?host=H&api_key=...
+     GET https://go-pentest-subfinder.0exec.com/enum?domain=X with X-API-Key: $FLEET_API_KEY
+     for each host: GET https://go-pentest-takeover-checker.0exec.com/check?host=H with X-API-Key: $FLEET_API_KEY
      filter where severity != "none"
    Don't try to do this from `bash | xargs -P` again — those scans kept
    getting stuck. Do it inline, sequential, with progress printed every 25

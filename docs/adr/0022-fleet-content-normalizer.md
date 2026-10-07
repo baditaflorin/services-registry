@@ -128,7 +128,7 @@ Consumers adopt incrementally:
    outage.
 
 Per-call auth: the canonical fleet shape —
-`X-API-Key: $api_key` or `?api_key=$api_key` — exactly like every
+`X-API-Key: $api_key` is the supported service authentication header.
 other `mesh-0exec` service. No new auth surface.
 
 Top consumers (in dependency-removal order):
