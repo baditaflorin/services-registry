@@ -30,13 +30,14 @@ endpoint.
 On 2026-10-07 the active instance did not have a `default` stream, so do not
 assume host/journald logs are available. Query `docker_logs` by exact host and
 `container_name`; rows only cover hosts with an active shipper. As of
-2026-10-08, eight active shippers were verified: three Docker hosts on 0docker
-and five of six planned Docker hosts on 0mcp. The GitHub email runner shipper
-is active and sends to the current JSON endpoint above. The 0mcp Docker-runtime
-VM is the remaining 0mcp gap; the 0docker Builder CT and the pve01 and 0own
-Buildx workers are not enrolled. Treat missing rows as a collection gap, not
-a clean run. Check the live stream inventory and per-host coverage before
-relying on OpenObserve results.
+2026-10-08, nine active shippers were verified: three Docker hosts on 0docker
+and all six planned Docker hosts on 0mcp. The GitHub email runner shipper is
+active and sends to the current JSON endpoint above. A central query confirmed
+`docker-runtime-lv3` had logs for 29 containers (1,273 events in the preceding
+20 minutes). The 0docker Builder CT and the pve01 and 0own Buildx workers are
+not enrolled. Treat missing rows as a collection gap, not a clean run. Check
+the live stream inventory and per-host coverage before relying on OpenObserve
+results.
 
 ## Collection contract
 
