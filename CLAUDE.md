@@ -873,26 +873,22 @@ or health-check a static Pages site.
   a raw traceback, never indistinguishable from "zero results") — copy
   both patterns if you add a new command that talks to OpenObserve.
 
-  **Two streams**, both queryable the same way:
-  - `default` — OS-level syslog/journald, forwarded via plain `rsyslog`
-    (`omfwd` in `/etc/rsyslog.d/*.conf`) from the dockerhost VM, the
-    nginx proxy manager VM, and the LXC itself. sshd, kernel, cron,
-    dockerd's own daemon events, and any systemd service that logs via
-    journald.
-  - `docker_logs` — **every container's stdout/stderr, fleet-wide**,
-    tagged `container_name` / `host` / `image` / compose labels. Added
-    2026-08-23 to close exactly the gap that bit an agent that night:
-    `docker logs` only shows the CURRENT container instance, so a
-    redeploy silently discards history. `docker logs` and the
-    `json-file` driver are UNCHANGED on every service — this is a
-    second, independent path, not a replacement.
+  **Check `bin/oo streams` and host coverage before relying on a stream.**
+  The active 0own instance returned `Search stream not found: default` on
+  2026-10-07, so do not assume host/journald logs are available. `docker_logs`
+  contains container stdout/stderr only for hosts with a running shipper,
+  tagged `container_name` / `host` / `image` / compose labels. Missing rows
+  are not evidence of zero activity or a clean soak. `docker logs` and the
+  `json-file` driver are unchanged; centralized collection is a second,
+  independent path.
 
   **How `docker_logs` gets populated**: a small Vector (`timberio/vector`,
   pinned by digest) container named `vector-log-shipper` runs at
-  `/opt/observability/vector-log-shipper/` on every docker host (as of
-  2026-08-26: the 0docker dockerhost/prod VMs and the 0mcp Docker runtime
-  rollout). It is an always-on production control, not a temporary debug
-  switch. It reads every container's logs via the Docker socket — the same
+  `/opt/observability/vector-log-shipper/` on enrolled Docker hosts. The
+  GitHub email runner host was a verified coverage gap on 2026-10-07: five
+  containers were running, no shipper was present, and authenticated search
+  found no host records in the checked window. It reads container logs via the
+  Docker socket — the same
   read path `docker logs` uses — and ships a copy to the single central
   OpenObserve instance; it does not touch each container's own logging driver
   or config, so nothing about existing services changes, and no per-service
