@@ -620,7 +620,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
-    "version": "1.5.15",
+    "version": "1.5.16",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
