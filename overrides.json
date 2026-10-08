@@ -2239,7 +2239,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "994-domain live audit superseding a prior trl:7 self-assessment validated only against synthetic fixtures. Found the fetch-cache-masking bug confirmed live via docker inspect -- a service whose entire job is reading current rate-limit counters was eligible to silently serve stale shared-cache data. Also fixed a false negative (rejected a real API's float-format X-Rate-Limit-Limit as malformed) and a false positive (12 unrelated shared-hosting domains flagged present based on a boilerplate RateLimit-Policy header alone). See github.com/baditaflorin/go_domain_ratelimit_headers PR #4.",
-    "version": "0.2.0",
+    "version": "0.4.10",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
