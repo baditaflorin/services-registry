@@ -606,7 +606,7 @@
   },
   "api-extractor": {
     "env": {
-      "GRAPH_ENABLED": "true",
+      "GRAPH_ENABLED": "false",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "container_port": 8336,
@@ -620,7 +620,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
-    "version": "1.5.13"
+    "version": "1.5.14"
   },
   "api-first": {
     "container_port": 8276,
@@ -734,7 +734,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.8.30",
+    "version": "2.8.31",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1068,12 +1068,12 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20.",
-    "version": "3.5.36",
+    "version": "3.5.37",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
-      "GRAPH_ENABLED": "true",
+      "GRAPH_ENABLED": "false",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     }
   },
@@ -1549,7 +1549,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.3.12"
   },
   "domain-ai-catalog-discovery": {
     "host_port": 18324,
@@ -1828,7 +1829,7 @@
     "trl_evidence": "Confirmed this repo's own trl:7 claim via independent audit rather than self-assessment. Found a real regression from an earlier merged PR: a demotion meant to catch one specific false-positive shape was over-broadly capping the weight of every platform-exclusive backend/CDN host match, systemically under-detecting 9 platforms (VTEX had only 12 detections fleet-wide vs. 10,041 for Shopify). Confirmed live: a real operating VTEX storefront was reported as having no e-commerce platform despite 7 independent VTEX asset references. Fixed by narrowing the demotion to only its intended tag shape. See github.com/baditaflorin/go_domain_ecommerce_platform PR #15.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "version": "0.4.5",
+    "version": "0.5.18",
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -1908,7 +1909,7 @@
     "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
     "host_port": 18231,
     "trl": 7,
-    "version": "0.1.0",
+    "version": "0.2.17",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1936,7 +1937,7 @@
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
     "trl": 7,
-    "version": "0.1.0",
+    "version": "0.3.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2260,7 +2261,7 @@
   "domain-structured-data-rollup": {
     "container_port": 18188,
     "host_port": 18188,
-    "version": "0.3.14",
+    "version": "0.3.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2531,7 +2532,8 @@
     "trl_evidence": "RSS/Atom/JSON autodiscovery, conventional feed probes, WordPress JSON hinting, feed parsing, source/confidence output, and unit tests.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.5.15"
   },
   "field-recording-mirror": {
     "trl": 4,
@@ -4498,7 +4500,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15.",
-    "version": "2.2.0",
+    "version": "2.5.19",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -4563,7 +4565,8 @@
     "trl_evidence": "400-domain live production diff against domain_outlinks (tool_version 2.4.3): found and fixed a www/non-www internal-vs-subdomain classification flip (7/400 = 1.75%) and 3 dead-gazetteer false-categorization bugs (aws.amazon.com tagged 'affiliate' instead of 'cloud', cloud.google.com falling through to blank, fonts.gstatic.com mistagged 'cloud' instead of 'fonts'). See github.com/baditaflorin/go_outlink_graph PR #12.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "2.4.10"
   },
   "page-load-metrics": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -5893,7 +5896,8 @@
     "trl_evidence": "2.3.0 transcodes the fetched body to UTF-8 honouring the declared charset (BOM/Content-Type/<meta>/statistical via x/net/html/charset) BEFORE html.Parse, and normalizes Unicode-form IDN hosts to punycode (IDNA2008 via x/net/idna) before the SSRF guard+fetch. Before, raw-byte parsing mojibake'd then U+FFFD'd every non-ASCII JSON-LD/microdata/RDFa value on legacy-charset pages while ASCII type names survived. 17 new table-driven tests across 9 real legacy encodings (Shift_JIS/EUC-JP/EUC-KR/ISO-8859-1/ISO-8859-2/windows-1251/GBK/Big5/windows-1252) + 8 IDN cases, each with regression guards proving the old path was wrong; build/vet/gofmt green. Live: bücher.de->xn--bcher-kva.de returns 200 (was unresolvable). Detection rate gap motivating the fix: legacy-charset ccTLDs .fr 11% / .jp 12% / .kr 14% vs UTF-8 ccTLDs .de 46% / .au 56%.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "2.4.12"
   },
   "schlieren-imaging-simulator": {
     "trl": 4,
@@ -6178,7 +6182,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "No audit-reset commit found -- genuine incremental hardening across 10+ rounds. Confirmed real table domain_social_profiles (~1.29M rows, tool_name='social-graph'). Tested against 600 real domains. Fixed: Weibo URL-routing prefixes (u/p/n) were being stored as the actual handle -- confirmed live in production, 144 rows literally have handle=\"u\", and CJK nicknames under /n/ were replaced with the literal string \"n\"; also fixed hyphenated-domain brand matching and wired Facebook's fb-page widget as a genuine owned-profile signal while correctly leaving fb-like alone (its link is often self-referential, not an identity claim). On a 517-domain corpus: domains with >=1 owned profile 169->179, zero regressions, no new false positives in a 25-profile precision spot-check. See github.com/baditaflorin/go_social_graph PR #18.",
-    "version": "2.3.0",
+    "version": "2.5.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6415,7 +6419,8 @@
     "trl_evidence": "Live production-DB audit found tech_count=0 on 51.2% of successful rows; investigated and found 71.9% of the zero rows carry a tool_version whose fetch path routed through a since-fixed contended cache bug (backlog awaiting reprocessing) -- current-version zero rate is a plausible ~17%, mostly genuine parked/static/bot-challenge pages, confirmed via 40+ live spot-checks. A real bug was found separately: techFromAssetURL used an unqualified substring match for 'bootstrap', misattributing Bootstrap Icons CDN URLs (an independently-versioned sibling project) as the Bootstrap CSS framework and bleeding its version onto it, poisoning the CPE/CVE bridge with a nonexistent version. Fixed (v1.9.6) by detecting bootstrap-icons as its own technology before the generic Bootstrap match. See github.com/baditaflorin/go_technology_stack PR #22 (merged). Rows with tool_version<1.9.6 are re-crawl candidates.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.10.3"
   },
   "telnet-banner": {
     "container_port": 8086,
