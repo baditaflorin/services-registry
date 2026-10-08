@@ -34,7 +34,7 @@ steps:
     depends_on: []
     image: python:3.13-alpine
     commands:
-      - apk add --no-cache git
+      - apk add --no-cache git bash
       - |
         target="$${CI_COMMIT_TARGET_BRANCH:-$${CI_REPO_DEFAULT_BRANCH}}"
         source="$${CI_COMMIT_SOURCE_BRANCH:-$${CI_COMMIT_BRANCH}}"
