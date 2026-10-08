@@ -620,7 +620,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
-    "version": "1.5.14",
+    "version": "1.5.15",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -3857,7 +3857,7 @@
     "scope": "internal-only",
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
-    "version": "0.3.30",
+    "version": "0.3.31",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
@@ -3884,7 +3884,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.0.0 uplift from TRL 3 to TRL 6:\n- Per-record A/AAAA resolution via miekg/dns with explicit TTL +\n  source-resolver attribution (1.1.1.1 / 8.8.8.8 fallback).\n- Family-pinned TCP probes (tcp4/tcp6) on ports 80 + 443 with a\n  3s connect timeout each; reports open/closed/timeout/skipped.\n- Real TLS handshake on reachable 443 with strict SNI (no\n  InsecureSkipVerify), reports offered + negotiated ALPN.\n- Dual-stack classification (ipv4-only / ipv6-only / dual-stack /\n  no-records).\n- Per-family connect_ms recorded so consumers can compute Happy\n  Eyeballs (RFC 8305) fallback cost.\n- SSRF guard refuses private/loopback/link-local/CGNAT addresses\n  unless ALLOW_PRIVATE=1.\n- Resolver + dialer interfaces injected from tests; 4-case\n  classification matrix + probe + happy-eyeballs unit tests pass.\n- 15s total request budget enforced via context.WithTimeout.",
-    "version": "2.4.2"
+    "version": "2.4.3"
   },
   "js-framework-version-extractor": {
     "container_port": 18258,
