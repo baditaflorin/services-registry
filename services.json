@@ -6526,6 +6526,9 @@
     "host_port": 8308,
     "container_port": 8308,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
