@@ -620,7 +620,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
-    "version": "1.5.16",
+    "version": "1.5.18",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -1076,7 +1076,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20.",
-    "version": "3.5.38",
+    "version": "3.5.40",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -6469,7 +6469,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.10.4",
+    "version": "1.10.5",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
