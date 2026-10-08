@@ -2994,16 +2994,16 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18242,
     "container_port": 18242,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.2.18",
-    "network_exposure": "gateway-authenticated",
-    "depends_on": [
-      "go-fleet-secrets",
-      "infrastructure-fetch-cache"
-    ]
+    "version": "0.2.19",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "domain-ratelimit-headers",
@@ -3221,16 +3221,16 @@
     "host_port": 8287,
     "container_port": 8287,
     "internal_direct": true,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.22",
-    "network_exposure": "gateway-authenticated",
-    "depends_on": [
-      "go-fleet-secrets",
-      "infrastructure-fetch-cache"
-    ]
+    "version": "1.6.23",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "email-harvester",
