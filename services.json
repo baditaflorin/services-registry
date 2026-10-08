@@ -293,6 +293,10 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8336,
     "container_port": 8336,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
     "version": "1.5.14",
@@ -438,6 +442,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8277,
     "container_port": 8277,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -1033,6 +1041,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8281,
     "container_port": 8281,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -2311,6 +2323,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18212,
     "container_port": 18212,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -4848,6 +4864,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8295,
     "container_port": 8295,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "mcp_ready": true,
@@ -4923,6 +4943,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8296,
     "container_port": 8296,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "mcp_ready": true,
@@ -6159,6 +6183,10 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8165,
     "container_port": 8165,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -7304,6 +7332,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 8315,
     "container_port": 8315,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -8629,6 +8661,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18195,
     "container_port": 18195,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -9145,6 +9181,10 @@
     "host_port": 18188,
     "container_port": 18188,
     "internal_direct": true,
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -11754,7 +11794,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "access_tier": "infra-privileged",
-    "version": "0.3.28",
+    "version": "0.3.30",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
