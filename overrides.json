@@ -2219,16 +2219,20 @@
   "domain-product-count": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18242,
-    "description": "E-commerce catalog lower-bound estimator with canonicalized sitemap, JSON-LD, Shopify, and homepage product signals.",
+    "description": "Estimates e-commerce catalog size from live pages or Common Crawl captures.",
     "host_port": 18242,
     "trl": 6,
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "900-domain live audit. Fixed a real bug: the sitemap URL classifier only recognized English /product(s)/ path shapes, so any WooCommerce store with a translated permalink slug (Spanish, French, Italian, German, Turkish) was 100% invisible -- 12/12 evidenced live stores across 5 languages returned 0 products (e.g. one site went 0->1027). Fixed via locale-independent sitemap filename detection plus a translated-slug fallback list; sum of estimates +10.0% on a clean-paired 325-domain subset. See github.com/baditaflorin/go_domain_product_count PR #4.",
-    "version": "0.2.1",
+    "version": "0.2.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-ratelimit-headers": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2461,12 +2465,12 @@
   "email-extractor": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8287,
-    "description": "Microservice for Email Extractor",
-    "example_path": "/?url=https://example.com",
+    "description": "Extracts email addresses from live pages or Common Crawl captures.",
+    "example_path": "/?target=https://example.com&source=commoncrawl",
     "host_port": 8287,
     "internal_direct": true,
     "placement": "replicable",
-    "version": "1.6.21",
+    "version": "1.6.22",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
@@ -2475,7 +2479,11 @@
     "trl_evidence": "Second-pass re-audit (fresh 80-domain live re-crawl): explicitly ruled out fetch-cache as a bug (present but deliberate/low-impact for this one-shot crawl pattern). Found and fixed 3 real false-positive bugs: contact-form placeholder text extracted as a real address (worst case: a Cloudflare-obfuscated name@architectink.com reported as top contact at 0.90 confidence), a missing German junk-domain gazetteer entry, and URL userinfo syntax (user@host) misparsed as email. See PR #11 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ]
   },
   "email-harvester": {
     "container_port": 8137,

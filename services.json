@@ -2967,7 +2967,7 @@
   {
     "id": "domain-product-count",
     "name": "Domain Product Count",
-    "description": "E-commerce catalog lower-bound estimator with canonicalized sitemap, JSON-LD, Shopify, and homepage product signals.",
+    "description": "Estimates e-commerce catalog size from live pages or Common Crawl captures.",
     "category": "web_analysis",
     "mesh": "0crawl",
     "kind": "container",
@@ -2981,7 +2981,7 @@
     "url": "https://domain-product-count.0crawl.com",
     "health_url": "https://domain-product-count.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_product_count",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?domain=https://example.com&source=commoncrawl",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -2998,8 +2998,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.2.1",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.2.18",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-ratelimit-headers",
@@ -3187,7 +3191,7 @@
   {
     "id": "email-extractor",
     "name": "Email Extractor",
-    "description": "Microservice for Email Extractor",
+    "description": "Extracts email addresses from live pages or Common Crawl captures.",
     "category": "domains",
     "mesh": "0crawl",
     "kind": "container",
@@ -3200,7 +3204,7 @@
     "url": "https://email-extractor.0crawl.com",
     "health_url": "https://email-extractor.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_email_extractor",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?target=https://example.com&source=commoncrawl",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -3221,8 +3225,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.21",
-    "network_exposure": "gateway-authenticated"
+    "version": "1.6.22",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "email-harvester",
