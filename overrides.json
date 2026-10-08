@@ -3838,7 +3838,19 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
   "ipv6-checker": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "IPV6_CONNECT_PROXY_ADDR": "167.233.114.159:8443",
+      "IPV6_CONNECT_PROXY_SERVER_NAME": "ipv6-checker-relay.internal",
+      "IPV6_CONNECT_PROXY_CERT_FILE": "/run/secrets/ipv6_relay_identity.pem",
+      "IPV6_CONNECT_PROXY_KEY_FILE": "/run/secrets/ipv6_relay_identity.pem",
+      "IPV6_CHECKER_BATCH_WORKERS": "1024",
+      "IPV6_CHECKER_BATCH_REQUESTS": "8",
+      "IPV6_CHECKER_BATCH_RPS": "1000",
+      "IPV6_CHECKER_BATCH_BURST": "256",
+      "IPV6_CHECKER_BATCH_IPV6_ADDRESSES": "1"
+    },
     "container_port": 8244,
     "description": "Microservice for Ipv6 Checker",
     "host_port": 8244,
@@ -3848,7 +3860,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.0.0 uplift from TRL 3 to TRL 6:\n- Per-record A/AAAA resolution via miekg/dns with explicit TTL +\n  source-resolver attribution (1.1.1.1 / 8.8.8.8 fallback).\n- Family-pinned TCP probes (tcp4/tcp6) on ports 80 + 443 with a\n  3s connect timeout each; reports open/closed/timeout/skipped.\n- Real TLS handshake on reachable 443 with strict SNI (no\n  InsecureSkipVerify), reports offered + negotiated ALPN.\n- Dual-stack classification (ipv4-only / ipv6-only / dual-stack /\n  no-records).\n- Per-family connect_ms recorded so consumers can compute Happy\n  Eyeballs (RFC 8305) fallback cost.\n- SSRF guard refuses private/loopback/link-local/CGNAT addresses\n  unless ALLOW_PRIVATE=1.\n- Resolver + dialer interfaces injected from tests; 4-case\n  classification matrix + probe + happy-eyeballs unit tests pass.\n- 15s total request budget enforced via context.WithTimeout.",
-    "version": "2.3.1"
+    "version": "2.4.0"
   },
   "js-framework-version-extractor": {
     "container_port": 18258,
