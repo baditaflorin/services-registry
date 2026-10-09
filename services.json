@@ -3127,11 +3127,15 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18233,
     "container_port": 18233,
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.4.9",
     "network_exposure": "gateway-authenticated"
   },
   {
