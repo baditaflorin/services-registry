@@ -3015,6 +3015,7 @@
     "host_port": 18242,
     "container_port": 18242,
     "depends_on": [
+      "fleet-graph",
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
     ],
@@ -3022,7 +3023,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.2.20",
+    "version": "0.2.21",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3246,6 +3247,7 @@
     "container_port": 8287,
     "internal_direct": true,
     "depends_on": [
+      "fleet-graph",
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
     ],
@@ -3253,7 +3255,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.26",
+    "version": "1.6.27",
     "network_exposure": "gateway-authenticated"
   },
   {

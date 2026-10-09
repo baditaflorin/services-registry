@@ -2232,11 +2232,12 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "900-domain live audit. Fixed a real bug: the sitemap URL classifier only recognized English /product(s)/ path shapes, so any WooCommerce store with a translated permalink slug (Spanish, French, Italian, German, Turkish) was 100% invisible -- 12/12 evidenced live stores across 5 languages returned 0 products (e.g. one site went 0->1027). Fixed via locale-independent sitemap filename detection plus a translated-slug fallback list; sum of estimates +10.0% on a clean-paired 325-domain subset. See github.com/baditaflorin/go_domain_product_count PR #4.",
-    "version": "0.2.20",
+    "version": "0.2.21",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
+      "fleet-graph",
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
     ]
@@ -2481,7 +2482,7 @@
     "host_port": 8287,
     "internal_direct": true,
     "placement": "replicable",
-    "version": "1.6.26",
+    "version": "1.6.27",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
@@ -2492,6 +2493,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
+      "fleet-graph",
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
     ]
