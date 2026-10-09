@@ -1053,7 +1053,7 @@
     "version": "0.1.5"
   },
   "company-name-extractor": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
     "compose_service_name": "go_company_name_extractor",
     "host_port": 18325,
     "container_port": 18325,
