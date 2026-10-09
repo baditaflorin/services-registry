@@ -1,5 +1,6 @@
 ## 2026-10-09
 - Sync five Go services to their merged profiling-enabled versions: captcha-detector 1.2.12, citation-reference-extractor 0.1.15, comment-extractor 1.4.7, consent-simulator 0.1.7, and crawl-web-application 1.3.4.
+- Retire Kokoro OpenVINO Adapter from the active service catalog; retain its source repository as a backup.
 
 # Changelog
 
