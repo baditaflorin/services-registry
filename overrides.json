@@ -881,7 +881,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.2.11",
+    "version": "1.2.12",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -968,7 +968,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.13",
+    "version": "0.1.15",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1022,7 +1022,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.10",
+    "version": "0.1.12",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1040,7 +1040,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 260-domain sample, 217 successful real fetches, ~9,500 comments extracted): confirmed fetch-cache masking does not apply (uses fleetfetch with cache/render provenance surfaced to callers) and confirmed HTML5-spec-correct tokenizer behavior on IE-conditional-comment/nested-comment/CDATA edge cases (not bugs). Found and fixed a real finding-suppression bug: isBoilerplate()'s escape hatch only re-checked raw text for a bare TODO/FIXME/RFC1918 IP, never the severity ClassifyComment had already computed -- so a genuine credential leak wrapped in JSDoc/license-shaped comment text was correctly classified credential_leak/high internally but then silently dropped from interesting_comments, the exact field the fleet's leak-bounty-policy/findings-store integrations key off. Fixed by trusting the already-computed severity. trl bumped 6->7; trl_ceiling held at 7 -- direct-fetch-only design (RenderJS deliberately reverted due to fleet-wide proxy degradation) is a real structural ceiling for a passive recon tool. See PR #7 (merged).",
     "coolify_app_uuid": "l8lihsf5ayj6qj331n5pqn97",
-    "version": "1.4.5"
+    "version": "1.4.7"
   },
   "contact-route-detector": {
     "container_port": 18330,
@@ -1145,7 +1145,7 @@
   "consent-simulator": {
     "host_port": 18208,
     "container_port": 18208,
-    "version": "0.1.5",
+    "version": "0.1.7",
     "trl": 4,
     "trl_evidence": "First ship + first real batch test 2026-08-24 (109 diverse EU domains, not the original Austria-gambling sample). Reject/accept control classification now covers EN/DE/FR/IT/ES/NL/PL/PT/SV/DA/FI canonical phrasing plus a handful of named CMP vendor ids; no vendor-specific CSS-selector table beyond that. Tracker signature list is a small set of ~20 major vendors, not a full tracker-radar dataset. Single page load, single interaction only. Known gap: Didomi-fronted sites (orf.at, kurier.at, nrc.nl confirmed) did not render their consent banner in this hosting environment even after 25s wait -- see README Scope and limitations. proxy_read_timeout raised 120s->200s to match the service-side timeout increase (serverWriteTimeout now 175s).",
     "proxy_read_timeout": "200s",
@@ -1258,7 +1258,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Registry previously showed trl:6 with a generic description, unsynced since this repo's iteration-3 work. A BFS web crawler with worker pool, RFC-9309 robots.txt enforcement, URL canonicalization+dedup, per-host rate limiting, SSRF-safe outbound HTTP, soft-404 fingerprint probing, and a calendar/pagination-loop guard. Stateless recon primitive invoked ad hoc by sitemap-finder, redirect-tracer, apikey-scanner, and broken-links -- no dedicated production table of its own. This pass: real production-data audit found and fixed 3 real classification bugs. Not TRL 8: one audit against a one-time 400-800 domain sample, not sustained operational/SLA track record. See github.com/baditaflorin/go_crawl_web_application PR #5.",
-    "version": "1.1.0",
+    "version": "1.3.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6951,7 +6951,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "4 probes (origin/auth/subprotocol/framesize) with hard 1MiB cap, in-process WS fixtures for /selftest, safehttpAllowLoopback() toggle for test-time SSRF guard\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (68f7ee9) reviewed end-to-end against its stated purpose (WS endpoint discovery + CSWSH/auth/subprotocol/frame-size probing via nhooyr.io/websocket). Confirmed a real, live-verified correctness bug: dial.go's dialWS, probes.go's dialProbe, and discover.go's httpClient all built safehttp.NewClient() bare. A WebSocket handshake is a plain GET with Upgrade headers and no body -- eligible for the fleet-wide fetch-cache delegate the same as any ordinary GET -- but the cache has no notion of a 101 Switching Protocols upgrade and can only hand back a synthetic HTTP response, so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0) every origin/auth/subprotocol probe would dial-error on a non-101 status and silently report 'no finding' against a genuinely vulnerable target -- defeating this tool's entire purpose under a normal fleet deploy. Fixed in PR https://github.com/baditaflorin/go_websocket_analyzer/pull/10 (open, not merged) by adding .WithoutFetchCache() to all three clients. Added TestDialProbe_BypassesFetchCache: installs a stub FetchDelegate as the process-wide default and asserts it is never consulted and the missing-origin-check finding still surfaces against the open fixture; verified this test fails on the pre-fix code (delegate called, finding suppressed) and passes after. Bumped 0.2.3->0.2.4. TRL 7 reaffirmed post-fix -- probe architecture and detection logic are sound once the cache bypass is in place; PR is pending merge.",
-    "version": "0.2.11",
+    "version": "0.2.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
