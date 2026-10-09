@@ -1064,7 +1064,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics.",
-    "version": "0.1.32",
+    "version": "0.1.33",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
   },
   "company-size": {
