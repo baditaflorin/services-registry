@@ -7086,6 +7086,22 @@
   "fleet-grafana-staging": {
     "health_url": "https://fleet-grafana-staging.0exec.com/_gw_health"
   },
+  "git-provider-api-broker": {
+    "access_tier": "infra-privileged",
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "category": "infrastructure",
+    "cert_domain": "",
+    "container_port": 8080,
+    "description": "Central, rate-aware read-only broker for GitHub API requests and quota state, shared across authorized tools.",
+    "example_path": "/health",
+    "host_port": 18322,
+    "mcp_ready": false,
+    "name": "Git Provider API Broker",
+    "network_exposure": "lan-internal"
+  },
   "github-app-token-broker": {
     "name": "GitHub App Token Broker",
     "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",

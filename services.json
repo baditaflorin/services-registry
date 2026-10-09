@@ -11592,6 +11592,34 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "git-provider-api-broker",
+    "name": "Git Provider API Broker",
+    "description": "Central, rate-aware read-only broker for GitHub API requests and quota state, shared across authorized tools.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "go"
+    ],
+    "url": "https://git-provider-api-broker.0exec.com",
+    "health_url": "https://git-provider-api-broker.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/git-provider-api-broker",
+    "example_path": "/health",
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "",
+    "host_port": 18322,
+    "container_port": 8080,
+    "mcp_ready": false,
+    "access_tier": "infra-privileged",
+    "network_exposure": "lan-internal"
+  },
+  {
     "id": "github-app-token-broker",
     "name": "GitHub App Token Broker",
     "description": "Signed Woodpecker secret extension that mints repository- and permission-scoped GitHub App installation tokens for trusted pushes to main.",
