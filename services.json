@@ -1007,8 +1007,12 @@
     "host_port": 18325,
     "container_port": 18325,
     "proxy_egress": true,
-    "version": "0.1.28",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.1.32",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ]
   },
   {
     "id": "company-size",
@@ -1891,8 +1895,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.2.0",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.3.6",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ]
   },
   {
     "id": "domain-analytics-stack",
@@ -2108,8 +2116,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.4.12",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.4.16",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ]
   },
   {
     "id": "domain-cache-policy",
@@ -2561,8 +2573,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.16",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.3.18",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ]
   },
   {
     "id": "domain-geo-anchor",
@@ -2700,8 +2716,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.3.11",
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ]
   },
   {
     "id": "domain-integration-marketplace",

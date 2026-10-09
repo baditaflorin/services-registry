@@ -1064,7 +1064,8 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics.",
-    "version": "0.1.28"
+    "version": "0.1.32",
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
   },
   "company-size": {
     "container_port": 8281,
@@ -1593,10 +1594,11 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "967-domain live audit against real DOM-parser-based AMP detection (no regex). Fixed a false-positive bug: broken/placeholder canonical links (href='domain.com', href='##') were accepted as valid AMP evidence -- 2.9% of currently-flagged AMP pages were false positives, one live-reproduced during the audit. Also patched a real CVE (x/net HTML-parser DoS). See github.com/baditaflorin/go_domain_amp_detector PR #5.",
-    "version": "0.2.0",
+    "version": "0.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
   },
   "domain-analytics-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1682,13 +1684,14 @@
     "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
     "host_port": 18230,
     "trl": 7,
-    "version": "0.4.12",
+    "version": "0.4.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "900-domain live audit (real HTML parser across JSON-LD/microdata/RDFa Lite). Fixed 4 real bugs: a cross-host false positive, a vacuous-truth path_aligned check that hit 78% of well-formed breadcrumb lists (mostly Yoast/RankMost/WooCommerce single-item homepage breadcrumbs), a missing nested item.name extraction path, and total JSON-LD parse failure on embedded control characters. Also fixed a dead selftest check that never ran and a false live-probe claim in trl_evidence/README. See github.com/baditaflorin/go_domain_breadcrumb_schema PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
   },
   "domain-cache-policy": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1957,13 +1960,14 @@
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
     "trl": 7,
-    "version": "0.3.16",
+    "version": "0.3.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "Independently re-validated this repo's own pre-existing trl:7 claim (earned across two prior real audit rounds, never synced to the central registry) via a fresh 900-domain paired audit. Fixed 4 real bugs: a false positive from a CDN mirror rewriting a Typekit URL, a missed preload-as-style async-loading pattern, an unfetched @import provider reference, and undercounting of fonts.gstatic.com direct-preload assets. Family-count sum improved 403->408, 2 false positives removed, 0 introduced. See github.com/baditaflorin/go_domain_font_stack PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
   },
   "domain-geo-anchor": {
     "env": {
@@ -2029,13 +2033,14 @@
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
     "host_port": 18223,
     "trl": 6,
-    "version": "0.1.0",
+    "version": "0.3.11",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "800-domain live audit. The DOM parsing/classification logic held up well (no bugs found), but the fetch layer had real defects: no HTTP fallback when HTTPS failed (84/800 domains affected by cert mismatches/refused connections), no status-code check before parsing (Cloudflare 403 challenge pages and domain-parking pages scored as real homepages), and a redirect cap cutting off legitimate chains one hop short. Fetch failure rate dropped 17.9%->14.2%. See github.com/baditaflorin/go_domain_image_alt_coverage PR #3.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
   },
   "domain-integration-marketplace": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
