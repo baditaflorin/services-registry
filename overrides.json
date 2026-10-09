@@ -449,7 +449,11 @@
     "trl_evidence": "Incremental hardening fix, not a new capability -- the substantive TRL-7 case was already made in PR #2/#4/#5/#7 (real WCAG contrast math, honest indeterminate/unknown reporting, conditional JS-render for SPA shells). This pass adds full transient-retry coverage across every SSRF/fetch call site and removes a dead httpClient. Live-tested against a 60-domain random sample from production domain_accessibility rows (49/60 = 82% scored successfully, 11 genuine dead targets). See github.com/baditaflorin/go_accessibility_score PR #9.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ]
   },
   "ad-density": {
     "container_port": 8274,

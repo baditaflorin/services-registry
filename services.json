@@ -105,6 +105,10 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8273,
     "container_port": 8273,
+    "depends_on": [
+      "infrastructure-fetch-cache",
+      "fleet-graph"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
