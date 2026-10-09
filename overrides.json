@@ -2231,7 +2231,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "900-domain live audit. Fixed a real bug: the sitemap URL classifier only recognized English /product(s)/ path shapes, so any WooCommerce store with a translated permalink slug (Spanish, French, Italian, German, Turkish) was 100% invisible -- 12/12 evidenced live stores across 5 languages returned 0 products (e.g. one site went 0->1027). Fixed via locale-independent sitemap filename detection plus a translated-slug fallback list; sum of estimates +10.0% on a clean-paired 325-domain subset. See github.com/baditaflorin/go_domain_product_count PR #4.",
-    "version": "0.2.19",
+    "version": "0.2.20",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4414,7 +4414,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "trl_evidence": "500-domain live audit against the deployed production container. Fixed a real bug: responsive <img> tags with srcset were falsely flagged for horizontal-scroll risk (37% of sample), same signal the service already credits as evidence of responsiveness. 59/118 false positives cleared post-fix, including verdict upgrades. Also found genuine viewport false negatives traced to the shared fetch-cache layer serving different bytes than a direct fetch (upstream issue, not this repo). See github.com/baditaflorin/go_mobile_friendly PR #10.",
-    "version": "1.3.0",
+    "version": "1.5.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6095,7 +6095,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "2.4.13",
+    "version": "2.4.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6940,7 +6940,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "4 probes (origin/auth/subprotocol/framesize) with hard 1MiB cap, in-process WS fixtures for /selftest, safehttpAllowLoopback() toggle for test-time SSRF guard\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (68f7ee9) reviewed end-to-end against its stated purpose (WS endpoint discovery + CSWSH/auth/subprotocol/frame-size probing via nhooyr.io/websocket). Confirmed a real, live-verified correctness bug: dial.go's dialWS, probes.go's dialProbe, and discover.go's httpClient all built safehttp.NewClient() bare. A WebSocket handshake is a plain GET with Upgrade headers and no body -- eligible for the fleet-wide fetch-cache delegate the same as any ordinary GET -- but the cache has no notion of a 101 Switching Protocols upgrade and can only hand back a synthetic HTTP response, so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0) every origin/auth/subprotocol probe would dial-error on a non-101 status and silently report 'no finding' against a genuinely vulnerable target -- defeating this tool's entire purpose under a normal fleet deploy. Fixed in PR https://github.com/baditaflorin/go_websocket_analyzer/pull/10 (open, not merged) by adding .WithoutFetchCache() to all three clients. Added TestDialProbe_BypassesFetchCache: installs a stub FetchDelegate as the process-wide default and asserts it is never consulted and the missing-origin-check finding still surfaces against the open fixture; verified this test fails on the pre-fix code (delegate called, finding suppressed) and passes after. Bumped 0.2.3->0.2.4. TRL 7 reaffirmed post-fix -- probe architecture and detection logic are sound once the cache bypass is in place; PR is pending merge.",
-    "version": "0.2.4",
+    "version": "0.2.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
