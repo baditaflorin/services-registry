@@ -8761,6 +8761,30 @@
     "url": "https://geo-places.0exec.com"
   },
   {
+    "access_tier": "infra-privileged",
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "category": "infrastructure",
+    "description": "Central, rate-aware read-only broker for GitHub API requests and quota state, shared across authorized tools.",
+    "example_path": "/health",
+    "health_url": "https://git-provider-api-broker.0exec.com/health",
+    "id": "git-provider-api-broker",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Git Provider API Broker",
+    "placement": "pinned",
+    "repo_url": "https://github.com/baditaflorin/git-provider-api-broker",
+    "runtime": "compose",
+    "tags": [
+      "go"
+    ],
+    "url": "https://git-provider-api-broker.0exec.com"
+  },
+  {
     "auth": {
       "type": "none"
     },
