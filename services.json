@@ -11115,6 +11115,7 @@
     "trl_assessor": "fleet-release-verification-2026-09-20",
     "host_port": 18140,
     "container_port": 18140,
+    "internal_direct": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -11577,9 +11578,12 @@
     "placement": "pinned",
     "host_port": 18331,
     "container_port": 8080,
+    "depends_on": [
+      "fleet-secrets"
+    ],
     "mcp_ready": false,
     "access_tier": "infra-privileged",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "network_exposure": "gateway-authenticated"
   },
   {
