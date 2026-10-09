@@ -11612,12 +11612,12 @@
       "type": "api_key"
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
-    "cert_domain": "",
+    "cert_domain": "wildcard.0exec.com",
     "host_port": 18322,
     "container_port": 8080,
     "mcp_ready": false,
     "access_tier": "infra-privileged",
-    "network_exposure": "lan-internal"
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "github-app-token-broker",
