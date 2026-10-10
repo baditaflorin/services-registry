@@ -27,14 +27,14 @@ to matching agents with free workflow slots. Keep the concurrency cap at four
 until host metrics and sustained resource behavior support a deliberate change.
 `ci.0mcp.com` remains a separate authority for repositories intentionally
 owned by the 0mcp platform (such as `mcp-site-service`). It is not a general
-capacity selector. Portable workflows on `ci.0exec.com` should request only
-the generic Docker backend and omit `site`/`lv3` labels; Woodpecker can then
-dispatch them across that authority's connected agents and the load controller
-can drain pressured physical workers. A workflow with `lv3=true` can run only
-on an agent advertising that capability under the workflow's own authority.
-If a general workflow received that label only to reach a server, remove the
-label and keep the repository on its existing authority instead of migrating
-its webhook.
+capacity selector. General `baditaflorin` repositories stay on their
+configured authority, normally `ci.0exec.com`. The shared `ci.0exec` Docker
+agents advertise `lv3=true`, so workflows requiring that capability are still
+scheduled across the common pool. Keep the label in the workflow; adding the
+capability to each eligible worker is the fleet-level change. The load
+controller still drains pressured physical workers, and Woodpecker chooses an
+eligible worker with a free slot. A worker label is a scheduling hint, not a
+security boundary.
 
 The VM 130 worker is shared infrastructure for two independent control
 planes: this `ci.0exec.com` worker has one slot, while the separate
@@ -57,8 +57,8 @@ workflow pinned to a site or specialized label can only use agents that match
 that label. General workflows use `repo=*` Docker agents for automatic
 cross-host scheduling. `site` and `lv3=true` are capability constraints within
 one authority, not control-plane routing switches. Keep a repository on its
-configured authority; add or enable a matching worker there if a workflow
-needs a specialized capability.
+configured authority; provision the required capability across that shared
+pool rather than moving the repository to a different CI server.
 
 This pool executes repository CI workflows. Production image publication and
 `fleet-runner deploy` still follow the fleet deployment contract and use the
@@ -92,8 +92,9 @@ control-plane hostname never determines the physical execution host; use
 
    For a general remote fleet worker, use a stable `WOODPECKER_AGENT_NAME` and
    a non-sensitive `WOODPECKER_AGENT_SITE` label. Keep `repo=*` and
-   `backend=docker` in its labels. Use the worker only for repositories
-   authorized on `ci.0exec.com`.
+   `backend=docker` in its labels. The shared fleet template also includes
+   `lv3=true` so labeled workflows can route across all eligible agents on the
+   `ci.0exec.com` pool. Use the worker only for repositories authorized there.
 
 5. Validate with `docker compose config --quiet`, start the agent and confirm
    its stable name in `GET /api/agents`.
