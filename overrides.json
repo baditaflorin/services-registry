@@ -400,7 +400,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "trl_evidence": "700-domain live audit (paired old/HEAD binaries against real fleet JS-render infra). Fixed a UTF-8 truncation bug corrupting non-Latin-script evidence text (verified on 2 real domains). Confirmed production is 3 commits stale with a known live false-negative. See github.com/baditaflorin/go_a11y_quick PR #7.",
-    "version": "1.5.13",
+    "version": "1.5.15",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -883,7 +883,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.2.12",
+    "version": "1.2.14",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -970,7 +970,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1136,7 +1136,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pass-3 found the prior probe client used fleetfetch.NewHTTPClient(RenderDefault), which despite its name routes every GET through the shared Redis fetch-cache, silently ignoring Transport.DisableCompression and collapsing the five independent Accept-Encoding negotiations into one warm cached body. On 1000 real v1.6.1 rows this produced 344/1000 (34%) recording supports_gzip=false while supports_br=true (implausible; gzip is the universal fallback). Replaced with a direct *http.Transport using safehttp.GuardedDialer (same SSRF/DNS-rebind guard, no new dep) + DisableCompression=true + ProxyFromEnvironment, so each offer and the raw wire bytes reach the origin. Re-probed the FP cohort live against deployed v1.6.2: 18/20 (90%) now correctly report gzip honored, 2 are genuine true negatives. 27 unit tests green.",
-    "version": "1.6.14",
+    "version": "1.6.17",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1920,7 +1920,7 @@
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
     "host_port": 18226,
     "trl": 7,
-    "version": "0.2.18",
+    "version": "0.2.25",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2178,7 +2178,7 @@
     "trl_ceiling_reason": "The shared JS-render upstream can degrade on cold or failed renders, limiting SLA-grade completeness.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.0",
+    "version": "0.4.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2350,7 +2350,7 @@
     "trl_evidence": "Live production-DB audit found primary_vendor='reamaze' as the single largest detected vendor (1,191 rows), with 49.5% being spam/parked .info domains. Traced the residual (post-earlier-fix) cases via live browser reproduction to GoDaddy Website Builder unconditionally loading Reamaze's shared JS bundle via a GoDaddy-specific loader file, whose bundled CSS/DOM boilerplate satisfied the detector's 'activation' marker regardless of merchant intent -- verified against reamaze.com's own genuine install, which never carries that GoDaddy-specific loader filename. Fixed (v0.3.8) with a targeted confidence cap keyed to the GoDaddy loader marker, with regression tests for both the false-positive and true-positive cases. See github.com/baditaflorin/go_domain_support_stack_detector PR #14 (merged). Rows with tool_version<0.3.8 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.3.4",
+    "version": "0.3.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2583,7 +2583,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (fresh 260-domain sample, live before/after with 12-way concurrency): found and fixed 2 major bugs. (1) A 98% false-positive rate from blanket WAF/security-plugin 403 pages misread as leaked files -- one domain alone produced 19 fabricated findings from a single generic Sucuri block page; fixed with cross-path dedup (a repeating 403 body across 2+ distinct paths is dropped as a blanket rule), dropping 52->3 false 403s sample-wide with zero genuine findings lost. (2) proxy_egress: true was a complete no-op since it was enabled -- the metadata flag was set but the hand-rolled http.Client never actually wired a proxy, so HTTPS_PROXY was silently ignored and every probe went out direct from the dockerhost IP since May 2026; fixed by switching to safehttp.NewClient with WithoutFetchCache. Also added 3 missing .env path variants. trl/trl_ceiling held at 6/6, now honestly earned -- pre-fix the uplift's headline FP claim didn't hold against live traffic. See PR #8 (merged).",
-    "version": "1.4.0",
+    "version": "1.4.9",
     "coolify_app_uuid": "vt65hjm8wqhknrp5vyrn5g1a"
   },
   "fake-text": {
