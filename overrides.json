@@ -645,7 +645,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.19",
+    "version": "1.5.20",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1122,7 +1122,7 @@
     "depends_on": [
       "sitemap-finder"
     ],
-    "version": "1.2.3"
+    "version": "1.2.4"
   },
   "compression-tester": {
     "container_port": 8327,
@@ -1348,7 +1348,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.16",
+    "version": "1.4.17",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2634,7 +2634,7 @@
   "firmographic-profile": {
     "container_port": 18297,
     "host_port": 18297,
-    "version": "1.3.9",
+    "version": "1.3.10",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5592,7 +5592,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Confirmed and independently verified a fetch-cache-masking timeout bug (35/200 = 17.5% of live domains failing at the 6s timeout despite curl succeeding in under 1s) already fixed via go-common's WithoutFetchCache in a concurrently-merged PR. This pass added a second, independent fix: parseAmount misread dot-decimal EUR/BRL/TRY/DKK prices as comma-decimal by trusting currency defaults instead of actual page formatting, inflating prices ~100x (e.g. EUR 49.00 -> 4900); fixed via digit-count-based disambiguation, verified live (4/4 EUR prices corrected on a real site). See github.com/baditaflorin/go_price_range PR #9.",
-    "version": "1.9.13",
+    "version": "1.9.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -5925,7 +5925,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "1.6.16"
+    "version": "1.6.17"
   },
   "room-vj": {
     "trl": 3,
@@ -6123,7 +6123,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "8-9 needs a real browser engine for post-JS-render header capture plus a persistent cross-check/SLA tier; structurally above a CPU-only RFC header-parser",
     "trl_evidence": "Production-DB anomaly (174 domains with all 4 key headers present still graded F; google.com/microsoft.com graded D/F despite serving real headers) investigated live end-to-end and found to be a correct-behavior semantic gap, not a bug: the tool grades header *quality* across 12 weighted signals (e.g. HSTS present but max-age=0 scores F), not just presence -- reproduced byte-for-byte the same scores the DB already stores. A separate, real bug was found and fixed instead: newClient() built its safehttp.Client without .WithoutFetchCache(), meaning production grading requests could be served stale/shared cached responses instead of live origin fetches. Fixed (v2.2.7) with a regression test proving the fetch-cache delegate is never invoked. See github.com/baditaflorin/go_security_headers PR #14 (merged). Rows with tool_version<2.2.7 are re-crawl candidates.",
-    "version": "2.3.5",
+    "version": "2.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6600,7 +6600,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 600-domain sample, zero commits since prior fix): genuinely clean -- confirmed the prior TLS chain-trust/hostname-coverage fix holds up on an independent sample with consistent residual-failure rates, and explicitly ruled out fetch-cache (never calls the vulnerable client constructor). No PR opened; trl/ceiling held at 8/8, evidence base strengthened.",
-    "version": "2.5.6",
+    "version": "2.5.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6821,7 +6821,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.6.226 CUSTOM_SEARCH_API_KEY env support added; service running in domainscope staging stack.",
-    "version": "1.99.79"
+    "version": "1.99.207"
   },
   "url-shortener": {
     "container_port": 8320,
