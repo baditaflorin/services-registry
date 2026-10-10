@@ -645,7 +645,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.17",
+    "version": "1.5.18",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1170,7 +1170,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.12",
+    "version": "0.1.14",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1574,7 +1574,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.13",
+    "version": "0.3.15",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -1686,7 +1686,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_evidence": "Second-pass re-audit (fresh 399-domain sample): found and fixed 2 real bugs -- (1) fetch-cache masking, confirmed live via docker inspect showing FLEET_FETCH_CACHE_URL set in production; (2) multiple BIMI/DMARC TXT records were silently resolved to 'whichever came first' instead of correctly treated as a discovery failure per spec (BIMI + RFC 7489 6.6.3) -- live-confirmed on 5 real domains including brandfinish.com and vos.health. See PR #6 (merged). trl bumped 6->7, now at ceiling.",
-    "version": "0.1.0",
+    "version": "0.2.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -1774,6 +1774,7 @@
     "trl_ceiling_reason": "single free heavily rate-limited crt.sh upstream (429/502/504), no second CT source or paid feed, no persistence/cross-check",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
+    "version": "0.3.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -2004,7 +2005,7 @@
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "host_port": 18239,
     "trl": 6,
-    "version": "0.2.1",
+    "version": "0.4.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2021,7 +2022,7 @@
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
     "host_port": 18237,
     "trl": 7,
-    "version": "0.1.0",
+    "version": "0.3.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2205,7 +2206,7 @@
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
     "host_port": 18229,
     "trl": 6,
-    "version": "0.2.13",
+    "version": "0.2.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2316,7 +2317,7 @@
   "domain-structured-data-rollup": {
     "container_port": 18188,
     "host_port": 18188,
-    "version": "0.3.22",
+    "version": "0.3.24",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2938,7 +2939,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.18"
+    "version": "0.4.19"
   },
   "fleet-har-builder": {
     "container_port": 18157,
@@ -3221,7 +3222,7 @@
       "fleet-dns-sync",
       "fleet-secrets"
     ],
-    "version": "0.3.8",
+    "version": "0.3.11",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -3792,7 +3793,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit: the repo contains two implementations -- a small unused root-module library using the correct safehttp client, and the ACTUALLY DEPLOYED src/ hexagonal service which hand-rolled its own SSRF/dial/cache stack. Found and fixed a critical bug in the deployed service: an SSRF-checking dialer was built but then unconditionally overridden by a plain DNS-caching dialer with zero SSRF check -- the default client profile never had transport-layer SSRF protection at all. Live-proved: pre-fix, the real factory-built client successfully dialed 127.0.0.1:1. Confirmed real fleet-wide reach -- several domain-analysis services (gdpr-compliance, broken-links, payment-detector, etc) route through this proxy as a fallback tier. Fixed by wiring the checker into the actual dial path for both client profiles, closing SSRF-via-redirect and DNS-rebind gaps too. Also fixed the recurring fetch-cache-masking bug (CacheMiddleware ignored Cache-Control entirely) and an unbounded response-body read for chunked responses (Content-Length -1 fell through to unbounded io.ReadAll). Flagged, not fixed: a credit/auth-bypass path trusts a client-supplied X-Real-IP header, safe only if the gateway always overwrites it -- needs deploy-topology context. trl held at 6; trl_ceiling=7 added, held back specifically because this security control passed its own unit test while the real wiring silently discarded it -- should be integration-verified before trusting above 7. See PR #11 (merged), plus 3 pre-existing stale PRs (#1/#2 dependency bumps, #7 a real headless-Chrome pool leak fix from 2026-06) now CONFLICTING against this fix and left for manual follow-up.",
-    "version": "0.5.21"
+    "version": "0.5.22"
   },
   "http-method-tester": {
     "container_port": 8087,
@@ -6121,6 +6122,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "8-9 needs a real browser engine for post-JS-render header capture plus a persistent cross-check/SLA tier; structurally above a CPU-only RFC header-parser",
     "trl_evidence": "Production-DB anomaly (174 domains with all 4 key headers present still graded F; google.com/microsoft.com graded D/F despite serving real headers) investigated live end-to-end and found to be a correct-behavior semantic gap, not a bug: the tool grades header *quality* across 12 weighted signals (e.g. HSTS present but max-age=0 scores F), not just presence -- reproduced byte-for-byte the same scores the DB already stores. A separate, real bug was found and fixed instead: newClient() built its safehttp.Client without .WithoutFetchCache(), meaning production grading requests could be served stale/shared cached responses instead of live origin fetches. Fixed (v2.2.7) with a regression test proving the fetch-cache delegate is never invoked. See github.com/baditaflorin/go_security_headers PR #14 (merged). Rows with tool_version<2.2.7 are re-crawl candidates.",
+    "version": "2.3.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6269,7 +6271,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.2.14"
+    "version": "2.2.15"
   },
   "smuggling-probe": {
     "container_port": 8154,
