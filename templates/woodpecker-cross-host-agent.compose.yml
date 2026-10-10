@@ -12,4 +12,4 @@ services:
       WOODPECKER_AGENT_SECRET_FILE: /run/secrets/woodpecker-agent-token
       WOODPECKER_MAX_WORKFLOWS: ${WOODPECKER_MAX_WORKFLOWS:-1}
       WOODPECKER_BACKEND: docker
-      WOODPECKER_AGENT_LABELS: site=${WOODPECKER_AGENT_SITE:?set the physical site},repo=*,backend=docker,agent_identity=${WOODPECKER_AGENT_IDENTITY:?set the registered agent ID}
+      WOODPECKER_AGENT_LABELS: site=${WOODPECKER_AGENT_SITE:?set the physical site},repo=*,backend=docker,agent_identity=${WOODPECKER_AGENT_IDENTITY:?set the registered agent ID},lv3=true
