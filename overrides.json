@@ -645,7 +645,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.18",
+    "version": "1.5.19",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1121,7 +1121,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "sitemap-finder"
-    ]
+    ],
+    "version": "1.2.3"
   },
   "compression-tester": {
     "container_port": 8327,
@@ -1347,7 +1348,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.14",
+    "version": "1.4.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1667,7 +1668,7 @@
     "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
     "host_port": 18210,
     "trl": 4,
-    "version": "0.1.0",
+    "version": "0.3.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1804,7 +1805,7 @@
     "trl_evidence": "Confirmed today's earlier merged fetch-cache fix is genuinely in place, then found and fixed one more real live false negative: the render PaaS rule only recognized a .onrender.com CNAME or an x-render-origin-server header, missing Render-hosted domains behind Cloudflare (CNAME hidden, Server header overwritten) -- live-verified via an independent ground-truth signal (hosting_asn_name='RENDER'), 6/20 (30%) of a targeted sample were misses. Fixed (v0.2.10) by adding Render's own rndr-id request-id header as a strong signal, re-verified live against all 6 domains plus a fresh 150-domain random sample with zero new mismatches. See github.com/baditaflorin/go_domain_deployment_fingerprint PR #17 (merged). Rows with tool_version<0.2.10 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.2.18",
+    "version": "0.2.20",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -1820,7 +1821,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Live production-DB audit (~1.1M rows) found 74,371 rows with status=1 (success) yet age_days=0, almost always paired with empty registrar/expires/nameservers -- literally claiming 74K+ domains were registered on their scan date. Root-caused: age_days defaulted to Go's int zero-value instead of NULL when a WHOIS creation date failed to parse, while status stayed 'ok'. Confirmed live: 3,361 of these rows were checked after an earlier related fix already shipped, proving this is a live, still-present gap. Fixed (v1.3.0) with a new 'partial' result classification whenever no usable Created date exists, plus a normaliseWhoisDate fix that no longer leaks raw unparsed date strings into a documented-RFC3339 field. See github.com/baditaflorin/go_domain_details PR #10 (merged). Rows with tool_version<1.3.0 are re-crawl candidates.",
-    "version": "1.1.0",
+    "version": "1.3.9",
     "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2"
   },
   "domain-dnssec-validator": {
@@ -2633,7 +2634,7 @@
   "firmographic-profile": {
     "container_port": 18297,
     "host_port": 18297,
-    "version": "1.3.8",
+    "version": "1.3.9",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5591,7 +5592,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Confirmed and independently verified a fetch-cache-masking timeout bug (35/200 = 17.5% of live domains failing at the 6s timeout despite curl succeeding in under 1s) already fixed via go-common's WithoutFetchCache in a concurrently-merged PR. This pass added a second, independent fix: parseAmount misread dot-decimal EUR/BRL/TRY/DKK prices as comma-decimal by trusting currency defaults instead of actual page formatting, inflating prices ~100x (e.g. EUR 49.00 -> 4900); fixed via digit-count-based disambiguation, verified live (4/4 EUR prices corrected on a real site). See github.com/baditaflorin/go_price_range PR #9.",
-    "version": "1.3.0",
+    "version": "1.9.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -5924,7 +5925,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "1.6.14"
+    "version": "1.6.16"
   },
   "room-vj": {
     "trl": 3,
@@ -6122,7 +6123,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "8-9 needs a real browser engine for post-JS-render header capture plus a persistent cross-check/SLA tier; structurally above a CPU-only RFC header-parser",
     "trl_evidence": "Production-DB anomaly (174 domains with all 4 key headers present still graded F; google.com/microsoft.com graded D/F despite serving real headers) investigated live end-to-end and found to be a correct-behavior semantic gap, not a bug: the tool grades header *quality* across 12 weighted signals (e.g. HSTS present but max-age=0 scores F), not just presence -- reproduced byte-for-byte the same scores the DB already stores. A separate, real bug was found and fixed instead: newClient() built its safehttp.Client without .WithoutFetchCache(), meaning production grading requests could be served stale/shared cached responses instead of live origin fetches. Fixed (v2.2.7) with a regression test proving the fetch-cache delegate is never invoked. See github.com/baditaflorin/go_security_headers PR #14 (merged). Rows with tool_version<2.2.7 are re-crawl candidates.",
-    "version": "2.3.4",
+    "version": "2.3.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6599,7 +6600,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 600-domain sample, zero commits since prior fix): genuinely clean -- confirmed the prior TLS chain-trust/hostname-coverage fix holds up on an independent sample with consistent residual-failure rates, and explicitly ruled out fetch-cache (never calls the vulnerable client constructor). No PR opened; trl/ceiling held at 8/8, evidence base strengthened.",
-    "version": "2.1.0",
+    "version": "2.5.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
