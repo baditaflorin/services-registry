@@ -494,7 +494,8 @@
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "admin-finder": {
     "env": {
@@ -598,7 +599,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "anon-conf-poll": {
     "trl": 4,
@@ -1377,7 +1379,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "d3-graph": {
     "container_port": 6003,
@@ -1420,7 +1423,8 @@
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "db-geo-geocode": {
     "container_port": 3909,
@@ -1536,7 +1540,9 @@
     "trl": 6,
     "trl_evidence": "First-pass audit (fresh 250-domain sample): corrected a stale premise -- this is a real, complete, working service (not a stub/never-assessed; the repo's own service.yaml already had trl=4 from a pre-fix 2026-07-01 placeholder assessment). Found and fixed 2 real bugs -- a nondeterministic preferred_email selection driven by Go's randomized map iteration order with no tiebreak (28/250, 11%, disagreed across repeat runs of the identical binary); and RDAP 429/5xx responses silently indistinguishable from a genuine 404. Confirmed fetch-cache masking doesn't apply (uses fleetfetch by design) and confirmed rdap.org rate-limiting live (8/20 sequential lookups 429'd). trl bumped 4->6; trl_ceiling=7 added -- capped by dependence on the free, rate-limited, unauthenticated rdap.org redirector and ICANN's 2018 privacy redaction making genuine site-specific RDAP contacts industry-wide rare. See PR #6 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "depends_on": ["infrastructure-fetch-cache"],
+    "version": "0.1.9"
   },
   "domain-ad-network": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1620,7 +1626,8 @@
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-anycast-footprint": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1651,7 +1658,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "866-domain 3-way replay (deployed prod vs pre-fix main vs fix, on identical HTML bytes). Fixed two real classification bugs: positive framework detections (e.g. Next.js at high confidence) reported as 'unknown'; an earlier merged fix over-corrected and lost legitimate same-origin framework fingerprints (Astro, Gatsby). ~1.1% of verdicts corrected, zero regressions. Also patched a real CVE. Flagged: production is 2 real-bug generations behind main. See github.com/baditaflorin/go_domain_app_render_mode PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-backlink-profile": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1730,7 +1738,8 @@
     "version": "0.4.19",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
@@ -1748,7 +1757,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-ct-log-watcher": {
     "container_port": 18184,
@@ -1842,7 +1852,8 @@
     "trl_evidence": "Fresh audit (DB pass found no anomaly) found and fixed a real, production-confirmed false positive: classify() pinned primary_platform=swagger_ui from swagger-ui-dist's bundled JS filenames alone, with no check the page was ever wired to a real API spec -- a cluster of unrelated small-business sites (several real-estate-agent pages) all serve the byte-identical, never-configured stock demo page pointed at Swagger's own public petstore.swagger.io sample spec. swagger_ui was the #2 most common detected platform (575 domains) fleet-wide. Fixed (v0.4.9) by skipping a swagger_ui match when the body still carries the literal default demo URL; verified live all 7 sampled false positives flip to no_data while genuine installs remain detected. See github.com/baditaflorin/go_domain_documentation_platform_detector PR #14 (merged). Rows with tool_version<0.4.9 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.20"
+    "version": "0.4.20",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-ecommerce-platform": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1897,7 +1908,8 @@
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-events-platform": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1912,7 +1924,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "991-domain live audit. Fixed 6 real bugs: the fetch layer never checked HTTP status codes so WAF/bot-block pages sailed through as clean scans (35+ domains affected); broken ID extraction for On24 (0/7->6/7) and Eventive (0/8->2/8) event links; false positives from self-hosted vFairs analytics and Eventbrite's own CDN favicon; plus a real CVE patch. See github.com/baditaflorin/go_domain_events_platform PR #3.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-experimentation-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1929,7 +1942,8 @@
     "version": "0.5.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-faq-schema": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2062,7 +2076,8 @@
     "version": "0.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-interactive-demo": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2108,7 +2123,8 @@
     "version": "0.4.2",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
@@ -2126,7 +2142,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-naptr-enum": {
     "container_port": 18236,
@@ -2162,7 +2179,8 @@
     "version": "0.4.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-open-source-presence": {
     "container_port": 18196,
@@ -2178,7 +2196,8 @@
     "version": "0.1.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-pagination-rel": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2332,7 +2351,8 @@
     "version": "0.3.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-tech-eol-flagger": {
     "container_port": 18186,
@@ -2378,7 +2398,8 @@
     "version": "0.1.0",
     "trl_evidence": "The prior trl:6 was a code-read-only rubric assignment with no real-data evidence. 900-domain live audit found and fixed 2 real bugs: the fetch layer never checked HTTP status codes, so bot-blocked/dead/error pages were scored as clean homepages with 0 trackers (19.5% of the 'clean' bucket was actually non-2xx); and an error-truncation bug cut off the diagnostically useful tail of wrapped error messages (100% of degraded responses hit the identical generic prefix). Flagged: production is running a 4-week-stale rollback image missing 2 already-merged fixes. See github.com/baditaflorin/go_domain_tracker_density PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-trust-composite-grader": {
     "container_port": 18199,
@@ -2395,7 +2416,8 @@
     "trl_evidence": "First-pass audit (never formally assessed before): confirmed this is a real, complete, fully self-contained service (does NOT call sibling services despite the catalog description implying aggregation) computing 6 signals itself (RDAP age, DNSSEC, SPF/DMARC, MTA-STS, TLS, security.txt). Does not use safehttp.NewClient() (uses fleetfetch exclusively), so fetch-cache masking does not apply. Found a real bug: the DEPLOYED production container (running since 2026-07-11) predates two already-merged main commits shipped without a version bump, missing a fix that makes checkTLS/checkSecurityTxt always score dial failures (including transient DNS timeouts) as measured negatives -- confirmed on ~17.6% of a 500-row production sample, the largest single scoring component. Backfilled CHANGELOG/version and recommended redeploy. See PR #8 (merged) + services-registry PR #31 (merged, added this service's first-ever registry entry).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-viewport-meta": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -2430,7 +2452,8 @@
     "version": "0.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "domain-wikidata-entity": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3338,6 +3361,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "v0.3.5 release: go-fleet-secrets PRs #14 and #15 hardened trusted-proxy identity handling and made /selftest an explicit unauthenticated health contract; deployed image f5fafff passed direct /health, /selftest, and /version smoke checks, followed by a gateway vhost render and reload. Existing audit-log redaction, consumer-ACL, rotation, and concurrency tests remain required.",
+    "internal_direct": true,
     "version": "0.4.6"
   },
   "fleet-selftest-aggregator": {
@@ -3511,7 +3535,8 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "funding-detector": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3526,7 +3551,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 40+Korean-domain sample): confirmed prior fixes intact and fetch-cache pattern correctly not applicable (uses fleetfetch, live cache_hit:false verified). Found and fixed a real bug: KRW (Korean won) amounts were silently dropped because the currency-prefix matcher checked bare 'kr' (Nordic krona) before the 'KRW' ISO code in an ordered case-insensitive prefix scan. See PR #14 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "funding-signal": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3541,7 +3567,8 @@
     "version": "0.1.30",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "gdpr-compliance": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3557,7 +3584,8 @@
     "trl_evidence": "Second-pass re-audit: found and fixed a subtle masking bug -- when the JS renderer silently fails/times out and falls back, the response header still claimed render_mode=js, hiding the fallback and turning real renderer failures into false-negative 'no cookie banner' results. Live-confirmed against a real domain with a genuine cookie-consent banner. See PR #14 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "gentle-adhd-flow": {
     "trl": 4,
@@ -4111,7 +4139,8 @@
     "trl_assessor": "claude-opus-4.8",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Multi-stage leadership-team extraction over a fetched HTML page. Detection runs three passes in priority order on the parsed DOM (golang.org/x/net/html): (1) schema.org Person JSON-LD carrying a jobTitle — walks every <script type=application/ld+json>, descends @graph and nested objects, handles @type as string OR array, and reads name/givenName+familyName/description/url/sameAs via stdlib encoding/json; (2) schema.org Person microdata (itemtype=schema.org/Person, http or https), pulling name/jobTitle/description and itemprop=url/sameAs + bare anchor hrefs; (3) a heuristic card walk used only when no structured data is present (flagged heuristic_fallback) — it scans repeated person cards (list items, articles, sections, figures, table cells, and team/staff/member-classed divs), skips grid wrappers that contain nested cards, and derives a name (preferring a heading) plus a title line. Every candidate is then FILTERED to leadership: the title must match a curated keyword set, and survivors are classified into exactly one normalized rank (c_suite, founder, president, vp, director, board, other_leadership) by case-insensitive, word-boundary regexes. Priority order is deliberate — vp is tested before president so 'Vice President' never lands in the president bucket despite containing the substring 'President', and \\b boundaries keep 'Director' from matching inside 'Directory'. c_suite matches the CxO acronyms plus the spelled 'Chief … Officer' shape; founder covers Founder/Co-Founder/Cofounder/Founding Partner; vp covers VP/SVP/EVP and (Senior|Executive )?Vice President; president covers President + Managing Director; director covers Director/Executive Director/Head of; board covers Chair(man|woman|person)/Board Member/Board of Directors/Trustee; other_leadership is a Partner/Principal/Owner/General Manager catch-all. Returns leaders[] (name/title/rank/bio omitempty/links non-nil), count, by_rank (rank→count), and detection (json_ld|microdata|heuristic). Relative profile hrefs/photo URLs are resolved against the final fetched URL; in text= mode (no fetch) they are returned as-authored. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch, in plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, heuristic_fallback, jsonld_parse_error, no_leaders) instead of failing the response; a page with text but no leaders still returns 200. ~30 unit tests cover every rank bucket, the Vice-President-vs-President disambiguation, the Directory-is-not-Director word-boundary guard, non-leadership rejection, case-insensitivity, the JSON-LD Person path (incl. @graph + @type array + missing-jobTitle skip + parse-error degraded), the microdata Person path, the heuristic card fallback + non-leader filtering + card links, by_rank counts, no-leaders degraded, dedupe across passes, omitempty/non-nil JSON shape, relative-link resolution, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler. /selftest exercises the full pure-logic pipeline (CEO + VP detected, engineer filtered, ranks asserted) plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: the structured-data paths are exact, but the heuristic fallback recognises only common team-page shapes — it is not layout-agnostic and does not infer roles from arbitrary running prose, which would need NLP-grade entity/role extraction."
+    "trl_evidence": "Multi-stage leadership-team extraction over a fetched HTML page. Detection runs three passes in priority order on the parsed DOM (golang.org/x/net/html): (1) schema.org Person JSON-LD carrying a jobTitle — walks every <script type=application/ld+json>, descends @graph and nested objects, handles @type as string OR array, and reads name/givenName+familyName/description/url/sameAs via stdlib encoding/json; (2) schema.org Person microdata (itemtype=schema.org/Person, http or https), pulling name/jobTitle/description and itemprop=url/sameAs + bare anchor hrefs; (3) a heuristic card walk used only when no structured data is present (flagged heuristic_fallback) — it scans repeated person cards (list items, articles, sections, figures, table cells, and team/staff/member-classed divs), skips grid wrappers that contain nested cards, and derives a name (preferring a heading) plus a title line. Every candidate is then FILTERED to leadership: the title must match a curated keyword set, and survivors are classified into exactly one normalized rank (c_suite, founder, president, vp, director, board, other_leadership) by case-insensitive, word-boundary regexes. Priority order is deliberate — vp is tested before president so 'Vice President' never lands in the president bucket despite containing the substring 'President', and \\b boundaries keep 'Director' from matching inside 'Directory'. c_suite matches the CxO acronyms plus the spelled 'Chief … Officer' shape; founder covers Founder/Co-Founder/Cofounder/Founding Partner; vp covers VP/SVP/EVP and (Senior|Executive )?Vice President; president covers President + Managing Director; director covers Director/Executive Director/Head of; board covers Chair(man|woman|person)/Board Member/Board of Directors/Trustee; other_leadership is a Partner/Principal/Owner/General Manager catch-all. Returns leaders[] (name/title/rank/bio omitempty/links non-nil), count, by_rank (rank→count), and detection (json_ld|microdata|heuristic). Relative profile hrefs/photo URLs are resolved against the final fetched URL; in text= mode (no fetch) they are returned as-authored. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch, in plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, heuristic_fallback, jsonld_parse_error, no_leaders) instead of failing the response; a page with text but no leaders still returns 200. ~30 unit tests cover every rank bucket, the Vice-President-vs-President disambiguation, the Directory-is-not-Director word-boundary guard, non-leadership rejection, case-insensitivity, the JSON-LD Person path (incl. @graph + @type array + missing-jobTitle skip + parse-error degraded), the microdata Person path, the heuristic card fallback + non-leader filtering + card links, by_rank counts, no-leaders degraded, dedupe across passes, omitempty/non-nil JSON shape, relative-link resolution, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler. /selftest exercises the full pure-logic pipeline (CEO + VP detected, engineer filtered, ranks asserted) plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: the structured-data paths are exact, but the heuristic fallback recognises only common team-page shapes — it is not layout-agnostic and does not infer roles from arbitrary running prose, which would need NLP-grade entity/role extraction.",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "legal-entity": {
     "container_port": 8293,
@@ -4127,7 +4156,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.25"
+    "version": "1.33.25",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "license-extractor": {
     "container_port": 18270,
@@ -4691,7 +4721,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 25-domain sample): found and fixed 2 evidence-inflation bugs -- 404/error pages were still scanned for payment-icon evidence (live-confirmed: a dead Shopify error template kept surfacing sitewide footer badges as 'detected' 4x over on codycallco.com; a stale Stripe.js reference on a 404 page produced a false detection on nybooks.com), and a URL-string dedup bug caused duplicate double-fetches on bare domains. Verdicts unchanged, only duplicate/stale evidence removed. See PR #14 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "pentest-agent-state": {
     "access_tier": "vetted-pentest",
@@ -5790,7 +5821,8 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "research-flow": {
     "trl": 4,
@@ -5814,7 +5846,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 82-domain sample): explicitly ruled out fetch-cache as a bug (confirmed this is the documented-correct pattern for bulk HTML classifiers per go-common's own fleetfetch docs). Found and fixed a real verdict-consistency bug: the primary-model/verdict arbitration hadn't learned a demotion gate added in the prior pass, producing self-contradictory responses (e.g. primary_model:'api_usage' + verdict:'ambiguous' on together.ai). See PR #16 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "reverse-dns": {
     "container_port": 8333,
@@ -5846,7 +5879,8 @@
     "version": "0.3.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "roamless-notes": {
     "trl": 3,
@@ -6045,7 +6079,8 @@
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 500-domain sample): explicitly ruled out fetch-cache as a bug (uses the correct fleetfetch client; deployed cache TTL of 10 minutes is too short to plausibly mask a wrong season). Found and fixed a real self-contradiction bug: the top-level 'seasonal' boolean never inherited the off-season ceiling already applied per-detection, so an out-of-season detection could report seasonal:true while the rest of the response said otherwise. Live-confirmed on 2 real domains. See PR #13 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "secrets-scanner": {
     "container_port": 8229,
@@ -6196,7 +6231,8 @@
     "version": "1.7.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "show-me-the-way": {
     "trl": 4,
@@ -6453,7 +6489,8 @@
     "trl_evidence": "Real DOM walk over a fetched HTML page (golang.org/x/net/html tokenizer, no regex over HTML structure) plus stdlib encoding/json for embedded structured data. Detection runs three strategies in strict priority order. (1) schema.org Person via JSON-LD: every <script type=\"application/ld+json\"> block is parsed and walked recursively — top-level Person, Person inside an @graph or array, and Person under an Organization's member/employee/founder/alumni properties are all harvested, with namespaced @type forms (https://schema.org/Person, schema:Person) recognised; jobTitle, description, image (string / array / ImageObject.url), sameAs and url become role/bio/photo_url/links; results are de-duplicated by name. (2) schema.org microdata: elements whose itemtype ends in /Person are read via their itemprop children (name/jobTitle/description/image/sameAs/url), without descending into nested itemscope entities. (3) Conservative repeated-card heuristic: under a common parent it finds the dominant run (>=2) of same-tag card containers (li/article/div/section), extracts a name from the first heading or strong/b that passes a strict person-name gate (2-4 tokens, each capitalised or an allowed name connective, no digits/role-words, length-capped), a role from a class/itemprop hint (role/title/position/jobTitle) or a nearby short line carrying a known role keyword, the longest paragraph as bio, the first img as photo, and the card's anchor hrefs as links. The heuristic is deliberately conservative: a group must yield >=2 qualifying members AND at least one must carry a role line, otherwise it is dropped — so navigation bars, footers, and link lists are not emitted as people. Photo and link hrefs are resolved against the fetched final URL via net/url ResolveReference; javascript:/fragment-only hrefs are dropped. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode (the static DOM is sufficient — no JS rendering needed). SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Non-fatal conditions are pushed to degraded[] (fetch_failed:<err>, no_extractable_text, jsonld_parse_error, heuristic_fallback, no_members) instead of failing; a page with text but no detectable roster still returns 200, and the response reports which method (jsonld/microdata/heuristic/none) was used. ~35 unit tests cover JSON-LD single/array/@graph/org-employee/namespaced-type/ImageObject/given-family-name/malformed/dedup/precedence, microdata single/multiple/content-attr, the heuristic across div/li/article cards with role-evidence gating, single-card rejection, nav rejection, mixed-role majority, bio capture, relative-link resolution, the name gate's accept/reject sets, omitempty JSON shape, non-nil slice stability, script isolation, and SSRF rejection. /selftest exercises all three pure-logic strategies plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: JSON-LD and microdata paths are exact, but the heuristic card detection is structurally fragile against unmarked, bespoke, or visually-driven layouts — distinguishing a true team card from a generic content card without semantic markup is a judgement a trained model would make far better than these hand-tuned rules, and the conservative gate trades recall (missing people) for precision (not emitting non-people).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "team-size": {
     "container_port": 8314,
@@ -6547,7 +6584,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 60-domain sample): found and fixed a real bug -- the fleetfetch fallback client (used when the shared fetch cache degrades) silently stripped the User-Agent, causing real production sites to 403-block the bare Go-http-client UA. Live-confirmed 2 domains flipping from blocked/unreachable to correct results after fix. See PR #14 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "trust-decay": {
     "container_port": 8317,
@@ -7102,7 +7140,8 @@
     "name": "Git Provider API Broker",
     "network_exposure": "gateway-authenticated",
     "placement": "pinned",
-    "version": "0.1.8"
+    "depends_on": ["fleet-secrets"],
+    "version": "0.1.9"
   },
   "github-app-token-broker": {
     "name": "GitHub App Token Broker",

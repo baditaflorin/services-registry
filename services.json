@@ -185,6 +185,9 @@
     "host_port": 8275,
     "container_port": 8275,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -259,6 +262,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8081,
     "container_port": 8081,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -1560,6 +1566,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8283,
     "container_port": 8283,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "mcp_ready": true,
@@ -1633,6 +1642,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8284,
     "container_port": 8284,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -1938,6 +1950,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18215,
     "container_port": 18215,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -2009,6 +2024,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18224,
     "container_port": 18224,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -2196,6 +2214,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18216,
     "container_port": 18216,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "70s",
     "mcp_ready": true,
@@ -2383,6 +2404,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18225,
     "container_port": 18225,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -2421,6 +2445,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18226,
     "container_port": 18226,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -2461,6 +2488,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18211,
     "container_port": 18211,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -2759,6 +2789,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18243,
     "container_port": 18243,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -2869,6 +2902,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18213,
     "container_port": 18213,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -3097,6 +3133,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18238,
     "container_port": 18238,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "version": "0.1.0",
@@ -3555,6 +3594,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8289,
     "container_port": 8289,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -3593,6 +3635,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8290,
     "container_port": 8290,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -3630,6 +3675,9 @@
     "host_port": 18293,
     "container_port": 18293,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -3668,6 +3716,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8291,
     "container_port": 8291,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -4470,6 +4521,9 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18252,
     "container_port": 18252,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4503,6 +4557,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8293,
     "container_port": 8293,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "mcp_ready": true,
@@ -5100,6 +5157,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8298,
     "container_port": 8298,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -5848,6 +5908,9 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8302,
     "container_port": 8302,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -5887,6 +5950,9 @@
     "host_port": 8303,
     "container_port": 8303,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -5964,6 +6030,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 18292,
     "container_port": 18292,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -6341,6 +6410,9 @@
     "host_port": 8306,
     "container_port": 8306,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "mcp_ready": true,
@@ -6711,6 +6783,9 @@
     "host_port": 8310,
     "container_port": 8310,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "mcp_ready": true,
@@ -7264,6 +7339,9 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18251,
     "container_port": 18251,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7491,6 +7569,9 @@
     "host_port": 8316,
     "container_port": 8316,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -8628,10 +8709,14 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18189,
     "container_port": 18189,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.9",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -8743,6 +8828,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18198,
     "container_port": 18198,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -8852,6 +8940,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18197,
     "container_port": 18197,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "version": "0.4.20",
@@ -8964,6 +9055,9 @@
     "host_port": 18187,
     "container_port": 18187,
     "internal_direct": true,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -9000,6 +9094,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18193,
     "container_port": 18193,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -9037,6 +9134,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18196,
     "container_port": 18196,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -9225,6 +9325,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18192,
     "container_port": 18192,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
@@ -9338,6 +9441,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "host_port": 18199,
     "container_port": 18199,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -9373,6 +9479,9 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "host_port": 18194,
     "container_port": 18194,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
