@@ -7,6 +7,8 @@
 
 ## 2026-10-10
 
+- Sync A11y Quick version 1.5.15 after Fleet Graph credential integration merged.
+
 - Declare observed Fetch Cache dependencies for 36 DomainScope-facing services and regenerate the dependency graph projection.
 - Preserve existing Fleet Secrets routing and Git Provider Broker dependency/version metadata during full registry generation.
 
