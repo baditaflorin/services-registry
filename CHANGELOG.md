@@ -7,7 +7,7 @@
 
 ## 2026-10-10
 
-- Sync Ad Density 2.6.16 and Brand Logo Extractor 0.1.19 after their file-backed Fleet Graph writer key releases merged.
+- Sync the canonical catalog and overrides to Ad Density 2.6.17, Brand Logo Extractor 0.1.19, and Broken Links 1.6.13 after their file-backed Fleet Graph writer changes merged.
 - Sync A11y Quick version 1.5.15 after Fleet Graph credential integration merged.
 
 - Declare observed Fetch Cache dependencies for 36 DomainScope-facing services and regenerate the dependency graph projection.
