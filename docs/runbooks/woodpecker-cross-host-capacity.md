@@ -12,6 +12,8 @@ registering stable agents from both sites with that control plane.
 - `0docker-builder-agent-a`
 - `0docker-builder-agent-b`
 - `0mcp-docker-exec-agent`
+- `0mcp-docker-0exec-ag-from-72-r-20260929t184118` on VM 130, with one
+  workflow slot and the VM 130 metrics group
 - `pve01-fleet-agent` on a dedicated remote builder VM
 - `0own-build-agent` on dedicated 0own VM 610
 
@@ -24,6 +26,24 @@ to matching agents with free workflow slots. Keep the concurrency cap at four
 until host metrics and sustained resource behavior support a deliberate change.
 `ci.0mcp.com` remains a separate authority for its `lv3=true` pipelines; do
 not register those repositories on the 0exec pool.
+
+The VM 130 worker is shared infrastructure for two independent control
+planes: this `ci.0exec.com` worker has one slot, while the separate
+`ci.0mcp.com` worker has two. Their queues do not coordinate, so host metrics
+and the load controller remain the safety bound. The `ci.0exec` worker must be
+grouped with VM 130 metrics at `127.0.0.1:19400`; the VM 120 runtime endpoint
+at `127.0.0.1:19200` describes a different host. If the VM 130 metrics tunnel
+fails, the `ci.0exec` agent is drained until metrics recover.
+
+Worker attribution follows the running container's host, not names embedded
+in old agent registrations. Registration 98 has a historical `pve01` name but
+runs on CT 108; it is mapped to `0docker` and remains unschedulable while the
+backing RAID is degraded.
+
+Only repositories with a Woodpecker workflow file can run a pipeline. A
+workflow pinned to a site or specialized label can only use agents that match
+that label. General workflows use `repo=*` Docker agents for automatic
+cross-host scheduling; `lv3=true` workflows stay on `ci.0mcp.com`.
 
 This pool executes repository CI workflows. Production image publication and
 `fleet-runner deploy` still follow the fleet deployment contract and use the

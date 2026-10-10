@@ -79,6 +79,7 @@ class ConfigTests(unittest.TestCase):
             "88": "0mcp-runtime",
             "90": "0mcp",
             "91": "0docker",
+            "98": "0docker",
         }
         for agent_id, physical_host in expected.items():
             with self.subTest(agent_id=agent_id):
