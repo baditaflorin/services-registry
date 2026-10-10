@@ -7,6 +7,7 @@
 
 ## 2026-10-10
 
+- Sync Captcha Detector 1.2.13 and Citation Reference Extractor 0.1.16 after file-backed Fleet Graph writer integration merged.
 - Sync the canonical catalog and overrides to Ad Density 2.6.17, Brand Logo Extractor 0.1.19, and Broken Links 1.6.13 after their file-backed Fleet Graph writer changes merged.
 - Sync A11y Quick version 1.5.15 after Fleet Graph credential integration merged.
 
