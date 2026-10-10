@@ -29,6 +29,14 @@ more agents to one server, not by activating a repository on more servers.
    mapping lives in `ci-authorities.json`: `ci.0exec.com` is the owner default,
    with explicit per-repository exceptions such as `mcp-site-service` on
    `ci.0mcp.com`.
+   Authority is selected by repository ownership, not by which physical host
+   currently has spare capacity. General workflows use generic labels and are
+   assigned by the authority's native scheduler to any matching connected
+   agent with an available slot. A `site` or `lv3=true` label is a capability
+   constraint, not a way to select a control plane. Do not move a repository's
+   webhook to reach a worker hosted at another site; connect eligible workers
+   to the repository's existing authority instead. Keep a repository on
+   `ci.0mcp.com` only when its CI authority is intentionally owned there.
 2. `bin/ci_authority_audit.py` reads GitHub's repository-hook API and fails
    unless exactly one known CI hook is active and its hostname matches the
    registry. It never prints full hook URLs because those URLs contain signed

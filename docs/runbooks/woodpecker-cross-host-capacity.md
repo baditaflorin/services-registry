@@ -3,7 +3,8 @@
 This runbook reproduces the deployed execution-plane design without storing
 private addresses or credentials in Git. Each repository keeps one
 authoritative Woodpecker control plane. Physical capacity is pooled by
-registering stable agents from both sites with that control plane.
+registering stable agents from any approved site with that control plane; do
+not move a repository between control planes just to choose a worker host.
 
 ## Deployed topology
 
@@ -24,13 +25,24 @@ existing `ci.0exec.com` control plane; repositories do not need a new webhook
 or a repo-specific builder configuration. Woodpecker assigns queued workflows
 to matching agents with free workflow slots. Keep the concurrency cap at four
 until host metrics and sustained resource behavior support a deliberate change.
-`ci.0mcp.com` remains a separate authority for its `lv3=true` pipelines; do
-not register those repositories on the 0exec pool.
+`ci.0mcp.com` remains a separate authority for repositories intentionally
+owned by the 0mcp platform (such as `mcp-site-service`). It is not a general
+capacity selector. Portable workflows on `ci.0exec.com` should request only
+the generic Docker backend and omit `site`/`lv3` labels; Woodpecker can then
+dispatch them across that authority's connected agents and the load controller
+can drain pressured physical workers. A workflow with `lv3=true` can run only
+on an agent advertising that capability under the workflow's own authority.
+If a general workflow received that label only to reach a server, remove the
+label and keep the repository on its existing authority instead of migrating
+its webhook.
 
 The VM 130 worker is shared infrastructure for two independent control
 planes: this `ci.0exec.com` worker has one slot, while the separate
-`ci.0mcp.com` worker has two. Their queues do not coordinate, so host metrics
-and the load controller remain the safety bound. The `ci.0exec` worker must be
+`ci.0mcp.com` worker has two. The latter's capacity is not visible to the
+0exec scheduler; using it for general fleet CI requires connecting a worker to
+the 0exec authority and verifying the host-level concurrency budget. Their
+queues do not coordinate, so host metrics and the load controllers remain the
+safety bound. The `ci.0exec` worker must be
 grouped with VM 130 metrics at `127.0.0.1:19400`; the VM 120 runtime endpoint
 at `127.0.0.1:19200` describes a different host. If the VM 130 metrics tunnel
 fails, the `ci.0exec` agent is drained until metrics recover.
@@ -43,7 +55,10 @@ backing RAID is degraded.
 Only repositories with a Woodpecker workflow file can run a pipeline. A
 workflow pinned to a site or specialized label can only use agents that match
 that label. General workflows use `repo=*` Docker agents for automatic
-cross-host scheduling; `lv3=true` workflows stay on `ci.0mcp.com`.
+cross-host scheduling. `site` and `lv3=true` are capability constraints within
+one authority, not control-plane routing switches. Keep a repository on its
+configured authority; add or enable a matching worker there if a workflow
+needs a specialized capability.
 
 This pool executes repository CI workflows. Production image publication and
 `fleet-runner deploy` still follow the fleet deployment contract and use the
@@ -170,7 +185,8 @@ private metrics URLs and verified agent aliases in the live config at
 `/etc/woodpecker-load-controller/ci.0exec.json`; do not put rendered private
 addresses or tokens in Git. The current controller service is the
 `woodpecker-load-controller@ci.0exec` instance. Keep the separate
-`ci.0mcp.com` controller and its `lv3=true` pool independent.
+`ci.0mcp.com` controller and queue independent. It does not change scheduling
+on `ci.0exec.com`; each control plane can only drain agents registered to it.
 
 Start with `--once` and without `--apply`. Confirm every configured agent name
 appears, each host's metrics URL succeeds, and the host-level observations match
