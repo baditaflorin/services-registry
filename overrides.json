@@ -567,7 +567,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
   },
   "agent-tools": {
-    "version": "0.1.4",
+    "version": "0.1.5",
     "host_port": 18307,
     "container_port": 18307,
     "category": "infrastructure",
@@ -3532,7 +3532,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged).",
-    "version": "3.0.0",
+    "version": "3.4.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
