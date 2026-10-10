@@ -4455,7 +4455,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Requires headless browser, DOM rendering",
     "trl_evidence": "500-domain live audit against the deployed production container. Fixed a real bug: responsive <img> tags with srcset were falsely flagged for horizontal-scroll risk (37% of sample), same signal the service already credits as evidence of responsiveness. 59/118 false positives cleared post-fix, including verdict upgrades. Also found genuine viewport false negatives traced to the shared fetch-cache layer serving different bytes than a direct fetch (upstream issue, not this repo). See github.com/baditaflorin/go_mobile_friendly PR #10.",
-    "version": "1.5.14",
+    "version": "1.5.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6141,7 +6141,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "2.4.17",
+    "version": "2.4.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
