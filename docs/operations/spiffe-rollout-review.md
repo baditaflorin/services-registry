@@ -1,8 +1,8 @@
 # SPIFFE fleet rollout: pre-mortem and post-mortem
 
-**Review date:** 2026-10-06  
-**Trust domain:** `spiffe://0exec.com`  
-**Current rollout stage:** isolated staging canary passed; production adoption not started
+**Review date:** 2026-10-12
+**Trust domain:** `spiffe://0exec.com`
+**Current rollout stage:** first production workload identities and SVID renewal verified; broker mTLS caller migration and multi-mesh rollout remain incomplete
 
 ## Pre-mortem
 
@@ -142,19 +142,18 @@ revoke path, or API-key fallback against the live staging listener. Agent
 restart recovery, task creation/close, and rejection of an unapproved broker
 identity are the behaviors actually verified.
 
-No production service, production key, database, gateway, or production
-container was changed. The broker's last fleet graph snapshot reported zero
-observed callers in its earlier seven-day window. A fresh read-only Fleet
+At the 2026-10-06 staging-review baseline, no production service, key, database,
+gateway, or container was changed. The broker's last fleet graph snapshot
+reported zero observed callers in its earlier seven-day window. A fresh read-only Fleet
 Runner discovery at `2026-10-06T15:34Z`, using the canonical service registry,
 found zero graph callers and zero declared `depends_on` consumers. A source
 scan found one `go_apikey_service` match, but inspection of current `origin/main`
 showed that match only in `lease_test.go` using an `httptest` server. This
 targeted source scan found no production call site; dynamically configured or
-differently named callers are not ruled out by that scan. There is not yet a
-verified production caller to migrate, and this run made no production
-enrollments.
+differently named callers are not ruled out by that scan. At that baseline, no
+production caller had been verified and no production enrollment had occurred.
 
-A second read-only Fleet Runner source scan for `credentiallease`,
+A second read-only Fleet Runner source scan at that baseline for `credentiallease`,
 `SPIFFE_ENDPOINT_SOCKET`, and `spiffe://` returned zero matches among eligible
 Go container services, with no missing workspaces. This signature-based scan
 does not cover non-Go workloads or runtime-only/dynamically configured
@@ -166,17 +165,54 @@ The previous capacity-reader blocker is resolved: `fleet-runner capacity
 reported hosts were up; the report recommended `0mcp-runtime-general`, while
 `dockerhost` carried a load-per-CPU warning. This capacity snapshot does not
 establish control-plane durability, a private path from the selected runtime
-to each workload, or recovery readiness. VM 102 also lacks a recorded VM
-snapshot and had a blocked cross-host TCP path, so it is not approved as the
-production control plane. Production migration remains gated on identifying a
-real production caller, an approved Server/Agent placement with backup and
-recovery, complete host/runtime and private-path inventory, the remaining
-staging identity/key-path checks, and then a separately reviewed production
-canary. The central Compose adapter remains default-off; Coolify, external,
-and static entries were not enrolled.
+to each workload, or recovery readiness. VM 102 also lacked a recorded VM
+snapshot and had a blocked cross-host TCP path, so it was not approved as the
+production control plane. At that time, production migration remained gated on
+identifying a real production caller, an approved Server/Agent placement with
+backup and recovery, complete host/runtime and private-path inventory, the
+remaining staging identity/key-path checks, and then a separately reviewed
+production canary. The bounded 0exec identity canary has since progressed as
+recorded below; consumer migration and additional trust domains remain gated.
+Coolify, external, and static entries are still outside the Compose adapter.
 
 The full Fleet Runner suite has two pre-existing environment-sensitive test
 failures on this workstation: tests requiring a root-owned private credential
 file and a safe state-directory path fail under the local user. Both failures
 were reproduced unchanged against fresh `origin/main`; the SPIFFE-specific
 renderer tests pass.
+
+## Production verification — 2026-10-12
+
+The first production 0exec canary is now registered and verified. Registry PR
+#542 opted `task-credential-broker` into the Compose Workload API overlay; PR
+#544 added the stateless `agent-tools` service. Their exact identities are
+`spiffe://0exec.com/ns/fleet/sa/task-credential-broker` and
+`spiffe://0exec.com/ns/fleet/sa/agent-tools`. The agent-tools container fetched
+its SVID through the mounted Unix Workload API socket. Its certificate serial
+changed after a bounded five-minute SVID lifetime test, proving renewal; the
+registration was then returned to the Server default lifetime. The temporary
+probe binary was removed from the workload, builder, and Docker host.
+
+The `agent-tools` public `/health` and `/version` routes returned 200 and
+`/manifest` returned 401 without API credentials. Its image digest and service
+version did not change. The change did not alter gateway routing, broker policy,
+provider rules, or the broker's default API-key authentication. The production
+SPIRE Agent remained healthy after the test. The post-change fleet snapshot
+reported 392 containers, 12 native services, 401 vhosts, 397 successful health
+checks, 4 warnings, and 0 broken routes.
+
+This proves production enrollment, Workload API delivery, SVID issuance, and
+renewal for two 0exec workloads. It does **not** prove that an application
+consumer calls the broker with SPIFFE mTLS: the broker's private mTLS listener
+remains disabled, no caller has been verified against the broker's private listener, and the
+source/runtime graph still has no verified production broker caller. No
+production API-key path has been removed. The latest 0exec audit reports 2 of
+169 services opted in; 167 remain outside this canary. The separate `0crawl.com`
+and `0docker.com` trust domains have no production server/agent rollout yet.
+
+Next rollout gates are to select an actual broker consumer, prove the staged
+SVID rotation and API-key fallback checks against that consumer, enable only its
+exact SPIFFE principal on the private listener, and then add 0crawl/0docker
+control planes and mesh-scoped socket paths before enrolling their workloads.
+Coolify, external, and static services remain unsupported by the Compose
+adapter.
