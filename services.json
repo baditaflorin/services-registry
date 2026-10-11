@@ -540,7 +540,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.10",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "brand-logo-extractor",
@@ -577,7 +580,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.19",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "broken-links",
@@ -1176,7 +1182,10 @@
     "container_port": 18330,
     "proxy_egress": true,
     "version": "0.1.5",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "content-fingerprint",
@@ -1214,7 +1223,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.14",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "cookie-checker",
@@ -1249,7 +1261,10 @@
     "container_port": 8226,
     "proxy_egress": true,
     "coolify_app_uuid": "fqmqklxqrf710ryv77xlriao",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "cors-scanner",
@@ -1889,7 +1904,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.4.13",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-amp-detector",
@@ -2081,7 +2099,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.3.8",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-bimi-checker",
@@ -2192,7 +2213,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.3.18",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-cms-version",
@@ -2304,7 +2328,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.2.20",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-details",
@@ -2340,7 +2367,10 @@
     "proxy_egress": true,
     "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2",
     "version": "1.3.9",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-ecommerce-platform",
@@ -2546,7 +2576,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.2.18",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-favicon-completeness",
@@ -2583,7 +2616,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.3.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-font-stack",
@@ -2848,7 +2884,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.0",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-liveness-state",
@@ -2997,7 +3036,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.2.14",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-podcast-presence",
@@ -3034,7 +3076,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.0",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-product-count",
@@ -3113,7 +3158,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.4.12",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "domain-tracker-density",
@@ -3498,7 +3546,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "1.5.15",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "file-inclusion",
@@ -3576,7 +3627,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "1.3.10",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "founding-year",
@@ -3895,7 +3949,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.3.10",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "hidden-fields",
@@ -4434,7 +4491,10 @@
     "host_port": 18286,
     "container_port": 18286,
     "proxy_egress": true,
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "keyword-density",
@@ -4506,7 +4566,10 @@
     "trl_assessor": "codex-trl-audit-2026-07-14",
     "host_port": 18250,
     "container_port": 18250,
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "leadership-extractor",
@@ -4756,7 +4819,10 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18266,
     "container_port": 18266,
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "merchant-profile",
@@ -5452,7 +5518,10 @@
     "proxy_egress": true,
     "proxy_read_timeout": "120s",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "policy-clause-extractor",
@@ -5608,7 +5677,10 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "promo-code-detector",
@@ -6606,7 +6678,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "2.4.18",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "seo-audit",
@@ -7929,7 +8004,10 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "voice-search",
@@ -8072,7 +8150,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "2.6.15",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "websocket-analyzer",
