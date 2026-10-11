@@ -473,7 +473,10 @@
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "address-extractor": {
     "container_port": 8275,
@@ -653,7 +656,10 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "apikey-scanner": {
     "env": {
@@ -1012,7 +1018,10 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "color-contrast-checker": {
     "container_port": 18261,
@@ -1356,7 +1365,10 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "cursorparty": {
     "trl": 3,
@@ -1597,7 +1609,10 @@
     "trl_assessor": "fleet-bot-squatter-recovery",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Passive + well-known probe coverage; TRL 7+ needs sustained production evidence across bot-hostile / JS-heavy sites.",
-    "trl_evidence": "Live on dockerhost host_port 18324 at /opt/services/domain-ai-catalog-discovery (was an unregistered squatter). Registered so allocate-port never reissues 18324. Health returns service=domain-ai-catalog-discovery status=ok version=0.1.0. Repo baditaflorin/go_domain_ai_catalog_discovery; mesh-0exec topics added 2026-09-17."
+    "trl_evidence": "Live on dockerhost host_port 18324 at /opt/services/domain-ai-catalog-discovery (was an unregistered squatter). Registered so allocate-port never reissues 18324. Health returns service=domain-ai-catalog-discovery status=ok version=0.1.0. Repo baditaflorin/go_domain_ai_catalog_discovery; mesh-0exec topics added 2026-09-17.",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-amp-detector": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -1786,7 +1801,10 @@
     "version": "0.3.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-dane-tlsa": {
     "container_port": 18219,
@@ -1901,7 +1919,10 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.17"
+    "version": "0.3.17",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-error-monitoring": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2054,7 +2075,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-image-alt-coverage": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -2238,7 +2262,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-podcast-presence": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2321,7 +2348,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-structured-data-rollup": {
     "container_port": 18188,
@@ -2379,7 +2409,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-third-party-fetch-map": {
     "container_port": 18185,
@@ -2396,7 +2429,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "domain-tracker-density": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2578,7 +2614,10 @@
     "version": "3.0.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "env-finder": {
     "container_port": 8344,
@@ -4114,7 +4153,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Second-pass re-audit (fresh ~80-domain sample): explicitly verified the fetch-cache pattern here is deliberate/correct (pinned by a dedicated test, negligible TTL for this one-shot use case). Found and fixed a real bug: extractDoc counted never-rendered <iframe>/<object>/<canvas> HTML fallback text as page content, producing false 'severe keyword stuffing' verdicts on real small-business sites (confirmed on 35 production rows, one example jumping from 89% density on a mangled Maps-embed artifact to a correct 3.55% on the real top term). See PR #9 (merged)."
+    "trl_evidence": "Second-pass re-audit (fresh ~80-domain sample): explicitly verified the fetch-cache pattern here is deliberate/correct (pinned by a dedicated test, negligible TTL for this one-shot use case). Found and fixed a real bug: extractDoc counted never-rendered <iframe>/<object>/<canvas> HTML fallback text as page content, producing false 'severe keyword stuffing' verdicts on real small-business sites (confirmed on 35 production rows, one example jumping from 89% density on a mangled Maps-embed artifact to a correct 3.55% on the real top term). See PR #9 (merged).",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "kokoro-ovms-adapter": {
     "auth": {
@@ -4490,7 +4532,10 @@
     "version": "1.5.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "named-entity-recognizer": {
     "container_port": 18285,
@@ -4716,7 +4761,10 @@
     "trl_evidence": "Re-validated against real production data after the 2026-07-01 conservative reset (never followed up with real validation): pulled 800 random real rows plus a targeted 100-domain sample of every non-br/gzip/identity content_encoding value from domain_page_load (3.3M rows), ran the service live against all of them with same-time before/after A-B runs. Found and fixed 3 real bugs within the HTTP-level ceiling: (1) decodeBody() had no case for deflate/x-gzip, so it silently reported still-compressed wire bytes as decoded HTML and fed undecoded bytes into the HTML parser, blinding all downstream structural signals -- confirmed live, one domain's html_bytes was undercounted by 83%, another's score swung 92(A)->48(F) once real structural findings surfaced. (2) scoreTransfer() treated any non-empty/identity content_encoding as real compression, so mislabeled headers (utf-8) and AWS's non-compressing aws-chunked framing dodged the uncompressed-HTML penalty -- fixed by gating on measured byte savings, not the label. (3) a bare EOF was misclassified as HTTP 502 instead of the honest unreachable taxonomy. Same-time control A/B confirmed near-identical grade distributions on the general population (zero regression) with real targeted improvement only on the ~25 domains carrying the buggy encodings. Full go build/test passes (69 tests). See github.com/baditaflorin/go_page_load_metrics PR #15 for full writeup.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "parse-address": {
     "trl": 3,
@@ -5610,7 +5658,10 @@
     "trl_evidence": "600-domain live audit. Fixed a real bug present since the tool's first commit: a bare 'bottom' string in the footer-hint matcher collided with common CSS classes, live-confirmed on stripe.com itself (a scroll-progress indicator opened a fake footer window crediting an unrelated customer case study as press coverage). False positives dropped 30->7 across the sample; some verdicts flipped (e.g. high_visibility->moderate). See github.com/baditaflorin/go_press_mentions PR #16.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "price-range": {
     "container_port": 8301,
@@ -5625,7 +5676,10 @@
     "version": "1.9.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "pricing-tier-parser": {
     "container_port": 18268,
@@ -5964,7 +6018,10 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "1.6.17"
+    "version": "1.6.17",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "room-vj": {
     "trl": 3,
@@ -6028,7 +6085,10 @@
     "trl_evidence": "Second-pass re-audit (fresh 250-domain sample): explicitly ruled out fetch-cache as a bug (uses fleetfetch, the correct shared-cache client). Found and fixed a real SPA-shell-detection bug: contentElementCount excluded decorative <svg> bulk but not <head>/<script>/<template> boilerplate, causing near-text-free SPA shells (x.com, Instagram) to blow the content budget purely on head tags. Also patched a Dependabot HTML-parser DoS CVE (golang.org/x/net). See PR #8 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "schema-extractor": {
     "container_port": 8165,
@@ -6165,7 +6225,10 @@
     "version": "2.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "security-txt": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -6315,7 +6378,10 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.2.15"
+    "version": "2.2.15",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "smuggling-probe": {
     "container_port": 8154,
@@ -6345,7 +6411,10 @@
     "version": "2.5.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "social-proof-extractor": {
     "container_port": 18269,
@@ -6654,7 +6723,10 @@
     "version": "2.5.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "trust-no-one-anonymizer": {
     "trl": 4,
@@ -6904,7 +6976,10 @@
     "trl_evidence": "TRL 7->8: found and fixed 3 confirmed geographic false-positive classes via live production re-testing on 114 real domains from the prod domains/domain_demographics tables (e.g. \\blei\\b colliding with Portuguese 'law' and Italian 'she'/'you'). See github.com/baditaflorin/go_user_demographics PR #21.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "utils-readcontent": {
     "container_port": 5008,
@@ -7157,7 +7232,8 @@
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18322,
     "depends_on": [
-      "apikey-service"
+      "apikey-service",
+      "infrastructure-fetch-cache"
     ],
     "description": "Finds validated public careers-page and ATS hiring evidence for a company domain using the owned search service and its separately scoped fallback.",
     "example_path": "/?domain=example.com",
