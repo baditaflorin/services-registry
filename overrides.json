@@ -4328,6 +4328,11 @@
     "description": "Extracts HTML lists from a web page or raw HTML: ordered (ol), unordered (ul), and description (dl) lists, with item text, term/definition pairs, nesting depth, and per-list/total counts.",
     "example_path": "/?url=https://example.com",
     "host_port": 18249,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "0.1.6",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -4841,6 +4846,11 @@
     "description": "Passive-voice detection for a web page or raw text — flags sentences using a be/get auxiliary plus a past participle, reports the matched trigger per sentence, total/passive sentence counts, and the passive-sentence ratio.",
     "example_path": "/?url=https://example.com",
     "host_port": 18264,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "0.1.5",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -5751,6 +5761,11 @@
     "description": "Extract pricing tiers / plan cards from a web page or raw HTML — per-tier plan name, parsed price (currency + amount + billing period), most-popular flag, and feature list, plus a summary (tier count, currency, price range, billing-toggle detection).",
     "example_path": "/?url=https://example.com",
     "host_port": 18268,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "0.1.9",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -5777,6 +5792,11 @@
     "description": "Detect promotional offers and discount/coupon codes on a web page or in raw text — coupon codes near trigger words (use code, promo, voucher), percentage-off and amount-off offers across currencies, BOGO, free shipping, free trial, plus urgency/expiry hints.",
     "example_path": "/?url=https://example.com",
     "host_port": 18267,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "0.2.6",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -5941,6 +5961,11 @@
     "description": "Estimates reading time for a web page or raw text across slow/average/fast WPM bands, plus a Medium-style per-image viewing allowance — returns words, image count, per-band minutes/seconds, and a humanized 'about N min read' label.",
     "example_path": "/?url=https://example.com",
     "host_port": 18246,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "0.1.8",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
