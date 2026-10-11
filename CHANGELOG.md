@@ -7,6 +7,8 @@
 
 ## 2026-10-11
 
+- Sync Task Credential Broker to merged release 0.1.17.
+
 - Enable Fleet Graph for ten current-release Go services with explicit, hot-reloadable writer identities.
 
 ## 2026-10-10
