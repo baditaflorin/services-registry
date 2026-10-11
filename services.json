@@ -1859,7 +1859,7 @@
     "url": "https://domain-ad-network.0crawl.com",
     "health_url": "https://domain-ad-network.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_ad_network",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?domain=nytimes.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -1974,7 +1974,7 @@
     "url": "https://domain-anycast-footprint.0crawl.com",
     "health_url": "https://domain-anycast-footprint.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_anycast_footprint",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=cloudflare.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -2052,7 +2052,7 @@
     "url": "https://domain-backlink-profile.0crawl.com",
     "health_url": "https://domain-backlink-profile.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_backlink_profile",
-    "example_path": "/",
+    "example_path": "/?domain=google.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -5670,7 +5670,7 @@
     "url": "https://pwa-manifest.0crawl.com",
     "health_url": "https://pwa-manifest.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_pwa_manifest",
-    "example_path": "/go_pwa_manifest?url=https://example.com",
+    "example_path": "/?target=https://example.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -6015,7 +6015,7 @@
     "url": "https://review-presence.0crawl.com",
     "health_url": "https://review-presence.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_review_presence",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=asana.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
