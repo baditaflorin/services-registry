@@ -7385,6 +7385,7 @@
     "trl_assessor": "codex-gpt-6",
     "placement": "pinned",
     "proxy_egress": true,
+    "spiffe_workload": true,
     "trl_evidence": "v0.1.10 includes gateway-authenticated delegated API-key issuance, required proxy egress, a strict TLS hostname, and a two-app staging harness; live production canary and restore evidence are pending.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Still needs a live staged deployment, scoped provider delegation, and production-equivalent backup/restore verification.",
