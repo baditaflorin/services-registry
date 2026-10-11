@@ -567,6 +567,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
   },
   "agent-tools": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "version": "0.1.5",
     "host_port": 18307,
     "container_port": 18307,
@@ -3050,6 +3054,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-memory": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
@@ -3070,6 +3078,10 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
   },
   "fleet-notify": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "auth": {
       "type": "none"
     },
@@ -3091,6 +3103,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-payload-corpus": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18156,
     "description": "versioned attack-payload corpus (125 payloads, 12 classes)",
@@ -3230,6 +3246,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "fleet-priority-queue": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "container_port": 18169,
     "description": "composite-scored findings priority ranker",
     "host_port": 18169,
@@ -4147,6 +4167,10 @@
     "depends_on": ["infrastructure-fetch-cache"]
   },
   "legal-entity": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "container_port": 8293,
     "description": "Microservice for Legal Entity",
     "host_port": 8293,
@@ -5681,6 +5705,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pwa-manifest": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "container_port": 8168,
     "description": "Microservice for Pwa Manifest",
     "example_path": "/go_pwa_manifest?url=https://example.com",
@@ -5871,6 +5899,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "review-presence": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "container_port": 18292,
     "host_port": 18292,
     "proxy_egress": true,
@@ -6517,6 +6549,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "tech-stack": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "container_port": 8162,
     "description": "Microservice for Tech Stack",
     "host_port": 8162,
@@ -6597,6 +6633,10 @@
     "depends_on": ["infrastructure-fetch-cache"]
   },
   "trust-decay": {
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "container_port": 8317,
     "description": "Microservice for Trust Decay",
     "host_port": 8317,

@@ -5,6 +5,10 @@
 
 # Changelog
 
+## 2026-10-11
+
+- Enable Fleet Graph for ten current-release Go services with explicit, hot-reloadable writer identities.
+
 ## 2026-10-10
 
 - Allow the 0mcp host address to reach Fleet Secrets so its explicitly scoped services can load allowlisted runtime secrets.
