@@ -6263,6 +6263,10 @@
   "sitemap-finder": {
     "container_port": 8311,
     "description": "Discovers a site's sitemaps via robots.txt + common-path probes, follows sitemapindex chains, decompresses .gz, returns URL inventory sorted by lastmod with an evidence trail.",
+    "env": {
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_ENABLED": "true"
+    },
     "example_path": "/?target=https://stripe.com",
     "host_port": 8311,
     "trl": 7,
