@@ -163,6 +163,26 @@ class TestGatewayRoutesStayPrivate(unittest.TestCase):
                 )
 
 
+class TestFleetGraphWriterRollout(unittest.TestCase):
+    def test_next_five_writers_are_explicitly_enabled(self):
+        payload = json.loads((Path(generate.ROOT) / "overrides.json").read_text())
+        expected = (
+            "company-size",
+            "keyword-density",
+            "language-detector",
+            "leadership-extractor",
+            "security-headers",
+        )
+        for service_id in expected:
+            with self.subTest(service_id=service_id):
+                env = payload[service_id]["env"]
+                self.assertEqual(env.get("GRAPH_ENABLED"), "true")
+                self.assertEqual(
+                    env.get("GRAPH_COLLECTOR_URL"),
+                    "https://fleet-graph.0exec.com",
+                )
+
+
 def _contains_key(value: object, key: str) -> bool:
     if isinstance(value, dict):
         return key in value or any(_contains_key(child, key) for child in value.values())
