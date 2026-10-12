@@ -50,6 +50,11 @@ spiffe_socket_directories:
   0docker: /run/spire/sockets/0docker
   0exec: /run/spire/sockets
 
+# Numeric group ownership of each host Workload API socket directory. The
+# renderer adds this supplementary group only to explicitly opted-in workloads.
+spiffe_socket_group_ids:
+  0exec: 60000
+
 container_defaults:
   # Make the dockerhost's gateway IP resolvable from inside the
   # container as `host.docker.internal`. Required by every service
