@@ -3825,7 +3825,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (Fastify service over the static geojson-places dataset for administrative-region search/reverse-geocode, confirmed genuinely non-overlapping with both geocode siblings -- opposite direction, no external network call at request time so fetch-cache masking doesn't apply). Found a real bug currently live in production: GET /health actually resolves to /health/health due to a fastify-autoload route-registration mismatch, so Docker's own HEALTHCHECK and the fleet catalog's health_url are both 404ing right now despite the app working fine -- a prior changelog entry claimed to have already fixed this but registered the route at the wrong path. Fixed by registering at / like every other route file. Also fixed a limit<=0 validation gap that silently broke the result cap (100 matches leaking through with no error), and found the service's own smoke-test config has never actually matched the real API (GET /?query= vs the real GET /search?q=). trl held at 6; trl_ceiling=7 added -- entire dataset is a frozen snapshot of a pinned npm package with no freshness/drift-detection pipeline, geometries are simplified so border-adjacent reverse-geocode is inherently approximate, permanently scoped to administrative units only by design. See PR #2 (merged).",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "version": "0.1.3"
   },
   "go-oauth-mapper": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
