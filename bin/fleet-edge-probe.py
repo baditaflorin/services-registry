@@ -19,10 +19,15 @@ with -insecure. This asserts the things those skip:
   6  cert_expiring       notAfter > now + --expiry-days
   7  offsite_redirect    GET /health may redirect, but must stay on the same host
   8  health_status       final /health status == 200
-  9  health_body         /health body is JSON with status=="ok" (not a landing page)
+  9  health_body         /health body is JSON with status ok|healthy|up|success, or
+                         {"ok": true}, or carries a service/version key (not a landing page)
  10  fallback_vhost      body is not the known default-vhost fingerprint (<title>LV3 ...)
  11  example_unreachable GET <url><example_path> -> 200/401/403 and same host
                          (401/403 == "edge wired, auth on" == fine)
+
+Services whose registry entry has lifecycle.status == "sunset" are not probed
+(they are deliberately retired and answer 410); they are reported as `skipped`
+and stay visible via fleet_edge_probe_service_skipped / fleet_edge_probe_skipped_total.
 
 Exit: 0 = all probed services pass ; 1 = >=1 failure ; 2 = usage/fetch error.
 
@@ -42,6 +47,13 @@ GATEWAY_IPS = {
     "compose": {"176.9.123.221"},
     "coolify": {"65.108.75.123"},
 }
+
+# registry `lifecycle.status` values that mean "deliberately retired, do not probe".
+# schema/v1.json defines active|sunset only; extend here if the schema grows more.
+SKIP_LIFECYCLE_STATUSES = {"sunset"}
+
+# JSON `status` values (case-insensitive) accepted as a healthy /health body.
+HEALTHY_STATUS_VALUES = ("ok", "healthy", "up", "success")
 
 FALLBACK_FINGERPRINTS = ("<title>lv3", "nginx.0mcp.com", "default backend - 404")
 
@@ -182,6 +194,53 @@ def curl(url: str, timeout: float, want_body: bool):
                 pass
 
 
+def health_body_ok(hbody: str) -> bool:
+    """True if a 200 /health body looks like a real app health response.
+
+    JSON object: status in HEALTHY_STATUS_VALUES (case-insensitive), or
+    ok is exactly true, or a `service` / `version` key is present.
+    Non-JSON: plain `ok` / `healthy` / `up` (or starting with `ok`).
+    Anything else (landing page, {"ok": false}, empty body) is not healthy.
+    """
+    try:
+        j = json.loads(hbody)
+    except ValueError:
+        t = hbody.strip().lower()
+        return t in ("ok", "healthy", "up") or t.startswith("ok")
+    return isinstance(j, dict) and (
+        str(j.get("status", "")).lower() in HEALTHY_STATUS_VALUES
+        or j.get("ok") is True
+        or "service" in j or "version" in j
+    )
+
+
+def lifecycle_skip_status(svc: dict) -> str | None:
+    """Return the registry lifecycle status if this service must not be probed."""
+    lc = svc.get("lifecycle")
+    if isinstance(lc, dict):
+        st = str(lc.get("status", "")).strip().lower()
+        if st in SKIP_LIFECYCLE_STATUSES:
+            return st
+    return None
+
+
+def skipped_result(svc: dict, status: str) -> dict:
+    url = svc.get("url", "")
+    return {
+        "slug": svc.get("id", "?"), "host": urlsplit(url).hostname or "",
+        "runtime": svc.get("runtime", ""),
+        "fails": [], "hard_fail": False, "ok": True,
+        "skipped": True, "lifecycle": status, "meta": {},
+    }
+
+
+def probe_or_skip(svc: dict, args) -> dict:
+    status = lifecycle_skip_status(svc)
+    if status:
+        return skipped_result(svc, status)
+    return probe(svc, args)
+
+
 def probe(svc: dict, args) -> dict:
     slug = svc.get("id", "?")
     url = svc.get("url", "")
@@ -229,17 +288,7 @@ def probe(svc: dict, args) -> dict:
     elif hcode != 200:
         add("health_status")          # 000 / 5xx / unexpected → real outage
     else:
-        body_ok = False
-        try:
-            j = json.loads(hbody)
-            body_ok = isinstance(j, dict) and (
-                str(j.get("status", "")).lower() in ("ok", "healthy", "up")
-                or "service" in j or "version" in j
-            )
-        except ValueError:
-            body_ok = hbody.strip().lower() in ("ok", "healthy", "up") or \
-                hbody.strip().lower().startswith("ok")
-        if not body_ok:
+        if not health_body_ok(hbody):
             add("health_body")
     if any(fp in hbody.lower() for fp in FALLBACK_FINGERPRINTS):
         add("fallback_vhost")
@@ -300,6 +349,8 @@ PROM_HELP = {
     "fleet_edge_probe_service_hard_fail": "1 if the service has a page-worthy edge failure",
     "fleet_edge_probe_fail_code": "1 per (service, assertion code) that failed",
     "fleet_edge_probe_hard_fail_total": "count of services with a hard edge failure",
+    "fleet_edge_probe_service_skipped": "1 per service not probed because its registry lifecycle.status is sunset (label lifecycle)",
+    "fleet_edge_probe_skipped_total": "count of services skipped because of registry lifecycle",
     "fleet_edge_probe_last_run": "unix ts of the last completed run",
 }
 
@@ -316,8 +367,14 @@ def write_prom(path: str, results: list[dict], vantage: str):
     lines.append(f"fleet_edge_probe_up{{{v}}} 1")
     lines.append(f"fleet_edge_probe_last_run{{{v}}} {int(time.time())}")
     lines.append(f"fleet_edge_probe_hard_fail_total{{{v}}} {hard}")
+    lines.append(f"fleet_edge_probe_skipped_total{{{v}}} {sum(1 for r in results if r.get('skipped'))}")
     for r in results:
         lbl = f'{v},slug="{esc(r["slug"])}",host="{esc(r["host"])}",runtime="{esc(r["runtime"])}"'
+        if r.get("skipped"):
+            # not probed: no service_ok claim; keep it visible and explicit
+            lines.append(f'fleet_edge_probe_service_skipped{{{lbl},lifecycle="{esc(r.get("lifecycle", ""))}"}} 1')
+            lines.append(f"fleet_edge_probe_service_hard_fail{{{lbl}}} 0")
+            continue
         lines.append(f"fleet_edge_probe_service_ok{{{lbl}}} {1 if r['ok'] else 0}")
         lines.append(f"fleet_edge_probe_service_hard_fail{{{lbl}}} {1 if r['hard_fail'] else 0}")
         for code in r["fails"]:
@@ -391,21 +448,26 @@ def main():
     log(f"probing {len(elig)} services (timeout={args.timeout}s, concurrency={args.concurrency}) ...")
     results = []
     with ThreadPoolExecutor(max_workers=args.concurrency) as ex:
-        futs = {ex.submit(probe, s, args): s for s in elig}
+        futs = {ex.submit(probe_or_skip, s, args): s for s in elig}
         for fut in as_completed(futs):
             results.append(fut.result())
     results.sort(key=lambda r: (r["ok"], r["slug"]))
 
     broken = [r for r in results if not r["ok"]]
     hard = [r for r in results if r["hard_fail"]]
+    skipped = [r for r in results if r.get("skipped")]
 
     ts = datetime.now(timezone.utc).isoformat()
     if args.json:
-        print(json.dumps({"ts": ts, "probed": len(results),
+        print(json.dumps({"ts": ts, "probed": len(results) - len(skipped),
+                          "skipped": len(skipped),
                           "broken": len(broken), "hard_fail": len(hard),
                           "results": results}, indent=2))
     else:
         for r in results:
+            if r.get("skipped"):
+                print(f"SKIP  {r['slug']:<34} {r['host']:<40} {r['runtime']:<8}  [lifecycle={r['lifecycle']}]")
+                continue
             if r["ok"] and not args.all:
                 continue
             tag = "PASS" if r["ok"] else ("FAIL" if r["hard_fail"] else "WARN")
@@ -420,8 +482,9 @@ def main():
                 if m.get("san"):
                     extra += f"  SAN={m['san'][:3]}"
             print(f"{tag:4}  {r['slug']:<34} {r['host']:<40} {r['runtime']:<8}{extra}")
-        print(f"\n{ts}  probed={len(results)}  ok={len(results)-len(broken)}  "
-              f"warn={len(broken)-len(hard)}  fail={len(hard)}")
+        print(f"\n{ts}  probed={len(results)-len(skipped)}  "
+              f"ok={len(results)-len(broken)-len(skipped)}  "
+              f"warn={len(broken)-len(hard)}  fail={len(hard)}  skipped={len(skipped)}")
 
     # alert-on-transition
     if args.state:
@@ -432,7 +495,8 @@ def main():
             except Exception:
                 prev = {}
         newly_broken = [r for r in broken if prev.get(r["slug"], {}).get("ok", True)]
-        recovered = [r for r in results if r["ok"] and prev.get(r["slug"]) and not prev[r["slug"]]["ok"]]
+        recovered = [r for r in results if r["ok"] and not r.get("skipped")
+                     and prev.get(r["slug"]) and not prev[r["slug"]]["ok"]]
         try:
             json.dump({"ts": ts, "results": results}, open(args.state, "w"), indent=2)
         except OSError as e:
