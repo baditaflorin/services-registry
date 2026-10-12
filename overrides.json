@@ -6551,7 +6551,8 @@
     "trl": 5,
     "trl_evidence": "First-pass audit: found and fixed a real data race between the background poll loop and on-demand API-triggered tests, both operating on the same shared *Service struct without holding the registry lock across blocking network calls (3 distinct races confirmed via go test -race, fixed by snapshotting fields under lock). Added the repo's first-ever test suite. Also surfaced an urgent ops finding: the dashboard's own canonical URL is currently serving a completely different service (a port-collision routing issue on the fleet host, not a code bug) -- flagged for the deploy/routing team. trl held at 5 pending broader test coverage; trl_ceiling=7 added. See PR #2 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "session-management": {
     "container_port": 8095,
