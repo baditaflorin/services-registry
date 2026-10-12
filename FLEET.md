@@ -377,6 +377,16 @@ host-conventions.yaml ───────────────────�
 
 [`host-conventions.yaml`](host-conventions.yaml) declares fleet-wide compose primitives that apply to every container service unless explicitly overridden. Today: `extra_hosts: host.docker.internal:host-gateway`, default `APIKEY_SERVICE_URL`, default `LOG_LEVEL`, default networks. Adding a new fleet-wide compose key (e.g. a log driver, a new env var every service reads) is ONE PR here + `fleet-runner render-compose --push --restart --all` instead of SSH-editing N dockerhost composes.
 
+For a service whose `service.yaml` declares the reviewed, file-backed
+`FLEET_FETCH_CACHE_API_KEY_FILE` credential, set
+`fetch_cache_api_key_file_mount: true` in that service's `overrides.json`
+entry. `fleet-runner render-compose` then injects the fixed read-only bind
+mount from `.secrets/fleet_fetch_cache_api_key` to
+`/run/secrets/fleet_fetch_cache_api_key` and sets the matching `_FILE`
+environment variable. The opt-in is exact per service; a missing host file
+fails Compose startup because the bind mount uses `create_host_path: false`.
+Never add a Fetch Cache key value to `overrides.json`.
+
 Precedence (declaration order):
 1. `container_defaults` — every container
 2. `mesh_defaults.<mesh>` — per-mesh layer

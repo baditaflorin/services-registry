@@ -455,7 +455,8 @@
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "ad-density": {
     "container_port": 8274,
@@ -479,7 +480,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "address-extractor": {
     "container_port": 8275,
@@ -502,7 +504,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "admin-finder": {
     "env": {
@@ -627,7 +630,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "anon-conf-poll": {
     "trl": 4,
@@ -679,7 +683,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "apikey-scanner": {
     "env": {
@@ -818,7 +823,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "brand-logo-extractor": {
     "container_port": 18287,
@@ -838,7 +844,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "broken-links": {
     "container_port": 8192,
@@ -1059,7 +1066,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "color-contrast-checker": {
     "container_port": 18261,
@@ -1235,7 +1243,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "cookie-checker": {
     "container_port": 8226,
@@ -1424,7 +1433,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "cursorparty": {
     "trl": 3,
@@ -1453,7 +1463,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "d3-graph": {
     "container_port": 6003,
@@ -1498,7 +1509,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "db-geo-geocode": {
     "container_port": 3909,
@@ -1620,7 +1632,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "depends_on": ["infrastructure-fetch-cache"],
     "version": "0.1.9",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-ad-network": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1746,7 +1759,8 @@
     "trl_evidence": "866-domain 3-way replay (deployed prod vs pre-fix main vs fix, on identical HTML bytes). Fixed two real classification bugs: positive framework detections (e.g. Next.js at high confidence) reported as 'unknown'; an earlier merged fix over-corrected and lost legitimate same-origin framework fingerprints (Astro, Gatsby). ~1.1% of verdicts corrected, zero regressions. Also patched a real CVE. Flagged: production is 2 real-bug generations behind main. See github.com/baditaflorin/go_domain_app_render_mode PR #4.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-backlink-profile": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1833,7 +1847,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
@@ -1854,7 +1869,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.4.15",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-ct-log-watcher": {
     "container_port": 18184,
@@ -1911,7 +1927,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-details": {
     "container_port": 8085,
@@ -1963,7 +1980,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "version": "0.4.20",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-ecommerce-platform": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2039,7 +2057,8 @@
     "trl_evidence": "991-domain live audit. Fixed 6 real bugs: the fetch layer never checked HTTP status codes so WAF/bot-block pages sailed through as clean scans (35+ domains affected); broken ID extraction for On24 (0/7->6/7) and Eventive (0/8->2/8) event links; false positives from self-hosted vFairs analytics and Eventbrite's own CDN favicon; plus a real CVE patch. See github.com/baditaflorin/go_domain_events_platform PR #3.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-experimentation-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2057,7 +2076,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-faq-schema": {
     "env": {
@@ -2096,7 +2116,8 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-font-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -2207,7 +2228,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-interactive-demo": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2257,7 +2279,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
@@ -2276,7 +2299,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-naptr-enum": {
     "container_port": 18236,
@@ -2313,7 +2337,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-open-source-presence": {
     "container_port": 18196,
@@ -2331,7 +2356,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-pagination-rel": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2348,7 +2374,8 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-passive-dns-history": {
     "container_port": 18183,
@@ -2463,7 +2490,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-structured-data-rollup": {
     "container_port": 18188,
@@ -2505,7 +2533,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-tech-eol-flagger": {
     "container_port": 18186,
@@ -2526,7 +2555,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-third-party-fetch-map": {
     "container_port": 18185,
@@ -2546,7 +2576,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-tracker-density": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2577,7 +2608,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-viewport-meta": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -2614,7 +2646,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "domain-wikidata-entity": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2774,7 +2807,8 @@
     "version": "1.5.15",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "field-recording-mirror": {
     "trl": 4,
@@ -2818,7 +2852,8 @@
     "depends_on": ["composite-runner", "infrastructure-fetch-cache"],
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "fetch_cache_api_key_file_mount": true
   },
   "fleet-backoff-coordinator": {
     "container_port": 18163,
@@ -3743,7 +3778,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "funding-detector": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3759,7 +3795,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "funding-signal": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3792,7 +3829,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "gentle-adhd-flow": {
     "trl": 4,
@@ -3927,7 +3965,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "hidden-fields": {
     "container_port": 8345,
@@ -4295,7 +4334,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "keyword-density": {
     "container_port": 8292,
@@ -4311,7 +4351,8 @@
     "trl_evidence": "Second-pass re-audit (fresh ~80-domain sample): explicitly verified the fetch-cache pattern here is deliberate/correct (pinned by a dedicated test, negligible TTL for this one-shot use case). Found and fixed a real bug: extractDoc counted never-rendered <iframe>/<object>/<canvas> HTML fallback text as page content, producing false 'severe keyword stuffing' verdicts on real small-business sites (confirmed on 35 production rows, one example jumping from 89% density on a mangled Maps-embed artifact to a correct 3.55% on the real top term). See PR #9 (merged).",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "language-detector": {
     "container_port": 18250,
@@ -4326,7 +4367,8 @@
     "trl_evidence": "Dependency-free, pure-Go language detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace with block-element boundaries. Two complementary signals. (1) SCRIPT detection — every letter rune is bucketed by its Unicode block into Latin (incl. Latin-1/Extended accents), Cyrillic, Greek (incl. Extended), CJK Han, Japanese kana (hiragana+katakana), Arabic, Hebrew, Devanagari; the dominant writing system by letter count is reported. This is near-certain because scripts occupy disjoint Unicode ranges. (2) STOPWORD-frequency scoring — for Latin-script prose the text is tokenised into lowercased words and, for each scored language (English, Spanish, French, German, Italian, Portuguese, Dutch), score = stopword-hits / total-tokens from curated high-frequency function-word sets; the highest score wins. Confidence is the margin form winner/(winner+runner_up) so a clear separation reads as high-confidence and a tight race reads ~0.5; a sole non-zero scorer reports its raw density. Non-Latin scripts map to a best-effort script→language guess (Cyrillic→ru, Greek→el, Arabic→ar, Hebrew→he, Devanagari→hi, Han→zh, Han+kana→ja) at deliberately modest confidence with a script_guess degraded note (script != language). Per-failure notes go to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_words for <30-word inputs, undetermined when no stopwords match) rather than failing the response; degraded[] is always a non-null slice. Direct text= mode analyses pasted content with no fetch. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode; SSRF defense-in-depth (input-time block of literal loopback/private/link-local IPs via safehttp + localhost/.local names, with cache-side + safehttp-fallback dial-time guards). ~30 unit tests cover seven real multi-language Latin sentences mapping to the correct ISO 639-1 code, the es-vs-it and de-vs-nl confusable pairs, six non-Latin script classifications (Cyrillic/Greek/Arabic/Hebrew/Devanagari/Han) plus the kana→Japanese flip, the confidence margin metric, tokenisation, per-rune Unicode bucketing, low-sample + undetermined + no-stopword degraded paths, parse-input aliases, missing-param 400, and SSRF rejection. /selftest runs the pure-logic checks (en/es/fr/de detection, Cyrillic + CJK script, low-sample flag, extraction, SSRF guard) AND a live example.com fetch through the cache (asserting Latin script + no error, since example.com is too short for confident language scoring). Honest TRL-4 ceiling: this is a stopword/script heuristic, NOT a trained character-n-gram model (CLD3, fastText). It cannot separate two languages that share a script and most function words (e.g. Norwegian vs Danish, or any language outside the curated seven on the Latin path), a single short sentence can be misranked, and a CJK/Cyrillic/Arabic script result is a writing-system identification, not a language one. A trained n-gram/byte-model would lift accuracy and language coverage (and TRL) but requires shipping a model artifact and is out of scope for the no-dependency contract.",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "leadership-extractor": {
     "container_port": 18252,
@@ -4361,7 +4403,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "1.33.25",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "license-extractor": {
     "env": {
@@ -4505,7 +4548,8 @@
     "trl_evidence": "Real DOM walk over golang.org/x/net/html (no regex over HTML structure): parses the document and discovers navigation regions by four signals in document order — explicit <nav> elements (source nav), any element with role=navigation (source role), any element whose aria-label mentions nav/menu (source aria), and <ul>/<ol> link-lists that live directly inside a <header>/<footer> landmark and contain at least one link (source list). Once a region root is found its whole subtree is marked claimed so a nested nav inside a nav, or a header-nested list inside an explicit nav, is folded into the parent tree rather than re-emitted as a separate region. Each region builds a menu tree from its first descendant <ul>/<ol> (one MenuItem per direct <li>: label+href from the first <a> that is NOT inside the li's nested submenu list, with the nested <ul>/<ol> walked recursively into children[]; an <li> with no link falls back to its direct non-list text); regions with no list fall back to a flat list of their <a> descendants. Nesting depth is preserved (flat menu = depth 1, one submenu level = depth 2, ...). Regions are classified by nearest ancestor landmark: inside <footer> -> footer, inside <header> -> primary, else generic. script/style/noscript/svg/template/iframe/object/embed subtrees are pruned via the shared skipTags map so code/CSS never leak into labels; whitespace is collapsed via normalizeWhitespace. Response carries regions[] ({class, label, source, items[], link_count, max_depth}) plus a summary {region_count, link_count, max_depth}. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_navigation_found) instead of failing the response. 28 unit tests cover <nav> extraction, role=navigation, aria-label nav/menu detection, nested submenu tree, deep (3-level) nesting depth, header-vs-footer classification, generic standalone nav, header/footer bare-link-list detection, multiple regions, nested-nav not double-counted, label+href capture, label from inner markup, parent label not stolen by first child link, flat-link fallback, script/style not leaked, summary roll-up, empty/no-nav degraded, parse-input aliases, missing-param 400, SSRF rejection (input + handler), and text= mode. /selftest exercises the pure-logic pipeline (nav tree + nesting, role=navigation, header/footer classification, no-nav empty, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: static-DOM only — JS-rendered / hydrated menus (React/Vue nav built client-side) are invisible; region classification is heuristic (landmark-ancestor based, not semantic intent), so a mid-page <nav> with no header/footer ancestor is labelled generic; mega-menu structures that encode hierarchy via CSS rather than nested <ul> collapse to a flat tree.",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "merchant-profile": {
     "container_port": 18302,
@@ -4688,7 +4732,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "named-entity-recognizer": {
     "container_port": 18285,
@@ -4961,7 +5006,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "pentest-agent-state": {
     "access_tier": "vetted-pentest",
@@ -5848,7 +5894,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "pricing-tier-parser": {
     "container_port": 18268,
@@ -6114,7 +6161,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "research-flow": {
     "trl": 4,
@@ -6139,7 +6187,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "reverse-dns": {
     "container_port": 8333,
@@ -6177,7 +6226,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "roamless-notes": {
     "trl": 3,
@@ -6224,7 +6274,8 @@
     "version": "1.6.17",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "room-vj": {
     "trl": 3,
@@ -6291,7 +6342,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "schema-extractor": {
     "container_port": 8165,
@@ -6392,7 +6444,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "secrets-scanner": {
     "container_port": 8229,
@@ -6439,7 +6492,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "security-txt": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -6463,7 +6517,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "seo-audit": {
     "container_port": 18298,
@@ -6559,7 +6614,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "show-me-the-way": {
     "trl": 4,
@@ -6603,7 +6659,8 @@
     "version": "2.2.15",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "smuggling-probe": {
     "container_port": 8154,
@@ -6636,7 +6693,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "social-proof-extractor": {
     "container_port": 18269,
@@ -6928,7 +6986,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true
   },
   "trust-decay": {
     "env": {
@@ -6950,7 +7009,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "trust-no-one-anonymizer": {
     "trl": 4,
@@ -7015,7 +7075,8 @@
     "version": "2.5.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "fetch_cache_api_key_file_mount": true
   },
   "urban-farm-year": {
     "trl": 3,
@@ -7209,7 +7270,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "utils-readcontent": {
     "container_port": 5008,
@@ -7341,7 +7403,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "fetch_cache_api_key_file_mount": true
   },
   "websocket-analyzer": {
     "env": {
@@ -7491,7 +7554,8 @@
       "hiring",
       "company-signals"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "fetch_cache_api_key_file_mount": true
   },
   "fleet-grafana-staging": {
     "health_url": "https://fleet-grafana-staging.0exec.com/_gw_health"
