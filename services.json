@@ -8458,6 +8458,11 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18310,
     "container_port": 18310,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "agent-approval",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "infra-privileged",
     "network_exposure": "gateway-ip-allowlisted"
   },
@@ -8487,6 +8492,11 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18304,
     "container_port": 18304,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "agent-mailbox",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "infra-privileged",
     "network_exposure": "gateway-ip-allowlisted"
   },
@@ -8516,6 +8526,11 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18306,
     "container_port": 18306,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "agent-quorum",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "infra-privileged",
     "network_exposure": "gateway-ip-allowlisted"
   },
@@ -8647,6 +8662,11 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "catalog-service",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "trl": 6,
     "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
     "trl_assessed_at": "2026-05-15",
