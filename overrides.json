@@ -2326,7 +2326,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-pagination-rel": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2457,7 +2458,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-structured-data-rollup": {
     "container_port": 18188,
@@ -2519,7 +2521,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-third-party-fetch-map": {
     "container_port": 18185,
@@ -2606,7 +2609,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-wikidata-entity": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
