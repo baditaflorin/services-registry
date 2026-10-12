@@ -1285,7 +1285,8 @@
       ],
       "last_verified_at": "2026-09-13",
       "evidence": "All 249 assigned ISO 3166-1 alpha-2 countries/territories are represented. The checked regression validates full alpha-3 shape, long-tail alpha-2 codes, and an alias for every country; source-label refresh remains a scheduled review, not an assertion that every local alias is exhaustive."
-    }
+    },
+    "spiffe_workload": true
   },
   "crawl-web-application": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1481,7 +1482,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "First-pass audit (Go+Postgres cache layer in front of sibling geo-geocode's API aggregation, confirmed not a duplicate): found and fixed a real bug -- the upstream aggregator sometimes returns a literal null array element, and unmarshaling null into a non-pointer struct silently zeroed it with no error, so a genuine 'no result' response got served as a fake 200 with lat/lng 0,0 and PERMANENTLY CACHED in Postgres. Live-confirmed the same upstream flapping between real results and null for identical consecutive queries. Fixed to detect and reject empty/null decoded addresses before caching/serving. Confirmed parameterized SQL is injection-safe. trl held at 6; trl_ceiling=7 added -- accuracy is bounded by whichever free-tier provider the upstream happens to answer with (~500m-1km drift observed across providers), the Postgres cache has no TTL/refresh mechanism, and availability depends entirely on a single upstream with no fallback ordering (an outage was observed live during this audit). See PR #1 (merged)."
+    "trl_evidence": "First-pass audit (Go+Postgres cache layer in front of sibling geo-geocode's API aggregation, confirmed not a duplicate): found and fixed a real bug -- the upstream aggregator sometimes returns a literal null array element, and unmarshaling null into a non-pointer struct silently zeroed it with no error, so a genuine 'no result' response got served as a fake 200 with lat/lng 0,0 and PERMANENTLY CACHED in Postgres. Live-confirmed the same upstream flapping between real results and null for identical consecutive queries. Fixed to detect and reject empty/null decoded addresses before caching/serving. Confirmed parameterized SQL is injection-safe. trl held at 6; trl_ceiling=7 added -- accuracy is bounded by whichever free-tier provider the upstream happens to answer with (~500m-1km drift observed across providers), the Postgres cache has no TTL/refresh mechanism, and availability depends entirely on a single upstream with no fallback ordering (an outage was observed live during this audit). See PR #1 (merged).",
+    "spiffe_workload": true
   },
   "debug-detector": {
     "container_port": 8227,
@@ -1586,7 +1588,8 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.1.9"
+    "version": "0.1.9",
+    "spiffe_workload": true
   },
   "domain-ad-network": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1907,7 +1910,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "domain-documentation-platform-detector": {
     "proxy_read_timeout": "75s",
