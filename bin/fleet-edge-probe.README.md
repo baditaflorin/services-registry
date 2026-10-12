@@ -22,9 +22,11 @@ the existing checks follow redirects, only assert `200`, and
 | `health_status` | health check returned `000` / `5xx` (real outage). Uses registry `health_url`, else `/health` |
 | `health_forbidden` *(warn)* | health check returned `401`/`403` — edge up, endpoint gated (infra services) |
 | `health_notfound` *(warn)* | health check returned `404` — wrong path / missing `health_url` in registry |
-| `health_body` | `2xx` but body is not JSON `status:ok` / `service` / `version`, nor a plain `ok`/`healthy` |
+| `health_body` | `2xx` but body is not JSON `status` ok/healthy/up/success (case-insensitive), `{"ok": true}`, a `service`/`version` key, nor a plain `ok`/`healthy` |
 | `fallback_vhost` | body matches a known default-vhost fingerprint (`<title>LV3`, `nginx.0mcp.com`, …) |
 | `example_unreachable` *(warn)* | `GET <url><example_path>` ∉ {200,401,403} or landed off-host — usually a stale `example_path` in the registry |
+
+Services with registry `lifecycle.status: sunset` are **not probed**: they are listed as `SKIP`, counted in `skipped`, and exported as `fleet_edge_probe_service_skipped{lifecycle="sunset"} 1` plus `fleet_edge_probe_skipped_total` so they stay visible but never alert.
 
 Exit `0` = all probed pass · `1` = ≥1 hard fail · `2` = usage/fetch error.
 Warn-severity codes do not affect exit code.
