@@ -1076,7 +1076,8 @@
     "trl_evidence": "Standalone Go microservice with bounded same-site fetches through go-common fleetfetch and conservative route classification. Unit tests cover positive and negative signals, page limits, aliases, SSRF rejection, and cache accounting. Pre-production; no live fleet deployment yet.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "HTML-only inspection misses client-rendered routes and does not validate that a route is currently operational.",
-    "version": "0.1.5",
+    "version": "0.1.10",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "contact-route-detector", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "depends_on": [
       "infrastructure-fetch-cache"
     ]
@@ -4165,7 +4166,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Not a domain crawler -- confirmed via exhaustive DB search that no stored JWT corpus exists in this fleet. Built a 5,242-case corpus from 1,000 real domain names. Fixed 2 security-relevant false negatives: string-typed exp/iat/nbf claims (real-world non-conformant issuers) silently treated as absent, so an already-expired token showed no expiry claim at all; alg=none tokens with a stale non-empty signature attached went unflagged. Also fixed 'Bearer <jwt>' prefix handling. Zero regressions across 5,242 cases. See github.com/baditaflorin/go_jwt_debugger PR #6.",
-    "version": "1.4.0"
+    "version": "1.4.4",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "jwt-debugger", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"}
   },
   "jwt-pentest": {
     "access_tier": "vetted-pentest",
@@ -4330,8 +4332,12 @@
     "host_port": 18249,
     "env": {
       "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "list-extractor",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "version": "0.1.7",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
@@ -4359,7 +4365,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL-6 uplift 2026-05-16. Detection now stacks four orthogonal signal\nfamilies: (1) DNS multi-A / round-robin lookup, (2) parallel HEAD\nmulti-fetch with Server / ETag / Date-skew / cookie diversity scoring,\n(3) a vendor signature matrix covering F5 BIG-IP, AWS ALB/ELB,\nHAProxy, Citrix NetScaler, Barracuda, Pulse Secure, Nginx Plus, plus\nCDN families (Cloudflare, CloudFront, Fastly, Akamai), (4) a\nclassifier producing none|proxy|cdn|lb|cluster with an explicit\nadditive confidence formula. Evidence trail surfaced per vendor\nmatch. 19 unit + integration tests covering single-host, AWS ALB,\nF5 BIG-IP, multi-IP round-robin, plain-nginx no-LB, generic-fallback\nand vendor-suppression cases. Backward-compatible with v1.x callers\nvia the legacy `analysis` JSON sub-field. ADR: docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.5.0"
+    "version": "1.5.5",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "loadbalancer-detect", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"}
   },
   "local-proofreader": {
     "trl": 4,
@@ -5845,7 +5852,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "RFC 7230 Via header parser (multi-header, comment-aware) + RFC 7239 Forwarded.\n17-vendor signature table (Cloudflare, Akamai, CloudFront, Fastly, Vercel,\nNetlify, BunnyCDN, KeyCDN, CDN77, StackPath, Sucuri, Incapsula, Azure\nFront Door, Google, Varnish, GitHub Pages, generic CDN). Topology\nclassification (direct / reverse_proxy / forward_proxy / cdn / multi_layer).\nChain-depth inference from max(via_hops, distinct_vendors, generic_floor).\nActive X-Forwarded-For probe to detect transparent forwarding (echo,\ncache-key flip, Vary advertisement). 28 unit tests + 6 httptest end-to-end\nscenarios across canned vendor headers. SSRF-safe via go-common/safehttp.",
-    "version": "1.4.0",
+    "version": "1.4.5",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "proxy-fingerprint", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -5897,7 +5905,9 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.7"
+    "version": "0.1.9",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "quote-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "depends_on": ["infrastructure-fetch-cache"]
   },
   "random-proxy": {
     "container_port": 3333,
