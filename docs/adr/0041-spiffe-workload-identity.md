@@ -35,10 +35,12 @@ The first supported runtime adapter is Docker Compose on the approved
 0exec runtime. SPIRE Agent's Docker workload attestor matches the explicit
 `io.spiffe.workload` and `io.spiffe.workload-id` container labels rendered by
 Fleet Runner. These labels are enrollment selectors, not immutable or
-cryptographic identity. The registry opts a workload in explicitly; the fleet overlay mounts only the
-`/run/spire/sockets` directory read-only and sets
-`SPIFFE_ENDPOINT_SOCKET=unix:///run/spire/sockets/agent.sock`. Mounting the
-directory lets workloads reconnect after the agent replaces its socket.
+cryptographic identity. The registry opts a workload in explicitly; the fleet
+overlay mounts only the mesh's declared socket directory read-only and sets
+`SPIFFE_ENDPOINT_SOCKET` to that directory's `agent.sock`. `0exec` retains its
+existing `/run/spire/sockets` path; other trust domains use isolated
+subdirectories such as `/run/spire/sockets/0crawl`. Mounting the directory lets
+workloads reconnect after the agent replaces its socket.
 Application containers never receive the Docker socket. Agent and server
 installation, registration entries, and socket permissions are managed
 separately from the application overlay. Fleet Runner's `spiffe-entries`

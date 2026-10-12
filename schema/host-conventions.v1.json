@@ -27,6 +27,17 @@
       },
       "additionalProperties": false
     },
+    "spiffe_socket_directories": {
+      "type": "object",
+      "description": "Host Workload API socket directory for each SPIFFE trust domain. Isolates agents for separate service meshes on a shared Docker host.",
+      "patternProperties": {
+        "^(0exec|0crawl|0docker)$": {
+          "type": "string",
+          "pattern": "^/run/spire/sockets(?:/[a-z0-9][a-z0-9-]*)?$"
+        }
+      },
+      "additionalProperties": false
+    },
     "mesh_defaults": {
       "type": "object",
       "description": "Per-mesh layers applied on top of container_defaults. Key is the mesh slug.",
