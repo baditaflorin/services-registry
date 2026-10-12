@@ -25,9 +25,19 @@ def load_rollout_state(path):
     return state
 def supports_docs_only_ci(text):
     return "path:" in text and "CLAUDE.md" in text and "AGENTS.md" in text
+PR_PUSH_WHEN = re.compile(r"^  - event: pull_request\n(?:    branch: [^\n]+\n)?|^  - event: push\n    branch: [^\n]+\n", re.M)
+def add_docs_only_ci_list_when(path, text):
+    """Workflow-level `when:` list (templates/woodpecker-go-ci.yml): add the path exclude to the pull_request and push items."""
+    if not re.search(r"^when:\n  - event: pull_request\n", text, flags=re.M) or text.count("\nwhen:\n") + text.startswith("when:\n") != 1:
+        raise ValueError("unsupported Woodpecker shape; preserve for manual CI migration")
+    block = "    path:\n      exclude:\n        - CLAUDE.md\n        - AGENTS.md\n"
+    updated, n = PR_PUSH_WHEN.subn(lambda m: m.group(0) + block, text)
+    if n != 2: raise ValueError("unsupported Woodpecker shape; preserve for manual CI migration")
+    path.write_text(updated); return True
 def add_docs_only_ci(path):
     text = path.read_text()
     if supports_docs_only_ci(text): return False
+    if re.search(r"^when:\n  - event: pull_request\n", text, flags=re.M): return add_docs_only_ci_list_when(path, text)
     pattern = r"^(\s*)when:\n\1  event:\s*\[(?=[^\]]*\bpush\b)(?=[^\]]*\bpull_request\b)[^\]]+\][ \t]*$"
     match = re.search(pattern, text, flags=re.M)
     if not match or len(re.findall(r"^\s*when:\s*$", text, flags=re.M)) != 1:

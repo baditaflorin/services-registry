@@ -1,0 +1,32 @@
+# Canonical per-repo Woodpecker CI for fleet Go services (ADR-0035, ADR-0040).
+#
+# Triggers: one pipeline per PR update (pull_request) and one per push to the
+# default branch. A push to a PR branch is already covered by its pull_request
+# run, so it must NOT start a second identical pipeline: before this change
+# ~23% of ci.0exec pipelines were such push+pull_request duplicates, and a
+# fleet-wide dependency bump queued ~200 pipelines in ten minutes.
+# `manual` stays so a run can be started from the API/UI.
+#
+# Substitute <default-branch> (normally main). The CLAUDE.md/AGENTS.md path
+# exclusion is the docs-only skip bin/propagate_agent_guidance.py maintains.
+# bin/woodpecker_trigger_rollout.py applies exactly this shape to existing repos.
+when:
+  - event: pull_request
+    path:
+      exclude:
+        - CLAUDE.md
+        - AGENTS.md
+  - event: push
+    branch: <default-branch>
+    path:
+      exclude:
+        - CLAUDE.md
+        - AGENTS.md
+  - event: manual
+
+steps:
+  test:
+    image: golang:1.25
+    commands:
+      - go build ./...
+      - go test ./...
