@@ -1887,7 +1887,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "Tested against 913 real domains (700 random + 80 .cz + 80 .nl + 53 known-DANE-positive from prod data). Fixed: (1) matches_served_cert was a plain bool silently conflating 'never checked' (e.g. a real dial timeout) with 'genuine mismatch' -- now nullable, affected 7/913 domains; (2) added new dane_verified field distinguishing DANE matches on DNSSEC-signed zones from unsigned ones -- 16/52 real matches were on unsigned zones (DANE without the RFC 6698 guarantee). Independently reproduced 51/53 of the DB's existing recorded DANE positives from a fresh build. See github.com/baditaflorin/go_domain_dane_tlsa PR #3.",
     "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
+    "version": "0.3.6"
   },
   "domain-deployment-fingerprint": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2882,6 +2883,10 @@
     "trl_evidence": "NEW fleet primitive (G9, 2026-05-19). /selftest exercises the full aggregator path against an in-process httptest fleet. Unit-tested: container-only filter, per-service-error-no-drop, selftest 200/503/404 each counted, worker pool ceiling honoured, summary counts internally consistent, /refresh admin-gated, /capabilities.json served with Cache-Control max-age=300."
   },
   "fleet-cert-watch": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18316,
     "host_port": 18316,
     "version": "0.2.6"
@@ -6303,6 +6308,10 @@
     "trl_evidence": "physics simulator, optics model"
   },
   "search-bing-go": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3413,
     "description": "Microservice for Search Bing Go",
     "example_path": "/?query=anthropic+claude",
@@ -6335,6 +6344,10 @@
     "version": "0.1.10"
   },
   "search-duck-go": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3401,
     "description": "Microservice for Search Duck Go",
     "example_path": "/?query=anthropic+claude",
@@ -6345,7 +6358,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (confirmed genuinely distinct from sibling go-search-duck -- different mesh, different upstream endpoint, different API contract, no shared code). Found and fixed 2 real bugs: (1) the recurring fetch-cache-masking bug, which would defeat this service's retry-through-fresh-proxy-IP logic and leak cached DDG responses across unrelated services. (2) A bot-challenge page misreported as 'zero results' then CACHED as a false-empty result for the full 1h TTL -- exactly the risk this service's own ADR warned about but never guarded against; fixed with DOM-based bot-challenge detection (stable anomaly-modal/challenge-form markers) that skips the cache entirely. Live DDG testing (kept conservative, ~5 requests) confirmed correct behavior for a coherent browser persona vs. a bare request. trl held at 5; trl_ceiling=6 added -- DDG's HTML-Lite endpoint has no official API/SLA and actively detects/blocks this exact traffic pattern, a structural adversarial limit no further engineering removes. See PR #4 (merged).",
-    "version": "0.4.12",
+    "version": "0.4.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
