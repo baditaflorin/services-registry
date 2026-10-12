@@ -28,6 +28,21 @@ class GuidanceTests(unittest.TestCase):
             )
             self.assertFalse(guidance.add_docs_only_ci(path))
 
+    def test_docs_only_ci_supports_the_pr_and_main_when_list(self):
+        base = (
+            "when:\n  - event: pull_request\n  - event: push\n    branch: main\n  - event: manual\n\n"
+            "steps:\n  test:\n    image: golang:1.25\n"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / ".woodpecker.yml"
+            path.write_text(base)
+            self.assertTrue(guidance.add_docs_only_ci(path))
+            text = path.read_text()
+            self.assertEqual(text.count("        - CLAUDE.md"), 2)
+            self.assertIn("  - event: push\n    branch: main\n    path:\n      exclude:", text)
+            self.assertIn("  - event: manual\n", text)
+            self.assertFalse(guidance.add_docs_only_ci(path))
+
     def test_graph_block_replaces_unmanaged_section_and_is_idempotent(self):
         content = "## Graph-first workflow\n\nnew guidance"
         with tempfile.TemporaryDirectory() as directory:
