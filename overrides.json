@@ -476,7 +476,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "address-extractor": {
     "container_port": 8275,
@@ -798,7 +799,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "brand-logo-extractor": {
     "container_port": 18287,
@@ -1387,7 +1389,8 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "cursorparty": {
     "trl": 3,
@@ -1440,7 +1443,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true
   },
   "data-inventory": {
     "container_port": 8284,
