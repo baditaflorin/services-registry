@@ -1292,9 +1292,12 @@ are resolved as of 2026-08-23:
   against `go-fleet-secrets` on 2026-08-23). A plain `deploy` signs on
   push and verifies on pull with no flag. `--skip-cosign` still exists
   as an emergency-only bypass (vault unreachable, key mid-rotation) —
-  don't pass it by default; it prints a loud bypass warning and lands
-  an audit-log row precisely so it's never silently routine.
+  don't pass it by default. `deploy` refuses it without a reason
+  (`--skip-cosign-reason "<why>"` or `FLEET_SKIP_COSIGN_REASON`); it prints
+  a loud bypass warning and lands an audit-log row that records the reason,
+  precisely so it's never silently routine.
 
+<!-- anchor id=skip-cosign-reason repo=go_fleet_runner symbol=go:deploy_cosign.go#resolveSkipCosignReason verified=02bf8378f digest=sha256:f9d3e56291db47b14ad0e2e8e79a585d5e19b9e87549db4d6c56dfcbb84e9657 on=2026-10-12 -->
 `fleet-runner deploy` is idempotent end-to-end. The pipeline is built
 to fail fast BEFORE touching prod, and to refuse to declare success
 unless every check confirms the new image actually carries the new
