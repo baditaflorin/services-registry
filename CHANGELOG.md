@@ -6,6 +6,7 @@
 # Changelog
 
 ## 2026-10-12
+- Opt three zero-observed 0exec fleet services into SPIFFE workload identity.
 - Opt five zero-observed 0exec fleet services into SPIFFE workload identity.
 
 - Opt four 0exec domain-signal APIs into SPIFFE workload identity for the next Compose canary wave: domain-open-source-presence, domain-saas-host-mapper, domain-well-known-catalog, and domain-tech-eol-flagger.
