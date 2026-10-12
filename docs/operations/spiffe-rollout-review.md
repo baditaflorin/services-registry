@@ -216,3 +216,25 @@ exact SPIFFE principal on the private listener, and then add 0crawl/0docker
 control planes and mesh-scoped socket paths before enrolling their workloads.
 Coolify, external, and static services remain unsupported by the Compose
 adapter.
+
+## Production registration expansion — 2026-10-12
+
+Registry PR #624 (`545a293fbfd2`) opted additional Compose workloads into the
+0exec and 0crawl trust domains. The generated, duplicate-free plans contain 86
+0exec and 96 0crawl workload identities. After applying only identities absent
+from each live server, SPIRE reports 89 raw 0exec entries (87 unique SPIFFE
+IDs, including the 86 planned workload identities) and 96 raw 0crawl entries
+(all 96 planned workload identities). The 0exec baseline had 46 raw entries,
+including two pre-existing duplicate records and one distinct non-plan entry;
+those were preserved. The 0crawl baseline had 48 entries. No existing entry
+was replaced or deleted.
+
+Both production servers on VM 103 passed `spire-server healthcheck` after the
+change. The selected parent agents were present and not banned. Every newly
+created entry has the planned parent and both exact Docker label selectors.
+The rollout added 43 0exec and 48 0crawl registrations. It did not recreate or
+restart application containers, so this verifies SPIRE registration state, not
+Workload API SVID acquisition for the newly opted-in services. Those services
+will acquire identities only after their Compose overlay applies the matching
+labels and socket mount; verify a canary on each trust domain before expanding
+container restarts.
