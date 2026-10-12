@@ -42,6 +42,14 @@ spiffe_trust_domains:
   0docker: 0docker.com
   0exec: 0exec.com
 
+# Each trust domain uses its own agent Workload API socket directory on a
+# shared Docker host. Keep 0exec on its original path for compatibility while
+# new mesh agents use isolated subdirectories.
+spiffe_socket_directories:
+  0crawl: /run/spire/sockets/0crawl
+  0docker: /run/spire/sockets/0docker
+  0exec: /run/spire/sockets
+
 container_defaults:
   # Make the dockerhost's gateway IP resolvable from inside the
   # container as `host.docker.internal`. Required by every service
