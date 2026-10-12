@@ -7,6 +7,8 @@
 
 ## 2026-10-12
 
+- Opt Dependency Counter and Accessibility Audit into 0crawl SPIFFE workload identity.
+
 - Opt Embed Iframe Classifier into 0crawl SPIFFE workload identity; live enrollment and SVID/health checks will follow merge.
 
 - Opt six low-traffic 0crawl Go services into SPIFFE workload identity: page-load-metrics, pwa-manifest, promo-code-detector, quote-extractor, reading-time-estimator, and robots-analyzer.

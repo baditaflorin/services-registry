@@ -431,7 +431,8 @@
     "trl_evidence": "5/5 OK on stripe.com; accessibility_score grade A+. Public at accessibility-audit.0crawl.com.",
     "depends_on": [
       "composite-runner"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "accessibility-score": {
     "env": {
@@ -1549,7 +1550,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true
   },
   "dir-listing": {
     "container_port": 8342,
