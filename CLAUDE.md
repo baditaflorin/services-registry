@@ -1279,13 +1279,25 @@ No extra flags needed on Builder LXC 108 — both historical workarounds
 are resolved as of 2026-08-23:
 
 - **Registry cache race** — `raw.githubusercontent.com/.../services.json`
-  is still Fastly-cached with `max-age=300`, but `fleet-runner` now
-  resolves the registry source itself: when `--services` isn't passed
-  and `/root/workspace/services-registry/services.json` exists, it
-  prefers that local working copy over the CDN automatically
-  (`ResolveServicesSource`, shipped 2026-05-21). An explicit
-  `--services <path>` still works if you ever need to force a
-  different source.
+  is still Fastly-cached with `max-age=300`, so `fleet-runner` resolves
+  the registry source itself when `--services` isn't passed
+  (`ResolveServicesSource`, shipped 2026-05-21; made stale-proof in
+  go_fleet_runner v0.7.303). After one bounded `git fetch origin main`
+  per process it reads `/root/workspace/services-registry/services.json`
+  only while that file is byte-identical to origin/main. If the checkout
+  is behind or edited, it reads origin/main's copy from the checkout's
+  git objects instead and warns on stderr how far behind the checkout
+  is; if git cannot verify the checkout (not a clone of
+  `baditaflorin/services-registry`, fetch failed), it reads the CDN URL.
+  `overrides.json` follows the same rule. A stale or dirty workspace
+  checkout therefore no longer feeds old data into the registry lookups
+  of `nginx-render`, `deploy`, `render-compose` or `whois` (on
+  2026-10-12 it was 212 commits behind and made `nginx-render
+  --exact-filter proxy` refuse a pooled service as "not explicitly
+  marked replicable"). An explicit `--services <path>` is never
+  touched. The check only fetches: it moves
+  `refs/remotes/origin/main` and adds objects, and never changes the
+  checkout's working tree, index or HEAD.
 - **Cosign signing** — restored fleet-wide; the vault's
   `cosign-signing-key`, `cosign-signing-key-password`, and
   `cosign-public-key` are all populated again (verified directly
