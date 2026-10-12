@@ -1754,7 +1754,7 @@
     "example_path": "/?domain=google.com",
     "host_port": 18210,
     "trl": 4,
-    "version": "0.3.8",
+    "version": "0.3.10",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2376,7 +2376,7 @@
     "description": "Podcast presence detector — RSS feed + linked platforms + embedded players.",
     "host_port": 18227,
     "trl": 5,
-    "version": "0.1.0",
+    "version": "0.3.22",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2553,7 +2553,7 @@
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
     "host_port": 18238,
     "trl": 7,
-    "version": "0.1.0",
+    "version": "0.3.3",
     "trl_evidence": "The prior trl:6 was a code-read-only rubric assignment with no real-data evidence. 900-domain live audit found and fixed 2 real bugs: the fetch layer never checked HTTP status codes, so bot-blocked/dead/error pages were scored as clean homepages with 0 trackers (19.5% of the 'clean' bucket was actually non-2xx); and an error-truncation bug cut off the diagnostically useful tail of wrapped error messages (100% of degraded responses hit the identical generic prefix). Flagged: production is running a 4-week-stale rollback image missing 2 already-merged fixes. See github.com/baditaflorin/go_domain_tracker_density PR #5.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
@@ -2712,7 +2712,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "version": "0.2.8"
   },
   "emotional-tone": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2725,7 +2726,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "CPU-only lexicon/cue method: no sarcasm/irony/syntactic context, and per-language cue lists are necessarily positive-skewed; reaching 6 needs RFC-grade evidence trails + production cross-checks beyond a lexicon.",
     "trl_evidence": "Corrected DOWNWARD from trl:6, which sat above this record's own documented trl_ceiling of 5 (CPU-only lexicon/cue method, no sarcasm/irony/syntactic context) -- a pre-existing contradiction (registered via PR #30, 'register-emotional-tone-3.3.0', predating this session's audit) not supported by real evidence beyond what the ceiling itself already caps. No code changes needed; this repo's own v3.3.0 chrome/boilerplate-exclusion work is genuine and already reflected in trl_ceiling=5. Pure registry bookkeeping correction, no PR.",
-    "version": "3.0.0",
+    "version": "3.4.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4363,7 +4364,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Multi-stage leadership-team extraction over a fetched HTML page. Detection runs three passes in priority order on the parsed DOM (golang.org/x/net/html): (1) schema.org Person JSON-LD carrying a jobTitle — walks every <script type=application/ld+json>, descends @graph and nested objects, handles @type as string OR array, and reads name/givenName+familyName/description/url/sameAs via stdlib encoding/json; (2) schema.org Person microdata (itemtype=schema.org/Person, http or https), pulling name/jobTitle/description and itemprop=url/sameAs + bare anchor hrefs; (3) a heuristic card walk used only when no structured data is present (flagged heuristic_fallback) — it scans repeated person cards (list items, articles, sections, figures, table cells, and team/staff/member-classed divs), skips grid wrappers that contain nested cards, and derives a name (preferring a heading) plus a title line. Every candidate is then FILTERED to leadership: the title must match a curated keyword set, and survivors are classified into exactly one normalized rank (c_suite, founder, president, vp, director, board, other_leadership) by case-insensitive, word-boundary regexes. Priority order is deliberate — vp is tested before president so 'Vice President' never lands in the president bucket despite containing the substring 'President', and \\b boundaries keep 'Director' from matching inside 'Directory'. c_suite matches the CxO acronyms plus the spelled 'Chief … Officer' shape; founder covers Founder/Co-Founder/Cofounder/Founding Partner; vp covers VP/SVP/EVP and (Senior|Executive )?Vice President; president covers President + Managing Director; director covers Director/Executive Director/Head of; board covers Chair(man|woman|person)/Board Member/Board of Directors/Trustee; other_leadership is a Partner/Principal/Owner/General Manager catch-all. Returns leaders[] (name/title/rank/bio omitempty/links non-nil), count, by_rank (rank→count), and detection (json_ld|microdata|heuristic). Relative profile hrefs/photo URLs are resolved against the final fetched URL; in text= mode (no fetch) they are returned as-authored. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch, in plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, heuristic_fallback, jsonld_parse_error, no_leaders) instead of failing the response; a page with text but no leaders still returns 200. ~30 unit tests cover every rank bucket, the Vice-President-vs-President disambiguation, the Directory-is-not-Director word-boundary guard, non-leadership rejection, case-insensitivity, the JSON-LD Person path (incl. @graph + @type array + missing-jobTitle skip + parse-error degraded), the microdata Person path, the heuristic card fallback + non-leader filtering + card links, by_rank counts, no-leaders degraded, dedupe across passes, omitempty/non-nil JSON shape, relative-link resolution, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler. /selftest exercises the full pure-logic pipeline (CEO + VP detected, engineer filtered, ranks asserted) plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: the structured-data paths are exact, but the heuristic fallback recognises only common team-page shapes — it is not layout-agnostic and does not infer roles from arbitrary running prose, which would need NLP-grade entity/role extraction.",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "version": "0.2.2"
   },
   "legal-entity": {
     "env": {
@@ -5882,7 +5884,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "0.1.10",
+    "version": "0.1.14",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6096,7 +6098,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "0.1.9",
+    "version": "0.1.10",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6673,7 +6675,8 @@
     "trl_evidence": "Real DOM walk over a fetched page (golang.org/x/net/html tokenizer, no regex over HTML structure — regex used only over already-extracted text spans): parses schema.org AggregateRating from both JSON-LD (recursively searching @graph / nested Product nodes for ratingValue + reviewCount/ratingCount, coercing numeric strings, defaulting scale to bestRating or 5) and microdata (itemprop=ratingValue/bestRating/reviewCount, preferring the machine-readable content attribute). Heuristic text patterns over the visible prose detect visible star ratings (4.8 out of 5, 4.8/5), review counts with thousands separators (1,234 reviews), and customer/usage headline counts with k/m/b magnitude + optional plus (trusted by 10,000+ customers, 1M+ downloads), filtering out sub-100 noise. DOM-class/blockquote heuristics count testimonial blocks; a known-outlet list gated on an as-seen-in/press region or phrase yields press mentions; the largest img/svg cluster inside a logos/clients/partners/brands region gives a trust-badge logo count. Structured ratings win over visible-text ratings; results roll up into a structured social_proof object plus a human summary. Input fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so N producers scanning the same URL trigger one upstream fetch; plain-HTML render mode; 4 MiB body cap. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Per-failure notes pushed to degraded[] (no_social_proof_found, fetch_failed:<err>) instead of failing the response. ~30 table-driven + httptest unit tests cover JSON-LD/microdata/@graph rating parse, scale defaulting, visible X-out-of-5 and X/5 parse, review-count thousands separators, k/m/b usage counts and the +-flag, sub-100 noise rejection, testimonial counting, press-mention detection (region- and phrase-gated), logo-region img counting, no-proof→degraded, missing-param 400, SSRF rejection, and text= mode. /selftest exercises the pure-logic pipeline (JSON-LD rating, usage-count heuristic, visible-rating, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: signal counts are heuristic (text phrasing is English-centric; logo/testimonial counts key on conventional class names), static-DOM only (no JS-rendered review widgets like Trustpilot/Yotpo embeds), and outlet detection is a curated English-language press list rather than an exhaustive registry — a headless-render + entity-recognition pass would lift accuracy and TRL but isn't required for aggregate page-level social-proof scoring.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.10"
   },
   "sourcemap-finder": {
     "container_port": 8347,
@@ -6849,7 +6852,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "version": "0.2.2"
   },
   "team-size": {
     "container_port": 8314,

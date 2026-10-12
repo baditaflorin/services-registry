@@ -11,6 +11,7 @@
 - Opt two low-traffic, gateway-authenticated 0exec Pentest APIs into SPIFFE workload identity.
 - Defer SPIFFE enrollment for fleet-payload-corpus and fleet-persona until their missing runtime prerequisites are resolved.
 - Opt three zero-observed 0exec fleet services into SPIFFE workload identity.
+- Sync ten production-deployed 0crawl service versions to their merged `origin/main` releases after direct health, self-test, and version probes: Backlink Profile 0.3.10, Podcast Presence 0.3.22, Tracker Density 0.3.3, Embed/Iframe Classifier 0.2.8, Emotional Tone 3.4.0, Leadership Extractor 0.2.2, Pricing Tier Parser 0.1.14, Reading Time Estimator 0.1.10, Social Proof Extractor 0.1.10, and Team Member Extractor 0.2.2. The 50-domain replays are unlabeled coverage checks and do not establish precision/recall.
 - Opt five zero-observed 0exec fleet services into SPIFFE workload identity.
 
 - Opt four 0exec domain-signal APIs into SPIFFE workload identity for the next Compose canary wave: domain-open-source-presence, domain-saas-host-mapper, domain-well-known-catalog, and domain-tech-eol-flagger.
