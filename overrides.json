@@ -3488,7 +3488,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-sandbox-targets": {
     "container_port": 18168,
@@ -3500,7 +3501,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). internal-only sandbox vulnerable apps (10 endpoints). /selftest + INTEGRATIONS.md shipped. ADR-0018. See services-registry/docs/adr/0018-fleet-sandbox-targets.md.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "spiffe_workload": true
   },
   "fleet-schema-validator": {
     "container_port": 18166,
