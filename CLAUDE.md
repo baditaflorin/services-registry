@@ -166,7 +166,7 @@ non-empty explicit service allowlist, and `build-only` is excluded from
 placement. Change the policy and its schema in the same PR; do not hand-code a
 host decision in an agent or service repository.
 
-<!-- anchor id=host-placement-policy-hosts repo=services-registry symbol=json:host-placement-policy.json#/hosts verified=e08695528 digest=sha256:56b520e32fb364e58b6538254d595a04701762b728ee278ef2398b78b4b7c911 on=2026-10-12 -->
+<!-- anchor id=host-placement-policy-states repo=services-registry symbol=json:schema/host-placement-policy.v1.json#/$defs/host/properties/state/enum verified=c3b320064 digest=sha256:21dbb1fa007b05e5c61c66b7739b86218c7d419f592fd36632d1ea9d7b513c41 on=2026-10-12 -->
 
 ### Reading the registry — fetch a slice, not the full blob
 
