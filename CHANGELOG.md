@@ -7,6 +7,8 @@
 
 ## 2026-10-12
 
+- Opt Domain Email Deliverability Score into 0exec SPIFFE workload identity as a single-service rollout canary.
+
 - Opt Login Analyzer into 0crawl SPIFFE workload identity.
 
 - Regenerate the catalog from canonical sources; sync Domain FAQ Schema to merged 0.2.23 and record the live Chromium replay while holding TRL at 7 pending a labeled held-out JS sample.
