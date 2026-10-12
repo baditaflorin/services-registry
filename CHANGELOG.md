@@ -7,6 +7,8 @@
 
 ## 2026-10-12
 
+- Opt four 0exec domain-signal APIs into SPIFFE workload identity for the next Compose canary wave: domain-open-source-presence, domain-saas-host-mapper, domain-well-known-catalog, and domain-tech-eol-flagger.
+
 - Opt Domain Email Deliverability Score into 0exec SPIFFE workload identity as a single-service rollout canary.
 
 - Opt Login Analyzer into 0crawl SPIFFE workload identity.
