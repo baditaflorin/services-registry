@@ -6715,8 +6715,8 @@
     "trl_evidence": "Finds and validates structured data from three sources on a fetched (or pasted) HTML page, walking the WHOLE parsed document (golang.org/x/net/html tokenizer, zero regex for structure) — JSON-LD scripts routinely live in <head>, so it deliberately does not restrict to a content root. (1) JSON-LD validation is rigorous: each <script type=application/ld+json> body is parsed with the stdlib encoding/json; malformed JSON yields valid=false plus a precise error message including the byte offset reported by the decoder (json.SyntaxError/UnmarshalTypeError Offset). @type is extracted from a lone object, every object of a JSON array, and the @graph wrapper array; @type accepts both the string and array forms. (2) Microdata extraction reads itemscope elements (top-level and nested), pulling type(s) from itemtype and the itemprop names from descendants without leaking a nested item's props up to its parent. (3) RDFa extraction reads typeof elements, pulling type(s) from typeof and property names from descendants scoped to the nearest typeof ancestor, matching CURIE properties (schema:headline) by bare name. For a curated, intentionally-small checklist of common schema.org types it emits recommended-but-missing-field warnings — Article/NewsArticle/BlogPosting need headline; Product/Organization/Person need name; BreadcrumbList needs itemListElement — keyed on the bare type name so full-URL, CURIE, and bare forms all match. Returns blocks[] (format, types, valid, errors[], warnings[]; errors/warnings always non-nil) plus summary { total_blocks, valid_blocks, invalid_blocks, types_seen[] deduped+sorted, by_format map }. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode — the static markup already carries the ld+json scripts and itemscope/typeof attributes, so no JS rendering is needed. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scans pasted HTML with no fetch. Non-fatal conditions go to degraded[] (fetch_failed:<err>, no_structured_data, invalid_blocks) instead of failing the response; a page with no structured data still returns 200. ~36 unit tests cover valid single-object/array/@graph JSON-LD, malformed JSON-LD with offset, string and array @type, the per-type recommended-field warnings, full-URL type matching, ld+json charset param, microdata itemtype/itemprop and nested-scope isolation, RDFa typeof/property and CURIE matching, summary counts + by_format + types_seen dedupe/sort, no-data and garbage input, non-nil slices, parseInput aliases, missing-param 400, SSRF rejection, and the finishAnalysis degraded[] tagging. /selftest exercises the pure-logic pipeline (1 valid + 1 invalid JSON-LD, the missing-headline warning, microdata/RDFa extraction, summary, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: it validates parse correctness plus a curated required/recommended-field checklist for a handful of common schema.org types — it does NOT validate against the full schema.org vocabulary graph (property domains/ranges, enumerations, cardinality), which is what a full validator like Google's Rich Results Test does and would require carrying the entire vocabulary. Microdata/RDFa are structural extraction with lighter checks than the rigorous JSON-LD JSON parse.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
-  },
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true  },
   "subdomain-finder": {
     "container_port": 8348,
     "description": "Microservice for Subdomain Finder",
@@ -7301,8 +7301,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
-  },
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true  },
   "wayback-checker": {
     "container_port": 8351,
     "description": "Microservice for Wayback Checker",
@@ -7421,8 +7421,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 140-domain sample): confirmed the source-level fetch-cache/HTTP2 fix (safehttp.WithForceHTTP2(), go-common v0.72.0) is already correctly merged and guarded by a regression test, but the DEPLOYED production container is running a stale pre-fix image (built before the 2026-07-30 go-common bump). Live-proved a 22-point score swing on wikipedia.org (Grade F vs Grade C) purely from this deploy lag. No PR needed -- redeploy from current main required to realize the fix in production. Also surfaced (separately) that the shared go_infrastructure_fetch_cache container was actively crash-looping (RestartCount 104) during this audit, a fleet-wide incident independent of this service.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
-  },
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true  },
   "xss-payload": {
     "container_port": 8231,
     "description": "Microservice for Xss Payload",
