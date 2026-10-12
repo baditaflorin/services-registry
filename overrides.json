@@ -2939,7 +2939,8 @@
     "trl_assessor": "claude-opus-4-8-pass2-2026-06-02",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-diff-engine": {
     "container_port": 18160,
@@ -3288,7 +3289,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "trl_ceiling": 8,
     "trl_evidence": "First-pass audit of this shared fleet-infra security-testing payload corpus: found a serious integration break -- every real consumer (go_xss_scanner, go_crlf_tester, go-pentest-cors-misconfig-prober, go-pentest-authz-matrix, go-pentest-ssrf-prober) has been silently falling back to stale local vendored payload lists since a May 20 envelope-format change, because their hand-rolled decoders predate this service's {status,data} response envelope -- the entire 'single source of truth' promise has been quietly defeated for 2+ months with no errors raised (documented the fix pattern, consumer-side fixes are a separate follow-up). Also fixed a real bug rejecting the legitimate target_context='any' value for 2 real payloads, and a stale CorpusVersion that never bumped despite a payload-set change. Separately flagged (spun off as its own task) a real crash bug in the shared go-common metrics middleware: invalid-UTF-8 percent-encoding in a request path panics that connection, reachable pre-auth on every go-common-based service in the fleet. trl held at 6 (code itself is solid; the broken promise needs consumer-side fixes first); trl_ceiling corrected 8->7 -- the repo's own git history never supported a ceiling of 8. See PR #3 (merged).",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "spiffe_workload": true
   },
   "fleet-persona": {
     "auth": {
@@ -3356,7 +3358,8 @@
     "trl_assessor": "codex-trl-audit-2026-07-01-batch3",
     "trl_ceiling": 6,
     "trl_evidence": "NEW fleet primitive (2026-05-18). 1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet. /selftest covers GIF roundtrip + DNT suppression + IP truncation. Optional Plausible self-host upstream.",
-    "url": "https://pixel.0exec.com"
+    "url": "https://pixel.0exec.com",
+    "spiffe_workload": true
   },
   "fleet-poc-curl": {
     "container_port": 18158,
