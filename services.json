@@ -2291,8 +2291,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "version": "0.3.6"
+    "version": "0.3.6",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "domain-deployment-fingerprint",
@@ -2567,9 +2567,11 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "This repo's own service.yaml already carried a genuine trl:7 assessment that a later registry-sync commit discarded down to a bare trl:5 -- a registry bookkeeping gap, not a code regression. Re-validated with a fresh 1,000-domain live audit: fixed a real bug affecting the two most common JSON-LD producers on the web (Yoast SEO, RankMath) where @id-reference-style FAQ entries were misread as malformed, zeroing out otherwise-valid FAQ pages (reproduced live on 2 real sites, 6/6 valid questions each, previously misreported as 0). See github.com/baditaflorin/go_domain_faq_schema PR #4.",
-    "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "trl_evidence": "This repo's own service.yaml already carried a genuine trl:7 assessment that a later registry-sync commit discarded down to a bare trl:5 -- a registry bookkeeping gap, not a code regression. Re-validated with a fresh 1,000-domain live audit: fixed a real bug affecting the two most common JSON-LD producers on the web (Yoast SEO, RankMath) where @id-reference-style FAQ entries were misread as malformed, zeroing out otherwise-valid FAQ pages (reproduced live on 2 real sites, 6/6 valid questions each, previously misreported as 0). See github.com/baditaflorin/go_domain_faq_schema PR #4. Live 2026-10-12 production replay after deploy (commit bbdee54, version 0.2.23) used domain=<site>&render=auto across 50 domains: all 50 API requests returned HTTP 200; Chromium was attempted on 45; 43 responses reported render_mode=js, including 39 clean successful JS attempts; there were five renderer errors (three homepage HTTP 400, one homepage HTTP 404, one timeout), one downgrade, no unverified output, and three FAQ pages with well-formed schema. A separate forced render=js replay attempted all three previously identified Next.js cases and reported confirmed JS output for each; brainycanvas returned one FAQ page, dynamicpassgen returned a bot challenge, and cointosscoin had no FAQ schema in the forced-render result while auto mode abstained after recognizing the parked page. These small observations have no independent truth labels and do not measure false-positive/negative reduction or accuracy lift; maintain TRL 7 pending a held-out labeled JS-only sample.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Live render=auto and forced render=js replays confirmed Chromium output, but the 50-domain sample has no independent truth labels, and current known-site cases include a bot challenge and a parked domain. Recall on true JS-only positives, false-positive impact, and accuracy lift remain unmeasured; retain the ceiling at TRL 7 pending a held-out labeled JS-only sample.",
+    "trl_assessed_at": "2026-10-12",
+    "trl_assessor": "engineering-review-2026-10-12",
     "host_port": 18231,
     "container_port": 18231,
     "depends_on": [
@@ -2579,7 +2581,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.2.18",
+    "version": "0.2.23",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -8459,13 +8461,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18310,
     "container_port": 18310,
-    "version": "0.2.4",
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "GRAPH_SERVICE_ID": "agent-approval",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    },
     "access_tier": "infra-privileged",
+    "version": "0.2.4",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -8494,13 +8491,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18304,
     "container_port": 18304,
-    "version": "0.2.4",
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "GRAPH_SERVICE_ID": "agent-mailbox",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    },
     "access_tier": "infra-privileged",
+    "version": "0.2.4",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -8529,13 +8521,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18306,
     "container_port": 18306,
-    "version": "0.2.4",
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "GRAPH_SERVICE_ID": "agent-quorum",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    },
     "access_tier": "infra-privileged",
+    "version": "0.2.4",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -8666,11 +8653,6 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
-    "env": {
-      "GRAPH_ENABLED": "true",
-      "GRAPH_SERVICE_ID": "catalog-service",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    },
     "trl": 6,
     "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
     "trl_assessed_at": "2026-05-15",
@@ -8678,10 +8660,10 @@
     "host_port": 18022,
     "container_port": 18022,
     "depends_on": [],
-    "version": "0.1.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "0.1.7",
     "network_exposure": "gateway-public"
   },
   {

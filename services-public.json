@@ -1850,8 +1850,10 @@
       "runtime-compose"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "trl_assessed_at": "2026-10-12",
+    "trl_assessor": "engineering-review-2026-10-12",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Live render=auto and forced render=js replays confirmed Chromium output, but the 50-domain sample has no independent truth labels, and current known-site cases include a bot challenge and a parked domain. Recall on true JS-only positives, false-positive impact, and accuracy lift remain unmeasured; retain the ceiling at TRL 7 pending a held-out labeled JS-only sample.",
     "url": "https://domain-faq-schema.0crawl.com"
   },
   {
