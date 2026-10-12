@@ -157,7 +157,7 @@ filename. Sized for AI agents on a token budget.
 
 | URL suffix                | shape                                                    | size  | use when |
 |---------------------------|----------------------------------------------------------|-------|----------|
-| `services.ids.json`       | `["a11y-quick", …]`                                      | ~5 KB | "what services exist" |
+| `services.ids.json`       | `["a11y-quick", …]`                                      | ~5 KB | "what services exist?" |
 | `services.names.json`     | `[{id, name}]`                                           | ~13 KB | pickers / menus |
 | `services.minimal.json`   | `[{id, name, mesh, kind, category, language, trl, url}]`| ~44 KB | catalog overview |
 | `services.urls.json`      | `[{id, url, health_url, example_path, auth_help}]`      | ~63 KB | building Open / smoke links |
@@ -204,7 +204,7 @@ keys in a URL path or query string.
 
 | `runtime`     | What it means                                             |
 |---------------|-----------------------------------------------------------|
-| `compose`     | Default for `kind: container`. Docker-compose on the dockerhost; deploy = `docker compose pull & up -d` |
+| `compose`     | Default for `kind: container`. Docker-compose on the dockerhost; deploy = `docker compose pull && up -d` |
 | `systemd`     | Reserved — a service unit on a host; deploy = `systemctl restart` |
 | `binary`      | Reserved — a static binary run by hand or by a launcher    |
 | `k8s`         | Reserved — managed by a kube manifest                      |
@@ -677,12 +677,12 @@ rm -rf .git
 fleet-runner allocate-port --count 1
 
 # 2. Init + create the GitHub repo + push.
-git init & git add -A & git commit -m "initial scaffold from go_domain_amp_detector"
+git init && git add -A && git commit -m "initial scaffold from go_domain_amp_detector"
 gh repo create baditaflorin/<repo> --private --source=. --remote=origin \
   --description "<one-line description>" --push
 
 # 3. Tag the first version.
-git tag 0.1.0 & git push origin 0.1.0
+git tag 0.1.0 && git push origin 0.1.0
 
 # 4. Add the canonical GitHub topics so bin/generate.py picks it up.
 gh repo edit --add-topic mesh-0crawl \
@@ -821,14 +821,14 @@ or health-check a static Pages site.
   The hard rules:
 
   - **Before reading any repo state** (`service.yaml`, source,
-    tests, `go.mod`): `cd /root/workspace/<repo> & git fetch
+    tests, `go.mod`): `cd /root/workspace/<repo> && git fetch
     origin --tags` first. Then read via `git show origin/main:<file>`
     or a fresh `git worktree add ... origin/main`. Never the
     working-tree file directly.
   - **Before triaging a "broken" repo**: re-run the failure against
     a fresh `origin/main` worktree. If green, the workspace is
     stale, not the code. Stop and verify before opening a PR.
-  - **Push every commit immediately.** `git commit & git push`
+  - **Push every commit immediately.** `git commit && git push`
     is one breath. Holding commits locally is what enables the
     concurrent-collision class above.
   - **Fleet-runner subcommands that read workspace state** (deploy,
@@ -1006,7 +1006,7 @@ One-liner:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/baditaflorin/services-registry/main/bin/fleet-runner-shim \
   | sudo tee /usr/local/bin/fleet-runner >/dev/null \
-  & sudo chmod +x /usr/local/bin/fleet-runner
+  && sudo chmod +x /usr/local/bin/fleet-runner
 fleet-runner --help            # smoke test — should print the remote binary's help
 ```
 
@@ -1125,14 +1125,14 @@ version** until you deploy. Pair with `fleet-runner deploy <repo>`.
 ```bash
 cd /path/to/<repo>
 # 1. service.yaml (preserve quoting — quoted stays quoted)
-sed -i.bak 's/^version: "1.2.3"/version: "1.2.4"/' service.yaml & rm service.yaml.bak
+sed -i.bak 's/^version: "1.2.3"/version: "1.2.4"/' service.yaml && rm service.yaml.bak
 
 # 2. main.go / version.go const, if present
 grep -l 'const Version' *.go
-sed -i.bak 's/const Version = "1.2.3"/const Version = "1.2.4"/' main.go & rm main.go.bak
+sed -i.bak 's/const Version = "1.2.3"/const Version = "1.2.4"/' main.go && rm main.go.bak
 
 # 3. Commit, tag, push, push tag — ALL FOUR (Gemini forgot step 4)
-git add -A & git commit -m "chore: bump version to 1.2.4"
+git add -A && git commit -m "chore: bump version to 1.2.4"
 git tag 1.2.4              # NO leading v
 git push
 git push origin 1.2.4      # tags don't ride `git push` by default
@@ -1233,7 +1233,7 @@ docker buildx build --platform linux/amd64 --provenance=false \
 ssh -J root@0docker.com ubuntu_vm@10.10.10.20 '
   cd /opt/services/go_<repo>/src
   git pull origin main
-  sudo docker compose pull & sudo docker compose up -d
+  sudo docker compose pull && sudo docker compose up -d
 '
 
 # 3. Update the gateway-served deployment metadata (catalog UI reads it)
@@ -1436,7 +1436,7 @@ for the canonical pattern.
 
 9. **`./binary &` smoke tests on Builder LXC 108.** Don't. The builder
    is a build host and `fleet-runner` host — it is **not** a service
-   host. When an agent runs `go build & ./binary &` inside
+   host. When an agent runs `go build && ./binary &` inside
    `/root/workspace/<repo>/` to "quickly check the handler responds,"
    the binary backgrounds, the agent's SSH session ends, and the
    process becomes an orphan (`PPid=1`) listening on whichever port it
@@ -1555,7 +1555,7 @@ for dir in /opt/services/*/; do
   grep -q "modernc.org/sqlite" "$go_mod" || continue
   echo "=== $dir ==="
   grep -q "SetMaxOpenConns" "$main" || echo "  MISSING: SetMaxOpenConns"
-  grep -q "busy_timeout" "$main" & \
+  grep -q "busy_timeout" "$main" && \
     grep -oP 'busy_timeout\(\K[0-9]+' "$main" | \
     awk '{if($1>500) print "  HIGH busy_timeout: "$1"ms (reduce to ≤500)"}'
   grep -n "go db\." "$main" 2>/dev/null | grep -v '//' | \
@@ -1605,7 +1605,7 @@ entry on top, in the same shape `go-common` uses:
 ```
 
 Why: with ~220 services moving independently, "what shipped in this
-version and could it have broken X" is otherwise un-answerable without
+version and could it have broken X?" is otherwise un-answerable without
 trawling git. A per-version, human-and-AI-written entry makes
 regressions diff-able at a glance and feeds the fleet-wide
 `fleet-runner changelog` digest with intent (not just PR titles).
@@ -1633,7 +1633,7 @@ entry.
   concurrent workflows so it doesn't contend with `fleet-runner
   deploy-all` batches on the same box. GitHub webhooks are wired
   (OAuth App + nginx vhost reusing the `wildcard.0exec.com` cert);
-  pushes and PRs trigger `go build ./... & go test ./...` on every
+  pushes and PRs trigger `go build ./... && go test ./...` on every
   activated repo — the same gate `fleet-runner deploy`'s pre-flight
   already runs, now push-triggered instead of deploy-time-only. A
   daily cron (`docker builder prune -af --filter unused-for=24h`,
