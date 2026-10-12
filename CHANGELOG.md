@@ -5,6 +5,10 @@
 
 # Changelog
 
+## 2026-10-12
+
+- Declare DomainScope API's direct dependency on Fetch Cache and sync registry versions for the Common Crawl source-selector release.
+
 ## 2026-10-11
 
 - Sync Task Credential Broker to merged release 0.1.17.
