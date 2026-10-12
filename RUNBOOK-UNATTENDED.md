@@ -200,19 +200,27 @@ resp, _ := http.DefaultClient.Do(req)
 
 ## Bootstrap (one-time, the chicken-and-egg)
 
-`go-fleet-secrets` itself needs its master key out-of-band. On LXC 108:
+`go-fleet-secrets` itself needs its master key out-of-band. On LXC 108, as root
+(`sudo -i`). The block does nothing if any of the files already exists: running
+it again on the host that holds the vault would replace the master key and make
+the vault's data unrecoverable. It writes the values to files and never prints
+them (do not use `tee`, which echoes its input to the terminal):
 
 ```bash
-openssl rand -hex 32 | sudo tee /root/.fleet-secrets-master.key
-openssl rand -hex 32 | sudo tee /root/.fleet-secrets-admin.token
-sudo chmod 600 /root/.fleet-secrets-*
+if [ -e /root/.fleet-secrets-master.key ] || [ -e /root/.fleet-secrets-admin.token ] \
+   || [ -e /opt/services/go-fleet-secrets/.env ]; then
+  echo "bootstrap files already exist: not overwriting them" >&2
+else
+  umask 077
+  openssl rand -hex 32 > /root/.fleet-secrets-master.key
+  openssl rand -hex 32 > /root/.fleet-secrets-admin.token
 
-# Pass to docker-compose via env_file. NEVER bake into image.
-sudo tee /opt/services/go-fleet-secrets/.env <<EOF
-SECRETS_MASTER_KEY=$(cat /root/.fleet-secrets-master.key)
-SECRETS_ADMIN_TOKEN=$(cat /root/.fleet-secrets-admin.token)
-EOF
-sudo chmod 600 /opt/services/go-fleet-secrets/.env
+  # Pass to docker-compose via env_file. NEVER bake into image.
+  {
+    printf 'SECRETS_MASTER_KEY=%s\n' "$(cat /root/.fleet-secrets-master.key)"
+    printf 'SECRETS_ADMIN_TOKEN=%s\n' "$(cat /root/.fleet-secrets-admin.token)"
+  } > /opt/services/go-fleet-secrets/.env
+fi
 ```
 
 **Keep a sealed offsite backup of both files.** If LXC 108 is reimaged
