@@ -6889,7 +6889,11 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "TRL 8 requires distributed-trace deduplication of multi-feed sites, language-aware date scraping for non-English homepages, and a paid historical-content feed to disambiguate cosmetic re-crawls from genuine content edits at scale.",
     "trl_evidence": "Second-pass re-audit: found and fixed a severe fetch-cache-masking bug -- every outbound fetch (homepage, robots.txt, feeds, sitemap, Wayback CDX) was eligible for silent cache replay instead of live fetch, undermining this service's core cadence-measurement purpose. Proved live with a stub cache server: 14/14 requests served stale before fix, 0/14 after; live production ground-truth reproduced exactly post-fix. See PR #11 (merged).",
-    "version": "2.2.0",
+    "depends_on": [
+      "go-fleet-secrets",
+      "infrastructure-fetch-cache"
+    ],
+    "version": "2.5.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
