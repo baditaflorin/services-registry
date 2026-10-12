@@ -1661,7 +1661,8 @@
     "trl_evidence": "Live on dockerhost host_port 18324 at /opt/services/domain-ai-catalog-discovery (was an unregistered squatter). Registered so allocate-port never reissues 18324. Health returns service=domain-ai-catalog-discovery status=ok version=0.1.0. Repo baditaflorin/go_domain_ai_catalog_discovery; mesh-0exec topics added 2026-09-17.",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-amp-detector": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -1837,7 +1838,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.4.15",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-ct-log-watcher": {
     "container_port": 18184,
@@ -1859,7 +1861,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-dane-tlsa": {
     "container_port": 18219,
@@ -1943,7 +1946,8 @@
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "version": "0.4.20",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-ecommerce-platform": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
