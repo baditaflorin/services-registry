@@ -6,6 +6,7 @@
 # Changelog
 
 ## 2026-10-12
+- Opt geo-places into 0exec SPIFFE workload identity.
 - Opt three additional low-traffic 0crawl analyzers into SPIFFE workload identity.
 - Opt four independent 0crawl extractors into SPIFFE workload identity.
 - Opt two low-traffic, gateway-authenticated 0exec Pentest APIs into SPIFFE workload identity.
