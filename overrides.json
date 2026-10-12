@@ -1601,7 +1601,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true
   },
   "domain-abuse-contact-rollup": {
     "container_port": 18189,
@@ -2120,7 +2121,8 @@
     "host_port": 18317,
     "container_port": 8080,
     "cpus": 2,
-    "mem_limit": "2g"
+    "mem_limit": "2g",
+    "spiffe_workload": true
   },
   "domain-gift-card": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
