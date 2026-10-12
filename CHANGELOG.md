@@ -6,6 +6,7 @@
 # Changelog
 
 ## 2026-10-12
+- Opt four independent 0crawl extractors into SPIFFE workload identity.
 - Opt two low-traffic, gateway-authenticated 0exec Pentest APIs into SPIFFE workload identity.
 - Defer SPIFFE enrollment for fleet-payload-corpus and fleet-persona until their missing runtime prerequisites are resolved.
 - Opt three zero-observed 0exec fleet services into SPIFFE workload identity.
