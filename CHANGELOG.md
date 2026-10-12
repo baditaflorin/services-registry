@@ -6,6 +6,7 @@
 # Changelog
 
 ## 2026-10-12
+- Defer SPIFFE enrollment for fleet-payload-corpus and fleet-persona until their missing runtime prerequisites are resolved.
 - Opt three zero-observed 0exec fleet services into SPIFFE workload identity.
 - Opt five zero-observed 0exec fleet services into SPIFFE workload identity.
 
