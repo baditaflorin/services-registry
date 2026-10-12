@@ -46,3 +46,20 @@ steps:
       - python3 -m unittest discover -s bin -p 'test_*.py'
       - python3 bin/check_service_version_regressions.py origin/main
       - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py
+
+  docs-drift:
+    depends_on: []
+    image: python:3.13-alpine
+    commands:
+      - apk add --no-cache git
+      # No unshallow here: --ref HEAD only reads blobs at HEAD, and this step runs in parallel (depends_on: []) with
+      # the tests step, which unshallows the same workspace ("shallow file has changed since we read it").
+      # bin/docdrift.py addresses repositories as <repos>/<name>; only this repository exists in CI.
+      - mkdir -p /tmp/repos && ln -s "$PWD" /tmp/repos/services-registry
+      # A lone & used as a command separator in a shell recipe backgrounds the left command (commit 1cdfe74 turned 13 && into &).
+      - python3 bin/docdrift.py --repos /tmp/repos --ref HEAD lint CLAUDE.md AGENTS.md
+      # GENERATED blocks must match the data they are generated from (blocks whose repository is not checked out here are skipped).
+      - python3 bin/docdrift.py --repos /tmp/repos --ref HEAD gen --check CLAUDE.md AGENTS.md
+      # Anchors on symbols in this repository must still match their digest. Anchors on other repositories are skipped here
+      # and checked by the nightly job on the builder (fleet-state scripts/docdrift-nightly.sh).
+      - python3 bin/docdrift.py --repos /tmp/repos --ref HEAD check CLAUDE.md AGENTS.md
