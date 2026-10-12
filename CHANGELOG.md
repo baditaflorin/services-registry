@@ -7,6 +7,8 @@
 
 ## 2026-10-12
 
+- Opt Login Analyzer into 0crawl SPIFFE workload identity.
+
 - Opt Cas into 0crawl SPIFFE workload identity.
 
 - Opt Dependency Counter and Accessibility Audit into 0crawl SPIFFE workload identity.
