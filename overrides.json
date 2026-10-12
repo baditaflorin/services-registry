@@ -1133,7 +1133,8 @@
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "contact-route-detector", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "company-name-extractor": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},

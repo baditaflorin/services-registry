@@ -9,6 +9,7 @@
 - Double canonical SPIFFE workload opt-ins on the 0docker Compose cohort: 43 additional 0exec services and 48 additional 0crawl services; leave the open Contact Route Detector canary PR out of this batch.
 
 ## 2026-10-12
+- Opt Contact Route Detector into 0crawl SPIFFE workload identity.
 - Remove the stale `kokoro-ovms-adapter` override. The adapter left the active catalog on 2026-10-09 and was deleted from the dockerhost on 2026-10-12 (containers, compose project, model files); its source repository is retained.
 - Opt geo-places into 0exec SPIFFE workload identity.
 - Sync Funding Signal to deployed 0.1.35 after the runtime identity fix; direct `/health`, `/selftest`, and `/version` returned 200, and gateway health returned 200. The gateway `/selftest` probe remains auth-gated (401).
