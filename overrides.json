@@ -942,7 +942,8 @@
     "trl_evidence": "Re-validated the x/net/html parser + CTA lexicon (PR #2-#4, merged 2026-06-01) against 900 real domains sampled via TABLESAMPLE from the production `domains` table (11.9M rows). No persisted go_cas results table exists in production. Found and fixed 3 real bug classes: (1) duplicated CTA text from SVG <title> tooltips and hover-swap <span> duplicates concatenating verbatim; (2) English-only kind-signal lists caused 327 real multilingual e-commerce CTAs to be extracted but misclassified as \"generic\" (DE/ES/FR/IT phrases added); (3) Japanese CTA-verb blindness caused false zero-CTA verdicts on real small-business pages (fixed with a Japanese + Russian/Ukrainian CTA-verb table). On a clean re-crawl of 623 domains with substantive content in both runs: zero-CTA rate improved 10.3%->9.1% (7 genuine new detections, 0 regressions); duplicated-text CTAs 22->0; multilingual misclassification 327->0. 11 new tests added reproducing real failure modes; 34 total tests pass. See github.com/baditaflorin/go_cas PR #5 for full writeup.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "castle-archive-memory-vault": {
     "trl": 3,

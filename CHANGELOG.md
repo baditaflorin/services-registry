@@ -7,6 +7,8 @@
 
 ## 2026-10-12
 
+- Opt Cas into 0crawl SPIFFE workload identity.
+
 - Opt Dependency Counter and Accessibility Audit into 0crawl SPIFFE workload identity.
 
 - Opt Embed Iframe Classifier into 0crawl SPIFFE workload identity; live enrollment and SVID/health checks will follow merge.
