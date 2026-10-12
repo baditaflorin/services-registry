@@ -2837,7 +2837,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-budget-tracker": {
     "container_port": 18164,
@@ -2892,7 +2893,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-counter": {
     "auth": {
@@ -3502,7 +3504,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 8,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). JSON Schema catalog + validator (8 baseline schemas). /selftest + INTEGRATIONS.md shipped. ADR-0016. See services-registry/docs/adr/0016-fleet-schema-validator.md.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "spiffe_workload": true
   },
   "fleet-secrets": {
     "access_tier": "infra-privileged",
