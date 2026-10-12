@@ -6,6 +6,7 @@
 # Changelog
 
 ## 2026-10-12
+- Remove the stale `kokoro-ovms-adapter` override. The adapter left the active catalog on 2026-10-09 and was deleted from the dockerhost on 2026-10-12 (containers, compose project, model files); its source repository is retained.
 - Opt geo-places into 0exec SPIFFE workload identity.
 - Sync Funding Signal to deployed 0.1.35 after the runtime identity fix; direct `/health`, `/selftest`, and `/version` returned 200, and gateway health returned 200. The gateway `/selftest` probe remains auth-gated (401).
 - Opt three additional low-traffic 0crawl analyzers into SPIFFE workload identity.
