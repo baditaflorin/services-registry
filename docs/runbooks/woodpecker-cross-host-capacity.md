@@ -166,12 +166,10 @@ Never commit the rendered templates: they contain private routing coordinates.
 
 Install the controller executable, copy
 `templates/woodpecker-load-controller@.service`, and create one JSON config and
-root-managed token file per control plane:
-
-```bash
-systemctl enable --now woodpecker-load-controller@ci.0exec
-systemctl enable --now woodpecker-load-controller@ci.0mcp
-```
+root-managed token file per control plane. Do not enable an instance yet: the
+unit template starts the controller with `--apply`, so an enabled instance
+changes agent `no_schedule` flags straight away. Dry-run first, as described
+below.
 
 Use configuration version 2 to group one physical host with all of its
 Woodpecker agent names. Agent names identify membership in a host group; the
@@ -194,8 +192,16 @@ appears, each host's metrics URL succeeds, and the host-level observations match
 the physical topology. For a host reachable only through Tailscale userspace
 networking, configure the controller service with an HTTP proxy and an explicit
 `NO_PROXY` list for its Woodpecker API and directly reachable metrics endpoints.
-After validating the dry run and checking the schedulable-host minimum, use the
-supervised service. The default policy samples every 30 seconds, drains after
+After validating the dry run and checking the schedulable-host minimum in each
+config (a minimum of 0 means no minimum-capacity guard), enable the supervised,
+apply-mode instance of each control plane:
+
+```bash
+systemctl enable --now woodpecker-load-controller@ci.0exec
+systemctl enable --now woodpecker-load-controller@ci.0mcp
+```
+
+The default policy samples every 30 seconds, drains after
 ten overloaded samples, restores after twenty healthy samples, and keeps at
 least one physical host schedulable.
 
