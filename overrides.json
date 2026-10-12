@@ -456,7 +456,8 @@
       "infrastructure-fetch-cache",
       "fleet-graph"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "ad-density": {
     "container_port": 8274,
@@ -545,7 +546,8 @@
     "trl": 6,
     "trl_evidence": "First-pass audit of this shared fleet-infra human-in-the-loop approval primitive: found and fixed a real bug -- Store.Decide only checked a 'decided' flag, not the request's own deadline, so a human could still POST /decide and have it succeed (overriding the documented fail-closed/fail-open default) after the timeout had already lapsed, if nobody had polled /await yet. Live-reproduced and fixed by consolidating expiry-checking into one shared path; concurrency (20 simultaneous /decide calls) was already correctly single-shot under go test -race. trl bumped 5->6; trl_ceiling=7 added -- deliberately in-RAM/ephemeral by design (no durability/audit trail of past decisions), a scope choice rather than a hard structural limit. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "agent-mailbox": {
     "env": {
@@ -567,7 +569,8 @@
     "trl": 6,
     "trl_evidence": "First-pass audit of this shared fleet-infra request/reply message bus: found and fixed a real capacity-cap bypass -- Store.Reply only incremented the message counter for one of two data structures a reply gets stored in, so MAILBOX_MAX_MSGS silently drifted under sustained normal traffic (reverting the fix, a 500-cycle test drove the counter to -500, an unbounded-growth exploit). Confirmed 0 message loss/duplication under 5000 concurrent send/drain operations with go test -race. trl bumped 5->6; trl_ceiling=7 added -- deliberately in-RAM/single-process/ephemeral with a process-wide (not per-recipient) capacity budget. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "agent-quorum": {
     "env": {
@@ -589,7 +592,8 @@
     "trl": 6,
     "trl_evidence": "First-pass audit of this shared fleet-infra k-of-n voting/consensus primitive: found and fixed a real bug -- decisions were never frozen once quorum was reached, so a straggler vote arriving after a caller was already told decided:true could silently flip or undo the outcome for the same round (live-reproduced: a 2-of-5 majority 'yes' decision flipped back to undecided by 2 more votes). Fixed with a freeze-on-decide pattern; confirmed no double-decide race exists under go test -race (single mutex covers record+aggregate+freeze atomically). trl bumped 5->6; trl_ceiling=7 added -- intentionally ephemeral/single-process, and voter identity isn't cryptographically bound to the caller (documented trust model, not changed). See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "agent-tools": {
     "env": {
@@ -631,7 +635,8 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "anon-conf-poll": {
     "trl": 4,
@@ -684,7 +689,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "apikey-scanner": {
     "env": {
@@ -719,7 +725,8 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
     "trl_evidence": "20 -race test funcs, audit_log table with prefix-only redaction, /audit admin-gated, /selftest",
-    "version": "0.4.7"
+    "version": "0.4.7",
+    "spiffe_workload": true
   },
   "asn-lookup": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -787,7 +794,8 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "blocklist-checker": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -845,7 +853,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "broken-links": {
     "container_port": 8192,
@@ -893,7 +902,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "First-pass audit (confirmed genuinely written in C, a minimal libcurl-based forward proxy): found and fixed a real local-file-read vulnerability -- GET /?url=file:///etc/passwd let libcurl read arbitrary local files into memory since the protocol scheme was never restricted (live-proved with real /etc/passwd content); only invisible externally by an unrelated accident, not a real control. Fixed by allowlisting http/https schemes on both direct requests and redirects. Also fixed 2 real thread-safety bugs: curl_global_init() was never called before spawning per-connection threads (a documented libcurl requirement, dead TODO comment acknowledging it), and rand()/srand() were reseeded per-request across concurrent threads (data race, also defeating UA rotation). All verified clean under ASan/UBSan/TSan after the fix. Flagged (not fixed): a hardcoded proxy credential literal in source. trl bumped 4->5; trl_ceiling=7 added -- core path confirmed correct, but ad hoc HTTP parsing, a hardcoded credential, and no CI wiring are real non-structural gaps. See PR #1 (merged)."
+    "trl_evidence": "First-pass audit (confirmed genuinely written in C, a minimal libcurl-based forward proxy): found and fixed a real local-file-read vulnerability -- GET /?url=file:///etc/passwd let libcurl read arbitrary local files into memory since the protocol scheme was never restricted (live-proved with real /etc/passwd content); only invisible externally by an unrelated accident, not a real control. Fixed by allowlisting http/https schemes on both direct requests and redirects. Also fixed 2 real thread-safety bugs: curl_global_init() was never called before spawning per-connection threads (a documented libcurl requirement, dead TODO comment acknowledging it), and rand()/srand() were reseeded per-request across concurrent threads (data race, also defeating UA rotation). All verified clean under ASan/UBSan/TSan after the fix. Flagged (not fixed): a hardcoded proxy credential literal in source. trl bumped 4->5; trl_ceiling=7 added -- core path confirmed correct, but ad hoc HTTP parsing, a hardcoded credential, and no CI wiring are real non-structural gaps. See PR #1 (merged).",
+    "spiffe_workload": true
   },
   "caa-checker": {
     "container_port": 8325,
@@ -981,7 +991,8 @@
     "trl_evidence": "Live for months, serves catalog.0exec.com production traffic",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "cdn-detector": {
     "container_port": 8326,
@@ -1002,7 +1013,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true
   },
   "chatwrapped": {
     "trl": 7,
@@ -1067,7 +1079,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "color-contrast-checker": {
     "container_port": 18261,
@@ -1136,7 +1149,8 @@
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics.",
     "version": "0.1.35",
-    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
+    "spiffe_workload": true
   },
   "company-size": {
     "container_port": 8281,
@@ -1159,7 +1173,8 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "complete-gardener-planner": {
     "trl": 4,
@@ -1186,7 +1201,8 @@
     "depends_on": [
       "sitemap-finder"
     ],
-    "version": "1.2.4"
+    "version": "1.2.4",
+    "spiffe_workload": true
   },
   "compression-tester": {
     "container_port": 8327,
@@ -1207,7 +1223,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true
   },
   "consent-simulator": {
     "host_port": 18208,
@@ -1244,7 +1261,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "cookie-checker": {
     "container_port": 8226,
@@ -1464,7 +1482,8 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "d3-graph": {
     "container_port": 6003,
@@ -1474,7 +1493,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "First-pass audit (Node/Express static-file server + client-side D3 v7/dagre-d3 force-graph viewer; no server-side rendering exists despite README claims, and the d3-node dependency is unused dead weight). Found 2 severe bugs. (1) The service is CURRENTLY COMPLETELY BROKEN in production: express.static('public') resolves relative to process.cwd(), not the source file, so under Docker's WORKDIR every static asset (/, /script.js, the actual graph CSV) 404s right now -- live-confirmed, and the deploy script has a resigned comment tolerating it rather than fixing it. (2) A real XSS: the hover-tooltip interpolates raw CSV source/target/label fields unescaped into HTML, and those labels can be populated from an attacker-chosen URL via the /fetch-and-convert NLP pipeline with zero sanitization anywhere -- any HTML/script in a label executes on hover. Both fixed. Also fixed a hang-forever bug on malformed upstream NLP-service data (resource-exhaustion risk under adversarial/concurrent load). Added the repo's first real test suite (previously a stub that always failed). Real trl DOWNGRADE: 6->3 -- the service could not serve its core function in production at all; trl_ceiling=5 -- single-purpose internal tool, no app-level auth, an untrusted-data pipeline with no sanitization boundary of its own. See PR #1 (merged)."
+    "trl_evidence": "First-pass audit (Node/Express static-file server + client-side D3 v7/dagre-d3 force-graph viewer; no server-side rendering exists despite README claims, and the d3-node dependency is unused dead weight). Found 2 severe bugs. (1) The service is CURRENTLY COMPLETELY BROKEN in production: express.static('public') resolves relative to process.cwd(), not the source file, so under Docker's WORKDIR every static asset (/, /script.js, the actual graph CSV) 404s right now -- live-confirmed, and the deploy script has a resigned comment tolerating it rather than fixing it. (2) A real XSS: the hover-tooltip interpolates raw CSV source/target/label fields unescaped into HTML, and those labels can be populated from an attacker-chosen URL via the /fetch-and-convert NLP pipeline with zero sanitization anywhere -- any HTML/script in a label executes on hover. Both fixed. Also fixed a hang-forever bug on malformed upstream NLP-service data (resource-exhaustion risk under adversarial/concurrent load). Added the repo's first real test suite (previously a stub that always failed). Real trl DOWNGRADE: 6->3 -- the service could not serve its core function in production at all; trl_ceiling=5 -- single-purpose internal tool, no app-level auth, an untrusted-data pipeline with no sanitization boundary of its own. See PR #1 (merged).",
+    "spiffe_workload": true
   },
   "data-format-converter": {
     "container_port": 18294,
@@ -1510,7 +1530,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "db-geo-geocode": {
     "container_port": 3909,
@@ -1651,7 +1672,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-ai-bot-policy-scanner": {
     "container_port": 18195,
@@ -1673,7 +1695,8 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-ai-catalog-discovery": {
     "host_port": 18324,
@@ -1708,7 +1731,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
+    "spiffe_workload": true
   },
   "domain-analytics-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1726,7 +1750,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-anycast-footprint": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1743,7 +1768,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "domain-app-render-mode": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1760,7 +1786,8 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-backlink-profile": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1778,7 +1805,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-bimi-checker": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1794,7 +1822,8 @@
     "version": "0.2.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "domain-breadcrumb-schema": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -1809,7 +1838,8 @@
     "trl_evidence": "900-domain live audit (real HTML parser across JSON-LD/microdata/RDFa Lite). Fixed 4 real bugs: a cross-host false positive, a vacuous-truth path_aligned check that hit 78% of well-formed breadcrumb lists (mostly Yoast/RankMost/WooCommerce single-item homepage breadcrumbs), a missing nested item.name extraction path, and total JSON-LD parse failure on embedded control characters. Also fixed a dead selftest check that never ran and a false live-probe claim in trl_evidence/README. See github.com/baditaflorin/go_domain_breadcrumb_schema PR #5.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
+    "spiffe_workload": true
   },
   "domain-cache-policy": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1826,7 +1856,8 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-cms-version": {
     "container_port": 18216,
@@ -1848,7 +1879,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-compliance-claim-scanner": {
     "container_port": 18198,
@@ -1910,7 +1942,8 @@
     "trl_evidence": "Tested against 913 real domains (700 random + 80 .cz + 80 .nl + 53 known-DANE-positive from prod data). Fixed: (1) matches_served_cert was a plain bool silently conflating 'never checked' (e.g. a real dial timeout) with 'genuine mismatch' -- now nullable, affected 7/913 domains; (2) added new dane_verified field distinguishing DANE matches on DNSSEC-signed zones from unsigned ones -- 16/52 real matches were on unsigned zones (DANE without the RFC 6698 guarantee). Independently reproduced 51/53 of the DB's existing recorded DANE positives from a fresh build. See github.com/baditaflorin/go_domain_dane_tlsa PR #3.",
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
-    "version": "0.3.6"
+    "version": "0.3.6",
+    "spiffe_workload": true
   },
   "domain-deployment-fingerprint": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -1928,7 +1961,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-details": {
     "container_port": 8085,
@@ -2000,7 +2034,8 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-email-deliverability-score": {
     "container_port": 18181,
@@ -2041,7 +2076,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-events-platform": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2058,7 +2094,8 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-experimentation-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2077,7 +2114,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-faq-schema": {
     "env": {
@@ -2099,7 +2137,8 @@
       "infrastructure-fetch-cache"
     ],
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Live render=auto and forced render=js replays confirmed Chromium output, but the 50-domain sample has no independent truth labels, and current known-site cases include a bot challenge and a parked domain. Recall on true JS-only positives, false-positive impact, and accuracy lift remain unmeasured; retain the ceiling at TRL 7 pending a held-out labeled JS-only sample."
+    "trl_ceiling_reason": "Live render=auto and forced render=js replays confirmed Chromium output, but the 50-domain sample has no independent truth labels, and current known-site cases include a bot challenge and a parked domain. Recall on true JS-only positives, false-positive impact, and accuracy lift remain unmeasured; retain the ceiling at TRL 7 pending a held-out labeled JS-only sample.",
+    "spiffe_workload": true
   },
   "domain-favicon-completeness": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2117,7 +2156,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-font-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -2132,7 +2172,8 @@
     "trl_evidence": "Independently re-validated this repo's own pre-existing trl:7 claim (earned across two prior real audit rounds, never synced to the central registry) via a fresh 900-domain paired audit. Fixed 4 real bugs: a false positive from a CDN mirror rewriting a Typekit URL, a missed preload-as-style async-loading pattern, an unfetched @import provider reference, and undercounting of fonts.gstatic.com direct-preload assets. Family-count sum improved 403->408, 2 false positives removed, 0 introduced. See github.com/baditaflorin/go_domain_font_stack PR #5.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
+    "spiffe_workload": true
   },
   "domain-geo-anchor": {
     "env": {
@@ -2157,7 +2198,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "950-domain live audit plus a 39-merchant/20-non-commerce ground-truth set (precision 1.00, recall 0.26). Fixed a real bug: no HTTP fallback on TLS/certificate failure caused 11.4% of homepage fetches to fail entirely even though real content existed over plain HTTP -- errors dropped 108->23, recovering 2 previously-masked real positives. Also closed a fetch-cache-consistency gap between homepage and probe evidence. See github.com/baditaflorin/go_domain_gift_card PR #5.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "spiffe_workload": true
   },
   "domain-glue-records": {
     "container_port": 18237,
@@ -2174,7 +2216,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "Tested against domain_glue_records (946,788 rows, actively written by this service) and a 200-domain random sample. Fixed 3 real bugs, one already visibly producing wrong production rows: (1) checker trusted only the first-responding parent nameserver, but different authoritative instances of the same TLD zone disagree on glue provisioning -- verified live that forth.gr and nic.sh had real false-negative production rows dated the day of this audit from exactly this cause; fixed by merging glue across all responding parent NS instances; (2) glue_provided_count was inflated by counting opportunistic out-of-bailiwick glue -- 37% of the 200-domain sample affected (e.g. amazon.com); (3) empty glue results couldn't distinguish 'no glue needed' from NXDOMAIN -- 4% of the sample were silently-wrong NXDOMAIN domains reported as clean. All fixed with live-verified before/after numbers. TRL held at 7 rather than inflated further -- re-affirmed with real evidence instead of a fresh bump. See github.com/baditaflorin/go_domain_glue_records PR #4.",
     "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
+    "spiffe_workload": true
   },
   "domain-http3-quic-detector": {
     "container_port": 18190,
@@ -2210,7 +2253,8 @@
     "trl_evidence": "800-domain live audit. The DOM parsing/classification logic held up well (no bugs found), but the fetch layer had real defects: no HTTP fallback when HTTPS failed (84/800 domains affected by cert mismatches/refused connections), no status-code check before parsing (Cloudflare 403 challenge pages and domain-parking pages scored as real homepages), and a redirect cap cutting off legitimate chains one hop short. Fetch failure rate dropped 17.9%->14.2%. See github.com/baditaflorin/go_domain_image_alt_coverage PR #3.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"]
+    "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
+    "spiffe_workload": true
   },
   "domain-integration-marketplace": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2229,7 +2273,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-interactive-demo": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2247,7 +2292,8 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-liveness-state": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2261,7 +2307,8 @@
     "trl_evidence": "Strongest finding of a 30-service production-DB forensics sweep. tool_version=0.2.0 (433K rows) showed a 52.8% false-unreachable rate, including google.com, apple.com, microsoft.com, amazon.com, facebook.com, cloudflare.com, and wikipedia.org all falsely marked unreachable/high-confidence, cross-validated against an independent sibling fetcher (domain_http3) reaching the same hosts same-day. Root-caused to the classic fleet fetch-cache-masking bug: safehttp.NewClient() had no .WithoutFetchCache(), routing every outbound GET through the shared fleet cache instead of probing origins directly. Fixed (v0.2.2), live-verified against all 8 major domains post-fix. See github.com/baditaflorin/go_domain_liveness_state PR #8 (merged). The bulk of the table (tool_version<0.2.2) still needs re-crawl -- this is the highest-priority re-crawl target in this batch.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "domain-martech-stack": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2280,7 +2327,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-mobile-app-resolver": {
     "container_port": 18187,
@@ -2300,7 +2348,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-naptr-enum": {
     "container_port": 18236,
@@ -2317,7 +2366,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "Tested against domain_naptr_enum (946,853 rows) and a fresh 2,000-domain sample. Confirmed ENUM essentially never occurs on generic web domains (0/946k). Fixed 3 real bugs: (1) exact-string flag matching silently dropped multi-char NAPTR flags -- verified live against apple.com's actual SIP records (flags=\"se\"); (2) no IDNA/punycode encoding meant IDN domains (e.g. muenchen.de) got a false 'verified empty' instead of the real DNS answer; (3) NXDOMAIN was indistinguishable from 'verified empty' -- 2.55% of a fresh 2,000-domain sample were misreported this way. Also fixed a CVE by bumping a vulnerable x/net dependency. See github.com/baditaflorin/go_domain_naptr_enum PR #3.",
     "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
+    "spiffe_workload": true
   },
   "domain-newsletter-platform-detector": {
     "proxy_read_timeout": "75s",
@@ -2338,7 +2388,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-open-source-presence": {
     "container_port": 18196,
@@ -2375,7 +2426,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-passive-dns-history": {
     "container_port": 18183,
@@ -2414,7 +2466,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-product-count": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2434,7 +2487,8 @@
       "fleet-graph",
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-ratelimit-headers": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2451,7 +2505,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-rbl-reputation": {
     "container_port": 18182,
@@ -2514,7 +2569,8 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "domain-support-stack-detector": {
     "proxy_read_timeout": "75s",
@@ -2577,7 +2633,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-tracker-density": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2590,7 +2647,8 @@
     "trl_evidence": "The prior trl:6 was a code-read-only rubric assignment with no real-data evidence. 900-domain live audit found and fixed 2 real bugs: the fetch layer never checked HTTP status codes, so bot-blocked/dead/error pages were scored as clean homepages with 0 trackers (19.5% of the 'clean' bucket was actually non-2xx); and an error-truncation bug cut off the diagnostically useful tail of wrapped error messages (100% of degraded responses hit the identical generic prefix). Flagged: production is running a 4-week-stale rollback image missing 2 already-merged fixes. See github.com/baditaflorin/go_domain_tracker_density PR #5.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "domain-trust-composite-grader": {
     "container_port": 18199,
@@ -2609,7 +2667,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "domain-viewport-meta": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
@@ -2627,7 +2686,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl_evidence": "Corrected an internal contradiction (repo's own service.yaml had drifted to trl:7 above its own ceiling:5). 916-domain live audit proved the fetch-cache-masking bug live: two back-to-back requests for the same domain returned in 5100ms then 454ms, only explainable by a cache hit. Fixed. Also fixed Safari's shrink-to-fit viewport directive being misfiled as unknown (~4% of viewport-present pages) plus a CVE patch. See github.com/baditaflorin/go_domain_viewport_meta PR #4.",
     "trl_assessed_at": "2026-07-31",
-    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch"
+    "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
+    "spiffe_workload": true
   },
   "domain-well-known-catalog": {
     "container_port": 18194,
@@ -2662,7 +2722,8 @@
     "version": "0.2.2",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "dtss": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -2677,7 +2738,8 @@
     "trl_evidence": "Second-pass re-audit (fresh 400+700-domain sample): no regressions since prior fix. Found and fixed a real bug: probeDKIM treated any DNS lookup error (not just confirmed NXDOMAIN) as 'try next selector', unlike probeSPF/probeDMARC which already got this fix -- live-verified reclassifying a false-negative DKIM result to correctly indeterminate. Fetch-cache anti-pattern hardened defensively (safehttp.WithoutFetchCache() added) though FLEET_FETCH_CACHE_URL is not currently set for this service. See PR #8 (merged).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "earthquake-wave-propagation": {
     "trl": 5,
@@ -2867,7 +2929,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-backup": {
     "compose_dir": "/opt/services/fleet-backup",
@@ -2883,7 +2946,8 @@
     "trl_ceiling_reason": "Verify-after-write in production is byte-equality on the encrypted blob (daemon holds no decrypting identity, by design). Full encrypt+decrypt+tar-diff verify only runs in tests + when an operator opts a verifying identity into the daemon. Lift to 7+ would either issue the daemon a dedicated verify-only identity or require every restore retrieval to verify before exposing bytes.",
     "trl_evidence": "Initial scaffold (2026-05-19). 19 unit tests with injectable TarFn/EncryptFn/Destination + :memory: audit DB — tests never touch real disk or run heavy crypto on the hot path. Covered: AGE_RECIPIENTS empty/malformed/blank-only refuses to start (fail-CLOSED on missing crypto); malformed-key error redacts key body (no leak to logs); encrypt+decrypt + tar+untar round-trip; recipient fingerprint never contains raw pubkey; classify retention against 365 daily inputs / sparse inputs / multiple-same-day / zero-bands / non-RFC3339-rejected / deterministic-against-synthetic-clock; orchestrator successful snapshot writes audit row with recipient FP; destination-unreachable writes no blobs AND no audit rows; verify-mismatch marks run FAILED AND skips retention prune (safety invariant: failed run = no safe to delete history); retention-prune respects unowned-snapshot invariant (manually-placed blobs survive); /status JSON shape carries last_run/next_run/runs/audit/recipient_fingerprints/destination_ready; /restore defaults dry-run; /restore dry_run=false rejected without confirm_restore=YES; /run admin-gated (403 without token); /selftest 200 happy path + 503 on destination unreachable; parseSources rejects malformed (missing kind, unknown kind, missing path, duplicate names); LocalDest round-trip on real tmpdir; storage-box:// NotImplemented surfaces cleanly.",
     "mem_limit": "12g",
-    "version": "0.1.7"
+    "version": "0.1.7",
+    "spiffe_workload": true
   },
   "fleet-body-redactor": {
     "container_port": 18154,
@@ -2909,7 +2973,8 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "spiffe_workload": true
   },
   "fleet-call-tracer": {
     "container_port": 18161,
@@ -2923,7 +2988,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-capabilities": {
     "container_port": 18206,
@@ -2934,7 +3000,8 @@
     "trl_assessed_at": "2026-05-19",
     "trl_assessor": "claude-opus-4-7-session-2026-05-19-g9",
     "trl_ceiling": 7,
-    "trl_evidence": "NEW fleet primitive (G9, 2026-05-19). /selftest exercises the full aggregator path against an in-process httptest fleet. Unit-tested: container-only filter, per-service-error-no-drop, selftest 200/503/404 each counted, worker pool ceiling honoured, summary counts internally consistent, /refresh admin-gated, /capabilities.json served with Cache-Control max-age=300."
+    "trl_evidence": "NEW fleet primitive (G9, 2026-05-19). /selftest exercises the full aggregator path against an in-process httptest fleet. Unit-tested: container-only filter, per-service-error-no-drop, selftest 200/503/404 each counted, worker pool ceiling honoured, summary counts internally consistent, /refresh admin-gated, /capabilities.json served with Cache-Control max-age=300.",
+    "spiffe_workload": true
   },
   "fleet-cert-watch": {
     "env": {
@@ -2943,7 +3010,8 @@
     },
     "container_port": 18316,
     "host_port": 18316,
-    "version": "0.2.6"
+    "version": "0.2.6",
+    "spiffe_workload": true
   },
   "fleet-content-normalizer": {
     "container_port": 18172,
@@ -3038,7 +3106,8 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
     "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
-    "version": "0.2.0"
+    "version": "0.2.0",
+    "spiffe_workload": true
   },
   "fleet-engagement-timeline": {
     "container_port": 18162,
@@ -3073,7 +3142,8 @@
     "trl": 5,
     "trl_evidence": "First-pass audit of this shared fleet-infra append-only event log: confirmed durability (in-RAM only, documented and verified via a real SIGKILL-and-restart test) and ordering (mutex-guarded offset assignment, verified with 500 concurrent live publish calls yielding unique contiguous offsets) both match documentation exactly. Found and fixed a real unbounded-growth bug -- nothing capped the number of distinct topics or topic-name length (20,000 single-event topics grew RSS from 12.5MB to 29MB; a ~500KB topic name was accepted with no validation). Fixed with a new EVENTLOG_MAX_TOPICS cap and a 256-byte name limit. trl held at 5 (one real bug found, now fixed); trl_ceiling=6 added -- the in-RAM-only design is a deliberate structural limitation, can't claim 'system of record' reliability while a restart silently loses all data. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "fleet-exec": {
     "access_tier": "infra-privileged",
@@ -3093,7 +3163,8 @@
     "trl": 5,
     "trl_evidence": "First-pass safety audit of this shared fleet-infra remote-script-execution service: confirmed no shell/command-injection vulnerability (args always passed as literal argv, never shell-interpreted; allowlist correctly rejects everything else) via direct adversarial testing. Found and fixed a real availability/DoS bug -- the 'hard timeout' guarantee could be bypassed by a submitted script detaching a descendant into its own process session (setsid/start_new_session), escaping the process-group kill and blocking the request handler indefinitely regardless of timeout_ms (live-confirmed). Fixed with a hard wait-delay cap so the handler always returns within timeout+2s no matter what the script does; the escaped process itself still needs deployment-level containment (cgroups/seccomp), which is documented but not verified enabled in production. trl held at 5 and trl_ceiling capped at 6 deliberately, pending that containment verification -- a production-grade rating for a command-execution surface needs the deployment to actually enforce what the README prescribes, not just document it. See PR #4 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "fleet-fake": {
     "auth": {
@@ -3152,7 +3223,8 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.19"
+    "version": "0.4.19",
+    "spiffe_workload": true
   },
   "fleet-har-builder": {
     "container_port": 18157,
@@ -3184,7 +3256,8 @@
     "version": "0.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-ip": {
     "auth": {
@@ -3226,7 +3299,8 @@
     "trl": 6,
     "trl_evidence": "First-pass audit of this shared fleet-infra distributed advisory-lock primitive: found and fixed the single most severe bug class checked for in this pass -- a TTL/wait_seconds integer overflow (any ttl_seconds >= ~1e10, an ordinary JSON int) wrapped the computed lease duration negative, so the lock was immediately treated as expired; live-reproduced two callers both getting acquired:true for the same key simultaneously, exactly the 'two callers both think they hold the lock' failure mode this service exists to prevent. Fixed by clamping before multiplying instead of after. The core mutex-guarded locking logic itself was reviewed carefully and confirmed correct (200-goroutine stress tests clean under go test -race) -- the bug was purely in unvalidated duration arithmetic. trl bumped 5->6; trl_ceiling=7 added -- single-process/in-memory with no HA/replication story, a coordinator crash drops all locks fleet-wide. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "fleet-mcp-gateway": {
     "description": "Aggregates fleet services' agent contracts (GET /agent.json) into one Model Context Protocol Streamable HTTP endpoint at /mcp.",
@@ -3239,7 +3313,8 @@
     "trl_evidence": "First ship. Real MCP wire-level tests pass (initialize -> tools/list -> tools/call, incl. caller-Authorization pass-through) against in-process aggregation. Fleet-wide registry-driven aggregation unproven in production -- zero services expose /agent.json yet (Phase 2 of a 5-phase rollout).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-md": {
     "auth": {
@@ -3285,7 +3360,8 @@
     "trl": 6,
     "trl_evidence": "First-pass audit of this shared fleet-infra key-value/memory store: genuinely clean, no PR needed. Thorough adversarial testing (read-after-write consistency, TTL boundary precision at 900ms/1100ms on a 1s lease, 40-way concurrent HTTP load, a real SIGKILL-and-restart crash simulation, MEMORY_MAX_DOCS eviction, oversized/malformed-payload DoS probes) found the service does exactly what it documents with zero discrepancies. trl bumped 5->6 given thorough independently-verified test coverage; trl_ceiling=7 added -- single-process in-memory store with no replication/backing store and an explicitly documented 'v0.1 scale' linear-scan tradeoff, structural limits on reaching SLA-grade.",
     "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch"
+    "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
+    "spiffe_workload": true
   },
   "fleet-notify": {
     "env": {
@@ -3310,7 +3386,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-payload-corpus": {
     "env": {
@@ -3329,7 +3406,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "trl_ceiling": 8,
     "trl_evidence": "First-pass audit of this shared fleet-infra security-testing payload corpus: found a serious integration break -- every real consumer (go_xss_scanner, go_crlf_tester, go-pentest-cors-misconfig-prober, go-pentest-authz-matrix, go-pentest-ssrf-prober) has been silently falling back to stale local vendored payload lists since a May 20 envelope-format change, because their hand-rolled decoders predate this service's {status,data} response envelope -- the entire 'single source of truth' promise has been quietly defeated for 2+ months with no errors raised (documented the fix pattern, consumer-side fixes are a separate follow-up). Also fixed a real bug rejecting the legitimate target_context='any' value for 2 real payloads, and a stale CorpusVersion that never bumped despite a payload-set change. Separately flagged (spun off as its own task) a real crash bug in the shared go-common metrics middleware: invalid-UTF-8 percent-encoding in a request path panics that connection, reachable pre-auth on every go-common-based service in the fleet. trl held at 6 (code itself is solid; the broken promise needs consumer-side fixes first); trl_ceiling corrected 8->7 -- the repo's own git history never supported a ceiling of 8. See PR #3 (merged).",
-    "version": "0.1.0"  },
+    "version": "0.1.0",
+    "spiffe_workload": true  },
   "fleet-persona": {
     "auth": {
       "type": "none"
@@ -3353,7 +3431,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 2,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"  },
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true  },
   "fleet-pipe": {
     "auth": {
       "type": "none"
@@ -3374,7 +3453,8 @@
     "trl_evidence": "v0.4.1 in-RAM TTL relay (PutOpts API, total-RAM byte budget, last-write-wins ?replace slots, read-receipt watch channels). Store unit tests: put/get, burn-on-read, TTL expiry via injected clock, write-once, replace, expired-name reclaim, max-entries + max-total-bytes budgets, byte accounting across burn/expire, clamp-TTL, base62 id shape/uniqueness over 1000 draws, PutRandom uniqueness over 500, 256-word list uniqueness, word-code shape. Handler/HTTP tests: random+named push/pull, write-once 409, replace overwrite, reserved/invalid name, burn-once-then-404, content negotiation (HTML app vs text vs ?shell/?app/?raw), word-code create, QR text+png, read-receipt notify+watch token/gone, safe headers, delete, 413. /selftest runs put→get-multi→burn→named→reserved→empty→ttl→replace→word-code→byte-budget end-to-end. Cross-impl crypto proven: AES-256-CTR+HMAC openssl↔WebCrypto round-trips (incl. 256 KB + macOS LibreSSL) and ECDH P-256 sealed-box round-trip + wrong-key rejection (node WebCrypto). Live real-browser verification (2026-06-01): terminal-encrypt→browser-decrypt, browser-compose→CLI-decrypt, and ask-me-a-secret reply sealed→inbox decrypt with the server holding ciphertext only. crypto/rand ids, rejection sampling (no modulo bias).",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-pixel": {
     "auth": {
@@ -3428,7 +3508,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-preflight": {
     "container_port": 18142,
@@ -3453,7 +3534,8 @@
     "version": "0.3.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-priority-queue": {
     "env": {
@@ -3471,7 +3553,8 @@
     "version": "0.1.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-prometheus": {
     "compose_service_name": "prometheus",
@@ -3519,7 +3602,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "mcp_ready": true,
     "mcp_tool_count": 5,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-read": {
     "auth": {
@@ -3540,7 +3624,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-resolver-quorum": {
     "container_port": 18155,
@@ -3600,7 +3685,8 @@
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "v0.3.5 release: go-fleet-secrets PRs #14 and #15 hardened trusted-proxy identity handling and made /selftest an explicit unauthenticated health contract; deployed image f5fafff passed direct /health, /selftest, and /version smoke checks, followed by a gateway vhost render and reload. Existing audit-log redaction, consumer-ACL, rotation, and concurrency tests remain required.",
     "internal_direct": true,
-    "version": "0.4.6"
+    "version": "0.4.6",
+    "spiffe_workload": true
   },
   "fleet-selftest-aggregator": {
     "container_port": 18165,
@@ -3623,7 +3709,8 @@
     "version": "0.1.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-tail": {
     "auth": {
@@ -3644,7 +3731,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "mcp_ready": true,
     "mcp_tool_count": 3,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-target-reputation": {
     "container_port": 18171,
@@ -3684,7 +3772,8 @@
     "trl": 4,
     "trl_assessed_at": "2026-08-05",
     "trl_assessor": "claude-sonnet-5-token-ledger",
-    "trl_evidence": "First ship. Atomic charge/credit + audit trail with unit test coverage (11 tests, storage + handler layers). Zero fleet services call /v1/charge yet; /v1/topup is admin-only by design -- no real payment rail (Stripe/x402) wired in this phase."
+    "trl_evidence": "First ship. Atomic charge/credit + audit trail with unit test coverage (11 tests, storage + handler layers). Zero fleet services call /v1/charge yet; /v1/topup is admin-only by design -- no real payment rail (Stripe/x402) wired in this phase.",
+    "spiffe_workload": true
   },
   "fleet-vendor-disclosure-tracker": {
     "container_port": 18167,
@@ -3719,7 +3808,8 @@
     "version": "0.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-webhook": {
     "auth": {
@@ -3740,7 +3830,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "mcp_ready": true,
     "mcp_tool_count": 4,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "fleet-webhook-verifier": {
     "container_port": 18170,
