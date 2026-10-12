@@ -1148,12 +1148,12 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20.",
-    "version": "3.5.41",
+    "version": "3.5.50",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
-      "GRAPH_ENABLED": "false",
+      "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "depends_on": [
@@ -4349,6 +4349,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh ~80-domain sample): explicitly verified the fetch-cache pattern here is deliberate/correct (pinned by a dedicated test, negligible TTL for this one-shot use case). Found and fixed a real bug: extractDoc counted never-rendered <iframe>/<object>/<canvas> HTML fallback text as page content, producing false 'severe keyword stuffing' verdicts on real small-business sites (confirmed on 35 production rows, one example jumping from 89% density on a mangled Maps-embed artifact to a correct 3.55% on the real top term). See PR #9 (merged).",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4365,6 +4369,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Dependency-free, pure-Go language detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace with block-element boundaries. Two complementary signals. (1) SCRIPT detection — every letter rune is bucketed by its Unicode block into Latin (incl. Latin-1/Extended accents), Cyrillic, Greek (incl. Extended), CJK Han, Japanese kana (hiragana+katakana), Arabic, Hebrew, Devanagari; the dominant writing system by letter count is reported. This is near-certain because scripts occupy disjoint Unicode ranges. (2) STOPWORD-frequency scoring — for Latin-script prose the text is tokenised into lowercased words and, for each scored language (English, Spanish, French, German, Italian, Portuguese, Dutch), score = stopword-hits / total-tokens from curated high-frequency function-word sets; the highest score wins. Confidence is the margin form winner/(winner+runner_up) so a clear separation reads as high-confidence and a tight race reads ~0.5; a sole non-zero scorer reports its raw density. Non-Latin scripts map to a best-effort script→language guess (Cyrillic→ru, Greek→el, Arabic→ar, Hebrew→he, Devanagari→hi, Han→zh, Han+kana→ja) at deliberately modest confidence with a script_guess degraded note (script != language). Per-failure notes go to degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_words for <30-word inputs, undetermined when no stopwords match) rather than failing the response; degraded[] is always a non-null slice. Direct text= mode analyses pasted content with no fetch. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode; SSRF defense-in-depth (input-time block of literal loopback/private/link-local IPs via safehttp + localhost/.local names, with cache-side + safehttp-fallback dial-time guards). ~30 unit tests cover seven real multi-language Latin sentences mapping to the correct ISO 639-1 code, the es-vs-it and de-vs-nl confusable pairs, six non-Latin script classifications (Cyrillic/Greek/Arabic/Hebrew/Devanagari/Han) plus the kana→Japanese flip, the confidence margin metric, tokenisation, per-rune Unicode bucketing, low-sample + undetermined + no-stopword degraded paths, parse-input aliases, missing-param 400, and SSRF rejection. /selftest runs the pure-logic checks (en/es/fr/de detection, Cyrillic + CJK script, low-sample flag, extraction, SSRF guard) AND a live example.com fetch through the cache (asserting Latin script + no error, since example.com is too short for confident language scoring). Honest TRL-4 ceiling: this is a stopword/script heuristic, NOT a trained character-n-gram model (CLD3, fastText). It cannot separate two languages that share a script and most function words (e.g. Norwegian vs Danish, or any language outside the curated seven on the Latin path), a single short sentence can be misranked, and a CJK/Cyrillic/Arabic script result is a writing-system identification, not a language one. A trained n-gram/byte-model would lift accuracy and language coverage (and TRL) but requires shipping a model artifact and is out of scope for the no-dependency contract.",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4381,6 +4389,10 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Multi-stage leadership-team extraction over a fetched HTML page. Detection runs three passes in priority order on the parsed DOM (golang.org/x/net/html): (1) schema.org Person JSON-LD carrying a jobTitle — walks every <script type=application/ld+json>, descends @graph and nested objects, handles @type as string OR array, and reads name/givenName+familyName/description/url/sameAs via stdlib encoding/json; (2) schema.org Person microdata (itemtype=schema.org/Person, http or https), pulling name/jobTitle/description and itemprop=url/sameAs + bare anchor hrefs; (3) a heuristic card walk used only when no structured data is present (flagged heuristic_fallback) — it scans repeated person cards (list items, articles, sections, figures, table cells, and team/staff/member-classed divs), skips grid wrappers that contain nested cards, and derives a name (preferring a heading) plus a title line. Every candidate is then FILTERED to leadership: the title must match a curated keyword set, and survivors are classified into exactly one normalized rank (c_suite, founder, president, vp, director, board, other_leadership) by case-insensitive, word-boundary regexes. Priority order is deliberate — vp is tested before president so 'Vice President' never lands in the president bucket despite containing the substring 'President', and \\b boundaries keep 'Director' from matching inside 'Directory'. c_suite matches the CxO acronyms plus the spelled 'Chief … Officer' shape; founder covers Founder/Co-Founder/Cofounder/Founding Partner; vp covers VP/SVP/EVP and (Senior|Executive )?Vice President; president covers President + Managing Director; director covers Director/Executive Director/Head of; board covers Chair(man|woman|person)/Board Member/Board of Directors/Trustee; other_leadership is a Partner/Principal/Owner/General Manager catch-all. Returns leaders[] (name/title/rank/bio omitempty/links non-nil), count, by_rank (rank→count), and detection (json_ld|microdata|heuristic). Relative profile hrefs/photo URLs are resolved against the final fetched URL; in text= mode (no fetch) they are returned as-authored. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch, in plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, heuristic_fallback, jsonld_parse_error, no_leaders) instead of failing the response; a page with text but no leaders still returns 200. ~30 unit tests cover every rank bucket, the Vice-President-vs-President disambiguation, the Directory-is-not-Director word-boundary guard, non-leadership rejection, case-insensitivity, the JSON-LD Person path (incl. @graph + @type array + missing-jobTitle skip + parse-error degraded), the microdata Person path, the heuristic card fallback + non-leader filtering + card links, by_rank counts, no-leaders degraded, dedupe across passes, omitempty/non-nil JSON shape, relative-link resolution, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler. /selftest exercises the full pure-logic pipeline (CEO + VP detected, engineer filtered, ranks asserted) plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: the structured-data paths are exact, but the heuristic fallback recognises only common team-page shapes — it is not layout-agnostic and does not infer roles from arbitrary running prose, which would need NLP-grade entity/role extraction.",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "depends_on": ["infrastructure-fetch-cache"],
     "version": "0.2.2"
   },
@@ -6486,7 +6498,11 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "8-9 needs a real browser engine for post-JS-render header capture plus a persistent cross-check/SLA tier; structurally above a CPU-only RFC header-parser",
     "trl_evidence": "Production-DB anomaly (174 domains with all 4 key headers present still graded F; google.com/microsoft.com graded D/F despite serving real headers) investigated live end-to-end and found to be a correct-behavior semantic gap, not a bug: the tool grades header *quality* across 12 weighted signals (e.g. HSTS present but max-age=0 scores F), not just presence -- reproduced byte-for-byte the same scores the DB already stores. A separate, real bug was found and fixed instead: newClient() built its safehttp.Client without .WithoutFetchCache(), meaning production grading requests could be served stale/shared cached responses instead of live origin fetches. Fixed (v2.2.7) with a regression test proving the fetch-cache delegate is never invoked. See github.com/baditaflorin/go_security_headers PR #14 (merged). Rows with tool_version<2.2.7 are re-crawl candidates.",
-    "version": "2.3.6",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "2.3.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
