@@ -7,6 +7,7 @@
 
 ## 2026-10-12
 - Opt geo-places into 0exec SPIFFE workload identity.
+- Sync Funding Signal to deployed 0.1.35 after the runtime identity fix; direct `/health`, `/selftest`, and `/version` returned 200, and gateway health returned 200. The gateway `/selftest` probe remains auth-gated (401).
 - Opt three additional low-traffic 0crawl analyzers into SPIFFE workload identity.
 - Opt four independent 0crawl extractors into SPIFFE workload identity.
 - Opt two low-traffic, gateway-authenticated 0exec Pentest APIs into SPIFFE workload identity.
