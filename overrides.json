@@ -7477,7 +7477,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "First-pass audit: this is an active, SSRF-guarded XSS reflection prober (not a static payload catalog, despite stale README docs -- flagged for awareness). Found and fixed 2 real bugs: a false not_reflected result for numeric-entity-escaped quotes (Go's own html.EscapeString uses &#34; not &quot;, causing 4/15 payloads to be misreported as safe when actually reflected/escaped), and a snippet-truncation bug sizing off the wrong string length. Also fixed the recurring fetch-cache-masking bug. trl bumped 5->6; trl_ceiling=7 added -- fundamentally regex/substring heuristics, not a real browser engine, so it infers exploitability rather than confirming actual script execution. See PR #3 (merged)."
+    "trl_evidence": "First-pass audit: this is an active, SSRF-guarded XSS reflection prober (not a static payload catalog, despite stale README docs -- flagged for awareness). Found and fixed 2 real bugs: a false not_reflected result for numeric-entity-escaped quotes (Go's own html.EscapeString uses &#34; not &quot;, causing 4/15 payloads to be misreported as safe when actually reflected/escaped), and a snippet-truncation bug sizing off the wrong string length. Also fixed the recurring fetch-cache-masking bug. trl bumped 5->6; trl_ceiling=7 added -- fundamentally regex/substring heuristics, not a real browser engine, so it infers exploitability rather than confirming actual script execution. See PR #3 (merged).",
+    "spiffe_workload": true
   },
   "xss-scanner": {
     "container_port": 8271,
