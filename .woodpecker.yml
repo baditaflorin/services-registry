@@ -52,10 +52,8 @@ steps:
     image: python:3.13-alpine
     commands:
       - apk add --no-cache git
-      - |
-        if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
-          git fetch --unshallow --no-tags origin
-        fi
+      # No unshallow here: --ref HEAD only reads blobs at HEAD, and this step runs in parallel (depends_on: []) with
+      # the tests step, which unshallows the same workspace ("shallow file has changed since we read it").
       # bin/docdrift.py addresses repositories as <repos>/<name>; only this repository exists in CI.
       - mkdir -p /tmp/repos && ln -s "$PWD" /tmp/repos/services-registry
       # A lone & used as a command separator in a shell recipe backgrounds the left command (commit 1cdfe74 turned 13 && into &).
