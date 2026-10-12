@@ -4300,6 +4300,7 @@
       "GRAPH_SERVICE_ID": "license-extractor",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
+    "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18270,
     "description": "Detect the software/content license(s) of a web page or raw HTML/text — walks the DOM for structured signals (link rel=license, license anchors, JSON-LD license fields) and scans extracted text for license names, normalizing to SPDX identifiers (MIT, Apache-2.0, GPL/LGPL/AGPL, BSD, MPL-2.0, ISC, Unlicense, Creative Commons), plus copyright-line extraction.",
     "example_path": "/?url=https://example.com",
@@ -5701,6 +5702,7 @@
       "GRAPH_SERVICE_ID": "policy-clause-extractor",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
+    "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18271,
     "description": "Segment a legal/policy web page or raw HTML (privacy policy, terms of service, cookie policy, EULA, refund/return, acceptable-use) into clauses keyed by heading and classify each by policy type (data-collection, data-sharing, cookies, retention, user-rights/GDPR, liability, governing-law, termination, refund-return, acceptable-use, contact/DPO), plus a summary roll-up.",
     "example_path": "/?url=https://example.com",
@@ -5967,6 +5969,7 @@
       "GRAPH_SERVICE_ID": "readability-index",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
+    "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18245,
     "description": "Readability scoring for a web page or raw text — Flesch Reading Ease, Flesch-Kincaid Grade, Gunning Fog, SMOG, Coleman-Liau, and ARI, plus a consensus US-grade estimate.",
     "example_path": "/?url=https://example.com",
@@ -6411,6 +6414,7 @@
       "GRAPH_SERVICE_ID": "service-worker-detector",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
+    "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18259,
     "description": "Detects Progressive-Web-App / service-worker signals from the STATIC markup of a web page (or raw HTML): inline navigator.serviceWorker.register() calls with the resolved script URL and scope option, the <link rel=manifest> URL, and PWA meta/link tags (theme-color, apple-mobile-web-app-capable, apple-touch-icon, mobile-web-app-capable, viewport). Returns a flat report with has_service_worker, sw_registrations[], manifest_url, pwa_signals, a pwa_score count, and an evidence[] trail.",
     "example_path": "/?url=https://example.com",
