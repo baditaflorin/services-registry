@@ -47,6 +47,10 @@ fleet-runner deps fleet-preflight --depth 1 --top 10 --since 24h --json
 fleet-runner ctx go-fleet-preflight --callers 3 --callees 3 --graph-since 24h --budget 1500 --workdir /root/workspace
 ```
 
+<!-- anchor id=graph-first-workflow-graph-context repo=go_fleet_runner symbol=verb:graph-context verified=6bebc4351 digest=sha256:8afc8bd71a2f98f7a648dceb9418ecbef26d537fc8817caf2d3e120fc6044e3d on=2026-10-12 -->
+<!-- anchor id=graph-first-workflow-deps repo=go_fleet_runner symbol=verb:deps verified=6bebc4351 digest=sha256:101210cc8bf29087966ee4208be474e74e653a10eba5efa059fc5e78f92857f8 on=2026-10-12 -->
+<!-- anchor id=graph-first-workflow-ctx repo=go_fleet_runner symbol=verb:ctx verified=6bebc4351 digest=sha256:f7a62ec3c73911e2e840945f3e84d98761973b0d67400a105e99e5a2939dea36 on=2026-10-12 -->
+
 The `graph-context` result is a token-bounded, review-only agent brief. It
 contains the service identity, declared topology, bounded runtime evidence,
 attention signals, and typed next actions. It can recommend investigation;
@@ -66,6 +70,8 @@ Use the result in this order:
    `fleet-runner explain <canonical-service-id> --since 24h --json`,
    alongside the normal build, health, self-test, version, and gateway
    checks.
+
+<!-- anchor id=graph-first-workflow-explain repo=go_fleet_runner symbol=verb:explain verified=6bebc4351 digest=sha256:0f1eccdcbdb8e81597e07a40b4db06aeca2ca525da426ab342c376de2fd58d78 on=2026-10-12 -->
 
 `graph-context`, `deps`, and `explain` use the canonical
 registry/graph ID (for example `fleet-preflight`). `ctx` accepts a
@@ -132,6 +138,8 @@ fleet-runner graph-context <service-id>
 fleet-runner capacity --hosts dockerhost,domainscope-runtime
 ```
 
+<!-- anchor id=metrics-hub-capacity-capacity repo=go_fleet_runner symbol=verb:capacity verified=6bebc4351 digest=sha256:34625b8a9c4f41286ca2ee90a7aee6df9ff987c2532ec0c5abce79779c194069 on=2026-10-12 -->
+
 `capacity` rejects missing/down node telemetry, incomplete CPU/memory metrics,
 and insufficient available memory. Load per core above the preferred threshold
 is reported as a warning only, so an ELIGIBLE host can still be busy. Its
@@ -141,6 +149,8 @@ cluster/runtime ownership. A real placement/deploy still needs fresh
 `origin/main`, dependency/caller review, `fleet-runner allocate-port`, deploy
 preflight, rollback capture, image/container verification, `/health`,
 `/selftest`, `/version`, and gateway smoke. No telemetry means fail closed.
+
+<!-- anchor id=port-allocation-allocate-port repo=go_fleet_runner symbol=verb:allocate-port verified=6bebc4351 digest=sha256:e648e1c4bec458426872a913eea49e8a49e03595896e398c93ed4558030f7177 on=2026-10-12 -->
 
 Do not SSH several hosts to compare `uptime`/`free` when Metrics Hub covers the
 targets. Add a private node-exporter scrape target and wait for `up=1` if a host
@@ -155,6 +165,8 @@ configuration. `active` is eligible for review, `restricted` requires a
 non-empty explicit service allowlist, and `build-only` is excluded from
 placement. Change the policy and its schema in the same PR; do not hand-code a
 host decision in an agent or service repository.
+
+<!-- anchor id=host-placement-policy-hosts repo=services-registry symbol=json:host-placement-policy.json#/hosts verified=e08695528 digest=sha256:56b520e32fb364e58b6538254d595a04701762b728ee278ef2398b78b4b7c911 on=2026-10-12 -->
 
 ### Reading the registry — fetch a slice, not the full blob
 
@@ -195,6 +207,8 @@ mesh.
 |-------------|---------------------------------------------|-----------|------------|-------------------|--------------------|--------------------------------------------------------|
 | `container` | Container service (compose or Coolify)      | yes       | yes        | yes               | yes                | yes                                                    |
 | `static`    | Static GitHub Pages site                    | no        | no         | no                | no                 | **no** — has its own `fleet-runner pages-audit`        |
+
+<!-- anchor id=kind-static-pages-audit repo=go_fleet_runner symbol=verb:pages-audit verified=6bebc4351 digest=sha256:1f393614de6c9d4c4f37d3cf00e216c5b25d9941a7b46a8b87e5977a595f8ab0 on=2026-10-12 -->
 
 If this repo's `service.yaml` (or registry entry) says `kind: static`,
 **stop looking for a Dockerfile, a port, or Go code**. Pages services
@@ -267,6 +281,8 @@ Every `services.json` entry may carry a `trl` field 1–9:
 `trl_ceiling` marks services that **structurally cannot** advance
 further (e.g. needs a browser engine, needs paid threat intel).
 `trl_assessed_at` older than ~90 days is stale — re-audit.
+
+<!-- anchor id=trl-cmdtrlreview repo=go_fleet_runner symbol=go:cmd_trl_review.go#cmdTRLReview verified=6bebc4351 digest=sha256:0e431989c33d02dd54e9a945f588319737fe7347bf55e93f8d553ac4e2fee26b on=2026-10-12 -->
 
 ## Key sibling repos
 
@@ -731,6 +747,9 @@ upstream-managed container). See ADR-0031.
 }
 ```
 
+<!-- anchor id=external-registry-entries-external-0-externa repo=services-registry symbol=json:overrides.json#/$external/0/external_image verified=e08695528 digest=sha256:805c93ff45d59c082bfc5091c6952f1509d570112df0ae00025f5b21299bbf36 on=2026-10-12 -->
+<!-- anchor id=port-allocation-external-0-host-port repo=services-registry symbol=json:overrides.json#/$external/0/host_port verified=e08695528 digest=sha256:dcacdef7c85b353596110dc1c6981acca45e795993db25004de80ec851f16503 on=2026-10-12 -->
+
 **Audit surface** — never grep overrides by hand:
 
 ```
@@ -738,6 +757,8 @@ fleet-runner overrides list   [--filter mesh=0crawl] [--key cert_domain]
 fleet-runner overrides explain <slug>      # full breakdown per key + source
 fleet-runner overrides audit                # stale slugs, unused rules, key adoption counts
 ```
+
+<!-- anchor id=overrides-audit-surface-overrides repo=go_fleet_runner symbol=verb:overrides verified=6bebc4351 digest=sha256:3ccb1bbb2d4117a7ed0b687018199c778b18c21ea513ca6c7862a22483254627 on=2026-10-12 -->
 
 `fleet-runner converge` also surfaces overrides drift (stale per-slug
 entries that reference removed services; rules with no matching
@@ -772,6 +793,9 @@ fleet-runner audit registry-host-port-set    # services without a registered hos
 fleet-runner audit orphaned-listeners        # SSH to the dockerhost, diff live `ss -tlnp` listeners against registered host_ports (v0.7.36+; --json goes AFTER the subcommand name, same as compose-drift)
 fleet-runner stats                           # audit log + token usage summary
 ```
+
+<!-- anchor id=fleet-runner-verbs-health repo=go_fleet_runner symbol=verb:health verified=6bebc4351 digest=sha256:24e024c191e54f6cd107d1debc945163ed3b485d9bfebdeaf5fb15dee68f80cb on=2026-10-12 -->
+<!-- anchor id=bootstrap-compose-scaffold-compose repo=go_fleet_runner symbol=verb:scaffold-compose verified=6bebc4351 digest=sha256:daff9c6da2423c153cec90dc3862e5abfc9d5904f30ca1cde7abbff16f91b2e6 on=2026-10-12 -->
 
 `new-service` does not set GitHub topics. `bin/generate.py` registers a repo
 only with a `mesh-<mesh>` topic, and also reads `lang-<x>` (defaults to go on
@@ -812,6 +836,18 @@ entries are skipped by default by `build-test`, `update-dep`, `rollout`
 and `scaffold-*`**; `deploy-all`, `exec`, `inject` and `push` do not
 filter by kind — don't deploy-all or health-check a static Pages site
 (use `pages-audit`).
+
+<!-- anchor id=static-skip-gomoddirsfiltered repo=go_fleet_runner symbol=go:main.go#goModDirsFiltered verified=6bebc4351 digest=sha256:812d05fe33bb54ea47a6380d38259fde77c078f14ac544eca92648e64d806460 on=2026-10-12 -->
+
+### All fleet-runner verbs (generated)
+
+Generated from the dispatch switch in `go_fleet_runner/main.go`; `fleet-runner --help` lists fewer. Do not edit by hand.
+
+<!-- BEGIN GENERATED:verbs repo=go_fleet_runner -->
+_116 verbs, generated from the dispatch switch in `go_fleet_runner/main.go`; do not edit by hand._
+
+`ai-context`, `allocate-port`, `astedit`, `astgrep`, `audit`, `audit-callers`, `audit-graph`, `audit-log`, `batch`, `branch`, `broker-canary`, `build-test`, `builder-pool`, `bump-version`, `canary-inventory`, `capacity`, `capacity-report`, `cert`, `change-receipts`, `changelog`, `classify`, `clone-missing`, `compose-heal`, `compose-image-heal`, `compose-port-prep`, `compose-ports-strip`, `compute-attribution`, `converge`, `coolify`, `ctx`, `cve-history`, `cve-root-cause`, `dep-cve`, `dep-cve-merge`, `depgraph`, `deploy`, `deploy-all`, `deploy-authorized`, `deploy-debt`, `deploy-pool`, `deps`, `diagram`, `digest`, `disk-report`, `dns-heal`, `drift`, `e2e`, `exec`, `explain`, `export-collection`, `fleetfetch-migrate`, `forecast`, `gateway-health`, `git-traffic`, `graph-context`, `grep`, `health`, `hosts-sync`, `image-gc`, `inject`, `install-fleet-access-log-conf`, `install-verify-cache-conf`, `intent`, `investigate-url`, `key`, `loadtest`, `mirror-clone`, `mirror-fetch`, `new-service`, `nginx-drift-audit`, `nginx-render`, `overrides`, `pages-audit`, `placement-check`, `placement-plan`, `playbook`, `pool-metrics-targets`, `port-heal`, `prs`, `publish-image`, `push`, `real-data-loops`, `remediate`, `render-compose`, `replay`, `rollout`, `scaffold-compose`, `scaffold-service-yaml`, `scanopy`, `scanopy-audit`, `scanopy-mcp`, `sed`, `select`, `session-summary`, `shape`, `smoke`, `spiffe-audit`, `spiffe-entries`, `split`, `stage`, `stage-batch`, `stash`, `state`, `stats`, `sweep-rollback`, `sync-deps`, `template`, `tokens`, `trl-review`, `update-dep`, `verify-image`, `whois`, `why`, `woodpecker`, `worktree-audit`, `worktree-prune`
+<!-- END GENERATED:verbs -->
 
 ## Infrastructure topology
 
@@ -911,6 +947,8 @@ filter by kind — don't deploy-all or health-check a static Pages site
   place them in a service repo or reuse the root credential for senders.
   Retention and stream coverage must be verified on VM 630 before pruning
   old snapshots.
+
+<!-- anchor id=rule-zero-worktrees-build-test repo=go_fleet_runner symbol=verb:build-test verified=6bebc4351 digest=sha256:48d16ff7ed1f442a4e042868920a42f36a6313ad59abafd2166901e5f5f1121a on=2026-10-12 -->
 
   **Query it with `bin/oo`, not hand-rolled curl.** `services-registry/bin/oo`
   is the deterministic CLI (`logs`, `grep`, `errors`, `since-redeploy`,
@@ -1054,6 +1092,8 @@ ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port 
 ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner audit --all'
 ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner bump-version go_<repo> patch --push'
 ```
+
+<!-- anchor id=fleet-runner-invocation-converge repo=go_fleet_runner symbol=verb:converge verified=6bebc4351 digest=sha256:58d68013fea726aa56947ab5cad42f19ad6a7a44d55b93d66e0b7ec1ee0b23cd on=2026-10-12 -->
 
 If you don't have SSH access to `0docker.com`, **stop and ask the user
 to run the command, copy-pasting the exact line above**. Do not
@@ -1509,6 +1549,8 @@ for the canonical pattern.
    fleet-pipe/svg-icon-inventory incident). Always take the number from
    `allocate-port`.
 
+<!-- anchor id=port-allocation-containercomposedir repo=go_fleet_runner symbol=go:deploy_compose_sync.go#containerComposeDir verified=6bebc4351 digest=sha256:b535184bb43b793d76cc57b963002943650dd3d1508799079a055a8873f8165f on=2026-10-12 -->
+
 2. **"I bumped the version in `service.yaml` and pushed."** Did you tag
    git AND push the tag AND bump `service.yaml`/`Dockerfile`/`CHANGELOG.md`?
    Use `fleet-runner bump-version <repo> patch --push`; the image is
@@ -1577,6 +1619,8 @@ goroutines on a slow shared upstream and starving the whole dockerhost's
 scheduler, so every service's `/selftest` probe stalls past its 8 s
 deadline. One service's overload silently fails everyone's deploys.
 
+<!-- anchor id=deploy-smoke-gate-max-time-8 repo=go_fleet_runner symbol="regex:deploy_smoke_direct.go#--max-time 8" verified=6bebc4351 digest=sha256:3a797aed5032adaf9bbbb07a81ac6160f1b0cae4a5dc3442e4c9e95d4d7fd8be on=2026-10-12 -->
+
 The canonical instance: `go_infrastructure_fetch_cache` (port 18205)
 proxies render requests to `go-js-proxy` / `go-html-proxy`, each held up
 to 95 s. A backfill fan-out fires thousands of concurrent `render=*`
@@ -1603,6 +1647,8 @@ curl -s http://<dockerhost>:18205/ | grep -E 'render_shed|upstream_errors'
 For the fleet-standard signal, `loadshed_shed_total{service,gate}` is
 emitted on `/metrics` by every service using `go-common/loadshed` — a
 sustained nonzero rate is the "this box is shedding load" alert.
+
+<!-- anchor id=loadshed-loadshed-shed-total repo=go-common symbol=regex:promx/loadshed.go#loadshed_shed_total verified=879bbaa1c digest=sha256:9b6e372a22aea8df5258e24235627c7efd149b046ecd34d5e0b5a70cd8bda9c2 on=2026-10-12 -->
 
 **Live mitigation (no rebuild).** The render cap is env-tunable. Lower
 `MAX_RENDER_INFLIGHT` on the host to shed sooner and shrink the pile-up,
@@ -1659,6 +1705,8 @@ go func(k string, ts int64) {
 }(key, now)
 ```
 
+<!-- anchor id=sqlite-safety-busy-timeout-d repo=go-fleet-dns-sync symbol=regex:store.go#busy_timeout\(\d+\) verified=2885f9e34 digest=sha256:a59a128314f9a458b5400ad42412ae1b367eab034cdab2ba4ca1c9954fafbc4e on=2026-10-12 -->
+
 **Audit one-liner** — run this from the workspace root (the directory that
 holds the sibling repos; `FLEET_RUNNER_WORKSPACE_ROOT`, default
 `/root/workspace` on the builder) to find violations before they cause an
@@ -1706,6 +1754,9 @@ for `--skip-smoke`. Need a single client to skip the cache outside
 selftest? `safehttp.WithoutFetchCache()` (per-client) or
 `WithoutFetchCacheContext(ctx)` (per-request).
 
+<!-- anchor id=selftest-fetch-cache-probedirect repo=go_fleet_runner symbol=go:deploy_smoke_direct.go#probeDirect verified=6bebc4351 digest=sha256:70ceaa2aab6ca13b2963b2421a3114c81d9fe762c083af372666b97da2df5827 on=2026-10-12 -->
+<!-- anchor id=selftest-fetch-cache-withoutfetchcachecontex repo=go-common symbol=go:safehttp/fetchcache.go#WithoutFetchCacheContext verified=879bbaa1c digest=sha256:e3bc237b8580886297b9c77d3ba644af87f623a770d6a6de9aeb7e66a724b6a9 on=2026-10-12 -->
+
 ## Per-repo `CHANGELOG.md` — capture what changed at each version
 
 Every container repo keeps a **`CHANGELOG.md`** at its root, newest
@@ -1739,6 +1790,9 @@ write failure only prints a WARNING; versions bumped by hand are not checked). T
 omission — don't bump a service's version without leaving a changelog
 entry.
 
+<!-- anchor id=bump-version-prependchangelogentry repo=go_fleet_runner symbol=go:bump_version.go#prependChangelogEntry verified=6bebc4351 digest=sha256:c4c6a3718d7d469d5b7fc44349ccc731532ae7bd336b1e673be0d798ff7aa239 on=2026-10-12 -->
+<!-- anchor id=bump-version-changelogbody repo=go_fleet_runner symbol=go:bump_version.go#changelogBody verified=6bebc4351 digest=sha256:20f443bb5cbc821951c78d047d4971cf6d7e5ed81b65a7ffc8c5c193c18b3f87 on=2026-10-12 -->
+
 ## Local workflow
 
 - Local workspace root: `/Users/live/Documents/Codex/2026-05-08/`.
@@ -1768,7 +1822,6 @@ entry.
 - Supply chain: prefer npm packages ≥ 3 days old over `@latest` —
   accept known CVEs over zero-day supply-chain injection.
 
-
 ## Canonical release receipts
 
 Every meaningful release must form one traceable chain:
@@ -1782,5 +1835,7 @@ Inspect the fleet deterministically with:
 ```bash
 fleet-runner change-receipts --sort prs --top 50
 ```
+
+<!-- anchor id=release-receipts-change-receipts repo=go_fleet_runner symbol=verb:change-receipts verified=6bebc4351 digest=sha256:eaa3a86295d8c67e4f365a142452f7130e41755abcc05b3908232a72930cde6f on=2026-10-12 -->
 
 That command reports commits, PR-number receipts, changelog-backed version counts and latest activity per service (add `--json` to also get each service's current version). Static applications follow the same changelog + code receipt chain, using their published Pages build as the deployment receipt.
