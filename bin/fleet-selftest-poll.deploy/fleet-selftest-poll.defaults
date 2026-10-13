@@ -1,0 +1,6 @@
+# fleet-selftest-poll runtime config (consumed by fleet-selftest-poll.service)
+SELFTEST_POLL_SRC_URL=https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.json
+SELFTEST_POLL_PROM=/var/lib/prometheus-node-exporter/textfile/fleet_selftest.prom
+# 0docker docker hosts, tried in order for compose services (registry host_port): dockerhost VM100, docker-prod VM101.
+# /selftest is public on the service itself; the gateway in front of it wants a key, so go direct on the LAN.
+SELFTEST_POLL_DIRECT_HOSTS=10.10.10.20,10.10.10.30
