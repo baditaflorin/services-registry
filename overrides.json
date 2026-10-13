@@ -3513,7 +3513,7 @@
   },
   "fleet-preflight": {
     "container_port": 18142,
-    "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
+    "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, allowlisted secret consumer access, image, edge, nginx, and version. Returns 200 (all green) or 424 (any red) with detailed checklist. Secret response bodies are never read. Read-only.",
     "example_path": "/checks",
     "host_port": 18142,
     "trl": 7,
@@ -3531,7 +3531,7 @@
       "fleet-dns-sync",
       "fleet-secrets"
     ],
-    "version": "0.3.13",
+    "version": "0.3.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
