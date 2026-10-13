@@ -232,7 +232,7 @@ MSG = "ci: run Woodpecker on PRs and the default branch only (no duplicate push+
 TRAILER = "\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
 
 
-def apply_repo(repo: str, mode: str, state: dict, dry_run: bool) -> dict:
+def apply_repo(repo: str, mode: str, state: dict, dry_run: bool, ci_skip: bool = False) -> dict:
     res = {"repo": repo, "mode": mode}
     with tempfile.TemporaryDirectory(prefix="wp-trigger-") as td:
         wt = Path(td) / "r"
@@ -261,7 +261,8 @@ def apply_repo(repo: str, mode: str, state: dict, dry_run: bool) -> dict:
             url = run(["gh", "pr", "create", "--repo", repo, "--base", db, "--head", br, "--title", MSG, "--body", body], cwd=wt).strip()
             res.update(status="pr", pr=url, before=before)
         else:
-            run(["git", "commit", "-q", "-m", MSG + TRAILER], cwd=wt)
+            # [CI SKIP]: Woodpecker creates no pipeline and posts no status for this commit
+            run(["git", "commit", "-q", "-m", MSG + ("\n\n[CI SKIP]" if ci_skip else "") + TRAILER], cwd=wt)
             for attempt in (1, 2):
                 p = subprocess.run(["git", "push", "-q", "origin", f"HEAD:{db}"], cwd=wt, text=True, capture_output=True)
                 if p.returncode == 0:
@@ -305,6 +306,7 @@ def main(argv=None) -> int:
     a.add_argument("--mode", choices=["pr", "direct"], required=True)
     a.add_argument("--state", type=Path, required=True)
     a.add_argument("--dry-run", action="store_true")
+    a.add_argument("--ci-skip", action="store_true", help="direct mode: add [CI SKIP] so Woodpecker runs nothing for the commit")
     a.add_argument("--pause", type=float, default=3.0, help="seconds between repos (keeps the CI queue calm)")
     r = sub.add_parser("rollback")
     r.add_argument("repos", nargs="+")
@@ -320,7 +322,7 @@ def main(argv=None) -> int:
     state = load_state(args.state)
     for n, repo in enumerate(args.repos):
         try:
-            res = apply_repo(repo, args.mode, state, args.dry_run) if args.cmd == "apply" else rollback_repo(repo, state)
+            res = apply_repo(repo, args.mode, state, args.dry_run, args.ci_skip) if args.cmd == "apply" else rollback_repo(repo, state)
         except Exception as exc:  # keep going: one repo must not stop the wave
             res = {"repo": repo, "status": "error", "reason": str(exc)[:300]}
         print(json.dumps(res), flush=True)
