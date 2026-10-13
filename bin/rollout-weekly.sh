@@ -7,9 +7,17 @@ if [ -z "${ROLLOUT_WEEKLY_COPY:-}" ]; then
   cp "$0" "${TMPDIR:-/tmp}/rollout-weekly.$$.sh" && ROLLOUT_WEEKLY_COPY=1 exec bash "${TMPDIR:-/tmp}/rollout-weekly.$$.sh" "$@"
 fi
 W="${FLEET_ROLLOUT_DIR:-$HOME/.local/share/fleet-claude-rollout}"
+mkdir -p "$W"
+# one run at a time (a run that was killed leaves a lock with a dead pid: that one is taken over)
+LOCK="$W/.run.lock"
+if ! mkdir "$LOCK" 2>/dev/null; then
+  old="$(cat "$LOCK/pid" 2>/dev/null)"
+  if [ -n "$old" ] && kill -0 "$old" 2>/dev/null; then echo "another rollout is running (pid $old); nothing to do"; exit 0; fi
+  rm -rf "$LOCK"; mkdir "$LOCK" || exit 2
+fi
+echo $$ > "$LOCK/pid"; trap 'rm -rf "$LOCK"' EXIT
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 export GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=20"
-mkdir -p "$W"
 [ -d "$W/services-registry/.git" ] || git clone -q git@github.com:baditaflorin/services-registry.git "$W/services-registry" || exit 2
 git -C "$W/services-registry" fetch -q origin && git -C "$W/services-registry" checkout -q -B main origin/main || exit 2
 echo "=== fleet CLAUDE.md rollout $(date -u +%FT%TZ) (registry $(git -C "$W/services-registry" rev-parse --short origin/main))"
