@@ -139,3 +139,5 @@ Drill-down when it fires:
 datasource uid `0mpc-prometheus`. Shows the **compose** vantage (this
 Prometheus only has that one). For the coolify vantage see
 `openobserve-dashboard-panels.md`.
+
+See also [fleet-selftest-poll](fleet-selftest-poll.README.md): same plumbing for `/selftest` (service behaviour, not just the edge).

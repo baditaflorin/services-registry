@@ -1,0 +1,15 @@
+[Unit]
+Description=Fleet selftest poll — /selftest of every fleet service -> Prometheus textfile
+Documentation=https://github.com/baditaflorin/services-registry/blob/main/bin/fleet-selftest-poll.README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-/etc/default/fleet-selftest-poll
+StateDirectory=fleet-selftest-poll
+ExecStartPre=-/bin/sh -c 'curl -fsSL --max-time 25 "$SELFTEST_POLL_SRC_URL" -o /var/lib/fleet-selftest-poll/services.json.new && mv -f /var/lib/fleet-selftest-poll/services.json.new /var/lib/fleet-selftest-poll/services.json'
+ExecStart=/usr/local/bin/fleet-selftest-poll --services /var/lib/fleet-selftest-poll/services.json --state /var/lib/fleet-selftest-poll/state.json --prom=${SELFTEST_POLL_PROM} --direct-hosts=${SELFTEST_POLL_DIRECT_HOSTS} --timeout 10 --concurrency 12
+# exit 2 == registry fetch / textfile write error == real unit failure. Service failures are in the metrics, not the exit code.
+Nice=10
+IOSchedulingClass=idle

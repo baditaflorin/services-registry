@@ -6,6 +6,7 @@
 # Changelog
 
 ## 2026-10-13
+- Add `bin/fleet-selftest-poll.py` and its CT108 systemd timer: polls `/selftest` of all 384 container services every 30 minutes (compose services on the docker hosts' LAN, no credential needed; coolify services on their edge) and exports `fleet_selftest_*` metrics. `SelftestCheckFailing` had no data source before; go-fleet-metrics-hub now alerts on it.
 - Double canonical SPIFFE workload opt-ins on the 0docker Compose cohort: 43 additional 0exec services and 48 additional 0crawl services; leave the open Contact Route Detector canary PR out of this batch.
 - Sync Google Taxonomy, Redirect Tracer, and Robots Analyzer catalog versions to their merged 1.5.6, 1.7.1, and 1.4.5 releases.
 
