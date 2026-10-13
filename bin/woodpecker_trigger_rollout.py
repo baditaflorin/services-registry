@@ -210,7 +210,12 @@ def verify_transformed(old: str, new: str) -> None:
 
 
 def default_branch_of(repo: str) -> str:
-    return run(["gh", "api", f"repos/{repo}", "--jq", ".default_branch"]).strip()
+    # git protocol, not the REST API: the 5000/h REST budget is shared with every other agent
+    out = run(["git", "ls-remote", "--symref", f"https://github.com/{repo}.git", "HEAD"])
+    m = re.match(r"ref: refs/heads/(\S+)\tHEAD", out)
+    if not m:
+        raise RuntimeError("cannot resolve default branch for " + repo)
+    return m.group(1)
 
 
 def run(args, cwd=None, check=True) -> str:
