@@ -5971,6 +5971,7 @@
   },
   "press-mentions": {
     "container_port": 8300,
+    "version": "2.5.17",
     "description": "Microservice for Press Mentions",
     "host_port": 8300,
     "proxy_read_timeout": "120s",
@@ -7749,6 +7750,7 @@
     "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected."
   },
   "payment-detector": {
+    "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -7761,6 +7763,7 @@
     }
   },
   "price-range": {
+    "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -7773,6 +7776,7 @@
     }
   },
   "remote-detector": {
+    "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
