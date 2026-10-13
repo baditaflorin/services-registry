@@ -8107,7 +8107,7 @@
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "infrastructure",
-    "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, required secrets metadata. Returns 200 (all green) or 424 (any red) with detailed checklist. Read-only.",
+    "description": "Pre-deploy validation. POST /preflight {repo, secrets?} runs every required check in parallel: registry presence, DNS resolution, port collision, allowlisted secret consumer access, image, edge, nginx, and version. Returns 200 (all green) or 424 (any red) with detailed checklist. Secret response bodies are never read. Read-only.",
     "example_path": "/checks",
     "health_url": "https://fleet-preflight.0exec.com/health",
     "id": "fleet-preflight",
