@@ -27,3 +27,22 @@ When an anchor goes STALE: read `git diff <verified>..origin/main -- <symbol fil
 A repository's CLAUDE.md is a byte-for-byte copy of this repository's `CLAUDE.md`, optionally followed by a repo-local tail that starts at the line
 `<!-- repo-local: ... -->`. Refresh with `python3 bin/docdrift.py --repos <dir> sync <canonical CLAUDE.md> <repo>/CLAUDE.md --write` (the tail is preserved).
 Staleness is read off git: a copy that equals an old canonical revision is "N revisions behind"; `docdrift census` does this for every registry repo from GitHub blob shas.
+
+## Rolling the canonical out to the fleet
+
+`bin/rollout_claude_md.py` copies this repository's `CLAUDE.md` into the fleet's repositories. It is deterministic (no LLM) and uses git over SSH, so GitHub's API quota is not spent.
+
+- `plan --registry <clone> --out <dir> --repos-file <names>` clones every repository shallowly, then classifies its `CLAUDE.md` by blob against this file's history: `current`, `absent`, `behind` (equal to an older revision: replacing it loses nothing) or `diverged` (differs from every revision).
+- `apply --out <dir> [--workers N] [--only a,b]` writes the canonical to the `absent` and `behind` repositories and pushes a docs-only commit with `[skip ci]`, so one commit does not start a pipeline in hundreds of repositories. A push that is rejected because the branch moved is re-fetched, re-classified and retried once; a protected default branch gets the branch `docs/claude-md-sync-<head>` and needs a PR. The log (`apply_log.jsonl`) is keyed by canonical head, so a later canonical rolls out again.
+- `diverged --registry <clone> --out <dir>` lists, for each diverged copy, the canonical revision it is closest to and the lines that are the repository's own; `merge ... [--push]` does a three-way merge (base = that revision) and pushes only conflict-free results. Conflicts need a person: typical ones are a locally reworded Auth section or a `<!-- ...:managed -->` block that another tool maintains.
+
+Run it from a machine whose SSH key can push to the repositories. Check the Woodpecker agents' logs after a run to see that no pipeline started.
+
+## Evidence ledger: what was true, at which commit and version
+
+An audit of a document produces many pieces of evidence of the form `repo/path:lines@sha`. `bin/evidence_ledger.py` keeps each one with what it said and where it was read, so the document can later say "this was true at go_fleet_runner v0.7.277; the code is now 33 releases further".
+
+- `build --claims <claims.jsonl> --repos <dir with clones> --out ledger.jsonl` stores one row per evidence range: the claim, the repository, the path and lines, the commit it was read at (`stamp_sha`), the nearest release tag at that commit (`stamp_tag`, from `git describe`), a digest of the whitespace-normalised snippet and the snippet itself (at most 15 lines).
+- `check --ledger ledger.jsonl --repos <dir> [--json out.json] [--md out.md]` compares each row with the repository's default branch: `FRESH` (same text, same lines), `MOVED` (same text, other lines), `CHANGED` (the text is gone: the report gives the diff and how many commits and release tags have passed since the stamp), `GONE` (file deleted) or `NO-REPO` (not cloned here). The Markdown report has a per-document table and a per-repository table "read at vX (sha), now vY: N commits, M tags later".
+
+A ledger holds code snippets, so keep it in a private repository (fleet-state), not here. A snippet with a credential-like line (password, token, secret, api key followed by a value) is never stored: the row keeps only the digest (`redacted: true`) and its diff is withheld. `check` reads git objects only and changes nothing.
