@@ -7151,7 +7151,8 @@
   "trust-decay": {
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "trust-decay"
     },
     "container_port": 8317,
     "description": "Microservice for Trust Decay",
@@ -7162,7 +7163,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh, disjoint 600-domain sample, zero commits since prior fix): genuinely clean -- confirmed the prior TLS chain-trust/hostname-coverage fix holds up on an independent sample with consistent residual-failure rates, and explicitly ruled out fetch-cache (never calls the vulnerable client constructor). No PR opened; trl/ceiling held at 8/8, evidence base strengthened.",
-    "version": "2.5.7",
+    "version": "2.7.1",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
