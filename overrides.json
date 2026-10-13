@@ -3996,6 +3996,7 @@
   "google-taxonomy": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8096,
+    "placement": "replicable",
     "description": "Deterministic Google Product Taxonomy lookup, fuzzy search, and TF-IDF classifier with confidence-based abstention.",
     "example_path": "/?url=https://example.com",
     "host_port": 8096,
