@@ -6773,6 +6773,10 @@
     "coolify_app_uuid": "ndfiu265nwa69g8j749nn9ya"
   },
   "shipping-regions": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8310,
     "description": "Microservice for Shipping Regions",
     "host_port": 8310,
@@ -6784,7 +6788,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13.",
-    "version": "1.7.13",
+    "version": "1.7.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -6850,6 +6854,10 @@
     "coolify_app_uuid": "rb5pn82f8bv599l7z2v7prfy"
   },
   "social-graph": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8312,
     "description": "Microservice for Social Graph",
     "example_path": "/?url=https://example.com",
@@ -6861,7 +6869,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "No audit-reset commit found -- genuine incremental hardening across 10+ rounds. Confirmed real table domain_social_profiles (~1.29M rows, tool_name='social-graph'). Tested against 600 real domains. Fixed: Weibo URL-routing prefixes (u/p/n) were being stored as the actual handle -- confirmed live in production, 144 rows literally have handle=\"u\", and CJK nicknames under /n/ were replaced with the literal string \"n\"; also fixed hyphenated-domain brand matching and wired Facebook's fb-page widget as a genuine owned-profile signal while correctly leaving fb-like alone (its link is often self-referential, not an identity claim). On a 517-domain corpus: domains with >=1 owned profile 169->179, zero regressions, no new false positives in a 25-profile precision spot-check. See github.com/baditaflorin/go_social_graph PR #18.",
-    "version": "2.5.16",
+    "version": "2.6.3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7117,6 +7125,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "technology-stack": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8315,
     "description": "Microservice for Technology Stack",
     "example_path": "/?url=https://example.com",
@@ -7130,7 +7142,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.10.6",
+    "version": "1.11.1",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -7447,6 +7459,10 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "user-demographics": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8321,
     "description": "Microservice for User Demographics",
     "example_path": "/?url=https://example.com",
@@ -7454,7 +7470,7 @@
     "proxy_read_timeout": "120s",
     "trl": 8,
     "trl_assessed_at": "2026-07-30",
-    "version": "2.5.5",
+    "version": "2.5.9",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-fetch homepage inference cannot reach production-grade (TRL 8+) audience certainty without persistence/cross-checks; also gated by the shared fleetfetch tier (RenderJS 502 fleet-wide).",
@@ -7512,10 +7528,15 @@
     ]
   },
   "video-content": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8322,
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
     "example_path": "/?url=https://example.com",
     "host_port": 8322,
+    "version": "2.4.2",
     "trl": 7,
     "trl_assessed_at": "2026-07-14",
     "trl_assessor": "codex-trl-audit-2026-07-14",
