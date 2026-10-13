@@ -2,6 +2,10 @@
 # Weekly rollout of the canonical CLAUDE.md to the fleet (see docs/operations/doc-drift.md). Run by a LaunchAgent; safe to run by hand.
 # Uses its own clone of services-registry (kept at origin/main), so the tool that runs is always the merged one.
 set -u
+# This file lives in the clone the script resets to origin/main, and bash reads a script while it runs: run from a private copy.
+if [ -z "${ROLLOUT_WEEKLY_COPY:-}" ]; then
+  cp "$0" "${TMPDIR:-/tmp}/rollout-weekly.$$.sh" && ROLLOUT_WEEKLY_COPY=1 exec bash "${TMPDIR:-/tmp}/rollout-weekly.$$.sh" "$@"
+fi
 W="${FLEET_ROLLOUT_DIR:-$HOME/.local/share/fleet-claude-rollout}"
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 export GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=20"
