@@ -120,8 +120,11 @@ def cmd_apply(a):
     todo = [r for r in plan["rows"] if r["status"] in ("absent", "behind") and r["repo"] not in done]
     if a.only:
         todo = [r for r in todo if r["repo"] in a.only.split(",")]
+    if a.exclude:
+        todo = [r for r in todo if r["repo"] not in a.exclude.split(",")]
     if a.limit:
         todo = todo[:a.limit]
+
     def one(r):
         try:
             d = apply_one(r, a.out, text, plan["canonical_head"])
@@ -278,6 +281,6 @@ if __name__ == "__main__":
     p.add_argument("--repos"); p.add_argument("--repos-file"); p.add_argument("--workers", type=int, default=6)
     dv = sp.add_parser("diverged"); dv.add_argument("--registry", required=True); dv.add_argument("--out", required=True)
     mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--workers", type=int, default=4)
-    q = sp.add_parser("apply"); q.add_argument("--out", required=True); q.add_argument("--limit", type=int); q.add_argument("--only"); q.add_argument("--no-push", action="store_true"); q.add_argument("--workers", type=int, default=4)
+    q = sp.add_parser("apply"); q.add_argument("--out", required=True); q.add_argument("--limit", type=int); q.add_argument("--only"); q.add_argument("--exclude"); q.add_argument("--no-push", action="store_true"); q.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
     {"plan": cmd_plan, "apply": cmd_apply, "diverged": cmd_diverged, "merge": cmd_merge}[a.cmd](a)
