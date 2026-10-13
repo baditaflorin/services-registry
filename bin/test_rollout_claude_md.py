@@ -2,6 +2,7 @@
 """Hermetic tests for the pure parts of rollout_claude_md.py (canonical history, three-way merge). Cloning and pushing need GitHub and are not tested here.
 Run: python3 -m unittest discover -s <dir containing rollout_claude_md.py> -p 'test_rollout_claude_md.py'"""
 import importlib.util
+import json
 import os
 import subprocess
 import tempfile
@@ -60,6 +61,38 @@ class RolloutTest(unittest.TestCase):
         merged, conflicts = R.merge_text(self.reg, self.revs[0], local, V3)
         self.assertEqual(conflicts, 1)
         self.assertIn("<<<<<<<", merged)
+
+    def test_prefer_canonical_keeps_both_inserts_and_lets_the_canonical_win_changes(self):
+        # both sides changed the Auth line -> canonical wins and the local wording is reported; both inserted after "Tail" -> both kept
+        local = V1.replace("old auth wording", "service specific auth wording") + "local tail section\n"
+        theirs = V3 + "canonical tail section\n"
+        text, conflicts, over = R.merge_prefer_canonical(self.reg, self.revs[0], local, theirs)
+        self.assertGreaterEqual(conflicts, 1)
+        self.assertIn("new auth wording", text)
+        self.assertNotIn("service specific auth wording", text)
+        self.assertTrue(any("service specific auth wording" in o for o in over))
+        self.assertIn("local tail section", text)
+        self.assertIn("canonical tail section", text)
+        self.assertNotIn("<<<<<<<", text)
+
+    def test_prefer_canonical_is_a_no_op_when_the_copy_equals_the_base_plus_nothing(self):
+        text, conflicts, over = R.merge_prefer_canonical(self.reg, self.revs[0], V1, V3)
+        self.assertEqual((text, conflicts, over), (V3, 0, []))
+
+    def test_closest_rev_finds_the_revision_a_copy_was_made_from(self):
+        texts = R.history(self.reg)
+        rev, behind, own = R.closest_rev(texts, V2 + "an own line\n")
+        self.assertEqual((rev, behind, own), (self.revs[1], 1, 1))
+
+    def test_repo_names_come_from_services_json_and_the_extra_file(self):
+        with open(os.path.join(self.reg, "services.json"), "w") as f:
+            f.write(json.dumps({"services": [{"repo_url": "https://github.com/baditaflorin/go_a"}, {"repo_url": "https://github.com/baditaflorin/go_b.git"}, {"repo_url": "https://example.com/x/y"}, {}]}))
+        self.git("add", "-A"); self.git("commit", "-q", "-m", "services")
+        self.git("update-ref", "refs/remotes/origin/main", "HEAD")
+        extra = os.path.join(self.tmp.name, "extra.txt")
+        with open(extra, "w") as f:
+            f.write("# infra\nfleet-state\n\ngo_a\n")
+        self.assertEqual(R.repo_names(self.reg, extra), ["fleet-state", "go_a", "go_b"])
 
 
 if __name__ == "__main__":
