@@ -16,6 +16,7 @@ A push to a protected default branch is retried as the branch docs/claude-md-syn
 import argparse, concurrent.futures as cf, json, os, subprocess, sys, threading
 
 OWNER = "baditaflorin"
+SYNC_BRANCH = "docs/claude-md-sync"
 ID = ["-c", "user.name=Claude Code", "-c", "user.email=noreply@anthropic.com"]
 
 
@@ -140,8 +141,8 @@ def cmd_apply(a):
                     return dict(repo=r["repo"], result="skipped-" + again, note="after fetching a newer tip")
             if p.returncode == 0:
                 return dict(repo=r["repo"], result="pushed", was=r["status"])
-            br = "docs/claude-md-sync-" + plan["canonical_head"]
-            p2 = subprocess.run(["git", "-C", d, "push", "-q", "origin", "HEAD:refs/heads/" + br], capture_output=True, text=True)
+            br = SYNC_BRANCH  # one branch per repository, owned by this tool: a later run updates it (and so the open PR) instead of adding another
+            p2 = subprocess.run(["git", "-C", d, "push", "-q", "--force", "origin", "HEAD:refs/heads/" + br], capture_output=True, text=True)
             return dict(repo=r["repo"], result="branch-needs-pr" if p2.returncode == 0 else "push-failed", branch=br, note=(p.stderr or "").strip()[:100])
         except Exception as e:
             return dict(repo=r["repo"], result="error", note=str(e)[:150])
@@ -222,15 +223,66 @@ def merge_text(registry, rev, mine, theirs):
         return r.stdout, (r.returncode if r.returncode >= 0 else 255)
 
 
+def history(registry):
+    """[(revisions behind, commit, counter of stripped lines)] for every revision of the canonical, newest first"""
+    out = []
+    for c in git(registry, "log", "--format=%H", "origin/main", "--", "CLAUDE.md").split("\n"):
+        t = subprocess.run(["git", "-C", registry, "show", c + ":CLAUDE.md"], capture_output=True, text=True)
+        if t.returncode == 0:
+            import collections
+            out.append((len(out), c, collections.Counter(l.strip() for l in t.stdout.split("\n") if l.strip())))
+    return out
+
+
+def closest_rev(texts, mine):
+    import collections
+    m = collections.Counter(l.strip() for l in mine.split("\n") if l.strip())
+    best = min(((sum((m - cnt).values()), sum((cnt - m).values()), i, c) for i, c, cnt in texts))
+    return best[3], best[2], best[0]  # commit, revisions behind, own lines
+
+
+def merge_prefer_canonical(registry, rev, mine, theirs):
+    """three-way merge that always yields a text. Where both sides INSERTED at the same place (the base side of the conflict is empty) both are kept;
+    where both CHANGED the same lines the canonical wins. -> (text, conflicts, overridden): the local wording the canonical replaced"""
+    import tempfile
+    base = subprocess.run(["git", "-C", registry, "show", rev + ":CLAUDE.md"], capture_output=True, text=True, check=True).stdout
+    with tempfile.TemporaryDirectory() as t:
+        ps = []
+        for n, b in (("ours", mine), ("base", base), ("theirs", theirs)):
+            pth = os.path.join(t, n)
+            with open(pth, "w") as f:
+                f.write(b)
+            ps.append(pth)
+        r = subprocess.run(["git", "merge-file", "-p", "--diff3", "-L", "local", "-L", "base", "-L", "canonical", *ps], capture_output=True, text=True)
+    out, over, lines, i = [], [], r.stdout.split("\n"), 0
+    while i < len(lines):
+        if lines[i].startswith("<<<<<<<"):
+            j = i
+            while not lines[j].startswith(">>>>>>>"):
+                j += 1
+            blk = lines[i + 1:j]
+            k1 = next(n for n, l in enumerate(blk) if l.startswith("|||||||"))
+            k2 = next(n for n, l in enumerate(blk) if l == "=======")
+            loc, bas, can = blk[:k1], blk[k1 + 1:k2], blk[k2 + 1:]
+            if not any(l.strip() for l in bas):
+                out += loc + can
+            else:
+                out += can
+                over.append(" ".join(l.strip() for l in loc if l.strip())[:160])
+            i = j + 1
+            continue
+        out.append(lines[i]); i += 1
+    return "\n".join(out), r.returncode, over
+
+
 def cmd_merge(a):
-    """For 'diverged' repositories: merge the new canonical into the local copy. Clean merges are committed (and pushed with --push); conflicts are left alone and listed."""
-    with open(os.path.join(a.out, "diverged.json")) as f:
-        dv = {x["repo"]: x for x in json.load(f)}
+    """For 'diverged' repositories: merge the new canonical into the local copy. Without --prefer-canonical only conflict-free merges are pushed (and only with --push);
+    with it every copy is merged (both-inserted: keep both; both-changed: the canonical wins) and the replaced local wording is recorded in the commit message."""
     with open(os.path.join(a.out, "plan.json")) as f:
         plan = json.load(f)
     with open(os.path.join(a.out, "CLAUDE.md.canonical")) as f:
         theirs = f.read()
-    revs = {c[:9]: c for c in git(a.registry, "log", "--format=%H", "origin/main", "--", "CLAUDE.md").split("\n")}
+    texts = history(a.registry)
     todo = [r for r in plan["rows"] if r["status"] == "diverged"]
     if a.only:
         todo = [r for r in todo if r["repo"] in a.only.split(",")]
@@ -241,27 +293,53 @@ def cmd_merge(a):
         d = os.path.join(a.out, "clones", r["repo"])
         with open(os.path.join(d, "CLAUDE.md"), errors="replace") as f:
             mine = f.read()
-        merged, nconf = merge_text(a.registry, revs[dv[r["repo"]]["closest_rev"]], mine, theirs)
-        x = dict(repo=r["repo"], base=dv[r["repo"]]["closest_rev"], conflicts=nconf, canonical=plan["canonical_head"])
-        if nconf:
+        rev, behind, own = closest_rev(texts, mine)
+        if a.prefer_canonical:
+            merged, nconf, over = merge_prefer_canonical(a.registry, rev, mine, theirs)
+        else:
+            merged, nconf = merge_text(a.registry, rev, mine, theirs); over = []
+        x = dict(repo=r["repo"], base=rev[:9], conflicts=nconf, overridden=len(over), canonical=plan["canonical_head"])
+        if nconf and not a.prefer_canonical:
             x["result"] = "conflict"
         elif merged == mine:
             x["result"] = "unchanged"
         elif not a.push:
-            x["result"] = "clean-not-pushed"
+            x["result"] = "clean-not-pushed" if not nconf else "resolved-not-pushed"
         else:
             with open(os.path.join(d, "CLAUDE.md"), "w") as f:
                 f.write(merged)
             git(d, "add", "CLAUDE.md")
             msg = "docs(claude): merge the services-registry canonical %s into the local CLAUDE.md [skip ci]" % plan["canonical_head"]
-            body = ("Three-way merge (git merge-file): base = canonical revision %s, which this copy was closest to; ours = this repository's CLAUDE.md, whose own edits are kept; "
-                    "theirs = the canonical now. No conflicts.\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>") % x["base"]
+            body = ("Three-way merge (git merge-file): base = canonical revision %s (the one this copy is closest to), ours = this repository's CLAUDE.md, theirs = the canonical now. "
+                    "Where both sides inserted at the same place both were kept; where both changed the same lines the canonical wording was used (%d such hunks).") % (x["base"], len(over))
+            if over:
+                body += "\n\nLocal wording replaced by the canonical (still in this repository's history):\n" + "\n".join("- " + o for o in over[:12])
+            body += "\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
             subprocess.run(["git", "-C", d] + ID + ["commit", "-q", "-m", msg, "-m", body], capture_output=True, text=True, check=True)
             p = subprocess.run(["git", "-C", d, "push", "-q", "origin", "HEAD"], capture_output=True, text=True)
-            x["result"] = "pushed" if p.returncode == 0 else "push-failed"
-            x["note"] = (p.stderr or "").strip()[:100] if p.returncode else ""
+            if p.returncode and ("fetch first" in p.stderr or "non-fast-forward" in p.stderr):
+                # the branch moved: redo the merge on its newest tip once
+                br = r.get("branch") or "HEAD"
+                if subprocess.run(["git", "-C", d, "fetch", "-q", "--depth", "1", "origin", br], capture_output=True, text=True).returncode == 0:
+                    git(d, "reset", "-q", "--hard", "FETCH_HEAD")
+                    with open(os.path.join(d, "CLAUDE.md"), errors="replace") as f:
+                        mine2 = f.read()
+                    merged2, _, over2 = merge_prefer_canonical(a.registry, rev, mine2, theirs)
+                    if merged2 != mine2:
+                        with open(os.path.join(d, "CLAUDE.md"), "w") as f:
+                            f.write(merged2)
+                        git(d, "add", "CLAUDE.md")
+                        subprocess.run(["git", "-C", d] + ID + ["commit", "-q", "-m", msg, "-m", body], capture_output=True, text=True, check=True)
+                        p = subprocess.run(["git", "-C", d, "push", "-q", "origin", "HEAD"], capture_output=True, text=True)
+            if p.returncode == 0:
+                x["result"] = "pushed"
+            else:
+                p2 = subprocess.run(["git", "-C", d, "push", "-q", "--force", "origin", "HEAD:refs/heads/" + SYNC_BRANCH], capture_output=True, text=True)
+                x["result"] = "branch-needs-pr" if p2.returncode == 0 else "push-failed"
+                x["branch"] = SYNC_BRANCH
+                x["note"] = (p.stderr or "").strip()[:100]
         with lock:
-            print(x["repo"], x["result"], x["conflicts"], flush=True)
+            print(x["repo"], x["result"], "conflicts=%s overridden=%s" % (x["conflicts"], x["overridden"]), flush=True)
             with open(logp, "a") as f:
                 f.write(json.dumps(x) + "\n")
         return x
@@ -272,7 +350,76 @@ def cmd_merge(a):
     for x in res:
         t[x["result"]] = t.get(x["result"], 0) + 1
     print("merge:", t)
+    return res
 
+
+def repo_names(registry, extra_file):
+    """every repository the canonical is rolled out to: the registry's services.json (repo_url) plus the infrastructure repositories in extra_file"""
+    import re
+    reg = json.loads(git(registry, "show", "origin/main:services.json"))
+    ents = reg if isinstance(reg, list) else reg.get("services", reg)
+    names = {m.group(1).replace(".git", "") for e in ents for m in [re.search(r"github\.com/%s/([^/\s#]+)" % re.escape(OWNER), e.get("repo_url") or "")] if m}
+    if extra_file and os.path.exists(extra_file):
+        with open(extra_file) as f:
+            names |= {l.strip() for l in f.read().splitlines() if l.strip() and not l.startswith("#")}
+    return sorted(names)
+
+
+def ensure_prs(results, head):
+    """a repository whose default branch is protected got the branch SYNC_BRANCH: make sure a PR from it is open (best effort; needs gh)"""
+    made = []
+    for x in results:
+        if x.get("result") != "branch-needs-pr":
+            continue
+        repo = "%s/%s" % (OWNER, x["repo"])
+        p = subprocess.run(["gh", "pr", "list", "--repo", repo, "--head", SYNC_BRANCH, "--state", "open", "--json", "number", "--jq", "length"], capture_output=True, text=True)
+        if p.returncode == 0 and p.stdout.strip() == "0":
+            body = ("Refreshes CLAUDE.md from the services-registry canonical (%s). The default branch of this repository is protected, so the weekly fleet rollout (`bin/rollout_claude_md.py weekly`) "
+                    "puts the change on the branch `%s` instead of pushing it; the next run updates this same branch.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)") % (head, SYNC_BRANCH)
+            q = subprocess.run(["gh", "pr", "create", "--repo", repo, "--head", SYNC_BRANCH, "--title", "docs(claude): refresh CLAUDE.md from the services-registry canonical", "--body", body], capture_output=True, text=True)
+            made.append((x["repo"], (q.stdout or q.stderr).strip().splitlines()[-1][:120] if (q.stdout or q.stderr).strip() else "?"))
+    return made
+
+
+def cmd_weekly(a):
+    """plan -> apply -> merge the diverged copies (the canonical wins where both changed the same lines) -> PRs for protected repositories -> report.
+    Everything lives under --work (registry clone not needed to exist: it must already be a clone; this command fetches it)."""
+    import datetime
+    os.makedirs(a.work, exist_ok=True)
+    git(a.registry, "fetch", "-q", "origin")
+    repos = repo_names(a.registry, a.extra)
+    rf = os.path.join(a.work, "repos.txt")
+    with open(rf, "w") as f:
+        f.write("\n".join(repos) + "\n")
+    ns = argparse.Namespace(registry=a.registry, out=a.work, repos=None, repos_file=rf, workers=a.workers)
+    cmd_plan(ns)
+    with open(os.path.join(a.work, "plan.json")) as f:
+        plan = json.load(f)
+    before = {}
+    for r in plan["rows"]:
+        before[r["status"]] = before.get(r["status"], 0) + 1
+    apply_ns = argparse.Namespace(out=a.work, limit=None, only=None, exclude=None, no_push=False, workers=a.apply_workers)
+    cmd_apply(apply_ns)
+    merge_ns = argparse.Namespace(registry=a.registry, out=a.work, only=None, push=True, prefer_canonical=True, workers=a.apply_workers)
+    merged = cmd_merge(merge_ns)
+    with open(os.path.join(a.work, "apply_log.jsonl")) as f:
+        applied = [json.loads(l) for l in f if l.strip()]
+    mine = [x for x in applied if x.get("canonical") == plan["canonical_head"]] + merged
+    prs = ensure_prs(mine, plan["canonical_head"])
+    tally = {}
+    for x in mine:
+        tally[x["result"]] = tally.get(x["result"], 0) + 1
+    bad = [x for x in mine if x["result"] in ("push-failed", "error", "conflict")]
+    clone_failed = [r["repo"] for r in plan["rows"] if r["status"] in ("clone-failed", "fetch-failed")]
+    rep = dict(date=datetime.date.today().isoformat(), canonical=plan["canonical_head"], blob=plan["canonical_blob"][:10], repositories=len(repos), classified_before=before, results=tally,
+               problems=[dict(repo=x["repo"], result=x["result"], note=x.get("note", "")) for x in bad], not_reachable=clone_failed, prs_opened=prs)
+    os.makedirs(os.path.join(a.work, "reports"), exist_ok=True)
+    with open(os.path.join(a.work, "reports", rep["date"] + ".json"), "w") as f:
+        json.dump(rep, f, indent=1)
+    with open(os.path.join(a.work, "reports", "latest.json"), "w") as f:
+        json.dump(rep, f, indent=1)
+    print("WEEKLY REPORT", json.dumps(rep))
+    return 1 if (bad or clone_failed) else 0
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
@@ -280,7 +427,11 @@ if __name__ == "__main__":
     p = sp.add_parser("plan"); p.add_argument("--registry", required=True); p.add_argument("--out", required=True)
     p.add_argument("--repos"); p.add_argument("--repos-file"); p.add_argument("--workers", type=int, default=6)
     dv = sp.add_parser("diverged"); dv.add_argument("--registry", required=True); dv.add_argument("--out", required=True)
-    mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--workers", type=int, default=4)
+    mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--prefer-canonical", action="store_true"); mg.add_argument("--workers", type=int, default=4)
+    wk = sp.add_parser("weekly"); wk.add_argument("--registry", required=True); wk.add_argument("--work", required=True); wk.add_argument("--extra", help="file with extra repository names (infrastructure repos that are not in services.json)")
+    wk.add_argument("--workers", type=int, default=8); wk.add_argument("--apply-workers", type=int, default=5)
     q = sp.add_parser("apply"); q.add_argument("--out", required=True); q.add_argument("--limit", type=int); q.add_argument("--only"); q.add_argument("--exclude"); q.add_argument("--no-push", action="store_true"); q.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
-    {"plan": cmd_plan, "apply": cmd_apply, "diverged": cmd_diverged, "merge": cmd_merge}[a.cmd](a)
+    fn = {"plan": cmd_plan, "apply": cmd_apply, "diverged": cmd_diverged, "merge": cmd_merge, "weekly": cmd_weekly}[a.cmd]
+    rc = fn(a)
+    sys.exit(rc if a.cmd == "weekly" and isinstance(rc, int) else 0)

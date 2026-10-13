@@ -36,7 +36,14 @@ Staleness is read off git: a copy that equals an old canonical revision is "N re
 - `apply --out <dir> [--workers N] [--only a,b]` writes the canonical to the `absent` and `behind` repositories and pushes a docs-only commit with `[skip ci]`, so one commit does not start a pipeline in hundreds of repositories. A push that is rejected because the branch moved is re-fetched, re-classified and retried once; a protected default branch gets the branch `docs/claude-md-sync-<head>` and needs a PR. The log (`apply_log.jsonl`) is keyed by canonical head, so a later canonical rolls out again.
 - `diverged --registry <clone> --out <dir>` lists, for each diverged copy, the canonical revision it is closest to and the lines that are the repository's own; `merge ... [--push]` does a three-way merge (base = that revision) and pushes only conflict-free results. Conflicts need a person: typical ones are a locally reworded Auth section or a `<!-- ...:managed -->` block that another tool maintains.
 
+- `merge --prefer-canonical --push` merges every diverged copy: where both sides inserted at the same place both are kept, where both changed the same lines the **canonical wins**. The commit message lists the local wording that was replaced (it stays in the repository's history).
+- `weekly --registry <clone> --work <dir> --extra <file>` does all of it in one go: repository list = `services.json` (repo_url) plus the infrastructure repositories in `<file>`, then plan, apply, merge of the diverged copies, and a PR for each repository whose default branch is protected (the tool owns one branch per repository, `docs/claude-md-sync`, and updates it in place). It writes `<dir>/reports/<date>.json` and `latest.json` and exits non-zero when a push failed or a repository could not be reached.
+
 Run it from a machine whose SSH key can push to the repositories. Check the Woodpecker agents' logs after a run to see that no pipeline started.
+
+### Weekly schedule
+
+`bin/rollout-weekly.sh` is what the schedule runs: it updates its own clone of this repository to origin/main and runs `bin/rollout_claude_md.py weekly`, so the schedule always uses the merged version of the tool. On the maintainer's Mac it is a LaunchAgent (`~/Library/LaunchAgents/org.badita.fleet-claude-rollout.plist`, Mondays 06:30, a missed run happens on wake); the log is `~/Library/Logs/fleet-claude-rollout.log`, the state `~/.local/share/fleet-claude-rollout/`. The builder cannot do it: its GitHub key is read-only.
 
 ## Evidence ledger: what was true, at which commit and version
 
