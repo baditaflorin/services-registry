@@ -6752,6 +6752,11 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "spiffe_workload": true
+  ,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "session-management": {
     "container_port": 8095,
@@ -6880,6 +6885,11 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.10"
+  ,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "sourcemap-finder": {
     "container_port": 8347,
@@ -6922,7 +6932,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true  },
+    "spiffe_workload": true  ,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
+  },
   "subdomain-finder": {
     "container_port": 8348,
     "description": "Microservice for Subdomain Finder",
@@ -6988,7 +7003,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true  },
+    "spiffe_workload": true  ,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
+  },
   "svi": {
     "container_port": 8313,
     "description": "Microservice for Svi",
@@ -7032,7 +7052,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true  },
+    "spiffe_workload": true  ,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
+  },
   "tagboard": {
     "trl": 3,
     "trl_assessed_at": "2026-05-14",
