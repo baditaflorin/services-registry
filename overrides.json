@@ -2861,12 +2861,12 @@
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "codex-session-2026-05-14",
     "trl_ceiling": 7,
-    "trl_ceiling_reason": "Dynamic feed links hidden behind JavaScript need headless rendering for full coverage.",
-    "trl_evidence": "RSS/Atom/JSON autodiscovery, conventional feed probes, WordPress JSON hinting, feed parsing, source/confidence output, and unit tests.",
+    "trl_ceiling_reason": "The opt-in JavaScript-render fallback is deployed, but its production yield still needs measurement on a labeled domain sample.",
+    "trl_evidence": "RSS/Atom/JSON autodiscovery, conventional feed probes, WordPress JSON hinting, feed parsing, and source/confidence output. Version 1.6.2 adds an opt-in, bounded JavaScript-rendered homepage retry that accepts only confirmed RenderJS responses and probes same-origin feed links; mock-cache tests cover successful render and downgrade rejection. The production-derived 50-row sample suggested missing feeds, but gateway 401 prevented measuring render yield through the service path.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.15",
+    "version": "1.6.2",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
