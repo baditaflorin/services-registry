@@ -3878,7 +3878,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.3.1",
+    "version": "1.5.6",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4509,7 +4509,6 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
-    "version": "1.7.1",
     "tags": [
       "domains",
       "go"
@@ -4537,6 +4536,7 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": true,
+    "version": "1.7.1",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4548,7 +4548,6 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
-    "version": "0.3.1",
     "tags": [
       "kind-container",
       "language-go",
@@ -4575,6 +4574,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
+    "version": "0.3.1",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5025,15 +5025,15 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 18285,
     "container_port": 18285,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "proxy_read_timeout": "270s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated",
-    "depends_on": [
-      "infrastructure-fetch-cache"
-    ]
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "office-locations",
@@ -6011,6 +6011,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.7.1",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -6211,6 +6212,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "version": "1.4.5",
     "network_exposure": "gateway-authenticated"
   },
   {
