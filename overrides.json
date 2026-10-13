@@ -1537,6 +1537,11 @@
     "spiffe_workload": true
   },
   "db-geo-geocode": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "db-geo-geocode",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3909,
     "description": "City → lat/lon with local DB (?text=)",
     "host_port": 18009,
@@ -6705,6 +6710,11 @@
     ]
   },
   "seo-basics": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "seo-basics",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8308,
     "version": "1.5.10",
     "description": "Microservice for Seo Basics",
@@ -7163,6 +7173,11 @@
     "coolify_app_uuid": "mcv3og31c6mmjmhqwcsbn4m7"
   },
   "testimonial-extractor": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "testimonial-extractor",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18253,
     "description": "Extracts testimonials / customer reviews / endorsements from a web page or raw HTML — schema.org Review JSON-LD first, then <blockquote> with <cite>/<figcaption> attribution, then heuristic testimonial cards — capturing each testimonial's text, author, author_title, numeric rating (when present), and source_url, plus count and a has_ratings flag.",
     "example_path": "/?url=https://example.com",
@@ -7264,6 +7279,11 @@
     "trl_evidence": "document editor, multi-format support"
   },
   "update-frequency": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "update-frequency",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8319,
     "description": "Microservice for Update Frequency",
     "host_port": 8319,
