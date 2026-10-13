@@ -16,7 +16,8 @@ if ! mkdir "$LOCK" 2>/dev/null; then
   rm -rf "$LOCK"; mkdir "$LOCK" || exit 2
 fi
 echo $$ > "$LOCK/pid"; trap 'rm -rf "$LOCK"' EXIT
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+# launchd gives a bare PATH; gh lives in different places on different Macs (FLEET_ROLLOUT_EXTRA_PATH adds more)
+export PATH="${FLEET_ROLLOUT_EXTRA_PATH:+$FLEET_ROLLOUT_EXTRA_PATH:}$HOME/.local/bin:$HOME/Documents/GitHub/.tools:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 export GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=20"
 [ -d "$W/services-registry/.git" ] || git clone -q git@github.com:baditaflorin/services-registry.git "$W/services-registry" || exit 2
 git -C "$W/services-registry" fetch -q origin && git -C "$W/services-registry" checkout -q -B main origin/main || exit 2
