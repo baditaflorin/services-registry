@@ -7,6 +7,7 @@
 
 ## 2026-10-13
 - Double canonical SPIFFE workload opt-ins on the 0docker Compose cohort: 43 additional 0exec services and 48 additional 0crawl services; leave the open Contact Route Detector canary PR out of this batch.
+- Sync Google Taxonomy, Redirect Tracer, and Robots Analyzer catalog versions to their merged 1.5.6, 1.7.1, and 1.4.5 releases.
 
 ## 2026-10-12
 - Remove the stale `kokoro-ovms-adapter` override. The adapter left the active catalog on 2026-10-09 and was deleted from the dockerhost on 2026-10-12 (containers, compose project, model files); its source repository is retained.
