@@ -6579,7 +6579,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (confirmed genuinely distinct from sibling go-search-duck -- different mesh, different upstream endpoint, different API contract, no shared code). Found and fixed 2 real bugs: (1) the recurring fetch-cache-masking bug, which would defeat this service's retry-through-fresh-proxy-IP logic and leak cached DDG responses across unrelated services. (2) A bot-challenge page misreported as 'zero results' then CACHED as a false-empty result for the full 1h TTL -- exactly the risk this service's own ADR warned about but never guarded against; fixed with DOM-based bot-challenge detection (stable anomaly-modal/challenge-form markers) that skips the cache entirely. Live DDG testing (kept conservative, ~5 requests) confirmed correct behavior for a coherent browser persona vs. a bare request. trl held at 5; trl_ceiling=6 added -- DDG's HTML-Lite endpoint has no official API/SLA and actively detects/blocks this exact traffic pattern, a structural adversarial limit no further engineering removes. See PR #4 (merged).",
-    "version": "0.4.13",
+    "version": "0.4.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
