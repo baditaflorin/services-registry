@@ -3525,6 +3525,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SERVICE_ID": "go-fleet-preflight",
       "GRAPH_TARGET_ALIASES": "go-fleet-dns-sync=fleet-dns-sync,go-fleet-secrets=fleet-secrets"
     },
     "depends_on": [
