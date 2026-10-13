@@ -2780,7 +2780,8 @@
       "fleet-graph",
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "email-harvester": {
     "container_port": 8137,
@@ -2830,7 +2831,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "env-finder": {
     "container_port": 8344,
@@ -2871,7 +2873,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "field-recording-mirror": {
     "trl": 4,
@@ -2916,7 +2919,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "fleet-backoff-coordinator": {
     "container_port": 18163,
@@ -3872,7 +3876,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "funding-detector": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3889,7 +3894,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "funding-signal": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3905,7 +3911,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"]
+    "depends_on": ["infrastructure-fetch-cache"],
+    "spiffe_workload": true
   },
   "gdpr-compliance": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3923,7 +3930,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "gentle-adhd-flow": {
     "trl": 4,
@@ -4060,7 +4068,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "hidden-fields": {
     "container_port": 8345,
@@ -4167,7 +4176,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.4.0 adds IDNA2008 (RFC 5891 lookup-profile) U-label->A-label host normalization in validateTargetURL before DNS, the SSRF gate, TLS SNI, the Host header, and the h3 ServerName; before this every Unicode IDN host (munchen.de, japanese, cyrillic .rf, greek .gr) hard-failed with a no-such-host 400 because Go's resolver/crypto-tls require ASCII A-labels and do not auto-encode U-labels. Live before->after: 6/6 U-label probes 400'd on 2.3.1; on 2.4.0 4 resolve+probe correctly and 2 fail honestly on the correctly-encoded A-label (hosts lack live A records). Uses golang.org/x/net/idna (already a direct dep, zero new modules). Sits on the existing RFC-compliant 5-protocol probe matrix + negotiated/advertised/inconclusive/unsupported capability classifier with evidence trail. New idn_test.go adds 7 table-driven tests across 4 scripts incl ports/IP literals/malformed-fallback/end-to-end validateTargetURL; go build/test/vet/gofmt all green.",
-    "version": "2.2.0"
+    "version": "2.2.0",
+    "spiffe_workload": true
   },
   "iban-bic-validator": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -4288,7 +4298,8 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.0.0 uplift from TRL 3 to TRL 6:\n- Per-record A/AAAA resolution via miekg/dns with explicit TTL +\n  source-resolver attribution (1.1.1.1 / 8.8.8.8 fallback).\n- Family-pinned TCP probes (tcp4/tcp6) on ports 80 + 443 with a\n  3s connect timeout each; reports open/closed/timeout/skipped.\n- Real TLS handshake on reachable 443 with strict SNI (no\n  InsecureSkipVerify), reports offered + negotiated ALPN.\n- Dual-stack classification (ipv4-only / ipv6-only / dual-stack /\n  no-records).\n- Per-family connect_ms recorded so consumers can compute Happy\n  Eyeballs (RFC 8305) fallback cost.\n- SSRF guard refuses private/loopback/link-local/CGNAT addresses\n  unless ALLOW_PRIVATE=1.\n- Resolver + dialer interfaces injected from tests; 4-case\n  classification matrix + probe + happy-eyeballs unit tests pass.\n- 15s total request budget enforced via context.WithTimeout.",
-    "version": "2.4.4"
+    "version": "2.4.4",
+    "spiffe_workload": true
   },
   "js-framework-version-extractor": {
     "container_port": 18258,
@@ -4433,7 +4444,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "keyword-density": {
     "container_port": 8292,
@@ -4455,7 +4467,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "language-detector": {
     "container_port": 18250,
@@ -4476,7 +4489,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "leadership-extractor": {
     "container_port": 18252,
@@ -4494,7 +4508,8 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.2.2"
+    "version": "0.2.2",
+    "spiffe_workload": true
   },
   "legal-entity": {
     "env": {
@@ -4516,7 +4531,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "1.33.25",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "license-extractor": {
     "env": {
@@ -4599,7 +4615,8 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL-6 uplift 2026-05-16. Detection now stacks four orthogonal signal\nfamilies: (1) DNS multi-A / round-robin lookup, (2) parallel HEAD\nmulti-fetch with Server / ETag / Date-skew / cookie diversity scoring,\n(3) a vendor signature matrix covering F5 BIG-IP, AWS ALB/ELB,\nHAProxy, Citrix NetScaler, Barracuda, Pulse Secure, Nginx Plus, plus\nCDN families (Cloudflare, CloudFront, Fastly, Akamai), (4) a\nclassifier producing none|proxy|cdn|lb|cluster with an explicit\nadditive confidence formula. Evidence trail surfaced per vendor\nmatch. 19 unit + integration tests covering single-host, AWS ALB,\nF5 BIG-IP, multi-IP round-robin, plain-nginx no-LB, generic-fallback\nand vendor-suppression cases. Backward-compatible with v1.x callers\nvia the legacy `analysis` JSON sub-field. ADR: docs/adr/0001-trl-uplift-to-6.md.",
     "version": "1.5.5",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "loadbalancer-detect", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"}
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "loadbalancer-detect", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "spiffe_workload": true
   },
   "local-proofreader": {
     "trl": 4,
@@ -4661,7 +4678,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true
   },
   "merchant-profile": {
     "container_port": 18302,
@@ -4676,7 +4694,8 @@
     "trl_evidence": "This is a thin go_composite_runner recipe wrapper (RECIPE_LOCK=merchant, no service-specific Go source). Found and fixed a real fan-out client timeout bug (too short for the recipe's sibling calls) in the shared go_composite_runner, plus added checkout-flow-detection as a new capability, live-verified via a scratch process on the same live sibling ports the production container calls. See github.com/baditaflorin/go_merchant_profile PR #1 and github.com/baditaflorin/go_composite_runner PR #1.",
     "depends_on": [
       "composite-runner"
-    ]
+    ],
+    "spiffe_workload": true
   },
   "mesh-bench-archive": {
     "trl": 5,
@@ -4810,7 +4829,8 @@
     "trl_evidence": "Real DOM walk over the golang.org/x/net/html tokenizer (no regex for HTML structure). Implements the COMMON microformats2 rules. Root detection of any h-* class (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and arbitrary h-* tokens), emitting the canonical type[] array sorted and de-duplicated. Property reading on descendants by class prefix. p-* takes the collapsed visible text with img alt / area alt / abbr title fallbacks. u-* takes href/src/data/poster (in that order) resolved ABSOLUTE against the final fetched URL via net/url ResolveReference, falling back to element text. dt-* takes the datetime/value/title attribute, falling back to element text. e-* yields the {value, html} embedded-HTML object (collapsed text plus serialized inner HTML). Implied properties per the spec subset. implied p-name from a sole img alt / area alt / abbr title / element text, suppressed when an explicit name exists or the root has nested item values; implied u-url from the root element when it is an a/area with href, else a sole a/area/link descendant; implied u-photo from the root when it is an img/object, else a sole img/object descendant. Nesting. an h-* element carrying a property class becomes that property's value as a nested item (e.g. p-author h-card resolves to an Item with its own properties), while a bare nested h-* is appended to the parent's children[]; a nested root is never double-counted as a top-level item. rel collection across the whole document. a/link/area rel tokens populate rels{} (token -> deduped url list, absolute) and rel-urls{} (url -> {rels, text, type}). All JSON collections are non-nil (items=[], rels={}, rel-urls={}, types_seen=[]) so the envelope is stable, and degraded[] carries non-fatal notes (fetch_failed, no_microformats) instead of failing the response so a page with zero mf2 markup still returns 200. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) in plain-HTML render mode; direct text= mode parses pasted HTML with no fetch (no base, so relative u-* stay relative). SSRF defense-in-depth. input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side and safehttp-fallback dial-time guards catching DNS-resolved private IPs. 43 Go unit + handler tests cover explicit h-card properties, type[] arrays, implied name from text and from img alt, implied photo and url from sole elements and from the root element, implied-name suppression, dt-* from datetime/value/text, u-* text fallback, e-content value+html, nested author h-card, h-feed with child h-entry children[], multiple top-level roots, h-event properties, rels (me/author/webmention, multi-token, multi-url), absolute u-* resolution and relative-without-base, no-microformats empty, garbage/empty input, p-adr wrapper with nested props, summary sorting/dedup, abbr title fallback, and the handler text-mode + no_microformats + JSON-shape-stable paths. /selftest exercises the pure-logic pipeline (h-card name+url, implied name, absolute u-url, dt-published, e-content, nested author, rels, no-microformats, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real outbound-fetch signal. The documented TRL-4 ceiling. it implements the common-case rules, NOT the full mf2 algorithm. it deliberately SKIPS the value-class-pattern (vcp) for dt-* date/time assembly and for p-* (reads the attribute or element text directly, not multi-span value reconstruction), lang propagation onto property values, the mf1-to-mf2 backcompat upgrade path, and resolving u-* against an in-document base href (resolves against the fetched URL only).",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true
   },
   "mime-trap": {
     "container_port": 8145,
