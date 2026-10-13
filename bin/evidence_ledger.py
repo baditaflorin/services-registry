@@ -11,12 +11,13 @@ usage:
 A row stores: the claim (doc, line, text, verdict, severity), the evidence (repo, path, lines), the stamp (the commit the snippet was read at, its
 nearest release tag), a digest of the whitespace-normalised snippet and the snippet itself (<=15 lines).
 check statuses: FRESH (same text at the same lines), MOVED (same text, other lines), CHANGED (text no longer present; diff + versions since),
-GONE (file missing at the ref), NO-REPO (repository not available here)."""
+GONE (file missing at the ref), NO-REPO (no clone with a .git here; --alias NAME=PATH points a repository name at another checkout)."""
 import argparse, collections, difflib, hashlib, json, os, re, subprocess, sys
 
 # A snippet that looks like it holds a credential is never stored (only its digest is): the ledger is committed, and the "now" side of a diff is shown.
 SECRET = re.compile(r"(?i)(password|passwd|secret|token|api[_-]?key|credential|private[_-]?key)\w*[\"']?\s*[:=]\s*[\"']?[A-Za-z0-9+/_.\-]{12,}")
 REDACTED = ["<redacted: credential-like line; compare by digest only>"]
+ALIASES = {}  # repository name -> checkout path, for a repository that is not <repos>/<name> (e.g. fleet-state's own checkout)
 PAT = re.compile(r"^([\w.-]+)/(.+?):((?:\d+(?:-\d+)?)(?:,\d+(?:-\d+)?)*)@([0-9a-f]{7,40})$")
 _cache = {}
 
@@ -26,11 +27,20 @@ def git(repo_dir, *a):
     return r.stdout if r.returncode == 0 else None
 
 
+def rdir(repos, repo):
+    return ALIASES.get(repo) or os.path.join(repos, repo)
+
+
+def have(repos, repo):
+    """a usable clone: the directory has a .git (a plain copy of a repository's files cannot be read at a commit)"""
+    return os.path.exists(os.path.join(rdir(repos, repo), ".git"))
+
+
 def rref(repos, repo, ref):
     """ref "auto" = the repository's own default branch: origin/main, else origin/master, else HEAD"""
     if ref != "auto":
         return ref
-    d = os.path.join(repos, repo)
+    d = rdir(repos, repo)
     for c in ("origin/main", "origin/master", "HEAD"):
         if git(d, "rev-parse", "--verify", "-q", c):
             return c
@@ -41,7 +51,7 @@ def show(repos, repo, ref, path):
     ref = rref(repos, repo, ref)
     k = (repo, ref, path)
     if k not in _cache:
-        t = git(os.path.join(repos, repo), "show", "%s:%s" % (ref, path))
+        t = git(rdir(repos, repo), "show", "%s:%s" % (ref, path))
         _cache[k] = None if t is None else t.split("\n")
     return _cache[k]
 
@@ -59,13 +69,13 @@ def ranges(spec):
 
 
 def tag_at(repos, repo, sha):
-    d = os.path.join(repos, repo)
+    d = rdir(repos, repo)
     t = git(d, "describe", "--tags", "--abbrev=0", sha)
     return (t or "").strip() or None
 
 
 def full_sha(repos, repo, ref):
-    return (git(os.path.join(repos, repo), "rev-parse", ref) or "").strip()
+    return (git(rdir(repos, repo), "rev-parse", ref) or "").strip()
 
 
 def cmd_build(a):
@@ -79,7 +89,7 @@ def cmd_build(a):
                 skipped["not a file:line@sha ref"] += 1
                 continue
             repo, path, spec, label = m.groups()
-            if not os.path.isdir(os.path.join(a.repos, repo, ".git")) and not os.path.isfile(os.path.join(a.repos, repo, ".git")):
+            if not have(a.repos, repo):
                 skipped["repository not available"] += 1
                 continue
             head = heads.setdefault(repo, full_sha(a.repos, repo, a.ref))
@@ -117,7 +127,7 @@ def find_snippet(file_lines, snip_norm):
 
 
 def counts_since(repos, repo, sha, ref):
-    d = os.path.join(repos, repo)
+    d = rdir(repos, repo)
     n = (git(d, "rev-list", "--count", "%s..%s" % (sha, ref)) or "0").strip()
     t = (git(d, "tag", "--merged", ref, "--no-merged", sha) or "").split()
     return int(n or 0), len(t)
@@ -128,7 +138,7 @@ def cmd_check(a):
     for line in open(a.ledger).read().splitlines():
         r = json.loads(line)
         l1, l2 = r["lines"]
-        if not os.path.isdir(os.path.join(a.repos, r["repo"])):
+        if not have(a.repos, r["repo"]):
             out.append(dict(r, status="NO-REPO"))
             continue
         cur = show(a.repos, r["repo"], a.ref, r["path"])
@@ -196,8 +206,9 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
     b = sp.add_parser("build"); b.add_argument("--claims", required=True); b.add_argument("--repos", required=True); b.add_argument("--out", required=True)
-    b.add_argument("--ref", default="HEAD"); b.add_argument("--as-of", default="2026-10-12")
+    b.add_argument("--ref", default="HEAD"); b.add_argument("--as-of", default="2026-10-12"); b.add_argument("--alias", action="append", default=[], metavar="NAME=PATH")
     c = sp.add_parser("check"); c.add_argument("--ledger", required=True); c.add_argument("--repos", required=True); c.add_argument("--ref", default="auto")
-    c.add_argument("--json"); c.add_argument("--md"); c.add_argument("--show-diff", type=int, default=0)
+    c.add_argument("--json"); c.add_argument("--md"); c.add_argument("--show-diff", type=int, default=0); c.add_argument("--alias", action="append", default=[], metavar="NAME=PATH")
     a = ap.parse_args()
+    ALIASES.update(dict(x.split("=", 1) for x in a.alias))
     {"build": cmd_build, "check": cmd_check}[a.cmd](a)

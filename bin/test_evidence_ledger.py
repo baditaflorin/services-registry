@@ -140,6 +140,19 @@ class LedgerTest(unittest.TestCase):
         self.assertNotIn("Qq19WmN4vB8xRt2LpZ7Ds5", text)
         self.assertNotIn("Zx81hQ7vLm2PqR9sTu4Wk6", text)
 
+    def test_a_directory_without_git_is_no_repo_not_gone(self):
+        os.rename(os.path.join(self.d, ".git"), os.path.join(self.repos, "dotgit.away"))
+        self.assertEqual(self.check()["rows"][0]["status"], "NO-REPO")
+
+    def test_alias_points_a_repository_name_at_another_checkout(self):
+        elsewhere = os.path.join(self.repos, "elsewhere")
+        os.rename(self.d, elsewhere)
+        try:
+            E.ALIASES["svc"] = elsewhere
+            self.assertEqual(self.check()["rows"][0]["status"], "FRESH")
+        finally:
+            E.ALIASES.clear()
+
 
 if __name__ == "__main__":
     unittest.main()
