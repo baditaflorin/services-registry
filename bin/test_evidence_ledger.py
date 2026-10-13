@@ -113,6 +113,33 @@ class LedgerTest(unittest.TestCase):
         git(self.d, "add", "-A"); git(self.d, "commit", "-q", "-m", "fmt")
         self.assertEqual(self.check()["rows"][0]["status"], "FRESH")
 
+    def test_a_credential_like_snippet_is_not_stored_and_its_diff_is_withheld(self):
+        self.write("conf.yml", "db:\n  user: app\n  password: Zx81hQ7vLm2PqR9sTu4Wk6\n")
+        git(self.d, "add", "-A"); git(self.d, "commit", "-q", "-m", "conf")
+        sha = git(self.d, "rev-parse", "HEAD")
+        claims = os.path.join(self.repos, "claims2.jsonl")
+        with open(claims, "w") as f:
+            f.write(json.dumps(dict(chunk="c2", n=1, repo="doc-repo", path="CLAUDE.md", line=3, text="the db has a login", final_verdict="TRUE", severity=None,
+                                    evidence=[dict(ref="svc/conf.yml:2-3@%s" % sha)])) + "\n")
+        ledger = os.path.join(self.repos, "ledger2.jsonl")
+        with redirect_stdout(io.StringIO()):
+            E.cmd_build(argparse.Namespace(claims=claims, repos=self.repos, out=ledger, ref="HEAD", as_of="2026-10-12"))
+        with open(ledger) as f:
+            raw = f.read()
+        self.assertNotIn("Zx81hQ7vLm2PqR9sTu4Wk6", raw)
+        self.assertTrue(json.loads(raw.splitlines()[0])["redacted"])
+        self.write("conf.yml", "db:\n  user: app\n  password: Qq19WmN4vB8xRt2LpZ7Ds5\n")
+        git(self.d, "add", "-A"); git(self.d, "commit", "-q", "-m", "rotate")
+        E._cache.clear()
+        out = os.path.join(self.repos, "check2.json")
+        with redirect_stdout(io.StringIO()):
+            E.cmd_check(argparse.Namespace(ledger=ledger, repos=self.repos, ref="auto", json=out, md=None, show_diff=0))
+        with open(out) as f:
+            text = f.read()
+        self.assertIn('"status": "CHANGED"', text)  # still detected, by digest
+        self.assertNotIn("Qq19WmN4vB8xRt2LpZ7Ds5", text)
+        self.assertNotIn("Zx81hQ7vLm2PqR9sTu4Wk6", text)
+
 
 if __name__ == "__main__":
     unittest.main()

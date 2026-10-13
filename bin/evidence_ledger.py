@@ -14,6 +14,9 @@ check statuses: FRESH (same text at the same lines), MOVED (same text, other lin
 GONE (file missing at the ref), NO-REPO (repository not available here)."""
 import argparse, collections, difflib, hashlib, json, os, re, subprocess, sys
 
+# A snippet that looks like it holds a credential is never stored (only its digest is): the ledger is committed, and the "now" side of a diff is shown.
+SECRET = re.compile(r"(?i)(password|passwd|secret|token|api[_-]?key|credential|private[_-]?key)\w*[\"']?\s*[:=]\s*[\"']?[A-Za-z0-9+/_.\-]{12,}")
+REDACTED = ["<redacted: credential-like line; compare by digest only>"]
 PAT = re.compile(r"^([\w.-]+)/(.+?):((?:\d+(?:-\d+)?)(?:,\d+(?:-\d+)?)*)@([0-9a-f]{7,40})$")
 _cache = {}
 
@@ -90,12 +93,13 @@ def cmd_build(a):
                 if not norm(snip):
                     skipped["empty snippet"] += 1
                     continue
+                red = any(SECRET.search(x) for x in snip)
                 rows.append(dict(
                     id="%s:%s:%d:%d-%d" % (c["chunk"], c["n"], k, l1, l2),
                     doc="%s/%s" % (c["repo"], c["path"]), doc_line=c["line"], claim=c["text"][:200], verdict=c["final_verdict"], severity=c.get("severity"),
                     repo=repo, path=path, lines=[l1, l2], stamp_sha=head[:12], stamp_tag=tag_at(a.repos, repo, head),
                     label_sha=label, moved_since_label=(old is not None and digest(old[l1 - 1:l2]) != digest(snip)),
-                    digest=digest(snip), snippet=snip if len(snip) <= 15 else snip[:3] + ["..."], as_of=a.as_of))
+                    digest=digest(snip), snippet=REDACTED if red else (snip if len(snip) <= 15 else snip[:3] + ["..."]), redacted=red, as_of=a.as_of))
     with open(a.out, "w") as f:
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
@@ -129,7 +133,7 @@ def cmd_check(a):
             continue
         cur = show(a.repos, r["repo"], a.ref, r["path"])
         rr = rref(a.repos, r["repo"], a.ref)
-        snip_norm = norm(r["snippet"]) if r["snippet"][-1:] != ["..."] else None
+        snip_norm = norm(r["snippet"]) if r["snippet"][-1:] != ["..."] and not r.get("redacted") else None
         if cur is None:
             st, info = "GONE", {}
         elif digest(cur[l1 - 1:l2]) == r["digest"]:
@@ -145,8 +149,8 @@ def cmd_check(a):
             n, t = counts_since(a.repos, r["repo"], r["stamp_sha"], rr)
             info.update(commits_since=n, tags_since=t, now_tag=tag_at(a.repos, r["repo"], rr))
             if st == "CHANGED" and cur is not None:
-                lo = max(0, l1 - 1 - 3)
-                info["diff"] = "\n".join(difflib.unified_diff(r["snippet"], cur[l1 - 1:l2 + 6], "at %s (%s)" % (r["stamp_sha"], r["stamp_tag"] or "no tag"), "now", lineterm="", n=1))[:1500]
+                d = "\n".join(difflib.unified_diff(r["snippet"], cur[l1 - 1:l2 + 6], "at %s (%s)" % (r["stamp_sha"], r["stamp_tag"] or "no tag"), "now", lineterm="", n=1))[:1500]
+                info["diff"] = "<diff withheld: credential-like line>" if r.get("redacted") or SECRET.search(d) else d
         out.append(dict(r, status=st, **info))
     c = collections.Counter(x["status"] for x in out)
     print("evidence rows %d: %s" % (len(out), dict(c)))
