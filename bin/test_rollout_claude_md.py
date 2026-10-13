@@ -94,6 +94,27 @@ class RolloutTest(unittest.TestCase):
             f.write("# infra\nfleet-state\n\ngo_a\n")
         self.assertEqual(R.repo_names(self.reg, extra), ["fleet-state", "go_a", "go_b"])
 
+    def test_refresh_clone_survives_a_stale_index_lock_and_moves_to_the_remote_tip(self):
+        remote = os.path.join(self.tmp.name, "remote.git")
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "main", remote], check=True)
+        out = os.path.join(self.tmp.name, "work")
+        d = os.path.join(out, "clones", "svc")
+        subprocess.run(["git", "clone", "-q", remote, d], check=True, env=ENV)
+        for name, text in (("a", "one\n"), ("b", "two\n")):
+            with open(os.path.join(d, "CLAUDE.md"), "w") as f:
+                f.write(text)
+            subprocess.run(["git", "-C", d, "add", "-A"], check=True)
+            subprocess.run(["git", "-C", d, "commit", "-q", "-m", name], check=True, env=ENV)
+        subprocess.run(["git", "-C", d, "push", "-q", "-u", "origin", "main"], check=True, env=ENV)
+        subprocess.run(["git", "-C", d, "reset", "-q", "--hard", "HEAD~1"], check=True)  # the clone is behind the remote
+        with open(os.path.join(d, ".git", "index.lock"), "w") as f:
+            f.write("")  # what an interrupted run leaves behind
+        got, err = R.refresh_clone("svc", out)
+        self.assertEqual((got, err), (d, None))
+        with open(os.path.join(d, "CLAUDE.md")) as f:
+            self.assertEqual(f.read(), "two\n")
+        self.assertFalse(os.path.exists(os.path.join(d, ".git", "index.lock")))
+
 
 if __name__ == "__main__":
     unittest.main()

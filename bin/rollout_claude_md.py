@@ -39,18 +39,38 @@ def canonical(reg):
     return text, git(reg, "rev-parse", "origin/main:CLAUDE.md"), blobs, head
 
 
-def classify_one(repo, out, cblob, blobs):
+def refresh_clone(repo, out):
+    """a shallow clone at the remote's newest default-branch tip; None when it cannot be had. Clones are a disposable cache: a damaged one
+    (a stale index.lock from an interrupted run, a failed reset) is deleted and cloned again once."""
+    import shutil
     d = os.path.join(out, "clones", repo)
-    if not os.path.isdir(d):
-        r = subprocess.run(["git", "clone", "--depth", "1", "--quiet", "git@github.com:%s/%s.git" % (OWNER, repo), d], capture_output=True, text=True)
-        if r.returncode:
-            return dict(repo=repo, status="clone-failed", note=r.stderr.strip()[:120])
-    else:  # a clone from an earlier plan: bring it to the remote's newest tip and drop any local, unpushed commit
-        br = git(d, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False).replace("origin/", "") or "HEAD"
-        f = subprocess.run(["git", "-C", d, "fetch", "-q", "--depth", "1", "origin", br], capture_output=True, text=True)
-        if f.returncode:
-            return dict(repo=repo, status="fetch-failed", note=f.stderr.strip()[:120])
-        git(d, "reset", "-q", "--hard", "FETCH_HEAD")
+    for attempt in (1, 2):
+        try:
+            if os.path.isdir(d):
+                lock = os.path.join(d, ".git", "index.lock")
+                if os.path.exists(lock):
+                    os.remove(lock)  # nothing else runs in these clones: the lock is left over from an interrupted run
+                br = git(d, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False).replace("origin/", "") or "HEAD"
+                f = subprocess.run(["git", "-C", d, "fetch", "-q", "--depth", "1", "origin", br], capture_output=True, text=True)
+                if f.returncode:
+                    raise RuntimeError("fetch: " + f.stderr.strip()[:120])
+                git(d, "reset", "-q", "--hard", "FETCH_HEAD")
+                return d, None
+            r = subprocess.run(["git", "clone", "--depth", "1", "--quiet", "git@github.com:%s/%s.git" % (OWNER, repo), d], capture_output=True, text=True)
+            if r.returncode:
+                return None, "clone: " + r.stderr.strip()[:120]
+            return d, None
+        except Exception as e:
+            if attempt == 2:
+                return None, str(e)[:120]
+            shutil.rmtree(d, ignore_errors=True)
+    return None, "unreachable"
+
+
+def classify_one(repo, out, cblob, blobs):
+    d, err = refresh_clone(repo, out)
+    if d is None:
+        return dict(repo=repo, status="clone-failed" if err.startswith("clone") else "fetch-failed", note=err)
     p = os.path.join(d, "CLAUDE.md")
     branch = git(d, "rev-parse", "--abbrev-ref", "HEAD", check=False)
     if not os.path.exists(p):
