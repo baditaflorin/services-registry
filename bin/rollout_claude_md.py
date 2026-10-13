@@ -387,10 +387,12 @@ def repo_names(registry, extra_file):
 
 def ensure_prs(results, head):
     """a repository whose default branch is protected got the branch SYNC_BRANCH: make sure a PR from it is open (best effort; needs gh)"""
+    import shutil
     made = []
-    for x in results:
-        if x.get("result") != "branch-needs-pr":
-            continue
+    todo = [x for x in results if x.get("result") == "branch-needs-pr"]
+    if todo and not shutil.which("gh"):
+        return [(x["repo"], "gh not found on PATH: branch %s is pushed, open the PR by hand" % SYNC_BRANCH) for x in todo]
+    for x in todo:
         repo = "%s/%s" % (OWNER, x["repo"])
         p = subprocess.run(["gh", "pr", "list", "--repo", repo, "--head", SYNC_BRANCH, "--state", "open", "--json", "number", "--jq", "length"], capture_output=True, text=True)
         if p.returncode == 0 and p.stdout.strip() == "0":
