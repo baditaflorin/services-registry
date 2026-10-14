@@ -3866,7 +3866,16 @@
     "spiffe_workload": true
   },
   "fleet-tech-inferrer": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-fleet-tech-inferrer-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-fleet-tech-inferrer-write-password",
+      "APP_ENVIRONMENT": "production",
+      "APP_VERSION": "0.1.5"
+    },
     "container_port": 18159,
     "description": "composite tech-stack inferrer (83 signals)",
     "host_port": 18159,
@@ -3875,7 +3884,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). composite tech-stack inferrer (83 signals). /selftest + INTEGRATIONS.md shipped. ADR-0009. See services-registry/docs/adr/0009-fleet-tech-inferrer.md.",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3955,7 +3964,16 @@
     "spiffe_workload": true
   },
   "fleet-webhook-verifier": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-fleet-webhook-verifier-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-fleet-webhook-verifier-write-password",
+      "APP_ENVIRONMENT": "production",
+      "APP_VERSION": "0.2.3"
+    },
     "container_port": 18170,
     "description": "inbound webhook signature verifier (6 platforms)",
     "host_port": 18170,
@@ -3964,7 +3982,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 8,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). inbound webhook signature verifier (6 platforms). /selftest + INTEGRATIONS.md shipped. ADR-0020. See services-registry/docs/adr/0020-fleet-webhook-verifier.md.",
-    "version": "0.1.0",
+    "version": "0.2.3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
