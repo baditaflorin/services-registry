@@ -85,6 +85,27 @@
       "allowed_service_ids": [
         "passive-voice-detector"
       ]
+    },
+    "infer-builder-ci": {
+      "cluster": "infer",
+      "capacity_label": "infer-builder-ci",
+      "state": "build-only",
+      "roles": [
+        "image-builder",
+        "ci-agent"
+      ],
+      "allowed_runtimes": [],
+      "allowed_placement": []
+    },
+    "infer-pg-primary": {
+      "cluster": "infer",
+      "capacity_label": "infer-pg-primary",
+      "state": "restricted",
+      "roles": [
+        "postgres-primary"
+      ],
+      "allowed_runtimes": [],
+      "allowed_placement": []
     }
   }
 }
