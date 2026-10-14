@@ -1412,12 +1412,14 @@ ssh -J root@0docker.com ubuntu_vm@10.10.10.20 '
 #    <fqdn> = host of the service url in services.json
 #    (<slug>.0crawl.com or <slug>.0exec.com). Compute the sha locally in
 #    the service repo (after `git fetch origin`); $SHA is expanded before
-#    ssh, not on the gateway.
+#    ssh, not on the gateway. No nginx reload: the gateway serves the file
+#    per request (alias, Cache-Control: no-store), and every reload costs a
+#    full config parse and a new worker generation (fleet-runner stopped
+#    reloading here in go_fleet_runner v0.7.341).
 SHA=$(git rev-parse --short origin/main)
 ssh -J root@0docker.com florin@10.10.10.10 "
   echo '{\"sha\":\"$SHA\",\"version\":\"<version>\",\"deployed_at\":\"'\$(date -u +%FT%TZ)'\"}' \
     | sudo tee /etc/nginx/deploy-meta/<fqdn>.json
-  sudo nginx -s reload
 "
 
 # 4. Smoke test
