@@ -184,21 +184,35 @@ hand (seen 2026-10-14 with `go_fleet_msg`: pipeline and lint merged, no
 webhook, zero runs). OAuth login is still a human act and stays one, but
 it only has to happen **once**, not once per repo.
 
-**Decision.** A person mints a Woodpecker personal API token once and puts
-it in the vault. An agent may then activate the repo it was asked to
-onboard, using only that token and only for the calls listed below.
+**Decision.** A person mints a Woodpecker personal API token once and hands
+it over with `fleet-msg secret save woodpecker` (fleet-msg 0.6.2 or later).
+The command asks for it with nothing shown, checks it against ci.0exec.com,
+and keeps it on that machine in `~/.config/fleet-msg/credentials/woodpecker/`
+(mode 600), bound to the host `ci.0exec.com`. An agent then activates the
+repo it was asked to onboard with `fleet-msg secret curl woodpecker -- ...`,
+which puts the token in a header on curl's stdin, refuses `-v`, traces and
+redirects, sends only to the bound host and masks the value in anything curl
+prints. **The agent never holds the token**: it cannot print it by accident,
+and nothing about it is ever pasted into a chat. Using it is limited to the
+calls listed below.
+
+Why a local file and not the vault: the vault read path needs an access tier
+that agent sessions do not have (the `fleet-secrets` tool answered "requires
+the infra-privileged access tier" on 2026-10-14), and one token on the
+operator's machine is what the agents there need. A copy in `go-fleet-secrets`
+(see `RUNBOOK-UNATTENDED.md`) stays an option for other hosts; it is not
+required.
 
 ### The one-time human step (the only part that needs a person)
 
 1. Log in at <https://ci.0exec.com/login> (GitHub OAuth, as `baditaflorin`).
 2. Open <https://ci.0exec.com/user/cli-and-api> (Woodpecker 3.x; older UIs:
    avatar → User settings → CLI) and copy the personal access token.
-3. Seed it in `go-fleet-secrets` as `woodpecker_ci_api_token` (the "Seed a
-   secret" recipe in `RUNBOOK-UNATTENDED.md`). Set `consumers` to the single
-   `X-Auth-User` scope that the operator's agent sessions read the vault
-   with: look it up, never `*`. Put this ADR in the description.
-4. Check that an agent can read it. The agent answers "found" or "missing",
-   never the value.
+3. In your own terminal, on the machine the agents run on:
+   `fleet-msg secret save woodpecker` (paste the token; nothing is shown). It
+   prints the Woodpecker login the token belongs to, and nothing else.
+4. Another laptop: `fleet-msg update` (once, to get 0.6.2 or later from the
+   mesh), then the same command. Nothing else is needed.
 
 ### What an agent does
 
@@ -212,55 +226,57 @@ onboard, using only that token and only for the calls listed below.
   that passes. Activating a repo without a working pipeline only produces
   red checks.
 
-**Procedure.** `T` is the token, read from the vault into a shell variable
-and nowhere else: never printed, never written to a file, never put in a
-URL or argv (hand it to `curl` as a config on stdin, as below), never
-passed to a subagent, never included in a message, commit or PR text.
+**Procedure.**
 
 ```bash
 REPO=baditaflorin/<repo>
 ID=$(gh api repos/$REPO --jq .id)                      # GitHub's numeric repo id
 
 # 1. activate. NOT /api/repos/{owner}/{name}: that 200s with the SPA's HTML.
-printf 'header = "Authorization: Bearer %s"\n' "$T" |
-  curl -sS -K - -X POST "https://ci.0exec.com/api/repos?forge_remote_id=$ID"
+#    "Repository is already active." (HTTP 409) means it already is.
+fleet-msg secret curl woodpecker -- -sS -X POST "https://ci.0exec.com/api/repos?forge_remote_id=$ID"
 #    success is JSON with "id" and "active": true; a body starting with "<"
 #    is the HTML shell (wrong endpoint) and counts as failure.
+fleet-msg secret curl woodpecker -- -sS "https://ci.0exec.com/api/repos/lookup/$REPO"   # its Woodpecker id
 
 # 2. verify with no Woodpecker credential at all
 gh api repos/$REPO/hooks --jq '.[].config.url' | grep '^https://ci.0exec.com/api/hook'
 
-# 3. first run (recommended; needs `event: manual` in the pipeline's `when`)
-printf 'header = "Authorization: Bearer %s"\n' "$T" |
-  curl -sS -K - -X POST "https://ci.0exec.com/api/repos/<woodpecker repo id>/pipelines" \
+# 3. first run (recommended; needs `event: manual` in the pipeline's `when`),
+#    then read how it ended
+fleet-msg secret curl woodpecker -- -sS -X POST "https://ci.0exec.com/api/repos/<woodpecker id>/pipelines" \
     -H 'Content-Type: application/json' -d '{"branch":"<default branch>"}'
+fleet-msg secret curl woodpecker -- -sS "https://ci.0exec.com/api/repos/<woodpecker id>/pipelines/<number>"
 ```
 
 Then tell the user what happened: the repo, that the webhook exists, and
-how the first run ended (read it from the commit status on GitHub, not
-with the token). Do not repeat or quote the token.
+how the first run ended. Never print, copy or quote the token or its file;
+`fleet-msg secret path` is for tools that need the file's location.
 
-**What the token may be used for.** The activation call, the manual
-pipeline trigger and read of runs for the repo just activated, and nothing
-else. In particular no user, org, agent, secret, registry or cron
-endpoints, no settings changes, and no `DELETE` or deactivation unless the
-user explicitly names the repo and asks. A different Woodpecker credential
-is never a substitute: the load controller's admin token (ADR-0040,
-`/etc/woodpecker-load-controller/token`) belongs to that controller and an
-agent must not take it. If the vault entry is missing, unreadable or
-rejected, stop and give the user the two links above and the one-line
-activation command; do not go looking for another token.
+**What the token may be used for.** The activation call, the lookup, the
+manual pipeline trigger and the read of runs for the repo just activated,
+and nothing else. In particular no user, org, agent, secret, registry or
+cron endpoints, no settings changes, and no `DELETE` or deactivation unless
+the user explicitly names the repo and asks. A different Woodpecker
+credential is never a substitute: the load controller's admin token
+(ADR-0040, `/etc/woodpecker-load-controller/token`) belongs to that
+controller and an agent must not take it. If the credential is missing or
+rejected, stop and give the user the two links above and the save command;
+do not go looking for another token.
 
 **Risk accepted, and its limits.** Woodpecker personal tokens cannot be
 scoped: this one carries the connected GitHub user's rights on the whole
-Woodpecker instance. The controls are the single-consumer allowlist, the
-call list above, and the rule that nothing prints or persists the value. To
-rotate (after any suspicion, or if a transcript might have contained it):
+Woodpecker instance. `fleet-msg secret` is transcript hygiene and a hand-off,
+not a sandbox: the file is readable by anything that runs as the user (the
+same level as the mesh token in `~/.config/fleet-msg`), and the host binding
+only limits the sanctioned command. The controls are that the agent never
+holds the value, the call list above, and that nothing prints or persists it.
+To rotate (after any suspicion, or if a transcript might have contained it):
 "Reset token" on the CLI & API page invalidates the old value, then
-re-seed the vault entry as in the runbook. Accepted because the
-alternative, a person per repo, was observed to leave repos ungated for
-days. Revisit if Woodpecker gains scoped tokens, or if a dedicated
-service-account user is created for CI onboarding.
+`fleet-msg secret save woodpecker` again; `fleet-msg secret rm woodpecker`
+forgets it. Accepted because the alternative, a person per repo, was observed
+to leave repos ungated for days. Revisit if Woodpecker gains scoped tokens, or
+if a dedicated service-account user is created for CI onboarding.
 
 ## Alternatives considered
 
