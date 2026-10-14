@@ -88,6 +88,19 @@ class SelftestPollTests(unittest.TestCase):
         self.assertEqual(r["via"], "edge")
         self.assertEqual(r["url"], "https://c.invalid/selftest")
 
+    def test_failing_errors_carry_the_check_error_text(self):
+        body = json.dumps({"ok": False, "checks": [{"name": "selftest", "pass": False, "err": "timeout after 5s"},
+                                                   {"name": "dns", "pass": True}]})
+        self.assertEqual(fsp.failing_errors(body), ["selftest: timeout after 5s"])
+        self.assertEqual(fsp.failing_errors("not json"), [])
+        self.assertEqual(fsp.failing_errors(""), [])
+        long = json.dumps({"checks": [{"name": "x", "pass": False, "err": "e" * 500}]})
+        self.assertEqual(len(fsp.failing_errors(long)[0]), 160)
+
+    def test_probe_fail_logs_why(self):
+        status, body, _ = fsp.fetch("%s/boom/selftest" % self.base, 3)  # 500, non-JSON: no error text, no crash
+        self.assertEqual(fsp.failing_errors(body), [])
+
     def test_unreachable(self):
         status, body, err = fsp.fetch("http://127.0.0.1:1/selftest", 2)
         self.assertIsNone(status)
