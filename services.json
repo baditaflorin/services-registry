@@ -11981,7 +11981,12 @@
     ],
     "mcp_ready": false,
     "access_tier": "infra-privileged",
-    "version": "0.1.9",
+    "version": "0.1.11",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SERVICE_ID": "git-provider-api-broker"
+    },
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -15019,7 +15024,12 @@
       "html-proxy"
     ],
     "proxy_egress": true,
-    "version": "0.1.10",
+    "version": "0.1.11",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SERVICE_ID": "search-duck"
+    },
     "network_exposure": "gateway-authenticated"
   },
   {

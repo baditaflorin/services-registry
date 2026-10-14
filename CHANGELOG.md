@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Enable file-backed Fleet Graph for Search Duck 0.1.11 and Git Provider API Broker 0.1.11 after bounded source and live dependency review.
 - Keep task-credential-broker on its proven API-key path while retaining Fleet Graph integration; disable its Compose SPIFFE socket/mTLS opt-in because both local SPIRE agents are currently failing node attestation and no production caller of the broker's private mTLS listener is verified.
 - Pin `fleet-capabilities` to its live Compose directory `/opt/services/fleet-capabilities`; registry rendering and the writer manifest must target the Docker Compose working directory proven by the live container label.
 - Enable file-backed Fleet Graph writer configuration for five healthy active Go services: Fleet Counter, Fleet Dig, Fleet Fake, Fleet Pipe, and Fleet Port.
