@@ -5,6 +5,9 @@
 
 # Changelog
 
+## 2026-10-14
+- Enable Fleet Graph writer configuration for five active Go services and sync their catalog versions to the verified deployed origin/main releases: Domain AI Catalog Discovery 0.3.1, Team Size 3.0.13, Wps 2.3.3, Xss Payload 1.3.2, and Xss Scanner 1.5.8.
+
 ## 2026-10-13
 - Add the optional private `served_by` field (name of the other deployment that answers for an entry through a gateway upstream; schema, generator pass-through, not in the public mirror). `url-categorizer-api` sets it (`domainscope`): its VM100 copy was retired and its vhost proxies to the domainscope prod API, so no container is expected on the docker hosts. `fleet-selftest-poll` and `fleet-container-audit` skip the dockerhost check for such entries.
 - Add `bin/fleet-selftest-poll.py` and its CT108 systemd timer: polls `/selftest` of all 384 container services every 30 minutes (compose services on the docker hosts' LAN, no credential needed; coolify services on their edge) and exports `fleet_selftest_*` metrics. `SelftestCheckFailing` had no data source before; go-fleet-metrics-hub now alerts on it.
