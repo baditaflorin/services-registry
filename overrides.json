@@ -3747,7 +3747,13 @@
   "fleet-q": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-fleet-q-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-fleet-q-write-password",
+      "APP_ENVIRONMENT": "production",
+      "APP_VERSION": "0.4.3"
     },
     "auth": {
       "type": "none"
@@ -3768,7 +3774,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 5,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "version": "0.4.3"
   },
   "fleet-read": {
     "env": {
@@ -3820,7 +3827,13 @@
   "fleet-sandbox-targets": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-fleet-sandbox-targets-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-fleet-sandbox-targets-write-password",
+      "APP_ENVIRONMENT": "production",
+      "APP_VERSION": "0.1.2"
     },
     "container_port": 18168,
     "description": "internal-only sandbox vulnerable apps (10 endpoints)",
@@ -3831,7 +3844,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). internal-only sandbox vulnerable apps (10 endpoints). /selftest + INTEGRATIONS.md shipped. ADR-0018. See services-registry/docs/adr/0018-fleet-sandbox-targets.md.",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "spiffe_workload": true
   },
   "fleet-schema-validator": {
@@ -3899,7 +3912,13 @@
   "fleet-tail": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-fleet-tail-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-fleet-tail-write-password",
+      "APP_ENVIRONMENT": "production",
+      "APP_VERSION": "0.4.3"
     },
     "auth": {
       "type": "none"
@@ -3920,7 +3939,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 3,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "version": "0.4.3"
   },
   "fleet-target-reputation": {
     "env": {
@@ -4765,14 +4785,20 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "license-extractor",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-license-extractor-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-license-extractor-write-password",
+      "APP_ENVIRONMENT": "production",
+      "APP_VERSION": "0.1.8"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18270,
     "description": "Detect the software/content license(s) of a web page or raw HTML/text — walks the DOM for structured signals (link rel=license, license anchors, JSON-LD license fields) and scans extracted text for license names, normalizing to SPDX identifiers (MIT, Apache-2.0, GPL/LGPL/AGPL, BSD, MPL-2.0, ISC, Unlicense, Creative Commons), plus copyright-line extraction.",
     "example_path": "/?url=https://example.com",
     "host_port": 18270,
-    "version": "0.1.6",
+    "version": "0.1.8",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",

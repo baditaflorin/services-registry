@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Enable Pyroscope delivery for Fleet Q, Fleet Sandbox Targets, Fleet Tail, and License Extractor; service PRs #19, #18, #18, and #31; scoped secret names only; Go Common v0.102.53.
 - Enable the canonical Fleet Graph Compose overlay (GRAPH_ENABLED and the collector URL) for the eleven fleet-infra services Fleet Backoff Coordinator, Engagement Timeline, Fingerprint Cache, Persona, Pixel, Q, Sandbox Targets, Tail, Target Reputation, Vendor Disclosure Tracker and Webhook, so their reviewed hot-reload key mounts can be rendered.
 - Enable service-scoped Pyroscope profile configuration for Fleet Tech Inferrer and Fleet Webhook Verifier after their source releases were merged.
 - Align admin-finder 1.7.8 registry version and remove Coolify secret references from public environment overrides; the source manifest resolves them through validated coolify_secret_refs.
