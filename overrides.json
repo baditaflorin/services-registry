@@ -3256,7 +3256,12 @@
     "spiffe_workload": true
   },
   "fleet-discovery": {
-    "compose_service_name": "discovery"
+    "compose_service_name": "discovery",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-discovery",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "fleet-dns-sync": {
     "access_tier": "infra-privileged",
@@ -3315,7 +3320,12 @@
     "trl_evidence": "First-pass audit of this shared fleet-infra append-only event log: confirmed durability (in-RAM only, documented and verified via a real SIGKILL-and-restart test) and ordering (mutex-guarded offset assignment, verified with 500 concurrent live publish calls yielding unique contiguous offsets) both match documentation exactly. Found and fixed a real unbounded-growth bug -- nothing capped the number of distinct topics or topic-name length (20,000 single-event topics grew RSS from 12.5MB to 29MB; a ~500KB topic name was accepted with no validation). Fixed with a new EVENTLOG_MAX_TOPICS cap and a 256-byte name limit. trl held at 5 (one real bug found, now fixed); trl_ceiling=6 added -- the in-RAM-only design is a deliberate structural limitation, can't claim 'system of record' reliability while a restart silently loses all data. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-eventlog",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "fleet-exec": {
     "access_tier": "infra-privileged",
@@ -3336,7 +3346,12 @@
     "trl_evidence": "First-pass safety audit of this shared fleet-infra remote-script-execution service: confirmed no shell/command-injection vulnerability (args always passed as literal argv, never shell-interpreted; allowlist correctly rejects everything else) via direct adversarial testing. Found and fixed a real availability/DoS bug -- the 'hard timeout' guarantee could be bypassed by a submitted script detaching a descendant into its own process session (setsid/start_new_session), escaping the process-group kill and blocking the request handler indefinitely regardless of timeout_ms (live-confirmed). Fixed with a hard wait-delay cap so the handler always returns within timeout+2s no matter what the script does; the escaped process itself still needs deployment-level containment (cgroups/seccomp), which is documented but not verified enabled in production. trl held at 5 and trl_ceiling capped at 6 deliberately, pending that containment verification -- a production-grade rating for a command-execution surface needs the deployment to actually enforce what the README prescribes, not just document it. See PR #4 (merged).",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-exec",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "fleet-fake": {
     "env": {
@@ -3492,7 +3507,12 @@
     "trl_evidence": "First-pass audit of this shared fleet-infra distributed advisory-lock primitive: found and fixed the single most severe bug class checked for in this pass -- a TTL/wait_seconds integer overflow (any ttl_seconds >= ~1e10, an ordinary JSON int) wrapped the computed lease duration negative, so the lock was immediately treated as expired; live-reproduced two callers both getting acquired:true for the same key simultaneously, exactly the 'two callers both think they hold the lock' failure mode this service exists to prevent. Fixed by clamping before multiplying instead of after. The core mutex-guarded locking logic itself was reviewed carefully and confirmed correct (200-goroutine stress tests clean under go test -race) -- the bug was purely in unvalidated duration arithmetic. trl bumped 5->6; trl_ceiling=7 added -- single-process/in-memory with no HA/replication story, a coordinator crash drops all locks fleet-wide. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-lock",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "fleet-mcp-gateway": {
     "version": "0.5.3",
@@ -8324,7 +8344,12 @@
     "host_port": 18023,
     "container_port": 8080,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
-    "proxy_read_timeout": "120s"
+    "proxy_read_timeout": "120s",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "hiring-footprint": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
