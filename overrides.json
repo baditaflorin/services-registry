@@ -3710,7 +3710,7 @@
     "trl_ceiling": 6,
     "trl_evidence": "NEW fleet primitive (2026-05-18). 1x1 transparent-GIF pageview beacon for the mesh-* static-Pages fleet. /selftest covers GIF roundtrip + DNT suppression + IP truncation. Optional Plausible self-host upstream.",
     "url": "https://pixel.0exec.com",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "spiffe_workload": true
   },
   "fleet-poc-curl": {
@@ -5585,6 +5585,7 @@
     "coolify_app_uuid": "w11jlc1cbxyokw87klmh388p"
   },
   "pentest-attack-chainer": {
+    "version": "0.3.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
