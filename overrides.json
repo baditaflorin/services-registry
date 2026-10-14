@@ -5508,6 +5508,10 @@
     "fetch_cache_api_key_file_mount": true
   },
   "pentest-agent-state": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18146,
     "description": "Persistent agent memory for the pentest fleet. POST /snapshot upserts the 'where I left off' state for an autonomous agent; POST /journal appends events. SQLite (WAL). Closes the gap that makes every Claude conversation start at zero.",
@@ -5525,6 +5529,10 @@
     "version": "0.2.0"
   },
   "pentest-asset-inventory": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18131,
     "description": "Source of truth for every known asset per program. Recon services upsert; continuous-monitor diffs daily to fire scans only on NEW assets. The compounding-revenue substrate of the fleet.",
@@ -5556,6 +5564,10 @@
     "coolify_app_uuid": "w11jlc1cbxyokw87klmh388p"
   },
   "pentest-attack-chainer": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18149,
     "description": "CORS exploitation chain validator. Cross-references a CORS misconfig finding with go-pentest-takeover-checker (attacker-controllable siblings) AND probes target for data-bearing endpoints. Classifies real_severity end-to-end: critical / high / medium / low / informational. Renders a working PoC HTML page when chain elements present.",
@@ -5568,6 +5580,10 @@
     "trl_evidence": "4/4 unit tests passing (base-domain inference, severity matrix, PoC rendering with/without chain). Verified end-to-end against accommodations.booking.com: 30 siblings + 12 endpoint probes in 1.2s, correctly downgrades prober high -> informational."
   },
   "pentest-audit-log": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18119,
     "description": "Append-only audit log for the pentest fleet. Every scan-start / scope-denied / finding-submitted gets recorded. Legal floor + CYA.",
@@ -5661,6 +5677,10 @@
     "coolify_app_uuid": "gcvcza9jqe4d7zdhrrc42dd2"
   },
   "pentest-continuous-monitor": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18134,
     "description": "Daily cron-style scheduler that diffs asset-inventory per program and enqueues scan jobs only for NEW assets. Turns one-shot recon into a subscription — money compounds with the asset universe, not manpower.",
@@ -5841,6 +5861,10 @@
     "coolify_app_uuid": "mmjzm5ovulcr2x9sbpyii597"
   },
   "pentest-http-replay": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18130,
     "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
@@ -5871,6 +5895,10 @@
     "coolify_app_uuid": "fb9gk4en12bhh1e7ya5aptkt"
   },
   "pentest-job-queue": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18133,
     "description": "Durable workflow queue. POST jobs, workers /claim → /complete or /fail. Crash-resilient via SQLite WAL; expired leases auto-requeue every 15s with exponential backoff. Backbone for orchestrator + continuous-monitor + every long-running scan.",
@@ -5915,6 +5943,10 @@
     "coolify_app_uuid": "d13v7qexw5979ml26lyr901n"
   },
   "pentest-notify": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18108,
     "description": "Multi-sink notification fanout for the pentest fleet (Telegram/Discord/Slack/email/webhook/ntfy/Matrix/Teams/etc.) via containrrr/shoutrrr.",
@@ -5961,6 +5993,10 @@
     "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo"
   },
   "pentest-orchestrator": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18138,
     "description": "Master end-to-end pipeline. POST a campaign and the state machine drives scope→recon→scan→triage→verify→submit through every other go-pentest-* service. 30s ticker auto-advances. SUBMIT_DRY_RUN=1 by default — the unattended money loop.",
@@ -5991,6 +6027,10 @@
     "coolify_app_uuid": "fkk45m0hk84dz0mves6mdsma"
   },
   "pentest-payoff-tracker": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18148,
     "description": "Self-evaluator. POST /predict captures what finding-triage said before submission; POST /outcome captures what the platform did with it (via triager-listener). GET /calibration returns per-rule precision + per-program ROI. Closes the learning loop.",
@@ -6008,6 +6048,10 @@
     "version": "0.2.0"
   },
   "pentest-rate-coordinator": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18104,
     "description": "Global per-host token-bucket rate limiter. Every active prober calls POST /acquire {host, weight} before firing — prevents multiple scanners from collectively DDoS-ing a target.",
@@ -6231,6 +6275,10 @@
     "coolify_app_uuid": "ptteeog28oq6dcjni50vztgb"
   },
   "pentest-walkthrough": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "access_tier": "vetted-pentest",
     "container_port": 18139,
     "description": "HTTP equivalent of go-pentest-cli — single-domain pentest flow as REST API. /preflight, /recon, /findings, /report + /sessions for async scan with per-finding manual triage override. Pause/resume per session.",
