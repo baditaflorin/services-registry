@@ -1,5 +1,7 @@
 ## 2026-10-15
 
+- Add `bin/generate.py --only <id>` to update one generated registry row and projections without applying unrelated topic-catalog drift.
+- Align License Extractor 0.1.9 and declare its Vault-backed fetch-cache file mount after the canary found the Compose omission.
 - Sync five DomainScope detector registry versions to merged `origin/main` source releases before staging the file-backed Fleet Graph writer rollout: ad-network 0.4.18, analytics-stack 0.8.1, events-platform 0.2.34, interactive-demo 0.2.19, and podcast-presence 0.3.23.
 
 ## 2026-10-14

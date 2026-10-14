@@ -4879,15 +4879,16 @@
       "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-license-extractor-write-user",
       "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-license-extractor-write-password",
       "APP_ENVIRONMENT": "production",
-      "APP_VERSION": "0.1.8"
+      "APP_VERSION": "0.1.9"
     },
     "depends_on": ["infrastructure-fetch-cache"],
+    "fetch_cache_api_key_file_mount": true,
     "container_port": 18270,
     "description": "Detect the software/content license(s) of a web page or raw HTML/text — walks the DOM for structured signals (link rel=license, license anchors, JSON-LD license fields) and scans extracted text for license names, normalizing to SPDX identifiers (MIT, Apache-2.0, GPL/LGPL/AGPL, BSD, MPL-2.0, ISC, Unlicense, Creative Commons), plus copyright-line extraction.",
     "example_path": "/?url=https://example.com",
     "host_port": 18270,
     "placement": "replicable",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",

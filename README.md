@@ -53,7 +53,7 @@ after writing `services.json`.
 | `schema/v1.json`           | JSON Schema for an entry                                           |
 | `schema/private-services.v1.json` | strict schema for opaque private-service rows                |
 | `services.summary.txt`     | counts by mesh + category, rebuilt by `bin/build.py`               |
-| `bin/generate.py`          | rebuild `services.json` + slices from GitHub topics + `overrides.json` |
+| `bin/generate.py`          | rebuild `services.json` + slices from GitHub topics + `overrides.json`; `--only <id>` updates one existing service |
 | `bin/notify-consumers.sh`  | tell the catalog + hub to re-fetch (run after `git push`)          |
 | `ci-authorities.json`      | authoritative Woodpecker hostname per owner/repository             |
 | `bin/ci_authority_audit.py`| fail-closed audit for missing, duplicate, or wrong CI webhooks      |
