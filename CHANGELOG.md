@@ -1,3 +1,7 @@
+## 2026-10-15
+
+- Sync five DomainScope detector registry versions to merged `origin/main` source releases before staging the file-backed Fleet Graph writer rollout: ad-network 0.4.18, analytics-stack 0.8.1, events-platform 0.2.34, interactive-demo 0.2.19, and podcast-presence 0.3.23.
+
 ## 2026-10-14
 - Enable the canonical Fleet Graph Compose overlay (GRAPH_ENABLED and the collector URL) for the twelve pentest infrastructure services Agent State, Asset Inventory, Attack Chainer, Audit Log, Continuous Monitor, HTTP Replay, Job Queue, Notify, Orchestrator, Payoff Tracker, Rate Coordinator and Walkthrough, so their reviewed hot-reload key mounts can be rendered.
 - Enable the canonical Fleet Graph Compose overlay (GRAPH_ENABLED and the collector URL) for Fleet Token Ledger, Fleet Backup, Fleet Host Guard, Composite Runner, JS Proxy, JS Proxy Network and Random Proxy, so their reviewed hot-reload key mounts can be rendered.
