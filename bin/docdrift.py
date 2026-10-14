@@ -539,7 +539,25 @@ def gen_proxmox_inventory(git, attrs):
     return s
 
 
-GENERATORS = {"verbs": gen_verbs, "registry-counts": gen_registry_counts, "pools": gen_pools, "proxmox-inventory": gen_proxmox_inventory}
+def gen_placement_policy(git, attrs):
+    """one row per logical host of host-placement-policy.json. The allowlist size is a count, not the list: the list changes with every
+    onboarding wave (infer-runtime went from 1 to ~170 services in one day) and is read from the JSON, not from a document."""
+    repo = attrs.get("repo", "services-registry")
+    path = attrs.get("path", "host-placement-policy.json")
+    d = json.loads(git.show(repo, path))
+    hosts = d.get("hosts", d)
+    s = "\n_Generated from `%s/%s`; do not edit by hand. `restricted` hosts run only their allowlist; `build-only` hosts are never a placement target._\n\n" % (repo, path)
+    s += "| host | cluster | state | roles | runtimes | placement | allowlist |\n|---|---|---|---|---|---|---|\n"
+    for name, h in sorted(hosts.items(), key=lambda kv: (kv[1].get("cluster", ""), kv[0])):
+        allow = h.get("allowed_service_ids")
+        s += "| `%s` | %s | %s | %s | %s | %s | %s |\n" % (
+            name, h.get("cluster", "-"), h.get("state", "-"), ", ".join(h.get("roles", [])) or "-",
+            ", ".join(h.get("allowed_runtimes", [])) or "-", ", ".join(h.get("allowed_placement", [])) or "-",
+            ("%d services" % len(allow)) if allow is not None else "-")
+    return s
+
+
+GENERATORS = {"verbs": gen_verbs, "registry-counts": gen_registry_counts, "pools": gen_pools, "proxmox-inventory": gen_proxmox_inventory, "placement-policy": gen_placement_policy}
 
 
 def cmd_gen(a):
@@ -553,7 +571,7 @@ def cmd_gen(a):
             if not g:
                 raise SystemExit("no generator named %s" % m.group("name"))
             at = parse_attrs(m.group("attrs"))
-            need = at.get("repo") or {"verbs": "go_fleet_runner", "registry-counts": "services-registry", "pools": "fleet-state", "proxmox-inventory": "fleet-state"}.get(m.group("name"))
+            need = at.get("repo") or {"verbs": "go_fleet_runner", "registry-counts": "services-registry", "pools": "fleet-state", "proxmox-inventory": "fleet-state", "placement-policy": "services-registry"}.get(m.group("name"))
             if need and not git.has_repo(need):
                 print("%s: block %s skipped (repository %s is not available here)" % (d, m.group("name"), need), file=sys.stderr)
                 return m.group(0)

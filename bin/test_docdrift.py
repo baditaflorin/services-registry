@@ -232,6 +232,30 @@ class GenerateAndLintTests(Base):
         commit(fs, {"inventory/proxmox-snapshot.json": json.dumps(snap)}, "bigger")
         self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--check"]), 1)
 
+    def test_gen_placement_policy_shows_state_and_allowlist_size_not_the_list(self):
+        reg = os.path.join(self.root, "services-registry")
+        os.makedirs(reg)
+        sh(reg, "init", "-q", "-b", "main")
+        pol = {"hosts": {
+            "dockerhost": {"cluster": "0docker", "state": "active", "roles": ["fleet-compose-runtime"], "allowed_runtimes": ["compose"], "allowed_placement": ["replicable", "pinned"]},
+            "infer-runtime": {"cluster": "infer", "state": "restricted", "roles": ["fleet-compose-runtime"], "allowed_runtimes": ["compose"], "allowed_placement": ["replicable"], "allowed_service_ids": ["svc-a"]},
+            "infer-builder-ci": {"cluster": "infer", "state": "build-only", "roles": ["image-builder"], "allowed_runtimes": [], "allowed_placement": []}}}
+        commit(reg, {"host-placement-policy.json": json.dumps(pol)}, "policy")
+        p = os.path.join(self.root, "pp.md")
+        open(p, "w").write("a\n<!-- BEGIN GENERATED:placement-policy -->\nhand typed\n<!-- END GENERATED:placement-policy -->\nb\n")
+        self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--write"]), 0)
+        t = open(p).read()
+        self.assertIn("| `dockerhost` | 0docker | active | fleet-compose-runtime | compose | replicable, pinned | - |", t)
+        self.assertIn("| `infer-runtime` | infer | restricted | fleet-compose-runtime | compose | replicable | 1 services |", t)
+        self.assertIn("| `infer-builder-ci` | infer | build-only | image-builder | - | - | - |", t)
+        self.assertNotIn("svc-a", t)
+        self.assertNotIn("hand typed", t)
+        self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--check"]), 0)
+        # onboarding a second service changes the block: the doc fails `gen --check` until regenerated
+        pol["hosts"]["infer-runtime"]["allowed_service_ids"].append("svc-b")
+        commit(reg, {"host-placement-policy.json": json.dumps(pol)}, "wave")
+        self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--check"]), 1)
+
     def test_gen_accepts_space_after_colon(self):
         p = os.path.join(self.root, "g2.md")
         open(p, "w").write("<!-- BEGIN GENERATED: verbs repo=runner -->\n<!-- END GENERATED: verbs -->\n")
