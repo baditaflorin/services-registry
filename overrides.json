@@ -8047,13 +8047,9 @@
     "trl_assessor": "codex-gpt-6",
     "placement": "pinned",
     "proxy_egress": true,
-    "spiffe_workload": true,
+    "spiffe_workload": false,
     "env": {
-      "WORKLOAD_AUTH_MODE": "hybrid",
-      "WORKLOAD_SPIFFE_AUDIENCE": "https://task-credential-broker.0exec.com",
-      "WORKLOAD_SPIFFE_PRINCIPALS_JSON": "{\"spiffe://0exec.com/ns/fleet/sa/credential-broker-canary\":\"credential-broker-spiffe-canary\"}",
-      "WORKLOAD_SPIFFE_MTLS_LISTEN_ADDR": ":8443",
-      "WORKLOAD_SPIFFE_SERVER_ID": "spiffe://0exec.com/ns/fleet/sa/task-credential-broker",
+      "WORKLOAD_AUTH_MODE": "api_key",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SERVICE_ID": "task-credential-broker"
