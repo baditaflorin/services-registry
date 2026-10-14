@@ -804,7 +804,9 @@
     "trl_assessor": "claude-session-2026-08-20",
     "host_port": 8326,
     "container_port": 8326,
-    "depends_on": ["infrastructure-fetch-cache"],
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "internal_direct": true,
     "proxy_egress": true,
     "mcp_ready": true,
@@ -2726,7 +2728,9 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18239,
     "container_port": 18239,
-    "depends_on": ["infrastructure-fetch-cache"],
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -9859,7 +9863,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -9899,7 +9903,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "host_port": 18164,
     "container_port": 18164,
-    "version": "0.1.0",
+    "version": "0.1.4",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -9942,7 +9946,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.7",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -10043,7 +10047,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.8",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -10123,7 +10127,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.6",
     "network_exposure": "gateway-authenticated"
   },
   {

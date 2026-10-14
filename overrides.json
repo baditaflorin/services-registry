@@ -2979,6 +2979,11 @@
     "spiffe_workload": true
   },
   "fleet-body-redactor": {
+    "env":     {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-body-redactor",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18154,
     "description": "canonical sensitive-data redactor",
     "host_port": 18154,
@@ -2987,13 +2992,18 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 8,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). canonical sensitive-data redactor. /selftest + INTEGRATIONS.md shipped. ADR-0004. See services-registry/docs/adr/0004-fleet-body-redactor.md.",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true
   },
   "fleet-budget-tracker": {
+    "env":     {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-budget-tracker",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18164,
     "description": "per-program scan-cost cap (atomic check-and-insert)",
     "host_port": 18164,
@@ -3002,10 +3012,15 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
-    "version": "0.1.0",
+    "version": "0.1.4",
     "spiffe_workload": true
   },
   "fleet-call-tracer": {
+    "env":     {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-call-tracer",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18161,
     "description": "per-request call trace collector (Speedscope flamegraph output)",
     "host_port": 18161,
@@ -3014,7 +3029,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "trl_ceiling": 8,
     "trl_evidence": "First-pass audit of this shared fleet-infra per-request call-trace collector (Speedscope flamegraph output): found and fixed 2 real bugs hitting its two core features. (1) /flame/{trace_id} exported profiles that pass JSON Schema validation but real Speedscope actually rejects on import -- renderFlame flat-sorted spans ignoring parent_span_id, breaking well-nestedness for any ordinary concurrent fan-out; fixed by deriving events via a parent/child-tree DFS that guarantees well-nestedness by construction. (2) No idempotency on (trace_id, span_id) despite the API's own documented fire-and-forget/retry contract -- a retried batch silently aliased duplicate rows in the tree view, with the original data vanishing from display though still on disk; fixed with a unique index + ON CONFLICT DO NOTHING plus a dedup migration. Also fixed a scoping bug that made /selftest's flame-output check silently never actually run. trl held at 6 pending merge+soak (both bugs hit core features under ordinary non-adversarial conditions); trl_ceiling held at 8 -- clean, well-scoped implementation bugs, not evidence of an architectural flaw. See PR #4 (merged).",
-    "version": "0.1.0",
+    "version": "0.1.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3043,6 +3058,11 @@
     "spiffe_workload": true
   },
   "fleet-content-normalizer": {
+    "env":     {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-content-normalizer",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18172,
     "description": "MIME/charset/encoding normalizer (5MB cap)",
     "host_port": 18172,
@@ -3051,7 +3071,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). MIME/charset/encoding normalizer (5MB cap). /selftest + INTEGRATIONS.md shipped. ADR-0022. See services-registry/docs/adr/0022-fleet-content-normalizer.md.",
-    "version": "0.1.0",
+    "version": "0.1.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3080,6 +3100,11 @@
     "spiffe_workload": true
   },
   "fleet-diff-engine": {
+    "env":     {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-diff-engine",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18160,
     "description": "structured diff: http_response|json|html|asset_set|text",
     "host_port": 18160,
@@ -3088,7 +3113,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). structured diff: http_response|json|html|asset_set|text. /selftest + INTEGRATIONS.md shipped. ADR-0010. See services-registry/docs/adr/0010-fleet-diff-engine.md.",
-    "version": "0.1.0",
+    "version": "0.1.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
