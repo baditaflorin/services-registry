@@ -541,6 +541,7 @@ class TestPublicMirror(unittest.TestCase):
         "proxy_egress": True,
         "internal_direct": True,
         "ui_cookie_bridge": True,
+        "served_by": "domainscope",
         "network_exposure": "gateway-ip-allowlisted",
         "allowed_source_ips": ["65.108.75.123/32"],
         "extra_server_names": ["alt.0crawl.com"],
@@ -559,7 +560,7 @@ class TestPublicMirror(unittest.TestCase):
     def test_drops_all_internal_fields(self):
         pub = generate.to_public_entry(self.FULL_ENTRY)
         for forbidden in ("host_port", "container_port", "cert_domain",
-                          "proxy_egress", "internal_direct", "ui_cookie_bridge", "network_exposure",
+                          "proxy_egress", "internal_direct", "ui_cookie_bridge", "served_by", "network_exposure",
                           "allowed_source_ips",
                           "extra_server_names", "vhost", "depends_on",
                           "trl_evidence", "quality_contract"):

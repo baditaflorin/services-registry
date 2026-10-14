@@ -141,6 +141,8 @@ def audit(reg, args):
             continue
         if e.get("runtime") not in (None, "compose"):
             continue  # coolify / external audited elsewhere / not here
+        if e.get("served_by"):
+            continue  # answered by another deployment via a gateway upstream: no container expected here
         if e.get("network_exposure") == "internal":
             pass  # still worth auditing the container; keep
         slug = e["id"]

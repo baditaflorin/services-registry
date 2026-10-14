@@ -950,6 +950,12 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # set "120s", python-proxy sets "300s". Consumed by
               # fleet-runner nginx-render → ProxyReadTimeout field.
               "proxy_read_timeout",
+              # `served_by: "<name>"` marks an entry whose vhost is routed by the
+              # gateway to a different deployment (upstream in fleet-state
+              # nginx-upstreams.json). No container is expected on the docker
+              # hosts for it; container audits and fleet-selftest-poll skip
+              # the dockerhost check. A name, never a URL; not public.
+              "served_by",
               # MCP readiness (fleet-wide MCP support, Phase 3). Set by
               # bin/audit_mcp_ready.py, which reads the aggregated tool
               # list from go-fleet-mcp-gateway's GET /gateway/tools (the
