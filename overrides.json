@@ -3397,6 +3397,10 @@
     }
   },
   "fleet-md": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3701,6 +3705,10 @@
     "spiffe_workload": true
   },
   "fleet-read": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -5916,6 +5924,10 @@
     "coolify_app_uuid": "sqscgiph45qj0ao58sxl5bag"
   },
   "pentest-target-normalizer": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18102,
     "description": "Canonicalizes free-form pentest targets (URL/host/IP/CIDR). Returns kind, eTLD+1, private-IP flag. Foundation primitive every active prober calls before doing anything else.",
     "example_path": "/?q=https://EXAMPLE.com/path",
