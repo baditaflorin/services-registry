@@ -2728,7 +2728,6 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "trl_evidence": "First-pass audit (never synced to central registry before, though the repo's own service.yaml had a local trl=6 self-assessment from July 2026): confirmed genuinely complete and working, NOT a duplicate of sibling go_wellknown_scanner (different mesh, narrower 24-path catalog but materially deeper per-path semantic validation vs. the scanner's broader ~30-path/soft-404-only approach). Live endpoint healthy, no deploy/DNS drift. Found a real bug: change-password was the only catalogued path exempted from the generic 'reject an unexplained HTML body' check every other path gets -- the single largest source of all findings in a 250-domain sample, 51/250 (20.4%) false positives from CMS/parking/anti-bot catch-all pages. Fixed, dropping false positives to 3/250. Uses fleetfetch (not safehttp), so the literal fetch-cache bug pattern doesn't apply -- flagged fleetfetch's own documented 'live probe semantics should bypass cache' guidance as a follow-up, not changed here (no concrete evidence of a wrong result from it). See PR #4 (merged).",
-    "version": "0.2.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
