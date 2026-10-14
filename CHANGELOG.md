@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Align admin-finder 1.7.8 registry version and remove Coolify secret references from public environment overrides; the source manifest resolves them through validated coolify_secret_refs.
 - Verify Pyroscope profile transport for admin-finder in digest-pinned staging, then sync 1.7.7 after fixing Coolify/Compose environment and version-label propagation.
 - Enable the canonical Fleet Graph Compose overlay for Fleet Markdown, Fleet Read, and Pentest Target Normalizer, including the reviewed read-only hot-reload key mounts.
 - Sync Firmographic Profile 1.4.1, HTTP Protocol Checker 2.4.13, Heading Outline Extractor 0.3.12, and Menu Extractor 0.1.9 to both origin/main service.yaml and live /version; their runtime images differ from origin/main only by documentation-only commits, so no rebuild or restart is needed.
