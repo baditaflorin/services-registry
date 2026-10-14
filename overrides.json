@@ -1431,6 +1431,7 @@
     "description": "Detects which CSS framework(s) a web page or raw HTML uses (Bootstrap, Tailwind, Bulma, Foundation, Materialize, Semantic/Fomantic UI, UIkit, Pure.css, Tachyons, Skeleton, Milligram) from three independent static-markup signals: linked-stylesheet / CDN hrefs (strong, often versioned), distinctive class-name signatures, and a generator meta hint. Returns frameworks[] (each name + confidence 0..1 + extracted version + evidence[]) sorted by confidence, the top framework, and a raw-signal summary.",
     "example_path": "/?url=https://example.com",
     "host_port": 18257,
+    "placement": "replicable",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -2542,6 +2543,7 @@
   "domain-rbl-reputation": {
     "container_port": 18182,
     "host_port": 18182,
+    "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -4248,6 +4250,7 @@
     "description": "Microservice for Hsts Checker",
     "example_path": "/go_hsts_checker?url=https://example.com",
     "host_port": 8328,
+    "placement": "replicable",
     "trl": 6,
     "trl_assessed_at": "2026-05-16",
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
