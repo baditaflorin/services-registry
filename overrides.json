@@ -8004,6 +8004,7 @@
       "type": "api_key"
     },
     "category": "infrastructure",
+    "compose_service_name": "git-provider-api-broker",
     "cert_domain": "wildcard.0exec.com",
     "container_port": 8080,
     "description": "Central, rate-aware read-only broker for GitHub API requests and quota state, shared across authorized tools.",

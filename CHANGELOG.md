@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Pin the Git Provider API Broker Compose overlay to its actual `git-provider-api-broker` service; the default `app` name created an empty phantom service and blocked Fleet Graph key-mount activation.
 - Sync the Search Duck and Git Provider API Broker override versions with services.json and the released source v0.1.12 tags.
 - Sync Search Duck and Git Provider API Broker registry versions to source v0.1.12 after aligning their canonical Graph runtime declarations.
 - Enable file-backed Fleet Graph for Search Duck 0.1.11 and Git Provider API Broker 0.1.11 after bounded source and live dependency review.
