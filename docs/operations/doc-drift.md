@@ -66,3 +66,7 @@ A ledger holds code snippets, so keep it in a private repository (fleet-state), 
 - deliberate exceptions go in `inventory/inventory-allow.json` (`{"guests": [...], "hosts": [...]}`).
 
 `inventory/proxmox-hosts.json` lists the hosts as `{"id", "alias"}` (an ssh alias, no addresses). A host that cannot be read changes nothing and is reported.
+
+## Placement policy table
+
+`host-placement-policy.json` changes in waves: on 2026-10-14 the allowlist of `infer-runtime` went from one service to about 170 in a day. A document that lists hosts, their state or their allowlist therefore holds a **generated** table (`<!-- BEGIN GENERATED:placement-policy -->`, `docdrift gen`): one row per logical host with cluster, state, roles, runtimes, placement classes and the size of the allowlist (a count, never the list). The nightly job runs `gen --check`, so a policy change that is merged without regenerating the table shows up as drift on the next run.
