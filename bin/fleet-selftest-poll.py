@@ -38,7 +38,7 @@ State semantics (same taxonomy as go-fleet-selftest-aggregator, ADR-0015):
 
   pass         2xx (and body `ok` is not false)
   fail         5xx, other 4xx except 401/403/404, or 2xx with `"ok": false`
-  skip         404: service has not implemented /selftest yet
+  skip         404: service has not implemented /selftest yet; or registry `served_by` is set (another deployment answers)
   gated        401/403: endpoint is behind auth and this poller has no key
   unreachable  DNS / TLS / connect / timeout (for a compose service: no docker host answers on its port)
 
@@ -157,6 +157,11 @@ def fetch(url, timeout, api_key=None):
 def probe(svc, timeout, api_key=None, direct_hosts=()):
     sid = svc.get("id") or svc.get("slug")
     t0 = time.time()
+    if svc.get("served_by"):
+        # Answered by another deployment (gateway upstream), so no container is expected on the docker hosts and
+        # its /selftest belongs to that deployment. Visible as `skip`, never an alert.
+        return {"id": sid, "url": "", "via": "served_by:%s" % svc["served_by"], "http": None, "state": "skip",
+                "checks": [], "ms": 0, "error": ""}
     port = svc.get("host_port")
     if direct_hosts and svc.get("runtime") == "compose" and port:
         status, body, err, url = None, "", "", ""

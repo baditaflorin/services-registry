@@ -7314,6 +7314,7 @@
   },
   "url-categorizer-api": {
     "compose_dir": "/opt/services/url-categorizer-api",
+    "served_by": "domainscope",
     "container_port": 8080,
     "description": "URL categorization API - classifies URLs by topic/category",
     "depends_on": [

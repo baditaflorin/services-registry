@@ -76,6 +76,12 @@ class SelftestPollTests(unittest.TestCase):
         r = fsp.probe(svc, 2, None, ("127.0.0.1",))
         self.assertEqual((r["via"], r["state"]), ("lan", "unreachable"))
 
+    def test_probe_served_by_is_skip_without_any_request(self):
+        svc = {"id": "u", "kind": "container", "runtime": "compose", "host_port": self.srv.server_port,
+               "url": "https://u.invalid", "served_by": "domainscope"}
+        r = fsp.probe(svc, 2, None, ("127.0.0.1",))
+        self.assertEqual((r["state"], r["checks"], r["via"]), ("skip", [], "served_by:domainscope"))
+
     def test_probe_edge_for_non_compose(self):
         svc = {"id": "c", "kind": "container", "runtime": "coolify", "host_port": 1, "url": "https://c.invalid"}
         r = fsp.probe(svc, 2, None, ("127.0.0.1",))

@@ -220,6 +220,11 @@
       },
       "description": "Operational additional source allow rules for a gateway-ip-allowlisted service. Entries must be exact-host IPv4 /32 or IPv6 /128 CIDRs; these are additive and do not replace standard renderer allow rules. Kept out of services-public.json."
     },
+    "served_by": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of the other deployment that actually answers for this entry (e.g. 'domainscope'). The gateway routes the entry's vhost to it through the private upstream map in fleet-state/nginx-upstreams.json, so no container is expected from this entry's host_port on the docker hosts; host_port stays a reserved claim only. Container audits and the /selftest poller skip the dockerhost check for entries that set it. A name, never a URL: gateway upstreams are private deployment policy and must not be generated from the public catalog. Not in PUBLIC_FIELDS (allowlist), so excluded from services-public.json."
+    },
     "network_exposure": {
       "type": "string",
       "enum": ["loopback", "lan-internal", "gateway-ip-allowlisted", "gateway-authenticated", "gateway-public"],
