@@ -10060,6 +10060,10 @@
     "name": "Fleet Counter",
     "description": "Atomic distributed counters over HTTP \u2014 monotonic ids/build numbers, no DB",
     "category": "fleet_infra",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
@@ -10140,6 +10144,10 @@
     "name": "Fleet Dig",
     "description": "DNS lookups as a service \u2014 dig over curl from minimal containers",
     "category": "fleet_infra",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
@@ -10359,6 +10367,10 @@
     "name": "Fleet Fake",
     "description": "Fake/test data generator \u2014 fixtures and seed data over curl",
     "category": "fleet_infra",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
@@ -10912,6 +10924,10 @@
     "name": "Fleet Pipe",
     "description": "Ephemeral, unauthenticated cross-machine copy/paste relay. POST/PUT a blob with `curl --data-binary @-`, get back a URL, pull it on another machine within a hard \u22645-minute TTL. In-RAM only (restart wipes everything), 10 MiB/blob with a total-RAM budget. Random base62 ids, write-once or last-write-wins (?replace) named slots, say-it-out-loud ids (?words), ?burn one-time reads, ?qr scannable links, ?notify read-receipts. Optional client-side E2E: `-e` (AES-256-CTR+HMAC, key in the URL #fragment \u2014 opens in a browser or decrypts with openssl) plus a browser ask-me-a-secret sealed-box (ECDH P-256). `curl \u2026/install | sh` adds a `pipe` client with one-time wormhole codes and an end-to-end universal clipboard. Browser app at GET / for non-CLI users.",
     "category": "fleet_infra",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
@@ -11034,6 +11050,10 @@
     "name": "Fleet Port",
     "description": "Is a host:port reachable from the public internet? (SSRF-guarded check)",
     "category": "fleet_infra",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "mesh": "0exec",
     "kind": "container",
     "language": "go",

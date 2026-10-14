@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Enable file-backed Fleet Graph writer configuration for five healthy active Go services: Fleet Counter, Fleet Dig, Fleet Fake, Fleet Pipe, and Fleet Port.
 - Enable Fleet Graph writer configuration for five active Go services: Voice Search, Fleet Pwgen, Fleet Resolver Quorum, Fleet IP, and Fleet Visualizer.
 - fleet-backup `mem_limit` override 12g -> 6g (matches go-fleet-backup 0.2.2: streaming archives peak at 3.4 GiB of mostly reclaimable page cache, about 100 MiB process memory). The generated compose overlay reads this value, so the compose file alone could not lower it.
 - Set simulate-ddos `example_path` to `/health`: its load-generating route only exists under a secret path token, the service's own smoke test deliberately targets `/health`, and the scaffolded `/?target=example.com` always answered 404, which made no-key probes of that service meaningless.
