@@ -9956,6 +9956,8 @@
   },
   {
     "id": "fleet-capabilities",
+    "version": "0.1.7",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "name": "Fleet Capabilities",
     "description": "G9 fleet capability aggregator. Walks the catalog and probes /openapi + /health + /version + /selftest on every kind=container entry in parallel; surfaces one aggregate at /capabilities.json (5-min in-process TTL, served stale during refresh). Plain net/http outbound (ADR-0024). Failed sub-probes recorded in errors[]; we never drop a service silently. Summary rollup (container_reachable, openapi_published, selftest_green/red/not_implemented) for one-glance fleet status.",
     "category": "observability",
@@ -10549,6 +10551,7 @@
   },
   {
     "id": "fleet-har-builder",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "name": "Fleet Har Builder",
     "description": "HAR 1.2 evidence formatter",
     "category": "fleet_evidence",
@@ -10587,7 +10590,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11003,6 +11006,7 @@
   },
   {
     "id": "fleet-poc-curl",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "name": "Fleet Poc Curl",
     "description": "redacted PoC curl emitter (bash -n parse-gated)",
     "category": "infrastructure",
@@ -11042,7 +11046,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11631,6 +11635,7 @@
   },
   {
     "id": "fleet-tech-inferrer",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "name": "Fleet Tech Inferrer",
     "description": "composite tech-stack inferrer (83 signals)",
     "category": "fleet_infra",
@@ -11669,7 +11674,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.1.3",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11832,6 +11837,7 @@
   },
   {
     "id": "fleet-webhook-verifier",
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "name": "Fleet Webhook Verifier",
     "description": "inbound webhook signature verifier (6 platforms)",
     "category": "fleet_infra",
@@ -11870,7 +11876,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.0",
+    "version": "0.2.2",
     "network_exposure": "gateway-authenticated"
   },
   {
