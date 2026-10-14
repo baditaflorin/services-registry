@@ -16,6 +16,7 @@ example for the category.
 Run:
     python3 bin/generate.py             # writes services.json + summary
     python3 bin/generate.py --dry-run   # prints diff without writing
+    python3 bin/generate.py --only <id> # updates one entry and regenerates slices
 """
 from __future__ import annotations
 
@@ -1321,6 +1322,66 @@ def write_summary(entries: list[dict]) -> str:
     return txt
 
 
+def merge_selected_entry(
+    existing: list[dict], generated: list[dict], service_id: str
+) -> list[dict]:
+    """Replace exactly one existing registry row with its generated source row."""
+    old_matches = [i for i, entry in enumerate(existing) if entry.get("id") == service_id]
+    new_matches = [entry for entry in generated if entry.get("id") == service_id]
+    if len(old_matches) != 1:
+        raise ValueError(f"expected exactly one existing entry for {service_id!r}; found {len(old_matches)}")
+    if len(new_matches) != 1:
+        raise ValueError(f"expected exactly one generated entry for {service_id!r}; found {len(new_matches)}")
+    old_entry = existing[old_matches[0]]
+    generated_entry = new_matches[0]
+    ordered_entry = {
+        key: generated_entry[key]
+        for key in old_entry
+        if key in generated_entry
+    }
+    ordered_entry.update({key: value for key, value in generated_entry.items() if key not in ordered_entry})
+    result = list(existing)
+    result[old_matches[0]] = ordered_entry
+    return result
+
+
+def replace_selected_entry_json(blob: str, generated_entry: dict, service_id: str) -> str:
+    """Replace one JSON array object while preserving every other source byte."""
+    if generated_entry.get("id") != service_id:
+        raise ValueError(f"generated row ID does not match {service_id!r}")
+    decoder = json.JSONDecoder()
+    pos = len(blob) - len(blob.lstrip())
+    if pos >= len(blob) or blob[pos] != "[":
+        raise ValueError("services.json must contain a top-level array")
+    pos += 1
+    matches = []
+    while pos > 0 and pos < len(blob):
+        while pos < len(blob) and blob[pos].isspace():
+            pos += 1
+        if pos >= len(blob) or blob[pos] == "]":
+            break
+        start = pos
+        item, end = decoder.raw_decode(blob, pos)
+        if isinstance(item, dict) and item.get("id") == service_id:
+            matches.append((start, end))
+        pos = end
+        while pos < len(blob) and blob[pos].isspace():
+            pos += 1
+        if pos < len(blob) and blob[pos] == ",":
+            pos += 1
+        elif pos < len(blob) and blob[pos] == "]":
+            break
+        else:
+            raise ValueError("malformed services.json array separator")
+    if len(matches) != 1:
+        raise ValueError(f"expected exactly one existing entry for {service_id!r}; found {len(matches)}")
+    start, end = matches[0]
+    line_start = blob.rfind("\n", 0, start) + 1
+    indent = " " * (start - line_start)
+    replacement = json.dumps(generated_entry, indent=2).replace("\n", "\n" + indent)
+    return blob[:start] + replacement + blob[end:]
+
+
 def write_slices(entries: list[dict]) -> list[tuple[str, int, int]]:
     """Emit every projection in PROJECTIONS as a compact JSON file next to
     services.json. Returns (filename, entry_count, byte_size) per slice
@@ -1342,7 +1403,17 @@ def main() -> int:
     ap.add_argument("--slices-only", action="store_true",
                     help="rebuild only the sliced projection files from the "
                          "existing services.json (skips the GitHub fetch)")
+    ap.add_argument("--only", metavar="SERVICE_ID",
+                    help="update one existing registry entry from current sources, "
+                         "preserving all other entries")
     args = ap.parse_args()
+
+    if args.only is not None:
+        args.only = args.only.strip()
+        if not args.only:
+            ap.error("--only requires a service ID")
+    if args.slices_only and args.only is not None:
+        ap.error("--only cannot be combined with --slices-only")
 
     if args.slices_only:
         if not SERVICES_JSON.exists():
@@ -1356,10 +1427,22 @@ def main() -> int:
         return 0
 
     overrides = load_overrides()
-    entries = build(overrides)
+    generated = build(overrides)
+    if args.only is not None:
+        if not SERVICES_JSON.exists():
+            sys.exit(f"ERROR: {SERVICES_JSON} does not exist — cannot update one entry")
+        existing_blob = SERVICES_JSON.read_text()
+        try:
+            existing_entries = json.loads(existing_blob)
+            entries = merge_selected_entry(existing_entries, generated, args.only)
+            generated_entry = next(entry for entry in entries if entry.get("id") == args.only)
+            new_blob = replace_selected_entry_json(existing_blob, generated_entry, args.only)
+        except (ValueError, StopIteration) as exc:
+            sys.exit(f"ERROR: {exc}")
+    else:
+        entries = generated
+        new_blob = json.dumps(entries, indent=2) + "\n"
     assert_no_secrets(entries)
-
-    new_blob = json.dumps(entries, indent=2) + "\n"
     if args.dry_run:
         old = SERVICES_JSON.read_text() if SERVICES_JSON.exists() else ""
         if new_blob == old:
@@ -1371,6 +1454,10 @@ def main() -> int:
         removed = {e["id"] for e in old_entries} - {e["id"] for e in entries}
         print(f"+{len(added)} new entries: {sorted(added)[:10]}{'…' if len(added) > 10 else ''}")
         print(f"-{len(removed)} removed entries: {sorted(removed)[:10]}{'…' if len(removed) > 10 else ''}")
+        old_by_id = {e["id"]: e for e in old_entries}
+        new_by_id = {e["id"]: e for e in entries}
+        updated = sorted(k for k in set(old_by_id) & set(new_by_id) if old_by_id[k] != new_by_id[k])
+        print(f"~{len(updated)} updated entries: {updated[:10]}{'…' if len(updated) > 10 else ''}")
         return 0
 
     SERVICES_JSON.write_text(new_blob)

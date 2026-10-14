@@ -63,6 +63,32 @@ EXPAND_SPEC = {
 }
 
 
+class TestSelectedEntryMerge(unittest.TestCase):
+    def test_replaces_only_requested_entry_and_preserves_order(self):
+        existing = [{"id": "first", "version": "1.0.0"}, {"id": "target", "version": "1.0.0"}, {"id": "last"}]
+        generated = [{"id": "target", "version": "1.0.1", "env": {"APP_VERSION": "1.0.1"}}]
+        result = generate.merge_selected_entry(existing, generated, "target")
+        self.assertEqual([entry["id"] for entry in result], ["first", "target", "last"])
+        self.assertEqual(result[0], existing[0])
+        self.assertEqual(result[2], existing[2])
+        self.assertEqual(result[1], generated[0])
+
+    def test_json_update_preserves_every_non_target_byte(self):
+        blob = '[\n  {"id":"keep","env":{"A":"B"}},\n  {"id":"target","version":"1.0.0"}\n]\n'
+        updated = generate.replace_selected_entry_json(blob, {"id": "target", "version": "1.0.1"}, "target")
+        self.assertTrue(updated.startswith('[\n  {"id":"keep","env":{"A":"B"}},\n'))
+        self.assertEqual(json.loads(updated)[1]["version"], "1.0.1")
+        self.assertEqual(updated.splitlines()[0], blob.splitlines()[0])
+
+    def test_requires_one_existing_and_generated_entry(self):
+        with self.assertRaisesRegex(ValueError, "existing entry"):
+            generate.merge_selected_entry([], [{"id": "target"}], "target")
+        with self.assertRaisesRegex(ValueError, "generated entry"):
+            generate.merge_selected_entry([{"id": "target"}], [], "target")
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            generate.merge_selected_entry([{"id": "target"}, {"id": "target"}], [{"id": "target"}], "target")
+
+
 class TestHeaderOnlyAuth(unittest.TestCase):
     def test_api_key_help_never_advertises_url_auth(self):
         self.assertEqual(
