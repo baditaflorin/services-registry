@@ -16,6 +16,8 @@
 # Changelog
 
 ## 2026-10-14
+- Enable file-backed Fleet Graph writer configuration for five active Go services: Fleet Capabilities 0.1.7, Fleet Tech Inferrer 0.1.3, Fleet PoC Curl 0.1.2, Fleet HAR Builder 0.1.5, and Fleet Webhook Verifier 0.2.2; sync catalog versions to their source manifests.
+
 - Enable Fleet Graph writer configuration for five active Go services and sync their catalog versions to the verified deployed origin/main releases: Domain AI Catalog Discovery 0.3.1, Team Size 3.0.13, Wps 2.3.3, Xss Payload 1.3.2, and Xss Scanner 1.5.8.
 
 ## 2026-10-13
