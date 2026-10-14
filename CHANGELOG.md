@@ -36,6 +36,7 @@
 # Changelog
 
 ## 2026-10-15
+- Sync Fleet Capabilities to merged release 0.1.8 after fixing Pyroscope auth-file environment wiring.
 - Sync seven pentest Fleet Graph rollout targets to current origin/main source versions: HTTP Replay 0.3.5, Job Queue 0.2.4, Notify 0.1.2, Orchestrator 0.2.3, Payoff Tracker 0.2.3, Rate Coordinator 0.2.5, and Walkthrough 0.3.3. The registry update does not itself deploy these versions.
 
 ## 2026-10-14
