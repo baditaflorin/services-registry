@@ -34,7 +34,7 @@ assume host/journald logs are available. Query `docker_logs` by exact host and
 and all six planned Docker hosts on 0mcp. The GitHub email runner shipper is
 active and sends to the current JSON endpoint above. A central query confirmed
 `docker-runtime-lv3` had logs for 29 containers (1,273 events in the preceding
-20 minutes). The 0docker Builder CT and the pve01 and 0own Buildx workers are
+20 minutes). The 0docker Builder CT and the pve01, 0own and 0infer Buildx workers are
 not enrolled. Treat missing rows as a collection gap, not a clean run. Check
 the live stream inventory and per-host coverage before relying on OpenObserve
 results.
