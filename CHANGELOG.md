@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Sync the Search Duck and Git Provider API Broker override versions with services.json and the released source v0.1.12 tags.
 - Sync Search Duck and Git Provider API Broker registry versions to source v0.1.12 after aligning their canonical Graph runtime declarations.
 - Enable file-backed Fleet Graph for Search Duck 0.1.11 and Git Provider API Broker 0.1.11 after bounded source and live dependency review.
 - Keep task-credential-broker on its proven API-key path while retaining Fleet Graph integration; disable its Compose SPIFFE socket/mTLS opt-in because both local SPIRE agents are currently failing node attestation and no production caller of the broker's private mTLS listener is verified.
