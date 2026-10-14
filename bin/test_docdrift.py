@@ -163,6 +163,17 @@ class CheckTests(Base):
         self.assertEqual(r["status"], "STALE")
         self.assertIn("not in runner", r["detail"])
 
+    def test_stamp_refuses_a_shallow_clone(self):
+        shallow = os.path.join(self.root, "shallowrepo")
+        subprocess.run(["git", "clone", "-q", "--depth", "1", "file://" + self.repo, shallow], check=True, env=ENV, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = os.path.join(self.root, "st.md")
+        open(p, "w").write("# d\n<!-- anchor id=s repo=shallowrepo symbol=verb:alpha verified=deadbeef0 digest=sha256:0 on=2026-10-01 -->\n")
+        before = open(p).read()
+        D.main(["--repos", self.root, "--ref", "main", "stamp", p, "--yes"])
+        self.assertEqual(open(p).read(), before)  # nothing was rewritten
+        self.assertTrue(D.Git(self.root, "main").incomplete("shallowrepo"))
+        self.assertFalse(D.Git(self.root, "main").incomplete("runner"))
+
     def test_add_refuses_unresolvable_and_stamp_needs_yes(self):
         p = os.path.join(self.root, "d2.md")
         open(p, "w").write("# d\nline\n")
