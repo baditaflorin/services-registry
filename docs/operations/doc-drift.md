@@ -53,3 +53,16 @@ An audit of a document produces many pieces of evidence of the form `repo/path:l
 - `check --ledger ledger.jsonl --repos <dir> [--json out.json] [--md out.md]` compares each row with the repository's default branch: `FRESH` (same text, same lines), `MOVED` (same text, other lines), `CHANGED` (the text is gone: the report gives the diff and how many commits and release tags have passed since the stamp), `GONE` (file deleted) or `NO-REPO` (no clone with a `.git` here; `--alias NAME=PATH` points a repository name at another checkout, e.g. `--alias fleet-state=/var/lib/fleet-docdrift/fleet-state`). The Markdown report has a per-document table and a per-repository table "read at vX (sha), now vY: N commits, M tags later".
 
 A ledger holds code snippets, so keep it in a private repository (fleet-state), not here. A snippet with a credential-like line (password, token, secret, api key followed by a value) is never stored: the row keeps only the digest (`redacted: true`) and its diff is withheld. `check` reads git objects only and changes nothing.
+
+## Inventory check: a new Proxmox host or guest must reach the documentation
+
+2026-10-14 showed the failure: the fifth Proxmox host (0infer) was added to the builder pool, the CI capacity notes and the DNS export, but `OPS.md` still said "four Proxmox hosts", and a VM appeared and another one was resized the same day the section about them was merged.
+`bin/proxmox_inventory.py snapshot` reads, with one read-only `ssh` per host, every Proxmox host's version and its VMs and containers (id, name, vCPUs, memory) into `fleet-state/inventory/proxmox-snapshot.json`.
+`bin/inventory_weekly.py` (run by `bin/inventory-weekly.sh`, a weekly LaunchAgent on the maintainer's Mac) does the rest:
+
+- the guest tables in the docs are **generated** from the snapshot (`<!-- BEGIN GENERATED:proxmox-inventory host=<id> -->`, `docdrift gen`), so sizes are never typed by hand;
+- `bin/inventory_check.py` compares the docs with the inventory: a host no document mentions, a wrong "`<N>` Proxmox hosts", and a guest that is **new** since the baseline and that no document mentions by name or as `VM <id>`; guests that existed when the baseline was taken do not have to be listed;
+- while there are findings, `inventory/proxmox-baseline.json` is not advanced and one GitHub issue ("Docs drift: Proxmox inventory vs documentation") is kept up to date; it closes itself on the next clean run; a macOS notification is shown;
+- deliberate exceptions go in `inventory/inventory-allow.json` (`{"guests": [...], "hosts": [...]}`).
+
+`inventory/proxmox-hosts.json` lists the hosts as `{"id", "alias"}` (an ssh alias, no addresses). A host that cannot be read changes nothing and is reported.
