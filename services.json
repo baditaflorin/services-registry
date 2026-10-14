@@ -10710,7 +10710,7 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "tags": [
       "kind-container",
       "language-go",
@@ -10735,7 +10735,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SERVICE_ID": "fleet-mcp-gateway"
+    }
   },
   {
     "id": "fleet-md",
@@ -15054,7 +15059,12 @@
       "apikey-service"
     ],
     "proxy_egress": true,
-    "version": "0.1.18",
+    "version": "0.1.20",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SERVICE_ID": "task-credential-broker"
+    },
     "network_exposure": "gateway-authenticated"
   },
   {
