@@ -31,6 +31,9 @@
 
 # Changelog
 
+## 2026-10-15
+- Sync the five pentest Fleet Graph rollout targets to their current origin/main source versions: HTTP Replay 0.3.5, Job Queue 0.2.4, Notify 0.1.2, Orchestrator 0.2.3, and Payoff Tracker 0.2.3. The registry update does not itself deploy these versions.
+
 ## 2026-10-14
 - Enable file-backed Fleet Graph writer configuration for five active Go services: Fleet Capabilities 0.1.7, Fleet Tech Inferrer 0.1.3, Fleet PoC Curl 0.1.2, Fleet HAR Builder 0.1.5, and Fleet Webhook Verifier 0.2.2; sync catalog versions to their source manifests.
 

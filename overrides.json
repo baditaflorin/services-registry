@@ -5870,6 +5870,7 @@
     "description": "Captures + reproduces HTTP request/response pairs as bug-bounty evidence. Generates canonical curl PoC, replays for diff, imports raw HTTP from Burp. Uses go-common safehttp (SSRF-safe).",
     "example_path": "/stats",
     "host_port": 18130,
+    "version": "0.3.5",
     "trl": 6,
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-session-2026-05-15",
@@ -5913,7 +5914,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
     "trl_evidence": "idempotency_key column with partial UNIQUE index, /metrics short-circuit middleware, /selftest, TestEnqueue_IdempotencyKey_Concurrent (50-goroutine race)",
-    "version": "0.2.0"
+    "version": "0.2.4"
   },
   "pentest-js-bundle-scanner": {
     "access_tier": "vetted-pentest",
@@ -6008,7 +6009,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Bounded by submit-bot's platform-API stability. Once submit-bot ships TRL 8, this trails one step behind at 7-8.",
     "trl_evidence": "campaign state machine, transitions + campaign_artifacts tables, idempotency_key returns 201/200 same as job-queue pattern, /selftest drives scope->recon->scan against httptest stubs",
-    "version": "0.2.0",
+    "version": "0.2.3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6045,7 +6046,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling lifts once at least ~20 real submissions have flowed through and /calibration is non-empty.",
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE ingest, amount_cents as INTEGER (no float for money), /stats with percentiles, /scoreboard ordered by payout, /selftest",
-    "version": "0.2.0"
+    "version": "0.2.3"
   },
   "pentest-rate-coordinator": {
     "env": {
