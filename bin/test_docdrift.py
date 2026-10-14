@@ -269,6 +269,35 @@ class GenerateAndLintTests(Base):
         self.assertEqual(hits, [2, 10])
 
 
+class VolatileTests(Base):
+    def _doc(self, before, after):
+        d = os.path.join(self.root, "docrepo")
+        os.makedirs(d)
+        sh(d, "init", "-q", "-b", "main")
+        commit(d, {"A.md": before}, "base")
+        p = os.path.join(d, "A.md")
+        open(p, "w").write(after)
+        return p
+
+    def test_flags_added_number_and_status_word_but_not_old_text(self):
+        old = "The pool has 12 VMs and is currently small.\n"
+        p = self._doc(old, old + "\nThe new host has 64 GiB of RAM.\n\nThe pilot is in progress.\n")
+        hits = D.volatile_claims(p, "main")
+        self.assertEqual([(i, k) for i, k, _ in hits], [(3, "number"), (5, "status-word")])
+
+    def test_date_version_anchor_or_command_next_to_the_claim_is_enough(self):
+        add = ("\nThe host has 64 GiB of RAM (2026-10-14).\n\nThere are 9 containers as of the last audit.\n\n"
+               "Eight VMs run here; `pvesh get /nodes/x/qemu` lists them.\n\nWe run 3 replicas on v0.7.393.\n\n"
+               "```bash\n# 3 VMs currently\n```\n\n<!-- BEGIN GENERATED:x -->\n5 VMs currently\n<!-- END GENERATED:x -->\n")
+        p = self._doc("intro\n", "intro\n" + add)
+        self.assertEqual(D.volatile_claims(p, "main"), [])
+
+    def test_cli_is_advisory_unless_strict(self):
+        p = self._doc("intro\n", "intro\n\nIt currently has 4 hosts.\n")
+        self.assertEqual(D.main(["--repos", self.root, "volatile", p, "--base", "main"]), 0)
+        self.assertEqual(D.main(["--repos", self.root, "volatile", p, "--base", "main", "--strict"]), 1)
+
+
 class CopyTests(Base):
     def make_canon(self):
         canon = os.path.join(self.root, "registry")

@@ -70,3 +70,7 @@ A ledger holds code snippets, so keep it in a private repository (fleet-state), 
 ## Placement policy table
 
 `host-placement-policy.json` changes in waves: on 2026-10-14 the allowlist of `infer-runtime` went from one service to about 170 in a day. A document that lists hosts, their state or their allowlist therefore holds a **generated** table (`<!-- BEGIN GENERATED:placement-policy -->`, `docdrift gen`): one row per logical host with cluster, state, roles, runtimes, placement classes and the size of the allowlist (a count, never the list). The nightly job runs `gen --check`, so a policy change that is merged without regenerating the table shows up as drift on the next run.
+
+## Volatile claims added by a change
+
+A count with a unit ("12 VMs", "64 GiB"), or a word like "currently" or "not yet", goes stale without anyone touching the document. `bin/docdrift.py volatile --base origin/main DOC...` looks only at the lines a change adds and lists those whose paragraph has no date (`2026-10-14`, "as of"), version (`v0.7.393`), anchor or pointer to the command that prints the value (``run `...` ``, ``see `...` ``, ``lists `...` ``). Code fences and GENERATED blocks are skipped, and existing text is never flagged. It is advisory (exit 0); `--strict` exits 1 so a repository can gate on it. The fix is one of: date the sentence, name the command, or generate the value.
