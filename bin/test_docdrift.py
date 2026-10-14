@@ -246,7 +246,7 @@ class GenerateAndLintTests(Base):
         self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--write"]), 0)
         t = open(p).read()
         self.assertIn("| `dockerhost` | 0docker | active | fleet-compose-runtime | compose | replicable, pinned | - |", t)
-        self.assertIn("| `infer-runtime` | infer | restricted | fleet-compose-runtime | compose | replicable | 1 services |", t)
+        self.assertIn("| `infer-runtime` | infer | restricted | fleet-compose-runtime | compose | replicable | 1 service |", t)
         self.assertIn("| `infer-builder-ci` | infer | build-only | image-builder | - | - | - |", t)
         self.assertNotIn("svc-a", t)
         self.assertNotIn("hand typed", t)

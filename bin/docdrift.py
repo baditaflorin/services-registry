@@ -553,7 +553,7 @@ def gen_placement_policy(git, attrs):
         s += "| `%s` | %s | %s | %s | %s | %s | %s |\n" % (
             name, h.get("cluster", "-"), h.get("state", "-"), ", ".join(h.get("roles", [])) or "-",
             ", ".join(h.get("allowed_runtimes", [])) or "-", ", ".join(h.get("allowed_placement", [])) or "-",
-            ("%d services" % len(allow)) if allow is not None else "-")
+            ("%d service%s" % (len(allow), "" if len(allow) == 1 else "s")) if allow is not None else "-")
     return s
 
 
