@@ -193,6 +193,34 @@ class GenerateAndLintTests(Base):
         self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--check"]), 0)
         self.assertEqual(open(p).read(), body)
 
+    def test_gen_proxmox_inventory_renders_one_host_without_status_or_date(self):
+        fs = os.path.join(self.root, "fleet-state")
+        os.makedirs(fs)
+        sh(fs, "init", "-q", "-b", "main")
+        snap = {"taken_at": "2026-10-14T10:00:00Z", "hosts": {
+            "0infer": {"hostname": "pve01", "pve_version": "x", "guests": [
+                {"type": "qemu", "vmid": 702, "name": "infer-builder-ci", "status": "running", "cpus": 30, "maxmem_mb": 24576, "template": False},
+                {"type": "qemu", "vmid": 9000, "name": "infer-debian13-template", "status": "stopped", "cpus": 2, "maxmem_mb": 2048, "template": True}]},
+            "0docker": {"hostname": "h", "pve_version": "x", "guests": []}}}
+        commit(fs, {"inventory/proxmox-snapshot.json": json.dumps(snap)}, "snapshot")
+        p = os.path.join(self.root, "inv.md")
+        open(p, "w").write("a\n<!-- BEGIN GENERATED:proxmox-inventory host=0infer -->\nhand typed\n<!-- END GENERATED:proxmox-inventory -->\nb\n")
+        self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--write"]), 0)
+        t = open(p).read()
+        self.assertIn("| 702 | `infer-builder-ci` | VM | 30 | 24 |", t)
+        self.assertIn("| 9000 | `infer-debian13-template` (template) | VM | 2 | 2 |", t)
+        self.assertNotIn("running", t)
+        self.assertNotIn("2026-10-14", t)
+        self.assertNotIn("hand typed", t)
+        # a later snapshot with a changed taken_at and the same guests does not change the block
+        snap["taken_at"] = "2026-10-21T10:00:00Z"
+        commit(fs, {"inventory/proxmox-snapshot.json": json.dumps(snap)}, "weekly")
+        self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--check"]), 0)
+        # a new RAM size does
+        snap["hosts"]["0infer"]["guests"][0]["maxmem_mb"] = 32768
+        commit(fs, {"inventory/proxmox-snapshot.json": json.dumps(snap)}, "bigger")
+        self.assertEqual(D.main(["--repos", self.root, "--ref", "main", "gen", p, "--check"]), 1)
+
     def test_gen_accepts_space_after_colon(self):
         p = os.path.join(self.root, "g2.md")
         open(p, "w").write("<!-- BEGIN GENERATED: verbs repo=runner -->\n<!-- END GENERATED: verbs -->\n")

@@ -509,7 +509,23 @@ def gen_pools(git, attrs):
     return s
 
 
-GENERATORS = {"verbs": gen_verbs, "registry-counts": gen_registry_counts, "pools": gen_pools}
+def gen_proxmox_inventory(git, attrs):
+    """the guests of ONE Proxmox host from the weekly read-only snapshot (bin/proxmox_inventory.py), as a table.
+    Status is left out on purpose: it changes faster than a document, and the snapshot date is not printed (it would break `gen --check`)."""
+    repo = attrs.get("repo", "fleet-state")
+    path = attrs.get("path", "inventory/proxmox-snapshot.json")
+    host = attrs["host"]
+    h = json.loads(git.show(repo, path))["hosts"].get(host)
+    if h is None or "error" in h:
+        raise SystemExit("host %s is not in %s/%s (or its entry is an error)" % (host, repo, path))
+    s = "\n_Generated from `%s/%s` (a weekly read-only snapshot, `bin/proxmox_inventory.py`); do not edit by hand._\n\n" % (repo, path)
+    s += "| ID | Name | Type | vCPUs | RAM (GiB) |\n|---|---|---|---|---|\n"
+    for g in sorted(h["guests"], key=lambda g: (g["type"], g["vmid"])):
+        s += "| %d | `%s`%s | %s | %d | %s |\n" % (g["vmid"], g["name"], " (template)" if g.get("template") else "", "VM" if g["type"] == "qemu" else "CT", g["cpus"], ("%g" % round(g["maxmem_mb"] / 1024.0, 1)))
+    return s
+
+
+GENERATORS = {"verbs": gen_verbs, "registry-counts": gen_registry_counts, "pools": gen_pools, "proxmox-inventory": gen_proxmox_inventory}
 
 
 def cmd_gen(a):
@@ -523,7 +539,7 @@ def cmd_gen(a):
             if not g:
                 raise SystemExit("no generator named %s" % m.group("name"))
             at = parse_attrs(m.group("attrs"))
-            need = at.get("repo") or {"verbs": "go_fleet_runner", "registry-counts": "services-registry", "pools": "fleet-state"}.get(m.group("name"))
+            need = at.get("repo") or {"verbs": "go_fleet_runner", "registry-counts": "services-registry", "pools": "fleet-state", "proxmox-inventory": "fleet-state"}.get(m.group("name"))
             if need and not git.has_repo(need):
                 print("%s: block %s skipped (repository %s is not available here)" % (d, m.group("name"), need), file=sys.stderr)
                 return m.group(0)
