@@ -106,6 +106,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8273,
     "container_port": 8273,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -147,6 +148,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8274,
     "container_port": 8274,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -188,6 +190,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8275,
     "container_port": 8275,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -266,6 +269,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8081,
     "container_port": 8081,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -347,6 +351,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8276,
     "container_port": 8276,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -536,6 +541,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18288,
     "container_port": 18288,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -576,6 +582,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18287,
     "container_port": 18287,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -808,6 +815,7 @@
     "trl_assessor": "claude-session-2026-08-20",
     "host_port": 8326,
     "container_port": 8326,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -925,6 +933,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8280,
     "container_port": 8280,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -1041,6 +1050,7 @@
     "trl_assessor": "fleet-bot-squatter-recovery",
     "host_port": 18325,
     "container_port": 18325,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -1230,6 +1240,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18265,
     "container_port": 18265,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -1567,6 +1578,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8282,
     "container_port": 8282,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -1608,6 +1620,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8283,
     "container_port": 8283,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -1917,6 +1930,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18214,
     "container_port": 18214,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -1955,6 +1969,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18222,
     "container_port": 18222,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -1998,6 +2013,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18215,
     "container_port": 18215,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2073,6 +2089,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18224,
     "container_port": 18224,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2114,6 +2131,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet",
     "host_port": 18210,
     "container_port": 18210,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2187,6 +2205,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18230,
     "container_port": 18230,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -2228,6 +2247,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18235,
     "container_port": 18235,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2270,6 +2290,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18216,
     "container_port": 18216,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2345,6 +2366,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18241,
     "container_port": 18241,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2468,6 +2490,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18225,
     "container_port": 18225,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2509,6 +2532,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18226,
     "container_port": 18226,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2552,6 +2576,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18211,
     "container_port": 18211,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2595,6 +2620,7 @@
     "trl_assessor": "engineering-review-2026-10-12",
     "host_port": 18231,
     "container_port": 18231,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2635,6 +2661,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18232,
     "container_port": 18232,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2675,6 +2702,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18221,
     "container_port": 18221,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -2745,6 +2773,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18239,
     "container_port": 18239,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2823,6 +2852,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18223,
     "container_port": 18223,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -2866,6 +2896,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18243,
     "container_port": 18243,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2907,6 +2938,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18240,
     "container_port": 18240,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2983,6 +3015,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18213,
     "container_port": 18213,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3062,6 +3095,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18229,
     "container_port": 18229,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3102,6 +3136,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync",
     "host_port": 18227,
     "container_port": 18227,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3184,6 +3219,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18234,
     "container_port": 18234,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3224,6 +3260,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18238,
     "container_port": 18238,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3262,6 +3299,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18233,
     "container_port": 18233,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache",
       "fleet-graph"
@@ -3499,6 +3537,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8288,
     "container_port": 8288,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3576,6 +3615,7 @@
     "trl_assessor": "codex-session-2026-05-14",
     "host_port": 8164,
     "container_port": 8164,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3696,6 +3736,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8289,
     "container_port": 8289,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3737,6 +3778,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8290,
     "container_port": 8290,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3776,6 +3818,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 18293,
     "container_port": 18293,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -3818,6 +3861,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8291,
     "container_port": 8291,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3980,6 +4024,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18247,
     "container_port": 18247,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4532,6 +4577,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 18286,
     "container_port": 18286,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4569,6 +4615,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8292,
     "container_port": 8292,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -4609,6 +4656,7 @@
     "trl_assessor": "codex-trl-audit-2026-07-14",
     "host_port": 18250,
     "container_port": 18250,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4647,6 +4695,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18252,
     "container_port": 18252,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4684,6 +4733,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8293,
     "container_port": 8293,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4727,6 +4777,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18270,
     "container_port": 18270,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4765,6 +4816,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18249,
     "container_port": 18249,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -4874,6 +4926,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18266,
     "container_port": 18266,
+    "placement": "replicable",
     "version": "0.1.9",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -5023,6 +5076,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8294,
     "container_port": 8294,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5068,6 +5122,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 18285,
     "container_port": 18285,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5231,6 +5286,7 @@
     "trl_assessor": "claude-trl-uplift-2026-07-29-real-data-validation",
     "host_port": 8297,
     "container_port": 8297,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5311,6 +5367,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8298,
     "container_port": 8298,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5619,6 +5676,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18271,
     "container_port": 18271,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5659,6 +5717,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8300,
     "container_port": 8300,
+    "placement": "replicable",
     "version": "2.5.18",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -5701,6 +5760,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8301,
     "container_port": 8301,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5743,6 +5803,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18268,
     "container_port": 18268,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5901,6 +5962,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18248,
     "container_port": 18248,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5978,6 +6040,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18245,
     "container_port": 18245,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6096,6 +6159,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8302,
     "container_port": 8302,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6137,6 +6201,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8303,
     "container_port": 8303,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6218,6 +6283,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 18292,
     "container_port": 18292,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6298,6 +6364,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8304,
     "container_port": 8304,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6447,6 +6514,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8305,
     "container_port": 8305,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6608,6 +6676,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8306,
     "container_port": 8306,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6722,6 +6791,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 8307,
     "container_port": 8307,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6764,6 +6834,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8167,
     "container_port": 8167,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6843,6 +6914,7 @@
     "trl_assessor": "claude-opus-trl-real-upgrades-2026-05-14",
     "host_port": 8308,
     "container_port": 8308,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6886,6 +6958,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18259,
     "container_port": 18259,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -6994,6 +7067,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8310,
     "container_port": 8310,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -7564,6 +7638,7 @@
     "trl_assessor": "claude-opus-4.8",
     "host_port": 18251,
     "container_port": 18251,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -7798,6 +7873,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8316,
     "container_port": 8316,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -8035,6 +8111,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8321,
     "container_port": 8321,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -8115,6 +8192,7 @@
     "trl_assessor": "codex-trl-audit-2026-07-14",
     "host_port": 8322,
     "container_port": 8322,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -8266,6 +8344,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8324,
     "container_port": 8324,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -8978,6 +9057,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18189,
     "container_port": 18189,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9062,6 +9142,7 @@
     "trl_assessor": "fleet-bot-squatter-recovery",
     "host_port": 18324,
     "container_port": 18324,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9100,6 +9181,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18198,
     "container_port": 18198,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9141,6 +9223,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18184,
     "container_port": 18184,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -9218,6 +9301,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18197,
     "container_port": 18197,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9299,6 +9383,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18190,
     "container_port": 18190,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9339,6 +9424,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18187,
     "container_port": 18187,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -9379,6 +9465,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18193,
     "container_port": 18193,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9419,6 +9506,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "host_port": 18196,
     "container_port": 18196,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9537,6 +9625,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18191,
     "container_port": 18191,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9617,6 +9706,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18192,
     "container_port": 18192,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9659,6 +9749,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18186,
     "container_port": 18186,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9699,6 +9790,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18185,
     "container_port": 18185,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9739,6 +9831,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "host_port": 18199,
     "container_port": 18199,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9778,6 +9871,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
     "host_port": 18194,
     "container_port": 18194,
+    "placement": "replicable",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
