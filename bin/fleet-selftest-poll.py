@@ -135,6 +135,20 @@ def classify(http_status, body):
     return "fail", checks or [("_overall", False)]
 
 
+def failing_errors(body, limit=3, width=160):
+    """'name: err' for failing checks in a /selftest body, so the log says why (e.g. 'timeout after 5s')."""
+    try:
+        obj = json.loads(body) if body else None
+    except ValueError:
+        return []
+    out = []
+    if isinstance(obj, dict) and isinstance(obj.get("checks"), list):
+        for c in obj["checks"]:
+            if isinstance(c, dict) and c.get("pass") is False and c.get("err"):
+                out.append(("%s: %s" % (c.get("name", "?"), c["err"]))[:width])
+    return out[:limit]
+
+
 def fetch(url, timeout, api_key=None):
     """-> (http_status or None, body text, error text)."""
     headers = {"User-Agent": UA, "Accept": "application/json"}
@@ -176,6 +190,8 @@ def probe(svc, timeout, api_key=None, direct_hosts=()):
         status, body, err = fetch(url, timeout, api_key)
         via = "edge"
     state, checks = classify(status, body)
+    if not err and state == "fail":
+        err = "; ".join(failing_errors(body))
     return {"id": sid, "url": url, "via": via, "http": status, "state": state, "checks": checks,
             "ms": int((time.time() - t0) * 1000), "error": err}
 
