@@ -805,7 +805,7 @@ fleet-runner stats                           # audit log + token usage summary
 ```
 
 <!-- anchor id=fleet-runner-verbs-health repo=go_fleet_runner symbol=verb:health verified=6bebc4351 digest=sha256:24e024c191e54f6cd107d1debc945163ed3b485d9bfebdeaf5fb15dee68f80cb on=2026-10-12 -->
-<!-- anchor id=bootstrap-compose-scaffold-compose repo=go_fleet_runner symbol=verb:scaffold-compose verified=6bebc4351 digest=sha256:daff9c6da2423c153cec90dc3862e5abfc9d5904f30ca1cde7abbff16f91b2e6 on=2026-10-12 -->
+<!-- anchor id=bootstrap-compose-scaffold-compose repo=go_fleet_runner symbol=verb:scaffold-compose verified=101e9fb9f digest=sha256:22ed1710cf05923377e67ccb33ec2b670dc02eddd9487f6bbfd18e26734e81f1 on=2026-10-14 -->
 
 `new-service` does not set GitHub topics. `bin/generate.py` registers a repo
 only with a `mesh-<mesh>` topic, and also reads `lang-<x>` (defaults to go on
@@ -1819,7 +1819,9 @@ for `--skip-smoke`. Need a single client to skip the cache outside
 selftest? `safehttp.WithoutFetchCache()` (per-client) or
 `WithoutFetchCacheContext(ctx)` (per-request).
 
-<!-- anchor id=selftest-fetch-cache-probedirect repo=go_fleet_runner symbol=go:deploy_smoke_direct.go#probeDirect verified=6bebc4351 digest=sha256:70ceaa2aab6ca13b2963b2421a3114c81d9fe762c083af372666b97da2df5827 on=2026-10-12 -->
+Since go_fleet_runner v0.7.393, `deploy`'s direct smoke probe retries up to 5 times, 4 s apart, when a probe gets no HTTP response at all (curl prints `000`: connection refused, reset or timeout), so a container that is not listening yet is not rolled back for that; any HTTP status, including 4xx and 5xx, is judged on the first answer.
+
+<!-- anchor id=selftest-fetch-cache-probedirect repo=go_fleet_runner symbol=go:deploy_smoke_direct.go#probeDirect verified=101e9fb9f digest=sha256:9eb4e4a3eaa7e56651f227e3815e59452872711f8e19092ae6827f7dd0eb9ab4 on=2026-10-14 -->
 <!-- anchor id=selftest-fetch-cache-withoutfetchcachecontex repo=go-common symbol=go:safehttp/fetchcache.go#WithoutFetchCacheContext verified=879bbaa1c digest=sha256:e3bc237b8580886297b9c77d3ba644af87f623a770d6a6de9aeb7e66a724b6a9 on=2026-10-12 -->
 
 ## Per-repo `CHANGELOG.md` — capture what changed at each version

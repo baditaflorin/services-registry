@@ -62,6 +62,17 @@ class Git(object):
     def has_repo(self, repo):
         return os.path.exists(os.path.join(self.root, repo, ".git"))
 
+    def incomplete(self, repo):
+        """True for a shallow or partial (blobless, promisor) clone. `verb:` symbols are resolved with `git grep` over the tree, which only sees the blobs that
+        are present, so a digest computed from such a clone differs from the one a full clone gives: never stamp from one."""
+        d = os.path.join(self.root, repo)
+        try:
+            if self._run(repo, "rev-parse", "--is-shallow-repository").strip() == "true":
+                return True
+            return bool(self._run(repo, "config", "--get-regexp", r"^remote\..*\.promisor$").strip())
+        except RuntimeError:
+            return False
+
     def resolve_ref(self, repo):
         for cand in (self.ref, "HEAD"):
             try:
@@ -433,6 +444,9 @@ def cmd_stamp(a):
     out, last, changed = [], 0, 0
     for x in anchors:
         if a.id and x.id != a.id:
+            continue
+        if git.has_repo(x.get("repo")) and git.incomplete(x.get("repo")):
+            print("skip %s: %s is a shallow or partial clone here; its digest would not match a full clone's (stamp on a full clone)" % (x.id, x.get("repo")), file=sys.stderr)
             continue
         try:
             t, _f = resolve(git, x.get("repo"), x.get("symbol"))
