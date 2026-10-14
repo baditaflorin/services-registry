@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Enable service-scoped Pyroscope profile configuration for Fleet Tech Inferrer and Fleet Webhook Verifier after their source releases were merged.
 - Align admin-finder 1.7.8 registry version and remove Coolify secret references from public environment overrides; the source manifest resolves them through validated coolify_secret_refs.
 - Verify Pyroscope profile transport for admin-finder in digest-pinned staging, then sync 1.7.7 after fixing Coolify/Compose environment and version-label propagation.
 - Enable the canonical Fleet Graph Compose overlay for Fleet Markdown, Fleet Read, and Pentest Target Normalizer, including the reviewed read-only hot-reload key mounts.
