@@ -106,6 +106,16 @@
       ],
       "allowed_runtimes": [],
       "allowed_placement": []
+    },
+    "infer-tier0": {
+      "cluster": "infer",
+      "capacity_label": "infer-tier0",
+      "state": "restricted",
+      "roles": [
+        "tier0-standby"
+      ],
+      "allowed_runtimes": [],
+      "allowed_placement": []
     }
   }
 }
