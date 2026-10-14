@@ -666,6 +666,12 @@ from go_fleet_runner PR #82** — earlier binaries silently rendered the
 caps in its base `docker-compose.yml` opts OUT of overlay injection with
 `"compose_self_managed": true`.
 
+For a service whose published ports must stay private to its cluster's Dockerhost,
+set `"compose_bind_to_gateway_upstream": true` in its per-slug override. The
+renderer resolves the address from private cluster configuration; do not put an
+internal IP in this public repository. An explicit `render-compose
+--bind-address` still overrides the per-service setting for that invocation.
+
 > **Operational gotcha:** a live `docker update --cpus N` on a running
 > container **reverts** to the rendered value on the next
 > `render-compose` / `deploy` unless the per-slug `cpus` override is set

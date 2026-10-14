@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Keep Git Provider API Broker's published port bound to the Dockerhost's private gateway-upstream address through a public-registry boolean opt-in; fleet-runner resolves the actual address from private cluster configuration.
 - Pin the Git Provider API Broker Compose overlay to its actual `git-provider-api-broker` service; the default `app` name created an empty phantom service and blocked Fleet Graph key-mount activation.
 - Sync the Search Duck and Git Provider API Broker override versions with services.json and the released source v0.1.12 tags.
 - Sync Search Duck and Git Provider API Broker registry versions to source v0.1.12 after aligning their canonical Graph runtime declarations.
