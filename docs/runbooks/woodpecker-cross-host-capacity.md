@@ -8,19 +8,27 @@ not move a repository between control planes just to choose a worker host.
 
 ## Deployed topology
 
-`ci.0exec.com` schedules across these stable agent identities:
+As of 2026-10-14 `ci.0exec.com` has these schedulable agents
+(`fleet-runner woodpecker queue --plane 0exec` shows online and schedulable
+counts and capacity; the controller journal names the agents):
 
-- `0docker-builder-agent-a`
-- `0docker-builder-agent-b`
-- `0mcp-docker-exec-agent`
-- `0mcp-docker-0exec-ag-from-72-r-20260929t184118` on VM 130, with one
-  workflow slot and the VM 130 metrics group
-- `pve01-fleet-agent` on a dedicated remote builder VM
-- `0own-build-agent` on dedicated 0own VM 610
+- `0mcp-docker-0exec-ag-from-72-r-20260929t184118` on VM 130 (one workflow
+  slot and the VM 130 metrics group)
+- `0own-build-agent` on 0own VM 610 (`0own-build-worker`, which also hosts a
+  Forgejo Woodpecker server and agent, a Buildx builder and a mail server)
+- `infer-builder-ci`
+- a diagnostic registration on CT 108
 
-The pve01 worker is a general fleet agent (`repo=*`, Docker backend) with
-`WOODPECKER_MAX_WORKFLOWS=1`. The 0own VM 610 agent uses the general Docker
-backend with four workflow slots on its 8-vCPU, 32-GiB guest. It joins the
+`pve01-fleet-agent` (registration 100, capacity 2) was offline with a stale
+heartbeat and a stopped builder VM on 2026-10-14. Registration 98 on CT 108 is
+held by a manual `no_schedule`. `0docker-builder-agent-a`,
+`0docker-builder-agent-b` and `0mcp-docker-exec-agent` survive only as stale
+registrations.
+
+The pve01 worker is a general fleet agent (`repo=*`, Docker backend); read its
+`WOODPECKER_MAX_WORKFLOWS` from its Compose file once its VM is up. The 0own
+VM 610 agent uses the general Docker backend with four workflow slots on its
+10-vCPU, 32-GiB guest. It joins the
 existing `ci.0exec.com` control plane; repositories do not need a new webhook
 or a repo-specific builder configuration. Woodpecker assigns queued workflows
 to matching agents with free workflow slots. Keep the concurrency cap at four
@@ -49,8 +57,9 @@ fails, the `ci.0exec` agent is drained until metrics recover.
 
 Worker attribution follows the running container's host, not names embedded
 in old agent registrations. Registration 98 has a historical `pve01` name but
-runs on CT 108; it is mapped to `0docker` and remains unschedulable while the
-backing RAID is degraded.
+runs on CT 108; it belongs under `0docker`. As of 2026-10-14 it is held out of
+scheduling by a manual `no_schedule` flag, which the controller does not manage
+and does not tie to RAID state.
 
 Only repositories with a Woodpecker workflow file can run a pipeline. A
 workflow pinned to a site or specialized label can only use agents that match
@@ -64,7 +73,10 @@ This pool executes repository CI workflows. Production image publication and
 `fleet-runner deploy` still follow the fleet deployment contract and use the
 canonical deployment builder until that separate path is explicitly migrated.
 
-`ci.0mcp.com` also has `0exec-builder-mcp-agent` as remote capacity. The
+As of 2026-10-14 `ci.0mcp.com` has no usable `0exec-builder-mcp-agent`
+capacity: its online agents are its own VM 130 build worker and its staging
+runtime worker; `fleet-runner woodpecker queue --plane 0mcp` shows the live
+pool. The
 control-plane hostname never determines the physical execution host; use
 `bin/ci_execution_report.py` for deterministic attribution.
 
@@ -122,16 +134,11 @@ refuses a globally paused queue, assigned work on the selected agent, or an
 offline worker. It changes only `ci.0exec.com`; do not use it for
 `ci.0mcp.com`.
 
-If a successful worker cutover leaves the old registration unschedulable because
-the API delete was unavailable, retry its cleanup with
-`sudo fleet-runner woodpecker agent retire <registration-id>` after its
-heartbeat is stale and it has no assigned tasks.
+The `fleet-runner woodpecker agent retire` and `resume` verbs are disabled.
+Finish or retire a cutover only through the exact durable reconcile journal.
 
 If the replacement heartbeat was not verified, repair the worker's token file
-or Compose connection first. Once its identity-matched heartbeat is fresh, the
-source worker is offline and idle, and the global queue is not paused, finish
-the cutover with
-`sudo fleet-runner woodpecker agent resume <replacement-registration-id>`.
+or Compose connection first.
 
 The worker receives only `WOODPECKER_AGENT_SECRET_FILE`; the control-plane JWT
 signing secret remains on the server. The helper never copies secret-bearing
@@ -151,8 +158,9 @@ When sites reuse private address ranges, expose only the Woodpecker gRPC port
 on the control-plane site's Tailscale address. Render and install
 `woodpecker-private-proxy@.socket.tmpl` and
 `woodpecker-private-proxy@.service.tmpl` on that site's bastion. Instantiate
-ports 9000 and 9100 so the agent receives gRPC and the remote controller can
-read node-exporter without exposing either port publicly.
+port 9000 so the agent receives gRPC without exposing it publicly; the
+controller reads each worker's node-exporter through a loopback SSH tunnel to
+that worker's port 9100.
 
 If the agent VM is not itself a Tailscale node, render
 `woodpecker-private-route.sh.tmpl` on its bastion and install it with

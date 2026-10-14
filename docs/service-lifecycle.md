@@ -8,12 +8,14 @@ sunset records as tombstones so catalogs can explain why a product disappeared.
 Active-only ID and TRL work queues omit sunset records; the names and minimal
 catalog views retain the lifecycle marker for human-facing explanations.
 
-The generated deploy catalog also retains the lifecycle object. This is
-intentional: deploy tools need the record to refuse a sunset target and print
-the date and reason. `services.mcp.json` excludes sunset entries, even if an
+The generated deploy catalog also retains the lifecycle object, so anything
+reading it sees the sunset marker. `fleet-runner deploy` itself reads the full
+`services.json` to refuse a sunset target and print the date and reason.
+`services.mcp.json` excludes sunset entries, even if an
 older readiness audit still says `mcp_ready: true`. The assigned host port stays
-in `services.ports.json` while the old workload exists, preventing accidental
-reuse during retirement.
+in `services.ports.json` for as long as the sunset record is kept in the
+registry, even after the old workload has been removed, preventing accidental
+reuse of the port.
 
 The runner rejects a sunset target before compose or image deployment. Its
 NGINX renderer can turn the service hostname into an explicit HTTP 410 response

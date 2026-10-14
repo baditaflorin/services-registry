@@ -3,12 +3,12 @@
 The 2026-09 cookie-checker incident (a removed gateway vhost that 308-bounced
 to a valid-cert 200 elsewhere) and the python-proxy incident (a broken image
 crash-looping for 3 weeks) shared one root shape: **a deploy half-landed and
-nothing noticed.** These are the layers now in place.
+nothing noticed.** Layers 1, 3 and 4 are in place; as of 2026-10-14 layer 2 runs on one dockerhost only and no OpenObserve alert is defined on its stream.
 
 | Layer | Tool | Catches | Where |
 |---|---|---|---|
 | 1. External edge probe | `bin/fleet-edge-probe.py` (`fleet-edge-probe.timer`, 15 min) | wrong/expired cert, cert SAN ≠ `cert_domain`, cross-domain redirect, default-vhost fallback body, gateway-IP drift | `monitoring-lv3` (compose) + Builder LXC 108 (coolify) → Prometheus/Alertmanager + OpenObserve `fleet_edge_probe` |
-| 2. Dockerhost container audit | `bin/fleet-container-audit.py` (`fleet-container-audit.timer`, 10 min) | `no_container`, `not_running`, `restarting`, `restart_storm`, `unhealthy`, `port_foreign`, `image_tag_latest`, `image_version_mismatch` | each dockerhost → OpenObserve `fleet_container_audit`, alert `fleet_container_bad` |
+| 2. Dockerhost container audit | `bin/fleet-container-audit.py` (`fleet-container-audit.timer`, 10 min) | `no_container`, `not_running`, `restarting`, `restart_storm`, `unhealthy`, `port_foreign`, `image_tag_latest`, `image_version_mismatch` | one dockerhost only as of 2026-10-14 (check with `systemctl list-timers fleet-container-audit.timer`) → OpenObserve `fleet_container_audit`; as of 2026-10-14 no alert is defined on that stream (the old `fleet_container_bad` was not recreated) |
 | 3. CI image boot-smoke | `templates/woodpecker-boot-smoke.yml` (opt-in per repo) | Dockerfile-level breakage the checkout can't see — missing `COPY`, bad `ENTRYPOINT`, dropped runtime dep | Woodpecker `.woodpecker.yml`, PR-time. **Live on python-proxy + fleet-cert-watch** (repos activated in `ci.0exec.com`, `trusted.volumes=true` for the socket mount). |
 | 4. Pre-deploy edge gate | `go-fleet-preflight` `edge` check (≥ 0.3.6) | the migration class — vhost removed on a `runtime` flip and never recreated; probes `/health` **without following redirects** | **`fleet-runner deploy` ≥ v0.7.61 calls it automatically** (after the caller gate, before build/roll); blocks on `edge`==fail, fail-open otherwise, `--skip-preflight` to override |
 

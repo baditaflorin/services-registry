@@ -43,7 +43,7 @@ results.
 
 Every Docker log record should carry these stable fields:
 
-- `fleet`: `0docker` or `0mcp`
+- `fleet`: `0docker` or `0mcp` (as of 2026-10-14 the shippers on some 0docker VMs set only `host`, so their records have no `fleet` or `role`; filter those by `host`. The shipper on at least one other 0docker VM does set both.)
 - `host`: stable host name, not an ephemeral container ID
 - `role`: host role such as `docker-runtime` or `docker-build`
 - `container_name`, `container_id`, `image`, `stream`, `message`, `timestamp`

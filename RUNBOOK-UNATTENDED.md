@@ -62,7 +62,7 @@ cd <repo-name>
 ### 2. Push to private GitHub
 
 ```bash
-git init -q & git branch -M main & git add -A
+git init -q && git branch -M main && git add -A
 git -c user.email=baditaflorin@gmail.com -c user.name=baditaflorin commit -q -m "feat: scaffold <id> v0.1.0"
 gh repo create "baditaflorin/<id>" --private --source=. --remote=origin --push
 ```
@@ -200,7 +200,8 @@ resp, _ := http.DefaultClient.Do(req)
 
 ## Bootstrap (one-time, the chicken-and-egg)
 
-`go-fleet-secrets` itself needs its master key out-of-band. On LXC 108, as root
+`go-fleet-secrets` itself needs its master key out-of-band. On the dockerhost
+that runs the `go-fleet-secrets` container (not Builder LXC 108), as root
 (`sudo -i`). The block does nothing if any of the files already exists: running
 it again on the host that holds the vault would replace the master key and make
 the vault's data unrecoverable. It writes the values to files and never prints
@@ -223,8 +224,9 @@ else
 fi
 ```
 
-**Keep a sealed offsite backup of both files.** If LXC 108 is reimaged
-without these, the vault's data is unrecoverable.
+**Keep a sealed offsite backup of both files.** If the dockerhost that runs
+`go-fleet-secrets` is reimaged without these, the vault's data is unrecoverable.
+Builder LXC 108 does not hold them.
 
 ---
 
@@ -233,8 +235,10 @@ without these, the vault's data is unrecoverable.
 - **Zone**: `0exec.com` — id `1285812` in Hetzner Cloud
 - **API**: `https://api.hetzner.cloud/v1` (Bearer auth) — the **canonical**
   surface that supersedes the deprecated `dns.hetzner.com` Console API.
-- **Gateway IP**: `176.9.123.221` — every fleet service points here; nginx
-  on `mesh-0exec` terminates TLS + routes to the right upstream port.
+- **Gateway IP**: `176.9.123.221` — most fleet services point here; services
+  behind the 0mcp gateway resolve to that gateway instead, and `pages` services
+  resolve to GitHub Pages. nginx on `mesh-0exec` terminates TLS + routes to the
+  right upstream port.
 - **Token env name**: `HCLOUD_TOKEN` (matches hcloud-cli + official Go SDK).
   `HETZNER_TOKEN` is kept as a back-compat alias.
 
@@ -281,7 +285,7 @@ curl -fsS "https://<id>.0exec.com/health"
    Use `api.hetzner.cloud/v1` (different auth, different resource model,
    different token type).
 
-5. **"I'll deploy without preflight."** Don't. Preflight is two seconds;
+5. **"I'll deploy without preflight."** Don't. Preflight takes about a second;
    the cost of a half-deployed service that needs cleanup is hours.
 
 ---
