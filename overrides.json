@@ -419,6 +419,11 @@
     "trl_evidence": "First-pass audit of this browser-based accent/phoneme coach (classical 12th-order LPC + Durand-Kerner formant analysis, no WASM/ML model): privacy claim verified clean via live network capture during load, mic-denial, and analysis -- zero external calls anywhere, matches README/SECURITY.md exactly. Core functionality handled silence/empty/very-short/very-long clips and no-mic-permission gracefully. Found and fixed a real bug: analyzeFormants enters an infinite loop if sampleRate is 0, negative, or non-finite (hopSize rounds to 0, so the scan offset never advances) -- not reachable via the actual recording pipeline today, but a genuine unguarded hang other code could trigger; fixed with an early-return guard and a hopSize floor. No XSS surface, accessibility basics solid. trl held at 4; trl_ceiling=6 added -- classical LPC-based formant tracking has genuine structural accuracy limits (harmonic/formant confusion, only 3 curated practice sentences) blocking it from 'production, SLA-grade' without a fundamentally different acoustic-model architecture. See PR #6 (merged)."
   },
   "accessibility-audit": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "accessibility-audit",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18301,
     "host_port": 18301,
     "description": "WCAG accessibility audit: a11y quick checks, accessibility score, color contrast ratio, image alt coverage, heading outline — 5 analyzers covering the main WCAG 2.x success criteria.",
@@ -1319,6 +1324,11 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "country-iso-matcher",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18315,
     "host_port": 18315,
     "description": "Resolves a country name, native name, or common alias to its ISO 3166-1 alpha-2 and alpha-3 code. Unicode-normalizing, accent- and case-insensitive matcher over all 249 assigned ISO countries/territories and multilingual aliases, served entirely from memory.",
@@ -7324,6 +7334,11 @@
     "coolify_app_uuid": "v10xrrzd40holg48pqye556h"
   },
   "ugc-detector": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "ugc-detector",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8318,
     "description": "Microservice for Ugc Detector",
     "host_port": 8318,
@@ -7533,6 +7548,11 @@
     "version": "1.99.223"
   },
   "url-shortener": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "url-shortener",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8320,
     "description": "Microservice for Url Shortener",
     "example_path": "/?url=https://example.com",
@@ -7670,6 +7690,11 @@
     "coolify_app_uuid": "jlgndpylkfhcdcnqdk66bgcj"
   },
   "web-vitals-report": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "web-vitals-report",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18300,
     "host_port": 18300,
     "description": "Core Web Vitals and performance report: page-load metrics, CrUX field vitals (p75 LCP/CLS/INP/TTFB), DOM complexity, compression, cache policy, website carbon footprint.",
