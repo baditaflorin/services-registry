@@ -6067,7 +6067,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "In-process state — single instance. Multi-instance needs Redis (sethvargo/go-limiter has the backend ready).",
     "trl_evidence": "Prometheus /metrics (counter+histogram+gauges), /selftest spawns 100 concurrent acquirers, TestAcquire_Concurrent under -race; 0.2.1 fixes /metrics double-registration panic",
-    "version": "0.2.1"
+    "version": "0.2.5"
   },
   "pentest-reflection-hunter": {
     "access_tier": "vetted-pentest",
@@ -6291,7 +6291,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Same ceiling as orchestrator — bounded by submit-bot end-to-end verification.",
     "trl_evidence": "4 baked-in markdown templates (ssrf/xss/sqli/idor) via //go:embed, sensitive-header redaction (Cookie/Authorization/X-API-Key -> prefix-only), /selftest exercises all 4 templates",
-    "version": "0.2.0",
+    "version": "0.3.3",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
