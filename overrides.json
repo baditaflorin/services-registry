@@ -1215,6 +1215,10 @@
     "trl_evidence": "First-pass audit of this static-first garden/crop-rotation planner: found and fixed 2 real bugs. (1) Crop rotation anchored on the alphabetically-first selected crop only, ignoring the rest of the bed -- concretely, selecting marigold+tomato anchored on marigold ('flower') and completely missed that tomato (nightshade family) shouldn't be replanted for years, recommending a real horticultural error while claiming to move away from pressure; fixed to consider every selected crop's family. (2) Share links caused silent, repeating data loss -- loading a shared plan from the URL hash never cleared the hash, so reloading that tab or revisiting a bookmarked link would silently overwrite the user's own autosaved local plan every time with no confirmation or recovery path; fixed by clearing the hash once consumed. No XSS found (pure JSX interpolation); plant-ID is honestly labeled as heuristic, not a hidden ML claim. trl bumped 3->4; trl_ceiling=6 added -- genuinely working, well-documented static PWA with real computation (SunCalc solar-position math, a yield model) and honest labeling, but a single-maintainer hobby project with a heuristic (not trained-ML) plant-ID feature. See PR #7 (merged)."
   },
   "composite-runner": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18296,
     "host_port": 18296,
     "description": "Generic composite fan-out engine. GET /?recipe=<name>&target=<domain> runs any named recipe concurrently across N fleet analyzers; returns a merged envelope with summary + per-source fields. Add a recipe row in recipes.go — no new code.",
@@ -3054,6 +3058,10 @@
     "spiffe_workload": true
   },
   "fleet-backup": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "compose_dir": "/opt/services/fleet-backup",
     "category": "observability",
     "container_port": 18208,
@@ -3417,6 +3425,10 @@
     "spiffe_workload": true
   },
   "fleet-host-guard": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "category": "observability",
     "container_port": 18207,
     "description": "F7 disk pressure eviction + F9 memory leak detector. Dockerhost guardian daemon: every 5 min samples fs usage and runs `docker image prune --filter until=168h` + truncates oversized non-rotated /var/log/*.log; every 1 h samples container RSS via `docker stats` and fits a linear regression — flags containers whose slope > 50 MB/h AND R² > 0.7.",
@@ -4044,6 +4056,10 @@
     "spiffe_workload": true
   },
   "fleet-token-ledger": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
     "host_port": 18314,
     "container_port": 18314,
@@ -4630,6 +4646,8 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "MAX_CONCURRENT_BROWSERS": "3",
       "MAX_CONCURRENT_RENDERS": "8"
     },
@@ -4645,6 +4663,10 @@
     "pids_limit": 4096
   },
   "js-proxy-network": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "header": "X-API-Key",
       "type": "api_key"
@@ -6544,6 +6566,10 @@
     "spiffe_workload": true
   },
   "random-proxy": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3333,
     "description": "Routes to a random proxy backend (?url=)",
     "host_port": 18019,
