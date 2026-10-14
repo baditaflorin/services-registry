@@ -3314,6 +3314,10 @@
     "spiffe_workload": true
   },
   "fleet-ip": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3617,6 +3621,10 @@
     "mem_limit": "2g"
   },
   "fleet-pwgen": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3684,6 +3692,10 @@
     "spiffe_workload": true
   },
   "fleet-resolver-quorum": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18155,
     "description": "2-of-3 DNS resolver quorum",
     "host_port": 18155,
@@ -3852,6 +3864,10 @@
     "spiffe_workload": true
   },
   "fleet-visualizer": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18144,
     "depends_on": [
       "go-fleet-graph",
@@ -7691,8 +7707,13 @@
     ]
   },
   "voice-search": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8323,
     "host_port": 8323,
+    "version": "2.1.7",
     "trl": 6,
     "trl_evidence": "First-pass audit (250-domain live sample, live before/after): found and fixed 2 real bugs. (1) The recurring fetch-cache-masking bug -- for a service whose entire job is auditing live page state and measuring real TTFB, silently serving cached bytes is a correctness bug, not just a performance nuance; the same root cause already caused a 79.9% production-fetch failure in sibling go_technology_stack. Fixed with WithoutFetchCache + WithForceHTTP2 (the SSRF-guarded dialer otherwise silently forces HTTP/1.1). (2) A question-heading false positive -- a real 19-word marketing tagline starting with 'Where' was scored as a conversational question heading because the bare-prefix match had no length bound; capped at 14 words, verified genuine short question headings still match. Confirmed genuinely differentiated from sibling go_domain_faq_schema (a narrow single-signal detector vs. this service's broad 8-signal composite auditor). trl bumped 5->6; trl_ceiling=7 added -- the score is an unvalidatable heuristic (no ground truth for 'voice-search readiness' exists) and body-text signals get polluted by nav/footer boilerplate on real pages, a structural limit not a patchable bug. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-02",

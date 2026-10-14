@@ -8082,6 +8082,10 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "tags": [
       "go"
     ],
@@ -10617,6 +10621,10 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "tags": [
       "fleet-infra"
     ],
@@ -11192,6 +11200,10 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "tags": [
       "fleet-infra"
     ],
@@ -11304,6 +11316,10 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "tags": [
       "kind-container"
     ],
@@ -11716,6 +11732,10 @@
     "kind": "container",
     "language": "go",
     "runtime": "compose",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "tags": [],
     "url": "https://fleet-visualizer.0exec.com",
     "health_url": "https://fleet-visualizer.0exec.com/health",
