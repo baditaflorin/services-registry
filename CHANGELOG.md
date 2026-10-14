@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Pin `fleet-capabilities` to its live Compose directory `/opt/services/fleet-capabilities`; registry rendering and the writer manifest must target the Docker Compose working directory proven by the live container label.
 - Enable file-backed Fleet Graph writer configuration for five healthy active Go services: Fleet Counter, Fleet Dig, Fleet Fake, Fleet Pipe, and Fleet Port.
 - Enable Fleet Graph writer configuration for five active Go services: Voice Search, Fleet Pwgen, Fleet Resolver Quorum, Fleet IP, and Fleet Visualizer.
 - fleet-backup `mem_limit` override 12g -> 6g (matches go-fleet-backup 0.2.2: streaming archives peak at 3.4 GiB of mostly reclaimable page cache, about 100 MiB process memory). The generated compose overlay reads this value, so the compose file alone could not lower it.
