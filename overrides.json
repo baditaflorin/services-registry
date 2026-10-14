@@ -1842,7 +1842,7 @@
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_evidence": "Second-pass re-audit (fresh 399-domain sample): found and fixed 2 real bugs -- (1) fetch-cache masking, confirmed live via docker inspect showing FLEET_FETCH_CACHE_URL set in production; (2) multiple BIMI/DMARC TXT records were silently resolved to 'whichever came first' instead of correctly treated as a discovery failure per spec (BIMI + RFC 7489 6.6.3) -- live-confirmed on 5 real domains including brandfinish.com and vos.health. See PR #6 (merged). trl bumped 6->7, now at ceiling.",
-    "version": "0.2.16",
+    "version": "0.2.17",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1965,7 +1965,7 @@
     "trl_evidence": "Tested against 913 real domains (700 random + 80 .cz + 80 .nl + 53 known-DANE-positive from prod data). Fixed: (1) matches_served_cert was a plain bool silently conflating 'never checked' (e.g. a real dial timeout) with 'genuine mismatch' -- now nullable, affected 7/913 domains; (2) added new dane_verified field distinguishing DANE matches on DNSSEC-signed zones from unsigned ones -- 16/52 real matches were on unsigned zones (DANE without the RFC 6698 guarantee). Independently reproduced 51/53 of the DB's existing recorded DANE positives from a fresh build. See github.com/baditaflorin/go_domain_dane_tlsa PR #3.",
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "spiffe_workload": true
   },
   "domain-deployment-fingerprint": {
