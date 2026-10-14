@@ -68,6 +68,23 @@
         "proxy",
         "reverse-dns"
       ]
+    },
+    "infer-runtime": {
+      "cluster": "infer",
+      "capacity_label": "infer-runtime",
+      "state": "restricted",
+      "roles": [
+        "fleet-compose-runtime"
+      ],
+      "allowed_runtimes": [
+        "compose"
+      ],
+      "allowed_placement": [
+        "replicable"
+      ],
+      "allowed_service_ids": [
+        "passive-voice-detector"
+      ]
     }
   }
 }
