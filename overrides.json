@@ -6514,7 +6514,13 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "version": "2.5.4",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "scc",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "schema-extractor": {
     "container_port": 8165,
@@ -6619,8 +6625,16 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
+    "fetch_cache_api_key_file_mount": true,
+    "version": "2.7.2",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "seasonal-detector",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "secrets-scanner": {
     "container_port": 8229,
@@ -7003,7 +7017,14 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true  },
+    "spiffe_workload": true,
+    "version": "1.1.6",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "substack-scraper",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
+  },
   "substance-sampler": {
     "trl": 3,
     "trl_assessed_at": "2026-05-14",
@@ -7103,8 +7124,15 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.2.2"
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
+    "version": "0.2.3",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "team-member-extractor",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "team-size": {
     "container_port": 8314,
@@ -7217,8 +7245,16 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
+    "fetch_cache_api_key_file_mount": true,
+    "version": "1.9.2",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "tos-finder",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    }
   },
   "trust-decay": {
     "env": {

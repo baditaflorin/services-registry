@@ -756,5 +756,27 @@ class TestComputeNetworkExposure(unittest.TestCase):
         self.assertIsNone(generate.compute_network_exposure(entry, ov))
 
 
+class TestFleetGraphExpansionBatch(unittest.TestCase):
+    def test_expansion_five_writers_are_explicitly_enabled(self):
+        payload = json.loads((Path(generate.ROOT) / "overrides.json").read_text())
+        expected = {
+            "scc": "2.5.4",
+            "seasonal-detector": "2.7.2",
+            "team-member-extractor": "0.2.3",
+            "tos-finder": "1.9.2",
+            "substack-scraper": "1.1.6",
+        }
+        for service_id, version in expected.items():
+            with self.subTest(service_id=service_id):
+                env = payload[service_id]["env"]
+                self.assertEqual(payload[service_id]["version"], version)
+                self.assertEqual(env.get("GRAPH_ENABLED"), "true")
+                self.assertEqual(env.get("GRAPH_SERVICE_ID"), service_id)
+                self.assertEqual(
+                    env.get("GRAPH_COLLECTOR_URL"),
+                    "https://fleet-graph.0exec.com",
+                )
+
+
 if __name__ == "__main__":
     unittest.main()
