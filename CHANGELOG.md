@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Enable Fleet Graph writer configuration for Merchant Profile 1.1.5, SVI 2.3.5, SEO Audit 1.1.2, Vendor Security Scorecard 1.1.2, and Fleet Schema Validator 0.1.4; sync their canonical registry versions.
 - Enable Fleet Graph writer configuration and sync release versions for SCC 2.5.4, Seasonal Detector 2.7.2, Team Member Extractor 0.2.3, ToS Finder 1.9.2, and Substack Scraper 1.1.6.
 
 ## 2026-10-09

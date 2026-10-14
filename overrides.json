@@ -3677,6 +3677,11 @@
     "spiffe_workload": true
   },
   "fleet-schema-validator": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "fleet-schema-validator",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18166,
     "description": "JSON Schema catalog + validator (8 baseline schemas)",
     "host_port": 18166,
@@ -3685,7 +3690,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 8,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). JSON Schema catalog + validator (8 baseline schemas). /selftest + INTEGRATIONS.md shipped. ADR-0016. See services-registry/docs/adr/0016-fleet-schema-validator.md.",
-    "version": "0.1.0",
+    "version": "0.1.4",
     "spiffe_workload": true
   },
   "fleet-secrets": {
@@ -4697,6 +4702,11 @@
     "spiffe_workload": true
   },
   "merchant-profile": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "merchant-profile",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18302,
     "host_port": 18302,
     "description": "E-commerce merchant profile: platform detection, payment methods, accepted currencies, price range, shipping regions, catalog SKU count — 6 analyzers in one structured record.",
@@ -4710,7 +4720,8 @@
     "depends_on": [
       "composite-runner"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "version": "1.1.5"
   },
   "mesh-bench-archive": {
     "trl": 5,
@@ -6714,6 +6725,11 @@
     "fetch_cache_api_key_file_mount": true
   },
   "seo-audit": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "seo-audit",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18298,
     "host_port": 18298,
     "description": "Full SEO site audit: on-page basics, keyword density, heading structure, structured data, sitemap, robots.txt, broken links, mobile-friendliness — 9 analyzers in one call.",
@@ -6726,7 +6742,8 @@
     "trl_evidence": "Re-audit (fresh start after a prior attempt was killed by an external session-limit cutoff, fresh 200-domain sample): confirmed this is a thin go_composite_runner recipe wrapper with no service-specific Go source. Confirmed the composite-runner fan-out client timeout bug (18s->32s fix, merged 2026-07-30 upstream) directly affects this recipe: with the deployed image over a month stale (pre-dating the fix), 38%% of domains (76/200) recover a result once the fix is applied -- the sitemap-finder sub-check alone jumps from 74.5%% to 99.5%% success. Opened a regression test on go_composite_runner (PR #4, merged) and a docs-only evidence update on go_seo_audit (PR #1, merged). trl/ceiling held at 6/8 pending redeploy against the fixed composite-runner image and re-assessment.",
     "depends_on": [
       "composite-runner"
-    ]
+    ],
+    "version": "1.1.2"
   },
   "seo-basics": {
     "env": {
@@ -7054,6 +7071,11 @@
     }
   },
   "svi": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "svi",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8313,
     "description": "Microservice for Svi",
     "host_port": 8313,
@@ -7063,7 +7085,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "Corrected DOWNWARD from trl:7. The maintainer's own commit skipped a real TRL-6 assessment, bumping 5->7 in one shot while silently rewriting trl_ceiling_reason to imply a higher bar had been reached with no new capability (no Chromium/Playwright dependency before or after). The repo's own README and ADR still say TRL 5/6, contradicting service.yaml's TRL 7. Also fixed a real bug: non-web URI schemes (whatsapp:, tg:) were miscounted as broken internal links on a 600-domain live sample (13/600 affected). No dedicated production output table found for this service. See github.com/baditaflorin/go_svi PR #7.",
-    "version": "2.1.0",
+    "version": "2.3.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7580,6 +7602,11 @@
     "trl_evidence": "portfolio app, vCard format"
   },
   "vendor-security-scorecard": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "vendor-security-scorecard",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18299,
     "host_port": 18299,
     "description": "Third-party / vendor risk scorecard: HTTP security headers, HSTS, cookie flags, DNSSEC, CORS posture, end-of-life tech — 6 security analyzers merged into one graded report.",
@@ -7592,7 +7619,8 @@
     "trl_evidence": "First-pass audit of this go_composite_runner recipe (fans out to 6 siblings: security-headers, hsts-checker, cookie-checker, domain-dnssec-validator, cors-scanner, domain-tech-eol-flagger): live 250-domain sample found cookie-checker and cors-scanner failing 250/250 (100%) with connection-refused -- confirmed via docker ps that neither sibling has ever had a deployable image built/pushed, an infra gap flagged as a separate task, not a code bug in this service. Found and fixed a real cross-service field-name mismatch: those same 2 siblings emit their verdict as overall_risk, but go_composite_runner's auto-lift key list never included it, so even a successful response's risk verdict silently never reached the summary. Confirmed fetch-cache masking does not apply (LAN fan-out via plain http.Client is the correct convention here, not a bug). Real trl DOWNGRADE recommended: trl 6->4, trl_ceiling 8->7 -- a 'vendor security scorecard' permanently missing 2 of 6 advertised signals since inception isn't a demonstrated full-scope subsystem, and the service computes no actual weighted/aggregate score (a legitimate scope choice, not itself a bug, hence ceiling 7 not 8). See PR #5 on go_composite_runner (merged).",
     "depends_on": [
       "composite-runner"
-    ]
+    ],
+    "version": "1.1.2"
   },
   "video-content": {
     "env": {
