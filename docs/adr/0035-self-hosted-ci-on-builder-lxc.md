@@ -1,6 +1,6 @@
 # ADR-0035 — Self-hosted push-triggered CI (Woodpecker) on Builder LXC 108
 
-* **Status**: Accepted (2026-08-26 — see "Rollout status" below)
+* **Status**: Accepted (2026-08-26 — see "Rollout status" below; amended 2026-10-14 so agents can activate repos, see "Amendment")
 * **Date**: 2026-08-06
 * **Authors**: baditaflorin + claude-sonnet-5
 * **Tags**: ci, infra, builder-lxc, ops
@@ -146,7 +146,8 @@ numbers as current.
   by Woodpecker's own API, authenticated as the OAuth-connected GitHub
   user. **RESOLVED 2026-08-27**: the user logged into `ci.0exec.com`
   once (the one human step that can't be automated away — OAuth
-  requires it by design) and generated a personal API token via
+  requires it by design; since the 2026-10-14 amendment below it happens
+  once, not once per repo) and generated a personal API token via
   Settings → CLI, which was then used to activate all 11 repos
   unattended via `POST /api/repos?forge_remote_id=<github-repo-id>`
   (Woodpecker's real activation endpoint — note this is NOT
@@ -172,6 +173,94 @@ numbers as current.
   activated repo shows a `web` hook with `config.url` starting
   `https://ci.0exec.com/api/hook?access_token=...`; an inactive one
   returns `[]`. No Woodpecker credential needed for this read.
+
+## Amendment (2026-10-14): agents may activate repos themselves
+
+**Why.** "Adding `.woodpecker.yml` alone does not activate CI" turned the
+one human step above into a standing blocker. Every agent session that
+added a pipeline to a repo ended with "CI does nothing until you activate
+the repo", and the repo stayed ungated until a person ran the call by
+hand (seen 2026-10-14 with `go_fleet_msg`: pipeline and lint merged, no
+webhook, zero runs). OAuth login is still a human act and stays one, but
+it only has to happen **once**, not once per repo.
+
+**Decision.** A person mints a Woodpecker personal API token once and puts
+it in the vault. An agent may then activate the repo it was asked to
+onboard, using only that token and only for the calls listed below.
+
+### The one-time human step (the only part that needs a person)
+
+1. Log in at <https://ci.0exec.com/login> (GitHub OAuth, as `baditaflorin`).
+2. Open <https://ci.0exec.com/user/cli-and-api> (Woodpecker 3.x; older UIs:
+   avatar → User settings → CLI) and copy the personal access token.
+3. Seed it in `go-fleet-secrets` as `woodpecker_ci_api_token` (the "Seed a
+   secret" recipe in `RUNBOOK-UNATTENDED.md`). Set `consumers` to the single
+   `X-Auth-User` scope that the operator's agent sessions read the vault
+   with: look it up, never `*`. Put this ADR in the description.
+4. Check that an agent can read it. The agent answers "found" or "missing",
+   never the value.
+
+### What an agent does
+
+**Preconditions** (all must hold, otherwise stop and ask):
+
+- The user asked for CI on this repo in this session (or the task is
+  explicitly "onboard this repo"). Never activate repos on your own
+  initiative, and never in bulk unless the user listed them.
+- The repo is under `github.com/baditaflorin/`, and its default branch
+  already contains `.woodpecker.yml` (or `.woodpecker/*.yml`) with a step
+  that passes. Activating a repo without a working pipeline only produces
+  red checks.
+
+**Procedure.** `T` is the token, read from the vault into a shell variable
+and nowhere else: never printed, never written to a file, never put in a
+URL or argv (hand it to `curl` as a config on stdin, as below), never
+passed to a subagent, never included in a message, commit or PR text.
+
+```bash
+REPO=baditaflorin/<repo>
+ID=$(gh api repos/$REPO --jq .id)                      # GitHub's numeric repo id
+
+# 1. activate. NOT /api/repos/{owner}/{name}: that 200s with the SPA's HTML.
+printf 'header = "Authorization: Bearer %s"\n' "$T" |
+  curl -sS -K - -X POST "https://ci.0exec.com/api/repos?forge_remote_id=$ID"
+#    success is JSON with "id" and "active": true; a body starting with "<"
+#    is the HTML shell (wrong endpoint) and counts as failure.
+
+# 2. verify with no Woodpecker credential at all
+gh api repos/$REPO/hooks --jq '.[].config.url' | grep '^https://ci.0exec.com/api/hook'
+
+# 3. first run (recommended; needs `event: manual` in the pipeline's `when`)
+printf 'header = "Authorization: Bearer %s"\n' "$T" |
+  curl -sS -K - -X POST "https://ci.0exec.com/api/repos/<woodpecker repo id>/pipelines" \
+    -H 'Content-Type: application/json' -d '{"branch":"<default branch>"}'
+```
+
+Then tell the user what happened: the repo, that the webhook exists, and
+how the first run ended (read it from the commit status on GitHub, not
+with the token). Do not repeat or quote the token.
+
+**What the token may be used for.** The activation call, the manual
+pipeline trigger and read of runs for the repo just activated, and nothing
+else. In particular no user, org, agent, secret, registry or cron
+endpoints, no settings changes, and no `DELETE` or deactivation unless the
+user explicitly names the repo and asks. A different Woodpecker credential
+is never a substitute: the load controller's admin token (ADR-0040,
+`/etc/woodpecker-load-controller/token`) belongs to that controller and an
+agent must not take it. If the vault entry is missing, unreadable or
+rejected, stop and give the user the two links above and the one-line
+activation command; do not go looking for another token.
+
+**Risk accepted, and its limits.** Woodpecker personal tokens cannot be
+scoped: this one carries the connected GitHub user's rights on the whole
+Woodpecker instance. The controls are the single-consumer allowlist, the
+call list above, and the rule that nothing prints or persists the value. To
+rotate (after any suspicion, or if a transcript might have contained it):
+"Reset token" on the CLI & API page invalidates the old value, then
+re-seed the vault entry as in the runbook. Accepted because the
+alternative, a person per repo, was observed to leave repos ungated for
+days. Revisit if Woodpecker gains scoped tokens, or if a dedicated
+service-account user is created for CI onboarding.
 
 ## Alternatives considered
 
