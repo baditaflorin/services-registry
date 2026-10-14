@@ -1,4 +1,5 @@
 ## 2026-10-14
+- Enable the canonical Fleet Graph Compose overlay (GRAPH_ENABLED and the collector URL) for the twelve pentest infrastructure services Agent State, Asset Inventory, Attack Chainer, Audit Log, Continuous Monitor, HTTP Replay, Job Queue, Notify, Orchestrator, Payoff Tracker, Rate Coordinator and Walkthrough, so their reviewed hot-reload key mounts can be rendered.
 - Enable the canonical Fleet Graph Compose overlay (GRAPH_ENABLED and the collector URL) for Fleet Token Ledger, Fleet Backup, Fleet Host Guard, Composite Runner, JS Proxy, JS Proxy Network and Random Proxy, so their reviewed hot-reload key mounts can be rendered.
 - Enable Pyroscope delivery for Fleet Q, Fleet Sandbox Targets, Fleet Tail, and License Extractor; service PRs #19, #18, #18, and #31; scoped secret names only; Go Common v0.102.53.
 - Enable the canonical Fleet Graph Compose overlay (GRAPH_ENABLED and the collector URL) for the eleven fleet-infra services Fleet Backoff Coordinator, Engagement Timeline, Fingerprint Cache, Persona, Pixel, Q, Sandbox Targets, Tail, Target Reputation, Vendor Disclosure Tracker and Webhook, so their reviewed hot-reload key mounts can be rendered.
