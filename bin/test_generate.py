@@ -112,6 +112,16 @@ class TestSplitOverrides(unittest.TestCase):
 
 
 class TestQualityContractProjection(unittest.TestCase):
+    def test_generator_applies_curated_catalog_version_override(self):
+        repo = {
+            "name": "go-version-example",
+            "url": "https://github.com/baditaflorin/go-version-example",
+            "description": "fixture",
+            "repositoryTopics": [{"name": "mesh-0crawl"}],
+        }
+        entry = generate.make_entry(repo, {"version-example": {"version": "1.2.3"}}, [])
+        self.assertEqual(entry["version"], "1.2.3")
+
     def test_explicit_auth_help_overrides_generic_auth_text(self):
         repo = {
             "name": "go-quality-example",
