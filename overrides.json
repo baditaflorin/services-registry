@@ -516,7 +516,12 @@
   "admin-finder": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "60s",
+      "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-admin-finder-write-user",
+      "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-admin-finder-write-password",
+      "APP_ENVIRONMENT": "production"
     },
     "container_port": 8335,
     "description": "Microservice for Admin Finder",
@@ -528,7 +533,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated admin discovery requires site-specific credentials or session state.",
     "trl_evidence": "v1.6.0 — TRL 5→6 uplift.\n- Bundled curated wordlist (~150 paths from SecLists + OWASP CMS + vendor docs)\n  via go:embed; deduped, sorted, comment-stripped at parse time.\n- Per-probe: HEAD then GET fallback (for 405/400 and body sniffing on 2xx);\n  follows up to 2 manual redirects; per-request 3s, total 60s, worker pool 8.\n- Login-form sniffer (password / username / sign in / log in / type=password)\n  with strong-signal short-circuit (\"password\" alone) and 2-of-N rule.\n- First-hop Location preserved across follow chain so \"302 to /wp-admin/login\"\n  classifies as present even when the followed target is 404.\n- Optional ?wordlist_url= composes with sibling go-pentest-wordlists\n  (cap 500 entries, 256 KiB fetch budget, SSRF-safe via go-common/safehttp).\n- SCOPE_GUARD_URL env (comma list, supports *.example.com) gates which\n  hosts may be probed; off when unset.\n- Backward-compat: ?target= alias for ?url=.\n- Tests: handler_test.go + classify_test.go + wordlist_test.go;\n  httptest fake server covers 200-with-form / 302-to-login / 401 /\n  200-generic / 302-to-home / 404. `go test ./...` green.",
-    "version": "1.6.0",
+    "version": "1.7.6",
     "coolify_app_uuid": "jpahbgqwgmshagf91j3h4ggn"
   },
   "agent-approval": {
