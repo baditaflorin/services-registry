@@ -156,8 +156,11 @@ Recon shows every probed host with status + title + tech, or the error if dead.
    isn't the API, it's the parallelism. Stick with single-threaded
    foreground loop.
 
-3. Run github-dorks via the gh CLI (NOT the deployed go-pentest-github-dorks
-   service — that one's GITHUB_TOKEN env isn't set, so it returns 401).
+3. Run github-dorks via the gh CLI (the deployed go-pentest-github-dorks
+   service, now served at pentest-github-dorks.0exec.com, is healthy as of
+   2026-10-14 — /health returns 200 ok with its scanning dependency ok;
+   verify its GITHUB_TOKEN env directly before assuming the search endpoint
+   still 401s).
    The user has gh authed; use `gh api search/code -f q='...'` for queries
    like:
      "AKIA" /AKIA[0-9A-Z]{16}/ org:Shopify
@@ -172,9 +175,10 @@ Recon shows every probed host with status + title + tech, or the error if dead.
    c. POST to https://go-pentest-report-templater.0exec.com/render
       to get the markdown
    d. Show the user the markdown for review BEFORE any submission.
-      Submit-bot is NOT yet deployed; for the first real submission,
-      generate the report and let the user paste it manually into
-      HackerOne/Bugcrowd.
+      Submit-bot (pentest-submit-bot.0exec.com) is deployed and healthy as
+      of 2026-10-14; decide case-by-case whether to route the submission
+      through it or have the user review and paste the report manually
+      into HackerOne/Bugcrowd.
 
 5. After validating a finding -> submission path works, optionally deploy
    go-pentest-orchestrator + go-pentest-walkthrough so the user can drive
