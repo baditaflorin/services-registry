@@ -2955,6 +2955,10 @@
     "spiffe_workload": true
   },
   "fleet-backoff-coordinator": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18163,
     "description": "response-driven backoff coordinator",
     "host_port": 18163,
@@ -3182,6 +3186,10 @@
     "spiffe_workload": true
   },
   "fleet-engagement-timeline": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18162,
     "description": "per-program event timeline aggregator (6 siblings)",
     "host_port": 18162,
@@ -3265,6 +3273,10 @@
     "spiffe_workload": true
   },
   "fleet-fingerprint-cache": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18153,
     "description": "WAF/soft-404/CDN-noise classifier",
     "host_port": 18153,
@@ -3500,6 +3512,10 @@
     "version": "0.1.0",
     "spiffe_workload": true  },
   "fleet-persona": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3552,6 +3568,10 @@
     "spiffe_workload": true
   },
   "fleet-pixel": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3690,6 +3710,10 @@
     "spiffe_workload": true
   },
   "fleet-q": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3757,6 +3781,10 @@
     "spiffe_workload": true
   },
   "fleet-sandbox-targets": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18168,
     "description": "internal-only sandbox vulnerable apps (10 endpoints)",
     "host_port": 18168,
@@ -3832,6 +3860,10 @@
     "spiffe_workload": true
   },
   "fleet-tail": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
@@ -3854,6 +3886,10 @@
     "spiffe_workload": true
   },
   "fleet-target-reputation": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18171,
     "description": "target reputation lookup (5 sources)",
     "host_port": 18171,
@@ -3905,6 +3941,10 @@
     "spiffe_workload": true
   },
   "fleet-vendor-disclosure-tracker": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18167,
     "description": "vendor disclosure history tracker (PII-redacted)",
     "host_port": 18167,
@@ -3945,6 +3985,10 @@
     "spiffe_workload": true
   },
   "fleet-webhook": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "auth": {
       "type": "none"
     },
