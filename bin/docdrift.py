@@ -34,6 +34,7 @@ usage:
   docdrift.py add     --repos DIR --doc DOC --line N --id ID --repo REPO --symbol SYM [--expires D] [--level L]
   docdrift.py gen     --repos DIR [--check|--write] DOC...    regenerate GENERATED blocks (exit 1 on diff with --check)
   docdrift.py lint    --repos DIR DOC...                      flag a lone `&` used as a command separator in shell recipes
+  docdrift.py volatile [--base REF] [--strict] DOC...        flag lines this change ADDS with a count, size or status word that goes stale (advisory unless --strict)
   docdrift.py sync    --repos DIR CANONICAL TARGET [--write]   refresh a CLAUDE.md copy from the canonical, keeping its repo-local tail
   docdrift.py scan    --repos DIR [--json OUT]                 anchors + canonical-copy staleness for every repo clone in DIR
   docdrift.py census  --repos DIR [--json OUT]                 copy staleness of ALL registry repos via the GitHub API (blob shas, no clones)
@@ -637,6 +638,78 @@ def cmd_lint(a):
     return rc
 
 
+# ----------------------------------------------------------------------------------- volatile claims added by a change
+VOL_STATUS = re.compile(r"\b(currently|for now|not yet|at the moment|temporary|temporarily|pilot|in flight|in progress|is being|are being|soon)\b", re.I)
+VOL_NUM = re.compile(r"\b\d[\d,.]*\s*(GiB|GB|TB|TiB|MiB|vCPUs?|CPUs?|containers?|VMs?|hosts?|series|repos|agents?|services|workflows|pipelines|replicas)\b", re.I)
+VOL_OK = re.compile(r"20\d\d-\d\d-\d\d|\bas of\b|<!--\s*anchor\b|\bv\d+\.\d+|\b(?:run|see|shows?|lists?|prints?|reports?)\s+`", re.I)
+
+
+def added_lines(path, base):
+    """1-based line numbers of `path` that differ from `base` (git diff -U0); every line when the file is new at base."""
+    d = os.path.dirname(os.path.abspath(path))
+    r = subprocess.run(["git", "-C", d, "diff", "-U0", "--no-color", base, "--", os.path.abspath(path)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    if r.returncode != 0:
+        raise SystemExit("git diff %s failed in %s: %s" % (base, d, r.stderr.strip()))
+    nums = set()
+    for m in re.finditer(r"^@@ -\S+ \+(\d+)(?:,(\d+))? @@", r.stdout, re.M):
+        start, cnt = int(m.group(1)), int(m.group(2) if m.group(2) is not None else 1)
+        nums.update(range(start, start + cnt))
+    return nums
+
+
+def volatile_claims(path, base):
+    """A claim that goes out of date by itself (a count with a unit, "currently", "not yet") added by this change, in a paragraph that
+    carries no date, version, anchor or pointer to the command that prints it. Only lines the change adds are judged: existing text is
+    not flagged, so the check never asks for a rewrite of the whole document. Code fences and GENERATED blocks are skipped (generated
+    text is regenerated, commands are not prose). The reviewer decides: date it, point at the command, or generate it."""
+    lines = open(path, encoding="utf-8").read().split("\n")
+    changed = added_lines(path, base)
+    out, para, fenced, gen = [], [], False, False
+
+    def flush():
+        if not para:
+            return
+        text = " ".join(t for _, t in para)
+        hits = [(i, t) for i, t in para if i in changed and (VOL_STATUS.search(t) or VOL_NUM.search(t))]
+        if hits and not VOL_OK.search(text):
+            i, t = hits[0]
+            kind = "status-word" if VOL_STATUS.search(t) else "number"
+            out.append((i, kind, t.strip()))
+        del para[:]
+
+    for i, ln in enumerate(lines, 1):
+        st = ln.lstrip()
+        if st.startswith("```"):
+            flush()
+            fenced = not fenced
+            continue
+        if re.search(r"<!--\s*BEGIN GENERATED", ln):
+            flush()
+            gen = True
+            continue
+        if re.search(r"<!--\s*END GENERATED", ln):
+            gen = False
+            continue
+        if fenced or gen or not st:
+            flush()
+            continue
+        para.append((i, ln))
+    flush()
+    return out
+
+
+def cmd_volatile(a):
+    rc = 0
+    for d in a.docs:
+        hits = volatile_claims(d, a.base)
+        for i, kind, t in hits:
+            print("VOLATILE %-11s %s:%d  %s" % (kind, os.path.basename(d), i, t[:140]))
+        print("-- %s: %d added line(s) with a claim that goes stale and no date, version, anchor or command next to it" % (d, len(hits)))
+        if hits and a.strict:
+            rc = 1
+    return rc
+
+
 LOCAL_MARK_RE = re.compile(r"^<!--\s*repo-local\b.*?-->\s*$", re.M)
 LOCAL_MARK_TEXT = "<!-- repo-local: everything below this line belongs to this repository, is not part of the canonical, and survives `docdrift sync` -->"
 
@@ -833,6 +906,7 @@ def main(argv=None):
     ad.add_argument("--expires"); ad.add_argument("--level"); ad.add_argument("--allow-broken", action="store_true"); ad.set_defaults(f=cmd_add)
     g = sub.add_parser("gen"); g.add_argument("docs", nargs="+"); g.add_argument("--check", action="store_true"); g.add_argument("--write", action="store_true"); g.set_defaults(f=cmd_gen)
     li = sub.add_parser("lint"); li.add_argument("docs", nargs="+"); li.set_defaults(f=cmd_lint)
+    vo = sub.add_parser("volatile"); vo.add_argument("docs", nargs="+"); vo.add_argument("--base", default="origin/main"); vo.add_argument("--strict", action="store_true"); vo.set_defaults(f=cmd_volatile)
     sy = sub.add_parser("sync"); sy.add_argument("canonical"); sy.add_argument("target"); sy.add_argument("--write", action="store_true"); sy.set_defaults(f=cmd_sync)
     for nm, fn in (("scan", cmd_scan), ("census", cmd_census)):
         sp = sub.add_parser(nm); sp.add_argument("--json"); sp.add_argument("--canonical-repo", default="services-registry"); sp.add_argument("--canonical-path", default="CLAUDE.md")
