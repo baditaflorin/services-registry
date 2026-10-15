@@ -279,6 +279,36 @@ class ShimNonTTY(ShimCase):
             self.assertNotIn("--env-from-stdin", self.ssh_argv(self.calls()))
         self.each_bash(go)
 
+    # Where the fake credential may appear, file by file: the recorded record of every ssh
+    # call (argv), of the remote command (argv), and of what the remote binary read from the
+    # ssh stdin (the block) and then held in its environment (the binary applies the block
+    # with os.Setenv; the environment is not a command line).
+    def files_containing(self, value):
+        return sorted(f.name for f in self.log.iterdir() if value in f.read_text())
+
+    def test_fake_token_only_ever_in_the_recorded_stdin_new_path(self):
+        def go(b):
+            p = self.run_shim(bash=b, HCLOUD_TOKEN=TOKEN1)
+            self.assertEqual(p.returncode, 0, p.stderr)
+            self.assertEqual(self.files_containing(TOKEN1), ["bin.2.block", "bin.2.env"])
+            self.assertEqual([f for f in self.files_containing(TOKEN1) if f.endswith(".argv")], [])
+            self.assertNotIn(TOKEN1, p.stdout + p.stderr)
+        self.each_bash(go)
+
+    def test_fake_token_nowhere_in_the_legacy_binary_fallback(self):
+        def go(b):
+            p = self.run_shim(bash=b, HCLOUD_TOKEN=TOKEN1, STUB_BIN_KIND="old")
+            self.assertEqual(p.returncode, 0, p.stderr)
+            self.assertEqual(self.files_containing(TOKEN1), [], "no argv, stdin or environment record may hold it")
+            self.assertNotIn(TOKEN1, p.stdout + p.stderr)
+        self.each_bash(go)
+
+    def test_secret_names_match_the_runner_allow_list(self):
+        # go_fleet_runner env_stdin.go envBlockSecretNames: the shim must send exactly these and no others.
+        text = SHIM.read_text()
+        line = [l for l in text.splitlines() if l.startswith("SECRET_NAMES=")][0]
+        self.assertEqual(line.split('"')[1].split(), SECRET_VARS)
+
     # skew ---------------------------------------------------------------------------------
     def test_skew_new_shim_old_binary_sends_no_secret(self):
         def go(b):
