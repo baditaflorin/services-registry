@@ -269,6 +269,27 @@ class GenerateAndLintTests(Base):
         self.assertEqual(hits, [2, 10])
 
 
+class ScanTests(Base):
+    def test_a_symlink_alias_of_a_clone_is_not_counted_twice(self):
+        canon = "# canon\n\nbody\n"
+        reg = os.path.join(self.root, "services-registry")
+        os.makedirs(reg)
+        sh(reg, "init", "-q", "-b", "main")
+        commit(reg, {"CLAUDE.md": canon}, "canonical")
+        other = os.path.join(self.root, "go_other")
+        os.makedirs(other)
+        sh(other, "init", "-q", "-b", "main")
+        commit(other, {"CLAUDE.md": canon}, "copy")
+        os.symlink(other, os.path.join(self.root, "other-service"))  # the workspace names clones after services too
+        out = os.path.join(self.root, "scan.json")
+        D.main(["--repos", self.root, "--ref", "main", "scan", "--json", out])
+        with open(out) as f:
+            d = json.load(f)
+        names = sorted(r["repo"] for r in d["docs"] if r["path"] == "CLAUDE.md")
+        self.assertEqual(names, ["go_other", "services-registry"])
+        self.assertEqual(d["summary"].get("copy_current"), 1)
+
+
 class VolatileTests(Base):
     def _doc(self, before, after):
         d = os.path.join(self.root, "docrepo")

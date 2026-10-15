@@ -772,9 +772,16 @@ def cmd_scan(a):
     crepo = a.canonical_repo
     revs = canonical_revisions(git, crepo, a.canonical_path)
     docs, summary = [], collections_counter()
-    for name in sorted(os.listdir(a.repos)):
+    seen = set()
+    # real directories first: the builder workspace also holds ~360 symlinks named after services (ipv6-checker -> go_ipv6_checker); an alias of a
+    # clone that was already scanned must not count again (2026-10-16: it inflated copies and stale anchors by about 60%)
+    for name in sorted(os.listdir(a.repos), key=lambda n: (os.path.islink(os.path.join(a.repos, n)), n)):
         if not os.path.isdir(os.path.join(a.repos, name, ".git")):
             continue
+        real = os.path.realpath(os.path.join(a.repos, name))
+        if real in seen:
+            continue
+        seen.add(real)
         for path in ("CLAUDE.md", "AGENTS.md"):
             try:
                 text = git.show(name, path)
