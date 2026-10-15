@@ -8589,5 +8589,26 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     }
+  },
+  "fleet-activity": {
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "Machine keys (keystore user machine:<host>) may only POST /v1/events, as that host; read keys listed in READERS query /v1/events, /v1/findings, /v1/hosts and /v1/status.",
+    "container_port": 18322,
+    "depends_on": [
+      "apikey-service"
+    ],
+    "description": "Central, tamper-evident log of what agents do on every machine: fleet-guard ships audit events with per-machine keystore keys; the service flags risky patterns, replicates between nodes like fleet-msg and serves read-only keys (the hub).",
+    "example_path": "/health",
+    "host_port": 18322,
+    "name": "Fleet Activity",
+    "placement": "pinned",
+    "trl": 4,
+    "trl_assessed_at": "2026-10-16",
+    "trl_assessor": "claude-opus-5-5",
+    "trl_evidence": "v0.1.0: unit tests for the hash-chained store (tamper detected on reload), role enforcement, ingest masking, the rule engine against the 2026-10-14 incident commands, and two-node replication over HTTP; first production node pending.",
+    "version": "0.1.0"
   }
 }
