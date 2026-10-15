@@ -14886,5 +14886,29 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/z3-smt-game/"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "Machine keys (keystore user machine:<host>) may only POST /v1/events, as that host; read keys listed in READERS query /v1/events, /v1/findings, /v1/hosts and /v1/status.",
+    "category": "infrastructure",
+    "description": "Central, tamper-evident log of what agents do on every machine: fleet-guard ships audit events with per-machine keystore keys; the service flags risky patterns, replicates between nodes like fleet-msg and serves read-only keys (the hub).",
+    "example_path": "/health",
+    "health_url": "https://fleet-activity.0exec.com/health",
+    "id": "fleet-activity",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Activity",
+    "placement": "pinned",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-activity",
+    "runtime": "compose",
+    "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-10-16",
+    "trl_assessor": "claude-opus-5-5",
+    "url": "https://fleet-activity.0exec.com"
   }
 ]
