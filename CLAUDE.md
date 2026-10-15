@@ -1139,7 +1139,10 @@ After install, the canonical examples shorten to e.g.
 `fleet-runner deploy go_<repo>`. The shim is thin — it forwards argv, plus
 the fixed whitelist of token/env variables in the `for v in` loop of
 `bin/fleet-runner-shim`, over SSH to LXC 108 — so output, exit codes, and
-prompts behave as on the LXC. Source: [`services-registry/bin/fleet-runner-shim`](bin/fleet-runner-shim).
+prompts behave as on the LXC. The shim also sends caller identity
+(`FLEET_CALLER_HOST`/`USER`/`AGENT`/`SESSION`, derived from the local
+hostname, user, `CLAUDE_AGENT_NAME` and `CLAUDE_SESSION_ID` when not already
+set) so the remote audit log can tell laptops and agents apart. Source: [`services-registry/bin/fleet-runner-shim`](bin/fleet-runner-shim).
 
 Some verbs need env vars sourced (notably the `key …` family needs
 `APIKEY_SERVICE_URL` + `APIKEY_SERVICE_ADMIN_TOKEN`, and
