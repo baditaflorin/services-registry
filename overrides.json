@@ -8387,8 +8387,10 @@
     "cert_domain": "hub.scrapetheworld.org",
     "host_port": 18023,
     "container_port": 8080,
+    "compose_service_name": "hub-dashboard",
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
+    "version": "0.15.1",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
