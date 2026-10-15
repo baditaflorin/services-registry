@@ -2,6 +2,10 @@
 
 This repository is part of the baditaflorin fleet. Project-specific instructions in this file take precedence over generic conventions; retain them when updating this document.
 
+## Outcome
+
+This contract keeps four things true: work starts from fresh `origin/main`; production matches the registry; every release leaves a receipt chain; no secret or private topology reaches a commit, log or chat. Judge your work against those, not against "pushed" or "tests passed".
+
 ## Freshness and safety
 
 - Before reading, building, or changing source, run `git fetch origin --tags` and work from `origin/main` in an isolated worktree.
@@ -9,6 +13,51 @@ This repository is part of the baditaflorin fleet. Project-specific instructions
 - Container services use Woodpecker CI. Do not add GitHub Actions unless explicitly requested.
 - Before changing Woodpecker worker placement or controller behavior, read `docs/runbooks/woodpecker-cross-host-capacity.md`. It documents the `ci.0exec.com` shared worker pool and retains production image builds on the canonical fleet builder. Do not move a repository to `ci.0mcp.com` just to reach a physical worker; `site` and `lv3=true` are worker capability constraints within a control plane, not control-plane routing. Keep `ci.0mcp.com` for repositories intentionally owned by the 0mcp platform.
 - A pushed commit is not a production deployment. Use the fleet deployment path and retain rollback evidence.
+- The shared `/root/workspace/<repo>` tree can lag or sit on another agent's leftover branch, and `fleet-runner build-test` runs against it, so it is not freshness-correct. Confirm any failure on a fresh `origin/main` worktree before triaging.
+
+## Risk tier: what needs care before you touch it
+
+Most changes are low risk: probe-first deploy with rollback on a failed `/selftest` is the safety net, so `fleet-runner deploy <repo>` is enough. These are not covered by it. Not sure which row applies? Take the higher tier.
+
+| Touching | Do this first |
+|---|---|
+| One service, no shared code | `fleet-runner deploy <repo>` |
+| `safehttp`, middleware, auth, the gateway | Deploy one service first and verify `/health`, `/selftest`, `/version` and gateway smoke before widening (there is no `fleet-runner canary` verb). Never a fleet-wide rollout on first touch |
+| `go-common` or a `go-fleet-*` primitive with more than one consumer | List the affected set first with `fleet-runner rollout` in its default plan mode (see CLAUDE.md, "Fleet-wide changes") |
+| DNS records or secrets | Read `RUNBOOK-UNATTENDED.md`. DNS only through the Hetzner Cloud API; secrets only in `go-fleet-secrets`, never in env, repos or `services.json` |
+| `proxy_egress` in `overrides.json` | Read the `proxy_egress` section of `FLEET.md`; the right direction depends on the upstream |
+| A SQLite-backed service | Read "SQLite safety" in CLAUDE.md; its three rules are mandatory |
+
+## Evidence and done
+
+- Start from the rawest source: `fleet-runner state`, `whois <fqdn>`, `pool-status`. Do not re-probe hosts by hand, and do not treat a green `/health` or a registry field as proof.
+- Tag every fact that gates a decision OBSERVED (read live this session, with source and age) or PREDICTED (inferred from config, docs or an old snapshot). Only observed facts block or approve. Rules mirrored into scripts drift, so test them.
+- A dry run or `plan` proves less than a real run. Name the checks that sit after its return and are therefore unproven.
+- State acceptance criteria up front, with a number where you can ("0 findings", "0 non-200 reads in N requests"). Verify them with something other than yourself: `fleet-runner converge`, `fleet-runner audit --all`, `fleet-runner state snapshot`, the deploy smoke gates, the target system's own log. If a check does not exist, say so in the receipt rather than claiming done.
+
+## Hard rules
+
+- Never hand-pick a port: take it from `fleet-runner allocate-port`. A collision silently evicts the live service that owns it.
+- Release with `fleet-runner bump-version <repo> patch|minor|major --push`. A tag that is not pushed is not a release.
+- On the builder, do not run `docker buildx ls` (one hung call holds buildx's global lock and stalls every build) and do not start a service with `./binary &` (it orphans and squats a registered port). Use `go test ./...` or the deploy smoke gate.
+- Print environment variable names, never values. Scan output for `://user:pass@`, JWTs and webhook URLs before showing it.
+- Do not create billable cloud resources, credentials, logins or access-list entries unprompted. State the block and hand the user one command for that step.
+
+## Before an irreversible or fleet-wide action
+
+Answer these in the change receipt. They are techniques, not role-play. When subagents are available, give a reviewer that is not you the diff, not your conclusion.
+
+- **Blast radius and rollback** (what an SRE checks): `graph-context` and `deps` reviewed, rollback digest captured, one service first.
+- **Secrets** (what a secret scanner does): grep your own output and diff the same way.
+- **Cost and capacity**: does it add a billable resource or consume host headroom? `fleet-runner capacity` answers the second.
+- **Audit trail** (what a forensic accountant does): reconcile your claim against the log of the system you acted on, not against your own summary.
+
+## Where the detail lives
+
+- `FLEET.md`: read first for any fleet-wide task.
+- `RUNBOOK-UNATTENDED.md`: DNS, secrets, preflight.
+- `SERVICE-TEMPLATE.md`: building a new service.
+- `CLAUDE.md` recipes: deploying, rolling out a shared-lib change, closing a capability gap, anti-patterns observed in earlier sessions.
 
 ## Graph-first workflow
 
