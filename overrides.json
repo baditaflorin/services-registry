@@ -4419,6 +4419,11 @@
   "graphql-introspection": {
     "container_port": 8147,
     "description": "Microservice for Graphql Introspection",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "graphql-introspection",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/go_graphql_introspection?url=https://example.com",
     "host_port": 8147,
     "trl": 6,
@@ -4427,7 +4432,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated GraphQL schemas need user-supplied tokens and role-aware probing.",
     "trl_evidence": "TRL 6 (real). Beyond endpoint discovery + introspection summary,\nv3 adds three orthogonal abuse probes used by every commercial GraphQL\nscanner (Inspectiv, GraphCrawler, InQL): alias-batching DoS multiplier,\nfield-suggestion info-leak, and text/plain CSRF bypass. Findings are\nemitted with stable severity-tagged classes (introspection-enabled,\nalias-batching-unbounded, csrf-possible, field-suggestions-enabled,\nintrospection-partial) so the catalog UI and sibling services\n(api-extractor, swagger-finder) join on `class` strings without any\nper-service mapping table. 21 Go test functions covering ≥6 server-\nbehaviour fixtures (canned introspection, explicit-disabled,\nfield-suggestion typo, alias-batched echo, CSRF accept, CSRF block).\nSee docs/adr/0001-trl-uplift-to-6.md.\n\n2026-08-08: fixed fleet-wide safehttp bug class in the service itself (not the TRL claim above, which stands independently). newClient() in handler.go called safehttp.NewClient() bare, with no fetch-cache/HTTP2 opt-outs, so a process-wide default fetch delegate (when FLEET_FETCH_CACHE_URL is set) could silently serve this scanner stale cached responses instead of the live origin during discover/introspect/abuse probing -- masking real fetch failures as stale \"successes\" (or the reverse), and risking ALPN mishandling against HTTP/2-only GraphQL gateways. Fixed by passing safehttp.WithoutFetchCache() and safehttp.WithForceHTTP2() to the constructor, bumping Version 3.0.3 -> 3.0.4. Added regression test safehttp_client_test.go:TestNewClient_BypassesFetchCacheAndHonorsHTTP2 (installs a fake stale delegate, asserts the client observes the live origin directly; confirmed it fails against the pre-fix bare constructor and passes post-fix). Live-verified scan() against 3 real public GraphQL endpoints post-fix (countries.trevorblades.com, spacex-production.up.railway.app, rickandmortyapi.com/graphql), all returned correct live introspection data. PR (open, unmerged): https://github.com/baditaflorin/go_graphql_introspection/pull/7",
-    "version": "3.0.4",
+    "version": "3.0.7",
     "coolify_app_uuid": "bnr51pclmti2vobu122vemoq"
   },
   "group-theory-visualizer": {
@@ -4464,6 +4469,11 @@
   "hidden-fields": {
     "container_port": 8345,
     "description": "Microservice for Hidden Fields",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "hidden-fields",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/go_hidden_fields?url=https://example.com",
     "host_port": 8345,
     "trl": 6,
@@ -4472,7 +4482,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pure-Go x/net/html DOM walker. Per-field role taxonomy (csrf-token,\nhoneypot, state, id, timestamp, flag, viewstate, session, other) plus\nsix risk rules (csrf-on-get, honeypot-default, sensitive-plaintext,\nstate-without-nonce, timestamp-future/epoch-zero, javascript-action).\nToken-like values masked before serialisation (raw value never escapes\nthe process). 23 unit + integration tests against canned login,\nsignup, OAuth, GET-csrf, javascript:-action, and PII fixtures via\nhttptest.Server. safehttp SSRF guard + 5s per-request / 10s total\nbudget. ADR docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.0",
+    "version": "1.4.7",
     "coolify_app_uuid": "q122and0425dsjnhw56b2gio"
   },
   "highlight-recall": {
@@ -4486,6 +4496,11 @@
   "host-header": {
     "container_port": 8240,
     "description": "Microservice for Host Header",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "host-header",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/go_host_header?target=example.com",
     "host_port": 8240,
     "trl": 6,
@@ -4494,7 +4509,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "2.2.4",
+    "version": "2.2.6",
     "coolify_app_uuid": "likwplvqrfh94dukv1bm5qt7"
   },
   "hsts-checker": {
@@ -4544,6 +4559,11 @@
   "http-method-tester": {
     "container_port": 8087,
     "description": "Microservice for Http Method Tester",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "http-method-tester",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/?url=https://example.com",
     "host_port": 8087,
     "trl": 7,
@@ -4552,7 +4572,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 250-domain sample, live before/after): found and fixed a major false-positive bug -- classify() computed a plain-GET baseline but only ever used it for one classification rule (server-fingerprint), ignoring it everywhere else. Result: 86% (430/498) of verb-tampering/http-method-unrestricted-write findings across the sample were CDN/WAF edge servers responding byte-identically to every verb including an impossible one like FOO -- ordinary verb-agnostic edge delivery, not a confirmed bypass, reported as high/medium severity. Fixed with a sameAsGetBaseline + catchAllSuspected corroboration gate (requires an impossible verb to also match GET before downgrading, so one coincidental match can't mask a real bug): verb-tampering high 54->8, unrestricted-write high 174->43. Also hardened the scanner's own GET baseline against fetch-cache masking (the write-verb probes themselves were never at risk per go-common's GET-only cache eligibility gate). trl/trl_ceiling held at 7/7 -- reaching 8 would need corroboration beyond a single self-diffing scan (a second fetch or a shared WAF/CDN classifier), not more CPU-only logic. See PR #4 (merged).",
-    "version": "1.4.0",
+    "version": "1.4.6",
     "coolify_app_uuid": "o3t4k0qvwf0mskinbdzor4nh"
   },
   "http-protocol": {
@@ -6419,6 +6439,11 @@
   "phone-extractor": {
     "container_port": 8139,
     "description": "Microservice for Phone Extractor",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "phone-extractor",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/?url=https://example.com",
     "host_port": 8139,
     "proxy_read_timeout": "120s",
@@ -6428,6 +6453,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged).",
+    "version": "1.4.20",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
