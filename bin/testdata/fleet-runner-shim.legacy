@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# fleet-runner-shim — local wrapper that forwards to the canonical
+# `fleet-runner` binary on Builder LXC 108.
+#
+# Why: `fleet-runner` only exists on LXC 108 (a Proxmox container on
+# `0docker.com`). On a workstation, AI agents that try `fleet-runner`
+# directly get "command not found" and historically pivot to wrong
+# substitutes (local `git push`, naked `docker build`, etc.). With this
+# shim installed at /usr/local/bin/fleet-runner, the same prompts work
+# unchanged on any workstation that has SSH access to the bastion.
+#
+# Install (on a new MacBook, after SSH keys to 0docker.com are set up):
+#
+#   curl -fsSL https://raw.githubusercontent.com/baditaflorin/services-registry/main/bin/fleet-runner-shim \
+#     | sudo tee /usr/local/bin/fleet-runner >/dev/null \
+#     && sudo chmod +x /usr/local/bin/fleet-runner
+#
+# Verify:
+#
+#   fleet-runner --help          # should print the remote binary's help
+#
+# Setting up a new Builder LXC 108 (after cloning or rebuilding):
+#
+#   ssh root@0docker.com 'pct exec 108 -- bash -s' \
+#     < bin/setup-lxc-108.sh
+#
+#   This creates /usr/bin/fleet-runner and /usr/sbin/fleet-runner symlinks
+#   so `pct exec 108 -- bash -lc "fleet-runner …"` works without the full
+#   path. Without it, bash -lc doesn't find /usr/local/bin in its lookup
+#   path even though it's technically in PATH — a pct exec env quirk.
+#   fleet-runner allocate-port --count 1
+#
+# Overrides (env vars):
+#   FLEET_BASTION      default: root@0docker.com
+#   FLEET_LXC          default: 108
+#   FLEET_REMOTE_BIN   default: /usr/local/bin/fleet-runner
+#   FLEET_CALLER_HOST / FLEET_CALLER_USER / FLEET_CALLER_AGENT /
+#   FLEET_CALLER_SESSION
+#                      caller identity stamped on the remote audit log;
+#                      derived locally when unset (see below).
+#
+# Requirements:
+#   - bash (uses `printf %q` for portable arg quoting).
+#   - SSH key access to $FLEET_BASTION. Test with `ssh $FLEET_BASTION true`.
+#
+# Caveats:
+#   - The remote binary's $PWD is LXC 108's home dir, not your local
+#     repo dir. Pass repo names as arguments (e.g. `fleet-runner deploy
+#     go_jwt_pentest`), not as implicit cwd. All canonical recipes in
+#     services-registry/CLAUDE.md already do this.
+#   - Long-running commands stream output back over the SSH channel.
+#     Ctrl-C closes the channel; the remote command may keep running.
+
+set -euo pipefail
+
+BASTION="${FLEET_BASTION:-root@0docker.com}"
+LXC="${FLEET_LXC:-108}"
+REMOTE_BIN="${FLEET_REMOTE_BIN:-/usr/local/bin/fleet-runner}"
+
+# Quote every arg for the remote shell. printf %q is bash-portable.
+remote_argv=""
+for a in "$@"; do
+  remote_argv+=" $(printf '%q' "$a")"
+done
+
+# Caller identity for the remote audit log (~/.fleet-runner/audit.jsonl on
+# LXC 108). Every shim call runs the binary as root over the same bastion
+# hop, so without these the rows from four laptops and N agents are
+# indistinguishable. fleet-runner >= 0.7.469 stamps them on every row and
+# `fleet-runner stats --by caller|agent` groups by them. Each is only set
+# when the caller has not already set it, so an agent harness that exports
+# FLEET_CALLER_* itself wins.
+: "${FLEET_CALLER_HOST:=$(hostname -s 2>/dev/null || hostname)}"
+: "${FLEET_CALLER_USER:=${USER:-$(id -un)}}"
+: "${FLEET_CALLER_AGENT:=${CLAUDE_AGENT_NAME:-${AGENT:-human}}}"
+# One id per invocation unless the harness supplies a session id, so the
+# rows of one shim call (deploy supervisor + child) can be joined.
+: "${FLEET_CALLER_SESSION:=${CLAUDE_SESSION_ID:-$(od -An -N8 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')}}"
+export FLEET_CALLER_HOST FLEET_CALLER_USER FLEET_CALLER_AGENT FLEET_CALLER_SESSION
+
+# Forward tokens the remote fleet-runner needs (Hetzner Cloud DNS for
+# bootstrap deploys, etc.). pct exec doesn't inherit env vars across
+# the LXC boundary, so we prepend `env VAR=value …` inside the pct
+# exec line so /usr/bin/env injects them before exec'ing the binary.
+# Add to this list if you discover another env var the remote binary
+# expects but doesn't have set inside LXC 108.
+#
+# TODO(follow-up, not done here): the token values in this list travel on
+# the remote command line (visible in `ps` and the bastion's shell history
+# while the call runs). Move them to stdin or an env file instead; the
+# identity variables above are not secrets and are fine on the line.
+remote_env=""
+for v in HCLOUD_TOKEN HETZNER_TOKEN GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN FLEET_SECRETS_ADMIN_TOKEN APIKEY_SERVICE_URL FLEET_BASTION FLEET_DOCKERHOST COOLIFY_API_TOKEN COOLIFY_BASTION COOLIFY_API_URL \
+         FLEET_CALLER FLEET_CALLER_HOST FLEET_CALLER_USER FLEET_CALLER_AGENT FLEET_CALLER_SESSION FLEET_BYPASS_REASON FLEET_SKIP_COSIGN_REASON; do
+  if [ -n "${!v:-}" ]; then
+    remote_env+=" $v=$(printf '%q' "${!v}")"
+  fi
+done
+env_prefix=""
+[ -n "$remote_env" ] && env_prefix="env$remote_env"
+
+# Allocate a TTY only when interactive — keeps `... | grep` and other
+# pipelines clean.
+# macOS /bin/bash is 3.2: under `set -u` an EMPTY array expanded as "${a[@]}" is
+# "unbound variable", which broke every non-TTY call (agents, pipes). The
+# ${a[@]+"${a[@]}"} form expands to nothing when empty and is safe on 3.2 and 5.x.
+ssh_opts=()
+if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); fi
+
+exec ssh ${ssh_opts[@]+"${ssh_opts[@]}"} "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN$remote_argv"
