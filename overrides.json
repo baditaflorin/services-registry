@@ -2588,7 +2588,12 @@
     "spiffe_workload": true
   },
   "domain-product-count": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s"
+    },
     "container_port": 18242,
     "description": "Estimates e-commerce catalog size from live pages or Common Crawl captures.",
     "example_path": "/?domain=https://example.com&source=commoncrawl",
@@ -2597,7 +2602,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "900-domain live audit. Fixed a real bug: the sitemap URL classifier only recognized English /product(s)/ path shapes, so any WooCommerce store with a translated permalink slug (Spanish, French, Italian, German, Turkish) was 100% invisible -- 12/12 evidenced live stores across 5 languages returned 0 products (e.g. one site went 0->1027). Fixed via locale-independent sitemap filename detection plus a translated-slug fallback list; sum of estimates +10.0% on a clean-paired 325-domain subset. See github.com/baditaflorin/go_domain_product_count PR #4.",
-    "version": "0.2.22",
+    "version": "0.3.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2743,7 +2748,9 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s"
     },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found no internal contradictions, but a fresh pass found and fixed a real bug: multi-tenant infrastructure CDN hosts (cloudfront.net, s3.amazonaws.com) are PSL 'private' suffixes, so each tenant subdomain was treated as its own registrable domain -- a page pulling assets from 2+ distinct CloudFront distributions (a common real pattern) was reported as referencing multiple distinct third-party vendors. Live query found 1,045 domains (14% of CloudFront users) affected, +1,727 phantom domain counts from CloudFront alone. Fixed (v0.4.6) by folding known multi-tenant infra-CDN hosts to one shared vendor identity for aggregation only, verified against a real 4-distribution production page. See github.com/baditaflorin/go_domain_third_party_fetch_map PR #15 (merged). Rows with tool_version<0.4.6 are re-crawl candidates.",
@@ -2758,7 +2765,8 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "version": "0.6.6"
   },
   "domain-tracker-density": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
