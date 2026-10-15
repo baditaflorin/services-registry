@@ -38,10 +38,40 @@
 #   FLEET_CALLER_SESSION
 #                      caller identity stamped on the remote audit log;
 #                      derived locally when unset (see below).
+#   FLEET_ENV_FORWARD_ALWAYS=1
+#                      send a locally set token even when the builder already
+#                      has one of its own (the caller's value then replaces the
+#                      builder's for that call).
+#   FLEET_ALLOW_ARGV_SECRETS=1
+#                      escape hatch: put token values on the remote command
+#                      line, as every shim before this one did. They are then
+#                      visible in `ps` on the bastion and on LXC 108 for the
+#                      length of the call. Prints a warning every time.
+#
+# Secrets never travel on a command line (ps on the bastion and on LXC 108, shell
+# history). Only non-secret names (caller identity, bypass reasons, URLs, hosts)
+# ride on the remote command line. For the tokens (HCLOUD_TOKEN HETZNER_TOKEN
+# GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN FLEET_SECRETS_ADMIN_TOKEN
+# COOLIFY_API_TOKEN) the shim only acts when one is set in your environment:
+#   1. It asks the builder, with `fleet-runner env-check --json`, which of them
+#      the builder already resolves from its own /root/.fleet-runner.env. Those
+#      are not sent: the builder's own value is the right one.
+#   2. A token the builder lacks is sent on STDIN, as `NAME=VALUE` lines and a
+#      blank line ahead of your own stdin, to `fleet-runner --env-from-stdin ...`
+#      (the binary reads the block before anything else and passes the values to
+#      its children through the environment only). Non-interactive calls only:
+#      an interactive `ssh -t` has no stdin to carry it, so an interactive call
+#      sends nothing secret and prints a one-line note instead (run it with a
+#      pipe or redirect, or add the token to the builder's env file).
+#   3. A builder too old to know `env-check` is never sent a secret: the shim
+#      prints one warning and carries on without it, unless
+#      FLEET_ALLOW_ARGV_SECRETS=1.
+# See go_fleet_runner docs/ENV-FORWARDING.md.
 #
 # Requirements:
 #   - bash (uses `printf %q` for portable arg quoting).
 #   - SSH key access to $FLEET_BASTION. Test with `ssh $FLEET_BASTION true`.
+#   - mkfifo and mktemp (only when a token is sent on stdin).
 #
 # Caveats:
 #   - The remote binary's $PWD is LXC 108's home dir, not your local
@@ -78,26 +108,25 @@ done
 : "${FLEET_CALLER_SESSION:=${CLAUDE_SESSION_ID:-$(od -An -N8 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')}}"
 export FLEET_CALLER_HOST FLEET_CALLER_USER FLEET_CALLER_AGENT FLEET_CALLER_SESSION
 
-# Forward tokens the remote fleet-runner needs (Hetzner Cloud DNS for
-# bootstrap deploys, etc.). pct exec doesn't inherit env vars across
-# the LXC boundary, so we prepend `env VAR=value …` inside the pct
-# exec line so /usr/bin/env injects them before exec'ing the binary.
-# Add to this list if you discover another env var the remote binary
-# expects but doesn't have set inside LXC 108.
-#
-# TODO(follow-up, not done here): the token values in this list travel on
-# the remote command line (visible in `ps` and the bastion's shell history
-# while the call runs). Move them to stdin or an env file instead; the
-# identity variables above are not secrets and are fine on the line.
+# Non-secret names forwarded on the remote command line. pct exec doesn't inherit
+# env vars across the LXC boundary, so we prepend `env VAR=value ...` inside the
+# pct exec line so /usr/bin/env injects them before exec'ing the binary. Add to
+# this list if you discover another NON-SECRET env var the remote binary expects
+# but doesn't have set inside LXC 108. A credential does not belong here: it goes
+# in SECRET_NAMES below, which never touches the command line.
 remote_env=""
-for v in HCLOUD_TOKEN HETZNER_TOKEN GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN FLEET_SECRETS_ADMIN_TOKEN APIKEY_SERVICE_URL FLEET_BASTION FLEET_DOCKERHOST COOLIFY_API_TOKEN COOLIFY_BASTION COOLIFY_API_URL \
+for v in APIKEY_SERVICE_URL FLEET_BASTION FLEET_DOCKERHOST COOLIFY_BASTION COOLIFY_API_URL \
          FLEET_CALLER FLEET_CALLER_HOST FLEET_CALLER_USER FLEET_CALLER_AGENT FLEET_CALLER_SESSION FLEET_BYPASS_REASON FLEET_SKIP_COSIGN_REASON; do
   if [ -n "${!v:-}" ]; then
     remote_env+=" $v=$(printf '%q' "${!v}")"
   fi
 done
-env_prefix=""
-[ -n "$remote_env" ] && env_prefix="env$remote_env"
+
+# Credentials: the names the remote binary accepts on stdin (its allow-list in
+# env_stdin.go). Keep the two lists identical.
+SECRET_NAMES="HCLOUD_TOKEN HETZNER_TOKEN GITHUB_TOKEN APIKEY_SERVICE_ADMIN_TOKEN FLEET_SECRETS_ADMIN_TOKEN COOLIFY_API_TOKEN"
+
+warn() { printf 'fleet-runner (shim): %s\n' "$*" >&2; }
 
 # Allocate a TTY only when interactive — keeps `... | grep` and other
 # pipelines clean.
@@ -105,6 +134,113 @@ env_prefix=""
 # "unbound variable", which broke every non-TTY call (agents, pipes). The
 # ${a[@]+"${a[@]}"} form expands to nothing when empty and is safe on 3.2 and 5.x.
 ssh_opts=()
-if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); fi
+interactive=0
+if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); interactive=1; fi
 
-exec ssh ${ssh_opts[@]+"${ssh_opts[@]}"} "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN$remote_argv"
+# Which credentials are set locally? (The name lists are space-separated on purpose.)
+local_secrets=""
+# shellcheck disable=SC2086
+for v in $SECRET_NAMES; do
+  if [ -n "${!v:-}" ]; then local_secrets+=" $v"; fi
+done
+
+block=""    # NAME=VALUE lines for stdin; built only from names, never echoed
+send_names=""
+
+if [ -n "$local_secrets" ]; then
+  if [ "${FLEET_ALLOW_ARGV_SECRETS:-}" = "1" ]; then
+    # Explicit, noisy opt-in to the pre-stdin behaviour.
+    warn "FLEET_ALLOW_ARGV_SECRETS=1: sending${local_secrets} on the remote command line; visible in ps on the bastion and on LXC 108 while the call runs."
+    # shellcheck disable=SC2086
+    for v in $local_secrets; do
+      remote_env+=" $v=$(printf '%q' "${!v}")"
+    done
+  else
+    # Ask the builder what it already has. stdin from /dev/null, no tty, no secrets
+    # on the line. An old binary answers `unknown command` and exits 1.
+    probe_out=""
+    probe_rc=0
+    probe_env=""
+    [ -n "$remote_env" ] && probe_env="env$remote_env "
+    probe_out=$(ssh "$BASTION" "pct exec $LXC -- ${probe_env}$REMOTE_BIN env-check --json" </dev/null 2>/dev/null) || probe_rc=$?
+    compact=$(printf '%s' "$probe_out" | tr -d ' \n\t\r')
+    case "$compact" in
+      *'"env_from_stdin":true'*) probe_ok=1 ;;
+      *) probe_ok=0 ;;
+    esac
+    if [ "$probe_rc" -ne 0 ]; then probe_ok=0; fi
+
+    if [ "$probe_ok" -ne 1 ]; then
+      warn "the builder's fleet-runner does not answer env-check (older than the stdin environment block, or unreachable): NOT sending${local_secrets}. Update the builder, or set FLEET_ALLOW_ARGV_SECRETS=1 to send them on the command line as before."
+    else
+      # Which of my secrets does the builder still need from me?
+      always=0
+      [ "${FLEET_ENV_FORWARD_ALWAYS:-}" = "1" ] && always=1
+      # shellcheck disable=SC2086
+      for v in $local_secrets; do
+        marker="\"name\":\"$v\""
+        case "$compact" in
+          *"$marker"*) ;;
+          *) continue ;;   # the builder does not accept this name on stdin
+        esac
+        rest=${compact#*"$marker"}
+        rest=${rest%%\}*}
+        case "$rest" in
+          *'"resolved":"none"'*) need=1 ;;
+          *) need=$always ;;
+        esac
+        [ "$need" -eq 1 ] || continue
+        val=${!v}
+        case "$val" in
+          *[[:cntrl:]]*)
+            warn "$v contains a control character or newline; it cannot travel in the stdin block and is not sent."
+            continue ;;
+        esac
+        block+="$v=$val"$'\n'
+        send_names+="${send_names:+,}$v"
+      done
+      if [ -n "$send_names" ]; then
+        [ "$always" -eq 1 ] && block+="FLEET_ENV_OVERRIDE=$send_names"$'\n'
+        block+=$'\n'
+        if [ "$interactive" -eq 1 ]; then
+          # ssh -t cannot take piped stdin; sending nothing is the only way to
+          # keep the value off the command line.
+          warn "${send_names//,/ } set locally but missing on the builder; not sent in an interactive session. Run it non-interactively (pipe or redirect), or add it to the builder's /root/.fleet-runner.env."
+          block=""
+        fi
+      fi
+    fi
+  fi
+fi
+
+env_prefix=""
+[ -n "$remote_env" ] && env_prefix="env$remote_env"
+
+if [ -z "$block" ]; then
+  exec ssh ${ssh_opts[@]+"${ssh_opts[@]}"} "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN$remote_argv"
+fi
+
+# Send the block on stdin, followed by whatever stdin the caller gave us. A named
+# pipe in a private directory carries it, so no value touches a file, and the shim
+# can stop the feeder when ssh exits (a plain `... | ssh` would wait for a caller
+# stdin that never closes). printf is a builtin: the block is in no process's argv.
+tmpd=$(mktemp -d "${TMPDIR:-/tmp}/fleet-shim.XXXXXX")
+feeder_pid=""
+cleanup() {
+  if [ -n "$feeder_pid" ]; then kill "$feeder_pid" 2>/dev/null || true; fi
+  rm -rf "$tmpd"
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+fifo="$tmpd/stdin"
+mkfifo "$fifo"
+# A closed stdin would make the feeder's `<&0` fail before the block is written.
+{ : <&0; } 2>/dev/null || exec 0</dev/null
+# `<&0` is explicit because a background job's stdin defaults to /dev/null.
+{ printf '%s' "$block"; exec cat; } <&0 >"$fifo" &
+feeder_pid=$!
+block=""
+rc=0
+ssh ${ssh_opts[@]+"${ssh_opts[@]}"} "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN --env-from-stdin$remote_argv" <"$fifo" || rc=$?
+exit "$rc"

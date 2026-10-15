@@ -1,6 +1,7 @@
 ## 2026-10-15
 
 - Enable Fleet Graph env projections and sync source versions for comment-extractor, cookie-checker, cors-scanner, cors-tester, and crlf-tester while preserving their Coolify app bindings.
+- `bin/fleet-runner-shim`: token values no longer travel on the remote command line (visible in `ps` on the bastion and on LXC 108). Non-secret names stay there. A token set locally is sent only when `fleet-runner env-check --json` says the builder lacks it (or `FLEET_ENV_FORWARD_ALWAYS=1`), and then on stdin to `fleet-runner --env-from-stdin` in non-interactive calls; interactive calls send nothing secret and print one note. A builder too old to know `env-check` is sent no secret (one warning); `FLEET_ALLOW_ARGV_SECRETS=1` is the explicit, noisy escape hatch back to argv. Adds `bin/test_fleet_runner_shim.py` (stub ssh, TTY and non-TTY, skew matrix) and a frozen copy of the previous shim in `bin/testdata/` for the old-shim case. Needs go_fleet_runner with `env-check` / `--env-from-stdin` installed on the builder to take the stdin path; see go_fleet_runner `docs/ENV-FORWARDING.md`.
 - Sync ASN Lookup 1.5.18 with the Coolify-compatible Pyroscope secret-reference release.
 - Sync search-duck-go 0.4.19 to generated registry metadata after the merged Pyroscope canary release.
 - Sync Search Duck 0.1.13 to the registry for the merged Pyroscope canary release.
