@@ -4698,6 +4698,8 @@
     "container_port": 8080,
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
+    "placement": "replicable",
+    "version": "0.8.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -4728,6 +4730,8 @@
     "description": "JS-render proxy returning rendered DOM plus full network log (every request fired, response headers, sizes, timing) + console + performance.",
     "example_path": "/?url=https://example.com",
     "host_port": 18024,
+    "placement": "replicable",
+    "version": "0.6.15",
     "mem_limit": "2g",
     "trl": 6,
     "trl_assessed_at": "2026-08-20",

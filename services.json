@@ -12459,6 +12459,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "host_port": 18006,
     "container_port": 8080,
+    "placement": "replicable",
+    "version": "0.8.16",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -12501,6 +12503,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-20-ssrf-fetch-domain-rebind-audit",
     "host_port": 18024,
     "container_port": 8500,
+    "placement": "replicable",
+    "version": "0.6.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
