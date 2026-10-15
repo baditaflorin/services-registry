@@ -10374,7 +10374,8 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "trl_ceiling": 7,
     "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-prometheus entries for shared repo-wide findings). Found and fixed a real observability gap: the refresh loop's success/failure/staleness was only visible via a JSON /debug/targets endpoint Prometheus can't scrape or alert on -- /health stayed 200 ok even if the registry fetch had been silently broken for hours, with /sd serving stale targets undetected. Fixed by adding 3 correctly-typed Prometheus metrics (refresh_total Counter, last_success_timestamp_seconds Gauge, targets Gauge), already picked up by the existing scrape job. Confirmed no lost updates under 300 concurrent writes with go test -race (shared state behind sync.RWMutex, verified with a new stress test), and malformed/hostile catalog entries fail closed without crashing (6 new test cases). trl bumped 4->6 -- real, race-clean, well-tested code that fails closed on hostile external input and now has correct self-observability; trl_ceiling held at 7 -- structurally trusts an unversioned external catalog, a deliberately thin sd-shim. See PR #3 (merged).",
-    "compose_service_name": "discovery"
+    "compose_service_name": "discovery",
+    "version": "0.1.13"
   },
   {
     "id": "fleet-dns-sync",
