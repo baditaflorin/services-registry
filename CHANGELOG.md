@@ -1,5 +1,9 @@
 ## 2026-10-15
 
+- Sync merged Pyroscope-enabled releases domain-product-count 0.3.5 and domain-third-party-fetch-map 0.6.6, with service-scoped receiver settings for the next central rollout wave.
+
+## 2026-10-15
+
 - Enable service-scoped Pyroscope ingestion for five merged domain detector releases using each service manifest’s file-mounted Vault credentials and a 30-second upload interval.
 
 - Sync five merged Pyroscope-enabled Go service versions to origin/main before the next central fleet-runner rollout wave.
