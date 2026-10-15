@@ -464,6 +464,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8277,
     "container_port": 8277,
+    "placement": "replicable",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -2447,6 +2448,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18212,
     "container_port": 18212,
+    "placement": "replicable",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -3178,6 +3180,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18242,
     "container_port": 18242,
+    "placement": "replicable",
     "depends_on": [
       "fleet-graph",
       "go-fleet-secrets",
@@ -4103,6 +4106,7 @@
     "trl_assessor": "codex",
     "host_port": 18328,
     "container_port": 18322,
+    "placement": "replicable",
     "depends_on": [
       "apikey-service",
       "infrastructure-fetch-cache"
@@ -5166,6 +5170,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 8295,
     "container_port": 8295,
+    "placement": "replicable",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -5245,6 +5250,7 @@
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 8296,
     "container_port": 8296,
+    "placement": "replicable",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -6558,6 +6564,7 @@
     "trl_assessor": "claude-opus-trl-uplift-pass3-2026-05-31",
     "host_port": 8165,
     "container_port": 8165,
+    "placement": "replicable",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -8033,6 +8040,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "host_port": 8319,
     "container_port": 8319,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "go-fleet-secrets",
@@ -9101,6 +9109,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18195,
     "container_port": 18195,
+    "placement": "replicable",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -9669,6 +9678,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18188,
     "container_port": 18188,
+    "placement": "replicable",
     "internal_direct": true,
     "depends_on": [
       "go-fleet-secrets",
