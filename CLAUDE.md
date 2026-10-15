@@ -797,7 +797,7 @@ Binary at `/usr/local/bin/fleet-runner` on **Builder LXC 108**. From
 any workspace dir on that LXC:
 
 ```
-fleet-runner health [--insecure] [--strict] [--json]  # GET health_url of every service the services-dashboard API lists (no kind filter); --strict exits 1 when a probe failed (the default exits 0), --json prints one JSON object
+fleet-runner health [--insecure] [--strict] [--json]  # GET health_url of every service the services-dashboard API lists (no kind filter); --strict exits 1 when a probe failed and 2 when none could run (the default exits 0 once the list was fetched), --json prints one JSON object
 fleet-runner smoke  [--insecure] [--strict] [--json]  # GET example_url of every service the services-dashboard API lists that has one (same flags)
 fleet-runner pages-audit                     # verify pages_url 200s for every kind=static entry
 fleet-runner build-test                      # go test ./... in every kind=container,language=go workspace
@@ -862,13 +862,14 @@ name-collision repos; the keystore is not in it). Only `health`, `smoke`,
 `build-test`, `update-dep`, `exec`, `inject`, `push` and `pages-audit`
 (plus `ai-context`, `dep-cve`, `e2e`, `export-collection`, `tokens`)
 accept `--tokens-used N --model NAME` for LLM accounting. **`kind: static`
-entries are skipped by default by `build-test`, `update-dep` and
-`rollout`** (their default filter is `kind=container,language=go`; `rollout`
-intersects any `--filter` with it). `scaffold-compose` and
-`scaffold-service-yaml` do not filter by kind but skip an entry that lacks the
-registry fields they need (a static site has no `host_port`). `deploy-all`,
-`exec`, `inject` and `push` do not filter by kind — don't deploy-all or
-health-check a static Pages site (use `pages-audit`).
+entries are skipped by default by `build-test`, `update-dep`, `rollout`
+and `scaffold-*`** (`build-test`, `update-dep` and `rollout` default their filter to
+`kind=container,language=go`; `rollout` applies that default to whichever of the two keys
+your `--filter` leaves unset, so `--filter kind=static` replaces it; `scaffold-compose` and
+`scaffold-service-yaml` skip every non-container entry, and `scaffold-compose` also skips a
+container entry without `host_port` or `container_port`). `deploy-all`, `exec`, `inject`
+and `push` do not filter by kind — don't deploy-all or health-check a static Pages site
+(use `pages-audit`).
 
 <!-- anchor id=static-skip-gomoddirsfiltered repo=go_fleet_runner symbol=go:main.go#goModDirsFiltered verified=c6f1ea927 digest=sha256:531ac5a72817291032363a209625dab2174e7fb704a77d73c8c0256a574e5c3a on=2026-10-15 -->
 
@@ -1223,12 +1224,13 @@ ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port 
 
 Until you land the port in `overrides.json`, nothing records the proposal, so two agents can be handed the
 same number. To prevent that, reserve it: `fleet-runner allocate-port --reserve <slug> [--ttl 24h] [--note ...]
-[--count N]` writes the proposal to the builder's shared ledger (`port-reservations.json` under the fleet state
-directory, never committed). A second call for the same slug returns the same port(s) and refreshes the TTL
+[--count N]` writes the proposal to the builder's shared ledger (`$FLEET_STATE_DIR/state/port-reservations.json`, falling back to
+`/var/lib/fleet-runner/`; host-local, never committed). `<slug>` is the service's registry id. A second call for the same slug returns the same port(s) and refreshes the TTL
 (default 24 h). `--list-reservations` prints the unexpired ones; `--release <slug>` drops your own (`--force
---reason ...` drops someone else's and is audited). `deploy` refuses a service whose `host_port` is reserved
-by a different slug and releases the slug's own reservation after a successful deploy; `converge` reports
-reservations that have gone stale.
+--reason ...` drops someone else's and is audited). In the single-image compose path, `deploy` refuses a service whose `host_port` is reserved
+by a different slug and releases the slug's own reservation after a successful deploy (`runtime: coolify` and
+compose-project deploys get neither the check nor the release). `converge` reports reservations whose slug
+is registered on a different `host_port`, and expired ones it could not prune.
 
 <!-- anchor id=port-allocation-reserve-flags repo=go_fleet_runner symbol=go:port_reserve.go#addPortReserveFlags verified=c6f1ea927 digest=sha256:dae1d00bca16e969095e844aa2d2aee1bc1427bdb6d9acd5500cc3385ea0628e on=2026-10-15 -->
 
@@ -1263,8 +1265,8 @@ its port: for a third-party container add an `$external` row (`id`,
 `host_port`, `repo_url`, plus `container_port`) to `overrides.json`; for a
 first-party repo add the `mesh-*` GitHub topics (a per-slug patch alone
 creates no entry), then set `host_port` in its `overrides.json` patch. Run
-`python3 bin/generate.py` and push. Without `--reserve`, `allocate-port` is read-only and only
-proposes a free port. (To find live listeners with no registry row at all,
+`python3 bin/generate.py` and push. A plain `allocate-port` records nothing and never edits the registry; it
+only proposes a free port (it still locks the ledger and prunes expired reservations). (To find live listeners with no registry row at all,
 `fleet-runner audit orphaned-listeners` checks the dockerhost against
 `services.json`.)
 Your service keeps its original port. Only reallocate
