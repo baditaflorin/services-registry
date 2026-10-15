@@ -733,7 +733,7 @@
     "placement": "pinned",
     "scope": "internal-only",
     "allowed_source_ips": [
-      "65.108.75.123/32", "157.90.1.174/32"
+      "65.108.75.123/32", "157.90.1.174/32", "88.198.68.213/32", "168.119.211.205/32"
     ],
     "trl": 7,
     "trl_assessed_at": "2026-05-16",
@@ -4013,7 +4013,7 @@
   },
   "fleet-secrets": {
     "access_tier": "infra-privileged",
-    "allowed_source_ips": ["65.108.75.123/32", "157.90.1.174/32"],
+    "allowed_source_ips": ["65.108.75.123/32", "157.90.1.174/32", "88.198.68.213/32", "168.119.211.205/32"],
     "container_port": 18140,
     "description": "Encrypted secrets vault. Holds infrastructure tokens (Hetzner DNS, GitHub App credentials, SMTP, platform API keys). Secretbox encryption at rest, consumer allowlists, and separate admin writes. The service data path is privately bound; only the trusted gateway peer may honor injected identity.",
     "example_path": "/",
@@ -4662,7 +4662,7 @@
   "infrastructure-fetch-cache": {
     "access_tier": "infra-privileged",
     "allowed_source_ips": [
-      "65.108.75.123/32", "157.90.1.174/32"
+      "65.108.75.123/32", "157.90.1.174/32", "88.198.68.213/32", "168.119.211.205/32"
     ],
     "container_port": 18205,
     "cpus": 4,
