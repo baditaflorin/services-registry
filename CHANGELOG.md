@@ -1,5 +1,6 @@
 ## 2026-10-15
 
+- Sync search-duck-go 0.4.19 to generated registry metadata after the merged Pyroscope canary release.
 - Sync Search Duck 0.1.13 to the registry for the merged Pyroscope canary release.
 
 - Keep the Scrape The World Hub on its existing project network when rendering the Graph writer mount; joining the shared `pentest_network` is outside this rollout.
