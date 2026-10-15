@@ -47,6 +47,17 @@ steps:
       - python3 bin/check_service_version_regressions.py origin/main
       - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py
 
+  claude-md-format:
+    depends_on: []
+    image: node:22
+    commands:
+      # The 68 mesh-* repositories run `prettier --check .` (prettier ^3.7.4, printWidth 100, no .prettierignore) over the CLAUDE.md copy
+      # the weekly rollout pushes, so a canonical that is not prettier-clean fails their next real CI run (found 2026-10-15 in
+      # mesh-card-sorter#9). Fix a failure with: npx prettier@3.7.4 --config <same json> --write CLAUDE.md, then `docdrift gen --check`.
+      - |
+        printf '%s' '{"semi":true,"singleQuote":false,"trailingComma":"all","printWidth":100}' > /tmp/prettierrc.json
+        npx --yes prettier@3.7.4 --config /tmp/prettierrc.json --check CLAUDE.md
+
   docs-drift:
     depends_on: []
     image: python:3.13-alpine

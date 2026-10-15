@@ -497,7 +497,9 @@ def gen_verbs(git, attrs):
     vs = sorted(set(verbs_declared(git.show(repo, "main.go"))))
     rows = ["`%s`" % v for v in vs]
     # no commit sha in the header: it would make `gen --check` fail on every unrelated commit to the source repository
-    return "\n_%d verbs, generated from the dispatch switch in `%s/main.go`; do not edit by hand._\n\n%s\n" % (len(vs), repo, ", ".join(rows))
+    # a blank line after the BEGIN comment and before the END comment: prettier inserts both, and the 68 mesh-* repositories run
+    # `prettier --check .` over the rolled-out copy of this file
+    return "\n\n_%d verbs, generated from the dispatch switch in `%s/main.go`; do not edit by hand._\n\n%s\n\n" % (len(vs), repo, ", ".join(rows))
 
 
 def gen_registry_counts(git, attrs):
