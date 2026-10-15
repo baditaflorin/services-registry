@@ -6,7 +6,7 @@ Per repository it compares the blob of CLAUDE.md with the canonical's own histor
   absent     no CLAUDE.md                                           -> add it
   behind     identical to an OLDER canonical revision (N behind)    -> replace it (nothing repo-specific can be lost)
   diverged   differs from every canonical revision                  -> skipped (needs a human or `docdrift sync` with a repo-local tail)
-Commits carry "[skip ci]" so a docs-only commit does not start a pipeline in ~500 repositories. Git runs over SSH, so GitHub's API quota is not used.
+Commits carry "[skip ci]" so a docs-only commit does not start a pipeline in ~500 repositories (not the commit that goes to the sync branch of a protected repository: its PR needs the required checks). Git runs over SSH, so GitHub's API quota is not used.
 
 usage:
   rollout_claude_md.py plan   --registry <clone> --out <dir> [--repos a,b,c | --repos-file f] [--workers 6]
@@ -99,6 +99,15 @@ def cmd_plan(a):
     print("canonical %s (blob %s): %s" % (head, cblob[:10], t))
 
 
+def drop_skip_ci(d):
+    """The sync branch backs a pull request, and a repository that protects its default branch may require status checks on it (a ruleset
+    requiring ci/woodpecker/push/woodpecker): a commit marked [skip ci] never gets them, so the PR stays BLOCKED however often it is rebuilt
+    (found 2026-10-16: mesh-card-sorter#9 and mesh-budget-pot#9). Only the commit that goes to the branch loses the marker; direct pushes keep it."""
+    m = subprocess.run(["git", "-C", d, "log", "-1", "--format=%B"], capture_output=True, text=True, check=True).stdout
+    if " [skip ci]" in m:
+        subprocess.run(["git", "-C", d] + ID + ["commit", "-q", "--amend", "-m", m.replace(" [skip ci]", "").rstrip("\n")], capture_output=True, text=True, check=True)
+
+
 def apply_one(r, out, text, head):
     d = os.path.join(out, "clones", r["repo"])
     with open(os.path.join(d, "CLAUDE.md"), "w") as f:
@@ -162,6 +171,7 @@ def cmd_apply(a):
             if p.returncode == 0:
                 return dict(repo=r["repo"], result="pushed", was=r["status"])
             br = SYNC_BRANCH  # one branch per repository, owned by this tool: a later run updates it (and so the open PR) instead of adding another
+            drop_skip_ci(d)
             p2 = subprocess.run(["git", "-C", d, "push", "-q", "--force", "origin", "HEAD:refs/heads/" + br], capture_output=True, text=True)
             return dict(repo=r["repo"], result="branch-needs-pr" if p2.returncode == 0 else "push-failed", branch=br, note=(p.stderr or "").strip()[:100])
         except Exception as e:
@@ -354,6 +364,7 @@ def cmd_merge(a):
             if p.returncode == 0:
                 x["result"] = "pushed"
             else:
+                drop_skip_ci(d)
                 p2 = subprocess.run(["git", "-C", d, "push", "-q", "--force", "origin", "HEAD:refs/heads/" + SYNC_BRANCH], capture_output=True, text=True)
                 x["result"] = "branch-needs-pr" if p2.returncode == 0 else "push-failed"
                 x["branch"] = SYNC_BRANCH
