@@ -1,5 +1,7 @@
 ## 2026-10-15
 
+- Sync Search Duck 0.1.13 to the registry for the merged Pyroscope canary release.
+
 - Keep the Scrape The World Hub on its existing project network when rendering the Graph writer mount; joining the shared `pentest_network` is outside this rollout.
 - Pin the Scrape The World Hub fleet overlay to its production `hub-dashboard` Compose service and sync registry version 0.15.1, so Graph key mounts target the live service instead of creating an invalid `app` block.
 - Sync merged Pyroscope-enabled releases domain-product-count 0.3.5 and domain-third-party-fetch-map 0.6.6, with service-scoped receiver settings for the next central rollout wave.
