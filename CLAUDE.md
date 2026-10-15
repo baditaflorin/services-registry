@@ -1324,8 +1324,14 @@ is degraded as of 2026-10-13 and deploys there need `--skip-cosign`:
   when the registry cannot be used: the checkout cannot be verified and
   neither `origin/main` nor the CDN can be read, or the bytes are not
   valid JSON. A workspace root chosen with `FLEET_RUNNER_WORKSPACE_ROOT`
-  is read as it is, and an explicit `--services <path>` does not steer
-  those three decisions. Since go_fleet_runner v0.7.336 `clusters.json` is
+  is read as it is. Since go_fleet_runner v0.7.492 an explicit
+  `deploy --services <path>` (and `--overrides <path>`) that names a file
+  outside the shared checkout is read as given for those three decisions
+  too, and for the service lookup and the vhost and compose override the
+  deploy renders (a file that cannot be read or parsed stops the deploy; it
+  never falls back to `origin/main`); one that names the checkout's own
+  file is replaced by the default, which is the verified registry.
+  Since go_fleet_runner v0.7.336 `clusters.json` is
   read the same way by everything that acts on the host it picks
   (`deploy`, `deploy-authorized`, `deploy-all`'s gate, `placement-plan`,
   `nginx-render`'s pools and the pool tools, `stage`, `port-heal
