@@ -1,5 +1,7 @@
 ## 2026-10-15
 
+- Sync five merged Pyroscope-enabled Go service versions to origin/main before the next central fleet-runner rollout wave.
+
 - Sync Fleet Pixel 0.4.2 and Pentest Attack Chainer 0.3.4 registry versions to their origin/main source manifests for the Pyroscope rollout.
 - Add `bin/generate.py --only <id>` to update one generated registry row and projections without applying unrelated topic-catalog drift.
 - Align License Extractor 0.1.9 and declare its Vault-backed fetch-cache file mount after the canary found the Compose omission.
