@@ -1,5 +1,7 @@
 ## 2026-10-15
 
+- Enable service-scoped Pyroscope ingestion for five merged domain detector releases using each service manifest’s file-mounted Vault credentials and a 30-second upload interval.
+
 - Sync five merged Pyroscope-enabled Go service versions to origin/main before the next central fleet-runner rollout wave.
 
 - Sync Fleet Pixel 0.4.2 and Pentest Attack Chainer 0.3.4 registry versions to their origin/main source manifests for the Pyroscope rollout.

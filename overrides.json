@@ -2331,7 +2331,13 @@
     "spiffe_workload": true
   },
   "domain-image-alt-coverage": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
+    "env": {
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_SOURCE": "commoncrawl"
+    },
     "container_port": 18223,
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
     "host_port": 18223,
@@ -2348,7 +2354,12 @@
     "spiffe_workload": true
   },
   "domain-integration-marketplace": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18243,
     "description": "Integration / marketplace / app-directory page detector with count estimate.",
     "host_port": 18243,
@@ -2511,7 +2522,12 @@
     "fetch_cache_api_key_file_mount": true
   },
   "domain-pagination-rel": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 18229,
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
     "host_port": 18229,
@@ -2781,7 +2797,13 @@
     "spiffe_workload": true
   },
   "domain-viewport-meta": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
+    "env": {
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_SOURCE": "commoncrawl"
+    },
     "container_port": 18233,
     "depends_on": [
       "infrastructure-fetch-cache",
@@ -2807,6 +2829,8 @@
     "host_port": 18194,
     "placement": "replicable",
     "env": {
+      "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
+      "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
