@@ -663,7 +663,7 @@
   },
   "api-extractor": {
     "env": {
-      "GRAPH_ENABLED": "false",
+      "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "container_port": 8336,
@@ -677,7 +677,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
-    "version": "1.5.23",
+    "version": "1.6.4",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -825,7 +825,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
     "trl_evidence": "~30 curated DNSBL/RBL/URIBL zones across spam, phishing, malware,\ntor, and open-proxy categories. Per-list 127.0.0.x return-code\ndecode tables (operator-sourced). Concurrent worker-pool fan-out\n(10) using miekg/dns directly so we distinguish NXDOMAIN /\nSERVFAIL / \"got 127.0.0.x\". In-process miekg/dns test server with\n≥10 cases (clean, listed, multi-listed, domain-list, ipv6, private\nIP refusal, ?lists= filter). Reputation score is explainable\n(per-list weight + per-category bonus, capped at 100). See\ndocs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.5",
+    "version": "1.4.7",
     "coolify_app_uuid": "bhyw09mpgmoc4r37en1mq26o"
   },
   "brand-color-palette": {
@@ -908,7 +908,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
     "trl_evidence": "v1.4.0 adds permutation-based discovery (?name=acme): generates a\nbounded candidate set (≤200) from base + corp/inc + role suffixes\n(backup, prod, staging, assets, internal, …), probes every candidate\nacross AWS S3 (vhost + path), GCS (vhost + path), Azure Blob/File,\nand DigitalOcean Spaces (5 regions) in parallel via a 16-worker pool\nwith a 4s per-probe and 90s total budget. Per-provider response\nclassification distinguishes listable / exists / denied / not_exists\n(via NoSuchBucket vs AccessDenied / Azure AuthenticationFailed) and\nattaches sample object keys + counts when a ListBucketResult or\nEnumerationResults body is present. Optional WORDLISTS_URL extension\nhook for go-pentest-wordlists. Test coverage: permute_test.go (8\ncases), detect_test.go (12 cases), handler_test.go (httptest server\nwith canned XML returning listable/denied/NoSuchBucket/404). Backward\ncompatibility preserved for the legacy ?url= page-scan path. Pure Go,\nCGO-free, SSRF-safe via go-common/safehttp. ADR:\ndocs/adr/0001-trl-uplift-to-6.md.\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (ebdd85c) reviewed end-to-end. Confirmed two real, live-verified bugs, both fixed in PR https://github.com/baditaflorin/go_bucket_finder/pull/10 (open, not merged):\n(1) fetch-cache staleness: fetchClient/probeClient in fetch.go were bare safehttp.NewClient() calls with no .WithoutFetchCache(), so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0), every probe GET is eligible for DefaultFetchDelegate and can be served a stale cached response instead of the live origin state -- directly undermining this tool's core promise of reporting CURRENT bucket exposure. This is the documented 'live probe semantics where freshness < cache TTL matters' case go-common/fleetfetch's own doc comment says must not use the cache.\n(2) false-positive classification: verified live against real AWS S3, GCS, DO Spaces, Wasabi, Linode, Vultr, and Backblaze B2 endpoints with curl. Backblaze B2's S3-compatible API (<name>.s3.<region>.backblazeb2.com) returns an identical 403 'Unauthenticated requests are not allowed for this api' for every bucket name -- real, nonexistent, public, or private alike -- so the legacy ?url= page-scan path's bespoke status-code-only classifier (any 403 -> exists_not_listable, any 200 -> public_accessible, no body inspection) reported a false 'bucket exists' finding for every Backblaze reference and every generic 200 fallback page detected in a scanned page. Fixed by having that path reuse the already-tested, evidence-based classifyResponse from the ?name= permutation path, plus a new Backblaze-specific non-signal branch. Two regression tests added (fail on pre-fix code, pass after, confirmed via git stash bisection).\nAll other providers (AWS S3 vhost+path, GCS vhost+path, Azure Blob/File, DO Spaces x5 regions, Wasabi, Linode, Vultr) verified live to behave exactly as the existing classifier expects (404 NoSuchBucket for nonexistent, 200+ListBucketResult for public-listable). TRL left at 6: the permutation-probing architecture and provider matrix work as claimed once these two bugs are patched; PR #10 is the pending fix, not yet on main.",
-    "version": "1.4.5",
+    "version": "1.4.8",
     "coolify_app_uuid": "ioxy3gabe7xoido8gx6574zf"
   },
   "c-proxy": {
@@ -1644,6 +1644,11 @@
     "spiffe_workload": true
   },
   "dir-listing": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
+    "version": "1.5.5",
     "container_port": 8342,
     "description": "Microservice for Dir Listing",
     "example_path": "/go_dir_listing?url=https://example.com",
@@ -1657,6 +1662,10 @@
     "coolify_app_uuid": "tr54hs1ir6x719g1fe3h7ov7"
   },
   "dns-record": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 8084,
     "description": "Microservice for Dns Record",
     "example_path": "/?target=example.com",
@@ -1667,7 +1676,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (fresh 250-domain sample, cross-checked against dig on 3 public resolvers): found and fixed a real bug -- flattenAnswers sorted MX/SRV records lexicographically as strings instead of numerically by preference/priority, scrambling any RRset mixing single- and double-digit values (confirmed on 17% of sampled domains with MX records, e.g. a Google Workspace MX set [1,5,5,10,10] emitted as [1,10,10,5,5]). Confirmed no fetch-cache layer sits in front of DNS lookups, and NXDOMAIN-vs-transient-error handling is already correct. trl bumped 6->7 given the live-validated fix; trl_ceiling=7 added -- structurally capped by dependence on shared public resolvers (1.1.1.1/8.8.8.8/9.9.9.9) for both answers and DNSSEC trust, no local validator. See PR #10 (merged).",
-    "version": "1.8.9",
+    "version": "1.8.17",
     "coolify_app_uuid": "rg33g8wm5fwwxzue83j5y6d9"
   },
   "dom-complexity-metrics": {
