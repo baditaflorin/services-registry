@@ -1,5 +1,6 @@
 ## 2026-10-15
 
+- Enable Fleet Graph env projections and sync source versions for comment-extractor, cookie-checker, cors-scanner, cors-tester, and crlf-tester while preserving their Coolify app bindings.
 - Sync ASN Lookup 1.5.18 with the Coolify-compatible Pyroscope secret-reference release.
 - Sync search-duck-go 0.4.19 to generated registry metadata after the merged Pyroscope canary release.
 - Sync Search Duck 0.1.13 to the registry for the merged Pyroscope canary release.
