@@ -66,7 +66,7 @@ done
 # Caller identity for the remote audit log (~/.fleet-runner/audit.jsonl on
 # LXC 108). Every shim call runs the binary as root over the same bastion
 # hop, so without these the rows from four laptops and N agents are
-# indistinguishable. fleet-runner >= 0.7.463 stamps them on every row and
+# indistinguishable. fleet-runner >= 0.7.469 stamps them on every row and
 # `fleet-runner stats --by caller|agent` groups by them. Each is only set
 # when the caller has not already set it, so an agent harness that exports
 # FLEET_CALLER_* itself wins.
@@ -101,7 +101,10 @@ env_prefix=""
 
 # Allocate a TTY only when interactive — keeps `... | grep` and other
 # pipelines clean.
+# macOS /bin/bash is 3.2: under `set -u` an EMPTY array expanded as "${a[@]}" is
+# "unbound variable", which broke every non-TTY call (agents, pipes). The
+# ${a[@]+"${a[@]}"} form expands to nothing when empty and is safe on 3.2 and 5.x.
 ssh_opts=()
 if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); fi
 
-exec ssh "${ssh_opts[@]}" "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN$remote_argv"
+exec ssh ${ssh_opts[@]+"${ssh_opts[@]}"} "$BASTION" "pct exec $LXC -- $env_prefix $REMOTE_BIN$remote_argv"
