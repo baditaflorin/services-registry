@@ -2054,6 +2054,11 @@
   "domain-details": {
     "container_port": 8085,
     "description": "Microservice for Domain Details",
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "domain-details",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "example_path": "/?target=example.com",
     "host_port": 8085,
     "trl": 6,
@@ -2062,7 +2067,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Live production-DB audit (~1.1M rows) found 74,371 rows with status=1 (success) yet age_days=0, almost always paired with empty registrar/expires/nameservers -- literally claiming 74K+ domains were registered on their scan date. Root-caused: age_days defaulted to Go's int zero-value instead of NULL when a WHOIS creation date failed to parse, while status stayed 'ok'. Confirmed live: 3,361 of these rows were checked after an earlier related fix already shipped, proving this is a live, still-present gap. Fixed (v1.3.0) with a new 'partial' result classification whenever no usable Created date exists, plus a normaliseWhoisDate fix that no longer leaks raw unparsed date strings into a documented-RFC3339 field. See github.com/baditaflorin/go_domain_details PR #10 (merged). Rows with tool_version<1.3.0 are re-crawl candidates.",
-    "version": "1.3.9",
+    "version": "1.4.3",
     "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2",
     "depends_on": [
       "infrastructure-fetch-cache"
