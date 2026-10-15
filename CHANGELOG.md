@@ -1,5 +1,6 @@
 ## 2026-10-15
 
+- Sync ASN Lookup 1.5.17 with the merged Pyroscope-enabled service release.
 - Sync search-duck-go 0.4.19 to generated registry metadata after the merged Pyroscope canary release.
 - Sync Search Duck 0.1.13 to the registry for the merged Pyroscope canary release.
 
