@@ -18951,8 +18951,8 @@
     "repo_url": "https://github.com/baditaflorin/go-fleet-activity",
     "example_path": "/health",
     "auth": {
-      "type": "api_key",
-      "header": "X-API-Key"
+      "header": "X-API-Key",
+      "type": "api_key"
     },
     "auth_help": "Machine keys (keystore user machine:<host>) may only POST /v1/events, as that host; read keys listed in READERS query /v1/events, /v1/findings, /v1/hosts and /v1/status.",
     "cert_domain": "wildcard.0exec.com",
@@ -18961,8 +18961,8 @@
     "trl_assessed_at": "2026-10-16",
     "trl_assessor": "claude-opus-5-5",
     "placement": "pinned",
-    "host_port": 18322,
-    "container_port": 18322,
+    "host_port": 18323,
+    "container_port": 18323,
     "depends_on": [
       "apikey-service"
     ],
