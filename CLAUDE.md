@@ -863,10 +863,10 @@ name-collision repos; the keystore is not in it). Only `health`, `smoke`,
 (plus `ai-context`, `dep-cve`, `e2e`, `export-collection`, `tokens`)
 accept `--tokens-used N --model NAME` for LLM accounting. **`kind: static`
 entries are skipped by default by `build-test`, `update-dep`, `rollout`
-and `scaffold-*`** (`build-test`, `update-dep` and `rollout` default their filter to
-`kind=container,language=go`; `rollout` applies that default to whichever of the two keys
-your `--filter` leaves unset, so `--filter kind=static` replaces it; `scaffold-compose` and
-`scaffold-service-yaml` skip every non-container entry, and `scaffold-compose` also skips a
+and `scaffold-*`** (`build-test` always uses `kind=container,language=go`; `update-dep` and
+`rollout` default to it and fill whichever of the two keys your `--filter` leaves unset, so
+`--filter kind=static` becomes `kind=static,language=go`; `scaffold-compose` and
+`scaffold-service-yaml` always skip non-container entries, and `scaffold-compose` also skips a
 container entry without `host_port` or `container_port`). `deploy-all`, `exec`, `inject`
 and `push` do not filter by kind — don't deploy-all or health-check a static Pages site
 (use `pages-audit`).
@@ -1225,12 +1225,12 @@ ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port 
 Until you land the port in `overrides.json`, nothing records the proposal, so two agents can be handed the
 same number. To prevent that, reserve it: `fleet-runner allocate-port --reserve <slug> [--ttl 24h] [--note ...]
 [--count N]` writes the proposal to the builder's shared ledger (`$FLEET_STATE_DIR/state/port-reservations.json`, falling back to
-`/var/lib/fleet-runner/`; host-local, never committed). `<slug>` is the service's registry id. A second call for the same slug returns the same port(s) and refreshes the TTL
+`/var/lib/fleet-runner/`; host-local, never committed). `<slug>` must be the service's registry `id` (not the repo directory or the `slug` field), or `deploy` will refuse its own port. A second call for the same slug returns the same port(s) and refreshes the TTL
 (default 24 h). `--list-reservations` prints the unexpired ones; `--release <slug>` drops your own (`--force
 --reason ...` drops someone else's and is audited). In the single-image compose path, `deploy` refuses a service whose `host_port` is reserved
 by a different slug and releases the slug's own reservation after a successful deploy (`runtime: coolify` and
 compose-project deploys get neither the check nor the release). `converge` reports reservations whose slug
-is registered on a different `host_port`, and expired ones it could not prune.
+is registered on a different `host_port`, and expired ones it could not prune (an unreadable ledger is listed under the same heading).
 
 <!-- anchor id=port-allocation-reserve-flags repo=go_fleet_runner symbol=go:port_reserve.go#addPortReserveFlags verified=c6f1ea927 digest=sha256:dae1d00bca16e969095e844aa2d2aee1bc1427bdb6d9acd5500cc3385ea0628e on=2026-10-15 -->
 
@@ -1266,7 +1266,8 @@ its port: for a third-party container add an `$external` row (`id`,
 first-party repo add the `mesh-*` GitHub topics (a per-slug patch alone
 creates no entry), then set `host_port` in its `overrides.json` patch. Run
 `python3 bin/generate.py` and push. A plain `allocate-port` records nothing and never edits the registry; it
-only proposes a free port (it still locks the ledger and prunes expired reservations). (To find live listeners with no registry row at all,
+only proposes a free port, skipping reserved ones (it still locks the ledger and prunes expired
+reservations). (To find live listeners with no registry row at all,
 `fleet-runner audit orphaned-listeners` checks the dockerhost against
 `services.json`.)
 Your service keeps its original port. Only reallocate
