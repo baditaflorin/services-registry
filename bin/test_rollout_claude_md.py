@@ -94,6 +94,23 @@ class RolloutTest(unittest.TestCase):
             f.write("# infra\nfleet-state\n\ngo_a\n")
         self.assertEqual(R.repo_names(self.reg, extra), ["fleet-state", "go_a", "go_b"])
 
+    def test_drop_skip_ci_only_touches_the_commit_that_goes_to_the_sync_branch(self):
+        d = tempfile.mkdtemp()
+        sh = lambda *a: subprocess.run(["git", "-C", d] + list(a), capture_output=True, text=True, check=True).stdout.strip()
+        sh("init", "-q", "-b", "main")
+        open(os.path.join(d, "CLAUDE.md"), "w").write("x\n")
+        sh("add", "CLAUDE.md")
+        subprocess.run(["git", "-C", d] + R.ID + ["commit", "-q", "-m", "docs(claude): refresh CLAUDE.md from the canonical abc [skip ci]", "-m", "body line one\n\nCo-Authored-By: someone"], check=True, capture_output=True)
+        R.drop_skip_ci(d)
+        msg = sh("log", "-1", "--format=%B")
+        self.assertNotIn("[skip ci]", msg)
+        self.assertTrue(msg.startswith("docs(claude): refresh CLAUDE.md from the canonical abc"))
+        self.assertIn("body line one", msg)
+        self.assertIn("Co-Authored-By: someone", msg)
+        before = sh("rev-parse", "HEAD")
+        R.drop_skip_ci(d)  # nothing to drop: the commit is left alone
+        self.assertEqual(before, sh("rev-parse", "HEAD"))
+
     def test_refresh_clone_survives_a_stale_index_lock_and_moves_to_the_remote_tip(self):
         remote = os.path.join(self.tmp.name, "remote.git")
         subprocess.run(["git", "init", "-q", "--bare", "-b", "main", remote], check=True)
