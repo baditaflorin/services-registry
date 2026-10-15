@@ -8596,13 +8596,13 @@
       "type": "api_key"
     },
     "auth_help": "Machine keys (keystore user machine:<host>) may only POST /v1/events, as that host; read keys listed in READERS query /v1/events, /v1/findings, /v1/hosts and /v1/status.",
-    "container_port": 18322,
+    "container_port": 18323,
     "depends_on": [
       "apikey-service"
     ],
     "description": "Central, tamper-evident log of what agents do on every machine: fleet-guard ships audit events with per-machine keystore keys; the service flags risky patterns, replicates between nodes like fleet-msg and serves read-only keys (the hub).",
     "example_path": "/health",
-    "host_port": 18322,
+    "host_port": 18323,
     "name": "Fleet Activity",
     "placement": "pinned",
     "trl": 4,
