@@ -206,6 +206,31 @@
       ],
       "url": "http://dockerhost:18320",
       "why": "See hermes-agent-tunnel-18318."
+    },
+    {
+      "id": "keystore-mesh",
+      "name": "Keystore mesh listener :18322",
+      "kind": "container",
+      "runtime": "external",
+      "language": "go",
+      "mesh": "0exec",
+      "category": "infrastructure",
+      "host_port": 18322,
+      "container_port": 8081,
+      "network_exposure": "lan-internal",
+      "auth": {
+        "type": "none"
+      },
+      "repo_url": "https://github.com/baditaflorin/go_apikey_service",
+      "url": "http://dockerhost:18322",
+      "health_url": "http://dockerhost:18021/health",
+      "tags": [
+        "external",
+        "keystore-mesh",
+        "non-gateway"
+      ],
+      "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
+      "why": "Second port of go_apikey_service, which the registry models with one host_port. Registered so allocate-port never hands out 18322 (allocated for the mesh on 2026-10-16); runtime external keeps nginx-render and clone-missing away from it."
     }
   ],
   "$rules": [

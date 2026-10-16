@@ -4593,6 +4593,32 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "keystore-mesh",
+    "name": "Keystore mesh listener :18322",
+    "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "keystore-mesh",
+      "non-gateway"
+    ],
+    "url": "http://dockerhost:18322",
+    "health_url": "http://dockerhost:18021/health",
+    "repo_url": "https://github.com/baditaflorin/go_apikey_service",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18322,
+    "container_port": 8081,
+    "network_exposure": "lan-internal"
+  },
+  {
     "id": "keyword-density",
     "name": "Keyword Density",
     "description": "Microservice for Keyword Density",
