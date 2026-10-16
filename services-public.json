@@ -3348,14 +3348,15 @@
     "kind": "container",
     "language": "go",
     "mesh": "0exec",
-    "name": "Keystore mesh listener :18322",
+    "name": "Keystore mesh listener :18340",
+    "repo_url": "https://github.com/baditaflorin/go_apikey_service/blob/main/mesh.go",
     "runtime": "external",
     "tags": [
       "external",
       "keystore-mesh",
       "non-gateway"
     ],
-    "url": "http://dockerhost:18322"
+    "url": "http://dockerhost:18340"
   },
   {
     "auth": {
@@ -11470,6 +11471,28 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://search-duck.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "Backend of the sitemap_parser compose project at /opt/sitemap_parser on the dockerhost (container sitemap_parser_backend, bound to 10.10.10.20:18322, up since 2026-10-12). Not managed by fleet-runner. Its frontend (sitemap_parser_frontend) binds 10.10.10.20:3000.",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18322/health",
+    "id": "sitemap-parser-backend-18322",
+    "kind": "container",
+    "language": "other",
+    "mesh": "0exec",
+    "name": "sitemap_parser backend :18322",
+    "repo_url": "https://github.com/baditaflorin/sitemap_parser",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet"
+    ],
+    "url": "http://dockerhost:18322"
   },
   {
     "auth": {
