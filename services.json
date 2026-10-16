@@ -4594,7 +4594,7 @@
   },
   {
     "id": "keystore-mesh",
-    "name": "Keystore mesh listener :18322",
+    "name": "Keystore mesh listener :18340",
     "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
     "category": "infrastructure",
     "mesh": "0exec",
@@ -4606,14 +4606,15 @@
       "keystore-mesh",
       "non-gateway"
     ],
-    "url": "http://dockerhost:18322",
+    "url": "http://dockerhost:18340",
     "health_url": "http://dockerhost:18021/health",
+    "repo_url": "https://github.com/baditaflorin/go_apikey_service/blob/main/mesh.go",
     "example_path": "/",
     "auth": {
       "type": "none"
     },
     "auth_help": "no auth",
-    "host_port": 18322,
+    "host_port": 18340,
     "container_port": 8081,
     "network_exposure": "lan-internal"
   },
@@ -15272,6 +15273,33 @@
       "GRAPH_SERVICE_ID": "search-duck"
     },
     "network_exposure": "gateway-authenticated"
+  },
+  {
+    "id": "sitemap-parser-backend-18322",
+    "name": "sitemap_parser backend :18322",
+    "description": "Backend of the sitemap_parser compose project at /opt/sitemap_parser on the dockerhost (container sitemap_parser_backend, bound to 10.10.10.20:18322, up since 2026-10-12). Not managed by fleet-runner. Its frontend (sitemap_parser_frontend) binds 10.10.10.20:3000.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "other",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "non-fleet"
+    ],
+    "url": "http://dockerhost:18322",
+    "health_url": "http://dockerhost:18322/health",
+    "repo_url": "https://github.com/baditaflorin/sitemap_parser",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "host_port": 18322,
+    "container_port": 8080,
+    "external_compose_dir": "/opt/sitemap_parser",
+    "external_image": "ghcr.io/baditaflorin/sitemap_parser/backend:a35e63b",
+    "network_exposure": "lan-internal"
   },
   {
     "id": "task-credential-broker",

@@ -209,19 +209,20 @@
     },
     {
       "id": "keystore-mesh",
-      "name": "Keystore mesh listener :18322",
+      "name": "Keystore mesh listener :18340",
       "kind": "container",
       "runtime": "external",
       "language": "go",
       "mesh": "0exec",
       "category": "infrastructure",
-      "host_port": 18322,
+      "host_port": 18340,
       "container_port": 8081,
       "network_exposure": "lan-internal",
       "auth": {
         "type": "none"
       },
-      "url": "http://dockerhost:18322",
+      "repo_url": "https://github.com/baditaflorin/go_apikey_service/blob/main/mesh.go",
+      "url": "http://dockerhost:18340",
       "health_url": "http://dockerhost:18021/health",
       "tags": [
         "external",
@@ -229,7 +230,32 @@
         "non-gateway"
       ],
       "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
-      "why": "Second port of go_apikey_service, which the registry models with one host_port. Registered so allocate-port never hands out 18322 (allocated for the mesh on 2026-10-16); runtime external keeps nginx-render and clone-missing away from it."
+      "why": "Second port of go_apikey_service, which the registry models with one host_port. Registered so allocate-port never hands it out; runtime external keeps nginx-render and clone-missing away from it. 18322 (allocated 2026-10-16) was already bound on the dockerhost by the unregistered sitemap_parser backend (see sitemap-parser-backend-18322), so the mesh moved to 18340, checked free on the dockerhost, 0infer runtime, 0mcp runtime and the tier-0 standby. repo_url points at the mesh source file, not the repo root: fleet-runner deploy resolves a repo name to the first entry whose repo_url ends in /<repo>, and this entry sorts before apikey-service."
+    },
+    {
+      "id": "sitemap-parser-backend-18322",
+      "name": "sitemap_parser backend :18322",
+      "kind": "container",
+      "runtime": "external",
+      "language": "other",
+      "mesh": "0exec",
+      "category": "infrastructure",
+      "host_port": 18322,
+      "container_port": 8080,
+      "network_exposure": "lan-internal",
+      "auth": {
+        "type": "none"
+      },
+      "repo_url": "https://github.com/baditaflorin/sitemap_parser",
+      "url": "http://dockerhost:18322",
+      "external_compose_dir": "/opt/sitemap_parser",
+      "external_image": "ghcr.io/baditaflorin/sitemap_parser/backend:a35e63b",
+      "tags": [
+        "external",
+        "non-fleet"
+      ],
+      "description": "Backend of the sitemap_parser compose project at /opt/sitemap_parser on the dockerhost (container sitemap_parser_backend, bound to 10.10.10.20:18322, up since 2026-10-12). Not managed by fleet-runner. Its frontend (sitemap_parser_frontend) binds 10.10.10.20:3000.",
+      "why": "Unregistered squatter on 18322: allocate-port handed 18322 to the keystore mesh on 2026-10-16 and the keystore failed to start with 'port is already allocated' (rolled back within about a minute). Registered so the allocator stops handing it out."
     }
   ],
   "$rules": [
