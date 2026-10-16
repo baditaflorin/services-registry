@@ -4740,7 +4740,9 @@
       "MAX_RENDER_INFLIGHT": "12",
       "MAX_COMMON_CRAWL_INFLIGHT": "4",
       "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10",
-      "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "scrapetheworld.org,okssh.com,0own.com,0prx.com,badita.org"
+      "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "scrapetheworld.org,okssh.com,0own.com,0prx.com,badita.org",
+      "JS_PROXY_URL": "http://10.10.10.10:28006",
+      "JS_PROXY_FALLBACK_URL": "http://go-js-proxy:8080"
     },
     "example_path": "/fetch?url=https://example.com/",
     "host_port": 18205,
