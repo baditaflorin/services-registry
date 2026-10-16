@@ -94,6 +94,32 @@ class RolloutTest(unittest.TestCase):
             f.write("# infra\nfleet-state\n\ngo_a\n")
         self.assertEqual(R.repo_names(self.reg, extra), ["fleet-state", "go_a", "go_b"])
 
+    def test_refresh_clone_works_on_the_remote_default_branch_whatever_the_cache_has_checked_out(self):
+        r = tempfile.mkdtemp()
+        origin = os.path.join(r, "origin.git")
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "main", origin], check=True)
+        seed = os.path.join(r, "seed")
+        subprocess.run(["git", "clone", "-q", origin, seed], check=True, capture_output=True)
+        g = lambda d, *a: subprocess.run(["git", "-C", d, "-c", "user.name=t", "-c", "user.email=t@t"] + list(a), capture_output=True, text=True, check=True).stdout.strip()
+        with open(os.path.join(seed, "CLAUDE.md"), "w") as f:
+            f.write("one\n")
+        g(seed, "add", "CLAUDE.md")
+        g(seed, "commit", "-q", "-m", "one")
+        g(seed, "push", "-q", "origin", "HEAD:main")
+        cache = os.path.join(r, "clones", "repo")
+        os.makedirs(os.path.dirname(cache))
+        subprocess.run(["git", "clone", "-q", "--depth", "1", "file://" + origin, cache], check=True, capture_output=True)
+        g(cache, "checkout", "-q", "-b", "leftover-branch")  # what an earlier session left checked out in the cache
+        with open(os.path.join(seed, "CLAUDE.md"), "w") as f:
+            f.write("two\n")
+        g(seed, "commit", "-qam", "two")
+        g(seed, "push", "-q", "origin", "HEAD:main")
+        d, err = R.refresh_clone("repo", r)
+        self.assertIsNone(err)
+        self.assertEqual(g(d, "rev-parse", "--abbrev-ref", "HEAD"), "main")  # the push of HEAD would otherwise create a stray remote branch
+        with open(os.path.join(d, "CLAUDE.md")) as f:
+            self.assertEqual(f.read(), "two\n")
+
     def test_drop_skip_ci_only_touches_the_commit_that_goes_to_the_sync_branch(self):
         d = tempfile.mkdtemp()
         sh = lambda *a: subprocess.run(["git", "-C", d] + list(a), capture_output=True, text=True, check=True).stdout.strip()

@@ -39,6 +39,17 @@ def canonical(reg):
     return text, git(reg, "rev-parse", "origin/main:CLAUDE.md"), blobs, head
 
 
+def remote_default_branch(d):
+    """the branch the remote calls HEAD (git ls-remote --symref), or None when the remote cannot be asked"""
+    p = subprocess.run(["git", "-C", d, "ls-remote", "--symref", "origin", "HEAD"], capture_output=True, text=True)
+    if p.returncode:
+        return None
+    for line in p.stdout.splitlines():
+        if line.startswith("ref:"):
+            return line.split()[1].replace("refs/heads/", "", 1)
+    return None
+
+
 def refresh_clone(repo, out):
     """a shallow clone at the remote's newest default-branch tip; None when it cannot be had. Clones are a disposable cache: a damaged one
     (a stale index.lock from an interrupted run, a failed reset) is deleted and cloned again once."""
@@ -50,11 +61,16 @@ def refresh_clone(repo, out):
                 lock = os.path.join(d, ".git", "index.lock")
                 if os.path.exists(lock):
                     os.remove(lock)  # nothing else runs in these clones: the lock is left over from an interrupted run
-                br = git(d, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False).replace("origin/", "") or "HEAD"
+                # the remote's own default branch decides, never what this cache clone happens to have checked out: a leftover local branch made the
+                # rollout push its commit to a stray remote branch of the same name instead of the default branch (go-fleet-metrics-hub, 2026-10-16)
+                br = remote_default_branch(d) or git(d, "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}", check=False).replace("origin/", "") or "HEAD"
                 f = subprocess.run(["git", "-C", d, "fetch", "-q", "--depth", "1", "origin", br], capture_output=True, text=True)
                 if f.returncode:
                     raise RuntimeError("fetch: " + f.stderr.strip()[:120])
-                git(d, "reset", "-q", "--hard", "FETCH_HEAD")
+                if br == "HEAD":
+                    git(d, "reset", "-q", "--hard", "FETCH_HEAD")
+                else:
+                    git(d, "checkout", "-q", "-f", "-B", br, "FETCH_HEAD")
                 return d, None
             r = subprocess.run(["git", "clone", "--depth", "1", "--quiet", "git@github.com:%s/%s.git" % (OWNER, repo), d], capture_output=True, text=True)
             if r.returncode:
