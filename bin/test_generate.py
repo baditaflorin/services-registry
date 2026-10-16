@@ -368,6 +368,41 @@ class TestCustomMesh(unittest.TestCase):
         self.assertEqual(generate.registrable_domain("a.b.c.example.com"), "example.com")
         self.assertEqual(generate.registrable_domain("example.com"), "example.com")
 
+    def test_registrable_domain_handles_multi_label_public_suffixes(self):
+        r = generate.registrable_domain
+        self.assertEqual(r("shop.example.co.uk"), "example.co.uk")
+        self.assertEqual(r("example.co.uk"), "example.co.uk")
+        self.assertEqual(r("a.b.example.com.au"), "example.com.au")
+        self.assertEqual(r("hub.firma.com.ro"), "firma.com.ro")
+        self.assertEqual(r("myapp.github.io"), "myapp.github.io")
+        self.assertEqual(r("x.y.myapp.vercel.app"), "myapp.vercel.app")
+
+    def test_registrable_domain_edge_cases(self):
+        r = generate.registrable_domain
+        # case-insensitive suffix match, original label case preserved
+        self.assertEqual(r("Shop.Example.CO.UK"), "Example.CO.UK")
+        # trailing dot (FQDN form)
+        self.assertEqual(r("hub.scrapetheworld.org."), "scrapetheworld.org")
+        # a bare public suffix or a single label is returned unchanged
+        self.assertEqual(r("co.uk"), "co.uk")
+        self.assertEqual(r("localhost"), "localhost")
+        # unknown two-label suffix falls back to the last two labels
+        self.assertEqual(r("a.b.example.xyz"), "example.xyz")
+
+    def test_registrable_domain_unchanged_for_every_domain_the_fleet_uses(self):
+        # Regression guard: the fleet's own apexes and the custom domain are plain
+        # single-label TLDs; the multi-label table must not touch them.
+        for fqdn, want in [
+            ("x.0exec.com", "0exec.com"), ("x.0crawl.com", "0crawl.com"),
+            ("x.0docker.com", "0docker.com"), ("hub.scrapetheworld.org", "scrapetheworld.org"),
+            ("a.badita.org", "badita.org"), ("openobserve.0own.com", "0own.com"),
+        ]:
+            self.assertEqual(generate.registrable_domain(fqdn), want)
+
+    def test_custom_mesh_wildcard_cert_domain_uses_public_suffix(self):
+        self.assertEqual(generate.wildcard_cert_domain("custom", "shop.example.co.uk"), "wildcard.example.co.uk")
+        self.assertEqual(generate.wildcard_cert_domain("custom", "hub.scrapetheworld.org"), "wildcard.scrapetheworld.org")
+
 
 class TestExternalEntry(unittest.TestCase):
     """$external is the registry's hook for third-party / upstream

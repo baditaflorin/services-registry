@@ -541,6 +541,37 @@ non-derived host_port, TRL fields), add it there — never write to
 
 ---
 
+### Custom domains and certificates (`mesh: custom`)
+
+A service on a domain the fleet has no pattern for (for example
+`hub.scrapetheworld.org`) is registered with `overrides.json[<id>].domain`. The
+registry then derives everything else from that one value:
+
+| Field | Derived as |
+|---|---|
+| `url` / `health_url` | `https://<domain>` / `https://<domain>/health` |
+| `cert_domain` | `wildcard.<registrable domain>`, e.g. `wildcard.scrapetheworld.org` |
+
+**Certificate policy: one wildcard certificate per registrable domain, never one
+certificate per host.** Per-host certificates multiply quickly (hundreds of
+vhosts) and run into Let's Encrypt's rate limits; a wildcard keeps issuance and
+deletion under deliberate control. `fleet-runner deploy` enforces it: if the
+registry says `wildcard.<domain>` and that certificate is not on the gateway,
+deploy aborts with "Issue the wildcard before deploying" instead of requesting a
+per-host certificate.
+
+- The registrable domain comes from `registrable_domain()` in `bin/generate.py`:
+  the last two labels, or the last three for a known multi-label public suffix
+  (`example.co.uk`, `firma.com.ro`, ...). The suffix table is a curated subset of
+  the Public Suffix List. For a suffix it does not know, set `cert_domain:`
+  explicitly in `overrides.json`; an explicit value always wins over the
+  derivation.
+- A wildcard certificate needs Let's Encrypt's DNS-01 challenge, i.e. the
+  ability to create `_acme-challenge` TXT records in that domain's DNS. Issue
+  `wildcard.<domain>` on the gateway before pointing a service at it.
+- An explicit per-host `cert_domain` (for example `hub.scrapetheworld.org`) is a
+  legacy exception to remove once the wildcard exists.
+
 ## 5. Build, deploy, smoke
 
 There is no GitHub Actions build. All builds happen on Builder LXC 108

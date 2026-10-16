@@ -648,20 +648,56 @@ APEX_FOR_MESH = {
 }
 
 
-def registrable_domain(fqdn: str) -> str:
-    """Best-effort apex (registrable domain) for a dotted hostname: the
-    last two labels, e.g. "hub.scrapetheworld.org" -> "scrapetheworld.org".
+# Public suffixes with more than one label, where the registrable domain is
+# the suffix plus ONE more label (example.co.uk, not co.uk). This is a curated
+# subset of the Public Suffix List, not the whole list: it covers the common
+# country second-level suffixes and the shared-hosting suffixes under which
+# every tenant is a separate registrant. A domain whose suffix is not listed
+# here falls back to the last two labels; set `cert_domain:` in overrides.json
+# for that one service -- it always wins over this derivation.
+MULTI_LABEL_PUBLIC_SUFFIXES = frozenset({
+    # United Kingdom
+    "co.uk", "org.uk", "me.uk", "ltd.uk", "plc.uk", "net.uk", "ac.uk", "gov.uk", "sch.uk",
+    # Romania
+    "com.ro", "org.ro", "nom.ro", "tm.ro", "store.ro", "info.ro",
+    # Australia / New Zealand
+    "com.au", "net.au", "org.au", "edu.au", "gov.au", "id.au", "asn.au",
+    "co.nz", "org.nz", "net.nz", "ac.nz", "govt.nz",
+    # Asia
+    "co.jp", "ne.jp", "or.jp", "ac.jp", "go.jp", "co.kr", "or.kr", "co.in", "net.in",
+    "org.in", "ac.in", "gov.in", "com.cn", "net.cn", "org.cn", "com.hk", "com.sg",
+    "com.tw", "com.tr",
+    # Americas / Africa / Europe (other)
+    "com.br", "net.br", "org.br", "com.ar", "com.mx", "org.mx", "co.za", "org.za",
+    "net.za", "com.pl", "net.pl", "org.pl", "com.ua",
+    # Shared hosting: every subdomain is a different registrant, so the
+    # "registrable domain" is the tenant's own name under the suffix.
+    "github.io", "gitlab.io", "pages.dev", "workers.dev", "netlify.app", "vercel.app",
+    "herokuapp.com", "appspot.com", "web.app", "firebaseapp.com", "blogspot.com",
+    "azurewebsites.net", "cloudfront.net",
+})
 
-    This is a simple heuristic, not a public-suffix-list lookup -- it is
-    wrong for multi-label public suffixes (co.uk, github.io, ...). Every
-    domain this fleet actually owns today is a plain single-label TLD, so
-    the heuristic is deliberately kept simple rather than pulling in a
-    PSL dependency for a case that hasn't happened yet. If a custom
-    domain ever needs the exact apex overridden, set `cert_domain:`
-    directly in overrides.json -- it always wins over this derivation
-    (see the entry-construction copy-through loop)."""
-    labels = fqdn.split(".")
-    return ".".join(labels[-2:]) if len(labels) >= 2 else fqdn
+
+def registrable_domain(fqdn: str) -> str:
+    """Best-effort apex (registrable domain) for a dotted hostname.
+
+    Normally the last two labels ("hub.scrapetheworld.org" ->
+    "scrapetheworld.org"). When the last two labels are a known multi-label
+    public suffix (MULTI_LABEL_PUBLIC_SUFFIXES) it is the last three
+    ("shop.example.co.uk" -> "example.co.uk"). A hostname that IS a public
+    suffix, or has too few labels, is returned unchanged.
+
+    Matching is case-insensitive; the original label case is preserved.
+    This is a curated subset of the Public Suffix List, not a full lookup;
+    for a suffix it does not know, set `cert_domain:` directly in
+    overrides.json -- it always wins over this derivation (see the
+    entry-construction copy-through loop)."""
+    labels = fqdn.strip(".").split(".")
+    if len(labels) < 2:
+        return fqdn
+    if ".".join(labels[-2:]).lower() in MULTI_LABEL_PUBLIC_SUFFIXES:
+        return ".".join(labels[-3:]) if len(labels) >= 3 else fqdn
+    return ".".join(labels[-2:])
 
 
 def wildcard_cert_domain(mesh: str, domain: str | None = None) -> str:
