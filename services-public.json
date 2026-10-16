@@ -3337,6 +3337,29 @@
   },
   {
     "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18021/health",
+    "id": "keystore-mesh",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Keystore mesh listener :18322",
+    "repo_url": "https://github.com/baditaflorin/go_apikey_service",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "keystore-mesh",
+      "non-gateway"
+    ],
+    "url": "http://dockerhost:18322"
+  },
+  {
+    "auth": {
       "header": "X-API-Key",
       "type": "api_key"
     },
