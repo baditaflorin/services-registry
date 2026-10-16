@@ -4742,7 +4742,9 @@
       "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10",
       "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "scrapetheworld.org,okssh.com,0own.com,0prx.com,badita.org",
       "JS_PROXY_URL": "http://10.10.10.10:28006",
-      "JS_PROXY_FALLBACK_URL": "http://go-js-proxy:8080"
+      "JS_PROXY_FALLBACK_URL": "http://go-js-proxy:8080",
+      "JS_PROXY_NETWORK_URL": "http://10.10.10.10:28024",
+      "JS_PROXY_NETWORK_FALLBACK_URL": "http://go-js-proxy-network:8500"
     },
     "example_path": "/fetch?url=https://example.com/",
     "host_port": 18205,
