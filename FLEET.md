@@ -345,6 +345,13 @@ fleet-wide rollout needs the bake/halt/resume machinery, implement
 **not** implement a generic `deploy --all` — the lack of one is a
 feature, not an omission.
 
+**Update 2026-10-16:** none of `canary`, `roll` or `converge-deploy` exists as a verb. The staged-canary
+part of this design is covered by `fleet-runner deploy-all --repos <lowest-blast-radius-repo>,<others>
+--canary 1 --soak 90s --gate-no-restarts`: `--repos` order is rollout order, the canary batch deploys
+first, and the gate runs before the rollout widens (see `fleet-runner deploy-all --help`). Use that for
+a high-risk first touch. A `deploy-all` verb now exists, so the sentence above about not implementing
+one records the original intent, not the current tool; it refuses an unfiltered run without `--all`.
+
 ## IaC pipeline
 
 Two parallel render targets — gateway nginx vhosts AND dockerhost docker-compose files — both driven from this registry. Neither lives as hand-edited state on the target host.

@@ -22,7 +22,7 @@ Most changes are low risk: probe-first deploy with rollback on a failed `/selfte
 | Touching | Do this first |
 |---|---|
 | One service, no shared code | `fleet-runner deploy <repo>` |
-| `safehttp`, middleware, auth, the gateway | Deploy one service first and verify `/health`, `/selftest`, `/version` and gateway smoke before widening (there is no `fleet-runner canary` verb). Never a fleet-wide rollout on first touch |
+| `safehttp`, middleware, auth, the gateway | Stage it: `fleet-runner deploy-all --repos <lowest-blast-radius-repo>,<others> --canary 1 --soak 90s --gate-no-restarts`, then verify `/health`, `/selftest`, `/version` and gateway smoke before widening (there is no `fleet-runner canary` verb). Never a fleet-wide rollout on first touch |
 | `go-common` or a `go-fleet-*` primitive with more than one consumer | List the affected set first with `fleet-runner rollout` in its default plan mode (see CLAUDE.md, "Fleet-wide changes") |
 | DNS records or secrets | Read `RUNBOOK-UNATTENDED.md`. DNS only through the Hetzner Cloud API; secrets only in `go-fleet-secrets`, never in env, repos or `services.json` |
 | `proxy_egress` in `overrides.json` | Read the `proxy_egress` section of `FLEET.md`; the right direction depends on the upstream |
