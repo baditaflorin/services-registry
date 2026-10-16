@@ -221,7 +221,7 @@
       "auth": {
         "type": "none"
       },
-      "repo_url": "https://github.com/baditaflorin/go_apikey_service/blob/main/mesh.go",
+      "repo_url": "https://github.com/baditaflorin/go_apikey_service",
       "url": "http://dockerhost:18340",
       "health_url": "http://dockerhost:18021/health",
       "tags": [
@@ -230,7 +230,7 @@
         "non-gateway"
       ],
       "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
-      "why": "Second port of go_apikey_service, which the registry models with one host_port. Registered so allocate-port never hands it out; runtime external keeps nginx-render and clone-missing away from it. 18322 (allocated 2026-10-16) was already bound on the dockerhost by the unregistered sitemap_parser backend (see sitemap-parser-backend-18322), so the mesh moved to 18340, checked free on the dockerhost, 0infer runtime, 0mcp runtime and the tier-0 standby. repo_url points at the mesh source file, not the repo root: fleet-runner deploy resolves a repo name to the first entry whose repo_url ends in /<repo>, and this entry sorts before apikey-service."
+      "why": "Second port of go_apikey_service, which the registry models with one host_port. Registered so allocate-port never hands it out; runtime external keeps nginx-render and clone-missing away from it. 18322 (allocated 2026-10-16) was already bound on the dockerhost by the unregistered sitemap_parser backend (see sitemap-parser-backend-18322), so the mesh moved to 18340, checked free on the dockerhost, 0infer runtime, 0mcp runtime and the tier-0 standby. repo_url is go_apikey_service itself, the repository that publishes this port. It is shared with apikey-service on purpose: since fleet-runner v0.7.569 (go_fleet_runner#848) every lookup that turns a repository into one entry skips runtime external entries, so this row can never be the deploy target (before that, a first-match lookup picked it and `deploy go_apikey_service` failed; #781 and #782 worked around it by moving this repo_url)."
     },
     {
       "id": "sitemap-parser-backend-18322",
