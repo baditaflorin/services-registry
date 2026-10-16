@@ -9955,7 +9955,10 @@
     "trl_assessed_at": "2026-08-26",
     "trl_assessor": "claude-sonnet-5",
     "trl_ceiling": 8,
-    "trl_evidence": "Stock prom/alertmanager:v0.34.0 wired to route Prometheus-native alerts (previously had no delivery path at all -- see fleet-prometheus entry's note on fleet-alerts.yml) through fleet-notify's no-auth webhook. Config is a single static route + one webhook receiver, not independently tested beyond confirming delivery live post-deploy. trl set to match the fleet-grafana/fleet-prometheus siblings in this same repo (config-driven third-party binary, no CI); trl_ceiling held at 8 for the same reason."
+    "trl_evidence": "Stock prom/alertmanager:v0.34.0 wired to route Prometheus-native alerts (previously had no delivery path at all -- see fleet-prometheus entry's note on fleet-alerts.yml) through fleet-notify's no-auth webhook. Config is a single static route + one webhook receiver, not independently tested beyond confirming delivery live post-deploy. trl set to match the fleet-grafana/fleet-prometheus siblings in this same repo (config-driven third-party binary, no CI); trl_ceiling held at 8 for the same reason.",
+    "compose_service_name": "alertmanager",
+    "compose_skip_networks": true,
+    "mem_limit": "256m"
   },
   {
     "id": "fleet-backoff-coordinator",
@@ -10713,7 +10716,10 @@
     "container_port": 3000,
     "host_port": 18326,
     "health_path": "/api/health",
-    "ui_cookie_bridge": true
+    "ui_cookie_bridge": true,
+    "compose_dir": "/opt/services/go-fleet-metrics-hub-staging",
+    "compose_self_managed": true,
+    "compose_service_name": "grafana-staging"
   },
   {
     "id": "fleet-graph",

@@ -1,3 +1,9 @@
+## 2026-10-16
+
+- Declare per-slug `mem_limit: 256m` for cognitive-load, domain-ad-network, domain-analytics-stack, domain-events-platform, domain-interactive-demo, domain-podcast-presence, gdpr-compliance and pentest-audit-log, matching the caps applied live on the 0docker dockerhost on 2026-10-16 (rule: max(4x current, 2x 7-day peak, 256 MiB)). These eight have no `docker-compose.override.yml` in their compose directory, so the registry cap reaches them only once their overlay is pushed (`render-compose <slug> --push`); a plain `fleet-runner deploy` does not write it.
+- Fix the go-fleet-metrics-hub overlay render. `fleet-alertmanager` and `fleet-grafana-staging` had no `compose_service_name`, so both rendered as an `app:` block in `/opt/services/go-fleet-metrics-hub/docker-compose.override.yml`: a duplicate YAML key that Compose rejects, and no cap reached Alertmanager. Alertmanager now targets its `alertmanager` service with `compose_skip_networks` (it runs with `network_mode: host`, like Prometheus) and `mem_limit: 256m`. Staging Grafana now renders into its own Compose project directory and `grafana-staging` service with `compose_self_managed`, because that project is started with `-f docker-compose.staging.yml`, which does not auto-load an override; its cap belongs in that file.
+- Refresh `services.summary.txt`, which had not been regenerated since the 2026-10-16 keystore-mesh port claims.
+
 ## 2026-10-15
 
 - Enable Fleet Graph env projections and sync source versions for comment-extractor, cookie-checker, cors-scanner, cors-tester, and crlf-tester while preserving their Coolify app bindings.
