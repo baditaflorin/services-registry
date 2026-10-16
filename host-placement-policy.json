@@ -66,7 +66,12 @@
         "github-app-token-broker",
         "google-taxonomy",
         "proxy",
-        "reverse-dns"
+        "reverse-dns",
+        "js-proxy",
+        "js-proxy-network",
+        "node-proxy",
+        "proxy-fingerprint",
+        "css-framework-detector"
       ]
     },
     "infer-runtime": {
@@ -314,7 +319,10 @@
         "replicable"
       ],
       "allowed_service_ids": [
-        "css-framework-detector"
+        "css-framework-detector",
+        "js-proxy-network",
+        "node-proxy",
+        "proxy-fingerprint"
       ]
     },
     "0database-runtime": {
@@ -331,7 +339,11 @@
         "replicable"
       ],
       "allowed_service_ids": [
-        "css-framework-detector"
+        "css-framework-detector",
+        "js-proxy",
+        "js-proxy-network",
+        "node-proxy",
+        "proxy-fingerprint"
       ]
     }
   }
