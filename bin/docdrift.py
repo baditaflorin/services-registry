@@ -75,7 +75,11 @@ class Git(object):
             return False
 
     def resolve_ref(self, repo):
-        for cand in (self.ref, "HEAD"):
+        # `origin/main` is only the default spelling. A repository whose default branch is another one (master, gh-pages) is read at that branch, which the
+        # nightly refresh keeps in refs/remotes/origin/HEAD; falling back to the checked-out HEAD would read a stale local branch and report the copy "behind"
+        # (2026-10-16: cookiecutter-data-science, deep-searcher, show-me-the-way, vcard-personal-portfolio)
+        cands = ("origin/HEAD", self.ref, "HEAD") if self.ref == "origin/main" else (self.ref, "HEAD")
+        for cand in cands:
             try:
                 return self._run(repo, "rev-parse", "--verify", "--quiet", cand + "^{commit}").strip()
             except RuntimeError:

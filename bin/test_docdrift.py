@@ -269,6 +269,35 @@ class GenerateAndLintTests(Base):
         self.assertEqual(hits, [2, 10])
 
 
+class DefaultBranchTests(Base):
+    def test_origin_main_reads_the_remote_default_branch_when_it_is_not_main(self):
+        origin = os.path.join(self.root, "origin.git")
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "master", origin], check=True)
+        seed = os.path.join(self.root, "seed")
+        subprocess.run(["git", "clone", "-q", origin, seed], check=True, capture_output=True)
+        commit(seed, {"CLAUDE.md": "old\n"}, "one")
+        sh(seed, "push", "-q", "origin", "HEAD:master")
+        work = os.path.join(self.root, "work")
+        subprocess.run(["git", "clone", "-q", origin, work], check=True, capture_output=True)
+        commit(seed, {"CLAUDE.md": "new\n"}, "two")
+        sh(seed, "push", "-q", "origin", "HEAD:master")
+        sh(work, "fetch", "-q", "origin")
+        sh(work, "remote", "set-head", "origin", "master")
+        git = D.Git(self.root, "origin/main")  # the default ref: no origin/main exists in this repository
+        self.assertEqual(git.show("work", "CLAUDE.md"), "new\n")  # the remote default tip, not the stale checked-out HEAD ("old")
+        self.assertEqual(sh(work, "show", "HEAD:CLAUDE.md").strip(), "old")
+
+    def test_origin_main_is_still_used_when_origin_head_is_missing(self):
+        origin = os.path.join(self.root, "o2.git")
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "main", origin], check=True)
+        work = os.path.join(self.root, "w2")
+        subprocess.run(["git", "clone", "-q", origin, work], check=True, capture_output=True)
+        commit(work, {"CLAUDE.md": "x\n"}, "one")
+        sh(work, "push", "-q", "origin", "HEAD:main")
+        sh(work, "fetch", "-q", "origin")
+        self.assertEqual(D.Git(self.root, "origin/main").show("w2", "CLAUDE.md"), "x\n")
+
+
 class ScanTests(Base):
     def test_a_symlink_alias_of_a_clone_is_not_counted_twice(self):
         canon = "# canon\n\nbody\n"
