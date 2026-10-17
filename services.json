@@ -373,7 +373,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -399,7 +399,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "r3s8sxosmycwuolwijycjrgc",
     "network_exposure": "gateway-authenticated",
-    "version": "1.7.5"
+    "version": "1.7.5",
+    "placement": "replicable"
   },
   {
     "id": "asn-lookup",
@@ -879,7 +880,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -905,7 +906,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "ixgke6um39vhypr3g9dhdtlw",
     "version": "1.3.5",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "cognitive-load",
@@ -1302,7 +1304,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -1328,7 +1330,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "ucpnn7eamllrrvvjwp5nne1y",
     "network_exposure": "gateway-authenticated",
-    "version": "1.3.7"
+    "version": "1.3.7",
+    "placement": "replicable"
   },
   {
     "id": "cors-tester",
@@ -1723,7 +1726,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -1749,7 +1752,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "sri96kx10a1iltoz0q7m472k",
     "version": "2.1.2",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "dependency-counter",
@@ -3453,7 +3457,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -3479,7 +3483,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
     "network_exposure": "gateway-authenticated",
-    "version": "1.4.15"
+    "version": "1.4.15",
+    "placement": "replicable"
   },
   {
     "id": "embed-iframe-classifier",
