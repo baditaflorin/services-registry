@@ -1,3 +1,7 @@
+## 2026-10-17
+
+- Fleet Graph telemetry on for the six Node.js services (d3-graph, nlp-extractinfo, node-proxy, node-search-bing, node-search-duck, ocr-pdf): overrides.json env GRAPH_ENABLED=true and GRAPH_COLLECTOR_URL, the same opt-in every other writer has; their service repos carry the vendored client and the reviewed manifest entries are on go_fleet_runner main (#862). Without it the rendered overlay keeps the fleet default GRAPH_ENABLED=false (found on the d3-graph replica, 2026-10-17).
+
 ## 2026-10-16
 
 - `fleet-preflight` version 0.3.14 -> 0.3.15 (go-fleet-preflight#36: the `image` check tries the registry id before the repository name, so services published under their id stop showing a false red image check). Regenerated with `bin/generate.py --only fleet-preflight`; services.json changes only that value.
