@@ -3547,7 +3547,7 @@
     "health_url": "https://fleet-grafana.0exec.com/_gw_health"
   },
   "fleet-graph": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "false"},
     "access_tier": "infra-privileged",
     "container_port": 18143,
     "depends_on": [
