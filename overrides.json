@@ -336,35 +336,19 @@
         "ids": [
           "api-extractor",
           "asn-lookup",
-          "blocklist-checker",
-          "bucket-finder",
           "comment-extractor",
           "cookie-checker",
           "cors-tester",
           "crlf-tester",
           "crypto-finder",
-          "dir-listing",
-          "dns-record",
           "domain-details",
-          "env-finder",
-          "file-inclusion",
-          "go-session-fixation",
-          "graphql-introspection",
           "hidden-fields",
-          "host-header",
-          "http-method-tester",
-          "idor-finder",
           "iframe-analyzer",
           "information-leakage",
           "jsbundle-routes",
           "jsbundle-secrets",
-          "jsonp-finder",
-          "jwt-pentest",
-          "mime-trap",
-          "open-redirect",
           "pentest-asset-scope-resolver",
           "pentest-authz-matrix",
-          "pentest-bounty-pilot",
           "pentest-bounty-scope-checker",
           "pentest-cert-transparency",
           "pentest-chaos-sync",
@@ -399,31 +383,14 @@
           "pentest-takeover-fingerprints",
           "pentest-triager-listener",
           "pentest-trufflehog",
-          "pentest-waf-detect",
           "pentest-wayback-urls",
           "pentest-wordlists",
-          "pentest-ywh-sync",
           "phone-extractor",
           "postmessage",
           "proto-pollution",
-          "ratelimit-tester",
-          "scan-port",
-          "scan-port-banner",
-          "scan-port-ssh",
-          "secrets-scanner",
           "security-header-analyzer",
-          "session-management",
-          "simulate-ddos",
-          "smuggling-probe",
           "sourcemap-finder",
           "subdomain-finder",
-          "subdomain-takeover",
-          "swagger-finder",
-          "telnet-banner",
-          "typosquat-finder",
-          "wayback-checker",
-          "wellknown-scanner",
-          "wp-plugins",
           "zone-transfer"
         ]
       },
@@ -864,6 +831,7 @@
     "spiffe_workload": true
   },
   "blocklist-checker": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8338,
     "description": "Microservice for Blocklist Checker",
@@ -947,6 +915,7 @@
     "spiffe_workload": true
   },
   "bucket-finder": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8339,
     "description": "Microservice for Bucket Finder",
@@ -1712,6 +1681,7 @@
     "spiffe_workload": true
   },
   "dir-listing": {
+    "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1730,6 +1700,7 @@
     "coolify_app_uuid": "tr54hs1ir6x719g1fe3h7ov7"
   },
   "dns-record": {
+    "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3085,6 +3056,7 @@
     "spiffe_workload": true
   },
   "env-finder": {
+    "placement": "replicable",
     "container_port": 8344,
     "description": "Microservice for Env Finder",
     "example_path": "/go_env_finder?url=https://example.com",
@@ -3136,6 +3108,7 @@
     "trl_evidence": "First-pass audit of this browser field-recording-loop instrument (WebAudio, OPFS/Whisper/Pyodide workers): privacy claim verified genuine -- audio only ever moves via postMessage (transferred ArrayBuffer) into a local Worker, no exfiltration anywhere. Found and fixed 2 real bugs: (1) a reentrancy race in engine.stop() -- the running guard was only cleared AFTER await audioContext.close(), so a fast double-click on Stop could call AudioContext.close() twice on the same context, throwing an uncaught InvalidStateError and leaving the UI stuck mid-teardown; fixed by flipping the guard synchronously before the first await. (2) a Whisper/Pyodide worker leak -- every click of 'Transcribe'/'Analyse' created a brand-new client/Worker without disposing the previous one, growing memory by hundreds of MB per click, directly contradicting the docs' own 'second run is instant' claim; fixed by caching one client per session and reusing it. trl bumped 3->4; trl_ceiling=7 added -- client-only art piece with no server component and a subjective 'does it sound right' success criterion, 8-9 doesn't apply. See PR #6 (merged)."
   },
   "file-inclusion": {
+    "placement": "replicable",
     "container_port": 8221,
     "description": "Microservice for File Inclusion",
     "example_path": "/?url=https://example.com",
@@ -4490,6 +4463,7 @@
     "spiffe_workload": true
   },
   "go-session-fixation": {
+    "placement": "replicable",
     "version": "0.5.4",
     "access_tier": "vetted-pentest",
     "container_port": 8316,
@@ -4531,6 +4505,7 @@
     "trl_evidence": "First-pass audit of this browser granular-material teaching sandbox (Three.js/WebGPU-or-WebGL, a tiny WASM contact kernel with a TS fallback): confirmed no uncapped-particle-count or uncanceled-animation-loop leak (GranularScene.dispose() correctly tears down everything, particleBudget always enforced) -- clean bill of health on the hypothesized bug classes. Found a real physics-correctness bug instead: resolvePair()'s inter-particle friction impulse cap was a fixed +-0.08 constant that ignored the material's actual friction coefficient entirely, so sand (0.7), gravel (0.62), and snow (0.86) all resisted sliding at essentially the same rate -- measured a resting sand pile in the app's own default setup settling to only ~13.5deg and sliding to the outer wall within 15 simulated seconds instead of holding a slope, undermining the app's own stated teaching claim ('clean avalanche angle,' 'jammed pile'). Fixed by scaling the friction cap to the material's coefficient with a basic Coulomb stick/slip model -- the same scenario now holds ~21deg and stays clear of the wall. Also fixed a broken pre-commit test hook (Node's built-in localStorage global wasn't being overridden by vitest's jsdom environment). trl bumped 4->5; trl_ceiling=6 added -- permanently committed (per its own ADR/postmortem) to a simplified non-Chrono-parity 2.5D approximation with no backend, no path to SLA-grade for a client-side teaching sandbox. See PR #5 (merged)."
   },
   "graphql-introspection": {
+    "placement": "replicable",
     "container_port": 8147,
     "description": "Microservice for Graphql Introspection",
     "env": {
@@ -4608,6 +4583,7 @@
     "trl_evidence": "First-pass audit of this local-first EPUB/PDF highlight-review app (spaced repetition + semantic search): privacy claim holds up -- no fetch/XHR/sendBeacon/analytics anywhere in src/, all persistence is IndexedDB/localStorage, the only network-capable code is dynamic import() of pdfjs-dist/jszip/optional AI libs, none of which ever receive document/highlight content. Found and fixed 2 real bugs. (1) scheduleReview() computed a first 'hard' review's interval as intervalDays*1.2, but intervalDays on a new highlight is just the random 0-14 day import jitter, not a real interval -- so a 'hard' (worse) grade could schedule further out than 'good' or 'easy' on the same highlight, inverting the difficulty ordering; fixed by anchoring the first 'hard' repetition to 1 day, matching how good/easy already special-case repetitions===0. (2) A real, well-formed EPUB fixture returned 0 highlights before the fix -- Element.textContent concatenates adjacent paragraphs with no separator, so a short non-sentence line (page footer, heading) between two real paragraphs glued onto the next paragraph and the whole merged run got discarded by the 'Page N' metadata filter, silently dropping legitimate highlights; fixed by preserving paragraph breaks through extraction and treating them as hard boundaries independent of punctuation (also fixes the same bug class for plain-text/Markdown import). Password-protected/corrupted PDFs handled correctly (verified with real qpdf-encrypted and truncated fixtures). Also restored docs/privacy.md, which along with 1,300+ lines of architecture/deploy/ADR docs had silently vanished in a 'build:' commit 40+ commits ago with nobody noticing, leaving README links dead (rest flagged, not restored, to keep the PR focused). trl held at 3 (real bugs just found in both the core scheduling and extraction paths -- genuinely early-stage, not gold-plated); trl_ceiling=5 added -- well-scoped single-user no-backend app with no fundamental design flaws found, but no CI, previously-broken lint/tests on main, and zero tests for two of three importers before this PR. See PR #7 (merged)."
   },
   "host-header": {
+    "placement": "replicable",
     "container_port": 8240,
     "description": "Microservice for Host Header",
     "env": {
@@ -4671,6 +4647,7 @@
     "version": "0.5.24"
   },
   "http-method-tester": {
+    "placement": "replicable",
     "container_port": 8087,
     "description": "Microservice for Http Method Tester",
     "env": {
@@ -4719,6 +4696,7 @@
     "spiffe_workload": true
   },
   "idor-finder": {
+    "placement": "replicable",
     "container_port": 8242,
     "description": "Microservice for Idor Finder",
     "example_path": "/go_idor_finder?url=https://example.com",
@@ -4932,6 +4910,7 @@
     "coolify_app_uuid": "s13roc0xole7p683zfxn2u8z"
   },
   "jsonp-finder": {
+    "placement": "replicable",
     "container_port": 8158,
     "description": "Microservice for Jsonp Finder",
     "example_path": "/go_jsonp_finder?url=https://example.com",
@@ -4962,6 +4941,7 @@
     "spiffe_workload": true
   },
   "jwt-pentest": {
+    "placement": "replicable",
     "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 8315,
@@ -5410,6 +5390,7 @@
     "spiffe_workload": true
   },
   "mime-trap": {
+    "placement": "replicable",
     "container_port": 8145,
     "description": "Microservice for Mime Trap",
     "example_path": "/go_mime_trap?url=https://example.com",
@@ -5632,6 +5613,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this browser-based 2D game-prototyping toolkit. Confirmed local-first privacy claim true (only network call is an explicit, user-configured local LLM endpoint). Verified the exported playtest HTML is genuinely playable (collision/pickup/hazard/win-loss logic all correct via a scripted animation-frame harness) and properly escapes injected XSS payloads in project name/goal fields. Found and fixed a real, live-reproduced data-loss bug: no text input enforced the underlying Zod schema's max lengths, and storage.ts silently discarded any save that failed validation, falling back to the starter project -- typing an ordinary 98-character title permanently and silently wiped the entire project on next reload, with the very next autosave overwriting the old save. Fixed by clamping input at the state-setter level plus matching maxLength attributes as defense-in-depth. trl bumped 3->4; trl_ceiling=5 -- editing loop is still minimal (no reposition/remove/re-import), a completeness gap not a correctness bug. See github.com/baditaflorin/open-indie-studio PR #7 (merged)."
   },
   "open-redirect": {
+    "placement": "replicable",
     "container_port": 8149,
     "description": "Microservice for Open Redirect",
     "example_path": "/go_open_redirect?target=example.com",
@@ -5873,6 +5855,7 @@
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18179,
     "description": "Bounty-hunt orchestrator: POST /hunt drives waf-detect → cookie-pwn → js-bundle-scanner → wayback-urls → reflection-hunter against given targets, returns consolidated triage JSON.",
@@ -6542,6 +6525,7 @@
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18295,
     "description": "Fingerprint WAF/CDN challenge interstitials (14 vendors, 18 signatures). Used by reflection-hunter and bounty pipeline to drop interstitial false positives.",
@@ -6605,6 +6589,7 @@
     "coolify_app_uuid": "bcyth03ylz1xux22rday1hvu"
   },
   "pentest-ywh-sync": {
+    "placement": "replicable",
     "container_port": 18176,
     "description": "Pull YWH public program list + scopes from api.yeswehack.com, filter by min-bounty / max-reports / verified, emit bounty-scope-checker seed entries.",
     "example_path": "/programs",
@@ -6932,6 +6917,7 @@
     "trl_evidence": "First-pass audit of this round-robin proxy-pool rotator: found a real bug that is CURRENTLY LIVE in production -- zero dead-backend failover, confirmed via 12 live requests against production showing a repeating 301/200/200/502 pattern, meaning ~25% of all production traffic is currently failing with no self-healing. Fixed with bounded retry to the next host on dial/connect failure (capped at len(hosts) attempts so a fully-dead pool fails fast), a response-write tracker so a backend that starts streaming and dies mid-response is never double-written, and body-buffering so retries resend the request body intact. Also fixed a /health contract mismatch (service.yaml declares 200, real behavior was 400). Confirmed the round-robin index itself was already correctly atomic/race-free (verified under go test -race) and no credential leak in logs. trl bumped 3->5; trl_ceiling=8 added -- the round-robin core was always sound, the gap was zero tests plus a confirmed live production failure mode, now fixed and tested; no structural blocker to reaching 6-7 with modest further work (active health checks, /selftest). See PR #1 (merged)."
   },
   "ratelimit-tester": {
+    "placement": "replicable",
     "container_port": 8156,
     "description": "Microservice for Ratelimit Tester",
     "host_port": 8156,
@@ -7190,6 +7176,7 @@
     "trl_evidence": "VJ app, real-time visuals"
   },
   "scan-port": {
+    "placement": "replicable",
     "container_port": 8222,
     "description": "Microservice for Scan Port",
     "example_path": "/?target=example.com",
@@ -7204,6 +7191,7 @@
     "coolify_app_uuid": "r11ztr9exd5b0kqt5ngizd2l"
   },
   "scan-port-banner": {
+    "placement": "replicable",
     "container_port": 8089,
     "description": "Microservice for Scan Port Banner",
     "example_path": "/?target=example.com",
@@ -7218,6 +7206,7 @@
     "coolify_app_uuid": "r1f8esfzv4scgf000pdegdg4"
   },
   "scan-port-ssh": {
+    "placement": "replicable",
     "container_port": 8090,
     "description": "Microservice for Scan Port Ssh",
     "example_path": "/?target=example.com",
@@ -7380,6 +7369,7 @@
     }
   },
   "secrets-scanner": {
+    "placement": "replicable",
     "version": "1.3.5",
     "container_port": 8229,
     "description": "Microservice for Secrets Scanner",
@@ -7540,6 +7530,7 @@
     }
   },
   "session-management": {
+    "placement": "replicable",
     "container_port": 8095,
     "description": "Microservice for Session Management",
     "example_path": "/?url=https://example.com",
@@ -7586,6 +7577,7 @@
     "trl_evidence": "navigation app, routing logic"
   },
   "simulate-ddos": {
+    "placement": "replicable",
     "version": "0.1.4",
     "container_port": 8092,
     "description": "Microservice for Simulate Ddos",
@@ -7624,6 +7616,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "smuggling-probe": {
+    "placement": "replicable",
     "version": "1.5.8",
     "container_port": 8154,
     "description": "Microservice for Smuggling Probe",
@@ -7749,6 +7742,7 @@
     "coolify_app_uuid": "qhxo952d5vz3vjbsm3qq2lwl"
   },
   "subdomain-takeover": {
+    "placement": "replicable",
     "container_port": 8223,
     "description": "Microservice for Subdomain Takeover",
     "example_path": "/go_subdomain_takeover?domain=example.com",
@@ -7840,6 +7834,7 @@
     ]
   },
   "swagger-finder": {
+    "placement": "replicable",
     "container_port": 8349,
     "description": "Microservice for Swagger Finder",
     "example_path": "/go_swagger_finder?url=https://example.com",
@@ -7971,6 +7966,7 @@
     ]
   },
   "telnet-banner": {
+    "placement": "replicable",
     "container_port": 8086,
     "description": "Microservice for Telnet Banner",
     "example_path": "/?target=example.com",
@@ -8065,6 +8061,7 @@
     "trl_evidence": "privacy tool, anonymization logic"
   },
   "typosquat-finder": {
+    "placement": "replicable",
     "container_port": 8350,
     "description": "Microservice for Typosquat Finder",
     "example_path": "/go_typosquat_finder?url=https://example.com",
@@ -8435,6 +8432,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "wayback-checker": {
+    "placement": "replicable",
     "version": "2.1.7",
     "container_port": 8351,
     "description": "Microservice for Wayback Checker",
@@ -8526,6 +8524,7 @@
     "spiffe_workload": true
   },
   "wellknown-scanner": {
+    "placement": "replicable",
     "version": "2.2.3",
     "container_port": 8352,
     "description": "Microservice for Wellknown Scanner",
@@ -8540,6 +8539,7 @@
     "coolify_app_uuid": "issc4hdee6k1ydw6bhluz7jf"
   },
   "wp-plugins": {
+    "placement": "replicable",
     "version": "1.4.5",
     "container_port": 8353,
     "description": "Microservice for Wp Plugins",

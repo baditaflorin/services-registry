@@ -359,8 +359,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Blocklist Checker",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_blocklist_checker",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -472,8 +473,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Bucket Finder",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_bucket_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -1333,9 +1335,10 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Dir Listing",
+    "placement": "replicable",
     "rename_status": "redirect",
     "repo_url": "https://github.com/baditaflorin/go_dir_listing",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -1362,8 +1365,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Dns Record",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_dns_record",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -2567,8 +2571,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Env Finder",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_env_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -2624,8 +2629,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "File Inclusion",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_file_inclusion",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -2861,8 +2867,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Graphql Introspection",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_graphql_introspection",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -2976,8 +2983,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Host Header",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_host_header",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3033,8 +3041,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Http Method Tester",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_http_method_tester",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3118,8 +3127,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Idor Finder",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_idor_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3271,8 +3281,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Jsonp Finder",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_jsonp_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3703,8 +3714,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Mime Trap",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_mime_trap",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3822,8 +3834,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Open Redirect",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_open_redirect",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3968,8 +3981,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Pentest Bounty Pilot",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go-pentest-bounty-pilot",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "kind-container",
@@ -4088,8 +4102,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Pentest Waf Detect",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go-pentest-waf-detect",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "kind-container",
@@ -4117,8 +4132,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Pentest Ywh Sync",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go-pentest-ywh-sync",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "kind-container",
@@ -4410,8 +4426,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Ratelimit Tester",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_ratelimit_tester",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -4702,8 +4719,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Scan Port",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_scan_port",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -4730,8 +4748,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Scan Port Banner",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_scan_port_banner",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -4758,8 +4777,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Scan Port Ssh",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_scan_port_ssh",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -4931,8 +4951,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Secrets Scanner",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_secrets_scanner",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5158,8 +5179,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Session Management",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_session_management",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5215,8 +5237,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Simulate Ddos",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_simulate_ddos",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5271,8 +5294,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Smuggling Probe",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_smuggling_probe",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5443,8 +5467,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Subdomain Takeover",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_subdomain_takeover",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5558,8 +5583,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Swagger Finder",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_swagger_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -5730,8 +5756,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Telnet Banner",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_telnet_banner",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5845,8 +5872,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Typosquat Finder",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_typosquat_finder",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6071,8 +6099,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Wayback Checker",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_wayback_checker",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6185,8 +6214,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Wellknown Scanner",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_wellknown_scanner",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6213,8 +6243,9 @@
     "language": "go",
     "mesh": "0crawl",
     "name": "Wp Plugins",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_wp_plugins",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -9017,10 +9048,11 @@
     "language": "go",
     "mesh": "0exec",
     "name": "Go Session Fixation",
+    "placement": "replicable",
     "rename_retire_at": "2026-06-15",
     "rename_status": "redirect",
     "repo_url": "https://github.com/baditaflorin/go_session_fixation",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "pentest",
@@ -9325,8 +9357,9 @@
     "language": "go",
     "mesh": "0exec",
     "name": "Jwt Pentest",
+    "placement": "replicable",
     "repo_url": "https://github.com/baditaflorin/go_jwt_pentest",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "pentest",
