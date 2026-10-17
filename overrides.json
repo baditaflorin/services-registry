@@ -794,7 +794,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
     "trl_evidence": "20 -race test funcs, audit_log table with prefix-only redaction, /audit admin-gated, /selftest",
-    "version": "0.7.5",
+    "version": "0.8.1",
     "spiffe_workload": true
   },
   "asn-lookup": {
@@ -4288,7 +4288,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Vis-network handles ~500 nodes comfortably. Lifts to 7 with server-side layout caching + WebGL-backed renderer for >500-node fleets.",
     "trl_evidence": "Second-pass re-audit of this fleet topology/TRL-heatmap dashboard: found and fixed 3 real bugs. (1) A data race in the ETag registry cache -- the 304 branch mutated a shared cache entry's fields in place while a concurrent Fetch call read those same fields unlocked, confirmed with go test -race; directly relevant since /dashboard, /graph.dot, and /trl-heatmap all hit the same cached URL concurrently. Fixed by making cache entries immutable-once-published. (2) A client-side XSS gap -- the operator dashboard built rows via innerHTML template-literal interpolation of collector-reported strings with zero escaping, unlike the SSR heatmap which correctly uses html.EscapeString; rewrote all sinks to use textContent/createElement and scheme-checked lookup URLs. (3) A malformed optional slice (services.depends.json) broke the entire read surface with a 502, despite the code's own comment claiming this case was tolerated -- the tolerance only covered fetch errors, not JSON decode errors; reproduced live, now returns 200. Confirmed /selftest is correctly wired (unlike sibling go-fleet-graph's dead-code bug) and no leaked secrets exist (unlike sibling go-fleet-metrics-hub). trl/trl_ceiling held at 7/7 -- the ceiling's stated rationale (no collector-failure circuit breaking/snapshot persistence) is unrelated to these bugs and still holds; all three are now fixed with regression tests. See PR #3 (merged).",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4857,7 +4857,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.8.16",
+    "version": "0.8.18",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -4889,7 +4889,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18024,
     "placement": "replicable",
-    "version": "0.6.15",
+    "version": "0.6.16",
     "mem_limit": "2g",
     "trl": 6,
     "trl_assessed_at": "2026-08-20",
@@ -5517,7 +5517,7 @@
     "description": "Node proxy (?url=)",
     "host_port": 18004,
     "placement": "replicable",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "name": "Proxy (Node)",
     "trl": 5,
     "trl_assessed_at": "2026-08-02",
@@ -5869,7 +5869,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
-    "version": "0.2.0",
+    "version": "0.3.2",
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
@@ -5882,7 +5882,7 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "Wraps 6 fleet primitives. Per-host worker pool, WAF pre-filter, triage rollup. 5 integration tests with fixture upstreams.",
-    "version": "0.1.0",
+    "version": "0.3.6",
     "coolify_app_uuid": "xinj0vpxvwqnk60uq9uom5zl"
   },
   "pentest-bounty-scope-checker": {
@@ -5925,7 +5925,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; ≥6 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across ≥3 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
-    "version": "0.2.0",
+    "version": "0.2.6",
     "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
   },
   "pentest-codec": {
@@ -8737,7 +8737,7 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex-gpt-6",
     "placement": "replicable",
-    "version": "0.1.5"
+    "version": "0.1.6"
   },
   "task-credential-broker": {
     "name": "Task Credential Broker",
