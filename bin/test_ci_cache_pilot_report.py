@@ -108,6 +108,19 @@ class CompareTests(unittest.TestCase):
         self.assertEqual(summary["unpaired"]["pilot_after"]["runs"], 0)
 
 
+class RepoNameTests(unittest.TestCase):
+    def test_accepts_owner_name_and_skips_comments(self):
+        self.assertEqual(
+            report.valid_repo_names(["# sample", "", "baditaflorin/go_trust_decay", " o/r.v2 "]),
+            ["baditaflorin/go_trust_decay", "o/r.v2"],
+        )
+
+    def test_rejects_anything_that_could_alter_the_url_path(self):
+        for bad in ("../admin", "o/r/extra", "o/../r", "o/r?x=1", "o/r#f", "o r/x", "/x", "o/"):
+            with self.subTest(name=bad), self.assertRaises(ValueError):
+                report.valid_repo_names([bad])
+
+
 class CliTests(unittest.TestCase):
     def test_help_exits_cleanly(self):
         with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(SystemExit) as caught:

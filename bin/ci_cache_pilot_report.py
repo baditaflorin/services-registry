@@ -32,6 +32,7 @@ import argparse
 import concurrent.futures
 import datetime as dt
 import json
+import re
 import statistics
 import sys
 from dataclasses import dataclass
@@ -56,6 +57,23 @@ class Run:
     @property
     def seconds(self) -> int:
         return self.finished - self.started
+
+
+REPO_NAME = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
+
+
+def valid_repo_names(lines: Iterable[str]) -> list[str]:
+    """owner/name per line; blanks and # comments skipped; anything else is an error
+    (a name is placed in an API URL path, so it must not carry slashes or dots tricks)."""
+    names = []
+    for raw in lines:
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if not REPO_NAME.match(line) or ".." in line:
+            raise ValueError(f"not an owner/name repository: {line!r}")
+        names.append(line)
+    return names
 
 
 def parse_instant(value: str) -> int:
@@ -271,11 +289,7 @@ def main(argv: list[str] | None = None) -> int:
     pilot_ids = resolve_agent_ids(client.agents(), args.pilot_agent)
     repo_names = None
     if args.repos_file:
-        repo_names = [
-            line.strip()
-            for line in args.repos_file.read_text(encoding="utf-8").splitlines()
-            if line.strip() and not line.startswith("#")
-        ]
+        repo_names = valid_repo_names(args.repos_file.read_text(encoding="utf-8").splitlines())
     excluded = set(DEFAULT_EXCLUDED_WORKFLOWS) | set(args.exclude_workflow)
     runs = collect_runs(
         client, repo_names, args.pipelines_per_repo, args.max_repos, args.workers, excluded

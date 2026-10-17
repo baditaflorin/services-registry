@@ -64,6 +64,8 @@ size_mb() { # size_mb <dir> -> megabytes rounded UP (so "over the cap" never hid
 trim_by_age() {
   local dir="$1" max_mb="$2" days current
   [[ -d "${dir}" ]] || return 0
+  # The tree is writable by containers: never follow a symlinked cache directory.
+  if [[ -L "${dir}" ]]; then log "refusing symlinked ${dir}"; return 0; fi
   current="$(size_mb "${dir}")"
   if (( current <= max_mb )); then
     log "${dir}: ${current} MB <= ${max_mb} MB, nothing to do"
@@ -90,6 +92,7 @@ trim_by_age() {
 prune_modcache() {
   local dir="$1" max_mb="$2" current
   [[ -d "${dir}" ]] || return 0
+  if [[ -L "${dir}" ]]; then log "refusing symlinked ${dir}"; return 0; fi
   current="$(size_mb "${dir}")"
   if (( current <= max_mb )); then
     log "${dir}: ${current} MB <= ${max_mb} MB, nothing to do"
@@ -104,11 +107,13 @@ prune_modcache() {
   # not guarantee the chmod runs before the rm).
   local entry
   while IFS= read -r -d '' entry; do
+    [[ -L "${entry}" ]] && continue  # a container could swap a directory for a symlink
     chmod -R u+w "${entry}" 2>/dev/null || true
     rm -rf "${entry}" || true
   done < <(find "${dir}" -type d -name '*@v*' -mtime +"${MOD_MIN_AGE_DAYS}" -prune -print0 2>/dev/null)
   if [[ -d "${dir}/cache/download" ]]; then
     while IFS= read -r -d '' entry; do
+      [[ -L "${entry}" ]] && continue
       chmod u+w "${entry}" 2>/dev/null || true
       rm -f "${entry}" || true
     done < <(find "${dir}/cache/download" -type f -mtime +"${MOD_MIN_AGE_DAYS}" -print0 2>/dev/null)

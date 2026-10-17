@@ -100,6 +100,29 @@ class PruneTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(recent.exists(), "in-use-looking modules are never pruned even over the cap")
 
+    def test_a_symlinked_cache_directory_is_never_followed(self):
+        outside = self.tmp / "outside"
+        outside.mkdir()
+        victim = outside / "precious"
+        put(victim, 1100, age_days=90)
+        shutil.rmtree(self.root / "go-build")
+        os.symlink(outside, self.root / "go-build")
+        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "1")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("refusing symlinked", result.stdout)
+        self.assertTrue(victim.exists(), "a file behind a symlinked cache directory must never be deleted")
+
+    def test_symlinks_inside_the_cache_are_not_followed_either(self):
+        outside = self.tmp / "outside2"
+        put(outside / "precious", 1100, age_days=90)
+        planted = self.root / "go-mod" / "github.com" / "x"
+        planted.mkdir(parents=True)
+        os.symlink(outside, planted / "evil@v1.0.0")
+        put(self.root / "go-mod" / "github.com" / "x" / "big@v1.0.0" / "f.go", 3000, age_days=60)
+        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-mod-max-mb", "1")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertTrue((outside / "precious").exists(), "must not reach through a planted symlink")
+
     def test_refuses_dangerous_or_missing_roots(self):
         for bad in ("/", "/tmp", "/var/cache", "relative/path", str(self.tmp / "missing")):
             with self.subTest(root=bad):

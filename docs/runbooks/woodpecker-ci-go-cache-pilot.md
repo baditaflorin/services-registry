@@ -20,9 +20,6 @@ OBSERVED 2026-10-17, read from the services registry and GitHub commit statuses:
   53 s, p90 85 s. Queue wait is a median 3 s but p90 537 s (bursts, for example a
   fleet-wide dependency bump). So caching shortens the 53 s; it does not fix
   bursts. See "What this does not fix".
-- The domainscope repository (the largest) runs about 28 agent-minutes per full
-  pipeline at about 68 merges a day.
-
 PREDICTED, not yet measured: how much of the 53 s is download and compile. The
 benchmark and the report below exist to turn that into a number before anything
 is widened.
@@ -141,12 +138,20 @@ convenient. The next pipelines are cold runs, as before.
 
 ## Risks and limits
 
-- **The cache is shared by every repository on that host.** A step that can write
-  to it can write entries other repositories might later read. The Go build cache
-  is content addressed (a crafted entry needs a matching input hash), and the
-  module cache is verified against `go.sum` on first download, but this is a trust
-  decision: it is acceptable for a private organisation whose pull requests come
-  from its own members, and it is not acceptable for builds of untrusted forks.
+- **One trust domain per host.** Anything that runs in a CI step on this host can
+  write to the shared caches, and later steps of any repository on that host read
+  them, so one compromised step could affect the others. Enable this only on hosts
+  whose CI runs code from this organisation's own members and automation, never on
+  a host that also builds third-party or fork pull requests. Deployed images are
+  built on the separate builder pool, not from these caches; these caches only
+  speed up and influence CI verification. The longer-term design removes the
+  shared-write assumption (a remote cache that only trusted builds may write).
+- **Host-side tooling treats the cache as untrusted input.** `prune.sh` runs as
+  root over a tree that containers can write to, so it refuses symlinked cache
+  directories, skips symlinks inside them, and only ever deletes inside the
+  configured root.
+- **`bench.sh` runs the repository's own tests** on the host: point it only at
+  repositories you trust.
 - **Per host, not fleet wide.** Five hosts means five caches, so a job landing on a
   cold host is cold. The step after this pilot, if it pays off, is Go's
   `GOCACHEPROG` (a shared cache server all hosts use), not more directories.
