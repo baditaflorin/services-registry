@@ -1,0 +1,17 @@
+[Unit]
+Description=Fleet version pin sync — registry version pins follow what is running (merged and deployed)
+Documentation=https://github.com/baditaflorin/services-registry/blob/main/bin/fleet-version-pin-sync.README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=HOME=/root
+EnvironmentFile=-/etc/default/fleet-version-pin-sync
+StateDirectory=fleet-version-pin-sync
+# One run at a time; PAUSE in /var/lib/fleet-version-pin-sync stops it without touching the unit.
+ExecStart=/usr/bin/flock -n /run/lock/fleet-version-pin-sync.lock /usr/local/bin/fleet-version-pin-sync --workdir /var/lib/fleet-version-pin-sync/repo --state-dir /var/lib/fleet-version-pin-sync --direct-hosts ${PIN_SYNC_DIRECT_HOSTS} --prom ${PIN_SYNC_PROM} $PIN_SYNC_ARGS
+# A run waits for its pull request's CI (up to --ci-timeout).
+TimeoutStartSec=2h
+Nice=10
+IOSchedulingClass=idle

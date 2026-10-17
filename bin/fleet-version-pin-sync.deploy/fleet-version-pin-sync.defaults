@@ -1,0 +1,6 @@
+# fleet-version-pin-sync runtime config (consumed by fleet-version-pin-sync.service)
+# --apply: open the pull request and merge it when CI is green. Remove it to only report (metrics + journal).
+PIN_SYNC_ARGS=--apply
+PIN_SYNC_PROM=/var/lib/prometheus-node-exporter/textfile/fleet_version_pins.prom
+# 0docker docker hosts, tried in order for compose services (registry host_port); anything else uses its public URL.
+PIN_SYNC_DIRECT_HOSTS=10.10.10.20,10.10.10.30
