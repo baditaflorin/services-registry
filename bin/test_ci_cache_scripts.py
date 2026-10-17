@@ -155,6 +155,7 @@ class InstallHostTests(unittest.TestCase):
         self.assertFalse(root.exists())
         self.assertIn("woodpecker-agent-ci-cache.override.yml", result.stdout)
         self.assertIn("docker inspect", result.stdout)
+        self.assertIn("HOLD the agent", result.stdout)
 
     def test_apply_creates_the_three_directories(self):
         root = self.tmp / "cache"
@@ -172,6 +173,69 @@ class InstallHostTests(unittest.TestCase):
         self.assertIn("not enough free disk", result.stderr)
         self.assertFalse(root.exists())
 
+    def compose_dir(self, service="woodpecker-agent", filename="compose.yml"):
+        d = self.tmp / "agent"
+        d.mkdir(exist_ok=True)
+        (d / filename).write_text(
+            f"services:\n  {service}:\n    image: example/agent:1\n    restart: always\n"
+        )
+        return d
+
+    def host_args(self, d, **extra):
+        args = ["--root", str(self.tmp / "cache"), "--min-free-gb", "0", "--compose-dir", str(d),
+                "--compose-file", "compose.yml", "--service", "woodpecker-agent", "--project", "own-agent"]
+        for key, value in extra.items():
+            args += [f"--{key}", value]
+        return args
+
+    def test_host_aware_dry_run_uses_the_hosts_real_names_and_writes_nothing(self):
+        d = self.compose_dir()
+        result = bash(SCRIPTS / "install-host.sh", *self.host_args(d), env=self.env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertFalse((d / "woodpecker-agent-ci-cache.override.yml").exists())
+        self.assertIn("-p own-agent -f compose.yml -f woodpecker-agent-ci-cache.override.yml config", result.stdout)
+        self.assertIn(f"apply-agent.sh --compose-dir {d} --compose-file compose.yml --service woodpecker-agent --project own-agent", result.stdout)
+        self.assertIn("label wp_uuid", result.stdout)
+        self.assertNotIn("com.woodpecker-ci.step", result.stdout)
+        self.assertNotIn("woodpecker-cross-host-agent", result.stdout)
+
+    def test_apply_writes_an_override_for_the_hosts_service_with_tight_permissions(self):
+        d = self.compose_dir()
+        result = bash(SCRIPTS / "install-host.sh", *self.host_args(d), "--apply", env=self.env)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        target = d / "woodpecker-agent-ci-cache.override.yml"
+        text = target.read_text()
+        self.assertIn("\n  woodpecker-agent:\n", text)
+        self.assertNotIn("woodpecker-cross-host-agent:", text)
+        self.assertIn("WOODPECKER_BACKEND_DOCKER_VOLUMES", text)
+        self.assertEqual(stat.S_IMODE(target.stat().st_mode), 0o600)
+        again = bash(SCRIPTS / "install-host.sh", *self.host_args(d), "--apply", env=self.env)
+        self.assertEqual(again.returncode, 0, "re-applying the same override is idempotent")
+
+    def test_refuses_to_overwrite_a_different_existing_override(self):
+        d = self.compose_dir()
+        (d / "woodpecker-agent-ci-cache.override.yml").write_text("services: {}\n")
+        result = bash(SCRIPTS / "install-host.sh", *self.host_args(d), "--apply", env=self.env)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("refusing to overwrite", result.stderr)
+        self.assertEqual((d / "woodpecker-agent-ci-cache.override.yml").read_text(), "services: {}\n")
+
+    def test_a_service_that_is_not_in_the_compose_file_is_refused(self):
+        d = self.compose_dir(service="something-else")
+        result = bash(SCRIPTS / "install-host.sh", *self.host_args(d), "--apply", env=self.env)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("bogus service", result.stderr)
+        self.assertFalse((d / "woodpecker-agent-ci-cache.override.yml").exists())
+
+    def test_service_and_project_names_are_validated(self):
+        d = self.compose_dir()
+        for flag, value in (("service", "a;rm -rf /"), ("project", "x y"), ("compose-file", "../x.yml")):
+            with self.subTest(flag=flag):
+                args = self.host_args(d)
+                args += [f"--{flag}", value]
+                result = bash(SCRIPTS / "install-host.sh", *args, env=self.env)
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+
     def test_refuses_without_docker(self):
         empty = self.tmp / "nodocker"
         empty.mkdir()
@@ -188,6 +252,139 @@ class InstallHostTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("docker is not installed", result.stderr)
 
+
+
+STUB_DOCKER = r"""#!/bin/sh
+# Stub docker for apply-agent.sh tests. State lives in files under $STUB_DIR.
+echo "$*" >> "$STUB_DIR/calls.log"
+pop() { # pop the first line of a sequence file; echo the default when it is empty
+  f="$STUB_DIR/$1"
+  if [ -s "$f" ]; then head -n1 "$f"; tail -n +2 "$f" > "$f.new"; mv "$f.new" "$f"; else echo "$2"; fi
+}
+case "$1" in
+  ps)
+    n="$(pop ps-seq 0)"; i=0
+    while [ "$i" -lt "$n" ]; do echo "step$i"; i=$((i+1)); done ;;
+  inspect) pop health-seq "${STUB_HEALTH:-healthy}" ;;
+  compose)
+    case " $* " in
+      *" config --services "*) printf '%s\n' "${STUB_SERVICES:-woodpecker-agent}" ;;
+      *" config "*)
+        echo "services:"; echo "  woodpecker-agent:"; echo "    environment:"
+        [ "${STUB_HAS_VOLUMES:-1}" = "1" ] && echo "      WOODPECKER_BACKEND_DOCKER_VOLUMES: /x:/root/.npm" ;;
+      *" ps -q "*) echo cid123 ;;
+      *) : ;;
+    esac ;;
+esac
+exit 0
+"""
+
+
+@unittest.skipUnless(BASH, "bash is required")
+class ApplyAgentTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp(prefix="ci-cache-apply-"))
+        self.stub_dir = self.tmp / "stub"
+        self.stub_dir.mkdir()
+        docker = self.stub_dir / "docker"
+        docker.write_text(STUB_DOCKER)
+        docker.chmod(0o755)
+        self.agent = self.tmp / "agent"
+        self.agent.mkdir()
+        (self.agent / "compose.yml").write_text("services:\n  woodpecker-agent:\n    image: x\n")
+        (self.agent / "woodpecker-agent-ci-cache.override.yml").write_text("services: {}\n")
+        self.env = {
+            "PATH": f"{self.stub_dir}:{os.environ['PATH']}",
+            "STUB_DIR": str(self.stub_dir),
+            "CI_CACHE_POLL_SECONDS": "0",
+            "CI_CACHE_HEALTH_WAIT_SECONDS": "0",
+        }
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def run_apply(self, *extra, env=None):
+        args = ["--compose-dir", str(self.agent), "--compose-file", "compose.yml",
+                "--service", "woodpecker-agent", "--project", "own-agent", "--stable", "0", *extra]
+        return bash(SCRIPTS / "apply-agent.sh", *args, env={**self.env, **(env or {})})
+
+    def calls(self):
+        path = self.stub_dir / "calls.log"
+        return path.read_text().splitlines() if path.exists() else []
+
+    def ups(self):
+        return [c for c in self.calls() if " up -d " in c]
+
+    def test_dry_run_changes_nothing(self):
+        result = self.run_apply("--dry-run")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.ups(), [])
+        self.assertIn("would wait", result.stdout)
+
+    def test_waits_for_the_host_to_be_idle_then_recreates_only_the_agent_with_the_override(self):
+        (self.stub_dir / "ps-seq").write_text("3\n2\n1\n0\n")
+        result = self.run_apply()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        ups = self.ups()
+        self.assertEqual(len(ups), 1, ups)
+        self.assertIn("-p own-agent", ups[0])
+        self.assertIn("-f woodpecker-agent-ci-cache.override.yml", ups[0])
+        self.assertTrue(ups[0].endswith("up -d woodpecker-agent"), ups[0])
+        ps_calls = [c for c in self.calls() if c.startswith("ps ")]
+        self.assertGreaterEqual(len(ps_calls), 4, "it must keep polling while steps are running")
+        self.assertTrue((self.agent / ".ci-cache-cutover").exists())
+
+    def test_idle_detection_uses_the_label_every_step_container_carries(self):
+        # regression: an earlier draft filtered on a label step containers do not have, so a busy
+        # host looked idle and a running pipeline was killed
+        self.run_apply()
+        ps_calls = [c for c in self.calls() if c.startswith("ps ")]
+        self.assertTrue(ps_calls)
+        for call in ps_calls:
+            self.assertIn("label=wp_uuid", call)
+            self.assertNotIn("com.woodpecker-ci.step", call)
+
+    def test_never_idle_means_nothing_is_changed(self):
+        (self.stub_dir / "ps-seq").write_text("1\n" * 5000)
+        result = self.run_apply("--max-wait", "0")
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        self.assertEqual(self.ups(), [])
+        self.assertIn("nothing was changed", result.stderr)
+
+    def test_refuses_when_compose_would_manage_a_second_service(self):
+        result = self.run_apply(env={"STUB_SERVICES": "woodpecker-agent\nbogus"})
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(self.ups(), [])
+
+    def test_refuses_when_the_override_does_not_set_the_volumes(self):
+        result = self.run_apply(env={"STUB_HAS_VOLUMES": "0"})
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(self.ups(), [])
+
+    def test_an_unhealthy_agent_is_rolled_back_automatically(self):
+        result = self.run_apply(env={"STUB_HEALTH": "unhealthy"})
+        self.assertEqual(result.returncode, 4, result.stdout + result.stderr)
+        ups = self.ups()
+        self.assertEqual(len(ups), 2, ups)
+        self.assertIn("-f woodpecker-agent-ci-cache.override.yml", ups[0])
+        self.assertNotIn("override", ups[1], "the automatic rollback must use the base compose file alone")
+
+    def test_rollback_mode_uses_the_base_compose_file_and_records_the_time(self):
+        result = self.run_apply("--rollback")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        ups = self.ups()
+        self.assertEqual(len(ups), 1)
+        self.assertNotIn("override", ups[0])
+        self.assertTrue((self.agent / ".ci-cache-rollback").exists())
+
+    def test_arguments_are_validated(self):
+        for flag, value in (("service", "a b"), ("project", "x;y"), ("compose-file", "../c.yml")):
+            with self.subTest(flag=flag):
+                args = ["--compose-dir", str(self.agent), "--compose-file", "compose.yml",
+                        "--service", "woodpecker-agent", "--project", "own-agent", f"--{flag}", value]
+                result = bash(SCRIPTS / "apply-agent.sh", *args, env=self.env)
+                self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+                self.assertEqual(self.ups(), [])
 
 @unittest.skipUnless(BASH, "bash is required")
 class BenchTests(unittest.TestCase):

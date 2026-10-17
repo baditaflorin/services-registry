@@ -49,6 +49,7 @@ source read.
 | `templates/woodpecker-agent-ci-cache.override.yml` | compose override for ONE host | mounts `go-build`, `go-mod`, `npm` into every step |
 | `templates/woodpecker-agent-ci-cache.env.example` | the agent's `.env` | cache root and caps |
 | `scripts/ci-cache/install-host.sh` | pilot host | checks Docker and free disk, creates the directories, prints the next commands |
+| `scripts/ci-cache/apply-agent.sh` | pilot host | switches the agent (or rolls it back) only in a real idle window, health-checked |
 | `scripts/ci-cache/prune.sh` | pilot host, daily | keeps each cache under its cap |
 | `scripts/ci-cache/bench.sh` | pilot host | cold, warm and warm-from-another-repo timings plus peak memory, no API needed |
 | `bin/ci_cache_pilot_report.py` | anywhere with a Woodpecker token | before/after against the other agents |
@@ -65,6 +66,13 @@ Pick the host with the most free disk and enough memory for its slot count. The
 runbook `woodpecker-cross-host-capacity.md` lists the schedulable agents and their
 slots; do not change `WOODPECKER_MAX_WORKFLOWS` as part of this pilot.
 
+**Recreating the agent kills every step it is running** (they exit 137 and the
+workflows are reported as canceled), and a busy host is rarely idle. That is why
+the switch is a held, waited, health-checked step and not a plain `docker compose
+up -d`. Hosts also differ from the registry template: use the host's real compose
+file, service and project names (`docker ps` shows the project in the container
+name; `docker inspect` shows it as the label `com.docker.compose.project`).
+
 1. **Before numbers.** On the host, from an existing checkout of a representative
    Go repository and a second, different one:
 
@@ -75,32 +83,64 @@ slots; do not change `WOODPECKER_MAX_WORKFLOWS` as part of this pilot.
    Keep the output. `cold` is today's cost, `warm` a re-run of the same commit,
    `warm-other` a repository's first run once the fleet has built the shared
    dependencies, and `peak_mem_MiB` is the container's peak memory in each case.
-2. **Check and prepare the host** (dry run first):
+2. **Prepare the host** (dry run first; it validates the service name against the
+   compose file and writes the override for THAT service):
 
    ```sh
-   scripts/ci-cache/install-host.sh              # checks, prints the plan
-   sudo scripts/ci-cache/install-host.sh --apply # creates the directories
+   scripts/ci-cache/install-host.sh --compose-dir /opt/woodpecker-agent \
+     --compose-file compose.yml --service woodpecker-agent --project <project>
+   sudo scripts/ci-cache/install-host.sh --compose-dir ... --apply   # same flags
    ```
-3. **Enable it** on that host only: add `WOODPECKER_CI_CACHE_ROOT` to the agent's
-   `.env`, put the override file next to the base compose file and recreate just
-   the agent (the exact commands are printed by the install script). Then prove it
-   took effect: a step container started after the restart must list the binds:
+3. **Hold the agent** in Woodpecker (Admin > Agents > the agent > "No schedule", an
+   admin action) and wait until it has no running workflow
+   (`fleet-runner woodpecker queue --plane 0exec`).
+4. **Switch it:**
 
    ```sh
-   docker inspect "$(docker ps -q --filter label=com.woodpecker-ci.step | head -1)" \
+   scripts/ci-cache/apply-agent.sh --compose-dir /opt/woodpecker-agent \
+     --compose-file compose.yml --service woodpecker-agent --project <project>
+   ```
+
+   It waits for a real idle window (no container with the label `wp_uuid`), changes
+   nothing if none comes, recreates only the agent and rolls back by itself if the
+   agent is not healthy. Then release the hold and note the cutover time it wrote
+   (`.ci-cache-cutover`, UTC).
+5. **Prove the mounts reached the steps.** A step container started after the
+   switch must list the three binds:
+
+   ```sh
+   docker inspect "$(docker ps -q --filter label=wp_uuid | head -1)" \
      --format '{{range .HostConfig.Binds}}{{println .}}{{end}}'
    ```
-
-   Record the cutover time (UTC).
-4. **Keep it bounded.** Schedule daily:
+6. **Keep it bounded.** Schedule daily:
    `scripts/ci-cache/prune.sh --root /var/cache/woodpecker-ci`. Go also trims its
    own build cache entries that were unused for 5 days; this is the hard cap.
-5. **Measure after 3 days** (so enough runs land on the pilot):
+7. **Measure after 3 days** (so enough runs land on the pilot):
 
    ```sh
    python3 bin/ci_cache_pilot_report.py --plane ci.0exec.com \
-     --pilot-agent <agent name> --cutover 2026-10-20T09:00:00Z --repos-file go-sample-repos.txt
+     --pilot-agent <agent name> --cutover <cutover UTC> --repos-file go-sample-repos.txt
    ```
+
+## What the first run on a real host showed
+
+OBSERVED on the pilot host, 2026-10-17 (one run each, host busy):
+
+| Case (fleet Go service, `golang:1.25`, `go build ./... && go test ./...`) | Seconds | Peak memory |
+|---|---|---|
+| cold: empty caches, today's cost | 67 | 1221 MiB |
+| warm: same commit again | 12 | 218 MiB |
+| warm-other: first run after a different service warmed the caches | 26 | 432 MiB |
+
+A warm cache cut a run by 61% to 82% and its peak memory by 65% to 82%. These are
+single runs on a busy host; repeat before quoting them.
+
+The same session corrected the procedure, which is why this runbook has the
+hold-and-wait step: the first switch used a plain recreate and an idle check on the
+wrong container label, and killed pipelines that were running (a long Go job and
+two frontend workflows). Also, a pull request whose clone step failed in the same
+minutes turned out to be an unrelated merge conflict, so check a failure's cause
+before blaming the change.
 
 ## Acceptance criteria
 
@@ -118,8 +158,9 @@ All five must hold before the setting is applied to a second host:
 4. **No memory regression.** The host's lowest available memory during the pilot is
    no lower than in the three days before (fleet metrics hub), and the `bench.sh`
    peak memory of `warm` is not above `cold`.
-5. **Reversible.** Rolling back (below) was exercised once and the next pipelines
-   ran normally.
+5. **Reversible and harmless to switch.** `apply-agent.sh --rollback` is exercised
+   once, and neither the switch nor the rollback cancels a pipeline (both are done
+   behind a hold).
 
 ## Memory and disk
 
@@ -133,8 +174,8 @@ are the safety net and `prune.sh` enforces them without stopping running jobs.
 
 ## Rollback
 
-Stop passing the override file and recreate the agent; delete the cache root when
-convenient. The next pipelines are cold runs, as before.
+Hold the agent, then `scripts/ci-cache/apply-agent.sh ... --rollback` (same flags);
+delete the cache root when convenient. The next pipelines are cold runs, as before.
 
 ## Risks and limits
 
