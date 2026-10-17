@@ -4,6 +4,13 @@
 The controller is dry-run by default. In apply mode it only restores agents
 that it previously drained itself; an operator's manual no_schedule setting is
 never cleared. State is persisted so hysteresis survives process restarts.
+
+Signals: CPU busy share, available memory, free disk space and, when thresholds
+for it are configured, disk I/O pressure (PSI "some" from node-exporter's
+node_pressure_io_waiting_seconds_total). A node on slow disks can have idle CPU,
+free memory and free space while every fsync takes hundreds of milliseconds; its
+agent then looks healthy to the other signals and keeps taking pipelines that
+run several times slower than on a quiet node.
 """
 
 from __future__ import annotations
@@ -32,6 +39,10 @@ class NodeSnapshot:
     memory_available_pct: float
     disk_available_pct: float
     disk_available_bytes: int | None = None
+    # Cumulative seconds tasks spent stalled on disk (node_pressure_io_waiting_seconds_total)
+    # and the wall-clock time of the scrape; None when the node does not export pressure.
+    io_waiting_seconds: float | None = None
+    taken_at: float | None = None
 
 
 @dataclass(frozen=True)
@@ -51,6 +62,7 @@ class Pressure:
     critical_storage_breach: bool = False
     backing_storage_available_pct: float | None = None
     backing_storage_available_bytes: int | None = None
+    io_pressure_pct: float | None = None
 
 
 def parse_labels(raw: str) -> dict[str, str]:
@@ -80,13 +92,17 @@ def prometheus_samples(text: str) -> list[tuple[str, dict[str, str], float]]:
     return samples
 
 
-def node_snapshot(text: str, mountpoint: str = "/") -> NodeSnapshot:
+def node_snapshot(text: str, mountpoint: str = "/", taken_at: float | None = None) -> NodeSnapshot:
     cpu_idle = 0.0
     cpu_total = 0.0
     memory_available = memory_total = None
     disk_available = disk_total = None
+    io_waiting = None
     for name, labels, value in prometheus_samples(text):
-        if name == "node_cpu_seconds_total":
+        if name == "node_pressure_io_waiting_seconds_total":
+            if math.isfinite(value) and value >= 0:
+                io_waiting = value
+        elif name == "node_cpu_seconds_total":
             mode = labels.get("mode")
             if mode in {"guest", "guest_nice"}:
                 continue
@@ -122,6 +138,8 @@ def node_snapshot(text: str, mountpoint: str = "/") -> NodeSnapshot:
         100.0 * memory_available / memory_total,
         100.0 * disk_available / disk_total,
         int(disk_available),
+        io_waiting,
+        time.time() if taken_at is None else taken_at,
     )
 
 
@@ -178,9 +196,30 @@ def evaluate_pressure(
         if total_delta > 0 and 0 <= idle_delta <= total_delta:
             cpu_pct = 100.0 * (1.0 - idle_delta / total_delta)
 
+    # I/O pressure is the share of wall time tasks spent stalled on disk between the two
+    # scrapes. It needs both scrapes to carry the counter; a counter reset (exporter
+    # restart) or a node without pressure metrics leaves it unknown, which never drains
+    # and never blocks a restore (an unknown signal must not hold an agent out forever).
+    io_pct = None
+    if (
+        previous is not None
+        and previous.io_waiting_seconds is not None
+        and previous.taken_at is not None
+        and current.io_waiting_seconds is not None
+        and current.taken_at is not None
+    ):
+        wall = current.taken_at - previous.taken_at
+        waited = current.io_waiting_seconds - previous.io_waiting_seconds
+        if wall >= 1.0 and waited >= 0:
+            io_pct = min(100.0, 100.0 * waited / wall)
+    io_stop = thresholds.get("io_pressure_stop_pct")
+    io_resume = thresholds.get("io_pressure_resume_pct")
+
     breaches = []
     if cpu_pct is not None and cpu_pct >= thresholds["cpu_stop_pct"]:
         breaches.append("cpu")
+    if io_stop is not None and io_pct is not None and io_pct >= io_stop:
+        breaches.append("io")
     if current.memory_available_pct <= thresholds["memory_stop_pct"]:
         breaches.append("memory")
     if current.disk_available_pct <= thresholds["disk_stop_pct"]:
@@ -211,6 +250,7 @@ def evaluate_pressure(
         and cpu_pct <= thresholds["cpu_resume_pct"]
         and current.memory_available_pct >= thresholds["memory_resume_pct"]
         and current.disk_available_pct >= thresholds["disk_resume_pct"]
+        and (io_resume is None or io_pct is None or io_pct <= io_resume)
         and backing_recovered
     )
     return Pressure(
@@ -222,7 +262,19 @@ def evaluate_pressure(
         critical_storage_breach,
         backing_available_pct,
         backing_available_bytes,
+        io_pct,
     )
+
+
+IO_THRESHOLD_KEYS = ("io_pressure_stop_pct", "io_pressure_resume_pct")
+
+
+def effective_thresholds(thresholds: dict[str, float], entry: dict[str, Any]) -> dict[str, float]:
+    """The global thresholds with a node's (or v1 agent's) own I/O pressure limits on top.
+    Only the I/O pair can be set per node: it is the one signal that is a property of a
+    node's disks, not of the fleet."""
+    own = {key: entry[key] for key in IO_THRESHOLD_KEYS if key in entry}
+    return {**thresholds, **own} if own else thresholds
 
 
 def update_hysteresis(
@@ -342,9 +394,39 @@ def save_state(path: Path, state: dict[str, Any]) -> None:
     temporary.replace(path)
 
 
+LEGACY_SNAPSHOT_FIELDS = (
+    "cpu_idle_seconds",
+    "cpu_total_seconds",
+    "memory_available_pct",
+    "disk_available_pct",
+    "disk_available_bytes",
+)
+
+
+def snapshot_to_state(agent_state: dict[str, Any], current: NodeSnapshot) -> None:
+    """Persist the scrape. The I/O counter goes under its own key so the previous_snapshot
+    object keeps exactly the fields older controller versions read: rolling the script back
+    must not make it fail on a state file this version wrote."""
+    agent_state["previous_snapshot"] = {name: getattr(current, name) for name in LEGACY_SNAPSHOT_FIELDS}
+    if current.io_waiting_seconds is not None and current.taken_at is not None:
+        agent_state["previous_io"] = {
+            "waiting_seconds": current.io_waiting_seconds,
+            "taken_at": current.taken_at,
+        }
+    else:
+        agent_state.pop("previous_io", None)
+
+
 def snapshot_from_state(agent_state: dict[str, Any]) -> NodeSnapshot | None:
     raw = agent_state.get("previous_snapshot")
-    return NodeSnapshot(**raw) if isinstance(raw, dict) else None
+    if not isinstance(raw, dict):
+        return None
+    fields = {name: raw[name] for name in LEGACY_SNAPSHOT_FIELDS if name in raw}
+    io = agent_state.get("previous_io")
+    if isinstance(io, dict):
+        fields["io_waiting_seconds"] = io.get("waiting_seconds")
+        fields["taken_at"] = io.get("taken_at")
+    return NodeSnapshot(**fields)
 
 
 def log_event(**fields: Any) -> None:
@@ -414,7 +496,7 @@ def run_cycle_v1(
             pressure = evaluate_pressure(
                 current,
                 snapshot_from_state(agent_state),
-                thresholds,
+                effective_thresholds(thresholds, entry),
                 backing_config,
                 backing_snapshot,
             )
@@ -435,7 +517,7 @@ def run_cycle_v1(
                 )
             continue
 
-        agent_state["previous_snapshot"] = current.__dict__
+        snapshot_to_state(agent_state, current)
         agent_state["managed_no_schedule"] = bool(managed_ids)
         action = update_hysteresis(
             agent_state,
@@ -458,6 +540,7 @@ def run_cycle_v1(
             agent_count=len(agents),
             schedulable_agents=len(schedulable),
             cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
+            io_pressure_pct=None if pressure.io_pressure_pct is None else round(pressure.io_pressure_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
             disk_available_pct=round(pressure.disk_available_pct, 2),
             backing_storage_available_pct=pressure.backing_storage_available_pct,
@@ -596,7 +679,7 @@ def run_cycle_v2(
             pressure = evaluate_pressure(
                 current,
                 snapshot_from_state(node_state),
-                thresholds,
+                effective_thresholds(thresholds, entry),
                 backing_config,
                 backing_snapshot,
             )
@@ -617,7 +700,7 @@ def run_cycle_v2(
                 )
             continue
 
-        node_state["previous_snapshot"] = current.__dict__
+        snapshot_to_state(node_state, current)
         node_state["managed_no_schedule"] = bool(managed_ids)
         action = update_hysteresis(
             node_state,
@@ -642,6 +725,7 @@ def run_cycle_v2(
             agent_count=len(agents),
             schedulable_agents=len(schedulable),
             cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
+            io_pressure_pct=None if pressure.io_pressure_pct is None else round(pressure.io_pressure_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
             disk_available_pct=round(pressure.disk_available_pct, 2),
             backing_storage_available_pct=pressure.backing_storage_available_pct,
@@ -766,6 +850,22 @@ def validate_backing_storage(entry: dict[str, Any]) -> None:
         raise ValueError("backing_storage minimum_free_bytes must be a positive integer")
 
 
+def validate_io_thresholds(source: dict[str, Any], where: str) -> None:
+    """The I/O pressure limits are optional, but a stop without a resume (or the reverse)
+    would drain without a way back, and a resume at or above the stop would flap."""
+    present = [key for key in IO_THRESHOLD_KEYS if key in source]
+    if not present:
+        return
+    if len(present) != len(IO_THRESHOLD_KEYS):
+        raise ValueError(f"{where}: io_pressure_stop_pct and io_pressure_resume_pct must be set together")
+    stop, resume = (source[key] for key in IO_THRESHOLD_KEYS)
+    for value in (stop, resume):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError(f"{where}: I/O pressure thresholds must be finite numbers")
+    if not 0 < resume < stop <= 100:
+        raise ValueError(f"{where}: I/O pressure thresholds need 0 < resume < stop <= 100")
+
+
 def validate_config(config: dict[str, Any]) -> None:
     version = config.get("version")
     if version not in {1, 2}:
@@ -827,6 +927,9 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("memory resume threshold must be higher than stop threshold")
     if config["thresholds"]["disk_resume_pct"] <= config["thresholds"]["disk_stop_pct"]:
         raise ValueError("disk resume threshold must be higher than stop threshold")
+    validate_io_thresholds(config["thresholds"], "controller thresholds")
+    for entry in config["nodes"] if version == 2 else config["agents"]:
+        validate_io_thresholds(entry, f"{entry.get('name')!r}")
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:

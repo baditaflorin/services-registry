@@ -32,7 +32,9 @@
       "name": "builder-b",
       "agent_names": ["builder-b-agent"],
       "metrics_url": "http://builder-b.example.internal:9100/metrics",
-      "filesystem_mountpoint": "/"
+      "filesystem_mountpoint": "/",
+      "io_pressure_stop_pct": 40,
+      "io_pressure_resume_pct": 15
     }
   ]
 }
