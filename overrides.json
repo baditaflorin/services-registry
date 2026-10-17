@@ -2142,7 +2142,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.21",
+    "version": "0.3.23",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -2271,7 +2271,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
-    "version": "0.1.6",
+    "version": "0.1.8",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2887,7 +2887,7 @@
     "trl_evidence": "Matching/gating logic is demonstrably correct (100% accurate on every spot-check when it resolves), but the service has operated at <1% real-world success rate for over a month across five releases (status=upstream_error on ~99.6% of recent rows). Could not reproduce the failure from outside the production network -- the same SPARQL/API calls succeeded cleanly from two independent external vantage points, including a 20-request burst, pointing to a production-egress-specific block/throttle by Wikimedia rather than a code bug. Fixed two real, concrete gaps regardless (v0.3.6): fetch-cache bypass was missing (could replay a cached error instead of retrying), and HTTP 429 handling ignored Retry-After with a blind fixed backoff. See github.com/baditaflorin/go_domain_wikidata_entity PR #14 (merged). Held below the prior self-reported trl=7 pending an ops-level escalation (egress IP reputation/rotation with Wikimedia) that a code fix alone cannot resolve.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2966,7 +2966,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged).",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.21"
+    "version": "1.4.23"
   },
   "embed-iframe-classifier": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3080,7 +3080,7 @@
   "firmographic-profile": {
     "container_port": 18297,
     "host_port": 18297,
-    "version": "1.4.4",
+    "version": "1.4.6",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5032,7 +5032,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.35",
+    "version": "1.33.37",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -6660,7 +6660,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged).",
-    "version": "1.4.26",
+    "version": "1.4.27",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6757,7 +6757,7 @@
   },
   "price-range": {
     "container_port": 8301,
-    "version": "1.9.18",
+    "version": "1.9.19",
     "description": "Microservice for Price Range",
     "host_port": 8301,
     "placement": "replicable",
@@ -7702,7 +7702,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "No audit-reset commit found -- genuine incremental hardening across 10+ rounds. Confirmed real table domain_social_profiles (~1.29M rows, tool_name='social-graph'). Tested against 600 real domains. Fixed: Weibo URL-routing prefixes (u/p/n) were being stored as the actual handle -- confirmed live in production, 144 rows literally have handle=\"u\", and CJK nicknames under /n/ were replaced with the literal string \"n\"; also fixed hyphenated-domain brand matching and wired Facebook's fb-page widget as a genuine owned-profile signal while correctly leaving fb-like alone (its link is often self-referential, not an identity claim). On a 517-domain corpus: domains with >=1 owned profile 169->179, zero regressions, no new false positives in a 25-profile precision spot-check. See github.com/baditaflorin/go_social_graph PR #18.",
-    "version": "2.6.4",
+    "version": "2.6.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -8085,7 +8085,7 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "version": "1.9.4",
+    "version": "1.9.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",
