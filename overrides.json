@@ -634,7 +634,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "v1.4.5 extracts API-endpoint surface from HTML/JS via static scan + BaaS-host gazetteer + auth-scheme inference + evidence trail. Root-cause FP: primary fetch was pinned to fleetfetch.RenderJS, routing every request through the down-fleet-wide chromedp render-cache, so 502s masqueraded as status=1/zero-endpoints (61.3% zero-rate on 1000 v1.4.3 rows). Switched to RenderDefault + WithFallbackOnTimeout. On 40 originally-502-blocked domains: before 40/40 hard-502+zero, after 36/40 (90%) honest 200 (3 recovered real endpoints, 33 confirmed true-negatives); github/stripe/vercel went 502->200 with 3/90/12 endpoints. Tests: TestCapUTF8RuneSafe + TestHandlerNonLatinBodyExtraction.",
     "coolify_app_uuid": "mgo3gs4rwktc5fn29z764lr8",
-    "version": "1.6.4",
+    "version": "1.6.5",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -667,7 +667,7 @@
   },
   "apikey-scanner": {
     "placement": "replicable",
-    "version": "1.7.5",
+    "version": "1.7.8",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -716,7 +716,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Multi-resolver Team Cymru DNS client (1.1.1.1 + 8.8.8.8) via miekg/dns with parallel-fanout / first-non-empty-wins semantics; RDAP fallback via openrdap when Cymru is unreachable; per-IP 24h in-memory TTL cache; bulk endpoint with 10-worker pool, per-lookup 2s and total 30s caps; private/reserved IPs refused unless ALLOW_PRIVATE=1. TRL-7: hosting-attribution guard against CDN/WAF edge IP false positives (Cloudflare, Fastly, Akamai, Incapsula) flagged as hosting_attribution=cdn_fronted with CDN label and LOW confidence; hyperscaler ASNs (AWS/Google/Azure/Alibaba) marked cloud_ambiguous at MEDIUM confidence; honest error taxonomy (status=no_data / status=unreachable, never a service error); transient resolver failures retried once, deadline-bounded; /selftest exercises CDN-attribution guard offline; ≥25 hermetic test cases including CDN-fronted-vs-direct in both directions and full resolve-failure taxonomy. Fleet fetch-cache-opt-out audit (2026-08-08): confirmed the safehttp client's options slice (main.go, extracted into buildSafeHTTPOptions in the fix) omitted WithoutFetchCache()/WithForceHTTP2() -- same bug class as the 2026-07 go_page_load_metrics incident, whereby a client without either opt-out is silently eligible for the fleet-wide DefaultFetchDelegate and gets answered from cached bytes instead of a live origin fetch. Added both options plus a regression test (TestBuildSafeHTTPOptions_OptsOutOfFetchCache) verified to fail without the fix and pass with it. Live-verified against real RIPEStat/Cymru lookups (1.1.1.1, 8.8.8.8, AS13335) post-fix: correct ASN/org/country data returned. IMPORTANT caveat: this service's safeHTTP client is not currently wired into any live call path -- RIPEStat/RDAP/quorum calls all use separate plain http.Client instances (see main.go's pre-existing comment) -- so the fix has zero live blast-radius today; it is pre-work for when those call sites get rewired onto safeHTTP. Bumped 1.5.6->1.5.7. trl/trl_ceiling unchanged (fix doesn't affect current live behavior). See github.com/baditaflorin/go_asn_lookup PR #10 (open, not merged).",
-    "version": "1.5.18",
+    "version": "1.5.20",
     "coolify_app_uuid": "gmhjeope5wg7owardeoio2ae"
   },
   "audience-field-sculpture": {
@@ -998,7 +998,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1046,7 +1046,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Browser-level frame behavior needs real rendering for unusual CSP/sandbox cases.",
     "trl_evidence": "2026-08-20 audit against a fresh clone of origin/main (8a30ace): found and live-confirmed a real HTML-escaping bug in buildFrameTestHTML() (handler.go), the builder for the frame_test_html field returned by ?probe_frame=1 -- README documents this HTML as meant to be opened directly in a browser 'for analyst-side browser verification only'. The function escaped only '\"' (strings.ReplaceAll) before splicing the caller-supplied target into both an HTML text-content position (<h3>) and an HTML attribute position (iframe src). net/url's Parse/String round-trip does NOT percent-encode '<', '>', or '\"' in the query/fragment components (verified directly: url.Parse+String on `https://example.com/?q=x\"><script>...` round-trips those bytes unchanged), so a target of https://example.com/?q=x\"><script>alert(document.domain)</script> survived into frame_test_html as a live, executable <script> tag rather than inert text. Live-reproduced end-to-end: built the binary, ran it, and hit /target=<payload>&probe_frame=1 -- the service fetched real https://example.com and returned the unescaped <script> verbatim in the JSON response body. This is a genuine XSS/script-injection bug in the tool's own analyst-facing report output, for a tool whose entire purpose is safely reporting on other sites' clickjacking exposure. Fixed via html.EscapeString (safe in both the text-content and quoted-attribute positions the target is spliced into) in PR https://github.com/baditaflorin/go_clickjacking_tester/pull/13 (open, NOT merged as of this audit) with a regression test (TestBuildFrameTestHTMLEscapesTarget) verified to fail pre-fix and pass post-fix; version bumped 1.3.3->1.3.4 in that PR. Separately checked the fleet's recurring safehttp.NewClient()-without-.WithoutFetchCache() bug class: not applicable here -- this repo has no direct safehttp import; it fetches exclusively via fleetfetch.NewClient() (go-common's higher-level client, intentionally designed to route through the shared 60s-TTL fetch cache with singleflight dedup, falling back to an SSRF-safe direct fetch on cache failure), which is the intended architecture, not an instance of the bug class. Core clickjacking-detection logic (XFO/CSP frame-ancestors parsing, meta-tag-is-not-enforcement handling, framebust-JS heuristic, final-response HTTPS/HTML gating) was untouched by this pass and is unaffected by the bug above -- it lives entirely in the optional analyst-verification helper. TRL held at 6/6: the core detection technology's readiness is unchanged, and the fix (once merged) closes the one concrete correctness/security gap found, but the ceiling reason (no real browser rendering for unusual CSP/sandbox cases) still stands independently of this finding.",
-    "version": "1.3.5",
+    "version": "1.3.8",
     "coolify_app_uuid": "ixgke6um39vhypr3g9dhdtlw"
   },
   "cognitive-load": {
@@ -1111,7 +1111,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 260-domain sample, 217 successful real fetches, ~9,500 comments extracted): confirmed fetch-cache masking does not apply (uses fleetfetch with cache/render provenance surfaced to callers) and confirmed HTML5-spec-correct tokenizer behavior on IE-conditional-comment/nested-comment/CDATA edge cases (not bugs). Found and fixed a real finding-suppression bug: isBoilerplate()'s escape hatch only re-checked raw text for a bare TODO/FIXME/RFC1918 IP, never the severity ClassifyComment had already computed -- so a genuine credential leak wrapped in JSDoc/license-shaped comment text was correctly classified credential_leak/high internally but then silently dropped from interesting_comments, the exact field the fleet's leak-bounty-policy/findings-store integrations key off. Fixed by trusting the already-computed severity. trl bumped 6->7; trl_ceiling held at 7 -- direct-fetch-only design (RenderJS deliberately reverted due to fleet-wide proxy degradation) is a real structural ceiling for a passive recon tool. See PR #7 (merged).",
     "coolify_app_uuid": "l8lihsf5ayj6qj331n5pqn97",
-    "version": "1.4.8"
+    "version": "1.4.9"
   },
   "contact-route-detector": {
     "container_port": 18330,
@@ -1160,7 +1160,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20.",
-    "version": "3.5.54",
+    "version": "3.5.56",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1271,7 +1271,7 @@
   "cookie-checker": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "cookie-checker", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "1.7.6",
+    "version": "1.7.7",
     "container_port": 8226,
     "description": "Microservice for Cookie Checker",
     "example_path": "/go_cookie_checker?url=https://example.com",
@@ -1324,11 +1324,11 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "7-variant active prober (reflection, null, subdomain-suffix-bypass,\nprefix-confusion, port-attack, case-fold, http-vs-https). Each variant\nsends an OPTIONS preflight + GET, records the full ACAO/ACAC/Vary/\nmethods/headers surface, and feeds a documented severity matrix\n(reflection x credentials, null x credentials, etc.). Worker pool of\n4, per-probe 4s, total 30s. Composes with go-pentest-cors-misconfig-\nprober via CORS_MISCONFIG_URL; gateable on bug-bounty scope via\nSCOPE_GUARD_URL. Tests: probes_test (variant table, downgrade skip,\nscheme preservation), evaluate_test (isReflection, isTrueACAC,\nhasVaryOrigin, Classify matrix), handler_test (httptest servers for\nreflective+credentials critical, wildcard-only low, suffix-bypass\ncritical, null-origin critical, safe server, case-fold, full JSON\nshape) — 20+ test cases across 3 files. ADR docs/adr/0001-trl-uplift-\nto-6.md captures the variant taxonomy and severity matrix.",
-    "version": "1.5.8",
+    "version": "1.5.9",
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
-    "version": "0.1.14",
+    "version": "0.1.15",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -1390,7 +1390,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Marker-based detection (8-byte per-scan unique hex marker) replaces\nstatic-string echo checks; inspect() classifies header reflection\n(critical), raw-newline-in-header (high), and body reflection (medium)\nseparately. Probes inject across query params, path segments, and four\nreflected headers (User-Agent, Referer, X-Forwarded-For, X-Forwarded-Host;\nHost gated by ALLOW_HOST_INJECT=1). Payload corpus is 20 variants\ncovering hex-case, double-encoding, Unicode/UTF-8 overlong, fragment-\nprefixed, raw \\r vs \\n vs \\r\\n; corpus extensible via PAYLOADS_URL\n(go-pentest-payloads). Per-request 4 s, total 60 s budget, worker pool\n4. SCOPE_GUARD_URL fail-closed gate. ≥9 unit + integration tests\nincluding httptest.Server vulnerable + safe backends.",
-    "version": "1.5.9",
+    "version": "1.5.10",
     "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx"
   },
   "crux-field-vitals": {
@@ -1422,7 +1422,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (fresh ~300-domain sample): found and fixed 2 real false-positive bugs. (1) BTC/LTC/TRX legacy detectors only checked base58 shape, never the checksum -- 78 false 'findings' across 28 real domains (Builder.io CMS block IDs, Bitrix element IDs, analytics IDs), fixed with real Base58Check checksum verification. (2) The SOL detector's own anti-false-positive gate was itself broken -- an unanchored substring match on 'sol'/'spl' matched inside ordinary words like 'display'/'console'/'absolute'/'solution', confirmed flagging a Bitrix storefront with zero crypto integration purely from style=\"display:...\"; fixed with a word-boundary-anchored regex. Confirmed fetch-cache masking does not apply (uses fleetfetch, already hardened in a prior fix). trl/trl_ceiling held at 6/6 -- brings the legacy detector up to the bar TRL 6 already claims, doesn't unlock new headroom (TRL 7 needs revoked-key cross-checking, default-on verification, a WASM client). Flagged a catalog/repo TRL mismatch (repo's own service.yaml says 7) for reconciliation. See PR #6 (merged).",
-    "version": "1.3.7",
+    "version": "1.3.8",
     "coolify_app_uuid": "cqk66ogn6g4aj2cjkhxzlm5c"
   },
   "crystal-growth-simulator": {
@@ -1666,7 +1666,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (fresh 250-domain sample, cross-checked against dig on 3 public resolvers): found and fixed a real bug -- flattenAnswers sorted MX/SRV records lexicographically as strings instead of numerically by preference/priority, scrambling any RRset mixing single- and double-digit values (confirmed on 17% of sampled domains with MX records, e.g. a Google Workspace MX set [1,5,5,10,10] emitted as [1,10,10,5,5]). Confirmed no fetch-cache layer sits in front of DNS lookups, and NXDOMAIN-vs-transient-error handling is already correct. trl bumped 6->7 given the live-validated fix; trl_ceiling=7 added -- structurally capped by dependence on shared public resolvers (1.1.1.1/8.8.8.8/9.9.9.9) for both answers and DNSSEC trust, no local validator. See PR #10 (merged).",
-    "version": "1.8.17",
+    "version": "1.8.19",
     "coolify_app_uuid": "rg33g8wm5fwwxzue83j5y6d9"
   },
   "dom-complexity-metrics": {
@@ -2059,7 +2059,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Live production-DB audit (~1.1M rows) found 74,371 rows with status=1 (success) yet age_days=0, almost always paired with empty registrar/expires/nameservers -- literally claiming 74K+ domains were registered on their scan date. Root-caused: age_days defaulted to Go's int zero-value instead of NULL when a WHOIS creation date failed to parse, while status stayed 'ok'. Confirmed live: 3,361 of these rows were checked after an earlier related fix already shipped, proving this is a live, still-present gap. Fixed (v1.3.0) with a new 'partial' result classification whenever no usable Created date exists, plus a normaliseWhoisDate fix that no longer leaks raw unparsed date strings into a documented-RFC3339 field. See github.com/baditaflorin/go_domain_details PR #10 (merged). Rows with tool_version<1.3.0 are re-crawl candidates.",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -2966,7 +2966,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged).",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.15"
+    "version": "1.4.21"
   },
   "embed-iframe-classifier": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3490,7 +3490,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.26",
+    "version": "0.4.28",
     "spiffe_workload": true
   },
   "fleet-har-builder": {
@@ -3526,7 +3526,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Bounded by docker-stats RSS fidelity (cgroup memory.usage_in_bytes includes page cache). Lift to 7+ would require parsing /sys/fs/cgroup/memory/{slice}/memory.stat to separate RSS from cache.",
     "trl_evidence": "Initial scaffold (2026-05-19). 11 unit tests across both primitives — injectable Runner + StatFS mocks; tests cover disk sweep below/above threshold (no-op / dry-run / real exec+parse), statfs failure path, log truncate keep-tail correctness, logrotate sibling skip, parseHumanBytes coverage, monotonic growth flagged (slope ~100MB/h, R² > 0.99), flat noise NOT flagged (R² < 0.7), noisy growth low R², leaky vs steady end-to-end ticker, docker-sock unreachable (state untouched, error surfaced). /selftest exercises regression + parsing primitives against in-memory data.",
-    "version": "0.2.7",
+    "version": "0.2.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4420,7 +4420,7 @@
   "go-session-fixation": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.5.4",
+    "version": "0.5.6",
     "access_tier": "vetted-pentest",
     "container_port": 8316,
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
@@ -4528,7 +4528,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pure-Go x/net/html DOM walker. Per-field role taxonomy (csrf-token,\nhoneypot, state, id, timestamp, flag, viewstate, session, other) plus\nsix risk rules (csrf-on-get, honeypot-default, sensitive-plaintext,\nstate-without-nonce, timestamp-future/epoch-zero, javascript-action).\nToken-like values masked before serialisation (raw value never escapes\nthe process). 23 unit + integration tests against canned login,\nsignup, OAuth, GET-csrf, javascript:-action, and PII fixtures via\nhttptest.Server. safehttp SSRF guard + 5s per-request / 10s total\nbudget. ADR docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.7",
+    "version": "1.4.8",
     "coolify_app_uuid": "q122and0425dsjnhw56b2gio"
   },
   "highlight-recall": {
@@ -4602,7 +4602,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit: the repo contains two implementations -- a small unused root-module library using the correct safehttp client, and the ACTUALLY DEPLOYED src/ hexagonal service which hand-rolled its own SSRF/dial/cache stack. Found and fixed a critical bug in the deployed service: an SSRF-checking dialer was built but then unconditionally overridden by a plain DNS-caching dialer with zero SSRF check -- the default client profile never had transport-layer SSRF protection at all. Live-proved: pre-fix, the real factory-built client successfully dialed 127.0.0.1:1. Confirmed real fleet-wide reach -- several domain-analysis services (gdpr-compliance, broken-links, payment-detector, etc) route through this proxy as a fallback tier. Fixed by wiring the checker into the actual dial path for both client profiles, closing SSRF-via-redirect and DNS-rebind gaps too. Also fixed the recurring fetch-cache-masking bug (CacheMiddleware ignored Cache-Control entirely) and an unbounded response-body read for chunked responses (Content-Length -1 fell through to unbounded io.ReadAll). Flagged, not fixed: a credit/auth-bypass path trusts a client-supplied X-Real-IP header, safe only if the gateway always overwrites it -- needs deploy-topology context. trl held at 6; trl_ceiling=7 added, held back specifically because this security control passed its own unit test while the real wiring silently discarded it -- should be integration-verified before trusting above 7. See PR #11 (merged), plus 3 pre-existing stale PRs (#1/#2 dependency bumps, #7 a real headless-Chrome pool leak fix from 2026-06) now CONFLICTING against this fix and left for manual follow-up.",
-    "version": "0.5.24"
+    "version": "0.5.26"
   },
   "http-method-tester": {
     "placement": "replicable",
@@ -4672,7 +4672,7 @@
   "iframe-analyzer": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "1.3.9",
+    "version": "1.3.10",
     "container_port": 8243,
     "description": "Microservice for Iframe Analyzer",
     "example_path": "/go_iframe_analyzer?url=https://example.com",
@@ -4706,7 +4706,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
     "trl_evidence": "2026-08-20 re-audit of go_information_leakage @ go-common v0.88.0 (fleet-runner rollout tip, commit 3b088f1). Confirmed live bug: scanClient (scan.go) was built via fleetfetch.NewHTTPClient(WithRender, WithFallbackOnTimeout, WithTimeout) with no fleetfetch.WithoutCache(), so every real probe -- baseline, error-triggers, debug routes, AND the content-verified backup checks (/.git/HEAD, /.git/config, /.env, /.DS_Store, /.svn/entries) -- was routed through the shared, Redis-backed, cross-service fleet fetch cache instead of fetching the target live. For a leak detector this is a correctness bug, not an efficiency one: a re-scan inside the cache TTL could replay a since-remediated exposure as still-leaking, or mask a newly-introduced one behind a stale negative-cached miss; a genuine .env hit's secret bytes would also sit in the shared cache readable by any other fleet service requesting the same URL+render. The scanner's own probes (a fresh crypto/rand UUID 404 path per scan, one-shot existence checks) are exactly the case fleetfetch's own WithoutCache doc comment calls out. Fixed by extracting newScanClient() and adding fleetfetch.WithoutCache() (dropped WithRender/WithFallbackOnTimeout as documented no-ops once WithoutCache is set); added TestScanClient_BypassesSharedFetchCache, confirmed failing pre-fix (returned a fake stale-cache body instead of the live target's) and passing post-fix. go build/vet/test all clean (24+ existing tests unaffected). Version bumped 3.0.5->3.0.6 in main.go + service.yaml. Fix opened as PR https://github.com/baditaflorin/go_information_leakage/pull/9 (not merged, per audit process). Detection design itself holds up: content-verified backup hits defeat SPA catch-all false positives, a generic-error control group defeats WAF-identical-response false positives on debug routes, per-finding severity rubric, SCOPE_GUARD_URL allowlist, 5s/req + 30s total caps. TRL 6 reaffirmed (not raised/lowered): the cache bug was a latent correctness gap under scan-freshness expectations, not a basic-operation failure, and it is now fixed with a regression test pinning it.",
-    "version": "3.0.8",
+    "version": "3.0.9",
     "coolify_app_uuid": "dgfll92zgusjswf1nzxpwbmk"
   },
   "infrastructure-fetch-cache": {
@@ -4798,7 +4798,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.9.1",
+    "version": "0.11.1",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -4830,7 +4830,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18024,
     "placement": "replicable",
-    "version": "0.7.0",
+    "version": "0.9.2",
     "mem_limit": "2g",
     "trl": 6,
     "trl_assessed_at": "2026-08-20",
@@ -4845,7 +4845,7 @@
   "jsbundle-routes": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "0.3.5",
+    "version": "0.3.6",
     "access_tier": "vetted-pentest",
     "container_port": 8312,
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
@@ -4862,7 +4862,7 @@
   "jsbundle-secrets": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "0.4.6",
+    "version": "0.4.7",
     "access_tier": "vetted-pentest",
     "container_port": 8311,
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
@@ -4911,7 +4911,7 @@
   "jwt-pentest": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.2.5",
+    "version": "0.2.7",
     "access_tier": "vetted-pentest",
     "container_port": 8315,
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
@@ -5763,7 +5763,7 @@
   "pentest-asset-scope-resolver": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "access_tier": "vetted-pentest",
     "container_port": 18126,
     "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
@@ -5826,7 +5826,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
-    "version": "0.3.2",
+    "version": "0.3.4",
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
@@ -5841,13 +5841,13 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "Wraps 6 fleet primitives. Per-host worker pool, WAF pre-filter, triage rollup. 5 integration tests with fixture upstreams.",
-    "version": "0.3.6",
+    "version": "0.3.8",
     "coolify_app_uuid": "xinj0vpxvwqnk60uq9uom5zl"
   },
   "pentest-bounty-scope-checker": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "container_port": 18110,
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
     "example_path": "/check?target=api.github.com",
@@ -5862,7 +5862,7 @@
   },
   "pentest-cert-transparency": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "0.1.7",
+    "version": "0.1.8",
     "access_tier": "vetted-pentest",
     "container_port": 18109,
     "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records (issuer/dates/SANs).",
@@ -5888,13 +5888,13 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; ≥6 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across ≥3 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
   },
   "pentest-codec": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "container_port": 18118,
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
     "example_path": "/encode?algo=base64&input=hello",
@@ -5939,13 +5939,13 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "5 cookie classes + 2 fallbacks, 9 severity-coded issue codes, 9 session-probe endpoints, PoC bundle generator with 4 embedded templates. 7 unit tests with real CyberGhost/Thuringer fixtures.",
-    "version": "0.4.4",
+    "version": "0.4.6",
     "coolify_app_uuid": "w6w2145jjtk01ulaplf0f1c0"
   },
   "pentest-cors-misconfig-prober": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.7.6",
+    "version": "0.7.7",
     "access_tier": "vetted-pentest",
     "container_port": 18124,
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
@@ -5961,7 +5961,7 @@
   "pentest-cvss": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "container_port": 18107,
     "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
     "example_path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
@@ -5997,7 +5997,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
     "trl_evidence": "73-row scanner corpus across 4 scanners x 8 vulns: intra=100% / inter=0% collision rates; fp_version=v1; /forget admin-gated; /selftest",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "coolify_app_uuid": "isb3ajcqvl49u83555lmktwx"
   },
   "pentest-dependency-cve": {
@@ -6013,13 +6013,13 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 7 with local CVE feed primitive caching NVD/GHSA delta-updates.",
     "trl_evidence": "SQLite TTL cache (NVD/KEV/OSV), OSV.dev cross-source merge, /selftest with stubbed upstreams, 14 test funcs (was 0)",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "coolify_app_uuid": "f8wp3sz3hf71oup0b6wpnv5h"
   },
   "pentest-disclosure-policy-finder": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "access_tier": "vetted-pentest",
     "container_port": 18111,
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
@@ -6046,13 +6046,13 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Each verifier is a thin recipe — lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
     "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
-    "version": "0.2.14",
+    "version": "0.2.15",
     "coolify_app_uuid": "x14nsu29g3jrr1biwgifwugm"
   },
   "pentest-favicon-hash": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "access_tier": "vetted-pentest",
     "container_port": 18117,
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~60 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
@@ -6078,7 +6078,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
     "trl_evidence": "SQLite decision ledger with /decisions query, dry_run mode returning would_decide, sony/gobreaker circuit breakers around scope-guard + dedup-fingerprint, degraded_mode in response, /selftest",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "coolify_app_uuid": "je3qc07vjjuov2qqd84vb13h"
   },
   "pentest-findings-store": {
@@ -6093,7 +6093,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite is fine until ~1M findings; horizontal shard or Postgres later.",
     "trl_evidence": "findings_history shadow table with SHA-256 evidence hashing, /findings/{id}/history endpoint, /selftest round-trip",
-    "version": "0.5.7",
+    "version": "0.5.8",
     "coolify_app_uuid": "vbeehwr7p783yg53y5fxhn4c"
   },
   "pentest-github-dorks": {
@@ -6110,7 +6110,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "GitHub Search has no regex; semantic dedup + verifier-loop integration cap the climb at 6.",
     "trl_evidence": "38 curated dork patterns (creds + files + vendors + infra + k8s + per-vendor leaks); typed rate-limit handling (primary + secondary/abuse) with adaptive sleep; per-dork 4s + total 90s deadline; optional verification compose with go-pentest-trufflehog (TRUFFLEHOG_URL); domain qualifier (\\\"<domain>\\\" in:file); production mode (MODE=production) refuses to start without GITHUB_TOKEN; 19 unit tests including httptest-mocked GitHub API (success / primary rate-limit / abuse / no-results) + trufflehog compose. Pure Go (CGO-free), no parallelism. Ceiling stays at 7 pending cross-dork dedup, snippet-level secret extraction, and findings-store fan-out.",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "coolify_app_uuid": "mmjzm5ovulcr2x9sbpyii597"
   },
   "pentest-http-replay": {
@@ -6137,7 +6137,7 @@
   "pentest-httpx": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.2.5",
+    "version": "0.2.7",
     "access_tier": "vetted-pentest",
     "container_port": 18113,
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
@@ -6184,7 +6184,7 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "21 secret-pattern classes (private RSA requires full PEM block to avoid jsencrypt FP). Static-asset filtering. First-vs-third-party sourcemap classifier. 7 unit tests with realistic SPA fixture.",
-    "version": "0.4.4",
+    "version": "0.4.6",
     "coolify_app_uuid": "p11myndrybtb6epn40dgvbua"
   },
   "pentest-leak-bounty-policy": {
@@ -6200,7 +6200,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
     "trl_evidence": "30-row vendor policy seed (AWS/GitHub/Slack/Stripe/OpenAI/Anthropic/Twilio/Mailgun/GCP/Azure/etc.), BEGIN IMMEDIATE on both seed and ledger, secret-prefix-only persistence (TestLedger_NoSecretInRows enforces), /selftest",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "coolify_app_uuid": "d13v7qexw5979ml26lyr901n"
   },
   "pentest-notify": {
@@ -6238,7 +6238,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Pinned-binary wrapping; templates refresh cadence + concurrency stress-testing gate the climb to 7.",
     "trl_evidence": "scope-guard preflight (fail-closed -> 503), rate-coordinator per-host acquire (fail-open), findings-store wire on severity>=medium, /selftest round-trips all 3 sibling stubs + runner",
-    "version": "0.2.14",
+    "version": "0.2.15",
     "coolify_app_uuid": "ihb1oqr2spj8jlcj3cb1shm7"
   },
   "pentest-oob-collector": {
@@ -6253,7 +6253,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo"
   },
   "pentest-orchestrator": {
@@ -6280,7 +6280,7 @@
   "pentest-payloads": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "container_port": 18101,
     "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
     "example_path": "/classes",
@@ -6347,13 +6347,13 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "6 reflection contexts + per-context escalation, 11 inline WAF signatures (vendored from go-pentest-waf-detect), 6 integration tests covering vulnerable/safe/WAF-masked/no-reflection/skip-WAF.",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "coolify_app_uuid": "kwhedb2sxgighnkn9ltu0v3n"
   },
   "pentest-report-templater": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "container_port": 18114,
     "description": "Turns a structured Finding into a platform-ready markdown report. Ships HackerOne/Bugcrowd/Intigriti templates. Optional CVSS enrichment via go-pentest-cvss. Highest-leverage service in the fleet.",
     "example_path": "/templates",
@@ -6378,13 +6378,13 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_evidence": "SQLite persistence with 256-LRU, audit_log with /audit query, ReDoS pattern rejection at create-time, target-normalizer composition with 3-strike circuit breaker, /selftest",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "coolify_app_uuid": "y14dh7j5fizv7tbo3z1dnx51"
   },
   "pentest-screenshot": {
     "proxy_egress": false,
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "0.3.3",
+    "version": "0.3.4",
     "access_tier": "vetted-pentest",
     "container_port": 18129,
     "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} → PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
@@ -6401,7 +6401,7 @@
   "pentest-secrets-scanner": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.5.5",
+    "version": "0.5.6",
     "access_tier": "vetted-pentest",
     "container_port": 18122,
     "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
@@ -6418,7 +6418,7 @@
   "pentest-session-state": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "container_port": 18151,
     "host_port": 18151,
     "trl": 6,
@@ -6432,7 +6432,7 @@
   "pentest-ssrf-prober": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.3.6",
+    "version": "0.3.8",
     "access_tier": "vetted-pentest",
     "container_port": 18150,
     "host_port": 18150,
@@ -6446,7 +6446,7 @@
   "pentest-subfinder": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "access_tier": "vetted-pentest",
     "container_port": 18112,
     "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
@@ -6472,7 +6472,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE on *sql.Conn (canonical pattern), idempotency_key (50-goroutine race test asserts 1 platform call), dry_run mode, /selftest with stubbed platform API",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "coolify_app_uuid": "r6y6un7n6emjwaa5dfywcsgc"
   },
   "pentest-takeover-checker": {
@@ -6488,13 +6488,13 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_evidence": "2-of-3 multi-resolver quorum, confirmed-tier registration probes (GitHub/S3/Heroku), findings-store wire with fail-open, 20 tests across 4 packages",
-    "version": "0.4.7",
+    "version": "0.4.9",
     "coolify_app_uuid": "ix66ihzc7zqgw85flaxerjm5"
   },
   "pentest-takeover-fingerprints": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "container_port": 18116,
     "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
     "example_path": "/fingerprints",
@@ -6529,7 +6529,7 @@
     "spiffe_workload": true  },
   "pentest-triager-listener": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "0.2.6",
+    "version": "0.2.7",
     "container_port": 18147,
     "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
     "example_path": "/stats",
@@ -6556,7 +6556,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
     "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam → ≥13 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
-    "version": "0.2.7",
+    "version": "0.2.9",
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
@@ -6571,7 +6571,7 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "14 vendor signatures, 10 unit tests covering CF managed-challenge / Akamai / F5 / Imperva / PerimeterX / DataDome / ModSecurity / no-WAF baseline.",
-    "version": "0.1.5",
+    "version": "0.1.8",
     "coolify_app_uuid": "ptteeog28oq6dcjni50vztgb"
   },
   "pentest-walkthrough": {
@@ -6598,7 +6598,7 @@
   "pentest-wayback-urls": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "access_tier": "vetted-pentest",
     "container_port": 18127,
     "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
@@ -6615,7 +6615,7 @@
   "pentest-wordlists": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "container_port": 18100,
     "description": "Serves curated pentest wordlists (dirs, subdomains, params, fuzz) by category with SHA256 integrity. Random-sample API. Designed to grow via SecLists submodule.",
     "example_path": "/lists",
@@ -6639,7 +6639,7 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "YWH API client with pagination, 1h in-memory cache, criteria-based filter, /programs/seed for direct ingestion into bounty-scope-checker. 5 unit tests with real DataDome fixture.",
-    "version": "0.1.4",
+    "version": "0.1.6",
     "coolify_app_uuid": "yv2ow8edj38olrzbdr8ds11x"
   },
   "phone-extractor": {
@@ -6660,7 +6660,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged).",
-    "version": "1.4.24",
+    "version": "1.4.26",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6727,7 +6727,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v0.2.0 (TRL 6) — AST-aware classification via tdewolff/parse/v2/js.\nFindings carry per-listener missing|weak|strong taxonomy for both\norigin and source checks, plus the dangerous method name when weak\n(indexOf, includes, startsWith, endsWith, search, match, test, exec).\nRegex remains as a fallback for unparseable JS, marked confidence=regex.\n24 unit tests cover: missing-origin (high), weak indexOf (high),\nweak includes (high), strong origin alone (medium), strong both (low),\nonmessage assignment, Object.defineProperty, arrow handlers, regex\nfallback path, line/col location, summary aggregation, verdict\nrollup, and POST-body / ?url= handler shapes.",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "coolify_app_uuid": "fe5lz8cfftoe56qbb3nm38ay"
   },
   "press-mentions": {
@@ -6836,7 +6836,7 @@
   "proto-pollution": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "0.2.4",
+    "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 8314,
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
@@ -6974,7 +6974,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "classifier matrix (none/fixed-window/token-bucket/sliding/indeterminate), 7 bypass vectors with rate-normalized decision, hard caps (100 req / 50 RPS), /selftest with strict+weak httptest fixtures",
-    "version": "0.2.6",
+    "version": "0.2.8",
     "coolify_app_uuid": "o10nvzk98vdnz1eis1sondiq"
   },
   "react-data-grid": {
@@ -7267,7 +7267,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "x/crypto/ssh full algo capture, weak-algo detection (KEX/cipher/MAC/host_key), findings-store wire with sha256-of-algos dedup, /selftest against in-process ssh.NewServerConn with planted weak algos (12 invariants)",
-    "version": "0.2.8",
+    "version": "0.2.10",
     "coolify_app_uuid": "ijkuh1oi5c57hy190v6qjz24"
   },
   "scc": {
@@ -7447,7 +7447,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Differentiated diff-engine over five named compliance baselines\n(owasp-a-grade, mozilla-observatory-100, pci-dss, hipaa, fedramp-moderate).\nPer-header conformance verdict (pass|warn|fail) with exact suggested fix\nvalues, weighted scoring, http-vs-https comparison, multi-page averaging.\nBuilt on go-common/safehttp (SSRF-gated) and go-common/server. Test\ncoverage: handler + diff + profiles, ≥17 cases, all green via httptest.\nCPU-only, CGO-free, single binary.",
-    "version": "3.0.5",
+    "version": "3.0.7",
     "coolify_app_uuid": "f65g6b6k4r7hsxr8q9ck31yt"
   },
   "security-headers": {
@@ -7633,7 +7633,7 @@
   "simulate-ddos": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.1.4",
+    "version": "0.1.7",
     "container_port": 8092,
     "description": "Microservice for Simulate Ddos",
     "example_path": "/health",
@@ -7673,7 +7673,7 @@
   "smuggling-probe": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "1.5.8",
+    "version": "1.5.10",
     "container_port": 8154,
     "description": "Microservice for Smuggling Probe",
     "example_path": "/go_smuggling_probe?target=example.com",
@@ -7736,7 +7736,7 @@
   "sourcemap-finder": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "1.3.7",
+    "version": "1.3.8",
     "container_port": 8347,
     "description": "Microservice for Sourcemap Finder",
     "example_path": "/go_sourcemap_finder?url=https://example.com",
@@ -7788,7 +7788,7 @@
   "subdomain-finder": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "1.7.1",
+    "version": "1.7.2",
     "container_port": 8348,
     "description": "Microservice for Subdomain Finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
@@ -8498,7 +8498,7 @@
   "wayback-checker": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "2.1.7",
+    "version": "2.1.9",
     "container_port": 8351,
     "description": "Microservice for Wayback Checker",
     "example_path": "/go_wayback_checker?url=https://example.com",
@@ -8607,7 +8607,7 @@
   "wp-plugins": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "1.4.5",
+    "version": "1.4.7",
     "container_port": 8353,
     "description": "Microservice for Wp Plugins",
     "example_path": "/go_wp_plugins?url=https://example.com",
@@ -8702,7 +8702,7 @@
   "zone-transfer": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "container_port": 8232,
     "description": "Microservice for Zone Transfer",
     "example_path": "/go_zone_transfer?domain=example.com",
