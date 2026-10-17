@@ -334,52 +334,16 @@
     {
       "match": {
         "ids": [
-          "api-extractor",
-          "asn-lookup",
-          "cookie-checker",
-          "cors-tester",
-          "crlf-tester",
-          "domain-details",
-          "pentest-asset-scope-resolver",
-          "pentest-authz-matrix",
-          "pentest-bounty-scope-checker",
           "pentest-cert-transparency",
           "pentest-chaos-sync",
-          "pentest-codec",
-          "pentest-cookie-pwn",
-          "pentest-cors-misconfig-prober",
-          "pentest-cvss",
           "pentest-dedup-fingerprint",
-          "pentest-dependency-cve",
-          "pentest-disclosure-policy-finder",
           "pentest-exploit-verifier",
-          "pentest-favicon-hash",
-          "pentest-finding-triage",
           "pentest-findings-store",
-          "pentest-github-dorks",
-          "pentest-httpx",
-          "pentest-js-bundle-scanner",
-          "pentest-leak-bounty-policy",
-          "pentest-nuclei",
           "pentest-oob-collector",
-          "pentest-payloads",
-          "pentest-reflection-hunter",
-          "pentest-report-templater",
           "pentest-scope-guard",
           "pentest-screenshot",
-          "pentest-secrets-scanner",
-          "pentest-session-state",
-          "pentest-ssrf-prober",
-          "pentest-subfinder",
           "pentest-submit-bot",
-          "pentest-takeover-checker",
-          "pentest-takeover-fingerprints",
-          "pentest-triager-listener",
-          "pentest-trufflehog",
-          "pentest-wayback-urls",
-          "pentest-wordlists",
-          "phone-extractor",
-          "zone-transfer"
+          "pentest-triager-listener"
         ]
       },
       "name": "security-recon-coolify-lv3",
@@ -664,6 +628,7 @@
     "trl_evidence": "First-pass audit of this anonymous conference-polling app (real @semaphore-protocol v4.12.1 zk-SNARK library, y-webrtc/Yjs CRDT mesh, libsodium Ed25519 host signing): the anonymity/one-vote claim verified as genuine, not a placeholder -- every vote is independently re-verified by every peer via real verifyProof before tallying, and the one-vote guarantee is enforced through the Semaphore nullifier (deduped in tally logic), not client-side state; confirmed clearing localStorage/incognito/replay all fail to bypass it. Found and fixed a real CRDT bug: tallyVotes/summarizeDuplicateVotes/uniqueQuestions picked the dedup 'winner' by sorting on createdAt alone -- when two records from the same nullifier tied on createdAt (millisecond-identical), the tie-break depended on each peer's local Y.Map iteration order (network-arrival-dependent), so two honest, fully-synced peers could disagree on the tally for a tied pair; reproduced concretely with a standalone multi-peer Yjs simulation. Fixed with a deterministic tie-break keyed on the record's unique id. Vote counts themselves were never wrong -- only which record wins a tie could diverge. trl bumped 3->4; trl_ceiling=5 added -- no server component to hold to a higher bar, anonymity strength is explicitly room-size-dependent per the project's own honest privacy docs, and one-vote enforcement's Sybil-resistance ultimately rests on the host distributing exactly one invite per attendee (an operational trust assumption, not a code flaw). See PR #6 (merged)."
   },
   "api-extractor": {
+    "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -749,6 +714,7 @@
     "spiffe_workload": true
   },
   "asn-lookup": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8337,
     "description": "Microservice for Asn Lookup",
@@ -1313,6 +1279,7 @@
     "spiffe_workload": true
   },
   "cookie-checker": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "cookie-checker", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.7.6",
     "container_port": 8226,
@@ -1355,6 +1322,7 @@
     "coolify_app_uuid": "ucpnn7eamllrrvvjwp5nne1y"
   },
   "cors-tester": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "cors-tester", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8141,
     "description": "Microservice for Cors Tester",
@@ -1420,6 +1388,7 @@
     "spiffe_workload": true
   },
   "crlf-tester": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "crlf-tester", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8142,
     "description": "Microservice for Crlf Tester",
@@ -2084,6 +2053,7 @@
     "spiffe_workload": true
   },
   "domain-details": {
+    "placement": "replicable",
     "container_port": 8085,
     "description": "Microservice for Domain Details",
     "env": {
@@ -5801,6 +5771,8 @@
     "version": "0.2.4"
   },
   "pentest-asset-scope-resolver": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.2.6",
     "access_tier": "vetted-pentest",
     "container_port": 18126,
@@ -5854,6 +5826,8 @@
     "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design."
   },
   "pentest-authz-matrix": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18152,
     "host_port": 18152,
@@ -5881,6 +5855,8 @@
     "coolify_app_uuid": "xinj0vpxvwqnk60uq9uom5zl"
   },
   "pentest-bounty-scope-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.3.5",
     "container_port": 18110,
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
@@ -5924,6 +5900,8 @@
     "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
   },
   "pentest-codec": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.1.8",
     "container_port": 18118,
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
@@ -5958,6 +5936,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-cookie-pwn": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18174,
     "description": "Parse Set-Cookie, classify cookies (session/Keycloak/F5/CSRF/tracker), flag missing flags, probe session-bearing endpoints, emit runnable PoC tar.gz.",
@@ -5971,6 +5951,8 @@
     "coolify_app_uuid": "w6w2145jjtk01ulaplf0f1c0"
   },
   "pentest-cors-misconfig-prober": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.7.6",
     "access_tier": "vetted-pentest",
     "container_port": 18124,
@@ -5985,6 +5967,8 @@
     "coolify_app_uuid": "qmj9u5wiz6vsr12i5gscv4yz"
   },
   "pentest-cvss": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.1.5",
     "container_port": 18107,
     "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
@@ -6024,6 +6008,8 @@
     "coolify_app_uuid": "isb3ajcqvl49u83555lmktwx"
   },
   "pentest-dependency-cve": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "container_port": 18125,
     "description": "CPE -> NVD JSON 2.0 + CISA KEV cross-flag. Per-request fetch (no local cache yet). Composes with go-pentest-httpx tech detection.",
     "example_path": "/",
@@ -6038,6 +6024,8 @@
     "coolify_app_uuid": "f8wp3sz3hf71oup0b6wpnv5h"
   },
   "pentest-disclosure-policy-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 18111,
@@ -6068,6 +6056,8 @@
     "coolify_app_uuid": "x14nsu29g3jrr1biwgifwugm"
   },
   "pentest-favicon-hash": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 18117,
@@ -6082,6 +6072,8 @@
     "coolify_app_uuid": "jnajpnv9r9dsmfc89e5og0qg"
   },
   "pentest-finding-triage": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "container_port": 18135,
     "description": "Auto-grades raw findings into submit_ready / needs_review / drop using 8 rules (missing fields, fingerprint-dupe, scope-deny, noise-class, confidence floor, severity promote, evidence-present, verified-class). Reasons array surfaces every decision.",
     "example_path": "/rules",
@@ -6110,6 +6102,8 @@
     "coolify_app_uuid": "vbeehwr7p783yg53y5fxhn4c"
   },
   "pentest-github-dorks": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18123,
     "description": "GitHub Search API dorking for leaked credentials: 31 curated patterns (AWS keys, .env, private keys, Slack/Stripe/PAT tokens, kubeconfig, npm/Docker creds). Rate-limit aware; pairs with go-pentest-trufflehog for verification.",
@@ -6146,6 +6140,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-httpx": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 18113,
@@ -6182,6 +6178,8 @@
     "version": "0.2.4"
   },
   "pentest-js-bundle-scanner": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18178,
     "description": "Fetch URL, recurse script src tags, scan 21 secret-pattern classes (AWS/Stripe/GitHub/Google/Anthropic/RSA-PEM/etc.), extract endpoints, classify sourcemaps as first vs third party (eTLD+1).",
@@ -6195,6 +6193,8 @@
     "coolify_app_uuid": "p11myndrybtb6epn40dgvbua"
   },
   "pentest-leak-bounty-policy": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "container_port": 18145,
     "description": "Curated registry: which bug-bounty programs PAY for credential-leak disclosures, broken down by leak class (own_employee / shared_secret / customer_cred / canary). Use BEFORE writing up a leaked-credential disclosure — most platforms treat customer-side leaks as goodwill-only; only Stripe / GitHub partner / AWS canary / GitLab pay per-leak. 25 programs seeded.",
     "example_path": "/search?token=sk_live_xxx",
@@ -6230,6 +6230,8 @@
     "version": "0.1.2"
   },
   "pentest-nuclei": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18115,
     "description": "Nuclei wrapper: scope-guarded YAML-template scanner (cves/exposures/misconfigs/takeovers). Pre-flights every target through go-pentest-scope-guard; forwards findings to go-pentest-findings-store. Bundles nuclei binary in container.",
@@ -6280,6 +6282,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-payloads": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.1.4",
     "container_port": 18101,
     "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
@@ -6336,6 +6340,8 @@
     "version": "0.2.5"
   },
   "pentest-reflection-hunter": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18175,
     "description": "Brute-fuzz ~40 standard params, classify reflection context (js-string/html-attr/json/url), escalate with composite breakout payloads. Filters WAF-challenge interstitials before classification.",
@@ -6349,6 +6355,8 @@
     "coolify_app_uuid": "kwhedb2sxgighnkn9ltu0v3n"
   },
   "pentest-report-templater": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.1.3",
     "container_port": 18114,
     "description": "Turns a structured Finding into a platform-ready markdown report. Ships HackerOne/Bugcrowd/Intigriti templates. Optional CVSS enrichment via go-pentest-cvss. Highest-leverage service in the fleet.",
@@ -6392,6 +6400,8 @@
     "coolify_app_uuid": "lsnzmw5sxciksu5lvfomrhsv"
   },
   "pentest-secrets-scanner": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.5.5",
     "access_tier": "vetted-pentest",
     "container_port": 18122,
@@ -6407,6 +6417,8 @@
     "coolify_app_uuid": "ozbu751n6lkn2pg42mfct4ki"
   },
   "pentest-session-state": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.1.5",
     "container_port": 18151,
     "host_port": 18151,
@@ -6419,6 +6431,8 @@
     "coolify_app_uuid": "b83h92cux80bgsbpf8rb09nz"
   },
   "pentest-ssrf-prober": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.3.6",
     "access_tier": "vetted-pentest",
     "container_port": 18150,
@@ -6431,6 +6445,8 @@
     "trl_evidence": "2026-08-20 fresh-clone audit (origin/main @ b4ed921, go-common@v0.88.0 post-fleet-bump). Confirmed the fleet-wide safehttp fetch-cache bug class DOES apply here (unlike some siblings): proberOutbound was built via safehttp.NewClient() with no .WithoutFetchCache(), and this service's own pollOOBPage (probe_poll.go) cursor-polls the OOB collector on a 500ms cadence during collectHits -- exactly the kind of call that must never be served stale. Once a fleet deployment sets FLEET_FETCH_CACHE_URL, server.New auto-wires a process-wide DefaultFetchDelegate (go-common/server/fetchcache.go) that transparently intercepts this GET; a cached response for the same token+cursor would repeat the last page forever, so a real live confirmed_ssrf callback landing after the cache warmed could go entirely unobserved -- silently downgrading a genuine finding to a false clean/suspected verdict, the worst failure mode for a vuln scanner. Separately confirmed a real secrets-handling bug: this service's own metadata-class payloads deliberately target credential-issuing endpoints (AWS IMDS iam/security-credentials, GCP/Azure service-account token endpoints, file:///proc/self/environ), but Finding.BodyExcerpt persisted the raw response body verbatim with no redaction, so a successful probe against a real vulnerable target would hand the live SecretAccessKey / session Token / OAuth access_token / PEM private key straight back in this service's own /probe JSON response. Scope-guard and OOB-alloc calls are POST (not cache-eligible) and were unaffected; the paired-control WAF differential, single-use run-scoped correlation IDs, and body-signal reflection-check logic are all sound -- the local 30-case corpus eval (TestCorpus_FPRate: 15 TP incl. adversarial, 15 TN incl. adversarial) passes 100% both before and after this fix, confirming the fix didn't regress detection. Fixed both: added safehttp.WithoutFetchCache() to newProberClient; added redactSecrets() to scrub credential values while preserving evidentiary fields (AccessKeyId, Expiration, field names). Added TestNewProberClientBypassesFetchCache (fails without the fix, verified) and TestRedactSecrets_*/TestRecordHTTPResponse_RedactsBodyExcerpt covering AWS/GCP/Azure/PEM shapes. Bumped 0.3.3->0.3.4. Fix opened as github.com/baditaflorin/go-pentest-ssrf-prober PR #10 (fix/prober-fetchcache-and-secret-redaction, NOT merged). Lowering TRL 7->6 because the deployed main branch still carries both bugs as of this assessment -- restore to 7 once PR #10 merges."
   },
   "pentest-subfinder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.3.5",
     "access_tier": "vetted-pentest",
     "container_port": 18112,
@@ -6460,6 +6476,8 @@
     "coolify_app_uuid": "r6y6un7n6emjwaa5dfywcsgc"
   },
   "pentest-takeover-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18121,
     "description": "Subdomain-takeover scanner. Resolves CNAME, probes HTTP, matches signatures from go-pentest-takeover-fingerprints. Severity none/possible/likely.",
@@ -6474,6 +6492,8 @@
     "coolify_app_uuid": "ix66ihzc7zqgw85flaxerjm5"
   },
   "pentest-takeover-fingerprints": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.2.4",
     "container_port": 18116,
     "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
@@ -6522,6 +6542,8 @@
     "coolify_app_uuid": "ar8u5rv0dp3cfpucrzyvezul"
   },
   "pentest-trufflehog": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18120,
     "description": "Trufflehog wrapper: scans repos/git/filesystem for VERIFIED secrets (--only-verified). 700+ detectors live-tested against providers. Upgrades go-pentest-secrets-scanner with verification.",
@@ -6573,6 +6595,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "pentest-wayback-urls": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.4.7",
     "access_tier": "vetted-pentest",
     "container_port": 18127,
@@ -6588,11 +6612,13 @@
     "coolify_app_uuid": "h1l5dpv77ha30bw3crzmf3kc"
   },
   "pentest-wordlists": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "0.1.5",
     "container_port": 18100,
     "description": "Serves curated pentest wordlists (dirs, subdomains, params, fuzz) by category with SHA256 integrity. Random-sample API. Designed to grow via SecLists submodule.",
     "example_path": "/lists",
-    "host_port": 18100,
+    "host_port": 18332,
     "trl": 6,
     "trl_assessed_at": "2026-05-14",
     "trl_assessor": "claude-session-2026-05-14",
@@ -6616,6 +6642,7 @@
     "coolify_app_uuid": "yv2ow8edj38olrzbdr8ds11x"
   },
   "phone-extractor": {
+    "placement": "replicable",
     "container_port": 8139,
     "description": "Microservice for Phone Extractor",
     "env": {
@@ -8672,6 +8699,8 @@
     "trl_evidence": "logic game, SMT solver integration"
   },
   "zone-transfer": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "placement": "replicable",
     "version": "1.4.6",
     "container_port": 8232,
     "description": "Microservice for Zone Transfer",
