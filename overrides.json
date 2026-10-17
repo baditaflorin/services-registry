@@ -1591,6 +1591,10 @@
     "spiffe_workload": true
   },
   "d3-graph": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 6003,
     "host_port": 18020,
     "placement": "replicable",
@@ -5422,6 +5426,10 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first newsletter drafting/repurposing tool. Found and fixed a real XSS vulnerability: source.url and discussionUrl fields (sourced from untrusted RSS/Atom/HTML/OPML imports, or an auto-loading shared Project JSON payload reachable via a #project= link with no confirmation) were rendered as raw <a href> with no scheme check -- a javascript: URL would execute in the app's own origin with access to every local project in IndexedDB, directly undermining the app's 'local-first, doesn't collect draft/source contents' privacy claim. Fixed with a sanitizeUrl() helper blocking javascript:/data:/vbscript:/file:/blob: schemes including tab/newline scheme-splitting bypasses, applied at both render sites. Autosave/draft-persistence logic checked specifically for the early-return-disables-autosave pattern found elsewhere in this initiative -- not present here. trl bumped 4->4 with real security hardening; trl_ceiling=5. See github.com/baditaflorin/newsletter-flow PR #7 (merged)."
   },
   "nlp-extractinfo": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 5302,
     "description": "NLP entity extraction from URL (?url=)",
     "host_port": 18011,
@@ -5448,6 +5456,10 @@
     "trl_evidence": "First-pass audit (TypeScript/Express/Playwright, confirmed genuine parallel implementation to go-js-proxy, not a duplicate -- forces every render through the fleet's residential Webshare proxy pool, a real functional difference against anti-bot IP blocking). Found and fixed 4 real bugs, all live-reproduced: (1) SSRF/LFI -- file:///etc/passwd was handed straight to page.goto() and its contents served back; private/internal IPs were only accidentally blocked by the residential proxy's CONNECT refusal, not a guard this service owned; fixed with real scheme/address validation. (2) Hardcoded, leaked Webshare proxy credentials and Google API keys committed to source (ignoring the env vars docker-compose already wires up) and logged in plaintext at startup -- these need rotating at Webshare/Google independent of this fix, still in git history. (3) A concurrency-slot lifetime bug reproduced as a full process crash -- the semaphore slot released on client-timeout instead of on real browser-context close, reintroducing exactly the resource-exhaustion class behind a documented 2026-05-29 fork-bomb incident; fixed by holding the slot for the render's real lifetime. (4) 9 known-vulnerable dependencies including a lodash pin the npm registry itself flags 'Bad release' -- npm audit now reports 0 vulnerabilities. trl bumped 4->6; trl_ceiling=7 added -- SSRF guard is pre-flight-only (not DNS-rebinding-proof), no response-size cap, legacy dead code remains. See PR #2 (merged)."
   },
   "node-proxy": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3003,
     "description": "Node proxy (?url=)",
     "host_port": 18004,
@@ -5462,6 +5474,10 @@
     "trl_evidence": "First-pass audit (plain Express+axios GET-only forward proxy, Node-clustered, mandatory Webshare egress). Found and fixed 3 real bugs: (1) an oversized-response memory blow-up masked as a fake 200 OK -- no maxContentLength/maxBodyLength on the axios call; a 2GB test response spiked worker RSS to ~3GB, and past V8's string-conversion limit axios's internal error still carried status=200, disguising a real failure as success; fixed with a 50MB cap. (2) NODE_ENV=test never started the server at all (cluster.isMaster defaults true when setupCluster() is skipped) -- likely why there was never a test suite; fixed. (3) error-handling data loss on 2xx/3xx branches. npm audit: 10 advisories (2 high) -> 0, plus removed an entirely-unused vulnerable dependency. Honestly documented (not silently fixed) a real SSRF gap: no host/IP allowlist exists in-app, safety is entirely delegated to the mandatory external egress-proxy topology -- flagged as deserving its own dedicated PR. trl bumped 4->5; trl_ceiling=6 added -- SSRF safety fully delegated to external infra, no retries/circuit-breaker sophistication. See PR #1 (merged)."
   },
   "node-search-bing": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3413,
     "description": "Bing SERP scraper in Node (?query=)",
     "host_port": 18016,
@@ -5475,6 +5491,10 @@
     "trl_evidence": "First-pass audit (Express/TypeScript cheerio-based Bing SERP scraper, routed through an internal C egress proxy). Found and fixed 4 real bugs: (1) bot-challenge/CAPTCHA pages (HTTP 200, 0 result nodes) misreported as 'no results', indistinguishable from a genuine zero-hit query -- added detection, now returns 503 with partial results preserved. (2) No fetch timeout at all (axios default) -- a real resource-exhaustion risk under concurrent load if the proxy/Bing stalls; added 15s timeouts. (3) A lodash override pinned to a version npm's own registry explicitly flags 'Bad release' -- the regressed attempted fix for a known code-injection CVE; repinned to the actually-clean release. (4) Several other stale vulnerable dependencies bumped (npm audit: 9 findings/2 high -> 1 moderate residual, an Express-5-migration deliberately deferred). Also found the internal C-based egress proxy this service depends on is currently returning 502 for every request -- an infra issue flagged as out of scope for this repo. Added the repo's first real test suite. trl held at 5; trl_ceiling=6 added -- structurally capped by Bing's unversioned/changeable HTML and aggressive, empirically-confirmed anti-bot posture. See PR #2 (merged)."
   },
   "node-search-duck": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 3403,
     "description": "DuckDuckGo SERP scraper in Node (?query=)",
     "host_port": 18015,
@@ -5496,6 +5516,10 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first academic-writing workbench. Verified privacy claim true via live browser network trace on a production build (zero external requests during normal use). Independently fuzz-tested the PDF line-wrapping algorithm against 500 random paragraphs using real pdf-lib font metrics (not the test suite's mocked measure) -- no overflow, no dropped content. Found and fixed a real bug: escapeLatex() only escaped 4 of 10 LaTeX special characters, so ordinary academic text ('O(n^2)', 'cost $5', 'dataset #1') produced a .tex export that fails to compile, undermining the app's 'submission-ready' claim. Fixed with a single-pass regex covering all special characters (avoiding a double-escape trap from naive chained replaceAll calls). Live-tested autosave survives a hard reload. trl bumped 3->4; trl_ceiling=5 pending real TeX-engine compilation testing of the export pipeline. See github.com/baditaflorin/numen PR #16 (merged)."
   },
   "ocr-pdf": {
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+    },
     "container_port": 5500,
     "description": "Extract text from PDFs — upload or URL",
     "host_port": 18012,
