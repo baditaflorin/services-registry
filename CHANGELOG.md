@@ -1,3 +1,7 @@
+## 2026-10-18
+
+- Targeted registry pins: `iban-bic-validator` 0.1.8 and `phone-extractor` 1.4.30, both with signed GHCR images verified and live deployments healthy. `services.json` changes only these version fields.
+
 ## 2026-10-17
 
 - `bin/rollout_claude_md.py merge --replace-safe`, now part of `weekly`: a diverged `CLAUDE.md` copy that has no lines of its own (it only lacks canonical lines) is replaced by the canonical. The three-way merge could not fix these: it treats a missing line as a local deletion and reported `unchanged`, so on 2026-10-17 the 53 copies that lacked the `fleet-runner audit orphaned-listeners` line stayed diverged and `FleetDocCopiesBehind` kept firing for 8 days. The commit message lists the lines restored. Copies with lines of their own still go through the merge, never replaced. Tests: `test_replace_safe_only_for_a_copy_with_no_lines_of_its_own`, `test_a_three_way_merge_cannot_restore_the_missing_line_but_replace_safe_does`, `test_cmd_merge_with_replace_safe_pushes_the_canonical_to_a_copy_that_lacked_a_line`.
