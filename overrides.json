@@ -5426,6 +5426,7 @@
   "mobile-friendly": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8294,
+    "mem_limit": "2g",
     "description": "Microservice for Mobile Friendly",
     "example_path": "/?url=https://example.com",
     "host_port": 8294,
