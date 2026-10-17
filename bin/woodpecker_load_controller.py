@@ -39,6 +39,7 @@ class NodeSnapshot:
     memory_available_pct: float
     disk_available_pct: float
     disk_available_bytes: int | None = None
+    load_per_cpu: float | None = None
     # Cumulative seconds tasks spent stalled on disk (node_pressure_io_waiting_seconds_total)
     # and the wall-clock time of the scrape; None when the node does not export pressure.
     io_waiting_seconds: float | None = None
@@ -97,12 +98,16 @@ def node_snapshot(text: str, mountpoint: str = "/", taken_at: float | None = Non
     cpu_total = 0.0
     memory_available = memory_total = None
     disk_available = disk_total = None
+    load1 = None
+    cpu_ids = set()
     io_waiting = None
     for name, labels, value in prometheus_samples(text):
         if name == "node_pressure_io_waiting_seconds_total":
             if math.isfinite(value) and value >= 0:
                 io_waiting = value
         elif name == "node_cpu_seconds_total":
+            if labels.get("cpu") is not None:
+                cpu_ids.add(labels["cpu"])
             mode = labels.get("mode")
             if mode in {"guest", "guest_nice"}:
                 continue
@@ -117,10 +122,14 @@ def node_snapshot(text: str, mountpoint: str = "/", taken_at: float | None = Non
             disk_available = value
         elif name == "node_filesystem_size_bytes" and labels.get("mountpoint") == mountpoint:
             disk_total = value
+        elif name == "node_load1":
+            load1 = value
     if cpu_total <= 0 or memory_total in {None, 0} or disk_total in {None, 0}:
         raise ValueError("node-exporter response is missing CPU, memory, or filesystem metrics")
     if memory_available is None or disk_available is None:
         raise ValueError("node-exporter response is missing available memory or filesystem metrics")
+    if load1 is not None and (not math.isfinite(load1) or load1 < 0):
+        raise ValueError("node-exporter response has invalid 1-minute load value")
     if (
         not math.isfinite(memory_available)
         or not math.isfinite(memory_total)
@@ -138,6 +147,7 @@ def node_snapshot(text: str, mountpoint: str = "/", taken_at: float | None = Non
         100.0 * memory_available / memory_total,
         100.0 * disk_available / disk_total,
         int(disk_available),
+        load1 / len(cpu_ids) if load1 is not None and cpu_ids else None,
         io_waiting,
         time.time() if taken_at is None else taken_at,
     )
@@ -216,8 +226,18 @@ def evaluate_pressure(
     io_resume = thresholds.get("io_pressure_resume_pct")
 
     breaches = []
-    if cpu_pct is not None and cpu_pct >= thresholds["cpu_stop_pct"]:
-        breaches.append("cpu")
+    load_stop = thresholds.get("load_per_cpu_stop")
+    load_resume = thresholds.get("load_per_cpu_resume")
+    if load_stop is not None:
+        if current.load_per_cpu is None:
+            raise ValueError("node-exporter response is missing normalized load metrics")
+        if current.load_per_cpu >= load_stop:
+            breaches.append("cpu_load")
+        cpu_recovered = current.load_per_cpu <= load_resume
+    else:
+        if cpu_pct is not None and cpu_pct >= thresholds["cpu_stop_pct"]:
+            breaches.append("cpu")
+        cpu_recovered = cpu_pct is not None and cpu_pct <= thresholds["cpu_resume_pct"]
     if io_stop is not None and io_pct is not None and io_pct >= io_stop:
         breaches.append("io")
     if current.memory_available_pct <= thresholds["memory_stop_pct"]:
@@ -234,20 +254,27 @@ def evaluate_pressure(
             raise ValueError("required backing-storage metrics are unavailable")
         backing_available_pct = backing_snapshot.available_pct
         backing_available_bytes = backing_snapshot.available_bytes
+        minimum_free_bytes = backing_storage.get("minimum_free_bytes")
+        minimum_bytes_breached = False
+        minimum_bytes_recovered = True
+        if minimum_free_bytes is not None:
+            if backing_available_bytes is None:
+                raise ValueError("required backing-storage byte metrics are unavailable")
+            minimum_bytes_breached = backing_available_bytes <= int(minimum_free_bytes)
+            minimum_bytes_recovered = backing_available_bytes >= int(minimum_free_bytes)
         critical_storage_breach = (
             backing_available_pct <= float(backing_storage["disk_stop_pct"])
-            or backing_available_bytes <= int(backing_storage["minimum_free_bytes"])
+            or minimum_bytes_breached
         )
         if critical_storage_breach:
             breaches.append("backing_storage")
         backing_recovered = (
             backing_available_pct >= float(backing_storage["disk_resume_pct"])
-            and backing_available_bytes >= int(backing_storage["minimum_free_bytes"])
+            and minimum_bytes_recovered
         )
 
     recovered = (
-        cpu_pct is not None
-        and cpu_pct <= thresholds["cpu_resume_pct"]
+        cpu_recovered
         and current.memory_available_pct >= thresholds["memory_resume_pct"]
         and current.disk_available_pct >= thresholds["disk_resume_pct"]
         and (io_resume is None or io_pct is None or io_pct <= io_resume)
@@ -269,12 +296,22 @@ def evaluate_pressure(
 IO_THRESHOLD_KEYS = ("io_pressure_stop_pct", "io_pressure_resume_pct")
 
 
-def effective_thresholds(thresholds: dict[str, float], entry: dict[str, Any]) -> dict[str, float]:
-    """The global thresholds with a node's (or v1 agent's) own I/O pressure limits on top.
-    Only the I/O pair can be set per node: it is the one signal that is a property of a
-    node's disks, not of the fleet."""
-    own = {key: entry[key] for key in IO_THRESHOLD_KEYS if key in entry}
-    return {**thresholds, **own} if own else thresholds
+def thresholds_for_node(
+    thresholds: dict[str, float],
+    node: dict[str, Any],
+) -> dict[str, float]:
+    """The global thresholds with one node's (or v1 agent's) own limits on top: an optional
+    disk-space pair (disk_thresholds) and an optional I/O pressure pair. Both are properties
+    of a node's disks, not of the fleet."""
+    effective = dict(thresholds)
+    disk_thresholds = node.get("disk_thresholds")
+    if disk_thresholds is not None:
+        effective["disk_stop_pct"] = float(disk_thresholds["stop_pct"])
+        effective["disk_resume_pct"] = float(disk_thresholds["resume_pct"])
+    for key in IO_THRESHOLD_KEYS:
+        if key in node:
+            effective[key] = node[key]
+    return effective
 
 
 def update_hysteresis(
@@ -400,6 +437,7 @@ LEGACY_SNAPSHOT_FIELDS = (
     "memory_available_pct",
     "disk_available_pct",
     "disk_available_bytes",
+    "load_per_cpu",
 )
 
 
@@ -432,6 +470,88 @@ def snapshot_from_state(agent_state: dict[str, Any]) -> NodeSnapshot | None:
 def log_event(**fields: Any) -> None:
     fields["timestamp"] = int(time.time())
     print(json.dumps(fields, sort_keys=True), flush=True)
+
+
+def agent_readiness(
+    agent: dict[str, Any],
+    now: float,
+    stale_after_seconds: int,
+    controller_managed: bool = False,
+) -> dict[str, Any]:
+    """Explain API scheduling state separately from a fresh worker heartbeat."""
+    raw_contact = agent.get("last_contact")
+    contact_age = None
+    heartbeat_state = "unknown"
+    if raw_contact is not None:
+        try:
+            contact = float(raw_contact)
+        except (TypeError, ValueError):
+            heartbeat_state = "invalid"
+        else:
+            if not math.isfinite(contact) or contact <= 0:
+                heartbeat_state = "invalid"
+            else:
+                contact_age = round(now - contact, 1)
+                if contact_age < 0:
+                    heartbeat_state = "future"
+                elif contact_age > stale_after_seconds:
+                    heartbeat_state = "stale"
+                else:
+                    heartbeat_state = "fresh"
+
+    no_schedule = bool(agent.get("no_schedule"))
+    reasons = []
+    if no_schedule:
+        reasons.append(
+            "controller_drained" if controller_managed else "manual_or_external_no_schedule"
+        )
+    if heartbeat_state != "fresh":
+        reasons.append(f"heartbeat_{heartbeat_state}")
+    api_enabled = not no_schedule
+    heartbeat_fresh = heartbeat_state == "fresh"
+    capacity = agent.get("capacity")
+    if isinstance(capacity, bool) or not isinstance(capacity, int) or capacity < 0:
+        capacity = None
+    return {
+        "id": agent.get("id"),
+        "name": agent.get("name"),
+        "api_enabled": api_enabled,
+        "heartbeat_state": heartbeat_state,
+        "last_contact_age_seconds": contact_age,
+        "capacity": capacity,
+        "ready_to_poll": api_enabled and heartbeat_fresh,
+        "controller_managed": controller_managed,
+        "reasons": reasons,
+    }
+
+
+def log_agent_readiness(
+    node: str,
+    agents: list[dict[str, Any]],
+    managed_ids: set[str],
+    stale_after_seconds: int,
+) -> None:
+    now = time.time()
+    inventory = [
+        agent_readiness(
+            agent,
+            now,
+            stale_after_seconds,
+            str(agent.get("id")) in managed_ids,
+        )
+        for agent in agents
+    ]
+    log_event(
+        event="agent_readiness",
+        node=node,
+        registered_agents=len(inventory),
+        api_enabled_agents=sum(item["api_enabled"] for item in inventory),
+        fresh_heartbeats=sum(item["heartbeat_state"] == "fresh" for item in inventory),
+        ready_to_poll_agents=sum(item["ready_to_poll"] for item in inventory),
+        ready_capacity=sum(item["capacity"] or 0 for item in inventory if item["ready_to_poll"]),
+        stale_after_seconds=stale_after_seconds,
+        agents=inventory,
+    )
 
 
 def run_cycle_v1(
@@ -480,6 +600,12 @@ def run_cycle_v1(
         }
         agent_state["managed_agent_ids"] = sorted(managed_ids)
         schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
+        log_agent_readiness(
+            name,
+            agents,
+            managed_ids,
+            int(config.get("agent_stale_after_seconds", 120)),
+        )
         backing_config = entry.get("backing_storage")
         try:
             current = node_snapshot(
@@ -496,18 +622,22 @@ def run_cycle_v1(
             pressure = evaluate_pressure(
                 current,
                 snapshot_from_state(agent_state),
-                effective_thresholds(thresholds, entry),
+                thresholds_for_node(thresholds, entry),
                 backing_config,
                 backing_snapshot,
             )
         except (OSError, ValueError, urllib.error.URLError) as exc:
+            fail_closed = bool(
+                backing_config is not None
+                or entry.get("fail_closed_on_metrics_error", False)
+            )
             log_event(
                 event="metrics_error",
                 agent=name,
-                fail_closed=backing_config is not None,
+                fail_closed=fail_closed,
                 error=str(exc),
             )
-            if backing_config is not None:
+            if fail_closed:
                 agent_state["previous_snapshot"] = None
                 agent_state["overload_samples"] = 0
                 agent_state["recovery_samples"] = 0
@@ -540,6 +670,7 @@ def run_cycle_v1(
             agent_count=len(agents),
             schedulable_agents=len(schedulable),
             cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
+            load_per_cpu=None if current.load_per_cpu is None else round(current.load_per_cpu, 3),
             io_pressure_pct=None if pressure.io_pressure_pct is None else round(pressure.io_pressure_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
             disk_available_pct=round(pressure.disk_available_pct, 2),
@@ -662,6 +793,12 @@ def run_cycle_v2(
             if agent_id in by_id and bool(by_id[agent_id].get("no_schedule"))
         }
         node_state["managed_agent_ids"] = sorted(managed_ids)
+        log_agent_readiness(
+            name,
+            agents,
+            managed_ids,
+            int(config.get("agent_stale_after_seconds", 120)),
+        )
 
         backing_config = entry.get("backing_storage")
         try:
@@ -679,18 +816,22 @@ def run_cycle_v2(
             pressure = evaluate_pressure(
                 current,
                 snapshot_from_state(node_state),
-                effective_thresholds(thresholds, entry),
+                thresholds_for_node(thresholds, entry),
                 backing_config,
                 backing_snapshot,
             )
         except (OSError, ValueError, urllib.error.URLError) as exc:
+            fail_closed = bool(
+                backing_config is not None
+                or entry.get("fail_closed_on_metrics_error", False)
+            )
             log_event(
                 event="metrics_error",
                 node=name,
-                fail_closed=backing_config is not None,
+                fail_closed=fail_closed,
                 error=str(exc),
             )
-            if backing_config is not None:
+            if fail_closed:
                 node_state["previous_snapshot"] = None
                 node_state["overload_samples"] = 0
                 node_state["recovery_samples"] = 0
@@ -725,6 +866,7 @@ def run_cycle_v2(
             agent_count=len(agents),
             schedulable_agents=len(schedulable),
             cpu_pct=None if pressure.cpu_pct is None else round(pressure.cpu_pct, 2),
+            load_per_cpu=None if current.load_per_cpu is None else round(current.load_per_cpu, 3),
             io_pressure_pct=None if pressure.io_pressure_pct is None else round(pressure.io_pressure_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
             disk_available_pct=round(pressure.disk_available_pct, 2),
@@ -842,12 +984,12 @@ def validate_backing_storage(entry: dict[str, Any]) -> None:
     if backing["disk_resume_pct"] <= backing["disk_stop_pct"]:
         raise ValueError("backing_storage resume percentage must be higher than stop percentage")
     minimum_free_bytes = backing.get("minimum_free_bytes")
-    if (
+    if minimum_free_bytes is not None and (
         isinstance(minimum_free_bytes, bool)
         or not isinstance(minimum_free_bytes, int)
         or minimum_free_bytes <= 0
     ):
-        raise ValueError("backing_storage minimum_free_bytes must be a positive integer")
+        raise ValueError("backing_storage minimum_free_bytes must be a positive integer when set")
 
 
 def validate_io_thresholds(source: dict[str, Any], where: str) -> None:
@@ -872,6 +1014,9 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("unsupported controller config version")
     if not config.get("woodpecker_url"):
         raise ValueError("config must declare woodpecker_url")
+    stale_after = config.get("agent_stale_after_seconds", 120)
+    if isinstance(stale_after, bool) or not isinstance(stale_after, int) or stale_after <= 0:
+        raise ValueError("agent_stale_after_seconds must be a positive integer")
     if version == 1:
         agents = config.get("agents")
         if not isinstance(agents, list) or not agents:
@@ -893,8 +1038,8 @@ def validate_config(config: dict[str, Any]) -> None:
         if not isinstance(nodes, list) or not nodes:
             raise ValueError("version 2 config must declare nodes")
         minimum_schedulable = int(config.get("minimum_schedulable_nodes", 1))
-        if minimum_schedulable < 1 or minimum_schedulable > len(nodes):
-            raise ValueError("minimum_schedulable_nodes must be between 1 and the node count")
+        if minimum_schedulable < 0 or minimum_schedulable > len(nodes):
+            raise ValueError("minimum_schedulable_nodes must be between 0 and the node count")
         if any(not isinstance(node, dict) for node in nodes):
             raise ValueError("each node configuration must be an object")
         node_names = [node.get("name") for node in nodes]
@@ -911,6 +1056,27 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError("each Woodpecker agent name must belong to exactly one node")
         for node in nodes:
             validate_backing_storage(node)
+            disk_thresholds = node.get("disk_thresholds")
+            if disk_thresholds is not None:
+                if not isinstance(disk_thresholds, dict):
+                    raise ValueError("node disk_thresholds must be an object")
+                if set(disk_thresholds) != {"stop_pct", "resume_pct"}:
+                    raise ValueError("node disk_thresholds must declare stop_pct and resume_pct only")
+                for key, value in disk_thresholds.items():
+                    if (
+                        isinstance(value, bool)
+                        or not isinstance(value, (int, float))
+                        or not math.isfinite(value)
+                        or not 0 <= value <= 100
+                    ):
+                        raise ValueError(f"node disk_thresholds {key} must be between 0 and 100")
+                if disk_thresholds["resume_pct"] <= disk_thresholds["stop_pct"]:
+                    raise ValueError("node disk resume percentage must be higher than stop percentage")
+            if (
+                "fail_closed_on_metrics_error" in node
+                and not isinstance(node["fail_closed_on_metrics_error"], bool)
+            ):
+                raise ValueError("fail_closed_on_metrics_error must be a boolean")
     required = {
         "cpu_stop_pct",
         "cpu_resume_pct",
@@ -923,6 +1089,26 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("controller thresholds are incomplete")
     if config["thresholds"]["cpu_resume_pct"] >= config["thresholds"]["cpu_stop_pct"]:
         raise ValueError("cpu resume threshold must be lower than stop threshold")
+    load_stop = config["thresholds"].get("load_per_cpu_stop")
+    load_resume = config["thresholds"].get("load_per_cpu_resume")
+    if (load_stop is None) != (load_resume is None):
+        raise ValueError("normalized load stop and resume thresholds must be configured together")
+    if load_stop is not None:
+        if (
+            isinstance(load_stop, bool)
+            or not isinstance(load_stop, (int, float))
+            or not math.isfinite(load_stop)
+            or load_stop <= 0
+        ):
+            raise ValueError("load_per_cpu_stop must be a positive number")
+        if (
+            isinstance(load_resume, bool)
+            or not isinstance(load_resume, (int, float))
+            or not math.isfinite(load_resume)
+            or load_resume < 0
+            or load_resume >= load_stop
+        ):
+            raise ValueError("load_per_cpu_resume must be non-negative and lower than stop")
     if config["thresholds"]["memory_resume_pct"] <= config["thresholds"]["memory_stop_pct"]:
         raise ValueError("memory resume threshold must be higher than stop threshold")
     if config["thresholds"]["disk_resume_pct"] <= config["thresholds"]["disk_stop_pct"]:

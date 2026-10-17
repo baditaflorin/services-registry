@@ -637,10 +637,10 @@ class IOPressureTests(unittest.TestCase):
 
     def test_a_nodes_own_io_limits_override_only_that_node(self):
         entry = {"name": "slow-disks", "io_pressure_stop_pct": 30, "io_pressure_resume_pct": 10}
-        merged = controller.effective_thresholds(IO_THRESHOLDS, entry)
+        merged = controller.thresholds_for_node(IO_THRESHOLDS, entry)
         self.assertEqual((merged["io_pressure_stop_pct"], merged["io_pressure_resume_pct"]), (30, 10))
-        self.assertEqual(IO_THRESHOLDS["io_pressure_stop_pct"], 40)
-        self.assertIs(controller.effective_thresholds(THRESHOLDS, {"name": "plain"}), THRESHOLDS)
+        self.assertEqual(IO_THRESHOLDS["io_pressure_stop_pct"], 40, "the global thresholds are not modified")
+        self.assertEqual(controller.thresholds_for_node(THRESHOLDS, {"name": "plain"}), THRESHOLDS)
 
     def test_state_keeps_the_legacy_snapshot_shape_and_round_trips_the_io_counter(self):
         state = {}
@@ -710,6 +710,84 @@ class IOPressureTests(unittest.TestCase):
             changes_per_cycle.append(list(client.changed))
         self.assertEqual(changes_per_cycle[0], [], "the first scrape has no previous one to compare")
         self.assertEqual(client.changed, [(1, True)], "only the node whose disk is stalled is drained")
+
+
+LOAD_THRESHOLDS = dict(THRESHOLDS, load_per_cpu_stop=3.0, load_per_cpu_resume=2.5)
+
+
+def load_metrics(load1, cpus=4, idle=80):
+    lines = [f'node_cpu_seconds_total{{cpu="{c}",mode="idle"}} {idle if c == 0 else 0}' for c in range(cpus)]
+    return "\n".join(lines) + f"""
+node_cpu_seconds_total{{cpu="0",mode="user"}} 20
+node_load1 {load1}
+node_memory_MemAvailable_bytes 300
+node_memory_MemTotal_bytes 1000
+node_filesystem_avail_bytes{{device="/dev/vda1",fstype="ext4",mountpoint="/"}} 200
+node_filesystem_size_bytes{{device="/dev/vda1",fstype="ext4",mountpoint="/"}} 1000
+"""
+
+
+class LiveFeatureTests(unittest.TestCase):
+    """The load, per-node disk and heartbeat behaviour the installed controller has had since
+    2026-10-11; pinned here when it was brought into the repository."""
+
+    def test_normalized_load_is_load1_over_the_cpu_count(self):
+        self.assertEqual(controller.node_snapshot(load_metrics(8, cpus=4)).load_per_cpu, 2.0)
+        self.assertIsNone(controller.node_snapshot(METRICS).load_per_cpu)
+
+    def test_load_thresholds_replace_the_cpu_busy_share(self):
+        previous = controller.node_snapshot(load_metrics(1), taken_at=0.0)
+        hot = controller.node_snapshot(load_metrics(14, idle=200), taken_at=30.0)  # 3.5 per CPU
+        pressure = controller.evaluate_pressure(hot, previous, LOAD_THRESHOLDS)
+        self.assertIn("cpu_load", pressure.breaches)
+        self.assertNotIn("cpu", pressure.breaches)
+        calm = controller.node_snapshot(load_metrics(4, idle=200), taken_at=30.0)  # 1.0 per CPU
+        self.assertTrue(controller.evaluate_pressure(calm, previous, LOAD_THRESHOLDS).recovered)
+        between = controller.node_snapshot(load_metrics(11, idle=200), taken_at=30.0)  # 2.75: above resume
+        pressure = controller.evaluate_pressure(between, previous, LOAD_THRESHOLDS)
+        self.assertEqual(pressure.breaches, ())
+        self.assertFalse(pressure.recovered)
+
+    def test_load_thresholds_fail_closed_without_a_load_metric(self):
+        with self.assertRaisesRegex(ValueError, "normalized load"):
+            controller.evaluate_pressure(controller.node_snapshot(METRICS), None, LOAD_THRESHOLDS)
+
+    def test_a_nodes_disk_thresholds_override_only_the_disk_pair(self):
+        entry = {"name": "n", "disk_thresholds": {"stop_pct": 6.8, "resume_pct": 7.5}}
+        merged = controller.thresholds_for_node(THRESHOLDS, entry)
+        self.assertEqual((merged["disk_stop_pct"], merged["disk_resume_pct"]), (6.8, 7.5))
+        self.assertEqual(merged["cpu_stop_pct"], THRESHOLDS["cpu_stop_pct"])
+        self.assertEqual(THRESHOLDS["disk_stop_pct"], 10)
+
+    def test_config_validation_of_load_and_disk_thresholds(self):
+        config = config_v2()
+        config["thresholds"].update(load_per_cpu_stop=3.0, load_per_cpu_resume=2.5)
+        config["nodes"][0]["disk_thresholds"] = {"stop_pct": 6.8, "resume_pct": 7.5}
+        controller.validate_config(config)
+        for mutate in (
+            lambda c: c["thresholds"].pop("load_per_cpu_resume"),
+            lambda c: c["thresholds"].update(load_per_cpu_resume=3.0),
+            lambda c: c["nodes"][0].update(disk_thresholds={"stop_pct": 7.5, "resume_pct": 7.5}),
+            lambda c: c["nodes"][0].update(disk_thresholds={"stop_pct": 6.8}),
+            lambda c: c["nodes"][0].update(fail_closed_on_metrics_error="yes"),
+        ):
+            broken = copy.deepcopy(config)
+            mutate(broken)
+            with self.assertRaises(ValueError):
+                controller.validate_config(broken)
+
+    def test_agent_readiness_separates_the_api_flag_from_the_heartbeat(self):
+        now = 1000.0
+        fresh = controller.agent_readiness({"id": 1, "name": "a", "last_contact": 990, "capacity": 3}, now, 120)
+        self.assertTrue(fresh["ready_to_poll"])
+        self.assertEqual(fresh["capacity"], 3)
+        stale = controller.agent_readiness({"id": 2, "name": "a", "last_contact": 700}, now, 120)
+        self.assertEqual(stale["heartbeat_state"], "stale")
+        self.assertFalse(stale["ready_to_poll"])
+        drained = controller.agent_readiness({"id": 3, "name": "a", "last_contact": 990, "no_schedule": True}, now, 120, True)
+        self.assertEqual(drained["reasons"], ["controller_drained"])
+        manual = controller.agent_readiness({"id": 4, "name": "a", "last_contact": 990, "no_schedule": True}, now, 120)
+        self.assertEqual(manual["reasons"], ["manual_or_external_no_schedule"])
 
 
 if __name__ == "__main__":
