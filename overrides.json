@@ -334,16 +334,6 @@
     {
       "match": {
         "ids": [
-          "pentest-cert-transparency",
-          "pentest-chaos-sync",
-          "pentest-dedup-fingerprint",
-          "pentest-exploit-verifier",
-          "pentest-findings-store",
-          "pentest-oob-collector",
-          "pentest-scope-guard",
-          "pentest-screenshot",
-          "pentest-submit-bot",
-          "pentest-triager-listener"
         ]
       },
       "name": "security-recon-coolify-lv3",
@@ -5871,6 +5861,7 @@
     "coolify_app_uuid": "w101yz0tp2q2k7noi1127wz5"
   },
   "pentest-cert-transparency": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.1.7",
     "access_tier": "vetted-pentest",
     "container_port": 18109,
@@ -5886,6 +5877,7 @@
     "coolify_app_uuid": "a13ee2j0glflbis9e7h0jux0"
   },
   "pentest-chaos-sync": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18128,
     "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
     "example_path": "/sync/status",
@@ -5994,6 +5986,7 @@
     "version": "0.2.0"
   },
   "pentest-dedup-fingerprint": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18132,
     "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
     "example_path": "/stats",
@@ -6041,6 +6034,7 @@
     "coolify_app_uuid": "d1vb8tk7rlf5zyayg0e0xomd"
   },
   "pentest-exploit-verifier": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "access_tier": "vetted-pentest",
     "container_port": 18137,
     "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
@@ -6088,6 +6082,7 @@
     "coolify_app_uuid": "je3qc07vjjuov2qqd84vb13h"
   },
   "pentest-findings-store": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18103,
     "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed (pure Go modernc); collapses same finding from multiple scanners via dedup_key with seen_count.",
     "example_path": "/findings?limit=1",
@@ -6247,6 +6242,7 @@
     "coolify_app_uuid": "ihb1oqr2spj8jlcj3cb1shm7"
   },
   "pentest-oob-collector": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18106,
     "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
     "example_path": "/sessions?limit=1",
@@ -6371,6 +6367,7 @@
     "coolify_app_uuid": "im67r9oeenhrfax75moulig0"
   },
   "pentest-scope-guard": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18105,
     "description": "Hard scope check before any active prober fires. POST /check {target, program_id} -> {allowed, reason, matched_by}. Matches hostname/wildcard/CIDR/regex; exclusions always win. Legal floor of the pentest fleet.",
     "example_path": "/programs",
@@ -6385,6 +6382,7 @@
     "coolify_app_uuid": "y14dh7j5fizv7tbo3z1dnx51"
   },
   "pentest-screenshot": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.3.3",
     "access_tier": "vetted-pentest",
     "container_port": 18129,
@@ -6462,6 +6460,7 @@
     "coolify_app_uuid": "x121svo53ijlwgdc4lfihc9l"
   },
   "pentest-submit-bot": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18136,
     "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
     "example_path": "/quota",
@@ -6528,6 +6527,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "pentest-triager-listener": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.2.6",
     "container_port": 18147,
     "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
