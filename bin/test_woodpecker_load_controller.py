@@ -563,5 +563,154 @@ class BackingStorageTests(unittest.TestCase):
         self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
 
 
+IO_THRESHOLDS = dict(THRESHOLDS, io_pressure_stop_pct=40, io_pressure_resume_pct=15)
+
+
+def io_metrics(waiting_seconds, idle=80):
+    """METRICS plus the pressure counter node-exporter exposes."""
+    return METRICS.replace('mode="idle"} 80', f'mode="idle"}} {idle}') + (
+        f"node_pressure_io_waiting_seconds_total {waiting_seconds}\n"
+        "node_pressure_io_stalled_seconds_total 5\n"
+    )
+
+
+class IOPressureTests(unittest.TestCase):
+    def snapshots(self, waited, wall):
+        previous = controller.node_snapshot(io_metrics(100), taken_at=1000.0)
+        # The CPU idle counter moves too, so CPU is known and low: only I/O can hold a recovery back.
+        current = controller.node_snapshot(io_metrics(100 + waited, idle=110), taken_at=1000.0 + wall)
+        return current, previous
+
+    def test_snapshot_reads_the_waiting_counter_and_not_the_stalled_one(self):
+        snapshot = controller.node_snapshot(io_metrics(204975.5), taken_at=12.0)
+        self.assertEqual(snapshot.io_waiting_seconds, 204975.5)
+        self.assertEqual(snapshot.taken_at, 12.0)
+        self.assertIsNone(controller.node_snapshot(METRICS, taken_at=12.0).io_waiting_seconds)
+
+    def test_io_pressure_is_the_waiting_share_of_the_wall_time(self):
+        current, previous = self.snapshots(waited=15, wall=30)
+        pressure = controller.evaluate_pressure(current, previous, IO_THRESHOLDS)
+        self.assertAlmostEqual(pressure.io_pressure_pct, 50.0)
+        self.assertIn("io", pressure.breaches)
+        self.assertFalse(pressure.recovered)
+
+    def test_below_the_stop_threshold_is_not_a_breach(self):
+        current, previous = self.snapshots(waited=9, wall=30)  # 30%
+        pressure = controller.evaluate_pressure(current, previous, IO_THRESHOLDS)
+        self.assertNotIn("io", pressure.breaches)
+        self.assertFalse(pressure.recovered, "30% is above the resume threshold of 15%")
+
+    def test_recovers_once_at_or_below_the_resume_threshold(self):
+        current, previous = self.snapshots(waited=3, wall=30)  # 10%
+        pressure = controller.evaluate_pressure(current, previous, IO_THRESHOLDS)
+        self.assertEqual(pressure.breaches, ())
+        self.assertTrue(pressure.recovered)
+        current, previous = self.snapshots(waited=4.5, wall=30)  # exactly the 15% resume threshold
+        self.assertTrue(controller.evaluate_pressure(current, previous, IO_THRESHOLDS).recovered)
+
+    def test_without_io_thresholds_behaviour_is_unchanged(self):
+        current, previous = self.snapshots(waited=30, wall=30)  # 100% stalled
+        pressure = controller.evaluate_pressure(current, previous, THRESHOLDS)
+        self.assertNotIn("io", pressure.breaches)
+        self.assertEqual(pressure.breaches, ())
+
+    def test_unknown_io_pressure_never_drains_and_never_blocks_a_restore(self):
+        previous = controller.node_snapshot(METRICS, taken_at=1000.0)
+        current = controller.node_snapshot(
+            METRICS.replace('mode="idle"} 80', 'mode="idle"} 110'), taken_at=1030.0
+        )
+        pressure = controller.evaluate_pressure(current, previous, IO_THRESHOLDS)
+        self.assertIsNone(pressure.io_pressure_pct)
+        self.assertNotIn("io", pressure.breaches)
+        self.assertTrue(pressure.recovered)
+
+    def test_counter_reset_and_too_short_an_interval_are_ignored(self):
+        previous = controller.node_snapshot(io_metrics(500), taken_at=1000.0)
+        reset = controller.node_snapshot(io_metrics(3), taken_at=1030.0)
+        self.assertIsNone(controller.evaluate_pressure(reset, previous, IO_THRESHOLDS).io_pressure_pct)
+        quick = controller.node_snapshot(io_metrics(501), taken_at=1000.4)
+        self.assertIsNone(controller.evaluate_pressure(quick, previous, IO_THRESHOLDS).io_pressure_pct)
+
+    def test_io_pressure_is_capped_at_100(self):
+        current, previous = self.snapshots(waited=45, wall=30)  # a multi-task PSI sum can exceed wall time
+        self.assertEqual(controller.evaluate_pressure(current, previous, IO_THRESHOLDS).io_pressure_pct, 100.0)
+
+    def test_a_nodes_own_io_limits_override_only_that_node(self):
+        entry = {"name": "slow-disks", "io_pressure_stop_pct": 30, "io_pressure_resume_pct": 10}
+        merged = controller.effective_thresholds(IO_THRESHOLDS, entry)
+        self.assertEqual((merged["io_pressure_stop_pct"], merged["io_pressure_resume_pct"]), (30, 10))
+        self.assertEqual(IO_THRESHOLDS["io_pressure_stop_pct"], 40)
+        self.assertIs(controller.effective_thresholds(THRESHOLDS, {"name": "plain"}), THRESHOLDS)
+
+    def test_state_keeps_the_legacy_snapshot_shape_and_round_trips_the_io_counter(self):
+        state = {}
+        controller.snapshot_to_state(state, controller.node_snapshot(io_metrics(700), taken_at=1234.5))
+        self.assertEqual(set(state["previous_snapshot"]), set(controller.LEGACY_SNAPSHOT_FIELDS))
+        self.assertEqual(state["previous_io"], {"waiting_seconds": 700, "taken_at": 1234.5})
+        restored = controller.snapshot_from_state(state)
+        self.assertEqual((restored.io_waiting_seconds, restored.taken_at), (700, 1234.5))
+        controller.snapshot_to_state(state, controller.node_snapshot(METRICS, taken_at=1300.0))
+        self.assertNotIn("previous_io", state)
+        self.assertIsNone(controller.snapshot_from_state(state).io_waiting_seconds)
+
+    def test_state_written_before_this_version_still_loads(self):
+        legacy = controller.NodeSnapshot(80, 100, 30, 20).__dict__
+        old = {"previous_snapshot": {k: legacy[k] for k in controller.LEGACY_SNAPSHOT_FIELDS}}
+        snapshot = controller.snapshot_from_state(old)
+        self.assertEqual(snapshot.cpu_total_seconds, 100)
+        self.assertIsNone(snapshot.io_waiting_seconds)
+
+    def test_config_validation_of_io_limits(self):
+        config = config_v2()
+        config["thresholds"].update(io_pressure_stop_pct=40, io_pressure_resume_pct=15)
+        controller.validate_config(config)
+        for bad in (
+            {"io_pressure_stop_pct": 40},
+            {"io_pressure_stop_pct": 15, "io_pressure_resume_pct": 15},
+            {"io_pressure_stop_pct": 10, "io_pressure_resume_pct": 20},
+            {"io_pressure_stop_pct": 101, "io_pressure_resume_pct": 20},
+            {"io_pressure_stop_pct": 40, "io_pressure_resume_pct": 0},
+            {"io_pressure_stop_pct": "40", "io_pressure_resume_pct": 15},
+            {"io_pressure_stop_pct": True, "io_pressure_resume_pct": 15},
+        ):
+            broken = config_v2()
+            broken["nodes"][0].update(bad)
+            with self.assertRaises(ValueError, msg=str(bad)):
+                controller.validate_config(broken)
+            broken = config_v2()
+            broken["thresholds"].update(bad)
+            with self.assertRaises(ValueError, msg=str(bad)):
+                controller.validate_config(broken)
+        node_only = config_v2()
+        node_only["nodes"][0].update(io_pressure_stop_pct=40, io_pressure_resume_pct=15)
+        controller.validate_config(node_only)
+
+    def test_slow_disk_node_is_drained_through_the_cycle_and_the_other_node_is_not(self):
+        config = config_v2()
+        config["nodes"][0].update(io_pressure_stop_pct=40, io_pressure_resume_pct=15)
+        client = FakeClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ]
+        )
+        state = {}
+        scrapes = {"builder-a": [(100, 1000.0), (130, 1030.0)], "builder-b": [(100, 1000.0), (101, 1030.0)]}
+        changes_per_cycle = []
+        for cycle in range(2):
+            def fetch(url, cycle=cycle):
+                node = "builder-a" if "builder-a" in url else "builder-b"
+                waiting, _ = scrapes[node][cycle]
+                return io_metrics(waiting, idle=80 + 30 * cycle)
+
+            with patch.object(controller, "fetch_text", side_effect=fetch), patch.object(
+                controller.time, "time", side_effect=lambda cycle=cycle: scrapes["builder-a"][cycle][1]
+            ):
+                controller.run_cycle_v2(config, state, client, apply=True)
+            changes_per_cycle.append(list(client.changed))
+        self.assertEqual(changes_per_cycle[0], [], "the first scrape has no previous one to compare")
+        self.assertEqual(client.changed, [(1, True)], "only the node whose disk is stalled is drained")
+
+
 if __name__ == "__main__":
     unittest.main()
