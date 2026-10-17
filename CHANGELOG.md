@@ -1,5 +1,7 @@
 ## 2026-10-17
 
+- Four services must never run the Fleet Graph writer (the collector `fleet-graph`, the keystore `apikey-service`, the vault front `fleet-secrets` and `keystore-mesh`): `bin/test_graph_forbidden.py` fails CI if any registry entry or override rule enables `env.GRAPH_ENABLED` for them or if the fleet default leaves `false`, and the collector's own entry goes from `GRAPH_ENABLED=true` to `false` (it was inert only because no writer key was mounted). The runner refuses an enabled manifest row for them and renders them with the writer off (go_fleet_runner#893, docs/graph-writer-targets.md).
+
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `analyze-headers` 1.4.9, `fleet-graph` 0.4.24, `js-proxy` 0.9.1.
 
 ## 2026-10-17
