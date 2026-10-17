@@ -145,6 +145,22 @@ following ten minutes. Steps started before the switch had none of the mounts,
 which is the control. This verifies the mechanism; the speedup on real pipelines
 is what `ci_cache_pilot_report.py` still has to show after a few days.
 
+A same-host A/B on the real pipeline path (OBSERVED, three runs): a throwaway
+workflow pinned to the pilot agent built and tested the public `go-common` with the
+mounted caches bypassed, then with them on, in one pipeline.
+
+| Run | cache bypassed | cache on, first | cache on, re-run | peak memory (bypassed / on / re-run) |
+|---|---|---|---|---|
+| 1 | 44 s | 18 s (-59%) | 1 s | 1331 / 475 / 132 MiB |
+| 2 | 33 s | 3 s | 1 s | 1445 / 128 / 127 MiB |
+| 3 | 31 s | 1 s | 1 s | 1553 / 143 / 141 MiB |
+
+Only run 1 is a true "first run" (runs 2 and 3 re-ran the same commit, so their
+cache-on rows are warm re-runs). Cache bypassed is today's cost: 31 to 44 s and about
+1.3 to 1.6 GB. All steps built and tested successfully. This meets the "at least 25%
+faster" and "no memory regression" criteria for this workload; it is one small public
+module, so the percentages, not the seconds, are what carries over to other repos.
+
 The same session corrected the procedure, which is why this runbook has the
 hold-and-wait step: the first switch used a plain recreate and an idle check on the
 wrong container label, and killed pipelines that were running (a long Go job and
