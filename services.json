@@ -212,7 +212,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -238,7 +238,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "jpahbgqwgmshagf91j3h4ggn",
     "version": "1.7.8",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "analyze-headers",
