@@ -334,7 +334,6 @@
     {
       "match": {
         "ids": [
-          "admin-finder",
           "api-extractor",
           "apikey-scanner",
           "asn-lookup",
@@ -570,6 +569,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "admin-finder": {
+    "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
