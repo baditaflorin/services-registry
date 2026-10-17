@@ -518,7 +518,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8.",
-    "version": "3.4.14",
+    "version": "3.4.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -757,7 +757,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
     "trl_evidence": "20 -race test funcs, audit_log table with prefix-only redaction, /audit admin-gated, /selftest",
-    "version": "0.9.0",
+    "version": "0.10.0",
     "spiffe_workload": true
   },
   "asn-lookup": {
@@ -843,7 +843,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Without continuous feed mirroring, this is 80% external-data dependency. Real upgrade is a feed-sync daemon, not algorithm work.",
     "trl_evidence": "~30 curated DNSBL/RBL/URIBL zones across spam, phishing, malware,\ntor, and open-proxy categories. Per-list 127.0.0.x return-code\ndecode tables (operator-sourced). Concurrent worker-pool fan-out\n(10) using miekg/dns directly so we distinguish NXDOMAIN /\nSERVFAIL / \"got 127.0.0.x\". In-process miekg/dns test server with\n≥10 cases (clean, listed, multi-listed, domain-list, ipv6, private\nIP refusal, ?lists= filter). Reputation score is explainable\n(per-list weight + per-category bonus, capped at 100). See\ndocs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.4.7",
+    "version": "1.4.8",
     "coolify_app_uuid": "bhyw09mpgmoc4r37en1mq26o"
   },
   "brand-color-palette": {
@@ -927,7 +927,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Enumeration (proving bucket exists, listing contents) requires paid threat intel, leaked wordlists, or HackerOne project data.",
     "trl_evidence": "v1.4.0 adds permutation-based discovery (?name=acme): generates a\nbounded candidate set (≤200) from base + corp/inc + role suffixes\n(backup, prod, staging, assets, internal, …), probes every candidate\nacross AWS S3 (vhost + path), GCS (vhost + path), Azure Blob/File,\nand DigitalOcean Spaces (5 regions) in parallel via a 16-worker pool\nwith a 4s per-probe and 90s total budget. Per-provider response\nclassification distinguishes listable / exists / denied / not_exists\n(via NoSuchBucket vs AccessDenied / Azure AuthenticationFailed) and\nattaches sample object keys + counts when a ListBucketResult or\nEnumerationResults body is present. Optional WORDLISTS_URL extension\nhook for go-pentest-wordlists. Test coverage: permute_test.go (8\ncases), detect_test.go (12 cases), handler_test.go (httptest server\nwith canned XML returning listable/denied/NoSuchBucket/404). Backward\ncompatibility preserved for the legacy ?url= page-scan path. Pure Go,\nCGO-free, SSRF-safe via go-common/safehttp. ADR:\ndocs/adr/0001-trl-uplift-to-6.md.\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (ebdd85c) reviewed end-to-end. Confirmed two real, live-verified bugs, both fixed in PR https://github.com/baditaflorin/go_bucket_finder/pull/10 (open, not merged):\n(1) fetch-cache staleness: fetchClient/probeClient in fetch.go were bare safehttp.NewClient() calls with no .WithoutFetchCache(), so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0), every probe GET is eligible for DefaultFetchDelegate and can be served a stale cached response instead of the live origin state -- directly undermining this tool's core promise of reporting CURRENT bucket exposure. This is the documented 'live probe semantics where freshness < cache TTL matters' case go-common/fleetfetch's own doc comment says must not use the cache.\n(2) false-positive classification: verified live against real AWS S3, GCS, DO Spaces, Wasabi, Linode, Vultr, and Backblaze B2 endpoints with curl. Backblaze B2's S3-compatible API (<name>.s3.<region>.backblazeb2.com) returns an identical 403 'Unauthenticated requests are not allowed for this api' for every bucket name -- real, nonexistent, public, or private alike -- so the legacy ?url= page-scan path's bespoke status-code-only classifier (any 403 -> exists_not_listable, any 200 -> public_accessible, no body inspection) reported a false 'bucket exists' finding for every Backblaze reference and every generic 200 fallback page detected in a scanned page. Fixed by having that path reuse the already-tested, evidence-based classifyResponse from the ?name= permutation path, plus a new Backblaze-specific non-signal branch. Two regression tests added (fail on pre-fix code, pass after, confirmed via git stash bisection).\nAll other providers (AWS S3 vhost+path, GCS vhost+path, Azure Blob/File, DO Spaces x5 regions, Wasabi, Linode, Vultr) verified live to behave exactly as the existing classifier expects (404 NoSuchBucket for nonexistent, 200+ListBucketResult for public-listable). TRL left at 6: the permutation-probing architecture and provider matrix work as claimed once these two bugs are patched; PR #10 is the pending fix, not yet on main.",
-    "version": "1.4.8",
+    "version": "1.4.9",
     "coolify_app_uuid": "ioxy3gabe7xoido8gx6574zf"
   },
   "c-proxy": {
@@ -1180,7 +1180,7 @@
     "trl_evidence": "Standalone Go microservice with bounded same-site fetches through go-common fleetfetch and conservative route classification. Unit tests cover positive and negative signals, page limits, aliases, SSRF rejection, and cache accounting. Pre-production; no live fleet deployment yet.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "HTML-only inspection misses client-rendered routes and does not validate that a route is currently operational.",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "contact-route-detector", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -1215,7 +1215,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20.",
-    "version": "3.5.53",
+    "version": "3.5.54",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1352,7 +1352,7 @@
   "cors-scanner": {
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "cors-scanner", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
-    "version": "1.3.7",
+    "version": "1.3.8",
     "container_port": 8239,
     "description": "Microservice for Cors Scanner",
     "example_path": "/go_cors_scanner?target=example.com",
@@ -1519,7 +1519,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.4",
+    "version": "1.5.6",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1686,7 +1686,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "1.5.5",
+    "version": "1.5.6",
     "container_port": 8342,
     "description": "Microservice for Dir Listing",
     "example_path": "/go_dir_listing?url=https://example.com",
@@ -2319,7 +2319,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
-    "version": "0.1.5",
+    "version": "0.1.6",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2668,7 +2668,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "900-domain live audit. Fixed a real bug: the sitemap URL classifier only recognized English /product(s)/ path shapes, so any WooCommerce store with a translated permalink slug (Spanish, French, Italian, German, Turkish) was 100% invisible -- 12/12 evidenced live stores across 5 languages returned 0 products (e.g. one site went 0->1027). Fixed via locale-independent sitemap filename detection plus a translated-slug fallback list; sum of estimates +10.0% on a clean-paired 325-domain subset. See github.com/baditaflorin/go_domain_product_count PR #4.",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3067,7 +3067,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (fresh 260-domain sample, live before/after with 12-way concurrency): found and fixed 2 major bugs. (1) A 98% false-positive rate from blanket WAF/security-plugin 403 pages misread as leaked files -- one domain alone produced 19 fabricated findings from a single generic Sucuri block page; fixed with cross-path dedup (a repeating 403 body across 2+ distinct paths is dropped as a blanket rule), dropping 52->3 false 403s sample-wide with zero genuine findings lost. (2) proxy_egress: true was a complete no-op since it was enabled -- the metadata flag was set but the hand-rolled http.Client never actually wired a proxy, so HTTPS_PROXY was silently ignored and every probe went out direct from the dockerhost IP since May 2026; fixed by switching to safehttp.NewClient with WithoutFetchCache. Also added 3 missing .env path variants. trl/trl_ceiling held at 6/6, now honestly earned -- pre-fix the uplift's headline FP claim didn't hold against live traffic. See PR #8 (merged).",
-    "version": "1.4.10",
+    "version": "1.4.11",
     "coolify_app_uuid": "vt65hjm8wqhknrp5vyrn5g1a"
   },
   "fake-text": {
@@ -3119,7 +3119,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs auth state for deeper testing",
     "trl_evidence": "First-pass audit (60-domain sample, live before/after): found and fixed 2 real bugs. (1) Fetch-cache masking -- for a re-scanning LFI/RFI prober, a domain probed twice within the cache TTL got stale cached bytes back, silently invalidating re-scan results; fixed. (2) A false-positive error_disclosure detector matching bare include(/require( anywhere in the response body -- also the literal CommonJS/webpack/RequireJS module-loader call inlined in countless ordinary sites' JS bundles; reproduced a fixture with zero PHP flagging 'medium severity PHP error disclosure' on all 16 payloads; fixed by requiring genuine PHP warning-dump framing (Warning:/Fatal error:) immediately before the call. Real ceiling correction: trl_ceiling was 5 (equal to trl, i.e. no headroom at all), but the service's own trl_evidence names only non-structural gaps (auth follow-up, SSRF chain pivot, rate adaptation) as the reason for the cap, and comparable single-shot probers in the fleet sit at TRL 6-7 -- corrected to trl_ceiling=8, trl bumped 5->6. See PR #4 (merged).",
-    "version": "1.3.7",
+    "version": "1.3.8",
     "coolify_app_uuid": "dhktp4bwh0g974ygj02nf1td"
   },
   "firmographic-profile": {
@@ -3535,7 +3535,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.24",
+    "version": "0.4.26",
     "spiffe_workload": true
   },
   "fleet-har-builder": {
@@ -4338,7 +4338,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged).",
-    "version": "3.6.6",
+    "version": "3.6.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4521,7 +4521,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated GraphQL schemas need user-supplied tokens and role-aware probing.",
     "trl_evidence": "TRL 6 (real). Beyond endpoint discovery + introspection summary,\nv3 adds three orthogonal abuse probes used by every commercial GraphQL\nscanner (Inspectiv, GraphCrawler, InQL): alias-batching DoS multiplier,\nfield-suggestion info-leak, and text/plain CSRF bypass. Findings are\nemitted with stable severity-tagged classes (introspection-enabled,\nalias-batching-unbounded, csrf-possible, field-suggestions-enabled,\nintrospection-partial) so the catalog UI and sibling services\n(api-extractor, swagger-finder) join on `class` strings without any\nper-service mapping table. 21 Go test functions covering ≥6 server-\nbehaviour fixtures (canned introspection, explicit-disabled,\nfield-suggestion typo, alias-batched echo, CSRF accept, CSRF block).\nSee docs/adr/0001-trl-uplift-to-6.md.\n\n2026-08-08: fixed fleet-wide safehttp bug class in the service itself (not the TRL claim above, which stands independently). newClient() in handler.go called safehttp.NewClient() bare, with no fetch-cache/HTTP2 opt-outs, so a process-wide default fetch delegate (when FLEET_FETCH_CACHE_URL is set) could silently serve this scanner stale cached responses instead of the live origin during discover/introspect/abuse probing -- masking real fetch failures as stale \"successes\" (or the reverse), and risking ALPN mishandling against HTTP/2-only GraphQL gateways. Fixed by passing safehttp.WithoutFetchCache() and safehttp.WithForceHTTP2() to the constructor, bumping Version 3.0.3 -> 3.0.4. Added regression test safehttp_client_test.go:TestNewClient_BypassesFetchCacheAndHonorsHTTP2 (installs a fake stale delegate, asserts the client observes the live origin directly; confirmed it fails against the pre-fix bare constructor and passes post-fix). Live-verified scan() against 3 real public GraphQL endpoints post-fix (countries.trevorblades.com, spacex-production.up.railway.app, rickandmortyapi.com/graphql), all returned correct live introspection data. PR (open, unmerged): https://github.com/baditaflorin/go_graphql_introspection/pull/7",
-    "version": "3.0.7",
+    "version": "3.0.8",
     "coolify_app_uuid": "bnr51pclmti2vobu122vemoq"
   },
   "group-theory-visualizer": {
@@ -4599,7 +4599,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": ">",
-    "version": "2.2.6",
+    "version": "2.2.7",
     "coolify_app_uuid": "likwplvqrfh94dukv1bm5qt7"
   },
   "hsts-checker": {
@@ -4664,7 +4664,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 250-domain sample, live before/after): found and fixed a major false-positive bug -- classify() computed a plain-GET baseline but only ever used it for one classification rule (server-fingerprint), ignoring it everywhere else. Result: 86% (430/498) of verb-tampering/http-method-unrestricted-write findings across the sample were CDN/WAF edge servers responding byte-identically to every verb including an impossible one like FOO -- ordinary verb-agnostic edge delivery, not a confirmed bypass, reported as high/medium severity. Fixed with a sameAsGetBaseline + catchAllSuspected corroboration gate (requires an impossible verb to also match GET before downgrading, so one coincidental match can't mask a real bug): verb-tampering high 54->8, unrestricted-write high 174->43. Also hardened the scanner's own GET baseline against fetch-cache masking (the write-verb probes themselves were never at risk per go-common's GET-only cache eligibility gate). trl/trl_ceiling held at 7/7 -- reaching 8 would need corroboration beyond a single self-diffing scan (a second fetch or a shared WAF/CDN classifier), not more CPU-only logic. See PR #4 (merged).",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "coolify_app_uuid": "o3t4k0qvwf0mskinbdzor4nh"
   },
   "http-protocol": {
@@ -4684,7 +4684,7 @@
     "spiffe_workload": true
   },
   "iban-bic-validator": {
-    "version": "0.1.5",
+    "version": "0.1.6",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18291,
     "host_port": 18291,
@@ -4708,7 +4708,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "True IDOR proof for unauthenticated scans still requires an external verifier/manual confirmation; TRL 8 (field-proven) needs sustained production incident history without the fetch-cache staleness class of bug.",
     "trl_evidence": "TRL 7 (2026-08-20 fleet TRL audit; reassessed up from stale registry TRL 6 dated 2026-05-16, which predated this repo self-reporting v3.1/TRL 7 in its own service.yaml on the same date). Fresh clone of origin/main (github.com/baditaflorin/go_idor_finder @ d9fe586, go-common@v0.88.0) read end to end.\n\nDetection logic confirmed sound by direct code review plus the full 28-test suite (all passing): DetectIDs (detect_id.go) classifies path/query fragments into integer/UUID/ObjectId/base64 candidates, gating plain integers on an ID-shaped param name so a page-number query param is not mistaken for an IDOR target; Variations (variants.go) applies shape-appropriate mutations (sequential +/-1, +/-10, +rand; UUID segment rotation plus nil-UUID; ObjectId counter-byte flip plus zero-OID; base64 last-byte flip); ClassifyProbe (classify.go) diffs each mutated response against the authenticated baseline by status/hash/length-similarity/user-data-field sniffing, with an auth-guard-copy check so a 200 login-required page is not misread as a hit. runAuthStrip/runAuthSwap (handler_run.go) and the A/B pair-probe (pair_probe.go, session_id + go-pentest-session-state) provide the auth-bypass and cross-session canonical IDOR proof paths respectively. ALL outbound probe traffic is GET-only with no request body (fetch() in probe.go hardcodes http.MethodGet) - confirmed the tool cannot perform destructive/write operations against a real target, so its methodology is safe to run against live third-party endpoints.\n\nFound and fixed one real, live correctness bug: probe.go's newSafeClient() called bare safehttp.NewClient(), which (per go-common@v0.88.0 safehttp/safehttp_helpers.go: useDefaultFetchCache := !noFetchCache & !withoutProxy & !forceHTTP2) opts every outbound GET into the process-wide DefaultFetchDelegate whenever FLEET_FETCH_CACHE_URL is set fleet-wide. Every request this scanner sends is an eligible body-less GET. The fetch-cache correctly keys on forwarded headers (auth-strip vs. authenticated baseline do not collide), but a cache hit can still be up to ~60s stale by default - enough to make a just-patched IDOR read as still vulnerable, or a still-vulnerable endpoint read as safe off a replayed auth-guard response, directly undermining this tool's core live baseline-vs-variant diff methodology. This is the same fleet-wide bug class documented in go-common's WithForceHTTP2 doc comment (go_page_load_metrics, 2026-07). Fixed with .WithoutFetchCache() (WithForceHTTP2 not needed - this service does not depend on ALPN signals); added fetchcache_bypass_test.go, a regression test confirmed to fail on the bare client and pass with the fix; bumped service version 3.1.4 -> 3.1.5. Fix shipped as PR github.com/baditaflorin/go_idor_finder/pull/11 (open, not merged per audit policy).\n\nLive external verification against a real target was not practical from this audit environment (idor-finder.0crawl.com not reachable from the sandbox network, and it is API-key gated) - confidence instead rests on the full local test suite plus direct reading of both this repo and the shared safehttp/fleetfetch libraries it depends on. TRL 7 (not lowered) is reaffirmed: the bug was in outbound freshness, not in the vulnerability-detection methodology itself, and is now fixed pending PR merge.",
-    "version": "3.1.5",
+    "version": "3.1.6",
     "coolify_app_uuid": "lqeajjm3lticxppsi3qurh4r"
   },
   "iframe-analyzer": {
@@ -4922,7 +4922,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (220-domain sample, live before/after; 0 JSONP endpoints found either run -- JSONP is largely extinct on the modern web, consistent with expectations, not a bug): found a real, previously-flagged-but-unfixed security gap -- a correct dial-time SSRF guard (safeDialContext/safeTransport) existed in the codebase but was dead code, never wired into the actual httpClient every fetch goes through; a classic check-then-connect DNS-rebind gap already lampshaded (not fixed) in a test-file comment. Live-proved: a loopback dial returned 200 before the fix. Fixed by wiring the guard in. Also patched an open CVE (golang.org/x/net HTML-parser DoS) directly relevant since discover.go feeds attacker-controlled target HTML into that exact tokenizer. trl held at 6; trl_ceiling bumped 6->7 -- the gap wasn't structural, it was a wiring bug in code that already existed to earn the higher band. See PR #5 (merged).",
-    "version": "1.5.6",
+    "version": "1.5.7",
     "coolify_app_uuid": "mlqalkr0pn6seq6mqf5xwrc0"
   },
   "jwt-debugger": {
@@ -5008,7 +5008,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18250,
     "placement": "replicable",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "trl": 7,
     "trl_assessed_at": "2026-07-14",
     "trl_assessor": "codex-trl-audit-2026-07-14",
@@ -5064,7 +5064,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.34",
+    "version": "1.33.35",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -5402,7 +5402,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Real RFC-style HTTP header parsing (Content-Type splitting, charset\nunquoting, X-Content-Type-Options exact-match), WHATWG MIME-sniffing\nvia stdlib net/http.DetectContentType, multi-axis classification\nrubric (declared vs sniffed vs URL-extension vs nosniff posture)\nemitting stable greppable codes (mime.mismatch.*, header.xcto.*,\nheader.charset.*, mime.svg.*, mime.pdf.*, mime.fallback.*).\n≥15 unit tests + ≥10 httptest integration cases covering SVG-with-\nscript, JSON-as-HTML, image-as-HTML, HTML-as-PNG, XSSI prefix,\nXCTO-missing-on-JS/HTML, charset-missing, octet-stream fallback for\nknown extensions, scope-guard, SSRF loopback, legacy ?target= alias,\nbody-bytes-hex cap, response-shape contract. Per-request 5s + total\n15s timeouts; 512 KiB body cap; SSRF guard via go-common/safehttp;\noptional ?probe_uploads=1 for upload-extension confusion fan-out.",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "coolify_app_uuid": "t4ikuexuurt9uk3m56laoruv"
   },
   "mobile-friendly": {
@@ -5596,7 +5596,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15.",
-    "version": "2.7.6",
+    "version": "2.7.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -5625,7 +5625,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Canonical 26-payload bypass set with class taxonomy\n(absolute / protocol-relative / userinfo / scheme-abuse / encoding /\nsuffix / unicode / CRLF). 17-name redirect-param matrix. eTLD+1\nescape detection via golang.org/x/net/publicsuffix (Mozilla PSL).\nMulti-hop chain tracing up to 5 hops with javascript:/data: refusal\nand unfollowed-Location-on-cap evaluation. Per-request 4s, total 30s,\nworker pool 4. handler_test.go + chain_test.go cover vulnerable\necho server, safe server, same-host ignore, dangerous-scheme labeling,\nhop cap, eTLD+1 comparison (incl. multi-label TLDs), back-compat\n?url= alias, SSRF guard. See docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "2.3.3",
+    "version": "2.3.4",
     "coolify_app_uuid": "aj6l0wno9j8d35m7qwbu17ux"
   },
   "open-school-lab": {
@@ -7047,7 +7047,7 @@
     "trl_evidence": "research tool, workflow pipeline"
   },
   "revenue-model": {
-    "version": "2.6.25",
+    "version": "2.6.27",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
@@ -7188,7 +7188,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (125-domain sample, 1220 live port probes): confirmed timeout-vs-closed classification is already correct (timing analysis shows clean separation between filtered/timeout and open/closed) and independently re-verified (out-of-band Python socket connects) a structural connect-scan false-positive class (a host that TCP-accepts on every port). Found and fixed a real bug -- proto=both ran TCP then UDP scans sequentially against one shared context deadline, so a slow TCP pass could silently starve UDP of its entire time budget (0 ports ever dialed); fixed by running both concurrently. trl bumped 6->7; trl_ceiling=7 added -- bare TCP-connect scanning structurally cannot distinguish a real service from a catch-all edge, UDP's open|filtered ambiguity is protocol-inherent, and there's no service-owned persistent rate limiting. See PR #4 (merged).",
-    "version": "1.3.6",
+    "version": "1.3.7",
     "coolify_app_uuid": "r11ztr9exd5b0kqt5ngizd2l"
   },
   "scan-port-banner": {
@@ -7203,7 +7203,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Per-port probe table covers SSH/FTP/SMTP(EHLO)/POP3/IMAP/HTTP/HTTPS-via-TLS/Redis/memcached/MySQL/Postgres/Mongo/Elasticsearch/Telnet (composes with telnet-banner for IAC handling). Structured fingerprints (product/version/os_hint) for OpenSSH, Dropbear, nginx, Apache, lighttpd, IIS, Caddy, Postfix, Exim, Sendmail, vsftpd, ProFTPD, Pure-FTPd, Redis, memcached, MariaDB, MySQL, Dovecot, Cyrus. Pure-Go (CGO-free), no shell-out to nmap/curl. Per-port 5s + total 12s timeouts. ALLOW_PRIVATE guard against RFC1918. ≥30 unit tests with canned-banner net.Listen fixtures (HTTP/SSH/SMTP/Redis/FTP/IMAP/MySQL).",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "coolify_app_uuid": "r1f8esfzv4scgf000pdegdg4"
   },
   "scan-port-ssh": {
@@ -7371,7 +7371,7 @@
   },
   "secrets-scanner": {
     "placement": "replicable",
-    "version": "1.3.5",
+    "version": "1.3.6",
     "container_port": 8229,
     "description": "Microservice for Secrets Scanner",
     "example_path": "/go_secrets_scanner?url=https://example.com",
@@ -7542,7 +7542,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs authenticated session state for full testing",
     "trl_evidence": "RFC6265bis prefix validation (__Secure-/__Host-), curated session-cookie list (~25 platforms), Shannon-entropy weak-token detector, two-pass fixation probe behind ?probe_fixation=1, ≥18 unit + httptest cases (entropy_test.go + validate_test.go + handler_test.go) all green; safehttp client with no auto-jar so cookies aren't replayed across analyses.",
-    "version": "1.2.5",
+    "version": "1.2.6",
     "coolify_app_uuid": "ndfiu265nwa69g8j749nn9ya"
   },
   "shipping-regions": {
@@ -7562,7 +7562,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13.",
-    "version": "1.7.21",
+    "version": "1.7.22",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7754,7 +7754,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 8 would need battle-tested cross-checks / paid threat-intel feeds / stateful re-verification; the detector is CPU-only DNS+HTTP with a curated gazetteer and reaches its real ceiling at principled, evidence-trailed, false-positive-hardened detection.",
     "trl_evidence": "1.6.0 adds a NotClaimable flag for can-i-take-over-xyz 'Edge case / Not vulnerable' platforms (Fastly); both the claimability and legacy severity ladders now cap such matches at dangling_review/possible. On 400 live re-probes of stored findings, Fastly false-'vulnerable' verdicts dropped 17 to 0 (22% of all 'vulnerable' were Ghost(Pro)/RebelMouse-over-Fastly HTTP-500 'unknown domain' pages on shared service maps an attacker cannot register), while genuine GitHub Pages/Azure orphans stayed vulnerable. Also adds IDNA2008 Unicode->punycode normalization (golang.org/x/net/idna, CGO-free) so native-script IDNs (bucher.de, rossiya.rf, example.jp) are scanned instead of rejected by the RFC-1035 ASCII validator (451 stored IDN domains affected). +18 table-driven tests; build/test/vet/gofmt green.",
-    "version": "1.7.1",
+    "version": "1.7.2",
     "coolify_app_uuid": "ydqmdzvdgkaw3mxb21y0lvg5"
   },
   "substack-scraper": {
@@ -7846,7 +7846,7 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
     "trl_evidence": "Probes 28 well-known OpenAPI/Swagger/GraphQL paths concurrently (worker pool of 8, 5s per-request, 60s total cap) via go-common/safehttp (SSRF-safe). Parses responses with kin-openapi v0.135.0 — OpenAPI 3.x natively, Swagger 2.0 upgraded via openapi2conv. Extracts {method,path,summary,parameters,security_schemes} inventory (capped at 2k endpoints). 1h sha256-keyed in-memory cache. Tested with httptest fixtures covering openapi3, swagger2, graphql, html, junk, and 404 cases.",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "coolify_app_uuid": "p14igv1fadqxha4rmaw9t4l5"
   },
   "table-extractor": {
@@ -7912,7 +7912,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 40-domain sample): found and fixed 2 real false-positive bugs -- schema.org Review-block author names (customer reviewers) counted as team members, and unfiltered schema.org Person names (CMS/theme boilerplate accounts) counted as employees. Also definitively resolved the cross-service field-contract question for go_company_size's integration: estimate.value/range_low/range_high/confidence/method, wrapped in the standard envelope -- that integration bug is now independently fixed on the go_company_size side (PR #20, merged same day). See PR #9 (merged).",
-    "version": "3.0.15",
+    "version": "3.0.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7978,7 +7978,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "30-row fingerprint table (Mikrotik/Cisco/Juniper/OpenBSD/Solaris-CVE-2007-0882/IoT cameras/BusyBox-Mirai/etc.), IAC-WONT negotiation, in-process TCP listener for /selftest, hex-safe banner storage",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "coolify_app_uuid": "mcv3og31c6mmjmhqwcsbn4m7"
   },
   "testimonial-extractor": {
@@ -8073,7 +8073,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
     "trl_evidence": "PSL adoption via publicsuffix.EffectiveTLDPlusOne (fixes multi-label TLD bug); 32-row offline corpus at 100% hit-rate; parked-SSL-CN heuristic against 7 provider markers; /selftest; psl_version in /version. TRL-uplift audit (2026-08-08) found probeClient (resolve.go) built via bare safehttp.NewClient() -- no WithoutFetchCache/WithForceHTTP2 -- so whenever the process-wide fleet fetch-cache delegate is installed, every DNS-active candidate's HTTP probe (status, Server header, redirect target, body simhash) could silently be served from cache instead of the live origin. This is a correctness bug specific to this service's purpose: body-hash similar-content classification (grouping variations that serve the same parking page) depends on the probe reflecting what the candidate serves right now, so a stale hit would make repeat scans of a live-but-changed domain report identical fingerprints forever and mask newly-live phishing pages as still-dormant. Fixed by adding safehttp.WithoutFetchCache() and safehttp.WithForceHTTP2() to the probeClient constructor, preserving the existing manual Timeout/CheckRedirect. New regression test safehttp_client_test.go:TestProbeClient_BypassesFetchCache installs a fake stale fetch delegate and proves the fix: fails pre-fix (delegate consulted, stale body returned), passes post-fix (live httptest origin reached, delegate never consulted); a second test confirms the pre-existing Timeout/one-hop CheckRedirect policy survived unchanged. Bumped Version 1.4.1 -> 1.4.2. Live-verified end-to-end post-fix against real domains via the built binary: github.com (117 variations generated, 71 active), paypal.com (110 generated, 80 active), apple.com (92 generated, 55 active) -- DNS fan-out, HTTP probing, body-hash, and classification all functioning correctly. See github.com/baditaflorin/go_typosquat_finder PR #5 (open, not yet merged as of 2026-08-08).",
-    "version": "1.4.4",
+    "version": "1.4.5",
     "coolify_app_uuid": "v10xrrzd40holg48pqye556h"
   },
   "ugc-detector": {
@@ -8327,7 +8327,7 @@
     "proxy_read_timeout": "120s",
     "trl": 8,
     "trl_assessed_at": "2026-07-30",
-    "version": "2.5.11",
+    "version": "2.5.12",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-fetch homepage inference cannot reach production-grade (TRL 8+) audience certainty without persistence/cross-checks; also gated by the shared fleetfetch tier (RenderJS 502 fleet-wide).",
@@ -8526,7 +8526,7 @@
   },
   "wellknown-scanner": {
     "placement": "replicable",
-    "version": "2.2.3",
+    "version": "2.2.4",
     "container_port": 8352,
     "description": "Microservice for Wellknown Scanner",
     "example_path": "/go_wellknown_scanner?url=https://example.com",
@@ -8678,7 +8678,7 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex",
     "trl_evidence": "Independent Go service tests pass; immutable canary image built and standalone /health returned 200. DomainScope aggregate canary remains partial, so end-to-end evidence collection is not yet release-validated.",
-    "version": "0.1.9",
+    "version": "0.1.11",
     "category": "domains",
     "tags": [
       "domains",
@@ -8794,6 +8794,6 @@
     "trl_assessed_at": "2026-10-16",
     "trl_assessor": "claude-opus-5-5",
     "trl_evidence": "v0.1.0: unit tests for the hash-chained store (tamper detected on reload), role enforcement, ingest masking, the rule engine against the 2026-10-14 incident commands, and two-node replication over HTTP; first production node pending.",
-    "version": "0.5.0"
+    "version": "0.5.1"
   }
 }
