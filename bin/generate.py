@@ -17,6 +17,7 @@ Run:
     python3 bin/generate.py             # writes services.json + summary
     python3 bin/generate.py --dry-run   # prints diff without writing
     python3 bin/generate.py --only <id> # updates one entry and regenerates slices
+    python3 bin/generate.py --only a,b  # the same for several entries, from one build
 """
 from __future__ import annotations
 
@@ -1381,6 +1382,18 @@ def merge_selected_entry(
     return result
 
 
+def update_selected_entries(blob: str, generated: list[dict], service_ids: list[str]) -> tuple[list[dict], str]:
+    """Apply `--only` for several ids from one build: each requested row is
+    replaced by its generated row (merge_selected_entry), every other byte of
+    services.json is preserved (replace_selected_entry_json)."""
+    entries = json.loads(blob)
+    for service_id in service_ids:
+        entries = merge_selected_entry(entries, generated, service_id)
+        generated_entry = next(entry for entry in entries if entry.get("id") == service_id)
+        blob = replace_selected_entry_json(blob, generated_entry, service_id)
+    return json.loads(blob), blob
+
+
 def replace_selected_entry_json(blob: str, generated_entry: dict, service_id: str) -> str:
     """Replace one JSON array object while preserving every other source byte."""
     if generated_entry.get("id") != service_id:
@@ -1439,15 +1452,18 @@ def main() -> int:
     ap.add_argument("--slices-only", action="store_true",
                     help="rebuild only the sliced projection files from the "
                          "existing services.json (skips the GitHub fetch)")
-    ap.add_argument("--only", metavar="SERVICE_ID",
-                    help="update one existing registry entry from current sources, "
-                         "preserving all other entries")
+    ap.add_argument("--only", metavar="SERVICE_ID[,SERVICE_ID...]",
+                    help="update existing registry entries (comma-separated ids) from "
+                         "current sources, preserving all other entries; one build")
     args = ap.parse_args()
 
+    only_ids: list[str] = []
     if args.only is not None:
-        args.only = args.only.strip()
-        if not args.only:
+        only_ids = [part.strip() for part in args.only.split(",") if part.strip()]
+        if not only_ids:
             ap.error("--only requires a service ID")
+        if len(set(only_ids)) != len(only_ids):
+            ap.error("--only lists a service ID twice")
     if args.slices_only and args.only is not None:
         ap.error("--only cannot be combined with --slices-only")
 
@@ -1469,10 +1485,7 @@ def main() -> int:
             sys.exit(f"ERROR: {SERVICES_JSON} does not exist — cannot update one entry")
         existing_blob = SERVICES_JSON.read_text()
         try:
-            existing_entries = json.loads(existing_blob)
-            entries = merge_selected_entry(existing_entries, generated, args.only)
-            generated_entry = next(entry for entry in entries if entry.get("id") == args.only)
-            new_blob = replace_selected_entry_json(existing_blob, generated_entry, args.only)
+            entries, new_blob = update_selected_entries(existing_blob, generated, only_ids)
         except (ValueError, StopIteration) as exc:
             sys.exit(f"ERROR: {exc}")
     else:

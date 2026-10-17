@@ -81,6 +81,19 @@ class TestSelectedEntryMerge(unittest.TestCase):
         self.assertEqual(json.loads(updated)[1]["version"], "1.0.1")
         self.assertEqual(updated.splitlines()[0], blob.splitlines()[0])
 
+    def test_several_ids_from_one_build_preserve_every_other_byte(self):
+        blob = '[\n  {"id":"a","version":"1.0.0"},\n  {"id":"keep","env":{"A":"B"}},\n  {"id":"b","version":"2.0.0"}\n]\n'
+        generated = [{"id": "a", "version": "1.0.1"}, {"id": "keep", "version": "9"}, {"id": "b", "version": "2.0.1"}]
+        entries, updated = generate.update_selected_entries(blob, generated, ["a", "b"])
+        self.assertEqual([e.get("version") for e in entries], ["1.0.1", None, "2.0.1"])
+        self.assertIn('\n  {"id":"keep","env":{"A":"B"}},\n', updated)
+        self.assertEqual(json.loads(updated), entries)
+
+    def test_several_ids_fail_on_an_unknown_one(self):
+        blob = '[{"id":"a","version":"1.0.0"}]'
+        with self.assertRaisesRegex(ValueError, "existing entry"):
+            generate.update_selected_entries(blob, [{"id": "a"}, {"id": "missing"}], ["a", "missing"])
+
     def test_requires_one_existing_and_generated_entry(self):
         with self.assertRaisesRegex(ValueError, "existing entry"):
             generate.merge_selected_entry([], [{"id": "target"}], "target")
@@ -844,6 +857,55 @@ class TestFleetGraphExpansionBatch(unittest.TestCase):
                     "https://fleet-graph.0exec.com",
                 )
 
+
+
+class TestRegistryFilesAgree(unittest.TestCase):
+    """services.json is generated from overrides.json. A value only
+    overrides.json can supply must match it, or the next regeneration
+    silently changes it: on 2026-10-16 four slugs were defined twice (the
+    generator kept the second block and would have dropped their ports,
+    placement and version) and 26 versions had been edited in services.json
+    only (a regeneration would have lowered or dropped them)."""
+
+    @classmethod
+    def setUpClass(cls):
+        root = Path(generate.ROOT)
+        cls.overrides_text = (root / "overrides.json").read_text()
+        cls.services = json.loads((root / "services.json").read_text())
+
+    def test_overrides_json_has_no_duplicate_keys(self):
+        duplicates = []
+
+        def hook(pairs):
+            seen = set()
+            for key, _ in pairs:
+                if key in seen:
+                    duplicates.append(key)
+                seen.add(key)
+            return dict(pairs)
+
+        json.loads(self.overrides_text, object_pairs_hook=hook)
+        self.assertEqual(duplicates, [], "json.loads keeps only the last copy of a duplicated key: merge them")
+
+    def test_services_json_versions_match_overrides(self):
+        by_slug, rules, expansions, externals = generate.split_overrides(json.loads(self.overrides_text))
+        children = {child["id"]: child for spec in expansions for child in spec.get("children") or []}
+        external_ids = {spec["id"] for spec in externals}
+        mismatches = []
+        for entry in self.services:
+            service_id = entry.get("id")
+            if service_id in external_ids:
+                want = None  # make_external_entry never copies a version
+            else:
+                patch, _ = generate.resolved_overrides_for(entry, by_slug, rules)
+                want = patch.get("version")
+                if want is None and service_id in children:
+                    want = children[service_id].get("version")
+                    if want is None:
+                        continue  # an $expand child without its own pin inherits the parent's
+            if entry.get("version") != want:
+                mismatches.append(f"{service_id}: services.json {entry.get('version')!r}, overrides.json {want!r}")
+        self.assertEqual(mismatches, [], "set the version in overrides.json and run bin/generate.py --only <ids>")
 
 if __name__ == "__main__":
     unittest.main()
