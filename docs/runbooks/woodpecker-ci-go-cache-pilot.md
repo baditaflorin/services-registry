@@ -135,6 +135,16 @@ OBSERVED on the pilot host, 2026-10-17 (one run each, host busy):
 A warm cache cut a run by 61% to 82% and its peak memory by 65% to 82%. These are
 single runs on a busy host; repeat before quoting them.
 
+Second switch, with `apply-agent.sh`, OBSERVED the same day: it waited for a real
+idle window (the whole CI plane happened to be quiet), recreated only the agent, and
+cancelled no pipeline. Every one of the first 12 step containers started afterwards
+(clone plugin, `golang`, `node`, `postgres` and `pgvector` service containers)
+carried all three cache mounts, the caches reached about 2 GB in the first ten
+minutes, host memory stayed flat, and no pipeline failed or was cancelled in the
+following ten minutes. Steps started before the switch had none of the mounts,
+which is the control. This verifies the mechanism; the speedup on real pipelines
+is what `ci_cache_pilot_report.py` still has to show after a few days.
+
 The same session corrected the procedure, which is why this runbook has the
 hold-and-wait step: the first switch used a plain recreate and an idle check on the
 wrong container label, and killed pipelines that were running (a long Go job and
