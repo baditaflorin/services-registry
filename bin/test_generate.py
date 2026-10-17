@@ -30,6 +30,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build  # type: ignore[import]
 import generate  # type: ignore[import]
+from check_service_version_regressions import semver_precedence  # type: ignore[import]
 
 
 PARENT_FIXTURE = {
@@ -820,17 +821,22 @@ class TestComputeNetworkExposure(unittest.TestCase):
 class TestFleetGraphExpansionBatch(unittest.TestCase):
     def test_expansion_five_writers_are_explicitly_enabled(self):
         payload = json.loads((Path(generate.ROOT) / "overrides.json").read_text())
-        expected = {
+        # The version each writer was enabled for Fleet Graph at. The pin may
+        # move past it as the service is released (it tracks the deployed
+        # version); it must not fall below it.
+        enabled_at = {
             "scc": "2.5.4",
             "seasonal-detector": "2.7.2",
             "team-member-extractor": "0.2.3",
             "tos-finder": "1.9.2",
             "substack-scraper": "1.1.6",
         }
-        for service_id, version in expected.items():
+        for service_id, version in enabled_at.items():
             with self.subTest(service_id=service_id):
                 env = payload[service_id]["env"]
-                self.assertEqual(payload[service_id]["version"], version)
+                pinned = semver_precedence(payload[service_id]["version"])
+                self.assertIsNotNone(pinned)
+                self.assertGreaterEqual(pinned, semver_precedence(version))
                 self.assertEqual(env.get("GRAPH_ENABLED"), "true")
                 self.assertEqual(env.get("GRAPH_SERVICE_ID"), service_id)
                 self.assertEqual(
