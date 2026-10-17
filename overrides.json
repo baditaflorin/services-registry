@@ -1462,6 +1462,7 @@
     "spiffe_workload": true
   },
   "crypto-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8341,
     "description": "Microservice for Crypto Finder",
     "example_path": "/go_crypto_finder?url=https://example.com",
@@ -1637,6 +1638,7 @@
     "spiffe_workload": true
   },
   "debug-detector": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8227,
     "description": "Microservice for Debug Detector",
@@ -3001,6 +3003,7 @@
     "spiffe_workload": true
   },
   "email-harvester": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8137,
     "description": "Microservice for Email Harvester",
@@ -3056,6 +3059,7 @@
     "spiffe_workload": true
   },
   "env-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8344,
     "description": "Microservice for Env Finder",
@@ -3108,6 +3112,7 @@
     "trl_evidence": "First-pass audit of this browser field-recording-loop instrument (WebAudio, OPFS/Whisper/Pyodide workers): privacy claim verified genuine -- audio only ever moves via postMessage (transferred ArrayBuffer) into a local Worker, no exfiltration anywhere. Found and fixed 2 real bugs: (1) a reentrancy race in engine.stop() -- the running guard was only cleared AFTER await audioContext.close(), so a fast double-click on Stop could call AudioContext.close() twice on the same context, throwing an uncaught InvalidStateError and leaving the UI stuck mid-teardown; fixed by flipping the guard synchronously before the first await. (2) a Whisper/Pyodide worker leak -- every click of 'Transcribe'/'Analyse' created a brand-new client/Worker without disposing the previous one, growing memory by hundreds of MB per click, directly contradicting the docs' own 'second run is instant' claim; fixed by caching one client per session and reusing it. trl bumped 3->4; trl_ceiling=7 added -- client-only art piece with no server component and a subjective 'does it sound right' success criterion, 8-9 doesn't apply. See PR #6 (merged)."
   },
   "file-inclusion": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8221,
     "description": "Microservice for File Inclusion",
@@ -4463,6 +4468,7 @@
     "spiffe_workload": true
   },
   "go-session-fixation": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "0.5.4",
     "access_tier": "vetted-pentest",
@@ -4697,6 +4703,7 @@
     "spiffe_workload": true
   },
   "idor-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8242,
     "description": "Microservice for Idor Finder",
@@ -4712,6 +4719,7 @@
     "coolify_app_uuid": "lqeajjm3lticxppsi3qurh4r"
   },
   "iframe-analyzer": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.3.9",
     "container_port": 8243,
     "description": "Microservice for Iframe Analyzer",
@@ -4734,6 +4742,7 @@
     "trl_evidence": "First-pass audit of this live-mic delay/pitch-shift/spectral-effects browser toy (20 ADRs, real OfflineAudioContext DSP regression tests, honest postmortems documenting bugs caught by testing): privacy confirmed clean via full source grep -- only network hits are an optional Pyodide CDN load (no audio in the request) and same-origin service-worker asset caching; the offline-analysis feature runs librosa entirely inside a Worker via Pyodide, audio never crosses a network boundary. Found and fixed a real hearing-safety gap: the live-mic effects chain (delay + pitch shift + output gain clamped to 2x) had no dynamics processing anywhere in the audio graph -- outGain connected straight to the AnalyserNode/destination -- combined with echoCancellation/noiseSuppression/autoGainControl intentionally disabled on mic capture, and this being a tool people plausibly run through speakers (not headphones) given its whole premise, a hot mic input or acoustic feedback plus a maxed output slider had no ceiling before hitting the user's ears. Fixed by adding a DynamicsCompressorNode (threshold -6dB, ratio 20:1, 3ms attack, 250ms release) as the final stage before both the analyser and destination; WAV export now taps post-limiter so recordings match what's actually heard. Documented in a new ADR. Delay/pitch/output-gain clamping and mic-permission-denied handling all verified correct; mid-session mic disconnect degrades to silence per Web Audio semantics rather than crashing (minor polish gap, not a bug). trl bumped 2->5 (significantly understated by the prior value -- real DSP-correctness regression tests, not just mocked units, plus gated local CI); trl_ceiling=7 added -- structural limit, not temporary: single-developer fully client-side creative tool with no backend/SLA, and no cross-browser testing exists despite README claims. See PR #9 (merged)."
   },
   "information-leakage": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8083,
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "example_path": "/?url=https://example.com",
@@ -4881,6 +4890,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "jsbundle-routes": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.3.5",
     "access_tier": "vetted-pentest",
     "container_port": 8312,
@@ -4896,6 +4906,7 @@
     "coolify_app_uuid": "hk5ym0t2p339163kwj6chjwf"
   },
   "jsbundle-secrets": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.4.6",
     "access_tier": "vetted-pentest",
     "container_port": 8311,
@@ -4911,6 +4922,7 @@
     "coolify_app_uuid": "s13roc0xole7p683zfxn2u8z"
   },
   "jsonp-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8158,
     "description": "Microservice for Jsonp Finder",
@@ -4942,6 +4954,7 @@
     "spiffe_workload": true
   },
   "jwt-pentest": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "0.2.5",
     "access_tier": "vetted-pentest",
@@ -5391,6 +5404,7 @@
     "spiffe_workload": true
   },
   "mime-trap": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8145,
     "description": "Microservice for Mime Trap",
@@ -5614,6 +5628,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this browser-based 2D game-prototyping toolkit. Confirmed local-first privacy claim true (only network call is an explicit, user-configured local LLM endpoint). Verified the exported playtest HTML is genuinely playable (collision/pickup/hazard/win-loss logic all correct via a scripted animation-frame harness) and properly escapes injected XSS payloads in project name/goal fields. Found and fixed a real, live-reproduced data-loss bug: no text input enforced the underlying Zod schema's max lengths, and storage.ts silently discarded any save that failed validation, falling back to the starter project -- typing an ordinary 98-character title permanently and silently wiped the entire project on next reload, with the very next autosave overwriting the old save. Fixed by clamping input at the state-setter level plus matching maxLength attributes as defense-in-depth. trl bumped 3->4; trl_ceiling=5 -- editing loop is still minimal (no reposition/remove/re-import), a completeness gap not a correctness bug. See github.com/baditaflorin/open-indie-studio PR #7 (merged)."
   },
   "open-redirect": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8149,
     "description": "Microservice for Open Redirect",
@@ -5856,6 +5871,7 @@
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18179,
@@ -6526,6 +6542,7 @@
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18295,
@@ -6590,6 +6607,7 @@
     "coolify_app_uuid": "bcyth03ylz1xux22rday1hvu"
   },
   "pentest-ywh-sync": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 18176,
     "description": "Pull YWH public program list + scopes from api.yeswehack.com, filter by min-bounty / max-reports / verified, emit bounty-scope-checker seed entries.",
@@ -6674,6 +6692,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass, which had scored this the highest trl in its batch) of this Go+Python multi-language NLP toolkit. Found and fixed the fleet's recurring CJK/multi-byte-script handling bug class: the tokenizer's unicode-aware greedy regex swallowed entire Chinese/Japanese sentences (no ASCII whitespace) into a single 'token' -- live-tested with a 40,000-char Chinese string tokenizing as exactly 1 token, and confirmed this reproduces through the exact code path the project's own Docker image ships for Japanese (no SudachiPy or per-language model actually installed, silently falls back to spaCy's blank whitespace-only tokenizer). Fixed with targeted Han/Kana re-segmentation, deliberately excluding space-delimited Korean. Also found and fixed a CSV formula-injection bug (CWE-1236) in the token exporter, and corrected a privacy doc that contradicted the app's actual unconditional localStorage autosave of raw corpus text. Wired a previously dead, never-CI'd test file into the build. trl dropped 5->4 pending a live Docker-deployment pass with real spaCy models; trl_ceiling=6. See github.com/baditaflorin/polyglot-nlp-toolkit PR #5 (merged)."
   },
   "postmessage": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "access_tier": "vetted-pentest",
     "container_port": 8313,
     "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
@@ -6791,6 +6810,7 @@
     "spiffe_workload": true
   },
   "proto-pollution": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.2.4",
     "access_tier": "vetted-pentest",
     "container_port": 8314,
@@ -6918,6 +6938,7 @@
     "trl_evidence": "First-pass audit of this round-robin proxy-pool rotator: found a real bug that is CURRENTLY LIVE in production -- zero dead-backend failover, confirmed via 12 live requests against production showing a repeating 301/200/200/502 pattern, meaning ~25% of all production traffic is currently failing with no self-healing. Fixed with bounded retry to the next host on dial/connect failure (capped at len(hosts) attempts so a fully-dead pool fails fast), a response-write tracker so a backend that starts streaming and dies mid-response is never double-written, and body-buffering so retries resend the request body intact. Also fixed a /health contract mismatch (service.yaml declares 200, real behavior was 400). Confirmed the round-robin index itself was already correctly atomic/race-free (verified under go test -race) and no credential leak in logs. trl bumped 3->5; trl_ceiling=8 added -- the round-robin core was always sound, the gap was zero tests plus a confirmed live production failure mode, now fixed and tested; no structural blocker to reaching 6-7 with modest further work (active health checks, /selftest). See PR #1 (merged)."
   },
   "ratelimit-tester": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8156,
     "description": "Microservice for Ratelimit Tester",
@@ -7177,6 +7198,7 @@
     "trl_evidence": "VJ app, real-time visuals"
   },
   "scan-port": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8222,
     "description": "Microservice for Scan Port",
@@ -7192,6 +7214,7 @@
     "coolify_app_uuid": "r11ztr9exd5b0kqt5ngizd2l"
   },
   "scan-port-banner": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8089,
     "description": "Microservice for Scan Port Banner",
@@ -7207,6 +7230,7 @@
     "coolify_app_uuid": "r1f8esfzv4scgf000pdegdg4"
   },
   "scan-port-ssh": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8090,
     "description": "Microservice for Scan Port Ssh",
@@ -7370,6 +7394,7 @@
     }
   },
   "secrets-scanner": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "1.3.6",
     "container_port": 8229,
@@ -7385,6 +7410,7 @@
     "coolify_app_uuid": "pe03mzt29pshi8kgoazm9ceq"
   },
   "security-header-analyzer": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8091,
     "description": "Microservice for Security Header Analyzer",
     "example_path": "/?url=https://example.com",
@@ -7531,6 +7557,7 @@
     }
   },
   "session-management": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8095,
     "description": "Microservice for Session Management",
@@ -7578,6 +7605,7 @@
     "trl_evidence": "navigation app, routing logic"
   },
   "simulate-ddos": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "0.1.4",
     "container_port": 8092,
@@ -7617,6 +7645,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "smuggling-probe": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "1.5.8",
     "container_port": 8154,
@@ -7679,6 +7708,7 @@
     }
   },
   "sourcemap-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.3.7",
     "container_port": 8347,
     "description": "Microservice for Sourcemap Finder",
@@ -7729,6 +7759,7 @@
     }
   },
   "subdomain-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.7.1",
     "container_port": 8348,
     "description": "Microservice for Subdomain Finder",
@@ -7743,6 +7774,7 @@
     "coolify_app_uuid": "qhxo952d5vz3vjbsm3qq2lwl"
   },
   "subdomain-takeover": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8223,
     "description": "Microservice for Subdomain Takeover",
@@ -7835,6 +7867,7 @@
     ]
   },
   "swagger-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8349,
     "description": "Microservice for Swagger Finder",
@@ -7967,6 +8000,7 @@
     ]
   },
   "telnet-banner": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8086,
     "description": "Microservice for Telnet Banner",
@@ -8062,6 +8096,7 @@
     "trl_evidence": "privacy tool, anonymization logic"
   },
   "typosquat-finder": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "container_port": 8350,
     "description": "Microservice for Typosquat Finder",
@@ -8433,6 +8468,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "wayback-checker": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "2.1.7",
     "container_port": 8351,
@@ -8525,6 +8561,7 @@
     "spiffe_workload": true
   },
   "wellknown-scanner": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "2.2.4",
     "container_port": 8352,
@@ -8540,6 +8577,7 @@
     "coolify_app_uuid": "issc4hdee6k1ydw6bhluz7jf"
   },
   "wp-plugins": {
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
     "version": "1.4.5",
     "container_port": 8353,
