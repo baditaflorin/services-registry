@@ -335,22 +335,17 @@
       "match": {
         "ids": [
           "api-extractor",
-          "apikey-scanner",
           "asn-lookup",
           "blocklist-checker",
           "bucket-finder",
-          "clickjacking-tester",
           "comment-extractor",
           "cookie-checker",
-          "cors-scanner",
           "cors-tester",
           "crlf-tester",
           "crypto-finder",
-          "debug-detector",
           "dir-listing",
           "dns-record",
           "domain-details",
-          "email-harvester",
           "env-finder",
           "file-inclusion",
           "go-session-fixation",
@@ -761,6 +756,7 @@
     "spiffe_workload": true
   },
   "apikey-scanner": {
+    "placement": "replicable",
     "version": "1.7.5",
     "env": {
       "GRAPH_ENABLED": "true",
@@ -1125,6 +1121,7 @@
     "spiffe_workload": true
   },
   "clickjacking-tester": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8225,
     "description": "Microservice for Clickjacking Tester",
@@ -1384,6 +1381,7 @@
     "trl_evidence": "First-pass audit: confirmed a genuine, unmodified fork of the well-known upstream DrivenData cookiecutter-data-science template (isFork:true, byte-for-byte identical template payload at the fork point) -- correctly left the vendored template's core structure alone rather than attempting a risky upstream re-sync. Real local finding: 12 commits since the fork point had accidentally propagated this fleet's onboarding automation (CLAUDE.md, SERVICE-TEMPLATE.md, git hooks) into this unrelated public repo, publishing internal fleet ops detail (auth flow, token-rotation playbook, mesh domains -- no literal secrets, but real information disclosure about unrelated infrastructure) with no bearing on what this repo actually is. Removed. trl held at 4; trl_ceiling=6 added -- the template itself is genuinely functional (verified end-to-end: generation, install, tests all pass) but this fork is frozen ~4+ years behind upstream with no CI of its own; periodic re-sync from upstream is the only lever, not local engineering. See PR #1 (merged)."
   },
   "cors-scanner": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "cors-scanner", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.3.7",
     "container_port": 8239,
@@ -1670,6 +1668,7 @@
     "spiffe_workload": true
   },
   "debug-detector": {
+    "placement": "replicable",
     "container_port": 8227,
     "description": "Microservice for Debug Detector",
     "example_path": "/go_debug_detector?url=https://example.com",
@@ -3031,6 +3030,7 @@
     "spiffe_workload": true
   },
   "email-harvester": {
+    "placement": "replicable",
     "container_port": 8137,
     "description": "Microservice for Email Harvester",
     "example_path": "/go_email_harvester?url=https://example.com",
