@@ -336,17 +336,10 @@
         "ids": [
           "api-extractor",
           "asn-lookup",
-          "comment-extractor",
           "cookie-checker",
           "cors-tester",
           "crlf-tester",
-          "crypto-finder",
           "domain-details",
-          "hidden-fields",
-          "iframe-analyzer",
-          "information-leakage",
-          "jsbundle-routes",
-          "jsbundle-secrets",
           "pentest-asset-scope-resolver",
           "pentest-authz-matrix",
           "pentest-bounty-scope-checker",
@@ -386,11 +379,6 @@
           "pentest-wayback-urls",
           "pentest-wordlists",
           "phone-extractor",
-          "postmessage",
-          "proto-pollution",
-          "security-header-analyzer",
-          "sourcemap-finder",
-          "subdomain-finder",
           "zone-transfer"
         ]
       },
@@ -1154,6 +1142,7 @@
     "spiffe_workload": true
   },
   "comment-extractor": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "comment-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8340,
     "description": "Microservice for Comment Extractor",
@@ -1462,6 +1451,7 @@
     "spiffe_workload": true
   },
   "crypto-finder": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8341,
     "description": "Microservice for Crypto Finder",
@@ -4562,6 +4552,7 @@
     "spiffe_workload": true
   },
   "hidden-fields": {
+    "placement": "replicable",
     "container_port": 8345,
     "description": "Microservice for Hidden Fields",
     "env": {
@@ -4719,6 +4710,7 @@
     "coolify_app_uuid": "lqeajjm3lticxppsi3qurh4r"
   },
   "iframe-analyzer": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.3.9",
     "container_port": 8243,
@@ -4742,6 +4734,7 @@
     "trl_evidence": "First-pass audit of this live-mic delay/pitch-shift/spectral-effects browser toy (20 ADRs, real OfflineAudioContext DSP regression tests, honest postmortems documenting bugs caught by testing): privacy confirmed clean via full source grep -- only network hits are an optional Pyodide CDN load (no audio in the request) and same-origin service-worker asset caching; the offline-analysis feature runs librosa entirely inside a Worker via Pyodide, audio never crosses a network boundary. Found and fixed a real hearing-safety gap: the live-mic effects chain (delay + pitch shift + output gain clamped to 2x) had no dynamics processing anywhere in the audio graph -- outGain connected straight to the AnalyserNode/destination -- combined with echoCancellation/noiseSuppression/autoGainControl intentionally disabled on mic capture, and this being a tool people plausibly run through speakers (not headphones) given its whole premise, a hot mic input or acoustic feedback plus a maxed output slider had no ceiling before hitting the user's ears. Fixed by adding a DynamicsCompressorNode (threshold -6dB, ratio 20:1, 3ms attack, 250ms release) as the final stage before both the analyser and destination; WAV export now taps post-limiter so recordings match what's actually heard. Documented in a new ADR. Delay/pitch/output-gain clamping and mic-permission-denied handling all verified correct; mid-session mic disconnect degrades to silence per Web Audio semantics rather than crashing (minor polish gap, not a bug). trl bumped 2->5 (significantly understated by the prior value -- real DSP-correctness regression tests, not just mocked units, plus gated local CI); trl_ceiling=7 added -- structural limit, not temporary: single-developer fully client-side creative tool with no backend/SLA, and no cross-browser testing exists despite README claims. See PR #9 (merged)."
   },
   "information-leakage": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8083,
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
@@ -4890,6 +4883,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "jsbundle-routes": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.3.5",
     "access_tier": "vetted-pentest",
@@ -4906,6 +4900,7 @@
     "coolify_app_uuid": "hk5ym0t2p339163kwj6chjwf"
   },
   "jsbundle-secrets": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.4.6",
     "access_tier": "vetted-pentest",
@@ -6692,6 +6687,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass, which had scored this the highest trl in its batch) of this Go+Python multi-language NLP toolkit. Found and fixed the fleet's recurring CJK/multi-byte-script handling bug class: the tokenizer's unicode-aware greedy regex swallowed entire Chinese/Japanese sentences (no ASCII whitespace) into a single 'token' -- live-tested with a 40,000-char Chinese string tokenizing as exactly 1 token, and confirmed this reproduces through the exact code path the project's own Docker image ships for Japanese (no SudachiPy or per-language model actually installed, silently falls back to spaCy's blank whitespace-only tokenizer). Fixed with targeted Han/Kana re-segmentation, deliberately excluding space-delimited Korean. Also found and fixed a CSV formula-injection bug (CWE-1236) in the token exporter, and corrected a privacy doc that contradicted the app's actual unconditional localStorage autosave of raw corpus text. Wired a previously dead, never-CI'd test file into the build. trl dropped 5->4 pending a live Docker-deployment pass with real spaCy models; trl_ceiling=6. See github.com/baditaflorin/polyglot-nlp-toolkit PR #5 (merged)."
   },
   "postmessage": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "access_tier": "vetted-pentest",
     "container_port": 8313,
@@ -6810,6 +6806,7 @@
     "spiffe_workload": true
   },
   "proto-pollution": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "0.2.4",
     "access_tier": "vetted-pentest",
@@ -7410,6 +7407,7 @@
     "coolify_app_uuid": "pe03mzt29pshi8kgoazm9ceq"
   },
   "security-header-analyzer": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8091,
     "description": "Microservice for Security Header Analyzer",
@@ -7708,6 +7706,7 @@
     }
   },
   "sourcemap-finder": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.3.7",
     "container_port": 8347,
@@ -7759,6 +7758,7 @@
     }
   },
   "subdomain-finder": {
+    "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "version": "1.7.1",
     "container_port": 8348,
