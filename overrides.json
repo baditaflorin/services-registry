@@ -693,7 +693,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Tested against domain_analyze_headers (1,023,840 rows) and a fresh 1,000-domain sample. Fixed: TLS certificate-verification failures returned an opaque 502 instead of a graded response (4.3% of live domains); 3xx redirect stubs graded as the final page causing false CSP-missing criticals (corpus FP rate 4%->0%). See github.com/baditaflorin/go_analyze_headers PR #5.",
-    "version": "1.4.8",
+    "version": "1.4.9",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3562,7 +3562,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.23",
+    "version": "0.4.24",
     "spiffe_workload": true
   },
   "fleet-har-builder": {
@@ -4857,7 +4857,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
