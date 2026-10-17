@@ -1,5 +1,6 @@
 ## 2026-10-17
 
+- Add a registry `version` to 94 container services that had none (deploy-pool refuses a service without one, as it did node-proxy, and go-fleet-preflight reported "version missing"). Each value is the running version, which equals the repo's main `service.yaml` for 89 of them; country-iso-matcher is pinned at its live 0.1.12 (main has an undeployed 0.1.14) and the four go-fleet-metrics-hub children at the hub's 0.1.13 (like fleet-discovery). Left without a version: named-entity-recognizer (sunset) and fleet-build-broker (no repo). GHCR already has the image for 54 of them; the 36 Coolify services get theirs when they are published for pools.
 - Fleet Graph telemetry on for the six Node.js services (d3-graph, nlp-extractinfo, node-proxy, node-search-bing, node-search-duck, ocr-pdf): overrides.json env GRAPH_ENABLED=true and GRAPH_COLLECTOR_URL, the same opt-in every other writer has; their service repos carry the vendored client and the reviewed manifest entries are on go_fleet_runner main (#862). Without it the rendered overlay keeps the fleet default GRAPH_ENABLED=false (found on the d3-graph replica, 2026-10-17).
 
 ## 2026-10-16

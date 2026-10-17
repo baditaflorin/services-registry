@@ -470,6 +470,7 @@
     "trl_evidence": "First-pass audit of this browser-based accent/phoneme coach (classical 12th-order LPC + Durand-Kerner formant analysis, no WASM/ML model): privacy claim verified clean via live network capture during load, mic-denial, and analysis -- zero external calls anywhere, matches README/SECURITY.md exactly. Core functionality handled silence/empty/very-short/very-long clips and no-mic-permission gracefully. Found and fixed a real bug: analyzeFormants enters an infinite loop if sampleRate is 0, negative, or non-finite (hopSize rounds to 0, so the scan offset never advances) -- not reachable via the actual recording pipeline today, but a genuine unguarded hang other code could trigger; fixed with an early-return guard and a hopSize floor. No XSS surface, accessibility basics solid. trl held at 4; trl_ceiling=6 added -- classical LPC-based formant tracking has genuine structural accuracy limits (harmonic/formant confusion, only 3 curated practice sentences) blocking it from 'production, SLA-grade' without a fundamentally different acoustic-model architecture. See PR #6 (merged)."
   },
   "accessibility-audit": {
+    "version": "1.2.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "accessibility-audit",
@@ -491,6 +492,7 @@
     "spiffe_workload": true
   },
   "accessibility-score": {
+    "version": "2.7.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -759,6 +761,7 @@
     "spiffe_workload": true
   },
   "apikey-scanner": {
+    "version": "1.7.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -963,6 +966,7 @@
     "coolify_app_uuid": "ioxy3gabe7xoido8gx6574zf"
   },
   "c-proxy": {
+    "version": "0.1.3",
     "container_port": 3001,
     "description": "C proxy (?url=)",
     "host_port": 18003,
@@ -1410,6 +1414,7 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
+    "version": "0.1.12",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -1591,6 +1596,7 @@
     "spiffe_workload": true
   },
   "d3-graph": {
+    "version": "0.1.1",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2343,6 +2349,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
+    "version": "0.1.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2392,6 +2399,7 @@
     "spiffe_workload": true
   },
   "domain-http3-quic-detector": {
+    "version": "0.5.3",
     "container_port": 18190,
     "host_port": 18190,
     "placement": "replicable",
@@ -2484,6 +2492,7 @@
     "spiffe_workload": true
   },
   "domain-liveness-state": {
+    "version": "0.4.1",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18217,
     "description": "Domain liveness classifier — live / under-construction / login-wall / parked / default-server-page / error.",
@@ -2631,6 +2640,7 @@
     "spiffe_workload": true
   },
   "domain-passive-dns-history": {
+    "version": "0.3.11",
     "container_port": 18183,
     "env": {
       "GRAPH_ENABLED": "true",
@@ -2739,6 +2749,7 @@
     "spiffe_workload": true
   },
   "domain-saas-host-mapper": {
+    "version": "0.3.16",
     "container_port": 18191,
     "host_port": 18191,
     "placement": "replicable",
@@ -2808,6 +2819,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "domain-tech-eol-flagger": {
+    "version": "0.5.3",
     "container_port": 18186,
     "host_port": 18186,
     "placement": "replicable",
@@ -2872,6 +2884,7 @@
     "spiffe_workload": true
   },
   "domain-trust-composite-grader": {
+    "version": "0.1.11",
     "container_port": 18199,
     "host_port": 18199,
     "placement": "replicable",
@@ -2959,6 +2972,7 @@
     "spiffe_workload": true
   },
   "dtss": {
+    "version": "2.1.10",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8286,
     "description": "Microservice for Dtss",
@@ -3304,6 +3318,7 @@
     "spiffe_workload": true
   },
   "fleet-counter": {
+    "version": "0.3.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3351,6 +3366,7 @@
     "spiffe_workload": true
   },
   "fleet-dig": {
+    "version": "0.3.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3425,6 +3441,7 @@
     "spiffe_workload": true
   },
   "fleet-eventlog": {
+    "version": "0.1.6",
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
@@ -3451,6 +3468,7 @@
     }
   },
   "fleet-exec": {
+    "version": "0.1.5",
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
@@ -3477,6 +3495,7 @@
     }
   },
   "fleet-fake": {
+    "version": "0.3.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3523,6 +3542,7 @@
     "spiffe_workload": true
   },
   "fleet-grafana": {
+    "version": "0.1.13",
     "compose_service_name": "grafana",
     "health_url": "https://fleet-grafana.0exec.com/_gw_health"
   },
@@ -3585,6 +3605,7 @@
     "spiffe_workload": true
   },
   "fleet-ip": {
+    "version": "0.4.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3612,6 +3633,7 @@
     "spiffe_workload": true
   },
   "fleet-lock": {
+    "version": "0.2.4",
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
@@ -3686,6 +3708,7 @@
     "spiffe_workload": true
   },
   "fleet-memory": {
+    "version": "0.2.1",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true"
@@ -3711,6 +3734,7 @@
     "spiffe_workload": true
   },
   "fleet-notify": {
+    "version": "0.3.2",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true"
@@ -3785,6 +3809,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "fleet-pipe": {
+    "version": "0.5.3",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3855,6 +3880,7 @@
     "spiffe_workload": true
   },
   "fleet-port": {
+    "version": "0.4.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3925,16 +3951,19 @@
     "spiffe_workload": true
   },
   "fleet-prometheus": {
+    "version": "0.1.13",
     "compose_service_name": "prometheus",
     "compose_skip_networks": true,
     "mem_limit": "2g"
   },
   "fleet-alertmanager": {
+    "version": "0.1.13",
     "compose_service_name": "alertmanager",
     "compose_skip_networks": true,
     "mem_limit": "256m"
   },
   "fleet-pwgen": {
+    "version": "0.3.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -4206,6 +4235,7 @@
     "spiffe_workload": true
   },
   "fleet-token-ledger": {
+    "version": "0.1.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -4265,6 +4295,7 @@
     "spiffe_workload": true
   },
   "fleet-webhook": {
+    "version": "0.3.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -4343,6 +4374,7 @@
     "spiffe_workload": true
   },
   "funding-detector": {
+    "version": "2.7.3",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8290,
     "description": "Microservice for Funding Detector",
@@ -4380,6 +4412,7 @@
     "spiffe_workload": true
   },
   "gdpr-compliance": {
+    "version": "1.26.3",
     "mem_limit": "256m",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8291,
@@ -4409,6 +4442,7 @@
     "trl_evidence": "First-pass audit of this local-first ADHD self-management app (Whisper STT + Flan-T5 refine, both in-browser via WASM/WebGPU): found and fixed a real privacy leak -- the browser-TTS fallback (used only if the local Piper engine fails) used the native SpeechSynthesisUtterance API, which on some browsers (notably Chrome) can route to a network TTS voice, silently sending derived personal task text off-device despite the 'local-first' claim, with no UI disclosure; fixed to require an explicitly local voice or stay silent. Also found and fixed a real data-loss bug in the core voice-to-task pipeline: extractBrainDump's sentence splitter only broke on newlines/periods/semicolons/bullets, so realistic rambling/voice-transcribed input with no punctuation (e.g. 'call mom and email boss and buy milk...') collapsed into one garbled task, silently losing 3 of 4 distinct actionable items; fixed with conjunction-aware splitting that still keeps plain item lists as one task. Focus timer verified immune to the classic setInterval drift bug (recomputes from Date.now() each tick). trl bumped 3->4; trl_ceiling=5 added -- real client-side-only architecture with genuine self-audits already done, but extraction is still a heuristic regex/keyword classifier, no external usability testing, no cross-device sync. Separately flagged: GitHub shows 24 Dependabot vulnerabilities (1 critical, 9 high) on the default branch, out of scope for this audit. See PR #9 (merged)."
   },
   "geo-geocode": {
+    "version": "0.1.0",
     "container_port": 4902,
     "description": "City/address → lat/lon via TomTom (?text=)",
     "host_port": 18008,
@@ -4456,6 +4490,7 @@
     "spiffe_workload": true
   },
   "go-session-fixation": {
+    "version": "0.5.4",
     "access_tier": "vetted-pentest",
     "container_port": 8316,
     "description": "Two-pass probe testing whether session cookies persist value across login. Cookie-name gazetteer covers PHPSESSID/JSESSIONID/ASP.NET_SessionId/etc.",
@@ -4671,6 +4706,7 @@
     "spiffe_workload": true
   },
   "iban-bic-validator": {
+    "version": "0.1.5",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18291,
     "host_port": 18291,
@@ -4697,6 +4733,7 @@
     "coolify_app_uuid": "lqeajjm3lticxppsi3qurh4r"
   },
   "iframe-analyzer": {
+    "version": "1.3.9",
     "container_port": 8243,
     "description": "Microservice for Iframe Analyzer",
     "example_path": "/go_iframe_analyzer?url=https://example.com",
@@ -4865,6 +4902,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "jsbundle-routes": {
+    "version": "0.3.5",
     "access_tier": "vetted-pentest",
     "container_port": 8312,
     "description": "Extracts React Router / Vue Router / Next.js / Express route configs from recovered JS bundles. Surfaces unlinked admin/internal routes.",
@@ -4879,6 +4917,7 @@
     "coolify_app_uuid": "hk5ym0t2p339163kwj6chjwf"
   },
   "jsbundle-secrets": {
+    "version": "0.4.6",
     "access_tier": "vetted-pentest",
     "container_port": 8311,
     "description": "Recovers original source from JS bundles via sourcemaps, then scans with gitleaks-grade rules for secrets that vanish from minified output.",
@@ -4923,6 +4962,7 @@
     "spiffe_workload": true
   },
   "jwt-pentest": {
+    "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 8315,
     "description": "Active JWT vulnerability battery: alg=none, weak-HMAC dictionary, kid traversal, jku/x5u SSRF, audience leakage, HS256↔RS256 confusion.",
@@ -4937,6 +4977,7 @@
     "coolify_app_uuid": "pdw49fd7niktinh18cnvjrv9"
   },
   "keyphrase-extractor": {
+    "version": "0.2.6",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
@@ -5082,6 +5123,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-02-consumer-app-batch"
   },
   "linkedin-attributes": {
+    "version": "0.1.0",
     "container_port": 4314,
     "description": "Scrape LinkedIn profile badge (?url=)",
     "example_path": "/?url=https://www.linkedin.com/in/baditaflorin",
@@ -5349,6 +5391,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a shared ripple/tap-pulse effect across a physical row of phones (Yjs/y-webrtc), not a stroke-drawing canvas. Found and fixed two real bugs: (1) untrusted peer awareness data let NaN/Infinity through a weak typeof check, poisoning the mesh clock offset for the whole room and baking permanent, un-garbage-collectable NaN entries into the shared doc; (2) the periodic ripple GC deleted dead entries by count-from-front rather than by identity, an assumption that breaks under concurrent multi-peer taps and could delete a live ripple while a dead one survived. Both fixed and regression-tested (2 of 3 new tests confirmed to fail pre-fix). Also corrected a false privacy claim: docs claimed encrypted SDP signaling, but y-webrtc's encryption is opt-in and never enabled here, so signaling is plaintext (TLS-in-transit only) -- doc corrected rather than bolting on a false sense of security. trl bumped 3->5. See github.com/baditaflorin/mesh-wave-canvas PR #1 (merged)."
   },
   "microformats2-extractor": {
+    "version": "0.2.7",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18260,
     "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} — returning items[], rels, rel-urls, and a summary roll-up.",
@@ -5433,6 +5476,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first newsletter drafting/repurposing tool. Found and fixed a real XSS vulnerability: source.url and discussionUrl fields (sourced from untrusted RSS/Atom/HTML/OPML imports, or an auto-loading shared Project JSON payload reachable via a #project= link with no confirmation) were rendered as raw <a href> with no scheme check -- a javascript: URL would execute in the app's own origin with access to every local project in IndexedDB, directly undermining the app's 'local-first, doesn't collect draft/source contents' privacy claim. Fixed with a sanitizeUrl() helper blocking javascript:/data:/vbscript:/file:/blob: schemes including tab/newline scheme-splitting bypasses, applied at both render sites. Autosave/draft-persistence logic checked specifically for the early-return-disables-autosave pattern found elsewhere in this initiative -- not present here. trl bumped 4->4 with real security hardening; trl_ceiling=5. See github.com/baditaflorin/newsletter-flow PR #7 (merged)."
   },
   "nlp-extractinfo": {
+    "version": "0.1.3",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5450,6 +5494,7 @@
     "trl_evidence": "First-pass audit (Node/TS Express + compromise.js, confirmed not Go so fetch-cache masking does not apply). Found and fixed 2 severe bugs on live production pages: (1) an OOM crash -- createCooccurrenceMatrix stored the entire unstripped-HTML source sentence uncapped as a graph edge attribute; a 271KB fetched page produced a 122MB response and crashed the Node process twice with a fatal allocation failure during testing; fixed by capping the stored snippet at 300 chars, dropping response size 67-100x with zero crashes across a 260-domain re-run. (2) The service's own flagship documented default usage (?text= alone, per README/llms.txt/openapi.json) returned a hard 400 in production -- one missing .optional() call; fixed. Also hardened the previously-unbounded ?url= outbound fetch with a timeout+size cap. Flagged, not fixed: no SSRF guard on ?url=, raw HTML never stripped before NLP tokenization, and hardcoded YouTube/proxy credentials sitting in dead never-imported code (the same pattern found repeatedly this session). Added the repo's first test coverage. trl held at 6; trl_ceiling=7 added -- compromise.js is a rule-based English-only tagger with no semantic disambiguation, reaching higher needs a different NLP engine. See PR #1 (merged)."
   },
   "node-js-proxy": {
+    "version": "0.1.3",
     "container_port": 3103,
     "description": "Node JS-rendering proxy (?url=)",
     "host_port": 18007,
@@ -5481,6 +5526,7 @@
     "trl_evidence": "First-pass audit (plain Express+axios GET-only forward proxy, Node-clustered, mandatory Webshare egress). Found and fixed 3 real bugs: (1) an oversized-response memory blow-up masked as a fake 200 OK -- no maxContentLength/maxBodyLength on the axios call; a 2GB test response spiked worker RSS to ~3GB, and past V8's string-conversion limit axios's internal error still carried status=200, disguising a real failure as success; fixed with a 50MB cap. (2) NODE_ENV=test never started the server at all (cluster.isMaster defaults true when setupCluster() is skipped) -- likely why there was never a test suite; fixed. (3) error-handling data loss on 2xx/3xx branches. npm audit: 10 advisories (2 high) -> 0, plus removed an entirely-unused vulnerable dependency. Honestly documented (not silently fixed) a real SSRF gap: no host/IP allowlist exists in-app, safety is entirely delegated to the mandatory external egress-proxy topology -- flagged as deserving its own dedicated PR. trl bumped 4->5; trl_ceiling=6 added -- SSRF safety fully delegated to external infra, no retries/circuit-breaker sophistication. See PR #1 (merged)."
   },
   "node-search-bing": {
+    "version": "0.1.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5498,6 +5544,7 @@
     "trl_evidence": "First-pass audit (Express/TypeScript cheerio-based Bing SERP scraper, routed through an internal C egress proxy). Found and fixed 4 real bugs: (1) bot-challenge/CAPTCHA pages (HTTP 200, 0 result nodes) misreported as 'no results', indistinguishable from a genuine zero-hit query -- added detection, now returns 503 with partial results preserved. (2) No fetch timeout at all (axios default) -- a real resource-exhaustion risk under concurrent load if the proxy/Bing stalls; added 15s timeouts. (3) A lodash override pinned to a version npm's own registry explicitly flags 'Bad release' -- the regressed attempted fix for a known code-injection CVE; repinned to the actually-clean release. (4) Several other stale vulnerable dependencies bumped (npm audit: 9 findings/2 high -> 1 moderate residual, an Express-5-migration deliberately deferred). Also found the internal C-based egress proxy this service depends on is currently returning 502 for every request -- an infra issue flagged as out of scope for this repo. Added the repo's first real test suite. trl held at 5; trl_ceiling=6 added -- structurally capped by Bing's unversioned/changeable HTML and aggressive, empirically-confirmed anti-bot posture. See PR #2 (merged)."
   },
   "node-search-duck": {
+    "version": "0.1.3",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5523,6 +5570,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first academic-writing workbench. Verified privacy claim true via live browser network trace on a production build (zero external requests during normal use). Independently fuzz-tested the PDF line-wrapping algorithm against 500 random paragraphs using real pdf-lib font metrics (not the test suite's mocked measure) -- no overflow, no dropped content. Found and fixed a real bug: escapeLatex() only escaped 4 of 10 LaTeX special characters, so ordinary academic text ('O(n^2)', 'cost $5', 'dataset #1') produced a .tex export that fails to compile, undermining the app's 'submission-ready' claim. Fixed with a single-pass regex covering all special characters (avoiding a double-escape trap from naive chained replaceAll calls). Live-tested autosave survives a hard reload. trl bumped 3->4; trl_ceiling=5 pending real TeX-engine compilation testing of the export pipeline. See github.com/baditaflorin/numen PR #16 (merged)."
   },
   "ocr-pdf": {
+    "version": "0.1.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5540,6 +5588,7 @@
     "trl_evidence": "First-pass audit (Fastify + pdf-parse + shelling out to ocrmypdf): found the service was completely non-functional end-to-end, every issue reproduced locally before fixing. (1) The server couldn't boot at all -- 3 fastify plugins pinned to fastify-4-only majors after a prior commit bumped fastify itself to 5.x, every start threw a plugin-version-mismatch and silently exited (fastify's default logger is a no-op, zero log output). (2) OCR never actually ran -- the Dockerfile never installed ocrmypdf/tesseract/ghostscript, every request silently returned a fake 200 success with empty text. (3) The POST upload path was completely dead due to a routing bug. (4) --force-ocr destroyed good text layers (verified byte-for-byte). (5) Encrypted/corrupted PDFs and OCR failures silently swallowed into fake 200 success. (6) No OCR timeout -- a scan could hang indefinitely. (7) A real path-traversal vulnerability via upload filename that could have overwritten the service's own code, since the container chowns to the same user running the process. (8) Docker's own HEALTHCHECK was a no-op that would report healthy even while crash-looping. 13 of 17 dependency CVEs fixed. Non-Latin-script OCR mojibake documented as a ceiling driver, not fixed. Added a real integration test suite exercising all of this over HTTP against actual OCR fixtures. trl was a stale scaffold placeholder at 4, bumped to 6; trl_ceiling=7 added -- hardcoded single-language OCR with no failure signal, and an unmaintained ~2016-vintage bundled pdf.js showing real fragility, both structural. See PR #1 (merged)."
   },
   "ocr-pdf-express": {
+    "version": "0.2.0",
     "container_port": 5500,
     "description": "Express-based OCR / PDF (?url=)",
     "host_port": 18014,
@@ -5642,6 +5691,7 @@
     ]
   },
   "page-load-metrics": {
+    "version": "2.9.1",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8297,
     "description": "Microservice for Page Load Metrics",
@@ -5757,6 +5807,7 @@
     "version": "0.2.4"
   },
   "pentest-asset-scope-resolver": {
+    "version": "0.2.6",
     "access_tier": "vetted-pentest",
     "container_port": 18126,
     "description": "Wildcard scope expansion: composes cert-transparency + subfinder + scope-guard to expand a program wildcard scope into a concrete in-scope subdomain list.",
@@ -5788,6 +5839,7 @@
     "trl_evidence": "4/4 unit tests passing (base-domain inference, severity matrix, PoC rendering with/without chain). Verified end-to-end against accommodations.booking.com: 30 siblings + 12 endpoint probes in 1.2s, correctly downgrades prober high -> informational."
   },
   "pentest-audit-log": {
+    "version": "0.2.4",
     "mem_limit": "256m",
     "env": {
       "GRAPH_ENABLED": "true",
@@ -5833,6 +5885,7 @@
     "coolify_app_uuid": "xinj0vpxvwqnk60uq9uom5zl"
   },
   "pentest-bounty-scope-checker": {
+    "version": "0.3.5",
     "container_port": 18110,
     "description": "Given a domain, returns which bug-bounty programs include it in scope (sorted by max payout). Embedded seed of ~10 well-known programs (GitHub, GitLab, Shopify, PayPal, Anthropic, Google, Microsoft, Tesla, Uber, X).",
     "example_path": "/check?target=api.github.com",
@@ -5846,6 +5899,7 @@
     "coolify_app_uuid": "w101yz0tp2q2k7noi1127wz5"
   },
   "pentest-cert-transparency": {
+    "version": "0.1.7",
     "access_tier": "vetted-pentest",
     "container_port": 18109,
     "description": "crt.sh wrapper with 24h SQLite cache. Returns SAN-derived subdomains or full cert records (issuer/dates/SANs).",
@@ -5874,6 +5928,7 @@
     "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
   },
   "pentest-codec": {
+    "version": "0.1.8",
     "container_port": 18118,
     "description": "Encode/decode + JWT segment decoder. 11 formats (base64 std/url/raw, base32, hex, url, html, gzip, zlib, json-string); alg=none/path-traversable-kid flags on JWT.",
     "example_path": "/encode?algo=base64&input=hello",
@@ -5920,6 +5975,7 @@
     "coolify_app_uuid": "w6w2145jjtk01ulaplf0f1c0"
   },
   "pentest-cors-misconfig-prober": {
+    "version": "0.7.6",
     "access_tier": "vetted-pentest",
     "container_port": 18124,
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
@@ -5933,6 +5989,7 @@
     "coolify_app_uuid": "qmj9u5wiz6vsr12i5gscv4yz"
   },
   "pentest-cvss": {
+    "version": "0.1.5",
     "container_port": 18107,
     "description": "CVSS 3.1 base score calculator. Pure-Go FIRST.org spec implementation. Takes a vector, returns base/severity/impact/exploitability.",
     "example_path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
@@ -5985,6 +6042,7 @@
     "coolify_app_uuid": "f8wp3sz3hf71oup0b6wpnv5h"
   },
   "pentest-disclosure-policy-finder": {
+    "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 18111,
     "description": "Probes 12 disclosure-policy paths and classifies bounty/VDP/safe-harbor/unknown/none. Extracts Contact/PGP from security.txt and detects platform hints (HackerOne/Bugcrowd/Intigriti/YesWeHack/Synack).",
@@ -6014,6 +6072,7 @@
     "coolify_app_uuid": "x14nsu29g3jrr1biwgifwugm"
   },
   "pentest-favicon-hash": {
+    "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 18117,
     "description": "Shodan-style mmh3 favicon hash with known-tech lookup (~60 seeds: Tomcat, Spring Boot, Jenkins, Grafana, Jupyter, phpMyAdmin, GitLab, FortiNet, F5, etc.).",
@@ -6091,6 +6150,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-httpx": {
+    "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 18113,
     "description": "One HTTP fingerprint per request: status, title, server, TLS cert summary, ~25 tech-detection signatures. Parallel batch with worker cap. Replaces chaining tech-stack + security-headers + cdn-detector.",
@@ -6224,6 +6284,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-payloads": {
+    "version": "0.1.4",
     "container_port": 18101,
     "description": "Serves payload corpora (XSS/SQLi/SSRF/SSTI/XXE/CRLF/NoSQLi/GraphQL/path-traversal) by class+variant. Random-sample API for taint fuzzing.",
     "example_path": "/classes",
@@ -6292,6 +6353,7 @@
     "coolify_app_uuid": "kwhedb2sxgighnkn9ltu0v3n"
   },
   "pentest-report-templater": {
+    "version": "0.1.3",
     "container_port": 18114,
     "description": "Turns a structured Finding into a platform-ready markdown report. Ships HackerOne/Bugcrowd/Intigriti templates. Optional CVSS enrichment via go-pentest-cvss. Highest-leverage service in the fleet.",
     "example_path": "/templates",
@@ -6319,6 +6381,7 @@
     "coolify_app_uuid": "y14dh7j5fizv7tbo3z1dnx51"
   },
   "pentest-screenshot": {
+    "version": "0.3.3",
     "access_tier": "vetted-pentest",
     "container_port": 18129,
     "description": "Headless-Chromium screenshot evidence for pentest reports. POST /shot {url,viewport,before_js,after_js} → PNG + DOM hash + title + status. 24h SQLite cache keyed by sha256 of inputs.",
@@ -6333,6 +6396,7 @@
     "coolify_app_uuid": "lsnzmw5sxciksu5lvfomrhsv"
   },
   "pentest-secrets-scanner": {
+    "version": "0.5.5",
     "access_tier": "vetted-pentest",
     "container_port": 18122,
     "description": "Regex+entropy secret scanner. ~30 vendor rules (AWS, GitHub, GitLab, Slack, Stripe, Google, Twilio, SendGrid, Mailgun, Anthropic, OpenAI, HF, Discord, npm, JWT, RSA/EC/OpenSSH/PGP keys).",
@@ -6347,6 +6411,7 @@
     "coolify_app_uuid": "ozbu751n6lkn2pg42mfct4ki"
   },
   "pentest-session-state": {
+    "version": "0.1.5",
     "container_port": 18151,
     "host_port": 18151,
     "trl": 6,
@@ -6358,6 +6423,7 @@
     "coolify_app_uuid": "b83h92cux80bgsbpf8rb09nz"
   },
   "pentest-ssrf-prober": {
+    "version": "0.3.6",
     "access_tier": "vetted-pentest",
     "container_port": 18150,
     "host_port": 18150,
@@ -6369,6 +6435,7 @@
     "trl_evidence": "2026-08-20 fresh-clone audit (origin/main @ b4ed921, go-common@v0.88.0 post-fleet-bump). Confirmed the fleet-wide safehttp fetch-cache bug class DOES apply here (unlike some siblings): proberOutbound was built via safehttp.NewClient() with no .WithoutFetchCache(), and this service's own pollOOBPage (probe_poll.go) cursor-polls the OOB collector on a 500ms cadence during collectHits -- exactly the kind of call that must never be served stale. Once a fleet deployment sets FLEET_FETCH_CACHE_URL, server.New auto-wires a process-wide DefaultFetchDelegate (go-common/server/fetchcache.go) that transparently intercepts this GET; a cached response for the same token+cursor would repeat the last page forever, so a real live confirmed_ssrf callback landing after the cache warmed could go entirely unobserved -- silently downgrading a genuine finding to a false clean/suspected verdict, the worst failure mode for a vuln scanner. Separately confirmed a real secrets-handling bug: this service's own metadata-class payloads deliberately target credential-issuing endpoints (AWS IMDS iam/security-credentials, GCP/Azure service-account token endpoints, file:///proc/self/environ), but Finding.BodyExcerpt persisted the raw response body verbatim with no redaction, so a successful probe against a real vulnerable target would hand the live SecretAccessKey / session Token / OAuth access_token / PEM private key straight back in this service's own /probe JSON response. Scope-guard and OOB-alloc calls are POST (not cache-eligible) and were unaffected; the paired-control WAF differential, single-use run-scoped correlation IDs, and body-signal reflection-check logic are all sound -- the local 30-case corpus eval (TestCorpus_FPRate: 15 TP incl. adversarial, 15 TN incl. adversarial) passes 100% both before and after this fix, confirming the fix didn't regress detection. Fixed both: added safehttp.WithoutFetchCache() to newProberClient; added redactSecrets() to scrub credential values while preserving evidentiary fields (AccessKeyId, Expiration, field names). Added TestNewProberClientBypassesFetchCache (fails without the fix, verified) and TestRedactSecrets_*/TestRecordHTTPResponse_RedactsBodyExcerpt covering AWS/GCP/Azure/PEM shapes. Bumped 0.3.3->0.3.4. Fix opened as github.com/baditaflorin/go-pentest-ssrf-prober PR #10 (fix/prober-fetchcache-and-secret-redaction, NOT merged). Lowering TRL 7->6 because the deployed main branch still carries both bugs as of this assessment -- restore to 7 once PR #10 merges."
   },
   "pentest-subfinder": {
+    "version": "0.3.5",
     "access_tier": "vetted-pentest",
     "container_port": 18112,
     "description": "Multi-source passive subdomain enumeration: crt.sh (via our own cert-transparency), HackerTarget, AnubisDB, Wayback. Free sources only.",
@@ -6411,6 +6478,7 @@
     "coolify_app_uuid": "ix66ihzc7zqgw85flaxerjm5"
   },
   "pentest-takeover-fingerprints": {
+    "version": "0.2.4",
     "container_port": 18116,
     "description": "Subdomain takeover signature DB. 17 curated vendors (AWS S3, GitHub Pages, Heroku, Fastly, Shopify, Vercel, Netlify, Azure, Cargo, WordPress, Tumblr, Zendesk, Surge, Ghost, ReadMe, Intercom, Unbounce).",
     "example_path": "/fingerprints",
@@ -6444,6 +6512,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "pentest-triager-listener": {
+    "version": "0.2.6",
     "container_port": 18147,
     "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
     "example_path": "/stats",
@@ -6506,6 +6575,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "pentest-wayback-urls": {
+    "version": "0.4.7",
     "access_tier": "vetted-pentest",
     "container_port": 18127,
     "description": "Historical URL discovery via web.archive.org CDX. Returns every URL ever crawled with status + MIME + auto-flagged interesting extensions (.bak/.sql/.env/.zip).",
@@ -6520,6 +6590,7 @@
     "coolify_app_uuid": "h1l5dpv77ha30bw3crzmf3kc"
   },
   "pentest-wordlists": {
+    "version": "0.1.5",
     "container_port": 18100,
     "description": "Serves curated pentest wordlists (dirs, subdomains, params, fuzz) by category with SHA256 integrity. Random-sample API. Designed to grow via SecLists submodule.",
     "example_path": "/lists",
@@ -6733,6 +6804,7 @@
     "spiffe_workload": true
   },
   "proto-pollution": {
+    "version": "0.2.4",
     "access_tier": "vetted-pentest",
     "container_port": 8314,
     "description": "Static scan for prototype-pollution sink patterns (Object.assign, lodash.merge, deepmerge) in recovered JS bundles.",
@@ -6806,6 +6878,7 @@
     "spiffe_workload": true
   },
   "python-proxy": {
+    "version": "0.1.1",
     "container_port": 18177,
     "description": "Python proxy (?url=)",
     "host_port": 18177,
@@ -6841,6 +6914,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "random-proxy": {
+    "version": "0.1.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -7305,6 +7379,7 @@
     }
   },
   "secrets-scanner": {
+    "version": "1.3.5",
     "container_port": 8229,
     "description": "Microservice for Secrets Scanner",
     "example_path": "/go_secrets_scanner?url=https://example.com",
@@ -7453,6 +7528,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "services-dashboard": {
+    "version": "1.10.8",
     "container_port": 18173,
     "host_port": 18173,
     "trl": 5,
@@ -7513,6 +7589,7 @@
     "trl_evidence": "navigation app, routing logic"
   },
   "simulate-ddos": {
+    "version": "0.1.4",
     "container_port": 8092,
     "description": "Microservice for Simulate Ddos",
     "example_path": "/?target=example.com",
@@ -7550,6 +7627,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "smuggling-probe": {
+    "version": "1.5.8",
     "container_port": 8154,
     "description": "Microservice for Smuggling Probe",
     "example_path": "/go_smuggling_probe?target=example.com",
@@ -7610,6 +7688,7 @@
     }
   },
   "sourcemap-finder": {
+    "version": "1.3.7",
     "container_port": 8347,
     "description": "Microservice for Sourcemap Finder",
     "example_path": "/go_sourcemap_finder?url=https://example.com",
@@ -7637,6 +7716,7 @@
     "trl_assessor": "claude-sonnet-5-2026-08-04-batch2-mesh-app-fleet"
   },
   "structured-data-validator": {
+    "version": "0.1.7",
     "container_port": 18254,
     "description": "Finds and validates a web page's structured data from three sources — JSON-LD (<script type=application/ld+json>), Microdata (itemscope/itemtype/itemprop), and RDFa (vocab/typeof/property) — reporting per block its format, the @type/itemtype/typeof values, whether it parsed, any parse errors, and recommended-field warnings for common schema.org types, plus a summary with total/valid/invalid counts, types_seen, and a by_format histogram.",
     "example_path": "/?url=https://example.com",
@@ -7658,6 +7738,7 @@
     }
   },
   "subdomain-finder": {
+    "version": "1.7.1",
     "container_port": 8348,
     "description": "Microservice for Subdomain Finder",
     "example_path": "/go_subdomain_finder?url=https://example.com",
@@ -7717,6 +7798,7 @@
     "trl_evidence": "sample/chemistry app, material properties"
   },
   "svg-icon-inventory": {
+    "version": "0.1.8",
     "container_port": 18256,
     "description": "Inventories every SVG / icon usage on a web page or raw HTML and classifies by mechanism: inline <svg> elements (with their <symbol> defs and viewBox), sprite references via <use href='#id'> / <use xlink:href='sprite.svg#id'>, <img src='*.svg'>, external SVG via <object data='*.svg'> / <embed src='*.svg'>, and icon-font usage (fa-/material-icons/glyphicon/bi-/icon- class heuristics). Returns icons[] (mechanism, resolved-absolute ref/src, symbol_id, viewBox), a per-mechanism summary, plus deduped unique_symbol_ids[] and external_sprite_urls[].",
     "example_path": "/?url=https://example.com",
@@ -7775,6 +7857,7 @@
     "coolify_app_uuid": "p14igv1fadqxha4rmaw9t4l5"
   },
   "table-extractor": {
+    "version": "0.1.4",
     "container_port": 18289,
     "host_port": 18289,
     "placement": "replicable",
@@ -7847,6 +7930,7 @@
     }
   },
   "tech-stack": {
+    "version": "1.3.11",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true"
@@ -7998,6 +8082,7 @@
     "coolify_app_uuid": "v10xrrzd40holg48pqye556h"
   },
   "ugc-detector": {
+    "version": "2.1.9",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "ugc-detector",
@@ -8214,6 +8299,7 @@
     "version": "1.99.223"
   },
   "url-shortener": {
+    "version": "2.1.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "url-shortener",
@@ -8260,6 +8346,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "utils-readcontent": {
+    "version": "0.1.0",
     "container_port": 5008,
     "description": "Extract structured content from URL (?url=)",
     "host_port": 18018,
@@ -8351,6 +8438,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true  },
   "wayback-checker": {
+    "version": "2.1.7",
     "container_port": 8351,
     "description": "Microservice for Wayback Checker",
     "example_path": "/go_wayback_checker?url=https://example.com",
@@ -8364,6 +8452,7 @@
     "coolify_app_uuid": "jlgndpylkfhcdcnqdk66bgcj"
   },
   "web-vitals-report": {
+    "version": "1.2.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "web-vitals-report",
@@ -8440,6 +8529,7 @@
     "spiffe_workload": true
   },
   "wellknown-scanner": {
+    "version": "2.2.3",
     "container_port": 8352,
     "description": "Microservice for Wellknown Scanner",
     "example_path": "/go_wellknown_scanner?url=https://example.com",
@@ -8453,6 +8543,7 @@
     "coolify_app_uuid": "issc4hdee6k1ydw6bhluz7jf"
   },
   "wp-plugins": {
+    "version": "1.4.5",
     "container_port": 8353,
     "description": "Microservice for Wp Plugins",
     "example_path": "/go_wp_plugins?url=https://example.com",
@@ -8545,6 +8636,7 @@
     "trl_evidence": "logic game, SMT solver integration"
   },
   "zone-transfer": {
+    "version": "1.4.6",
     "container_port": 8232,
     "description": "Microservice for Zone Transfer",
     "example_path": "/go_zone_transfer?domain=example.com",
@@ -8600,6 +8692,7 @@
     "fetch_cache_api_key_file_mount": true
   },
   "fleet-grafana-staging": {
+    "version": "0.1.13",
     "compose_dir": "/opt/services/go-fleet-metrics-hub-staging",
     "compose_self_managed": true,
     "compose_service_name": "grafana-staging",
