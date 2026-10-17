@@ -489,7 +489,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -515,7 +515,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "bhyw09mpgmoc4r37en1mq26o",
     "version": "1.4.7",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "brand-color-palette",
@@ -646,7 +647,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -672,7 +673,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "ioxy3gabe7xoido8gx6574zf",
     "version": "1.4.8",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "caa-checker",
@@ -1802,7 +1804,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -1835,7 +1837,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "tr54hs1ir6x719g1fe3h7ov7",
     "network_exposure": "gateway-authenticated",
-    "version": "1.5.5"
+    "version": "1.5.5",
+    "placement": "replicable"
   },
   {
     "id": "dns-record",
@@ -1845,7 +1848,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -1871,7 +1874,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "rg33g8wm5fwwxzue83j5y6d9",
     "version": "1.8.17",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "dom-complexity-metrics",
@@ -3575,7 +3579,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -3601,7 +3605,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "vt65hjm8wqhknrp5vyrn5g1a",
     "version": "1.4.10",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "feed-finder",
@@ -3653,7 +3658,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -3679,7 +3684,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "dhktp4bwh0g974ygj02nf1td",
     "version": "1.3.7",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "firmographic-profile",
@@ -3985,7 +3991,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -4011,7 +4017,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "bnr51pclmti2vobu122vemoq",
     "version": "3.0.7",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "heading-outline-extractor",
@@ -4139,7 +4146,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -4165,7 +4172,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "likwplvqrfh94dukv1bm5qt7",
     "version": "2.2.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "hsts-checker",
@@ -4211,7 +4219,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -4237,7 +4245,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "o3t4k0qvwf0mskinbdzor4nh",
     "version": "1.4.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "http-protocol",
@@ -4318,7 +4327,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -4344,7 +4353,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "lqeajjm3lticxppsi3qurh4r",
     "version": "3.1.5",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "iframe-analyzer",
@@ -4507,7 +4517,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -4533,7 +4543,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "mlqalkr0pn6seq6mqf5xwrc0",
     "version": "1.5.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "jwt-debugger",
@@ -5069,7 +5080,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5095,7 +5106,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "t4ikuexuurt9uk3m56laoruv",
     "version": "1.4.4",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "mobile-friendly",
@@ -5237,7 +5249,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -5263,7 +5275,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "aj6l0wno9j8d35m7qwbu17ux",
     "version": "2.3.3",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "outlink-graph",
@@ -5441,7 +5454,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "kind-container",
@@ -5469,7 +5482,8 @@
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "xinj0vpxvwqnk60uq9uom5zl",
     "version": "0.3.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "pentest-cookie-pwn",
@@ -5593,7 +5607,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "kind-container",
@@ -5621,7 +5635,8 @@
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "ptteeog28oq6dcjni50vztgb",
     "version": "0.1.5",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "pentest-ywh-sync",
@@ -5631,7 +5646,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "kind-container",
@@ -5658,7 +5673,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "yv2ow8edj38olrzbdr8ds11x",
     "version": "0.1.4",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "phone-extractor",
@@ -6036,7 +6052,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -6062,7 +6078,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "o10nvzk98vdnz1eis1sondiq",
     "version": "0.2.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "readability-index",
@@ -6439,7 +6456,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6465,7 +6482,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "r11ztr9exd5b0kqt5ngizd2l",
     "version": "1.3.6",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "scan-port-banner",
@@ -6475,7 +6493,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6501,7 +6519,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "r1f8esfzv4scgf000pdegdg4",
     "version": "1.1.5",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "scan-port-ssh",
@@ -6511,7 +6530,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -6537,7 +6556,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "ijkuh1oi5c57hy190v6qjz24",
     "version": "0.2.8",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "scc",
@@ -6754,7 +6774,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -6780,7 +6800,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "pe03mzt29pshi8kgoazm9ceq",
     "network_exposure": "gateway-authenticated",
-    "version": "1.3.5"
+    "version": "1.3.5",
+    "placement": "replicable"
   },
   {
     "id": "security-header-analyzer",
@@ -7067,7 +7088,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -7093,7 +7114,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "ndfiu265nwa69g8j749nn9ya",
     "version": "1.2.5",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "shipping-regions",
@@ -7147,7 +7169,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -7173,7 +7195,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "f9apfdnpdg5hgsovtq3mpw64",
     "network_exposure": "gateway-authenticated",
-    "version": "0.1.4"
+    "version": "0.1.4",
+    "placement": "replicable"
   },
   {
     "id": "sitemap-finder",
@@ -7224,7 +7247,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -7250,7 +7273,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "rb5pn82f8bv599l7z2v7prfy",
     "network_exposure": "gateway-authenticated",
-    "version": "1.5.8"
+    "version": "1.5.8",
+    "placement": "replicable"
   },
   {
     "id": "social-graph",
@@ -7452,7 +7476,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -7478,7 +7502,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "ydqmdzvdgkaw3mxb21y0lvg5",
     "version": "1.7.1",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "substack-scraper",
@@ -7606,7 +7631,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -7632,7 +7657,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "p14igv1fadqxha4rmaw9t4l5",
     "version": "1.0.7",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "table-extractor",
@@ -7842,7 +7868,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "security"
@@ -7868,7 +7894,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "mcv3og31c6mmjmhqwcsbn4m7",
     "version": "0.2.4",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "testimonial-extractor",
@@ -8001,7 +8028,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -8027,7 +8054,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "v10xrrzd40holg48pqye556h",
     "version": "1.4.4",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "ugc-detector",
@@ -8316,7 +8344,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -8342,7 +8370,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "jlgndpylkfhcdcnqdk66bgcj",
     "network_exposure": "gateway-authenticated",
-    "version": "2.1.7"
+    "version": "2.1.7",
+    "placement": "replicable"
   },
   {
     "id": "web-vitals-report",
@@ -8471,7 +8500,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -8497,7 +8526,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "issc4hdee6k1ydw6bhluz7jf",
     "network_exposure": "gateway-authenticated",
-    "version": "2.2.3"
+    "version": "2.2.3",
+    "placement": "replicable"
   },
   {
     "id": "wp-plugins",
@@ -8507,7 +8537,7 @@
     "mesh": "0crawl",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "recon"
@@ -8533,7 +8563,8 @@
     "proxy_egress": true,
     "coolify_app_uuid": "mfct41oydxnl7pedsg2liu7i",
     "network_exposure": "gateway-authenticated",
-    "version": "1.4.5"
+    "version": "1.4.5",
+    "placement": "replicable"
   },
   {
     "id": "wps",
@@ -12275,7 +12306,7 @@
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "pentest",
@@ -12311,7 +12342,8 @@
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "d53fvns2b33ml5z1scbjd1y7",
     "network_exposure": "gateway-authenticated",
-    "version": "0.5.4"
+    "version": "0.5.4",
+    "placement": "replicable"
   },
   {
     "id": "hermes-agent-tunnel-18318",
@@ -12661,7 +12693,7 @@
     "mesh": "0exec",
     "kind": "container",
     "language": "go",
-    "runtime": "coolify",
+    "runtime": "compose",
     "tags": [
       "go",
       "pentest",
@@ -12689,7 +12721,8 @@
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "pdw49fd7niktinh18cnvjrv9",
     "network_exposure": "gateway-authenticated",
-    "version": "0.2.5"
+    "version": "0.2.5",
+    "placement": "replicable"
   },
   {
     "id": "linkedin-attributes",
