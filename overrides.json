@@ -556,7 +556,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8.",
-    "version": "3.4.13",
+    "version": "3.4.14",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -588,7 +588,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Authenticated admin discovery requires site-specific credentials or session state.",
     "trl_evidence": "v1.6.0 — TRL 5→6 uplift.\n- Bundled curated wordlist (~150 paths from SecLists + OWASP CMS + vendor docs)\n  via go:embed; deduped, sorted, comment-stripped at parse time.\n- Per-probe: HEAD then GET fallback (for 405/400 and body sniffing on 2xx);\n  follows up to 2 manual redirects; per-request 3s, total 60s, worker pool 8.\n- Login-form sniffer (password / username / sign in / log in / type=password)\n  with strong-signal short-circuit (\"password\" alone) and 2-of-N rule.\n- First-hop Location preserved across follow chain so \"302 to /wp-admin/login\"\n  classifies as present even when the followed target is 404.\n- Optional ?wordlist_url= composes with sibling go-pentest-wordlists\n  (cap 500 entries, 256 KiB fetch budget, SSRF-safe via go-common/safehttp).\n- SCOPE_GUARD_URL env (comma list, supports *.example.com) gates which\n  hosts may be probed; off when unset.\n- Backward-compat: ?target= alias for ?url=.\n- Tests: handler_test.go + classify_test.go + wordlist_test.go;\n  httptest fake server covers 200-with-form / 302-to-login / 401 /\n  200-generic / 302-to-home / 404. `go test ./...` green.",
-    "version": "1.7.8",
+    "version": "1.7.10",
     "coolify_app_uuid": "jpahbgqwgmshagf91j3h4ggn"
   },
   "agent-approval": {
@@ -794,7 +794,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with: hash keys at rest (SHA-256), per-IP rate limit on /verify, audit log table for /issue+/revoke, full test coverage, automated SQLite backup. None require external paid services.",
     "trl_evidence": "20 -race test funcs, audit_log table with prefix-only redaction, /audit admin-gated, /selftest",
-    "version": "0.8.1",
+    "version": "0.9.0",
     "spiffe_workload": true
   },
   "asn-lookup": {
@@ -1414,7 +1414,7 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
-    "version": "0.1.12",
+    "version": "0.1.14",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -1552,7 +1552,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.3",
+    "version": "1.5.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2137,7 +2137,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Live production-DB audit (~1.1M rows) found 74,371 rows with status=1 (success) yet age_days=0, almost always paired with empty registrar/expires/nameservers -- literally claiming 74K+ domains were registered on their scan date. Root-caused: age_days defaulted to Go's int zero-value instead of NULL when a WHOIS creation date failed to parse, while status stayed 'ok'. Confirmed live: 3,361 of these rows were checked after an earlier related fix already shipped, proving this is a live, still-present gap. Fixed (v1.3.0) with a new 'partial' result classification whenever no usable Created date exists, plus a normaliseWhoisDate fix that no longer leaks raw unparsed date strings into a documented-RFC3339 field. See github.com/baditaflorin/go_domain_details PR #10 (merged). Rows with tool_version<1.3.0 are re-crawl candidates.",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -2220,7 +2220,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.20",
+    "version": "0.3.21",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -3013,7 +3013,7 @@
     "host_port": 8287,
     "internal_direct": true,
     "placement": "replicable",
-    "version": "1.6.33",
+    "version": "1.6.34",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
@@ -3042,7 +3042,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged).",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.13"
+    "version": "1.4.15"
   },
   "embed-iframe-classifier": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -3152,7 +3152,7 @@
   "firmographic-profile": {
     "container_port": 18297,
     "host_port": 18297,
-    "version": "1.4.3",
+    "version": "1.4.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -4765,7 +4765,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "needs real browser DOM for full JavaScript inspection",
     "trl_evidence": "2026-08-20 re-audit of go_information_leakage @ go-common v0.88.0 (fleet-runner rollout tip, commit 3b088f1). Confirmed live bug: scanClient (scan.go) was built via fleetfetch.NewHTTPClient(WithRender, WithFallbackOnTimeout, WithTimeout) with no fleetfetch.WithoutCache(), so every real probe -- baseline, error-triggers, debug routes, AND the content-verified backup checks (/.git/HEAD, /.git/config, /.env, /.DS_Store, /.svn/entries) -- was routed through the shared, Redis-backed, cross-service fleet fetch cache instead of fetching the target live. For a leak detector this is a correctness bug, not an efficiency one: a re-scan inside the cache TTL could replay a since-remediated exposure as still-leaking, or mask a newly-introduced one behind a stale negative-cached miss; a genuine .env hit's secret bytes would also sit in the shared cache readable by any other fleet service requesting the same URL+render. The scanner's own probes (a fresh crypto/rand UUID 404 path per scan, one-shot existence checks) are exactly the case fleetfetch's own WithoutCache doc comment calls out. Fixed by extracting newScanClient() and adding fleetfetch.WithoutCache() (dropped WithRender/WithFallbackOnTimeout as documented no-ops once WithoutCache is set); added TestScanClient_BypassesSharedFetchCache, confirmed failing pre-fix (returned a fake stale-cache body instead of the live target's) and passing post-fix. go build/vet/test all clean (24+ existing tests unaffected). Version bumped 3.0.5->3.0.6 in main.go + service.yaml. Fix opened as PR https://github.com/baditaflorin/go_information_leakage/pull/9 (not merged, per audit process). Detection design itself holds up: content-verified backup hits defeat SPA catch-all false positives, a generic-error control group defeats WAF-identical-response false positives on debug routes, per-finding severity rubric, SCOPE_GUARD_URL allowlist, 5s/req + 30s total caps. TRL 6 reaffirmed (not raised/lowered): the cache bug was a latent correctness gap under scan-freshness expectations, not a basic-operation failure, and it is now fixed with a regression test pinning it.",
-    "version": "3.0.6",
+    "version": "3.0.8",
     "coolify_app_uuid": "dgfll92zgusjswf1nzxpwbmk"
   },
   "infrastructure-fetch-cache": {
@@ -4857,7 +4857,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.8.18",
+    "version": "0.9.0",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -4889,7 +4889,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18024,
     "placement": "replicable",
-    "version": "0.6.16",
+    "version": "0.7.0",
     "mem_limit": "2g",
     "trl": 6,
     "trl_assessed_at": "2026-08-20",
@@ -4942,7 +4942,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (220-domain sample, live before/after; 0 JSONP endpoints found either run -- JSONP is largely extinct on the modern web, consistent with expectations, not a bug): found a real, previously-flagged-but-unfixed security gap -- a correct dial-time SSRF guard (safeDialContext/safeTransport) existed in the codebase but was dead code, never wired into the actual httpClient every fetch goes through; a classic check-then-connect DNS-rebind gap already lampshaded (not fixed) in a test-file comment. Live-proved: a loopback dial returned 200 before the fix. Fixed by wiring the guard in. Also patched an open CVE (golang.org/x/net HTML-parser DoS) directly relevant since discover.go feeds attacker-controlled target HTML into that exact tokenizer. trl held at 6; trl_ceiling bumped 6->7 -- the gap wasn't structural, it was a wiring bug in code that already existed to earn the higher band. See PR #5 (merged).",
-    "version": "1.5.0",
+    "version": "1.5.6",
     "coolify_app_uuid": "mlqalkr0pn6seq6mqf5xwrc0"
   },
   "jwt-debugger": {
@@ -5083,7 +5083,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.33",
+    "version": "1.33.34",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -5420,7 +5420,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Real RFC-style HTTP header parsing (Content-Type splitting, charset\nunquoting, X-Content-Type-Options exact-match), WHATWG MIME-sniffing\nvia stdlib net/http.DetectContentType, multi-axis classification\nrubric (declared vs sniffed vs URL-extension vs nosniff posture)\nemitting stable greppable codes (mime.mismatch.*, header.xcto.*,\nheader.charset.*, mime.svg.*, mime.pdf.*, mime.fallback.*).\n≥15 unit tests + ≥10 httptest integration cases covering SVG-with-\nscript, JSON-as-HTML, image-as-HTML, HTML-as-PNG, XSSI prefix,\nXCTO-missing-on-JS/HTML, charset-missing, octet-stream fallback for\nknown extensions, scope-guard, SSRF loopback, legacy ?target= alias,\nbody-bytes-hex cap, response-shape contract. Per-request 5s + total\n15s timeouts; 512 KiB body cap; SSRF guard via go-common/safehttp;\noptional ?probe_uploads=1 for upload-extension confusion fan-out.",
-    "version": "1.4.0",
+    "version": "1.4.4",
     "coolify_app_uuid": "t4ikuexuurt9uk3m56laoruv"
   },
   "mobile-friendly": {
@@ -5614,7 +5614,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15.",
-    "version": "2.7.5",
+    "version": "2.7.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -5642,7 +5642,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Canonical 26-payload bypass set with class taxonomy\n(absolute / protocol-relative / userinfo / scheme-abuse / encoding /\nsuffix / unicode / CRLF). 17-name redirect-param matrix. eTLD+1\nescape detection via golang.org/x/net/publicsuffix (Mozilla PSL).\nMulti-hop chain tracing up to 5 hops with javascript:/data: refusal\nand unfollowed-Location-on-cap evaluation. Per-request 4s, total 30s,\nworker pool 4. handler_test.go + chain_test.go cover vulnerable\necho server, safe server, same-host ignore, dangerous-scheme labeling,\nhop cap, eTLD+1 comparison (incl. multi-label TLDs), back-compat\n?url= alias, SSRF guard. See docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "2.3.0",
+    "version": "2.3.3",
     "coolify_app_uuid": "aj6l0wno9j8d35m7qwbu17ux"
   },
   "open-school-lab": {
@@ -5972,7 +5972,7 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "5 cookie classes + 2 fallbacks, 9 severity-coded issue codes, 9 session-probe endpoints, PoC bundle generator with 4 embedded templates. 7 unit tests with real CyberGhost/Thuringer fixtures.",
-    "version": "0.1.0",
+    "version": "0.4.4",
     "coolify_app_uuid": "w6w2145jjtk01ulaplf0f1c0"
   },
   "pentest-cors-misconfig-prober": {
@@ -6025,7 +6025,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Normalization rule corpus grows with bug-class variety; current 6 rules handle the common cases.",
     "trl_evidence": "73-row scanner corpus across 4 scanners x 8 vulns: intra=100% / inter=0% collision rates; fp_version=v1; /forget admin-gated; /selftest",
-    "version": "0.2.0",
+    "version": "0.2.2",
     "coolify_app_uuid": "isb3ajcqvl49u83555lmktwx"
   },
   "pentest-dependency-cve": {
@@ -6039,7 +6039,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 7 with local CVE feed primitive caching NVD/GHSA delta-updates.",
     "trl_evidence": "SQLite TTL cache (NVD/KEV/OSV), OSV.dev cross-source merge, /selftest with stubbed upstreams, 14 test funcs (was 0)",
-    "version": "0.2.0",
+    "version": "0.2.4",
     "coolify_app_uuid": "f8wp3sz3hf71oup0b6wpnv5h"
   },
   "pentest-disclosure-policy-finder": {
@@ -6069,7 +6069,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Each verifier is a thin recipe — lifts as verifier coverage grows. Bounded by OOB collector quality for blind classes.",
     "trl_evidence": "verification ledger with BEGIN IMMEDIATE, idempotency replays from ledger without re-firing target, sensitive header redaction asserted by test, 3-stage /selftest (vulnerable/patched/inconclusive)",
-    "version": "0.2.0",
+    "version": "0.2.14",
     "coolify_app_uuid": "x14nsu29g3jrr1biwgifwugm"
   },
   "pentest-favicon-hash": {
@@ -6097,7 +6097,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Lift bound is rule-corpus size. Adding ML or LLM-based triage would push the ceiling but break the pure-rule explainability.",
     "trl_evidence": "SQLite decision ledger with /decisions query, dry_run mode returning would_decide, sony/gobreaker circuit breakers around scope-guard + dedup-fingerprint, degraded_mode in response, /selftest",
-    "version": "0.2.0",
+    "version": "0.2.4",
     "coolify_app_uuid": "je3qc07vjjuov2qqd84vb13h"
   },
   "pentest-findings-store": {
@@ -6111,7 +6111,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite is fine until ~1M findings; horizontal shard or Postgres later.",
     "trl_evidence": "findings_history shadow table with SHA-256 evidence hashing, /findings/{id}/history endpoint, /selftest round-trip",
-    "version": "0.2.0",
+    "version": "0.5.7",
     "coolify_app_uuid": "vbeehwr7p783yg53y5fxhn4c"
   },
   "pentest-github-dorks": {
@@ -6126,7 +6126,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "GitHub Search has no regex; semantic dedup + verifier-loop integration cap the climb at 6.",
     "trl_evidence": "38 curated dork patterns (creds + files + vendors + infra + k8s + per-vendor leaks); typed rate-limit handling (primary + secondary/abuse) with adaptive sleep; per-dork 4s + total 90s deadline; optional verification compose with go-pentest-trufflehog (TRUFFLEHOG_URL); domain qualifier (\\\"<domain>\\\" in:file); production mode (MODE=production) refuses to start without GITHUB_TOKEN; 19 unit tests including httptest-mocked GitHub API (success / primary rate-limit / abuse / no-results) + trufflehog compose. Pure Go (CGO-free), no parallelism. Ceiling stays at 7 pending cross-dork dedup, snippet-level secret extraction, and findings-store fan-out.",
-    "version": "0.2.0",
+    "version": "0.4.7",
     "coolify_app_uuid": "mmjzm5ovulcr2x9sbpyii597"
   },
   "pentest-http-replay": {
@@ -6196,7 +6196,7 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "21 secret-pattern classes (private RSA requires full PEM block to avoid jsencrypt FP). Static-asset filtering. First-vs-third-party sourcemap classifier. 7 unit tests with realistic SPA fixture.",
-    "version": "0.1.0",
+    "version": "0.4.4",
     "coolify_app_uuid": "p11myndrybtb6epn40dgvbua"
   },
   "pentest-leak-bounty-policy": {
@@ -6210,7 +6210,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling 7 with quarterly auto-refresh from each program's policy URL + admin /reload endpoint. Pure manual curation caps at 5 because policies drift faster than humans can re-audit at scale.",
     "trl_evidence": "30-row vendor policy seed (AWS/GitHub/Slack/Stripe/OpenAI/Anthropic/Twilio/Mailgun/GCP/Azure/etc.), BEGIN IMMEDIATE on both seed and ledger, secret-prefix-only persistence (TestLedger_NoSecretInRows enforces), /selftest",
-    "version": "0.2.0",
+    "version": "0.2.4",
     "coolify_app_uuid": "d13v7qexw5979ml26lyr901n"
   },
   "pentest-notify": {
@@ -6246,7 +6246,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Pinned-binary wrapping; templates refresh cadence + concurrency stress-testing gate the climb to 7.",
     "trl_evidence": "scope-guard preflight (fail-closed -> 503), rate-coordinator per-host acquire (fail-open), findings-store wire on severity>=medium, /selftest round-trips all 3 sibling stubs + runner",
-    "version": "0.2.0",
+    "version": "0.2.14",
     "coolify_app_uuid": "ihb1oqr2spj8jlcj3cb1shm7"
   },
   "pentest-oob-collector": {
@@ -6260,7 +6260,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
-    "version": "0.2.0",
+    "version": "0.2.5",
     "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo"
   },
   "pentest-orchestrator": {
@@ -6350,7 +6350,7 @@
     "trl_assessed_at": "2026-05-20",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "6 reflection contexts + per-context escalation, 11 inline WAF signatures (vendored from go-pentest-waf-detect), 6 integration tests covering vulnerable/safe/WAF-masked/no-reflection/skip-WAF.",
-    "version": "0.1.0",
+    "version": "0.4.5",
     "coolify_app_uuid": "kwhedb2sxgighnkn9ltu0v3n"
   },
   "pentest-report-templater": {
@@ -6378,7 +6378,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Ceiling is whatever feeds it programs — once go-pentest-bounty-scope-checker exists, scope-guard is a CDN over its data.",
     "trl_evidence": "SQLite persistence with 256-LRU, audit_log with /audit query, ReDoS pattern rejection at create-time, target-normalizer composition with 3-strike circuit breaker, /selftest",
-    "version": "0.2.0",
+    "version": "0.2.8",
     "coolify_app_uuid": "y14dh7j5fizv7tbo3z1dnx51"
   },
   "pentest-screenshot": {
@@ -6461,7 +6461,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling lifts to 8 once real H1/BC/Intigriti creds are verified end-to-end and the rendered-markdown shape is confirmed against the platforms' parsers.",
     "trl_evidence": "SQLite ledger with BEGIN IMMEDIATE on *sql.Conn (canonical pattern), idempotency_key (50-goroutine race test asserts 1 platform call), dry_run mode, /selftest with stubbed platform API",
-    "version": "0.2.0",
+    "version": "0.3.5",
     "coolify_app_uuid": "r6y6un7n6emjwaa5dfywcsgc"
   },
   "pentest-takeover-checker": {
@@ -6475,7 +6475,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16",
     "trl_ceiling": 7,
     "trl_evidence": "2-of-3 multi-resolver quorum, confirmed-tier registration probes (GitHub/S3/Heroku), findings-store wire with fail-open, 20 tests across 4 packages",
-    "version": "0.4.0",
+    "version": "0.4.7",
     "coolify_app_uuid": "ix66ihzc7zqgw85flaxerjm5"
   },
   "pentest-takeover-fingerprints": {
@@ -6538,7 +6538,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
     "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam → ≥13 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
-    "version": "0.2.0",
+    "version": "0.2.7",
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
@@ -6551,7 +6551,7 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "14 vendor signatures, 10 unit tests covering CF managed-challenge / Akamai / F5 / Imperva / PerimeterX / DataDome / ModSecurity / no-WAF baseline.",
-    "version": "0.1.0",
+    "version": "0.1.5",
     "coolify_app_uuid": "ptteeog28oq6dcjni50vztgb"
   },
   "pentest-walkthrough": {
@@ -6613,7 +6613,7 @@
     "trl_assessed_at": "2026-05-17",
     "trl_assessor": "claude-opus-4-7-session-2026-05-17",
     "trl_evidence": "YWH API client with pagination, 1h in-memory cache, criteria-based filter, /programs/seed for direct ingestion into bounty-scope-checker. 5 unit tests with real DataDome fixture.",
-    "version": "0.1.0",
+    "version": "0.1.4",
     "coolify_app_uuid": "yv2ow8edj38olrzbdr8ds11x"
   },
   "phone-extractor": {
@@ -6633,7 +6633,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged).",
-    "version": "1.4.20",
+    "version": "1.4.24",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6698,12 +6698,12 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v0.2.0 (TRL 6) — AST-aware classification via tdewolff/parse/v2/js.\nFindings carry per-listener missing|weak|strong taxonomy for both\norigin and source checks, plus the dangerous method name when weak\n(indexOf, includes, startsWith, endsWith, search, match, test, exec).\nRegex remains as a fallback for unparseable JS, marked confidence=regex.\n24 unit tests cover: missing-origin (high), weak indexOf (high),\nweak includes (high), strong origin alone (medium), strong both (low),\nonmessage assignment, Object.defineProperty, arrow handlers, regex\nfallback path, line/col location, summary aggregation, verdict\nrollup, and POST-body / ?url= handler shapes.",
-    "version": "0.2.0",
+    "version": "0.3.5",
     "coolify_app_uuid": "fe5lz8cfftoe56qbb3nm38ay"
   },
   "press-mentions": {
     "container_port": 8300,
-    "version": "2.5.18",
+    "version": "2.5.19",
     "description": "Microservice for Press Mentions",
     "host_port": 8300,
     "placement": "replicable",
@@ -7228,7 +7228,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "x/crypto/ssh full algo capture, weak-algo detection (KEX/cipher/MAC/host_key), findings-store wire with sha256-of-algos dedup, /selftest against in-process ssh.NewServerConn with planted weak algos (12 invariants)",
-    "version": "0.2.2",
+    "version": "0.2.8",
     "coolify_app_uuid": "ijkuh1oi5c57hy190v6qjz24"
   },
   "scc": {
@@ -7570,7 +7570,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13.",
-    "version": "1.7.20",
+    "version": "1.7.21",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7759,7 +7759,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "TRL 8 would need battle-tested cross-checks / paid threat-intel feeds / stateful re-verification; the detector is CPU-only DNS+HTTP with a curated gazetteer and reaches its real ceiling at principled, evidence-trailed, false-positive-hardened detection.",
     "trl_evidence": "1.6.0 adds a NotClaimable flag for can-i-take-over-xyz 'Edge case / Not vulnerable' platforms (Fastly); both the claimability and legacy severity ladders now cap such matches at dangling_review/possible. On 400 live re-probes of stored findings, Fastly false-'vulnerable' verdicts dropped 17 to 0 (22% of all 'vulnerable' were Ghost(Pro)/RebelMouse-over-Fastly HTTP-500 'unknown domain' pages on shared service maps an attacker cannot register), while genuine GitHub Pages/Azure orphans stayed vulnerable. Also adds IDNA2008 Unicode->punycode normalization (golang.org/x/net/idna, CGO-free) so native-script IDNs (bucher.de, rossiya.rf, example.jp) are scanned instead of rejected by the RFC-1035 ASCII validator (451 stored IDN domains affected). +18 table-driven tests; build/test/vet/gofmt green.",
-    "version": "1.4.0",
+    "version": "1.7.1",
     "coolify_app_uuid": "ydqmdzvdgkaw3mxb21y0lvg5"
   },
   "substack-scraper": {
@@ -7850,7 +7850,7 @@
     "trl_ceiling": 4,
     "trl_ceiling_reason": "Functionally superseded by api-extractor. Deprecate.",
     "trl_evidence": "Probes 28 well-known OpenAPI/Swagger/GraphQL paths concurrently (worker pool of 8, 5s per-request, 60s total cap) via go-common/safehttp (SSRF-safe). Parses responses with kin-openapi v0.135.0 — OpenAPI 3.x natively, Swagger 2.0 upgraded via openapi2conv. Extracts {method,path,summary,parameters,security_schemes} inventory (capped at 2k endpoints). 1h sha256-keyed in-memory cache. Tested with httptest fixtures covering openapi3, swagger2, graphql, html, junk, and 404 cases.",
-    "version": "1.0.0",
+    "version": "1.0.7",
     "coolify_app_uuid": "p14igv1fadqxha4rmaw9t4l5"
   },
   "table-extractor": {
@@ -7981,7 +7981,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "30-row fingerprint table (Mikrotik/Cisco/Juniper/OpenBSD/Solaris-CVE-2007-0882/IoT cameras/BusyBox-Mirai/etc.), IAC-WONT negotiation, in-process TCP listener for /selftest, hex-safe banner storage",
-    "version": "0.2.0",
+    "version": "0.2.4",
     "coolify_app_uuid": "mcv3og31c6mmjmhqwcsbn4m7"
   },
   "testimonial-extractor": {
@@ -8075,7 +8075,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Bounded by seed-brand dictionary you ship. Real upgrade needs malicious-domain corpus from threat intel.",
     "trl_evidence": "PSL adoption via publicsuffix.EffectiveTLDPlusOne (fixes multi-label TLD bug); 32-row offline corpus at 100% hit-rate; parked-SSL-CN heuristic against 7 provider markers; /selftest; psl_version in /version. TRL-uplift audit (2026-08-08) found probeClient (resolve.go) built via bare safehttp.NewClient() -- no WithoutFetchCache/WithForceHTTP2 -- so whenever the process-wide fleet fetch-cache delegate is installed, every DNS-active candidate's HTTP probe (status, Server header, redirect target, body simhash) could silently be served from cache instead of the live origin. This is a correctness bug specific to this service's purpose: body-hash similar-content classification (grouping variations that serve the same parking page) depends on the probe reflecting what the candidate serves right now, so a stale hit would make repeat scans of a live-but-changed domain report identical fingerprints forever and mask newly-live phishing pages as still-dormant. Fixed by adding safehttp.WithoutFetchCache() and safehttp.WithForceHTTP2() to the probeClient constructor, preserving the existing manual Timeout/CheckRedirect. New regression test safehttp_client_test.go:TestProbeClient_BypassesFetchCache installs a fake stale fetch delegate and proves the fix: fails pre-fix (delegate consulted, stale body returned), passes post-fix (live httptest origin reached, delegate never consulted); a second test confirms the pre-existing Timeout/one-hop CheckRedirect policy survived unchanged. Bumped Version 1.4.1 -> 1.4.2. Live-verified end-to-end post-fix against real domains via the built binary: github.com (117 variations generated, 71 active), paypal.com (110 generated, 80 active), apple.com (92 generated, 55 active) -- DNS fan-out, HTTP probing, body-hash, and classification all functioning correctly. See github.com/baditaflorin/go_typosquat_finder PR #5 (open, not yet merged as of 2026-08-08).",
-    "version": "1.4.2",
+    "version": "1.4.4",
     "coolify_app_uuid": "v10xrrzd40holg48pqye556h"
   },
   "ugc-detector": {
