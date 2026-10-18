@@ -1,5 +1,6 @@
 ## 2026-10-18
 
+- Currency Detector pinned to 1.5.8 after adding localized African pricing markers; signed image verified and both pool replicas pass health checks.
 - Targeted registry pins: `iban-bic-validator` 0.1.8 and `phone-extractor` 1.4.30, both with signed GHCR images verified and live deployments healthy. `services.json` changes only these version fields.
 
 ## 2026-10-17
