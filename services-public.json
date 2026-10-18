@@ -881,10 +881,10 @@
     "runtime": "compose",
     "tags": [],
     "trl": 4,
-    "trl_assessed_at": "2026-10-04",
+    "trl_assessed_at": "2026-10-18",
     "trl_assessor": "Codex",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "HTML-only inspection misses client-rendered routes and does not validate that a route is currently operational.",
+    "trl_ceiling_reason": "The bounded static and JS-render paths may still miss client-rendered navigation; this replay had no provenance-confirmed JS success, and route extraction does not verify that a destination is operational.",
     "url": "https://contact-route-detector.0crawl.com"
   },
   {

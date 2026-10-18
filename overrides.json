@@ -1120,12 +1120,12 @@
     "host_port": 18330,
     "placement": "replicable",
     "trl": 4,
-    "trl_assessed_at": "2026-10-04",
+    "trl_assessed_at": "2026-10-18",
     "trl_assessor": "Codex",
-    "trl_evidence": "Standalone Go microservice with bounded same-site fetches through go-common fleetfetch and conservative route classification. Unit tests cover positive and negative signals, page limits, aliases, SSRF rejection, and cache accounting. Pre-production; no live fleet deployment yet.",
+    "trl_evidence": "Standalone Go detector with bounded same-site fetches and a bounded JS-render retry for sparse app shells. Regression tests cover accented Mexican Spanish Contáctanos links and a Spanish negative control. A read-only production-derived replay of 100 successful non-null contact-email rows across 20 non-US countries found one first-party /contacto route missed before the fix; the patch added one route with no removals and no boolean contact-signal change. Version 0.1.17 is deployed on both active replicas with the same image digest; direct health, selftest, and version checks passed. The replay had no provenance-confirmed JS renders, so none are counted as JS evidence.",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "HTML-only inspection misses client-rendered routes and does not validate that a route is currently operational.",
-    "version": "0.1.16",
+    "trl_ceiling_reason": "The bounded static and JS-render paths may still miss client-rendered navigation; this replay had no provenance-confirmed JS success, and route extraction does not verify that a destination is operational.",
+    "version": "0.1.17",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "contact-route-detector", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "depends_on": [
       "infrastructure-fetch-cache"

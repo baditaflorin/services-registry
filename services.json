@@ -1205,10 +1205,10 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 4,
-    "trl_evidence": "Standalone Go microservice with bounded same-site fetches through go-common fleetfetch and conservative route classification. Unit tests cover positive and negative signals, page limits, aliases, SSRF rejection, and cache accounting. Pre-production; no live fleet deployment yet.",
+    "trl_evidence": "Standalone Go detector with bounded same-site fetches and a bounded JS-render retry for sparse app shells. Regression tests cover accented Mexican Spanish Cont\u00e1ctanos links and a Spanish negative control. A read-only production-derived replay of 100 successful non-null contact-email rows across 20 non-US countries found one first-party /contacto route missed before the fix; the patch added one route with no removals and no boolean contact-signal change. Version 0.1.17 is deployed on both active replicas with the same image digest; direct health, selftest, and version checks passed. The replay had no provenance-confirmed JS renders, so none are counted as JS evidence.",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "HTML-only inspection misses client-rendered routes and does not validate that a route is currently operational.",
-    "trl_assessed_at": "2026-10-04",
+    "trl_ceiling_reason": "The bounded static and JS-render paths may still miss client-rendered navigation; this replay had no provenance-confirmed JS success, and route extraction does not verify that a destination is operational.",
+    "trl_assessed_at": "2026-10-18",
     "trl_assessor": "Codex",
     "placement": "replicable",
     "host_port": 18330,
@@ -1217,7 +1217,7 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": true,
-    "version": "0.1.16",
+    "version": "0.1.17",
     "network_exposure": "gateway-authenticated"
   },
   {
