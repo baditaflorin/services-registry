@@ -1,5 +1,7 @@
 ## 2026-10-18
 
+- team-member-extractor: record the 138-row country-focused rendered-DOM replay, the four-token schema.org Person/jobTitle recall improvement (PR #44), and signed v0.2.9 live checks.
+
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-activity` 0.7.0, `fleet-graph` 0.4.31, `team-member-extractor` 0.2.9, `team-size` 3.0.17.
 - team-size country-audit evidence refreshed: 108 production-derived candidate rows across 11 country/language strata identified a reproducible Russian headcount miss; PR #36 shipped in 3.0.17. Both pool replicas pass direct health, self-test, and version checks on matching cosign-verified image digest `sha256:64ada9105f21…`; gateway-health audit is 1/1 HTTP 200. Candidate rows were not treated as headcount labels; anonymous gateway `/selftest` remains auth-gated.
 - Correct Contact Route Detector's canonical registry pin and evidence to deployed v0.1.17; record the 100-row, 20-country replay and the reproduced Spanish `/contacto` route improvement.
