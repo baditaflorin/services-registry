@@ -47,6 +47,7 @@ func main() {
 		reqTO     = flag.Duration("request-timeout", 3*time.Second, "per-request timeout")
 		threshold = flag.Int("breaker-failures", 3, "consecutive failures that open the circuit")
 		cooldown  = flag.Duration("breaker-cooldown", 30*time.Second, "how long the circuit stays open")
+		slow      = flag.Duration("slow-threshold", 50*time.Millisecond, "a response slower than this to START counts as a failure (0 = off); a slow shared cache is worse than none")
 		maxPuts   = flag.Int("max-async-puts", 8, "concurrent background uploads")
 		putTO     = flag.Duration("put-timeout", 30*time.Second, "timeout of one background upload")
 	)
@@ -93,6 +94,7 @@ func main() {
 			},
 			threshold: *threshold,
 			cooldown:  *cooldown,
+			slow:      *slow,
 		}
 		hc = &cachers.HTTPClient{
 			BaseURL:               *server,

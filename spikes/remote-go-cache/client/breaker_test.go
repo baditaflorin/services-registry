@@ -14,10 +14,15 @@ type fakeRT struct {
 	calls  int
 	err    error
 	status int
+	delay  time.Duration // advances clk by this much per call, to simulate a slow link
+	clk    *time.Time
 }
 
 func (f *fakeRT) RoundTrip(*http.Request) (*http.Response, error) {
 	f.calls++
+	if f.clk != nil {
+		*f.clk = f.clk.Add(f.delay)
+	}
 	if f.err != nil {
 		return nil, f.err
 	}
@@ -119,5 +124,43 @@ func TestQuietLogDropsPerRequestErrorsButCountsThem(t *testing.T) {
 	}
 	if q.dropped.Load() != 2 {
 		t.Fatalf("dropped=%d, want 2", q.dropped.Load())
+	}
+}
+
+func TestSlowResponsesOpenTheBreakerButFastOnesDoNot(t *testing.T) {
+	now := time.Unix(1000, 0)
+	f := &fakeRT{status: 200, delay: 80 * time.Millisecond, clk: &now}
+	b := &breaker{rt: f, threshold: 3, cooldown: time.Minute, slow: 50 * time.Millisecond, now: func() time.Time { return now }}
+	for i := 0; i < 3; i++ {
+		b.RoundTrip(req())
+	}
+	if _, err := b.RoundTrip(req()); !errors.Is(err, errCircuitOpen) {
+		t.Fatal("three 80 ms responses against a 50 ms limit must open the breaker")
+	}
+	if f.calls != 3 {
+		t.Fatalf("after opening, the slow server must not be called again: calls=%d", f.calls)
+	}
+
+	g := &fakeRT{status: 200, delay: 30 * time.Millisecond, clk: &now}
+	c := &breaker{rt: g, threshold: 3, cooldown: time.Minute, slow: 50 * time.Millisecond, now: func() time.Time { return now }}
+	for i := 0; i < 20; i++ {
+		if _, err := c.RoundTrip(req()); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if trips, _ := c.stats(); trips != 0 {
+		t.Fatal("30 ms responses are within the limit and must not trip the breaker")
+	}
+}
+
+func TestSlowDisabledWhenZero(t *testing.T) {
+	now := time.Unix(1000, 0)
+	f := &fakeRT{status: 200, delay: time.Second, clk: &now}
+	b := &breaker{rt: f, threshold: 2, cooldown: time.Minute, now: func() time.Time { return now }}
+	for i := 0; i < 10; i++ {
+		b.RoundTrip(req())
+	}
+	if trips, _ := b.stats(); trips != 0 {
+		t.Fatal("with no slow limit set, latency alone must never trip the breaker")
 	}
 }
