@@ -1,5 +1,6 @@
 ## 2026-10-18
 
+- Correct Contact Route Detector's canonical registry pin and evidence to deployed v0.1.17; record the 100-row, 20-country replay and the reproduced Spanish `/contacto` route improvement.
 - fleet-version-pin-sync: 12 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.2, `contact-route-detector` 0.1.16, `crlf-tester` 1.5.11, `domain-geo-anchor` 0.1.10, `email-extractor` 1.6.36, `email-harvester` 1.4.24, `firmographic-profile` 1.4.7, `fleet-activity` 0.6.0, `legal-entity` 1.33.38, `pentest-authz-matrix` 0.3.5, `pentest-cors-misconfig-prober` 0.7.8, `pentest-trufflehog` 0.2.10.
 - Pricing Tier Parser registry pin advanced from `0.1.18` to signed release `0.1.19` after image verification; deployment remains pending.
 - fleet-version-pin-sync: 10 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.1, `company-size` 3.5.57, `data-inventory` 1.7.7, `fleet-activity` 0.5.2, `fleet-graph` 0.4.30, `js-proxy` 0.11.4, `language-detector` 0.3.6, `office-locations` 2.7.8, `payment-detector` 1.6.3, `random-proxy` 0.1.6.
