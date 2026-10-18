@@ -13,6 +13,15 @@ groups:
           summary: "fleet-edge-probe stopped reporting (>1h)"
           description: "No fleet_edge_probe_last_run update for over an hour from any vantage. The external edge monitor is blind."
 
+      - alert: FleetEdgeProbeNothingEligible
+        expr: min by (vantage) (fleet_edge_probe_eligible_services) == 0
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "fleet-edge-probe on {{ $labels.vantage }} has nothing to probe (blind vantage)"
+          description: "The runtime/filter configuration of this vantage matches zero services in services.json (for example EDGE_PROBE_RUNTIME names a runtime the registry no longer has). The probe exits 3 and says which filter excluded how many services on stderr; fix the vantage config. Until then this vantage sees nothing."
+
       - alert: FleetServiceEdgeDown
         expr: max by (slug, host, runtime) (fleet_edge_probe_service_hard_fail) == 1
         for: 15m

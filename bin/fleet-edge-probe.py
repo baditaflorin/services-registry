@@ -726,7 +726,8 @@ def main():
         prev, prev_nothing = {}, False
         if os.path.exists(args.state):
             try:
-                doc = json.load(open(args.state))
+                with open(args.state) as f:
+                    doc = json.load(f)
                 prev = {r["slug"]: r for r in doc.get("results", [])}
                 prev_nothing = bool(doc.get("nothing_eligible"))
             except Exception:
@@ -737,8 +738,10 @@ def main():
         state_doc = {"ts": ts, "eligible": eligible, "nothing_eligible": nothing, "results": results}
         if nothing:
             state_doc["detail"] = detail
-        try:
-            json.dump(state_doc, open(args.state, "w"), indent=2)
+        try:  # atomic: a torn state file would repeat every alert on the next run
+            with open(args.state + ".tmp", "w") as f:
+                json.dump(state_doc, f, indent=2)
+            os.replace(args.state + ".tmp", args.state)
         except OSError as e:
             log(f"cannot write state {args.state}: {e}")
         if newly_broken:
