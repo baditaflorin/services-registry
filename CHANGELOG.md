@@ -1,5 +1,6 @@
 ## 2026-10-18
 
+- address-extractor: pin deployed release 3.4.21 after go_address_extractor PR #72. Both pool replicas are healthy on the same Cosign-verified digest `sha256:85f567085493d973b5e13c98ae56a5ee5649cb322f21ea8eb4395b314af44742`; direct `/health`, `/selftest`, and `/version` checks returned 200 and `/version` reported 3.4.21. Informational: gateway `/selftest` returned 401, and pool status retains a pre-existing OTEL environment-contract difference on dockerhost.
 - legal-entity: pin release 1.33.39 for the country-qualified SARL and Côte d’Ivoire attribution fix (go_legal_entity#122).
 - phone-extractor: pin deployed release 1.4.31, which recognizes international numbers formatted without a leading plus (go_phone_extractor#62).
 - domain-geo-anchor: pin release 0.1.12 after the US state-code and country-code collision fix (go_domain_geo_anchor#29).
