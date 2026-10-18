@@ -1,5 +1,6 @@
 ## 2026-10-18
 
+- domain-geo-anchor: pin release 0.1.12 after the US state-code and country-code collision fix (go_domain_geo_anchor#29).
 - team-member-extractor: record the 138-row country-focused rendered-DOM replay, the four-token schema.org Person/jobTitle recall improvement (PR #44), and signed v0.2.9 live checks.
 
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-activity` 0.7.0, `fleet-graph` 0.4.31, `team-member-extractor` 0.2.9, `team-size` 3.0.17.
