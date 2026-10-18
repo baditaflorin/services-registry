@@ -810,6 +810,41 @@ def validate_allowed_source_ips(entry: dict) -> None:
             )
 
 
+def validate_public_path_prefixes(entry: dict) -> None:
+    """Validate request-path prefixes that bypass the keystore gate fail-closed.
+
+    This is a widening of attack surface (an unauthenticated route on an
+    otherwise keystore-gated service), so it is held to the same bar as
+    allowed_source_ips: non-empty, unique, strings only, and only on a
+    service that actually has a gate to exempt a prefix from.
+    """
+    if "public_path_prefixes" not in entry:
+        return
+    prefixes = entry["public_path_prefixes"]
+    service_id = entry.get("id", "<unknown>")
+    if not isinstance(prefixes, list) or not prefixes:
+        sys.exit(f"ERROR: {service_id} public_path_prefixes must be a non-empty array")
+    auth = entry.get("auth")
+    if not isinstance(auth, dict) or auth.get("type") != "api_key":
+        sys.exit(
+            f"ERROR: {service_id} public_path_prefixes is valid only for "
+            "auth.type='api_key' (a service with no gate has nothing to exempt)"
+        )
+    if not all(isinstance(value, str) for value in prefixes):
+        sys.exit(f"ERROR: {service_id} public_path_prefixes entries must be strings")
+    if len(prefixes) != len(set(prefixes)):
+        sys.exit(f"ERROR: {service_id} public_path_prefixes must contain unique entries")
+    for value in prefixes:
+        # Mirrors go-common's own guard at the container layer (KeystoreOpts.
+        # PublicPathPrefixes): "" and "/" would make the whole service
+        # public, which this field exists to avoid, not enable.
+        if value in ("", "/") or not value.startswith("/"):
+            sys.exit(
+                f"ERROR: {service_id} has invalid public_path_prefixes entry "
+                f"{value!r}; must be a path starting with '/', and not '/' itself"
+            )
+
+
 def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     topics = normalize_topics(repo.get("repositoryTopics") or [])
     mesh = mesh_of(topics)
@@ -963,6 +998,18 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # renderer retains its standard loopback/LAN/gateway rules.
               # This is operational metadata and intentionally not public.
               "allowed_source_ips",
+              # Request path prefixes that bypass the keystore gate entirely
+              # (fleet-runner nginx-render → PublicPathPrefixes; the matching
+              # container-side knob is go-common's KeystoreOpts.
+              # PublicPathPrefixes / server.WithKeystoreAuthPublicPrefixes).
+              # For a handler whose own unguessable value is its access
+              # control — an out-of-band callback catcher keyed on a random,
+              # one-shot token in the path, reached by a caller that can
+              # never hold this service's key — not a way to make a route
+              # convenient to call. validate_public_path_prefixes() above
+              # enforces the same "" / "/" refusal as the container layer.
+              # Operational metadata; intentionally not public.
+              "public_path_prefixes",
               # Egress routing — `proxy_egress: true` flags services that
               # must route outbound HTTP via the Webshare residential
               # proxy (FLEET.md §6 — active scanners hitting bug-bounty
@@ -1336,6 +1383,7 @@ def build(overrides: dict) -> list[dict]:
     entries = sorted(seen.values(), key=lambda e: (e.get("mesh", "private"), e["id"]))
     for entry in entries:
         validate_allowed_source_ips(entry)
+        validate_public_path_prefixes(entry)
     return entries
 
 
