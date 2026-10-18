@@ -1110,7 +1110,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.5.56",
+    "version": "3.5.57",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1724,7 +1724,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.7.6",
+    "version": "1.7.7",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4733,7 +4733,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.3.5",
+    "version": "0.3.6",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5249,7 +5249,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.7.7",
+    "version": "2.7.8",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5454,7 +5454,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.2",
+    "version": "1.6.3",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -8893,7 +8893,7 @@
       "88.198.68.213/32",
       "168.119.211.205/32"
     ],
-    "version": "0.10.0",
+    "version": "0.10.1",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -10852,7 +10852,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.4.28",
+    "version": "0.4.30",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -12579,7 +12579,7 @@
     "host_port": 18006,
     "container_port": 8080,
     "placement": "replicable",
-    "version": "0.11.1",
+    "version": "0.11.4",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -15359,7 +15359,7 @@
     "host_port": 18019,
     "container_port": 3333,
     "network_exposure": "gateway-authenticated",
-    "version": "0.1.5"
+    "version": "0.1.6"
   },
   {
     "id": "search-duck",
@@ -19154,7 +19154,7 @@
     "depends_on": [
       "apikey-service"
     ],
-    "version": "0.5.1",
+    "version": "0.5.2",
     "network_exposure": "gateway-authenticated"
   }
 ]
