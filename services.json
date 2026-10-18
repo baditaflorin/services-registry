@@ -1217,7 +1217,7 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": true,
-    "version": "0.1.15",
+    "version": "0.1.16",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1448,7 +1448,7 @@
     "container_port": 8142,
     "proxy_egress": true,
     "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx",
-    "version": "1.5.10",
+    "version": "1.5.11",
     "network_exposure": "gateway-authenticated",
     "placement": "replicable"
   },
@@ -2767,7 +2767,7 @@
     "container_port": 8080,
     "placement": "replicable",
     "network_exposure": "gateway-authenticated",
-    "version": "0.1.9"
+    "version": "0.1.10"
   },
   {
     "id": "domain-gift-card",
@@ -3458,7 +3458,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.35",
+    "version": "1.6.36",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3495,7 +3495,7 @@
     "proxy_egress": true,
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
     "network_exposure": "gateway-authenticated",
-    "version": "1.4.23",
+    "version": "1.4.24",
     "placement": "replicable"
   },
   {
@@ -3735,7 +3735,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4815,7 +4815,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.37",
+    "version": "1.33.38",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -8893,7 +8893,7 @@
       "88.198.68.213/32",
       "168.119.211.205/32"
     ],
-    "version": "0.10.1",
+    "version": "0.10.2",
     "network_exposure": "gateway-ip-allowlisted"
   },
   {
@@ -13283,7 +13283,7 @@
     "proxy_egress": true,
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "network_exposure": "gateway-authenticated",
     "placement": "replicable"
   },
@@ -13547,7 +13547,7 @@
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "qmj9u5wiz6vsr12i5gscv4yz",
     "network_exposure": "gateway-authenticated",
-    "version": "0.7.7",
+    "version": "0.7.8",
     "placement": "replicable"
   },
   {
@@ -15005,7 +15005,7 @@
     "proxy_egress": true,
     "access_tier": "vetted-pentest",
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g",
-    "version": "0.2.9",
+    "version": "0.2.10",
     "network_exposure": "gateway-authenticated",
     "placement": "replicable"
   },
@@ -19154,7 +19154,7 @@
     "depends_on": [
       "apikey-service"
     ],
-    "version": "0.5.2",
+    "version": "0.6.0",
     "network_exposure": "gateway-authenticated"
   }
 ]
