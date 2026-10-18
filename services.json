@@ -1205,9 +1205,9 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 4,
-    "trl_evidence": "Standalone Go detector with bounded same-site fetches and a bounded JS-render retry for sparse app shells. Regression tests cover accented Mexican Spanish Cont\u00e1ctanos links and a Spanish negative control. A read-only production-derived replay of 100 successful non-null contact-email rows across 20 non-US countries found one first-party /contacto route missed before the fix; the patch added one route with no removals and no boolean contact-signal change. Version 0.1.17 is deployed on both active replicas with the same image digest; direct health, selftest, and version checks passed. The replay had no provenance-confirmed JS renders, so none are counted as JS evidence.",
+    "trl_evidence": "Standalone Go detector with bounded same-site fetches and one bounded JS-render retry for sparse shells. PR #33 adds Hungarian `kapcsolat` contact-route recognition and a route/candidate regression test. A private DomainScope manual first-party audit used 100 valid domains across 60 country strata; isolated headless Chrome loaded 48 pages from 40 countries, while 50 returned browser errors and 2 timed out. One rendered Hungarian (`lang=hu`) page exposed three visible same-site contact links that pre-fix local handler replay missed; after the fix, replay found one route and candidate. The Hungarian-English [dict.cc entry](https://enhu.dict.cc/?s=kapcsolat) maps the term to contact. This was manual page review, not historical service-output ground truth; the service fetch-cache URL path was not replayed because this checkout lacked its service-scoped credential. Release 0.1.18 is tagged at commit 058d7c0; deployment verification is pending. Earlier 0.1.17 live checks passed on both active replicas. No raw hosts or page content are recorded.",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "The bounded static and JS-render paths may still miss client-rendered navigation; this replay had no provenance-confirmed JS success, and route extraction does not verify that a destination is operational.",
+    "trl_ceiling_reason": "The service bounded JS-render retry was not exercised through its fetch-cache endpoint in this checkout; manual Chrome inspection found no remaining thin shells in successful pages but does not establish service-render fidelity across sites. Route extraction does not verify that a destination is operational.",
     "trl_assessed_at": "2026-10-18",
     "trl_assessor": "Codex",
     "placement": "replicable",
@@ -1217,7 +1217,7 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": true,
-    "version": "0.1.17",
+    "version": "0.1.18",
     "network_exposure": "gateway-authenticated"
   },
   {
