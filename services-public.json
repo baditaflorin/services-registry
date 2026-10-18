@@ -884,7 +884,7 @@
     "trl_assessed_at": "2026-10-18",
     "trl_assessor": "Codex",
     "trl_ceiling": 6,
-    "trl_ceiling_reason": "The bounded static and JS-render paths may still miss client-rendered navigation; this replay had no provenance-confirmed JS success, and route extraction does not verify that a destination is operational.",
+    "trl_ceiling_reason": "The service bounded JS-render retry was not exercised through its fetch-cache endpoint in this checkout; manual Chrome inspection found no remaining thin shells in successful pages but does not establish service-render fidelity across sites. Route extraction does not verify that a destination is operational.",
     "url": "https://contact-route-detector.0crawl.com"
   },
   {

@@ -1,5 +1,7 @@
 ## 2026-10-18
 
+- contact-route-detector: pin release 0.1.18 for the Hungarian `kapcsolat` route/candidate fix (go_contact_route_detector PR #33, release commit `058d7c0`, tag `0.1.18`). A private country-stratified DomainScope audit covered 100 valid domains across 60 country strata; headless Chrome loaded 48 first-party pages from 40 countries, and one rendered Hungarian page exposed three visible same-site contact links missed by the prior handler. The fixed handler recovered one route and candidate. The fetch-cache URL path was unavailable in the checkout, and these were manual page labels rather than historical service-output ground truth. The Hungarian-English [dict.cc entry](https://enhu.dict.cc/?s=kapcsolat) confirms the label. Deployment verification follows the pin.
+
 - email-harvester: pin release 1.4.26 for the punctuation-leading internationalized mailbox fix (go_email_harvester#44).
 - address-extractor: pin deployed release 3.4.21 after go_address_extractor PR #72. Both pool replicas are healthy on the same Cosign-verified digest `sha256:85f567085493d973b5e13c98ae56a5ee5649cb322f21ea8eb4395b314af44742`; direct `/health`, `/selftest`, and `/version` checks returned 200 and `/version` reported 3.4.21. Informational: gateway `/selftest` returned 401, and pool status retains a pre-existing OTEL environment-contract difference on dockerhost.
 - legal-entity: pin release 1.33.39 for the country-qualified SARL and Côte d’Ivoire attribution fix (go_legal_entity#122).
