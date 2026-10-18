@@ -460,7 +460,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8.",
-    "version": "3.4.21",
+    "version": "3.4.23",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1390,7 +1390,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Marker-based detection (8-byte per-scan unique hex marker) replaces\nstatic-string echo checks; inspect() classifies header reflection\n(critical), raw-newline-in-header (high), and body reflection (medium)\nseparately. Probes inject across query params, path segments, and four\nreflected headers (User-Agent, Referer, X-Forwarded-For, X-Forwarded-Host;\nHost gated by ALLOW_HOST_INJECT=1). Payload corpus is 20 variants\ncovering hex-case, double-encoding, Unicode/UTF-8 overlong, fragment-\nprefixed, raw \\r vs \\n vs \\r\\n; corpus extensible via PAYLOADS_URL\n(go-pentest-payloads). Per-request 4 s, total 60 s budget, worker pool\n4. SCOPE_GUARD_URL fail-closed gate. ≥9 unit + integration tests\nincluding httptest.Server vulnerable + safe backends.",
-    "version": "1.5.11",
+    "version": "1.5.12",
     "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx"
   },
   "crux-field-vitals": {
@@ -2271,7 +2271,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
-    "version": "0.1.12",
+    "version": "0.1.14",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2966,7 +2966,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged). Country-localization follow-up (2026-10-18, PR #42 / commit 08636c8): a private 100-row production-derived candidate cohort covered 20 non-US countries. No rows were attributed to go_email_harvester, so historical email-extractor outputs were candidate leads only, not ground truth. First-party replay reproduced a static Polish same-host kontakt route miss (homepage-only result 0; linked route 4 mailto addresses). The fix follows kontakt after existing route keywords and preserves their priority under the four-page cap. Full replay changed six rows (+5 address hashes, 0 removed; 88 HTTP 200, 12 fetch failures; 68 nonempty and 20 empty). Release 1.4.25 is deployed to both pool replicas with a matching image digest; direct health/selftest/version and the gateway health audit passed. Internationalization follow-up (2026-10-18, code PR #44 / commit 7347543; release PR #45 / commit 8d3171f; tag 1.4.26): a private 46-row production-derived candidate cohort spanned 25 country codes. First-party visible text confirmed three misses for valid mailboxes whose local parts begin with RFC atext punctuation. The deterministic parser fix preserves valid punctuation-leading local parts while rejecting malformed dot boundaries and sentence punctuation; focused positive/negative regression cases pass. Historical outputs and candidate rows were leads, not ground-truth labels. The deployed 1.4.26 image was Cosign-verified at digest sha256:6dbf0deacd85…; both pool replicas report healthy on that digest, and direct health/selftest/version plus gateway health checks passed. Gateway selftest remains auth-gated (401); pool status retains pre-existing environment-contract drift. The targeted cohort does not justify raising TRL, so assessment remains 6/7.",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.26"
+    "version": "1.4.27"
   },
   "embed-iframe-classifier": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -4447,7 +4447,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Part of a fleet-wide TRL audit (round 15). Found and fixed a genuine, high-impact bug: closed a generic-head-noun false-positive loophole in the abstain gate. Not bumped to 8: no cross-check mechanism exists and the 852K-row backlog hasn't been reprocessed/validated end-to-end. See github.com/baditaflorin/go_google_taxonomy PR #6.",
-    "version": "1.5.7",
+    "version": "1.5.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -4798,7 +4798,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.11.4",
+    "version": "0.12.1",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -5032,7 +5032,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.39",
+    "version": "1.33.40",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -5565,7 +5565,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15.",
-    "version": "2.7.9",
+    "version": "2.7.11",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -5698,7 +5698,7 @@
   },
   "payment-detector": {
     "container_port": 8298,
-    "version": "1.6.3",
+    "version": "1.6.4",
     "description": "Microservice for Payment Detector",
     "host_port": 8298,
     "placement": "replicable",
@@ -5826,7 +5826,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
-    "version": "0.3.5",
+    "version": "0.3.7",
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
@@ -5945,7 +5945,7 @@
   "pentest-cors-misconfig-prober": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.7.8",
+    "version": "0.7.9",
     "access_tier": "vetted-pentest",
     "container_port": 18124,
     "description": "Active CORS-misconfig prober. 5 attacker-Origin probes (reflection, null-origin, suffix-bypass, pre-subdomain, case-fold). Reflection+Allow-Credentials=high.",
@@ -6432,7 +6432,7 @@
   "pentest-ssrf-prober": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "placement": "replicable",
-    "version": "0.3.8",
+    "version": "0.3.10",
     "access_tier": "vetted-pentest",
     "container_port": 18150,
     "host_port": 18150,
@@ -6789,7 +6789,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "0.1.20",
+    "version": "0.1.21",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -7093,7 +7093,7 @@
     "trl_evidence": "research tool, workflow pipeline"
   },
   "revenue-model": {
-    "version": "2.6.27",
+    "version": "2.6.29",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
@@ -7973,7 +7973,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 40-domain sample): found and fixed 2 real false-positive bugs -- schema.org Review-block author names (customer reviewers) counted as team members, and unfiltered schema.org Person names (CMS/theme boilerplate accounts) counted as employees. Also definitively resolved the cross-service field-contract question for go_company_size's integration: estimate.value/range_low/range_high/confidence/method, wrapped in the standard envelope -- that integration bug is now independently fixed on the go_company_size side (PR #20, merged same day). See PR #9 (merged). Supplementary country audit evidence (2026-10-18; TRL 6 rating unchanged): a production-derived candidate cohort of 108 recent non-null company-size rows across 11 country/language strata was used for candidate selection only, not as headcount labels. First-party Russian pages on 3 hosts contained 5 distinct explicit employee-count values that the prior parser did not emit. PR #36 added inflected Russian employee/worker nouns and team-anchored человек with customer-context controls. Release 3.0.17 (commit 70a050d57bd3d18b64b02412ba1ea90240334b43) is deployed to both pool replicas on the cosign-signed and verified image digest sha256:64ada9105f21…. Both replicas passed direct health, self-test, and version probes; gateway-health audit was 1/1 HTTP 200. The anonymous gateway self-test remains auth-gated (401).",
-    "version": "3.0.17",
+    "version": "3.0.18",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
