@@ -4641,16 +4641,16 @@
     "spiffe_workload": true
   },
   "iban-bic-validator": {
-    "version": "0.1.8",
+    "version": "0.1.9",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18291,
     "host_port": 18291,
     "placement": "replicable",
     "proxy_egress": false,
     "trl": 8,
-    "trl_evidence": "Real 900-URL production-data audit. Fixed a BIC country-code false positive and expanded the IBAN registry 33->47 countries, cross-checked against a 50/50 real-IBAN sample with zero disagreements. 35 passing tests. See github.com/baditaflorin/go_iban_bic_validator PR #1.",
-    "trl_assessed_at": "2026-07-30",
-    "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
+    "trl_evidence": "Historical 900-URL production-derived audit fixed a BIC country-code false positive; its 50/50 IBAN cohort was Europe-biased and did not independently validate every national format. Release 0.1.9 expands the offline IBAN format table from 60 to all 89 country/territory formats in SWIFT IBAN Registry Release 103 (Sep 2026), using official lengths, BBAN structures and bank-identifier offsets. The 29 newly added formats have generated synthetic positive/checksum, wrong-length and format-class regression controls; these are standards-derived fixtures, not real account identifiers. Tests cover all 89 formats, MOD-97 mutation, normalization, invalid structure and BIC-country checks. The validator verifies format and checksum only; it does not establish that a bank or account exists. See go_iban_bic_validator PRs #26 and #27.",
+    "trl_assessed_at": "2026-10-18",
+    "trl_assessor": "Codex (SWIFT Release 103 coverage audit)",
     "spiffe_workload": true
   },
   "idor-finder": {
