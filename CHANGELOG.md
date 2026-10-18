@@ -1,5 +1,6 @@
 ## 2026-10-18
 
+- Pricing Tier Parser registry pin advanced from `0.1.18` to signed release `0.1.19` after image verification; deployment remains pending.
 - fleet-version-pin-sync: 10 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.1, `company-size` 3.5.57, `data-inventory` 1.7.7, `fleet-activity` 0.5.2, `fleet-graph` 0.4.30, `js-proxy` 0.11.4, `language-detector` 0.3.6, `office-locations` 2.7.8, `payment-detector` 1.6.3, `random-proxy` 0.1.6.
 - Currency Detector pinned to 1.5.8 after adding localized African pricing markers; signed image verified and both pool replicas pass health checks.
 - Targeted registry pins: `iban-bic-validator` 0.1.8 and `phone-extractor` 1.4.30, both with signed GHCR images verified and live deployments healthy. `services.json` changes only these version fields.
