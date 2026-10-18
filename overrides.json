@@ -6254,7 +6254,8 @@
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
     "version": "0.2.6",
-    "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo"
+    "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo",
+    "public_path_prefixes": ["/c/"]
   },
   "pentest-orchestrator": {
     "env": {
