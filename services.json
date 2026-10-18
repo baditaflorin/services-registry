@@ -3888,11 +3888,11 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "Second-pass re-audit: found and fixed a subtle masking bug -- when the JS renderer silently fails/times out and falls back, the response header still claimed render_mode=js, hiding the fallback and turning real renderer failures into false-negative 'no cookie banner' results. Live-confirmed against a real domain with a genuine cookie-consent banner. See PR #14 (merged).",
+    "trl_evidence": "Second-pass re-audit: found and fixed a subtle masking bug -- when the JS renderer silently fails/times out and falls back, the response header still claimed render_mode=js, hiding the fallback and turning real renderer failures into false-negative 'no cookie banner' results. Live-confirmed against a real domain with a genuine cookie-consent banner. See PR #14 (merged). Country-localization loop (2026-10-18): a read-only sample of 25 non-null outputs across FI, NO, SE, DK, and CZ produced two first-party-confirmed substantive privacy-policy misses (one Norwegian, one Swedish). Added localized privacy and personal-data signals while retaining the two-signal confirmation guard, with positive and one-signal negative regression cases. Unit tests, vet, build, and CI passed; v1.26.4 is deployed to both healthy replicas and its live version endpoint is verified.",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_assessed_at": "2026-08-01",
-    "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
+    "trl_assessed_at": "2026-10-18",
+    "trl_assessor": "codex-country-localization-loop-2026-10-18",
     "host_port": 8291,
     "container_port": 8291,
     "placement": "replicable",
@@ -3904,7 +3904,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "network_exposure": "gateway-authenticated",
-    "version": "1.26.3"
+    "version": "1.26.4"
   },
   {
     "id": "go-oauth-mapper",
@@ -4733,7 +4733,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.3.6",
+    "version": "0.3.7",
     "network_exposure": "gateway-authenticated"
   },
   {
