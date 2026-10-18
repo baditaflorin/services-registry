@@ -1223,13 +1223,14 @@ ssh root@0docker.com 'pct exec 108 -- /usr/local/bin/fleet-runner allocate-port 
 ```
 
 The registry only knows what has a row, so `allocate-port` also reads, over SSH, which ports are already in use on the docker
-host (the LISTEN sockets and the ports running containers publish) and skips them: on 2026-10-16 a port that an unregistered
-compose project already published was handed out, and the key service was down for about a minute. With `--cluster` it reads
-that cluster's docker host; without it, the docker host of every production cluster (staging is left out; name it with
-`--cluster` to check it). It fails closed: a host it cannot read, a failing probe or output it cannot parse exits 2 and
-proposes and reserves nothing. `--registry-only` skips the live read on purpose and says so on stderr. A skipped port that no
-registry row claims is named on stderr and in `--json`: register that squatter as an `$external` row in `overrides.json`, or
-stop it.
+host (the TCP LISTEN sockets and the TCP ports running containers publish) and skips them: on 2026-10-16 a port that an
+unregistered compose project already published was handed out, and the key service was down for about a minute. With
+`--cluster` it reads that cluster's docker host; without it, the docker host of every production cluster (a cluster marked
+`environment: production`; staging, and any cluster with no environment set, are left out; name one with `--cluster` to
+check it). It fails closed: a host it cannot read, a failing probe or output it cannot parse exits 2 and proposes and
+reserves nothing. `--registry-only` skips the live read on purpose and says so on stderr. A skipped port that no registry row
+claims is named on stderr and in `--json`: register that squatter as an `$external` row in `overrides.json`, or stop it. A
+port that the same `--reserve` slug already holds is still returned when it is in use, with a warning.
 
 <!-- anchor id=port-allocation-live-check repo=go_fleet_runner symbol=go:allocate_port_live.go#readAllocatePortLive verified=630a481e6 digest=sha256:e57a2e8190f02f163a24fe897c7746ed6050ccaa5483651efe39d52db3c854fb on=2026-10-18 -->
 
