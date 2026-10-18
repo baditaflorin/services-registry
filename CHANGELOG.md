@@ -1,5 +1,6 @@
 ## 2026-10-18
 
+- Restore the pre-sync registry pins for `fleet-graph` (`0.4.30`) and `fleet-activity` (`0.6.0`); retain `team-size` `3.0.17` and `team-member-extractor` `0.2.9`.
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-activity` 0.7.0, `fleet-graph` 0.4.31, `team-member-extractor` 0.2.9, `team-size` 3.0.17.
 - Correct Contact Route Detector's canonical registry pin and evidence to deployed v0.1.17; record the 100-row, 20-country replay and the reproduced Spanish `/contacto` route improvement.
 - fleet-version-pin-sync: 12 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.2, `contact-route-detector` 0.1.16, `crlf-tester` 1.5.11, `domain-geo-anchor` 0.1.10, `email-extractor` 1.6.36, `email-harvester` 1.4.24, `firmographic-profile` 1.4.7, `fleet-activity` 0.6.0, `legal-entity` 1.33.38, `pentest-authz-matrix` 0.3.5, `pentest-cors-misconfig-prober` 0.7.8, `pentest-trufflehog` 0.2.10.
