@@ -326,12 +326,13 @@ services:
 
 ### `Dockerfile`
 
-Canonical multi-stage build. Match `golang` minor to whatever the rest
-of the fleet is on (`1.24`/`1.25` are both in use; pick the same one as
-neighbouring services).
+Canonical multi-stage build. New services use `golang:1.26` (go-common's
+minimum Go); an existing service moves to it together with its `go`
+line in go.mod, never one without the other (`GOTOOLCHAIN=local` in the image
+makes a go.mod newer than the image a build failure).
 
 ```Dockerfile
-FROM golang:1.25-alpine AS builder
+FROM golang:1.26-alpine AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
@@ -388,7 +389,7 @@ THEN add the `.gitignore` entry, otherwise the file stays tracked.
 ```
 module github.com/baditaflorin/<id>
 
-go 1.24
+go 1.26.0
 
 require github.com/baditaflorin/go-common v0.7.0
 ```
