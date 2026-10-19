@@ -220,6 +220,11 @@
       },
       "description": "Operational additional source allow rules for a gateway-ip-allowlisted service. Entries must be exact-host IPv4 /32 or IPv6 /128 CIDRs; these are additive and do not replace standard renderer allow rules. Kept out of services-public.json."
     },
+    "gateway_rate_limit": {
+      "type": "string",
+      "enum": ["api_per_ip", "allowlisted-sources-exempt"],
+      "description": "Gateway per-IP rate limit on the vhost's catchall location. Absent or 'api_per_ip' renders limit_req zone=api_per_ip. 'allowlisted-sources-exempt' renders none and is valid only for a keystore-gated, network_exposure='gateway-ip-allowlisted' service, whose allow/deny block admits fleet hosts alone; a remote runtime host sends all of its pool replicas from one egress address, so a per-IP bucket throttled them against each other. Kept out of services-public.json."
+    },
     "served_by": {
       "type": "string",
       "minLength": 1,

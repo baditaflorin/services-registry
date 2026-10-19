@@ -772,6 +772,58 @@ class TestAllowedSourceIPs(unittest.TestCase):
         generate.validate_allowed_source_ips(self.BASE)
 
 
+class TestGatewayRateLimit(unittest.TestCase):
+    BASE = {
+        "id": "infrastructure-fetch-cache",
+        "network_exposure": "gateway-ip-allowlisted",
+        "auth": {"type": "api_key"},
+    }
+
+    def test_accepts_exemption_on_keystore_gated_allowlisted_vhost(self):
+        generate.validate_gateway_rate_limit({
+            **self.BASE, "gateway_rate_limit": "allowlisted-sources-exempt"
+        })
+
+    def test_accepts_explicit_default_anywhere(self):
+        for exposure in ("gateway-ip-allowlisted", "gateway-authenticated", "gateway-public"):
+            with self.subTest(exposure=exposure):
+                generate.validate_gateway_rate_limit({
+                    **self.BASE, "network_exposure": exposure,
+                    "gateway_rate_limit": "api_per_ip",
+                })
+
+    def test_refuses_exemption_where_the_internet_reaches(self):
+        for change in (
+            {"network_exposure": "gateway-authenticated"},
+            {"network_exposure": "gateway-public"},
+            {"network_exposure": None},
+            {"auth": {"type": "none"}},
+            {"auth": None},
+        ):
+            with self.subTest(change=change), self.assertRaises(SystemExit):
+                generate.validate_gateway_rate_limit({
+                    **self.BASE, **change,
+                    "gateway_rate_limit": "allowlisted-sources-exempt",
+                })
+
+    def test_refuses_unknown_values(self):
+        for value in ("off", "", "Allowlisted-Sources-Exempt", True, None, ["api_per_ip"]):
+            with self.subTest(value=value), self.assertRaises(SystemExit):
+                generate.validate_gateway_rate_limit({**self.BASE, "gateway_rate_limit": value})
+
+    def test_omitted_metadata_remains_valid(self):
+        generate.validate_gateway_rate_limit(self.BASE)
+
+    def test_fetch_cache_override_validates(self):
+        overrides = json.loads((Path(generate.ROOT) / "overrides.json").read_text())
+        entry = overrides["infrastructure-fetch-cache"]
+        self.assertEqual(entry.get("gateway_rate_limit"), "allowlisted-sources-exempt")
+        generate.validate_gateway_rate_limit({**self.BASE, **entry, "id": "infrastructure-fetch-cache"})
+
+    def test_kept_out_of_the_public_projection(self):
+        self.assertNotIn("gateway_rate_limit", generate.PUBLIC_FIELDS)
+
+
 class TestComputeNetworkExposure(unittest.TestCase):
     """compute_network_exposure() derives network_exposure from the same
     signals that drive nginx-render's template — regression guard for the
