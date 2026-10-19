@@ -5054,7 +5054,7 @@
       "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-license-extractor-write-user",
       "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-license-extractor-write-password",
       "APP_ENVIRONMENT": "production",
-      "APP_VERSION": "0.1.9"
+      "APP_VERSION": "0.1.10"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
@@ -5063,7 +5063,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18270,
     "placement": "replicable",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
