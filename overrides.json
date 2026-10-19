@@ -7711,7 +7711,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "No audit-reset commit found -- genuine incremental hardening across 10+ rounds. Confirmed real table domain_social_profiles (~1.29M rows, tool_name='social-graph'). Tested against 600 real domains. Fixed: Weibo URL-routing prefixes (u/p/n) were being stored as the actual handle -- confirmed live in production, 144 rows literally have handle=\"u\", and CJK nicknames under /n/ were replaced with the literal string \"n\"; also fixed hyphenated-domain brand matching and wired Facebook's fb-page widget as a genuine owned-profile signal while correctly leaving fb-like alone (its link is often self-referential, not an identity claim). On a 517-domain corpus: domains with >=1 owned profile 169->179, zero regressions, no new false positives in a 25-profile precision spot-check. See github.com/baditaflorin/go_social_graph PR #18.",
-    "version": "2.6.6",
+    "version": "2.6.7",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
