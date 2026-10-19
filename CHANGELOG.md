@@ -1,3 +1,10 @@
+## 2026-10-20
+
+- currency-detector: pin version 1.5.14 after the Shopify geo-converted
+  transaction-currency fix merged in go_currency_detector PR #57 and tag
+  `1.5.14` was published. Production deployment remains pending healthy
+  fetch-cache dependency and standard fleet verification.
+
 ## 2026-10-19
 
 - fleet-version-pin-sync: 7 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.3, `domain-ecommerce-platform` 0.5.23, `domain-saas-host-mapper` 0.3.18, `domain-support-stack-detector` 0.4.3, `fleet-graph` 0.4.37, `hub-scrapetheworld-org` 0.17.2, `social-proof-extractor` 0.1.16.
