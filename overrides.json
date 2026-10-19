@@ -4340,7 +4340,7 @@
     "spiffe_workload": true
   },
   "gdpr-compliance": {
-    "version": "1.26.5",
+    "version": "1.26.6",
     "mem_limit": "256m",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8291,
@@ -4349,11 +4349,11 @@
     "host_port": 8291,
     "placement": "replicable",
     "trl": 7,
-    "trl_assessed_at": "2026-10-18",
-    "trl_assessor": "codex-country-localization-loop-2026-10-18",
+    "trl_assessed_at": "2026-10-19",
+    "trl_assessor": "codex-gdpr-ptbr-country-audit-2026-10-19",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
-    "trl_evidence": "Second-pass re-audit: found and fixed a subtle masking bug -- when the JS renderer silently fails/times out and falls back, the response header still claimed render_mode=js, hiding the fallback and turning real renderer failures into false-negative 'no cookie banner' results. Live-confirmed against a real domain with a genuine cookie-consent banner. See PR #14 (merged). Country-localization loop (2026-10-18): a read-only sample of 25 non-null outputs across FI, NO, SE, DK, and CZ produced two first-party-confirmed substantive privacy-policy misses (one Norwegian, one Swedish). Added localized privacy and personal-data signals while retaining the two-signal confirmation guard, with positive and one-signal negative regression cases. Unit tests, vet, build, and CI passed; v1.26.4 is deployed to both healthy replicas and its live version endpoint is verified.",
+    "trl_evidence": "Second-pass re-audit: found and fixed a subtle masking bug -- when the JS renderer silently fails/times out and falls back, the response header still claimed render_mode=js, hiding the fallback and turning real renderer failures into false-negative 'no cookie banner' results. Live-confirmed against a real domain with a genuine cookie-consent banner. See PR #14 (merged). Country-localization loop (2026-10-18): a read-only sample of 25 non-null outputs across FI, NO, SE, DK, and CZ produced two first-party-confirmed substantive privacy-policy misses (one Norwegian, one Swedish). Added localized privacy and personal-data signals while retaining the two-signal confirmation guard, with positive and one-signal negative regression cases. Unit tests, vet, build, and CI passed; v1.26.4 is deployed to both healthy replicas and its live version endpoint is verified. Brazil/pt-BR Article 18 audit (2026-10-19, source dataset domain_gdpr): 25/25 disjoint selector rows in even/odd record-ID discovery/holdout splits; 22/25 and 16/25 rows produced successful direct handler results, while 3/25 and 9/25 were unreachable. First-party validation matched 6 and 7 Portuguese privacy-policy bodies to their handler responses; all 13 corresponding v1.26.5 outputs had empty rights labels. Missed visible cue counts by discovery/holdout: access 1/4, rectification 1/5, erasure 4/5, restriction 4/2, objection 1/1, and automated-decision review 1/1. Portability appeared only in discovery (2/0) and was excluded from the parser change. No JS-rendered DOM was accepted; this evidence came from direct/static content. The PT-BR rules and sanitized positive/negative tests merged in go_gdpr_compliance PR #74 (4ac1dfa); go test, vet, build and Woodpecker CI passed. TRL remains 7. A signed 1.26.6 image is reported available; deployment verification is not included in this registry change.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
