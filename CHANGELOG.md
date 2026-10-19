@@ -1,5 +1,9 @@
 ## 2026-10-20
 
+- social-proof-extractor: pin version 0.1.18 after the Thai noun-first customer-count fix
+  merged in go_social_proof_extractor PR #42 and tag `0.1.18` was published. Deployment
+  remains pending the critical Docker host gate.
+
 - currency-detector: pin version 1.5.14 after the Shopify geo-converted
   transaction-currency fix merged in go_currency_detector PR #57 and tag
   `1.5.14` was published. Production deployment remains pending healthy
