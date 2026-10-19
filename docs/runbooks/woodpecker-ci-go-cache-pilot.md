@@ -208,6 +208,46 @@ file waits for them. Fixing that comes before judging this pilot: re-measure aft
 Synthetic runs on the same host (the "first run" and A/B sections above) are unaffected, they
 time only the compile.
 
+### Same day: why the pilot agent gets so little work, and the disk change
+
+**The load controller holds the pilot agent most of the time (OBSERVED).** The load-aware
+admission controller stops sending work to an agent whose host has had high I/O pressure for a
+while, and resumes it only after about ten minutes in a row with low pressure. A held agent still
+shows as online and healthy. From the controller's own journal over 26 hours, the pilot host was
+**held 82 % of the time** (2,567 samples about 30 s apart), with a mean I/O pressure between 17 and
+79 % an hour. Identical small probe workflows pinned by site label finished in about 6 s on three
+other sites while the one pinned to the pilot host waited more than 50 minutes and ran nowhere.
+That, more than anything about caching, explains the thin traffic behind the numbers above. An
+image builder on the same host (about 750 MB written in 30 s while the agent was held) keeps the
+pressure above the resume line.
+
+**Change applied 2026-10-19 20:13:52 UTC:** synchronous-write handling of that VM's disk was set
+to "disabled" on the hypervisor (a crash or power loss can lose the last ~5 s of writes; the VM
+has a nightly backup; revert with `zfs inherit sync <the VM's disk dataset>`). Same tests before and
+after, under similar load:
+
+| Test on the pilot host | Before | After |
+| --- | --- | --- |
+| synchronous 4 KB write | 47 and 62 ms | 0.4 to 1.8 ms |
+| `docker run alpine true`, image cached (median) | 1.9 s | 0.65 s |
+| same moment, other agents, same test | 0.3 to 0.4 s | 0.3 to 0.4 s |
+
+The gap to the other agents shrank from about 10-20 times to about 1.6 times. Occasional
+multi-second stalls remain (the pool is shared and made of spinning disks); a fast log device in
+that pool is the lasting fix.
+
+**Not yet shown: that the hold shrinks.** For the first hour after the change the pilot host was
+still held 100 % of the time (112 samples), which proves nothing in either direction. To judge
+the fix with the controller's own log, after a full working day run on the controller host:
+
+```sh
+journalctl -u woodpecker-load-controller@ci.0exec --since -26h --no-pager -o cat \
+  | python3 bin/woodpecker_controller_hold_report.py --node <pilot node> --split 2026-10-19T20:13:52Z
+```
+
+and then the token-free pilot report from step 7. If the hold stays near 80 %, the controller's
+resume rule (many calm samples in a row) is the next thing to look at, not the cache.
+
 ## Acceptance criteria
 
 All five must hold before the setting is applied to a second host:
