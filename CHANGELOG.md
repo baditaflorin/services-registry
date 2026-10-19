@@ -1,5 +1,8 @@
 ## 2026-10-20
 
+- address-extractor: prepare the 3.4.26 registry pin for go_address_extractor PR #78.
+  Merge only after that release PR is merged and tag `3.4.26` is published;
+  this registry change does not deploy the service.
 - founding-year: pin version 3.6.10 after the Portuguese evidence-language fix
   merged in go_founding_year PR #57 and tag `3.6.10` was published. Deployment
   remains pending the critical Docker host gate.
