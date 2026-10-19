@@ -845,6 +845,41 @@ def validate_public_path_prefixes(entry: dict) -> None:
             )
 
 
+def validate_gateway_rate_limit(entry: dict) -> None:
+    """Validate the gateway rate-limit knob fail-closed.
+
+    "allowlisted-sources-exempt" makes fleet-runner nginx-render leave the
+    per-IP api_per_ip limit off the catchall location. That is a widening, so
+    it is accepted only where it cannot reach the internet: on a
+    gateway-ip-allowlisted vhost (whose allow/deny block admits fleet hosts
+    alone) that is keystore-gated. Any other value is a typo, refused rather
+    than ignored. The renderer applies the same rule (go_fleet_runner
+    nginx_gateway_rate_limit.go).
+    """
+    if "gateway_rate_limit" not in entry:
+        return
+    value = entry["gateway_rate_limit"]
+    service_id = entry.get("id", "<unknown>")
+    if value not in ("api_per_ip", "allowlisted-sources-exempt"):
+        sys.exit(
+            f"ERROR: {service_id} gateway_rate_limit must be 'api_per_ip' or "
+            f"'allowlisted-sources-exempt', not {value!r}"
+        )
+    if value == "api_per_ip":
+        return
+    if entry.get("network_exposure") != "gateway-ip-allowlisted":
+        sys.exit(
+            f"ERROR: {service_id} gateway_rate_limit='allowlisted-sources-exempt' "
+            "is valid only for network_exposure='gateway-ip-allowlisted'"
+        )
+    auth = entry.get("auth")
+    if not isinstance(auth, dict) or auth.get("type") != "api_key":
+        sys.exit(
+            f"ERROR: {service_id} gateway_rate_limit='allowlisted-sources-exempt' "
+            "requires api_key auth"
+        )
+
+
 def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     topics = normalize_topics(repo.get("repositoryTopics") or [])
     mesh = mesh_of(topics)
@@ -1010,6 +1045,15 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # enforces the same "" / "/" refusal as the container layer.
               # Operational metadata; intentionally not public.
               "public_path_prefixes",
+              # Gateway per-IP rate limit for the catchall location
+              # (fleet-runner nginx-render → RateLimitExempt).
+              # "allowlisted-sources-exempt" leaves api_per_ip off a
+              # gateway-ip-allowlisted vhost: a remote runtime host sends all
+              # of its pool replicas from one egress address, so one per-IP
+              # bucket throttled them against each other (2026-10-19, fetch
+              # cache). validate_gateway_rate_limit() above refuses it on any
+              # vhost the internet can reach. Operational metadata; not public.
+              "gateway_rate_limit",
               # Egress routing — `proxy_egress: true` flags services that
               # must route outbound HTTP via the Webshare residential
               # proxy (FLEET.md §6 — active scanners hitting bug-bounty
@@ -1384,6 +1428,7 @@ def build(overrides: dict) -> list[dict]:
     for entry in entries:
         validate_allowed_source_ips(entry)
         validate_public_path_prefixes(entry)
+        validate_gateway_rate_limit(entry)
     return entries
 
 
