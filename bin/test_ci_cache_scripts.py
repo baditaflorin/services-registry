@@ -467,5 +467,34 @@ class OverrideFileTests(unittest.TestCase):
         self.assertNotRegex(self.text, r"(?i)(token|secret|password)\s*[:=]\s*\S{8,}")
 
 
+class PruneUnitTests(unittest.TestCase):
+    """The systemd units that run prune.sh daily must keep matching the script they call."""
+
+    SERVICE = REPO / "templates" / "woodpecker-ci-cache-prune.service"
+    TIMER = REPO / "templates" / "woodpecker-ci-cache-prune.timer"
+
+    def test_service_runs_prune_sh_on_the_cache_root_without_extra_privileges(self):
+        text = self.SERVICE.read_text()
+        exec_start = re.search(r"^ExecStart=(.+)$", text, re.M)
+        self.assertIsNotNone(exec_start)
+        self.assertRegex(exec_start.group(1), r"/prune\.sh --root /var/cache/woodpecker-ci$")
+        self.assertIn("Type=oneshot", text)
+        self.assertIn("Nice=19", text)
+        self.assertIn("IOSchedulingClass=idle", text)
+
+    def test_timer_is_daily_and_catches_up_after_downtime(self):
+        text = self.TIMER.read_text()
+        self.assertRegex(text, r"(?m)^OnCalendar=\*-\*-\* \d\d:\d\d:\d\d$", "daily at a fixed time")
+        self.assertIn("Persistent=true", text)
+        self.assertIn("RandomizedDelaySec=", text)
+        self.assertIn("WantedBy=timers.target", text)
+
+    def test_units_carry_no_secret_or_address(self):
+        for path in (self.SERVICE, self.TIMER):
+            text = path.read_text()
+            self.assertNotRegex(text, r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b", path.name)
+            self.assertNotRegex(text, r"(?i)token|secret|password", path.name)
+
+
 if __name__ == "__main__":
     unittest.main()

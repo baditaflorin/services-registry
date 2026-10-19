@@ -1,0 +1,14 @@
+# Keeps the shared CI caches of one Woodpecker agent host under their disk caps.
+# Install next to its timer (templates/woodpecker-ci-cache-prune.timer):
+#   install -m 0644 woodpecker-ci-cache-prune.{service,timer} /etc/systemd/system/
+#   systemctl daemon-reload && systemctl enable --now woodpecker-ci-cache-prune.timer
+# Adjust the two paths if install-host.sh put the scripts or the cache root elsewhere.
+# Safe while pipelines run (see scripts/ci-cache/prune.sh); it deletes only inside --root.
+[Unit]
+Description=Keep the shared Woodpecker CI caches under their disk caps
+
+[Service]
+Type=oneshot
+ExecStart=/root/ci-cache-pilot/scripts/prune.sh --root /var/cache/woodpecker-ci
+Nice=19
+IOSchedulingClass=idle

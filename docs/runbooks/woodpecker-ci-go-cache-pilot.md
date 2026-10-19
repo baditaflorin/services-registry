@@ -113,7 +113,9 @@ name; `docker inspect` shows it as the label `com.docker.compose.project`).
      --format '{{range .HostConfig.Binds}}{{println .}}{{end}}'
    ```
 6. **Keep it bounded.** Schedule daily:
-   `scripts/ci-cache/prune.sh --root /var/cache/woodpecker-ci`. Go also trims its
+   `scripts/ci-cache/prune.sh --root /var/cache/woodpecker-ci`, for example with the
+   systemd timer in `templates/woodpecker-ci-cache-prune.{service,timer}` (install
+   steps in the service file's header; 03:15 UTC, low priority). Go also trims its
    own build cache entries that were unused for 5 days; this is the hard cap.
 7. **Measure after 3 days** (so enough runs land on the pilot):
 

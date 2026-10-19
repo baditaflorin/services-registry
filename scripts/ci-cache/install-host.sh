@@ -137,7 +137,8 @@ is running, so the agent is held first and only then switched:
        docker inspect "\$(docker ps -q --filter label=wp_uuid | head -1)" \\
          --format '{{range .HostConfig.Binds}}{{println .}}{{end}}'
 
-  6. Keep it under its cap (run daily, from cron or a systemd timer):
+  6. Keep it under its cap (run daily, from cron or a systemd timer; ready-made units:
+     templates/woodpecker-ci-cache-prune.service and .timer):
        scripts/ci-cache/prune.sh --root ${ROOT}
 
   Roll back (same hold first):  scripts/ci-cache/apply-agent.sh ${applyflags} --rollback
