@@ -460,7 +460,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8.",
-    "version": "3.4.23",
+    "version": "3.4.24",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1160,7 +1160,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20. 2026-10-18 country-by-country update: private 196-row non-US cohort across 59 country strata exposed a Ukrainian-language workforce-count false negative in v3.5.58. PR #99 added the noun-first staff-count pattern and customer/user negative controls. Version 3.5.59 is deployed; direct health, self-test, version, and gateway-health checks passed.",
-    "version": "3.5.59",
+    "version": "3.5.60",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1328,7 +1328,7 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
-    "version": "0.1.15",
+    "version": "0.1.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -1469,7 +1469,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.9",
+    "version": "1.5.12",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2271,7 +2271,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
-    "version": "0.1.14",
+    "version": "0.1.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2966,7 +2966,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged). Country-localization follow-up (2026-10-18, PR #42 / commit 08636c8): a private 100-row production-derived candidate cohort covered 20 non-US countries. No rows were attributed to go_email_harvester, so historical email-extractor outputs were candidate leads only, not ground truth. First-party replay reproduced a static Polish same-host kontakt route miss (homepage-only result 0; linked route 4 mailto addresses). The fix follows kontakt after existing route keywords and preserves their priority under the four-page cap. Full replay changed six rows (+5 address hashes, 0 removed; 88 HTTP 200, 12 fetch failures; 68 nonempty and 20 empty). Release 1.4.25 is deployed to both pool replicas with a matching image digest; direct health/selftest/version and the gateway health audit passed. Internationalization follow-up (2026-10-18, code PR #44 / commit 7347543; release PR #45 / commit 8d3171f; tag 1.4.26): a private 46-row production-derived candidate cohort spanned 25 country codes. First-party visible text confirmed three misses for valid mailboxes whose local parts begin with RFC atext punctuation. The deterministic parser fix preserves valid punctuation-leading local parts while rejecting malformed dot boundaries and sentence punctuation; focused positive/negative regression cases pass. Historical outputs and candidate rows were leads, not ground-truth labels. The deployed 1.4.26 image was Cosign-verified at digest sha256:6dbf0deacd85…; both pool replicas report healthy on that digest, and direct health/selftest/version plus gateway health checks passed. Gateway selftest remains auth-gated (401); pool status retains pre-existing environment-contract drift. The targeted cohort does not justify raising TRL, so assessment remains 6/7.",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.27"
+    "version": "1.4.28"
   },
   "embed-iframe-classifier": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -4293,7 +4293,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged).",
-    "version": "3.6.8",
+    "version": "3.6.9",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4641,7 +4641,7 @@
     "spiffe_workload": true
   },
   "iban-bic-validator": {
-    "version": "0.1.9",
+    "version": "0.1.10",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18291,
     "host_port": 18291,
@@ -4743,7 +4743,7 @@
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/_gw_health",
-    "version": "0.3.48",
+    "version": "0.3.49",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
@@ -4798,7 +4798,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.12.1",
+    "version": "0.12.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -5032,7 +5032,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.40",
+    "version": "1.33.43",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -5565,7 +5565,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15.",
-    "version": "2.7.11",
+    "version": "2.7.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -6253,7 +6253,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Ceiling unlocked once projectdiscovery/interactsh is wrapped for DNS+SMTP exfil. HTTP half remains useful as simple-case catcher.",
     "trl_evidence": "token + hits store, 512B body cap with full SHA-256, catch-all subdomain dispatch (<token>.oob.<base>), TTL expiry, /selftest with 4 sub-checks",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "coolify_app_uuid": "tawx7urfnxwc6y6n7i832izo",
     "public_path_prefixes": ["/c/"]
   },
@@ -6661,7 +6661,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged).",
-    "version": "1.4.32",
+    "version": "1.4.34",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6695,7 +6695,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18271,
     "placement": "replicable",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6790,7 +6790,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "0.1.21",
+    "version": "0.1.23",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -7616,7 +7616,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13.",
-    "version": "1.7.24",
+    "version": "1.7.25",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",

@@ -1,5 +1,6 @@
 ## 2026-10-19
 
+- fleet-version-pin-sync: 17 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.24, `company-size` 3.5.60, `country-iso-matcher` 0.1.16, `currency-detector` 1.5.12, `domain-geo-anchor` 0.1.16, `email-harvester` 1.4.28, `founding-year` 3.6.9, `iban-bic-validator` 0.1.10, `infrastructure-fetch-cache` 0.3.49, `js-proxy` 0.12.2, `legal-entity` 1.33.43, `office-locations` 2.7.14, `pentest-oob-collector` 0.2.7, `phone-extractor` 1.4.34, `policy-clause-extractor` 0.1.13, `pricing-tier-parser` 0.1.23, `shipping-regions` 1.7.25.
 - contact-route-detector: sync the registry pin to 0.1.20 and record the Vietnamese route-candidate recall fix from the disjoint five-locale replay; signed image published for guarded rollout.
 
 - fleet-version-pin-sync: 8 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.48, `contact-route-detector` 0.1.19, `gdpr-compliance` 1.26.5, `infrastructure-fetch-cache` 0.3.48, `phone-extractor` 1.4.32, `shipping-regions` 1.7.24, `tos-finder` 1.9.7, `xss-scanner` 1.5.9.
