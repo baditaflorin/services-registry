@@ -236,9 +236,9 @@ The gap to the other agents shrank from about 10-20 times to about 1.6 times. Oc
 multi-second stalls remain (the pool is shared and made of spinning disks); a fast log device in
 that pool is the lasting fix.
 
-**Not yet shown: that the hold shrinks.** For the first hour after the change the pilot host was
-still held 100 % of the time (112 samples), which proves nothing in either direction. To judge
-the fix with the controller's own log, after a full working day run on the controller host:
+**Does the hold shrink?** For the first hour after the change the pilot host was still held
+(112 samples), which proves nothing. The evening results below are encouraging but short. To judge
+the fix over a working day with the controller's own log, run on the controller host:
 
 ```sh
 journalctl -u woodpecker-load-controller@ci.0exec --since -26h --no-pager -o cat \
@@ -247,6 +247,27 @@ journalctl -u woodpecker-load-controller@ci.0exec --since -26h --no-pager -o cat
 
 and then the token-free pilot report from step 7. If the hold stays near 80 %, the controller's
 resume rule (many calm samples in a row) is the next thing to look at, not the cache.
+
+**Measured the same evening, under load (2026-10-19, 2.5 to 3 hours after the change):**
+
+- *Released:* the controller put the pilot agent back in service 68 minutes after the change and
+  held it 0 % of the next hour (mean I/O pressure 9 %). The same quiet night hours before the
+  change were 100 % held at 29 to 79 % pressure.
+- *Under full load:* nine workflows on a scratch branch, six pinned to the pilot host (cold build and
+  test of a small public module, four rounds each) and one per other site, with all six slots busy.
+  About 45 controller samples: I/O pressure 3 to 82 %, CPU load per core up to 4.9, the breach counter
+  peaked at 6 (it needs 10 in a row, and resets on any calmer sample): **never held, no stop proposed.**
+- *Per job:* a single run took 69, 79 and 71 s on the other sites. On the pilot host, five at once took
+  143 to 262 s each (aggregate throughput only about 1.5 jobs' worth, so still disk-bound under load);
+  the run that happened to have the host to itself took 68, 68, 95 and 72 s, the same as elsewhere.
+  Two of 24 rounds failed their tests under load; the cause was not investigated.
+- *Real pipelines after the change* (token-free report, only 9 pilot runs): one comparable workflow
+  pair, `large-files`: pilot host 81 s to 32 s while the control agents went 19 s to 21 s (effect 0.36).
+  That workflow does no Go work, so it measures the disk fix, not the cache. No Go workflow has two
+  runs after the change on the pilot host yet.
+
+Limits: one evening, one load shape, no image builds or nightly backup in the window. The working-day
+check above is still the real test.
 
 ## Acceptance criteria
 
