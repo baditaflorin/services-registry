@@ -211,8 +211,9 @@ delete the cache root when convenient. The next pipelines are cold runs, as befo
   whose CI runs code from this organisation's own members and automation, never on
   a host that also builds third-party or fork pull requests. Deployed images are
   built on the separate builder pool, not from these caches; these caches only
-  speed up and influence CI verification. The longer-term design removes the
-  shared-write assumption (a remote cache that only trusted builds may write).
+  speed up and influence CI verification. A remote cache that only trusted builds
+  may write would remove the shared-write assumption, but a remote cache was
+  measured and not pursued (see "Why not a shared cache server" below).
 - **Host-side tooling treats the cache as untrusted input.** `prune.sh` runs as
   root over a tree that containers can write to, so it refuses symlinked cache
   directories, skips symlinks inside them, and only ever deletes inside the
@@ -220,13 +221,36 @@ delete the cache root when convenient. The next pipelines are cold runs, as befo
 - **`bench.sh` runs the repository's own tests** on the host: point it only at
   repositories you trust.
 - **Per host, not fleet wide.** Five hosts means five caches, so a job landing on a
-  cold host is cold. The step after this pilot, if it pays off, is Go's
-  `GOCACHEPROG` (a shared cache server all hosts use), not more directories.
+  cold host is cold. A shared cache server (Go's `GOCACHEPROG`) was tried to fix
+  that and lost, see the next section; the answer is more hosts with a cache
+  directory, sized to their disks, not a server.
+- **Do not set `GOCACHEPROG` in a step on a host that mounts these directories.**
+  It replaces `GOCACHE`, so that step stops using the mounted cache.
 - **Assumes root steps and the default paths** of the official images. A step image
   that runs as another user or sets its own `GOCACHE` or `GOMODCACHE` simply
   misses the cache; it does not break.
 - **Needs cgroup v2 for the peak memory column** of `bench.sh` on older kernels it
   prints `na`.
+
+## Why not a shared cache server
+
+Tried 2026-10-18 and 2026-10-19 and dropped. A `GOCACHEPROG` server that all agents share
+(an HTTP service, fail-open client with timeouts and a circuit breaker) was run on the pilot
+host and used from the agents on the other sites. Build plus test of go-common (65 s with no
+cache), fresh container, same commit, `GOFLAGS=-p=2`:
+
+| Where the cache lives | Re-run |
+| --- | --- |
+| mounted directories on the same host (this pilot) | **6 s** |
+| the server, on the same host | 7 s; 52 s when its circuit breaker interrupted the first fill |
+| the server, 17 ms away | 72 s (102 s with the slow-response guard off, every lookup a hit) |
+| the server, 21 ms away | 68 s |
+| the server, 38 ms away | 66 s |
+
+Every cache lookup is one HTTP round trip and a build plus test makes about 5,800 of them
+(effectively one at a time at `-p=2`), so the server only pays when it is next door, and then
+a plain directory does the same without a breaker. Cold hosts stay cold; the remedy is a cache
+directory on each agent that has the disk for one.
 
 ## What this does not fix
 
