@@ -11519,7 +11519,7 @@
     "trl_evidence": "First-pass audit of go-fleet-metrics-hub (see fleet-grafana/fleet-discovery entries for the shared repo-wide findings -- leaked API key removed, no unbounded-cardinality risk). Confirmed correct counter/gauge/histogram typing throughout the scrape/rule config, but fleet-alerts.yml claims 'promtool runs in CI on PR' and there is no CI in this repo at all -- that claim is stale, no automated config validation exists. trl bumped 4->5; trl_ceiling held at 8. See PR #3 (merged).",
     "compose_service_name": "prometheus",
     "compose_skip_networks": true,
-    "mem_limit": "3g",
+    "mem_limit": "4g",
     "version": "0.1.13"
   },
   {
