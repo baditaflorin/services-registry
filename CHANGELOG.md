@@ -1,3 +1,7 @@
+## 2026-10-19
+
+- fleet-version-pin-sync: 8 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.48, `contact-route-detector` 0.1.19, `gdpr-compliance` 1.26.5, `infrastructure-fetch-cache` 0.3.48, `phone-extractor` 1.4.32, `shipping-regions` 1.7.24, `tos-finder` 1.9.7, `xss-scanner` 1.5.9.
+
 ## 2026-10-18
 
 - templates: new services build on Go 1.26. `templates/Dockerfile.tmpl` (what `fleet-runner template Dockerfile` renders) moves from `golang:1.24-alpine` to `golang:1.26-alpine`, and `SERVICE-TEMPLATE.md` (the example Dockerfile and go.mod, and the sentence that told authors to match neighbouring services) now says 1.26 and that an existing service moves its image and `go` line together. go-common's minimum Go is 1.26 since v0.104.0 (go-common#182). Rendering the template with `--apply` rewrites every Dockerfile not marked `# fleet-skip`, so it is not run here; existing services are unchanged.
