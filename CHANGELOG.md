@@ -1,5 +1,7 @@
 ## 2026-10-19
 
+- contact-route-detector: sync the registry pin to 0.1.20 and record the Vietnamese route-candidate recall fix from the disjoint five-locale replay; signed image published for guarded rollout.
+
 - fleet-version-pin-sync: 8 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.48, `contact-route-detector` 0.1.19, `gdpr-compliance` 1.26.5, `infrastructure-fetch-cache` 0.3.48, `phone-extractor` 1.4.32, `shipping-regions` 1.7.24, `tos-finder` 1.9.7, `xss-scanner` 1.5.9.
 
 ## 2026-10-18
