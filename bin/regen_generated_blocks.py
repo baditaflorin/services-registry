@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""Regenerate the GENERATED blocks of the canonical agent docs (CLAUDE.md, AGENTS.md) and propose the result as ONE pull request.
+
+Why: a block such as the verbs list drifts every time go_fleet_runner gains a verb (131 -> 139 in three days) and the nightly `docdrift gen --check` stays red
+until somebody regenerates it by hand. This is the reconciler for that. It works in throw-away shallow clones (never the rollout's clones), pushes only the
+branch docs/regen-generated-blocks (force-updated on each run, so an unmerged proposal is refreshed, not duplicated) and NEVER merges: the registry's CLAUDE.md is
+the text every agent reads, so a person still reviews the generated change. CI runs the same prettier and generated-block checks on the pull request.
+
+  regen_generated_blocks.py --work DIR [--no-pr] [--dry-run]
+"""
+import argparse
+import os
+import re
+import shutil
+import subprocess
+import sys
+
+OWNER = "baditaflorin"
+BRANCH = "docs/regen-generated-blocks"
+DOCS = ("CLAUDE.md", "AGENTS.md")
+ID = ["-c", "user.name=Claude Code", "-c", "user.email=noreply@anthropic.com"]
+BLOCK_NAME = re.compile(r"<!--\s*BEGIN GENERATED:\s*([\w-]+)")
+# the repository each generator reads (docdrift.py gen_*); the registry itself is always cloned
+READS = {"verbs": "go_fleet_runner", "pools": "fleet-state", "proxmox-inventory": "fleet-state", "placement-policy": "services-registry", "registry-counts": "services-registry"}
+
+
+def run(cmd, cwd=None, check=True):
+    p = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
+    if check and p.returncode:
+        raise RuntimeError("%s: %s" % (" ".join(cmd[:4]), (p.stderr or p.stdout).strip()[:400]))
+    return p
+
+
+def verbs_in(text):
+    m = re.search(r"BEGIN GENERATED:verbs[^\n]*\n(.*?)<!-- END GENERATED:verbs", text, re.S)
+    if not m:
+        return None
+    lines = [ln for ln in m.group(1).split("\n") if ln.startswith("`")]
+    return set(re.findall(r"`([^`]+)`", " ".join(lines)))
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--work", required=True, help="work directory; <work>/regen is deleted and recreated on every run")
+    ap.add_argument("--registry-url", default="git@github.com:%s/services-registry.git" % OWNER)
+    ap.add_argument("--base-url", default="git@github.com:%s/" % OWNER, help="prefix of the other repositories: <prefix><name>.git")
+    ap.add_argument("--no-pr", action="store_true", help="push the branch but do not open the pull request")
+    ap.add_argument("--dry-run", action="store_true", help="report what would change; push nothing")
+    a = ap.parse_args(argv)
+
+    root = os.path.join(a.work, "regen")
+    shutil.rmtree(root, ignore_errors=True)
+    os.makedirs(root)
+    reg = os.path.join(root, "services-registry")
+    run(["git", "clone", "-q", "--depth", "1", a.registry_url, reg])
+    docs = [d for d in DOCS if os.path.exists(os.path.join(reg, d))]
+    names = set()
+    for d in docs:
+        with open(os.path.join(reg, d), encoding="utf-8") as f:
+            names |= set(BLOCK_NAME.findall(f.read()))
+    for repo in sorted({READS[n] for n in names if n in READS} - {"services-registry"}):
+        run(["git", "clone", "-q", "--depth", "1", a.base_url + repo + ".git", os.path.join(root, repo)])
+
+    tool = os.path.join(reg, "bin", "docdrift.py")
+
+    def gen(mode, doc):
+        return run([sys.executable, tool, "--repos", root, "--ref", "HEAD", "gen", mode, doc], cwd=reg, check=False)
+
+    drifted = []
+    for d in docs:
+        p = gen("--check", d)
+        if p.returncode == 1:
+            drifted.append(d)
+        elif p.returncode != 0:
+            raise RuntimeError("docdrift gen --check %s exited %d: %s" % (d, p.returncode, (p.stderr or p.stdout).strip()[:300]))
+    if not drifted:
+        print("generated blocks up to date")
+        return 0
+
+    old = {d: run(["git", "show", "HEAD:" + d], cwd=reg).stdout for d in drifted}
+    for d in drifted:
+        if gen("--write", d).returncode != 0:
+            raise RuntimeError("docdrift gen --write %s failed" % d)
+    summary = []
+    for d in drifted:
+        with open(os.path.join(reg, d), encoding="utf-8") as f:
+            new = f.read()
+        before, after = verbs_in(old[d]), verbs_in(new)
+        if before is not None and after is not None and before != after:
+            summary.append("%s: verbs %d -> %d (added: %s; removed: %s)" % (d, len(before), len(after), ", ".join(sorted(after - before)) or "none", ", ".join(sorted(before - after)) or "none"))
+        else:
+            summary.append("%s: generated blocks regenerated" % d)
+    print("; ".join(summary))
+    if a.dry_run:
+        print("dry run: nothing pushed")
+        return 0
+
+    title = "%s: regenerate the generated blocks" % ", ".join(drifted)
+    m = re.search(r"verbs (\d+) -> (\d+)", " ".join(summary))
+    if m:
+        title += " (verbs %s -> %s)" % (m.group(1), m.group(2))
+    body = ("Generated by bin/regen_generated_blocks.py (the weekly rollout job): `docdrift gen --check` found these blocks behind their source, so the nightly drift scan stays red until they are regenerated.\n\n"
+            + "\n".join("- " + s for s in summary)
+            + "\n\nThe job only regenerated (`docdrift gen --write`); nothing outside the generated blocks changed. It never merges: review, then merge. CI checks prettier and the generated blocks. "
+            "The copies in the repositories get the new blocks with the next rollout after this is merged.")
+    run(["git", "checkout", "-q", "-b", BRANCH], cwd=reg)
+    run(["git", "add", "-A"] + drifted, cwd=reg)
+    run(["git"] + ID + ["commit", "-q", "-m", title + "\n\n" + body + "\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"], cwd=reg)
+    run(["git", "push", "-q", "-f", "origin", BRANCH], cwd=reg)
+    print("pushed branch %s" % BRANCH)
+    if a.no_pr:
+        return 0
+    if not shutil.which("gh"):
+        print("gh not found on PATH: open the pull request for %s by hand" % BRANCH)
+        return 0
+    repo = "%s/services-registry" % OWNER
+    p = run(["gh", "pr", "list", "--repo", repo, "--head", BRANCH, "--state", "open", "--json", "number", "--jq", "length"], check=False)
+    if p.returncode == 0 and p.stdout.strip() == "0":
+        q = run(["gh", "pr", "create", "--repo", repo, "--base", "main", "--head", BRANCH, "--title", title, "--body", body + "\n\n\U0001F916 Generated with [Claude Code](https://claude.com/claude-code)"], check=False)
+        print(q.stdout.strip() or q.stderr.strip()[:200])
+    else:
+        print("a pull request from %s is already open (the branch was updated)" % BRANCH)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
