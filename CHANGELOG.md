@@ -1,5 +1,8 @@
 ## 2026-10-20
 
+- founding-year: pin version 3.6.10 after the Portuguese evidence-language fix
+  merged in go_founding_year PR #57 and tag `3.6.10` was published. Deployment
+  remains pending the critical Docker host gate.
 - pricing-tier-parser: pin version 0.1.26 after the opaque/localized-route JS retry fix
   merged in go_pricing_tier_parser PR #46 and tag `0.1.26` was published. Deployment
   remains pending the critical Docker host gate.
