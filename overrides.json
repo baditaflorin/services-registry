@@ -667,7 +667,7 @@
   },
   "apikey-scanner": {
     "placement": "replicable",
-    "version": "1.7.8",
+    "version": "1.7.9",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -763,7 +763,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.8.36",
+    "version": "2.8.37",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1328,7 +1328,7 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
-    "version": "0.1.16",
+    "version": "0.1.17",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -1390,7 +1390,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Marker-based detection (8-byte per-scan unique hex marker) replaces\nstatic-string echo checks; inspect() classifies header reflection\n(critical), raw-newline-in-header (high), and body reflection (medium)\nseparately. Probes inject across query params, path segments, and four\nreflected headers (User-Agent, Referer, X-Forwarded-For, X-Forwarded-Host;\nHost gated by ALLOW_HOST_INJECT=1). Payload corpus is 20 variants\ncovering hex-case, double-encoding, Unicode/UTF-8 overlong, fragment-\nprefixed, raw \\r vs \\n vs \\r\\n; corpus extensible via PAYLOADS_URL\n(go-pentest-payloads). Per-request 4 s, total 60 s budget, worker pool\n4. SCOPE_GUARD_URL fail-closed gate. ≥9 unit + integration tests\nincluding httptest.Server vulnerable + safe backends.",
-    "version": "1.5.12",
+    "version": "1.5.13",
     "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx"
   },
   "crux-field-vitals": {
@@ -2271,7 +2271,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
-    "version": "0.1.16",
+    "version": "0.1.17",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2698,7 +2698,7 @@
     "container_port": 18188,
     "host_port": 18188,
     "placement": "replicable",
-    "version": "0.3.25",
+    "version": "0.3.26",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -3490,7 +3490,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.31",
+    "version": "0.4.33",
     "spiffe_workload": true
   },
   "fleet-har-builder": {
@@ -4743,7 +4743,7 @@
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/_gw_health",
-    "version": "0.3.49",
+    "version": "0.3.50",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
@@ -5010,7 +5010,7 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.2.5",
+    "version": "0.2.6",
     "spiffe_workload": true
   },
   "legal-entity": {
@@ -5826,7 +5826,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch2",
     "trl_ceiling": 8,
     "trl_evidence": "/expanded matrix endpoint (5 verbs x N roles), peer-read bug detection, findings-store wire (1s timeout, fail-open), /selftest with in-process tiny-app",
-    "version": "0.3.7",
+    "version": "0.3.8",
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
@@ -6557,7 +6557,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Wraps upstream trufflehog binary; advancing requires custom concurrency control and deduplication.",
     "trl_evidence": "wraps pinned trufflehog binary (v3.83.0) with cmdRunner injection seam → ≥13 unit tests covering verified hits, mixed verified/unverified, scope-deny + fail-open, scan timeout, multi-detector summary, async cutover, concurrency cap. Per-finding output carries detector, source(file:line), commit, redacted (first/last 4), raw_match_hash (sha256), severity. Composes with go-pentest-scope-guard (POST /check, fail-open with note), go-pentest-findings-store (POST /findings, dedup_key includes fingerprint), go-pentest-job-queue (POST /jobs at >30s estimated runtime). Hard caps: 4 concurrent scans, 5min wall-clock per scan, 1MiB request body, argv-injection-safe flag value sanitisation.",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
@@ -7094,7 +7094,7 @@
     "trl_evidence": "research tool, workflow pipeline"
   },
   "revenue-model": {
-    "version": "2.6.29",
+    "version": "2.6.30",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
@@ -7369,7 +7369,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit of go-search-duck (Go, proxies every request through go-html-proxy via a hand-rolled client, never imports go-common -- confirmed fetch-cache masking does not apply here). Confirmed genuinely distinct from siblings search-duck-go (a more mature go-common-based rewrite, direct DDG fetch, in-process cache) and node-search-duck (a functional Node/TS twin) -- not a duplicate of either, more of a planned-successor relationship with search-duck-go. Live DDG testing confirmed the parsing/CAPTCHA/zero-result logic is genuinely correct against today's markup. Found and fixed 2 real bugs: (1) a timeout-detection check (err == context.DeadlineExceeded) that could never actually match, since net/http always wraps transport errors differently -- confirmed unreachable with a standalone repro, replaced with an errors.Is-based helper. (2) flag.Parse() called from init(), which broke 'go test ./...' entirely and is almost certainly why this repo had zero tests until now -- fixed by moving config loading into main(). Added the repo's first test suite (10 cases from live DDG fixtures). Noted (not fixed here, sibling's own scope): search-duck-go has the fetch-cache-masking bug, flagged for that repo's own audit. Also noted a live-ops issue: the deployed instance returned 502 from its own configured proxy on every query at audit time. trl held at 5 (grounding the catalog's existing low-effort assessment in real evidence); trl_ceiling=6 added -- structurally a CSS-selector scrape of an adversarial third-party page proxied through another internal service. See PR #2 (merged).",
-    "version": "0.1.13"
+    "version": "0.1.14"
   },
   "search-duck-go": {
     "env": {
@@ -7727,7 +7727,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.12"
+    "version": "0.1.15"
   ,
     "env": {
       "GRAPH_ENABLED": "true",
