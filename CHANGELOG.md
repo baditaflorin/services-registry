@@ -1,5 +1,8 @@
 ## 2026-10-20
 
+- pricing-tier-parser: pin version 0.1.26 after the opaque/localized-route JS retry fix
+  merged in go_pricing_tier_parser PR #46 and tag `0.1.26` was published. Deployment
+  remains pending the critical Docker host gate.
 - social-proof-extractor: pin version 0.1.18 after the Thai noun-first customer-count fix
   merged in go_social_proof_extractor PR #42 and tag `0.1.18` was published. Deployment
   remains pending the critical Docker host gate.
