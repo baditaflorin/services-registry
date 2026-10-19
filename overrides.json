@@ -1146,7 +1146,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics. Country-specific false-positive review (2026-10-18): a 341-row non-null production-derived cohort covered 131 country codes; 278 static first-party HTML pages were retrieved (12 fetch failures, 50 non-HTML/status responses, one body over 2 MiB). Three Latvian/Swedish generic homepage titles (S\u0101kumlapa, Startsida) appeared as company names. Exact-label filtering removed all three while host-correlated Latvian and Swedish brand controls still passed. PR #59 merged as 4fc4f31. v0.1.45 was signed and deployed to both replicas on one digest; direct health, selftest, and version smoke passed. TRL remains 4 because this sample does not establish coverage of bot-hostile or JS-heavy sites. 2026-10-18 country-by-country update: a private 102-row non-null cohort covered 102 non-US ISO3s. In 98 successful first-party replays, a Yemen-stratum Arabic generic homepage label appeared as a false organization-title candidate at score 0.60, while JSON-LD supplied the selected name. PR #61 added Arabic generic-home-title filtering with host-corroborated-brand positives and unrelated-brand negatives; the post-fix replay removed the candidate without changing the stored selected name. Version 0.1.46 was signed and deployed; direct health, self-test, version, and gateway audit passed.",
-    "version": "0.1.48",
+    "version": "0.1.50",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
     "spiffe_workload": true
   },
@@ -1331,7 +1331,7 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
-    "version": "0.1.17",
+    "version": "0.1.18",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -2941,7 +2941,7 @@
     "host_port": 8287,
     "internal_direct": true,
     "placement": "replicable",
-    "version": "1.6.36",
+    "version": "1.6.39",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
@@ -6668,7 +6668,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged).",
-    "version": "1.4.34",
+    "version": "1.4.35",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6797,7 +6797,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "0.1.23",
+    "version": "0.1.25",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -7734,7 +7734,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.16"
+    "version": "0.1.17"
   ,
     "env": {
       "GRAPH_ENABLED": "true",
