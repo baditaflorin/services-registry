@@ -13,9 +13,11 @@ steps:
         for path in bin/ci_authority_audit.py
         bin/ci_execution_report.py
         bin/woodpecker_load_controller.py bin/ci_cache_pilot_report.py
+        bin/ci_cache_pilot_fleet_runner_report.py
         bin/test_ci_authority_audit.py
         bin/test_ci_execution_report.py
         bin/test_woodpecker_load_controller.py
+        bin/test_ci_cache_pilot_fleet_runner_report.py
         ci-authorities.json
         ci-execution-report.json
         docs/runbooks/woodpecker-cross-host-capacity.md
@@ -45,7 +47,7 @@ steps:
         fi
       - python3 -m unittest discover -s bin -p 'test_*.py'
       - python3 bin/check_service_version_regressions.py origin/main
-      - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py bin/ci_cache_pilot_report.py
+      - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/woodpecker_load_controller.py bin/ci_cache_pilot_report.py bin/ci_cache_pilot_fleet_runner_report.py
 
   claude-md-format:
     depends_on: []

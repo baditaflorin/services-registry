@@ -124,6 +124,14 @@ name; `docker inspect` shows it as the label `com.docker.compose.project`).
      --pilot-agent <agent name> --cutover <cutover UTC> --repos-file go-sample-repos.txt
    ```
 
+   Without a Woodpecker API token, the same method runs through `fleet-runner`'s read-only
+   verb for one repository, and adds a per-step table:
+
+   ```sh
+   python3 bin/ci_cache_pilot_fleet_runner_report.py --repo owner/name \
+     --first <first pipeline number> --last <last> --pilot-agent-id <id> --cutover <cutover UTC>
+   ```
+
 ## What the first run on a real host showed
 
 OBSERVED on the pilot host, 2026-10-17 (one run each, host busy):
@@ -169,6 +177,36 @@ wrong container label, and killed pipelines that were running (a long Go job and
 two frontend workflows). Also, a pull request whose clone step failed in the same
 minutes turned out to be an unrelated merge conflict, so check a failure's cause
 before blaming the change.
+
+## What production showed after the first days (2026-10-19)
+
+Method: the token-free report above on one busy repository, 842 pipelines (numbers 8450 to
+9570; numbers that answer HTTP 404 do not exist and are not read errors), 4,757 successful
+workflow runs, cutover 2026-10-17T10:50:47Z, the pilot agent against the five other agents.
+The pilot agent was idle for long stretches (no work on a Sunday and overnight, plus a short
+Woodpecker server outage that made it restart), so only 140 workflow runs fall after the cutover.
+
+| Measure | Result |
+| --- | --- |
+| difference-in-differences effect, all workflows (7 to 8 pairs) | **0.84 to 0.94**: 6 to 16 % faster than the other agents, against the 25 % bar |
+| `go` workflow, pilot, after the cutover | median 464 s over 8 runs; the other agents 354 s (before the cutover: 413 s against 275 s) |
+| `main-health-go` (build and vet only, the cleanest Go step) | 1 run on the pilot agent so far: 155 s; the others 128 s |
+
+**Reading: inconclusive, and not a pass.** The cache effect cannot be seen because the pilot
+host is slower than the other agents at everything, before the cutover as well as after, and
+that dwarfs the compile time the cache removes. Median step times after the cutover, pilot
+agent against the others: the repository clone 32 s against 11 s; `docs-refs` 29 s against 2 s;
+`large-files` 16 s against 4 s; `changelog-format` 31 s against 6 s. These are steps that run for
+a few seconds anywhere else, so the cost is per container, not per compile.
+
+Cause found on the host (OBSERVED 2026-10-19): starting a container from a cached image took
+6.5 to 10 s (well under a second is normal); the CPU was idle (load 0.75 on 10 cores) while
+tasks were stalled on disk I/O 34 % of the time; a synchronous 4 KB write took **35 ms**,
+against 1.2 ms and 0.5 ms on two other agents. The host's virtual disk is backed by spinning
+disks without a fast log device, so every `fsync` of a container layer, a clone or a cache
+file waits for them. Fixing that comes before judging this pilot: re-measure after it.
+Synthetic runs on the same host (the "first run" and A/B sections above) are unaffected, they
+time only the compile.
 
 ## Acceptance criteria
 
