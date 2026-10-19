@@ -1170,9 +1170,12 @@
     },
     "depends_on": [
       "go-fleet-secrets",
-      "infrastructure-fetch-cache"
+      "infrastructure-fetch-cache",
+      "team-size",
+      "founding-year"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "placement": "replicable"
   },
   "complete-gardener-planner": {
     "trl": 4,
@@ -1563,9 +1566,12 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "depends_on": ["infrastructure-fetch-cache"],
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "placement": "replicable"
   },
   "db-geo-geocode": {
     "env": {
@@ -7983,7 +7989,10 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "team-size",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   "tech-stack": {
     "version": "1.3.11",

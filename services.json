@@ -1104,14 +1104,17 @@
     "container_port": 8281,
     "depends_on": [
       "go-fleet-secrets",
-      "infrastructure-fetch-cache"
+      "infrastructure-fetch-cache",
+      "team-size",
+      "founding-year"
     ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "3.5.60",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "compression-tester",
@@ -1725,7 +1728,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "1.7.7",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "placement": "replicable"
   },
   {
     "id": "debug-detector",
@@ -7795,7 +7799,10 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "3.0.18",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ]
   },
   {
     "id": "tech-stack",
