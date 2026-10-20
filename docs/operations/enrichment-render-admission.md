@@ -2,9 +2,11 @@
 
 The shared fetch cache gates only cache misses entering the JS, JS-network and
 HTML renderer chains. Cached hits bypass admission, and direct HTTP fetches have
-a separate MAX_FETCH_INFLIGHT limit. MAX_RENDER_INFLIGHT=32 replaces the earlier
+a separate MAX_FETCH_INFLIGHT limit. MAX_RENDER_INFLIGHT=96 replaces the earlier
 12-slot containment setting after both browser renderer pools reached five hosts.
-It is a bounded frontend allowance, not a promise of 32 Chromium sessions.
+The observed pool exposes 35 JS and 20 JS-network slots, plus four independent
+HTML proxy backends. The frontend cap is shared across those request classes.
+It is a bounded frontend allowance, not a promise of 96 Chromium sessions.
 
 Use the private runtime recipe for the approved pooled renderer URLs; preserve
 local fallback URLs only for an unreachable gateway, not for every HTTP error.
