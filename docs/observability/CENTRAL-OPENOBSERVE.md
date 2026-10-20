@@ -35,7 +35,12 @@ and all six planned Docker hosts on 0mcp. The GitHub email runner shipper is
 active and sends to the current JSON endpoint above. A central query confirmed
 `docker-runtime-lv3` had logs for 29 containers (1,273 events in the preceding
 20 minutes). The 0docker Builder CT and the pve01, 0own and 0infer Buildx workers are
-not enrolled. Treat missing rows as a collection gap, not a clean run. Check
+not enrolled. The nginx gateway VM is a non-Docker host and is not enrolled: as
+of 2026-10-15 it had no Docker, no Vector or other log shipper, and nginx there
+writes plain files under `/var/log/nginx`, so its access/error logs and journal
+exist only on that VM. Its only forwarder, an rsyslog rule pointing at the
+removed OpenObserve CT 106, delivers nothing (see `fleet-state`
+`docs/runbooks/gateway-rsyslog-dead-forward.md`). Treat missing rows as a collection gap, not a clean run. Check
 the live stream inventory and per-host coverage before relying on OpenObserve
 results.
 
@@ -78,6 +83,11 @@ the active config, and restores the previous config if the new container does
 not start. Use a distinct stable `fleet` and `host` value. Verify the agent is
 running and that `bin/oo hosts`/`bin/oo containers` show the new host before
 declaring the rollout complete.
+
+This procedure assumes a Docker host. A host without Docker (the nginx gateway)
+has no documented collection path yet; do not reuse the compose shape there.
+It needs its own design (for example a native Vector service) before it is
+listed as enrolled.
 
 At approximately 200 hosts, keep the same agent contract but review
 OpenObserve ingest rate, disk growth, retention, and the number of concurrent
