@@ -139,8 +139,8 @@
     "trl": 6,
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "trl_ceiling": 5,
-    "trl_ceiling_reason": "Real multi-country address extraction needs libpostal trained data (~400MB) or per-country gazetteers at ~1 person-week each. CPU-only without them tops at TRL 5.",
+    "trl_ceiling": 6,
+    "trl_ceiling_reason": "TRL 7 requires validation against authoritative postal data under ADR 0001; this release adds localized heuristics but no postal-source cross-check.",
     "url": "https://address-extractor.0crawl.com"
   },
   {
