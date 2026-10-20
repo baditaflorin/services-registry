@@ -3851,7 +3851,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 4,
-    "trl_evidence": "40/40 real-world audit: before this fix, the only two live sources were producing 0% correct non-zero hits, requiring a brand-mention-in-headline gate before mining news for funding. Corrected DOWNWARD from a previously-claimed trl=7 that was not supported by real evidence -- catalog showed trl:7 with no trl_ceiling prior to this audit. Post-fix: all 40 false positives correctly suppressed to empty while true positives on well-known companies are preserved. See github.com/baditaflorin/go_funding_signal PR #4.",
+    "trl_evidence": "40/40 real-world audit: before this fix, the only two live sources were producing 0% correct non-zero hits, requiring a brand-mention-in-headline gate before mining news for funding. Corrected DOWNWARD from a previously-claimed trl=7 that was not supported by real evidence -- catalog showed trl:7 with no trl_ceiling prior to this audit. Post-fix: all 40 false positives correctly suppressed to empty while true positives on well-known companies are preserved. See github.com/baditaflorin/go_funding_signal PR #4. | 2026-10-20 Brazil localization follow-up: the parser now recognizes Brazilian Portuguese \"rodada de investimento\" completed-raise wording and carries an explicit Series label to a USD amount in the adjacent body text. It keeps BRL out of USD results and excludes planned raises. A sanitized first-party parser fixture changed from 0 to 1 targeted Series B / US$31M detection; BRL-only and speculative controls stayed empty. Replay of 121 saved DomainScope-derived responses, including 80 stored non-null round candidates, changed 0 records; 78/121 outputs were unchanged. Stored outputs are unlabeled candidates, so no cohort-wide accuracy lift is claimed. The source article uses a nested route not discovered by the service fetcher; this validates parser behavior, not end-to-end discovery. Source PR #61, release 0.1.38.",
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "host_port": 18293,
@@ -3865,7 +3865,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.37",
+    "version": "0.1.38",
     "network_exposure": "gateway-authenticated"
   },
   {
