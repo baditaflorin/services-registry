@@ -5444,7 +5444,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "Second-pass re-audit (fresh 25-domain sample): found and fixed 2 evidence-inflation bugs -- 404/error pages were still scanned for payment-icon evidence (live-confirmed: a dead Shopify error template kept surfacing sitewide footer badges as 'detected' 4x over on codycallco.com; a stale Stripe.js reference on a 404 page produced a false detection on nybooks.com), and a URL-string dedup bug caused duplicate double-fetches on bare domains. Verdicts unchanged, only duplicate/stale evidence removed. See PR #14 (merged).",
+    "trl_evidence": "Second-pass re-audit (fresh 25-domain sample): found and fixed 2 evidence-inflation bugs -- 404/error pages were still scanned for payment-icon evidence (live-confirmed: a dead Shopify error template kept surfacing sitewide footer badges as 'detected' 4x over on codycallco.com; a stale Stripe.js reference on a 404 page produced a false detection on nybooks.com), and a URL-string dedup bug caused duplicate double-fetches on bare domains. Verdicts unchanged, only duplicate/stale evidence removed. See PR #14 (merged). Country-specific PayPay replay: 187 non-null candidates across 20 markets (87 stored-positive and 100 no-detection selectors; labels were not treated as ground truth). Five stored PayPay positives were outside Japan. Four reachable first-party captures from Germany, Indonesia, South Korea, and Sweden showed only generic pp.init() with no PayPay-specific token or SDK path; the fifth page returned 403. After the country-aware change, local replay produced zero PayPay method/gateway findings on those four captures. A manual browser render completed on one safe first-party page (33,962 DOM characters; static response 30,474 bytes; 9 scripts, 0 iframes) but exposed no PayPay marker, so no JS detection gain is claimed. Source PR #59 merged as a66e76f; release 1.6.8 tagged e487dbd.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Production-grade live detection-rate is bounded by the upstream fleetfetch RenderJS cache (502 context-deadline on every probe) \u2014 when it times out the detector never sees a page body, so live correctness can't be proven without a faster/warmer fetch tier or a stored-output table. Detector logic itself is sound and fully unit-tested.",
     "trl_assessed_at": "2026-08-01",
@@ -5459,7 +5459,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.7",
+    "version": "1.6.8",
     "network_exposure": "gateway-authenticated"
   },
   {
