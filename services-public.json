@@ -4405,7 +4405,7 @@
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "content",
-    "description": "Extracts quotations from a web page or raw HTML \u2014 <blockquote> (kind block) and inline <q> elements \u2014 capturing each quote's text, its cite= source URL, and any nested <cite> attribution, with block/inline counts.",
+    "description": "Extracts quotations from semantic <blockquote>/<q> elements and explicitly marked, attributed testimonial cards with balanced localized quotation marks, with block/inline counts.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://quote-extractor.0crawl.com/health",
     "id": "quote-extractor",
@@ -4421,11 +4421,11 @@
       "language-go",
       "runtime-compose"
     ],
-    "trl": 7,
-    "trl_assessed_at": "2026-06-01",
-    "trl_assessor": "claude-opus-4.8",
-    "trl_ceiling": null,
-    "trl_ceiling_reason": null,
+    "trl": 4,
+    "trl_assessed_at": "2026-05-31",
+    "trl_assessor": "claude-opus-4-8",
+    "trl_ceiling": 4,
+    "trl_ceiling_reason": "The current conservative extractor requires semantic quote tags or explicitly marked, attributed testimonial cards; detecting quotes from unmarked prose requires sentence-boundary and NLP work.",
     "url": "https://quote-extractor.0crawl.com"
   },
   {
