@@ -5237,7 +5237,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15. | 2026-10-20 saved cohort had 120 rows across 48 locale labels and 114 successful first-party replays. One Swiss row stored CH but two CH-9001/CH-3003 lines were classified NL; the fix honors country-prefixed postcodes and exact Dutch formatting. This confirms a sampled false-positive class, not a precision estimate. Source PR #63 merged; release 2.7.15.",
+    "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15. | 2026-10-20 saved cohort had 120 rows across 48 locale labels and 114 successful first-party replays. One Swiss row stored CH but two CH-9001/CH-3003 lines were classified NL; the fix honors country-prefixed postcodes and exact Dutch formatting. This confirms a sampled false-positive class, not a precision estimate. Source PR #63 merged; release 2.7.15. | 2026-10-20 cross-country office-location follow-up: a saved 120-record cohort across 48 locale labels and 1,800 captures contained one successful static false-positive where dated tour copy yielded a low-confidence office candidate. A narrow heuristic guard requires both a date and explicit travel/itinerary language in nearby text; a synthetic regression rejects the travel result while a street-name control remains eligible. This addresses one reproduced false-positive class and does not claim cohort-wide recall improvement. Source PR #64, release 2.7.16.",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_assessed_at": "2026-07-31",
@@ -5254,7 +5254,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.7.15",
+    "version": "2.7.16",
     "network_exposure": "gateway-authenticated"
   },
   {
