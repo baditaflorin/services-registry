@@ -3565,7 +3565,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 5,
-    "trl_evidence": "Corrected DOWNWARD from trl:6, which sat above this record's own documented trl_ceiling of 5 (CPU-only lexicon/cue method, no sarcasm/irony/syntactic context) -- a pre-existing contradiction (registered via PR #30, 'register-emotional-tone-3.3.0', predating this session's audit) not supported by real evidence beyond what the ceiling itself already caps. No code changes needed; this repo's own v3.3.0 chrome/boilerplate-exclusion work is genuine and already reflected in trl_ceiling=5. Pure registry bookkeeping correction, no PR.",
+    "trl_evidence": "Corrected DOWNWARD from trl:6, which sat above this record's own documented trl_ceiling of 5 (CPU-only lexicon/cue method, no sarcasm/irony/syntactic context) -- a pre-existing contradiction (registered via PR #30, 'register-emotional-tone-3.3.0', predating this session's audit) not supported by real evidence beyond what the ceiling itself already caps. No code changes needed; this repo's own v3.3.0 chrome/boilerplate-exclusion work is genuine and already reflected in trl_ceiling=5. Pure registry bookkeeping correction, no PR. 2026-10-20 Arabic localization follow-up (source PR #47 merged as 72a043c; release 3.4.3): controlled minimal pair reproduced a false negative when optional Arabic vocalization marks were present; normalization strips those marks while preserving hamza/madda, with vocalized-positive and vocalized-negation regressions. No saved non-null independent tone cohort was available, so this is a controlled lexical regression rather than a measured production lift.",
     "trl_ceiling": 5,
     "trl_ceiling_reason": "CPU-only lexicon/cue method: no sarcasm/irony/syntactic context, and per-language cue lists are necessarily positive-skewed; reaching 6 needs RFC-grade evidence trails + production cross-checks beyond a lexicon.",
     "trl_assessed_at": "2026-07-30",
@@ -3580,7 +3580,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.4.2",
+    "version": "3.4.3",
     "network_exposure": "gateway-authenticated"
   },
   {
