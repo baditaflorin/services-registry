@@ -3444,7 +3444,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "Second-pass re-audit (fresh 80-domain live re-crawl): explicitly ruled out fetch-cache as a bug (present but deliberate/low-impact for this one-shot crawl pattern). Found and fixed 3 real false-positive bugs: contact-form placeholder text extracted as a real address (worst case: a Cloudflare-obfuscated name@architectink.com reported as top contact at 0.90 confidence), a missing German junk-domain gazetteer entry, and URL userinfo syntax (user@host) misparsed as email. See PR #11 (merged).",
+    "trl_evidence": "Second-pass re-audit (fresh 80-domain live re-crawl): explicitly ruled out fetch-cache as a bug (present but deliberate/low-impact for this one-shot crawl pattern). Found and fixed 3 real false-positive bugs: contact-form placeholder text extracted as a real address (worst case: a Cloudflare-obfuscated name@architectink.com reported as top contact at 0.90 confidence), a missing German junk-domain gazetteer entry, and URL userinfo syntax (user@host) misparsed as email. See PR #11 (merged). 2026-10-20 French locale follow-up: a saved production-derived cohort of 100 successful non-null outputs across 20 country strata did not contain labeled CSS-bidi cases; it is not ground truth. A current French first-party homepage exposed a contact mailbox reversed in an element with explicit inline unicode-bidi:bidi-override and direction:rtl. Fresh 1.6.40 missed it; targeted 1.6.41 parser replay recovered it as obfuscated evidence. Negative controls for plain reversed text, dir=rtl alone, LTR override, stylesheet-only and hidden content stayed empty. One page-level confirmation, not a cohort lift. Source PR #85 merged; focused tests, go test, go vet, go build, and Woodpecker run 306 passed.",
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_assessed_at": "2026-08-01",
@@ -3462,7 +3462,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.40",
+    "version": "1.6.41",
     "network_exposure": "gateway-authenticated"
   },
   {
