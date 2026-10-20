@@ -1199,14 +1199,14 @@
     "trl_assessor": "claude-opus-4-8-2026-06-02",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Reaches TRL 8 with catalog-driven recipe discovery and schema validation on output.",
-    "trl_evidence": "Live on dockerhost 18296; 6 recipes tested end-to-end (firmographic 8/8, seo-audit 8-9/9, vendor-security 6/6, web-vitals 6/6, accessibility 5/5, merchant 6/6) across stripe/shopify/notion/gymshark.",
+    "trl_evidence": "Live on dockerhost 18296; 6 recipes tested end-to-end (firmographic 8/8, seo-audit 8-9/9, vendor-security 6/6, web-vitals 6/6, accessibility 5/5, merchant 6/6) across stripe/shopify/notion/gymshark. Latest country loop: 200 production-classified candidates across 20 markets; the BR/ES stratum had 14 reachable targets and 0 baseline cart detections. Five first-party static page captures (3 BR, 2 ES) reproduced misses; localized phrases and cart paths detected all five on replay. The page renderer returned 401, so no rendered DOM is claimed. Fix merged in go_composite_runner PR #36, release 1.2.7.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "sitemap-finder"
     ],
-    "version": "1.2.6",
+    "version": "1.2.7",
     "spiffe_workload": true
   },
   "compression-tester": {
