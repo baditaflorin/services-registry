@@ -3344,7 +3344,7 @@
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "nlp",
-    "description": "Rank multi-word keyphrases + topics via RAKE candidate generation re-ranked by a TextRank co-occurrence PageRank (pure Go, no external NLP service)",
+    "description": "Extracts keyphrases and topics with RAKE and TextRank; Japanese pages use Kagome morphological segmentation.",
     "example_path": "/?url=https://example.com",
     "health_url": "https://keyphrase-extractor.0crawl.com/health",
     "id": "keyphrase-extractor",
@@ -3361,7 +3361,7 @@
       "runtime-compose"
     ],
     "trl": 7,
-    "trl_assessed_at": "2026-08-02",
+    "trl_assessed_at": "2026-10-20",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "url": "https://keyphrase-extractor.0crawl.com"
   },

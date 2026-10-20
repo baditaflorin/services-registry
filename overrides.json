@@ -4933,7 +4933,8 @@
     "coolify_app_uuid": "pdw49fd7niktinh18cnvjrv9"
   },
   "keyphrase-extractor": {
-    "version": "0.2.6",
+    "version": "0.2.8",
+    "description": "Extracts keyphrases and topics with RAKE and TextRank; Japanese pages use Kagome morphological segmentation.",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
@@ -4944,8 +4945,8 @@
     "placement": "replicable",
     "proxy_egress": true,
     "trl": 7,
-    "trl_evidence": "First-pass audit (fresh 310-domain sample, real RAKE->TextRank pipeline): found and fixed 3 real bugs on live production pages. (1) CJK/full-width punctuation (、，。！？ etc) invisible to the tokenizer, so a whole Chinese/Japanese paragraph with no ASCII punctuation collapsed into one token -> one 'keyphrase'/'topic'. (2) Overlong stopword-free runs silently dropped entirely rather than chunked, returning zero keyphrases/topics on 2 real live pages. (3) A hidden <textarea style=\"display:none\"> JSON CDN-endpoint leak extracted as visible content and ranked as a keyphrase. Confirmed fetch-cache masking does not apply (uses fleetfetch by design). Live before/after: whole-paragraph blobs dropped 16->5 domains, 2 domains flipped from zero output to real output. trl held at 7; trl_ceiling=7 added -- genuinely correct and well-tested now, but further gains need architecture-level work (real per-language stopwords, true CJK/Thai segmentation, JS rendering). See PR #2 (merged).",
-    "trl_assessed_at": "2026-08-02",
+    "trl_evidence": "First-pass audit (fresh 310-domain sample, real RAKE->TextRank pipeline): found and fixed 3 real bugs on live production pages. (1) CJK/full-width punctuation (、，。！？ etc) invisible to the tokenizer, so a whole Chinese/Japanese paragraph with no ASCII punctuation collapsed into one token -> one 'keyphrase'/'topic'. (2) Overlong stopword-free runs silently dropped entirely rather than chunked, returning zero keyphrases/topics on 2 real live pages. (3) A hidden <textarea style=\"display:none\"> JSON CDN-endpoint leak extracted as visible content and ranked as a keyphrase. Confirmed fetch-cache masking does not apply (uses fleetfetch by design). Live before/after: whole-paragraph blobs dropped 16->5 domains, 2 domains flipped from zero output to real output. 2026-10-20 Japanese follow-up: same-page replay on 80 saved first-party captures (10 Japanese pages and 70 other-script controls) improved Japanese labels from en=10/10 to ja=9/10; one sparse page without enough kana remained English. Long phrase/topic counts fell from 22/3 to 2/0, while all 10 Japanese pages still returned extracted results. Neither revision labeled any of the 70 controls Japanese, and their aggregate outputs matched. PR #37 merged; Woodpecker pipeline #136 and local test/vet/build passed. The replay used saved captures; the JS-render path was unchanged. TRL remains 7. Remaining gaps include Chinese, Korean and Thai word segmentation, broader per-language stopwords, and broader JS-rendering coverage.",
+    "trl_assessed_at": "2026-10-20",
     "trl_assessor": "claude-sonnet-5-2026-08-02-proxy-search-nlp-geo-ocr-batch",
     "depends_on": [
       "infrastructure-fetch-cache"
