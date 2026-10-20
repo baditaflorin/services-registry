@@ -763,7 +763,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.8.37",
+    "version": "2.8.38",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5347,7 +5347,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a shared ripple/tap-pulse effect across a physical row of phones (Yjs/y-webrtc), not a stroke-drawing canvas. Found and fixed two real bugs: (1) untrusted peer awareness data let NaN/Infinity through a weak typeof check, poisoning the mesh clock offset for the whole room and baking permanent, un-garbage-collectable NaN entries into the shared doc; (2) the periodic ripple GC deleted dead entries by count-from-front rather than by identity, an assumption that breaks under concurrent multi-peer taps and could delete a live ripple while a dead one survived. Both fixed and regression-tested (2 of 3 new tests confirmed to fail pre-fix). Also corrected a false privacy claim: docs claimed encrypted SDP signaling, but y-webrtc's encryption is opt-in and never enabled here, so signaling is plaintext (TLS-in-transit only) -- doc corrected rather than bolting on a false sense of security. trl bumped 3->5. See github.com/baditaflorin/mesh-wave-canvas PR #1 (merged)."
   },
   "microformats2-extractor": {
-    "version": "0.2.7",
+    "version": "0.2.8",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 18260,
     "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} — returning items[], rels, rel-urls, and a summary roll-up.",
@@ -7420,7 +7420,7 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "version": "2.7.3",
+    "version": "2.7.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "seasonal-detector",
