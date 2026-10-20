@@ -810,6 +810,18 @@ def validate_allowed_source_ips(entry: dict) -> None:
             )
 
 
+def validate_cors(entry: dict) -> None:
+    """`cors` is an opt-out switch: absent keeps the fleet default (permissive CORS), `false` removes it.
+
+    `true` would be a no-op that reads like a grant, and any other type is a typo that must not silently keep
+    or drop CORS, so only the boolean false is accepted."""
+    if "cors" not in entry:
+        return
+    if entry["cors"] is not False:
+        service_id = entry.get("id", "<unknown>")
+        sys.exit(f"ERROR: {service_id} cors must be the boolean false (absent keeps the fleet default)")
+
+
 def validate_public_path_prefixes(entry: dict) -> None:
     """Validate request-path prefixes that bypass the keystore gate fail-closed.
 
@@ -1066,6 +1078,14 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # auth fallback + Upgrade/Connection headers in the nginx
               # template. Per-slug or expand-child override only.
               "ui_cookie_bridge",
+              # Per-service CORS opt-out. The gateway template includes
+              # snippets/cors.conf (Access-Control-Allow-Origin *, a 204 for
+              # any OPTIONS preflight) in every vhost; `cors: false` renders
+              # the vhost without it (fleet-runner nginx-render → NoCORS) so a
+              # cookie-authenticated browser UI (the hub) answers no
+              # cross-origin preflight. Only the boolean false is meaningful;
+              # validate_cors() refuses anything else. Operational; not public.
+              "cors",
               # NOTE: `scope` is deliberately NOT copied through anymore —
               # it's consumed as an input signal by compute_network_exposure()
               # below (13 slugs still set `scope: internal-only` in
@@ -1428,6 +1448,7 @@ def build(overrides: dict) -> list[dict]:
     for entry in entries:
         validate_allowed_source_ips(entry)
         validate_public_path_prefixes(entry)
+        validate_cors(entry)
         validate_gateway_rate_limit(entry)
     return entries
 
