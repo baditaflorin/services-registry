@@ -1,5 +1,6 @@
 ## 2026-10-20
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `funding-signal` 0.1.37.
 - country-focused releases: pin seasonal-detector 2.7.4 after PR #42, microformats2-extractor 0.2.8 after PRs #29/#30, and biz-classifier 2.8.38 after PRs #76/#77; source checks passed and version tags are published. Deployment is held while fleet capacity metrics return 503 and seasonal replicas have mixed image digests.
 - price-range: pin release 1.9.22 after go_price_range PR #50 (merge
   c52b13b) added NT$ to TWD parsing with Taiwan dot-decimal and
