@@ -6,6 +6,10 @@ a separate MAX_FETCH_INFLIGHT limit. MAX_RENDER_INFLIGHT=96 replaces the earlier
 12-slot containment setting after both browser renderer pools reached five hosts.
 The observed pool exposes 35 JS and 20 JS-network slots, plus four independent
 HTML proxy backends. The frontend cap is shared across those request classes.
+The cache app memory ceiling rises from 3 GiB to 6 GiB to allow for larger
+concurrent response buffers; its CPU ceiling remains four cores. This is a
+closely observed trial: check cache RSS/peak/OOM and backend capacity rejections,
+and roll back if useful throughput falls or memory approaches its limit.
 It is a bounded frontend allowance, not a promise of 96 Chromium sessions.
 
 Use the private runtime recipe for the approved pooled renderer URLs; preserve
