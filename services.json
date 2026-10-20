@@ -2469,7 +2469,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "Confirmed this repo's own trl:7 claim via independent audit rather than self-assessment. Found a real regression from an earlier merged PR: a demotion meant to catch one specific false-positive shape was over-broadly capping the weight of every platform-exclusive backend/CDN host match, systemically under-detecting 9 platforms (VTEX had only 12 detections fleet-wide vs. 10,041 for Shopify). Confirmed live: a real operating VTEX storefront was reported as having no e-commerce platform despite 7 independent VTEX asset references. Fixed by narrowing the demotion to only its intended tag shape. See github.com/baditaflorin/go_domain_ecommerce_platform PR #15.",
+    "trl_evidence": "Confirmed this repo's own trl:7 claim via independent audit rather than self-assessment. Found a real regression from an earlier merged PR: a demotion meant to catch one specific false-positive shape was over-broadly capping the weight of every platform-exclusive backend/CDN host match, systemically under-detecting 9 platforms (VTEX had only 12 detections fleet-wide vs. 10,041 for Shopify). Confirmed live: a real operating VTEX storefront was reported as having no e-commerce platform despite 7 independent VTEX asset references. Fixed by narrowing the demotion to only its intended tag shape. See github.com/baditaflorin/go_domain_ecommerce_platform PR #15. | 2026-10-20 Vietnamese localization follow-up: a current first-party storefront with executable Haravan runtime globals, Vietnamese dong prices, and localized purchase controls returned no platform hit before the fix and `haravan` after it. Added strong runtime fingerprints plus bounded Vietnamese commerce phrases; prose-only attribution/cart controls remain negative. This is a targeted first-party replay, not a cohort accuracy estimate. Source PR #58, release tag 0.5.24.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "host_port": 18212,
@@ -2484,7 +2484,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.5.23",
+    "version": "0.5.24",
     "network_exposure": "gateway-authenticated"
   },
   {
