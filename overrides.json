@@ -5036,11 +5036,11 @@
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative existence-validation needs jurisdiction-specific registries or paid company-data feeds; CPU-only/no-outbound forbids them, so the service can detect/classify suffixes and validate identifier form but cannot prove a company exists.",
-    "trl_evidence": "Second-pass re-audit (fresh sample across 18+ jurisdiction suffixes): found and fixed a real false-positive bug -- Dutch 'NV' and Swedish 'AB' legal-suffix matching collided with US-state/Canadian-province address fragments (e.g. 'Las Vegas, NV', 'Edmonton, AB'), live-confirmed including one confident wrong resolution (brookefarris.com). See PR #24 (merged).",
+    "trl_evidence": "Second-pass re-audit (fresh sample across 18+ jurisdiction suffixes): found and fixed a real false-positive bug -- Dutch 'NV' and Swedish 'AB' legal-suffix matching collided with US-state/Canadian-province address fragments (e.g. 'Las Vegas, NV', 'Edmonton, AB'), live-confirmed including one confident wrong resolution (brookefarris.com). See PR #24 (merged). | 2026-10-20 targeted Arabic first-party replay: a Saudi company disclosure missed before the parser fix now yields its legal form and SA country signal; generic Ministry guidance remains excluded. One positive page replay, not a broad recall estimate. Source go_legal_entity PR #132 merged at 98d1406; release 1.33.44.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.43",
+    "version": "1.33.44",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
