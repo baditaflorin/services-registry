@@ -2,7 +2,7 @@
 
 The shared fetch cache gates only cache misses entering the JS, JS-network and
 HTML renderer chains. Cached hits bypass admission, and direct HTTP fetches have
-a separate MAX_FETCH_INFLIGHT limit. MAX_RENDER_INFLIGHT=96 replaces the earlier
+a separate MAX_FETCH_INFLIGHT limit. MAX_RENDER_INFLIGHT=192 replaces the earlier
 12-slot containment setting after both browser renderer pools reached five hosts.
 The observed pool exposes 35 JS and 20 JS-network slots, plus four independent
 HTML proxy backends. The frontend cap is shared across those request classes.
@@ -11,7 +11,7 @@ concurrent response buffers; its CPU ceiling remains four cores. This is a
 closely observed trial: allow for growth from current RSS to the full 6 GiB
 ceiling when estimating host headroom. Check RSS/peak/OOM and backend rejections,
 and roll back if useful throughput falls or memory approaches its limit.
-It is a bounded frontend allowance, not a promise of 96 Chromium sessions.
+It is a bounded frontend allowance, not a promise of 192 Chromium sessions.
 
 Use the private runtime recipe for the approved pooled renderer URLs; preserve
 local fallback URLs only for an unreachable gateway, not for every HTTP error.
@@ -27,3 +27,9 @@ inspect the diff, preserve the previous overlay and protected environment, and
 recreate only the app with its verified existing immutable image. Never pull or
 recreate Redis for an admission setting. Roll back both configuration files if
 health/work probes fail. Keep the durable DomainScope batch running.
+
+The operator doubled the shared ceiling from 96 to 192. Observed occupancy was
+about 40–50 at the time: a higher ceiling alone does not double useful throughput.
+Keep the 6 GiB app memory ceiling and individual backend render limits in place;
+measure downstream capacity rejections and fresh successful results before widening
+backend concurrency.
