@@ -4346,7 +4346,7 @@
     "spiffe_workload": true
   },
   "gdpr-compliance": {
-    "version": "1.26.5",
+    "version": "1.26.7",
     "mem_limit": "256m",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8291,
@@ -7015,7 +7015,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18245,
     "placement": "replicable",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -8735,7 +8735,7 @@
     "compose_skip_networks": true,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
-    "version": "0.17.2",
+    "version": "0.17.3",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",

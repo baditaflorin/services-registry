@@ -1,5 +1,6 @@
 ## 2026-10-20
 
+- fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `gdpr-compliance` 1.26.7, `hub-scrapetheworld-org` 0.17.3, `readability-index` 0.1.14.
 - address-extractor: prepare the 3.4.26 registry pin for go_address_extractor PR #78.
   Merge only after that release PR is merged and tag `3.4.26` is published;
   this registry change does not deploy the service.
