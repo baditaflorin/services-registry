@@ -567,7 +567,9 @@
   "agent-tools": {
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "version": "0.1.5",
     "host_port": 18307,
@@ -3481,7 +3483,11 @@
     "health_url": "https://fleet-grafana.0exec.com/_gw_health"
   },
   "fleet-graph": {
-    "env": {"GRAPH_ENABLED": "false"},
+    "env": {
+      "GRAPH_ENABLED": "false",
+      "GRAPH_MTLS_ADDR": ":8443",
+      "GRAPH_MTLS_WRITER_IDS": "spiffe://0exec.com/ns/fleet/sa/agent-tools"
+    },
     "access_tier": "infra-privileged",
     "container_port": 18143,
     "depends_on": [
