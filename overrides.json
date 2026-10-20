@@ -5706,7 +5706,7 @@
   },
   "payment-detector": {
     "container_port": 8298,
-    "version": "1.6.5",
+    "version": "1.6.6",
     "description": "Microservice for Payment Detector",
     "host_port": 8298,
     "placement": "replicable",
@@ -6948,7 +6948,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "quote-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
