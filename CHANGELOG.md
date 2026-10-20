@@ -10,6 +10,15 @@
   pricing-page label was false, so this supports currency extraction only,
   not page classification. Source and release CI passed; deployment follows
   this registry pin.
+- price-range: pin release 1.9.23 after go_price_range PR #51 (merge
+  06c5343) fixed two Indonesian price-parsing defects. In a saved-page replay,
+  a funding request of Rp 225.000.000/tahun had been counted as a customer
+  offer (14 offers before); the updated exclusion removed it (13 after).
+  Indonesian IDR schema amounts such as 90.000 now parse as 90,000 instead of
+  90, while the EUR decimal-dot control remains unchanged. Evidence came from
+  157 usable saved pages across 49 non-US country strata; TRL remains 7 because
+  this confirms focused correctness fixes, not a broad precision/recall lift.
+  No deployment verification is claimed by this registry pin.
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `gdpr-compliance` 1.26.7, `hub-scrapetheworld-org` 0.17.3, `readability-index` 0.1.14.
 - address-extractor: prepare the 3.4.26 registry pin for go_address_extractor PR #78.
   Merge only after that release PR is merged and tag `3.4.26` is published;
