@@ -9073,7 +9073,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0exec.com",
     "trl": 4,
-    "trl_evidence": "First fleet-registered release (0.1.0, 2026-08-29). Verified live against the built amd64 image: /health, /version, /metrics (154 series) and /api/convert all 200; \"Germany\" -> DE, \"Deutschland\" -> DE (alias hit), \"United States\" -> US, unknown input -> 404 with a structured error. Real logic beyond a regex (Unicode NFD normalization, case/accent folding, alias table) and unit tests exist, but two known gaps hold it at 4: iso3Code is a documented fallback to iso2 under the default CSV source (csv_loader.go:72), and coverage is 183 of 249 assigned alpha-2 codes. Two of the repo's three test files had not compiled since the src/ restructure and were repaired as part of this onboarding. 2026-10-20 Indonesian CLDR 48.2.3 territory label `Amerika Serikat` was absent from the bundled alias CSV and in-memory alias map; both now resolve to US with a regression test. The saved DomainScope locale fixture contains 7 labels and no Indonesian alias, so this is standards-backed targeted coverage, not a sample lift.",
+    "trl_evidence": "First fleet-registered release (0.1.0, 2026-08-29). Verified live against the built amd64 image: /health, /version, /metrics (154 series) and /api/convert all 200; \"Germany\" -> DE, \"Deutschland\" -> DE (alias hit), \"United States\" -> US, unknown input -> 404 with a structured error. Real logic beyond a regex (Unicode NFD normalization, case/accent folding, alias table) and unit tests exist, but two known gaps hold it at 4: iso3Code is a documented fallback to iso2 under the default CSV source (csv_loader.go:72), and coverage is 183 of 249 assigned alpha-2 codes. Two of the repo's three test files had not compiled since the src/ restructure and were repaired as part of this onboarding. 2026-10-20 Indonesian CLDR 48.2.3 territory label `Amerika Serikat` was absent from the bundled alias CSV and in-memory alias map; both now resolve to US with a regression test. The saved DomainScope locale fixture contains 7 labels and no Indonesian alias, so this is standards-backed targeted coverage, not a sample lift. 2026-10-20 release follow-up: the first 0.1.23 rollout was rolled back after /version returned the stale embedded 0.1.22 value. The source of truth under src/internal/version/version.go is now synchronized with the 0.1.24 service manifest/tag before retrying deployment.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "Ceiling is set by corpus quality, not by architecture. Reaching 6 needs a real ISO 3166-1 source of truth (alpha-3 backfilled, subdivisions, official/short/UN names, withdrawn-code history) rather than a 183-row hand-curated CSV with 59 alias rows.",
     "trl_assessed_at": "2026-08-29",
@@ -9093,7 +9093,7 @@
     "host_port": 18315,
     "container_port": 18315,
     "network_exposure": "gateway-authenticated",
-    "version": "0.1.23"
+    "version": "0.1.24"
   },
   {
     "id": "d3-graph",
