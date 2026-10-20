@@ -1709,11 +1709,11 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "trl": 6,
-    "trl_evidence": "First-pass audit (fresh 250-domain sample): corrected a stale premise -- this is a real, complete, working service (not a stub/never-assessed; the repo's own service.yaml already had trl=4 from a pre-fix 2026-07-01 placeholder assessment). Found and fixed 2 real bugs -- a nondeterministic preferred_email selection driven by Go's randomized map iteration order with no tiebreak (28/250, 11%, disagreed across repeat runs of the identical binary); and RDAP 429/5xx responses silently indistinguishable from a genuine 404. Confirmed fetch-cache masking doesn't apply (uses fleetfetch by design) and confirmed rdap.org rate-limiting live (8/20 sequential lookups 429'd). trl bumped 4->6; trl_ceiling=7 added -- capped by dependence on the free, rate-limited, unauthenticated rdap.org redirector and ICANN's 2018 privacy redaction making genuine site-specific RDAP contacts industry-wide rare. See PR #6 (merged).",
+    "trl_evidence": "First-pass audit (fresh 250-domain sample): corrected a stale premise -- this is a real, complete, working service (not a stub/never-assessed; the repo's own service.yaml already had trl=4 from a pre-fix 2026-07-01 placeholder assessment). Found and fixed 2 real bugs -- a nondeterministic preferred_email selection driven by Go's randomized map iteration order with no tiebreak (28/250, 11%, disagreed across repeat runs of the identical binary); and RDAP 429/5xx responses silently indistinguishable from a genuine 404. Confirmed fetch-cache masking doesn't apply (uses fleetfetch by design) and confirmed rdap.org rate-limiting live (8/20 sequential lookups 429'd). trl bumped 4->6; trl_ceiling=7 added -- capped by dependence on the free, rate-limited, unauthenticated rdap.org redirector and ICANN's 2018 privacy redaction making genuine site-specific RDAP contacts industry-wide rare. See PR #6 (merged). 2026-10-20 RFC 9116 URI follow-up: a saved 50-domain sample across 10 markets had six successful security.txt responses and one Contact directive, with no encoded mailto value; it does not estimate market prevalence. RFC 9116 §2.5.3 gives a percent-encoded mailto example that the prior parser treated as malformed mailbox text. PR #39 decodes the URI path, preserves literal plus, and ignores optional query parameters; focused tests and Woodpecker passed.",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.1.15",
+    "version": "0.1.16",
     "spiffe_workload": true,
     "fetch_cache_api_key_file_mount": true
   },
