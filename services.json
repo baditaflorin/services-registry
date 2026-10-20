@@ -185,7 +185,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 6,
-    "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8. Latest country loop: added Slovak address support (PR #79) and postcode-first Ukrainian address parsing (PR #80); replay preserved 45/53 reachable stored positives and recovered one supported Ukrainian stored-zero case. Release 3.4.27 includes both fixes; focused checks and CI passed. No JS-rendered evidence was returned by the renderer, so this release makes no rendered-page claim.",
+    "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8. Latest country loop: added Slovak address support (PR #79) and postcode-first Ukrainian address parsing (PR #80); replay preserved 45/53 reachable stored positives and recovered one supported Ukrainian stored-zero case. Release 3.4.27 includes both fixes; focused checks and CI passed. No JS-rendered evidence was returned by the renderer, so this release makes no rendered-page claim. Vietnamese structured-data replay on a sanitized cached sample: 124 rows across 22 markets; release 3.4.28 localized addressCountry normalization recovered 1 of 3 Vietnamese JSON-LD records; records without country context remain conservatively unclassified.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "TRL 7 requires validation against authoritative postal data under ADR 0001; this release adds localized heuristics but no postal-source cross-check.",
     "trl_assessed_at": "2026-07-30",
@@ -201,7 +201,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.4.27",
+    "version": "3.4.28",
     "network_exposure": "gateway-authenticated"
   },
   {
