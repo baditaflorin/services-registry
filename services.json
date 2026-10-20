@@ -3368,7 +3368,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 6,
-    "trl_evidence": "Matching/gating logic is demonstrably correct (100% accurate on every spot-check when it resolves), but the service has operated at <1% real-world success rate for over a month across five releases (status=upstream_error on ~99.6% of recent rows). Could not reproduce the failure from outside the production network -- the same SPARQL/API calls succeeded cleanly from two independent external vantage points, including a 20-request burst, pointing to a production-egress-specific block/throttle by Wikimedia rather than a code bug. Fixed two real, concrete gaps regardless (v0.3.6): fetch-cache bypass was missing (could replay a cached error instead of retrying), and HTTP 429 handling ignored Retry-After with a blind fixed backoff. See github.com/baditaflorin/go_domain_wikidata_entity PR #14 (merged). Held below the prior self-reported trl=7 pending an ops-level escalation (egress IP reputation/rotation with Wikimedia) that a code fix alone cannot resolve.",
+    "trl_evidence": "Matching/gating logic is demonstrably correct (100% accurate on every spot-check when it resolves), but the service has operated at <1% real-world success rate for over a month across five releases (status=upstream_error on ~99.6% of recent rows). Could not reproduce the failure from outside the production network -- the same SPARQL/API calls succeeded cleanly from two independent external vantage points, including a 20-request burst, pointing to a production-egress-specific block/throttle by Wikimedia rather than a code bug. Fixed two real, concrete gaps regardless (v0.3.6): fetch-cache bypass was missing (could replay a cached error instead of retrying), and HTTP 429 handling ignored Retry-After with a blind fixed backoff. See github.com/baditaflorin/go_domain_wikidata_entity PR #14 (merged). Held below the prior self-reported trl=7 pending an ops-level escalation (egress IP reputation/rotation with Wikimedia) that a code fix alone cannot resolve. In the 2026-10-20 saved 200-row, 20-market replay, one China-market prefecture-level city passed as a high-confidence entity despite its exact P856 host match; PR #45 adds the two missing administrative place labels to the reject gate, and local replay emitted zero candidates for it. This corrects the place-class false positive but does not change the separate production-egress reliability limit.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
     "host_port": 18228,
@@ -3378,7 +3378,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "network_exposure": "gateway-authenticated"
   },
   {
