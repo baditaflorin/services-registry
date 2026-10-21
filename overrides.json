@@ -3732,9 +3732,6 @@
     "container_port": 18209,
     "description": "cross-app + cross-origin display identity (nickname + name + avatar) for the mesh-* P2P fleet — L2 tier of fleetPersona in mesh-common",
     "example_path": "/v1/health",
-    "extra_server_names": [
-      "persona.0exec.com"
-    ],
     "health_url": "https://persona.0exec.com/v1/health",
     "host_port": 18209,
     "trl": 4,
@@ -3788,9 +3785,6 @@
     "category": "fleet_infra",
     "container_port": 18200,
     "example_path": "/pix.gif?app=mesh-test&event=pv",
-    "extra_server_names": [
-      "pixel.0exec.com"
-    ],
     "health_url": "https://pixel.0exec.com/health",
     "host_port": 18200,
     "trl": 4,
