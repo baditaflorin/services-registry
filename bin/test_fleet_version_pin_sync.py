@@ -126,6 +126,51 @@ class TestStaleTargets(unittest.TestCase):
         self.assertIsNone(vps.stale_targets(["a: changed ['version']"], targets))                              # version alone is the pin itself: wrong value, not stale
 
 
+class TestWaitAndMergeAndResume(unittest.TestCase):
+    OK = json.dumps({"statuses": [{"context": c, "state": "success"} for c in vps.CI_CONTEXTS]})
+
+    def _run(self, answers, merged):
+        """A fake `run`: gh api answers come from `answers` in order (an Exception is raised), `gh pr merge` is recorded."""
+        def fake(cmd, cwd=None, check=True, **kw):
+            if cmd[:2] == ["gh", "api"]:
+                a = answers.pop(0)
+                if isinstance(a, Exception):
+                    raise a
+                return mock.Mock(stdout=a, returncode=0)
+            if cmd[:3] == ["gh", "pr", "merge"]:
+                merged.append(cmd)
+                return mock.Mock(stdout="", returncode=0)
+            raise AssertionError(cmd)
+        return fake
+
+    def test_a_refused_status_call_is_retried_not_fatal(self):
+        merged, sleeps = [], []
+        answers = [RuntimeError("gh api ...: exit 1: gh: API rate limit exceeded"), RuntimeError("again"), self.OK]
+        with mock.patch.object(vps, "run", self._run(answers, merged)), mock.patch.object(vps.time, "sleep", sleeps.append):
+            vps.wait_and_merge("/w", 7, "abc", 3600)
+        self.assertEqual(len(merged), 1)
+        self.assertIn("--match-head-commit", merged[0])
+        self.assertEqual(sleeps, [120, 120])
+
+    def test_failed_ci_still_stops_and_a_deadline_still_ends_the_wait(self):
+        bad = json.dumps({"statuses": [{"context": vps.CI_CONTEXTS[0], "state": "failure"}]})
+        with mock.patch.object(vps, "run", self._run([bad], [])):
+            with self.assertRaises(RuntimeError):
+                vps.wait_and_merge("/w", 7, "abc", 3600)
+        with mock.patch.object(vps, "run", self._run([RuntimeError("down")] * 5, [])), mock.patch.object(vps.time, "sleep", lambda s: None):
+            with self.assertRaises(RuntimeError):
+                vps.wait_and_merge("/w", 7, "abc", 0)
+
+    def test_an_open_pull_request_is_resumed_and_exit_3_means_it_could_not_be_merged(self):
+        args = mock.Mock(ci_timeout=60, prom="")
+        pr = {"number": 9, "headRefName": "bot/version-pin-sync-x", "headRefOid": "deadbeef"}
+        with mock.patch.object(vps, "wait_and_merge") as wm:
+            self.assertEqual(vps.resume_open_pr("/w", pr, {}, args), 0)
+            wm.assert_called_once_with("/w", 9, "deadbeef", 60)
+        with mock.patch.object(vps, "wait_and_merge", side_effect=RuntimeError("CI failed on #9")):
+            self.assertEqual(vps.resume_open_pr("/w", pr, {}, args), 3)
+
+
 class TestFreshCheckout(unittest.TestCase):
     """2026-10-20 18:21Z the job stopped at its own guard with edited overrides.json/services.json left in its work dir; from then on `checkout -B main origin/main`
     refused to run over them and every run (18:21, 00:18, 06:18) failed there, so no pin was synced for 12 hours."""
