@@ -1,7 +1,11 @@
 import importlib.util
 import json
+import os
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parent / "fleet-version-pin-sync.py"
 _spec = importlib.util.spec_from_file_location("fleet_version_pin_sync", SCRIPT)
@@ -107,6 +111,60 @@ class TestChangelog(unittest.TestCase):
         self.assertEqual(vps.changelog_with("## 2026-10-17\n\n- x\n", "- y\n", "2026-10-17"), "## 2026-10-17\n\n- y\n- x\n")
         self.assertEqual(vps.changelog_with("## 2026-10-16\n\n- x\n", "- y\n", "2026-10-17"),
                          "## 2026-10-17\n\n- y\n\n## 2026-10-16\n\n- x\n")
+
+
+class TestStaleTargets(unittest.TestCase):
+    def test_only_a_changed_row_of_a_target_is_skippable(self):
+        targets = {"a": "2", "b": "3", "c": "4"}
+        self.assertEqual(vps.stale_targets(["a: changed ['trl_evidence', 'version']"], targets), {"a"})
+        self.assertEqual(vps.stale_targets(["a: changed ['trl_evidence', 'version']", "c: changed ['env', 'version']"], targets), {"a", "c"})
+        self.assertIsNone(vps.stale_targets([], targets))
+        self.assertIsNone(vps.stale_targets(["the set of services changed"], targets))
+        self.assertIsNone(vps.stale_targets(["a: row did not change"], targets))
+        self.assertIsNone(vps.stale_targets(["zzz: changed ['trl_evidence']"], targets))                      # not a target: something else moved
+        self.assertIsNone(vps.stale_targets(["a: changed ['trl_evidence', 'version']", "the set of services changed"], targets))
+        self.assertIsNone(vps.stale_targets(["a: changed ['version']"], targets))                              # version alone is the pin itself: wrong value, not stale
+
+
+class TestFreshCheckout(unittest.TestCase):
+    """2026-10-20 18:21Z the job stopped at its own guard with edited overrides.json/services.json left in its work dir; from then on `checkout -B main origin/main`
+    refused to run over them and every run (18:21, 00:18, 06:18) failed there, so no pin was synced for 12 hours."""
+
+    def test_a_work_dir_left_dirty_by_a_failed_run_is_cleaned_and_follows_origin(self):
+        env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@example.invalid", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.invalid",
+               "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_CONFIG_SYSTEM": "/dev/null"}
+
+        def g(*args, cwd):
+            subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True, env=env)
+
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, env):
+            tmp = Path(tmp)
+            origin, seed, work = tmp / "origin.git", tmp / "seed", tmp / "work"
+            g("init", "-q", "--bare", "-b", "main", str(origin), cwd=tmp)
+            g("clone", "-q", str(origin), str(seed), cwd=tmp)
+            (seed / "overrides.json").write_text('{"a": {"version": "1"}}\n')
+            (seed / "services.json").write_text('[{"id": "a", "version": "1"}]\n')
+            g("add", "-A", cwd=seed)
+            g("commit", "-q", "-m", "one", cwd=seed)
+            g("push", "-q", "origin", "HEAD:main", cwd=seed)
+            with mock.patch.object(vps, "REPO_URL", str(origin)):
+                vps.fresh_checkout(work)                                          # the first run clones
+                # a run that died half-way: edited tracked files, an untracked file, even its own branch with a local commit
+                g("checkout", "-q", "-b", "bot/version-pin-sync-x", cwd=work)
+                (work / "overrides.json").write_text('{"a": {"version": "2"}}\n')
+                (work / "services.json").write_text("changed\n")
+                (work / "leftover.tmp").write_text("x\n")
+                g("commit", "-q", "-am", "half-way", cwd=work)
+                (work / "overrides.json").write_text("dirty again\n")
+                (seed / "overrides.json").write_text('{"a": {"version": "3"}}\n')   # origin moved on meanwhile
+                g("commit", "-q", "-am", "two", cwd=seed)
+                g("push", "-q", "origin", "HEAD:main", cwd=seed)
+                vps.fresh_checkout(work)                                          # must not raise
+            self.assertEqual((work / "overrides.json").read_text(), '{"a": {"version": "3"}}\n')
+            self.assertEqual((work / "services.json").read_text(), '[{"id": "a", "version": "1"}]\n')
+            self.assertFalse((work / "leftover.tmp").exists())
+            head = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=work, capture_output=True, text=True, env=env).stdout.strip()
+            self.assertEqual(head, "main")
 
 
 if __name__ == "__main__":

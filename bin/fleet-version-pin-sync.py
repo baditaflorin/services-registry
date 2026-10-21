@@ -172,6 +172,20 @@ def version_only_change(old_services, new_services, targets):
     return problems
 
 
+def stale_targets(problems, targets):
+    """The target ids whose ONLY problem is that their generated row on main differs in more than `version` (`<id>: changed [...]`), or None when any other
+    problem is present (a changed set of services, a row that did not change, a row outside the targets): those still stop the run. A target whose entry in
+    services.json is stale against overrides.json (2026-10-20: six `trl_evidence` texts edited in overrides.json without regenerating) cannot be pinned by a
+    pins-only change; skipping it must not hold back the other pins (one stale row stopped every sync for 12 hours)."""
+    ids = set()
+    for problem in problems:
+        sid, sep, rest = problem.partition(": changed ")
+        if not sep or sid not in targets or "'version'" in rest and rest.strip() == "['version']":
+            return None
+        ids.add(sid)
+    return ids or None
+
+
 def changelog_with(text, line, today):
     """CHANGELOG.md with `line` added under today's `## YYYY-MM-DD` heading (created when missing)."""
     head = f"## {today}\n\n"
@@ -200,6 +214,10 @@ def fresh_checkout(workdir):
         workdir.parent.mkdir(parents=True, exist_ok=True)
         run(["git", "clone", "--quiet", REPO_URL, str(workdir)])
     git(workdir, "fetch", "--quiet", "origin", "main")
+    # The work dir is this job's own, and a run that stops half-way (2026-10-20 18:21Z: the "services.json changed more than the pins" guard) leaves its
+    # edits in it. `checkout -B main origin/main` refuses to run over them, so every later run died here for 12 hours: drop whatever is left FIRST.
+    git(workdir, "reset", "--quiet", "--hard")
+    git(workdir, "clean", "-fdq")
     git(workdir, "checkout", "--quiet", "-B", "main", "origin/main")
     git(workdir, "reset", "--quiet", "--hard", "origin/main")
     git(workdir, "clean", "-fdq")
@@ -338,11 +356,24 @@ def main(argv=None):
     ok = False
     try:
         old_services = services
-        (wd / "overrides.json").write_text(set_pins((wd / "overrides.json").read_text(), targets))
-        run([sys.executable, "bin/generate.py", "--only", ",".join(sorted(targets))], cwd=wd)
-        problems = version_only_change(old_services, json.loads((wd / "services.json").read_text()), targets)
-        if problems:
-            raise RuntimeError("services.json changed more than the pins: " + "; ".join(problems[:10]))
+        original_overrides = (wd / "overrides.json").read_text()
+        skipped_stale = {}
+        for _attempt in range(3):
+            (wd / "overrides.json").write_text(set_pins(original_overrides, targets))
+            run([sys.executable, "bin/generate.py", "--only", ",".join(sorted(targets))], cwd=wd)
+            problems = version_only_change(old_services, json.loads((wd / "services.json").read_text()), targets)
+            if not problems:
+                break
+            stale = stale_targets(problems, targets)
+            if not stale or len(stale) >= len(targets):
+                raise RuntimeError("services.json changed more than the pins: " + "; ".join(problems[:10]))
+            for sid in sorted(stale):
+                skipped_stale[sid] = targets.pop(sid)
+            git(wd, "checkout", "--quiet", "--", ".")  # back to origin/main, then again for the remaining pins
+            print("skipping " + ", ".join(sorted(stale)) + ": their generated rows on main are stale against overrides.json "
+                  "(regenerate them first); the other pins go on", file=sys.stderr)
+        else:
+            raise RuntimeError("services.json still changed more than the pins after skipping stale rows: " + "; ".join(problems[:10]))
         run([sys.executable, "bin/check_service_version_regressions.py", "origin/main"], cwd=wd)
         run([sys.executable, "-m", "unittest", "discover", "-s", "bin", "-p", "test_*.py"], cwd=wd)
         today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
@@ -364,6 +395,8 @@ def main(argv=None):
                 "raised only when ghcr.io has that image. services.json changes only `version` in these rows "
                 "(asserted); the version-regression check and the unit tests passed before the push.\n\n"
                 + "\n".join(f"- `{r['id']}`: {r['reason']}" for r in rows if r["id"] in targets)
+                + ("\n\nNot synced (their generated row on main is stale against overrides.json: regenerate it, then the next run sets "
+                   "the pin): " + ", ".join(f"`{k}` {v}" for k, v in sorted(skipped_stale.items())) if skipped_stale else "")
                 + "\n\nMerged automatically when Woodpecker is green on this exact head.")
         url = run(["gh", "pr", "create", "-R", GH_REPO, "--base", "main", "--head", branch, "--title",
                    f"fix(registry): sync {len(targets)} version pin(s) to the running version", "--body", body],
