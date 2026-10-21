@@ -271,7 +271,14 @@ def image_exists(names, version):
 def wait_and_merge(workdir, number, head, timeout_s):
     deadline = time.time() + timeout_s
     while time.time() < deadline:
-        st = json.loads(run(["gh", "api", f"repos/{GH_REPO}/commits/{head}/status"]).stdout)
+        try:
+            st = json.loads(run(["gh", "api", f"repos/{GH_REPO}/commits/{head}/status"]).stdout)
+        except RuntimeError as exc:
+            # The GitHub REST budget is shared by every agent and tool of the account and runs dry several times a day (2026-10-21 07:31Z): one refused status call
+            # killed the run with its pull request open, and every later run then refused to start. A failed look is not a failed CI: look again after a pause.
+            print(f"could not read the CI status of #{number} ({str(exc)[-160:]}); retrying", file=sys.stderr)
+            time.sleep(120)
+            continue
         states = {s["context"]: s["state"] for s in st.get("statuses", [])}
         if any(states.get(c) in ("failure", "error") for c in CI_CONTEXTS):
             raise RuntimeError(f"CI failed on #{number}: {states}")
@@ -299,6 +306,21 @@ def write_prom(path, counts, applied, ok):
     tmp.write_text("\n".join(lines) + "\n")
     os.chmod(tmp, 0o644)
     tmp.replace(target)
+
+
+def resume_open_pr(workdir, pr, counts, a):
+    """A pull request of this job is still open: a run died before it merged (CI still running, the GitHub budget gone). Do not open another on top of it: wait for CI on
+    that exact head and merge it (the same gate as a fresh one), and let the next run compute what is left. Exit 3 when it cannot be merged (CI failed, no verdict in time)."""
+    print(f"a version-pin-sync pull request is still open (#{pr['number']}): resuming it, not opening another", file=sys.stderr)
+    try:
+        wait_and_merge(workdir, pr["number"], pr["headRefOid"], a.ci_timeout)
+    except RuntimeError as exc:
+        write_prom(a.prom, counts, 0, False)
+        print(f"#{pr['number']} stays open: {exc}", file=sys.stderr)
+        return 3
+    print(f"merged #{pr['number']} (resumed)")
+    write_prom(a.prom, counts, 0, True)
+    return 0
 
 
 def main(argv=None):
@@ -346,13 +368,10 @@ def main(argv=None):
         print(f"refusing: {len(targets)} changes is more than --max-changes {a.max_changes}", file=sys.stderr)
         return 2
     open_prs = [pr for pr in json.loads(run(["gh", "pr", "list", "-R", GH_REPO, "--state", "open", "--limit", "100",
-                                             "--json", "number,headRefName"]).stdout)
+                                             "--json", "number,headRefName,headRefOid"]).stdout)
                 if pr["headRefName"].startswith("bot/version-pin-sync-")]
     if open_prs:
-        write_prom(a.prom, counts, 0, False)
-        print(f"a version-pin-sync pull request is still open (#{open_prs[0]['number']}): not opening another",
-              file=sys.stderr)
-        return 3
+        return resume_open_pr(wd, open_prs[0], counts, a)
     ok = False
     try:
         old_services = services
