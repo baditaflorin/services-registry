@@ -520,7 +520,7 @@
     "0database-runtime": {
       "cluster": "0database",
       "capacity_label": "0database-runtime",
-      "state": "restricted",
+      "state": "maintenance",
       "roles": [
         "fleet-compose-runtime"
       ],
@@ -529,49 +529,6 @@
       ],
       "allowed_placement": [
         "replicable"
-      ],
-      "allowed_service_ids": [
-        "address-extractor",
-        "brand-color-palette",
-        "caa-checker",
-        "cognitive-load",
-        "company-name-extractor",
-        "compression-tester",
-        "css-framework-detector",
-        "data-inventory",
-        "domain-abuse-contact-rollup",
-        "domain-amp-detector",
-        "domain-app-render-mode",
-        "domain-ct-log-watcher",
-        "domain-details",
-        "domain-error-monitoring",
-        "domain-events-platform",
-        "domain-faq-schema",
-        "domain-favicon-completeness",
-        "domain-font-stack",
-        "domain-glue-records",
-        "domain-image-alt-coverage",
-        "domain-structured-data-rollup",
-        "domain-wikidata-entity",
-        "emotional-tone",
-        "founding-year",
-        "funding-signal",
-        "gdpr-compliance",
-        "js-proxy",
-        "js-proxy-network",
-        "legal-entity",
-        "mobile-friendly",
-        "node-proxy",
-        "phone-extractor",
-        "press-mentions",
-        "proxy-fingerprint",
-        "scc",
-        "video-content",
-        "company-size",
-        "funding-detector",
-        "google-taxonomy",
-        "html-proxy",
-        "payment-detector"
       ]
     }
   }
