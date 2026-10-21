@@ -1,5 +1,6 @@
 ## 2026-10-21
 
+- fleet-version-pin-sync: 12 registry version pin(s) set to the version the service runs, which is also its repository main: `agent-tools` 0.1.6, `domain-events-platform` 0.2.35, `email-extractor` 1.6.42, `email-harvester` 1.4.32, `fleet-graph` 0.4.39, `hub-scrapetheworld-org` 0.17.4, `merchant-profile` 1.1.7, `policy-clause-extractor` 0.1.16, `price-range` 1.9.24, `review-presence` 0.4.5, `seasonal-detector` 2.7.5, `shipping-regions` 1.7.27.
 - fleet-version-pin-sync (Builder job, every 6 h): it works again after 12 hours of failed runs. (1) A run that stopped at its own guard left its edits in the job's work dir and `git checkout -B main origin/main` then refused to run over them on every later run: the work dir is now reset and cleaned first. (2) One target whose generated row on main is stale against overrides.json (six `trl_evidence` texts were edited in overrides.json without regenerating services.json) stopped the whole run: such targets are now skipped, named in the log and in the pull request, and the other pins go on. Tests: a real-git test of the dirty work dir, a pure test of which problems are skippable.
 
 ## 2026-10-20
