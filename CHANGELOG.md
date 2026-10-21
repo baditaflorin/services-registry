@@ -1,5 +1,6 @@
 ## 2026-10-21
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-secrets` 0.7.4.
 - fleet-version-pin-sync: a refused GitHub call no longer strands its pull request. The REST budget is shared by every agent and runs dry several times a day; on 2026-10-21 07:31Z one refused CI-status call killed a run with its PR (#986) open, and every later run would have refused to start on top of it. `wait_and_merge` now retries a failed status read after 120 s (CI failure and the deadline still stop it), and a run that finds an open pin-sync PR waits for CI on that exact head and merges it (exit 3 only when it cannot). Tests with a fake gh.
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `contact-route-detector` 0.1.27, `html-proxy` 0.5.28.
 - services.json: regenerate the six rows whose `trl_evidence` had been edited in overrides.json without regenerating (pricing-tier-parser, social-proof-extractor, readability-index, contact-route-detector, country-iso-matcher, address-extractor; `bin/generate.py --only <ids>`, nothing else in the file changes). One of them blocked fleet-version-pin-sync's guard (contact-route-detector's 0.1.27 pin) on 2026-10-20.
