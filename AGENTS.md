@@ -17,11 +17,11 @@ This contract keeps four things true: work starts from fresh `origin/main`; prod
 
 ## Risk tier: what needs care before you touch it
 
-Most changes are low risk: probe-first deploy with rollback on a failed `/selftest` is the safety net, so `fleet-runner deploy <repo>` is enough. These are not covered by it. Not sure which row applies? Take the higher tier.
+Most changes are low risk: probe-first deploy with rollback on a failed `/selftest` is the safety net, so a plain deploy is enough. These are not covered by it. Not sure which row applies? Take the higher tier.
 
 | Touching | Do this first |
 |---|---|
-| One service, no shared code | `fleet-runner deploy <repo>` |
+| One service, no shared code | `fleet-runner deploy <repo>`; if the service has a replica pool, roll every replica with `fleet-runner deploy-pool <repo>` (a plain `deploy` rolls one replica and skews the pool) |
 | `safehttp`, middleware, auth, the gateway | Stage it: `fleet-runner deploy-all --repos <lowest-blast-radius-repo>,<others> --canary 1 --soak 90s --gate-no-restarts`, then verify `/health`, `/selftest`, `/version` and gateway smoke before widening (there is no `fleet-runner canary` verb). Never a fleet-wide rollout on first touch |
 | `go-common` or a `go-fleet-*` primitive with more than one consumer | List the affected set first with `fleet-runner rollout` in its default plan mode (see CLAUDE.md, "Fleet-wide changes") |
 | DNS records or secrets | Read `RUNBOOK-UNATTENDED.md`. DNS only through the Hetzner Cloud API; secrets only in `go-fleet-secrets`, never in env, repos or `services.json` |
