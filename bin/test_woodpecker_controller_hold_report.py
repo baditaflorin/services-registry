@@ -69,6 +69,44 @@ class ReportTests(unittest.TestCase):
         self.assertIn("after  the split: 4 samples, held 25 %", text)
 
 
+DAY = 86400
+DAY0 = rep.parse_instant("2026-10-19T00:00:00Z")
+
+
+class DailyWindowTests(unittest.TestCase):
+    """Two days; only the 07:00-16:00 samples count towards the working-day share."""
+
+    def setUp(self):
+        rows = []
+        for day, held_hours in ((0, {3, 7, 8}), (1, {3})):
+            for hour in (3, 7, 8, 9, 15, 16, 22):  # 3, 16 and 22 are outside the window
+                held_now = hour in held_hours
+                offset = DAY0 - T0 + day * DAY + hour * 3600
+                rows.append(line(NODE, offset, 0 if held_now else 2, 40 if held_now else 4))
+        self.recs = rep.samples(rows, NODE)
+
+    def test_parse_window(self):
+        self.assertEqual(rep.parse_window("07-16"), (7, 16))
+        for bad in ("16-07", "7", "07-25", "-3-5", "a-b", "07-07"):
+            with self.assertRaises(ValueError, msg=bad):
+                rep.parse_window(bad)
+
+    def test_share_is_per_day_and_ignores_samples_outside_the_hours(self):
+        days = rep.by_day(self.recs, (7, 16))
+        self.assertEqual(list(days), ["10-19", "10-20"])
+        self.assertEqual(days["10-19"]["samples"], 4)      # 07, 08, 09, 15
+        self.assertEqual(days["10-19"]["held_pct"], 50.0)  # 07 and 08 held
+        self.assertEqual(days["10-19"]["io_mean"], (40 + 40 + 4 + 4) / 4)
+        self.assertEqual(days["10-20"]["held_pct"], 0.0)
+
+    def test_report_prints_the_daily_lines_only_when_asked(self):
+        self.assertNotIn("per day", rep.report(self.recs, None))
+        text = rep.report(self.recs, None, (7, 16))
+        self.assertIn("per day, only 07:00-16:00 UTC", text)
+        self.assertRegex(text, r"10-19\s+4\s+50\s+22\.0")
+        self.assertRegex(text, r"10-20\s+4\s+0\s+4\.0")
+
+
 class CommandLineTests(unittest.TestCase):
     def run_main(self, argv, stdin_text):
         out, err = io.StringIO(), io.StringIO()

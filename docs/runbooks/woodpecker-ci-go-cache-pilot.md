@@ -260,7 +260,11 @@ resume rule (many calm samples in a row) is the next thing to look at, not the c
 - *Per job:* a single run took 69, 79 and 71 s on the other sites. On the pilot host, five at once took
   143 to 262 s each (aggregate throughput only about 1.5 jobs' worth, so still disk-bound under load);
   the run that happened to have the host to itself took 68, 68, 95 and 72 s, the same as elsewhere.
-  Two of 24 rounds failed their tests under load; the cause was not investigated.
+  Two of 24 rounds failed their tests under load (`go build` printed nothing, so it was `go test`;
+  the probe discarded the test output, so the failing test is unknown, and 28 later runs with the
+  output kept all passed). Two fake-clock tests in `go-common/chromeguard` took 12 s and 4 s in single
+  runs under load against 0.1 s normally, which points at disk stalls; other tests in that package wait
+  up to 5 s, so they are the suspects. Not proven.
 - *Real pipelines after the change* (token-free report, only 9 pilot runs): one comparable workflow
   pair, `large-files`: pilot host 81 s to 32 s while the control agents went 19 s to 21 s (effect 0.36).
   That workflow does no Go work, so it measures the disk fix, not the cache. No Go workflow has two
@@ -268,6 +272,48 @@ resume rule (many calm samples in a row) is the next thing to look at, not the c
 
 Limits: one evening, one load shape, no image builds or nightly backup in the window. The working-day
 check above is still the real test.
+
+### The first two working days (2026-10-20, 2026-10-21): better, not fixed
+
+Held share of the pilot host over 07:00-16:00 UTC, from the controller's own log (OBSERVED):
+
+| Day | Held | Note |
+| --- | --- | --- |
+| 10-19, before the change | 67 % | I/O pressure 25 % |
+| 10-20 | 13 % | one held stretch, 07:51-09:09 UTC |
+| 10-21 | 42 % | 985 samples, mean I/O pressure 26.5 % |
+
+So the disk change helped, but one good day was not a trend. What still holds the agent is the
+backup server that shares the same two spinning disks (a VM on the same hypervisor, datastore on the
+same pool). In a 20 s sample at 07:05 UTC on 2026-10-22 it read 18.5 MB/s, more than all other VMs
+together; the build VM wrote 2.7 MB/s. Controller samples from 10-21 00:58 to 10-22 07:07 UTC (3,198),
+split by whether a backup-server task (backup, verify, garbage collection or reader) was running:
+
+| | Samples | Held | Mean I/O pressure |
+| --- | --- | --- | --- |
+| backup server busy | 1,571 | 66 % | 36 % |
+| backup server idle | 1,627 | 22 % | 18 % |
+| 07-16 UTC, busy | 629 | 63 % | 31 % |
+| 07-16 UTC, idle | 370 | 7 % | 21 % |
+
+Long held stretches end where those jobs end (10-21 11:30-12:41 against a verify job that ran
+07:00-12:40; 22:18-23:40 against garbage collection 22:00-23:33). Inside working hours the backup
+server runs a daily pull-sync to another site at 08:00 UTC (six readers of 10-45 minutes) and weekly
+verify slices of 4.5 to 5.7 hours starting 07:00 or 10:00 UTC on Tuesday to Friday; a large VM backup
+from another site ran 04:31-11:20 UTC on 10-20. This is a correlation of two logs, not an experiment:
+the control is the idle row, where the same host in the same hours was held 7 % of the time.
+
+The lasting remedies are on the storage side (a log device or a special vdev in that pool, or
+moving verify, sync and the biggest backups out of 07-16 UTC); neither is part of this change.
+Judge any of them by the number, on the controller host:
+
+```sh
+journalctl -u woodpecker-load-controller@ci.0exec --since -30h --no-pager -o cat \
+  | python3 bin/woodpecker_controller_hold_report.py --node <pilot node> --daily-window 07-16
+```
+
+Target: held share at or under 15 % on three working days in a row. The controller's journal keeps
+only about 30 hours, so save each day's figure.
 
 ## Acceptance criteria
 
