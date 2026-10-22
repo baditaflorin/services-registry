@@ -1,3 +1,7 @@
+## 2026-10-22
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-graph` 0.4.43.
+
 ## 2026-10-21
 
 - `fleet-pixel` and `fleet-persona`: dropped the `extra_server_names` override (`overrides.json`, and the generated `services.json` with `bin/generate.py --only fleet-pixel` / `--only fleet-persona`). Each only repeated the canonical host (`url` is already `pixel.0exec.com` / `persona.0exec.com`), so the rendered vhost said `server_name pixel.0exec.com pixel.0exec.com;` and nginx logged six `conflicting server name` warnings at every reload. The old names `fleet-pixel.0exec.com` and `fleet-persona.0exec.com` were never listed here and are no longer served (the stale id-named vhost files that still answered them were removed from the gateway on 2026-10-21); if a client needs one of them, add it to `extra_server_names` as a DIFFERENT name from the canonical host.
