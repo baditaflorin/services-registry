@@ -238,7 +238,12 @@ Recovery requires the guest CPU, memory, and filesystem metrics to meet their
 resume thresholds and the backing filesystem to meet both its resume percentage
 and absolute free-byte floor for the complete configured resume_samples
 window. The controller restores only registration IDs it recorded as drained.
-An ID already held with no_schedule by an operator remains held. For v1,
+An ID already held with no_schedule by an operator remains held. The
+controller records an ID, and writes its state file, before it sends the
+pause, so a pause whose response is lost (a read timeout after Woodpecker
+applied it) is still restored, and a pause that never landed is forgotten on
+the next cycle because the agent is still schedulable. Such a request logs
+`agent_drain_unconfirmed` with the agent ID. For v1,
 duplicate live registrations with one configured name are evaluated as a
 single group, but only controller-managed IDs are restored. Drain only stops
 new scheduling; it does not terminate workflows already assigned to those

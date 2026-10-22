@@ -563,6 +563,178 @@ class BackingStorageTests(unittest.TestCase):
         self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
 
 
+class LostResponseClient(FakeClient):
+    """A pause PATCH whose response never arrives: urlopen's read times out.
+
+    With applied=True the server had already set no_schedule (the 2026-10-21
+    case: the gateway logged the controller's PATCH /api/agents/101 as 499 and
+    the agent stayed paused); with applied=False the request never landed.
+    """
+
+    def __init__(self, agents, applied):
+        super().__init__(agents)
+        self.applied = applied
+
+    def set_no_schedule(self, agent, value):
+        if value and not self.applied:
+            raise TimeoutError("The read operation timed out")
+        super().set_no_schedule(agent, value)
+        if value:
+            raise TimeoutError("The read operation timed out")
+
+
+def agent_by_id(client, agent_id):
+    return next(agent for agent in client.remote_agents if agent["id"] == agent_id)
+
+
+class LostPauseResponseTests(unittest.TestCase):
+    def quarantine_builder_b(self, applied):
+        config = config_v2()
+        config["nodes"][1]["fail_closed_on_metrics_error"] = True
+        client = LostResponseClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "remote-agent", "no_schedule": False},
+            ],
+            applied,
+        )
+        state = {
+            "nodes": {
+                "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        persisted = []
+
+        def fetch(url):
+            if "builder-b" in url:
+                raise TimeoutError("timed out")
+            return METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=fetch):
+            with self.assertRaises(TimeoutError):
+                controller.run_cycle_v2(
+                    config, state, client, apply=True, persist=lambda: persisted.append(copy.deepcopy(state))
+                )
+        # The record reached the state file before the request went out.
+        self.assertEqual(len(persisted), 1)
+        self.assertEqual(persisted[0]["nodes"]["builder-b"]["managed_agent_ids"], ["2"])
+        return config, client, persisted[0]
+
+    def test_v2_pause_applied_but_unanswered_is_restored_by_the_controller(self):
+        config, client, state = self.quarantine_builder_b(applied=True)
+        self.assertTrue(agent_by_id(client, 2)["no_schedule"])
+
+        # The process restarts from the file written before the request; the
+        # node recovers (two samples: the quarantine dropped the CPU baseline).
+        for metrics in (RECOVERED_METRICS, RECOVERED_METRICS_NEXT):
+            with patch.object(controller, "fetch_text", return_value=metrics):
+                controller.run_cycle_v2(config, state, client, apply=True)
+
+        self.assertEqual(client.changed, [(2, True), (2, False)])
+        self.assertFalse(agent_by_id(client, 2)["no_schedule"])
+        self.assertEqual(state["nodes"]["builder-b"]["managed_agent_ids"], [])
+
+    def test_v2_pause_that_never_landed_is_forgotten_and_not_mistaken_for_a_hold(self):
+        config, client, state = self.quarantine_builder_b(applied=False)
+        self.assertFalse(agent_by_id(client, 2)["no_schedule"])
+
+        with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS):
+            controller.run_cycle_v2(config, state, client, apply=True)
+
+        self.assertEqual(client.changed, [])
+        self.assertEqual(state["nodes"]["builder-b"]["managed_agent_ids"], [])
+        self.assertFalse(state["nodes"]["builder-b"]["managed_no_schedule"])
+
+    def test_v1_pause_applied_but_unanswered_is_restored_by_the_controller(self):
+        config = config_v1()
+        client = LostResponseClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ],
+            applied=True,
+        )
+        state = {
+            "agents": {
+                "builder-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "remote-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        persisted = []
+
+        def unreadable_backing(url):
+            return BACKING_MISMATCHED if "pve-host" in url else METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=unreadable_backing):
+            with self.assertRaises(TimeoutError):
+                controller.run_cycle_v1(
+                    config, state, client, apply=True, persist=lambda: persisted.append(copy.deepcopy(state))
+                )
+        state = persisted[-1]
+        self.assertEqual(state["agents"]["builder-agent"]["managed_agent_ids"], ["1"])
+
+        samples = iter(
+            [
+                (RECOVERED_METRICS, BACKING_HEALTHY),
+                (RECOVERED_METRICS_NEXT, BACKING_HEALTHY),
+                (RECOVERED_METRICS_NEXT2, BACKING_HEALTHY),
+            ]
+        )
+        for _ in range(3):
+            guest, backing = next(samples)
+            with patch.object(
+                controller, "fetch_text", side_effect=lambda url: backing if "pve-host" in url else guest
+            ):
+                controller.run_cycle_v1(config, state, client, apply=True)
+
+        self.assertEqual(client.changed, [(1, True), (1, False)])
+        self.assertFalse(agent_by_id(client, 1)["no_schedule"])
+
+    def test_main_writes_the_record_to_the_state_file_although_the_cycle_failed(self):
+        import json
+        import tempfile
+
+        config = config_v2()
+        config["nodes"][1]["fail_closed_on_metrics_error"] = True
+        client = LostResponseClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "remote-agent", "no_schedule": False},
+            ],
+            applied=True,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            config_path = Path(tmp, "config.json")
+            config_path.write_text(json.dumps(config), encoding="utf-8")
+            token_path = Path(tmp, "token")
+            token_path.write_text("test-token\n", encoding="utf-8")
+            state_path = Path(tmp, "state.json")
+
+            def fetch(url):
+                if "builder-b" in url:
+                    raise TimeoutError("timed out")
+                return METRICS
+
+            with patch.object(controller, "HTTPClient", return_value=client), patch.object(
+                controller, "fetch_text", side_effect=fetch
+            ):
+                code = controller.main(
+                    [
+                        "--config", str(config_path),
+                        "--state", str(state_path),
+                        "--token-file", str(token_path),
+                        "--apply",
+                        "--once",
+                    ]
+                )
+
+            self.assertEqual(code, 1)
+            saved = json.loads(state_path.read_text(encoding="utf-8"))
+        self.assertEqual(saved["nodes"]["builder-b"]["managed_agent_ids"], ["2"])
+        self.assertTrue(saved["nodes"]["builder-b"]["managed_no_schedule"])
+
+
 IO_THRESHOLDS = dict(THRESHOLDS, io_pressure_stop_pct=40, io_pressure_resume_pct=15)
 
 

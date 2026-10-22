@@ -26,7 +26,7 @@ import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 
 LABEL_RE = re.compile(r'([a-zA-Z_][a-zA-Z0-9_]*)="((?:\\.|[^"\\])*)"')
@@ -407,6 +407,40 @@ class HTTPClient:
         )
 
 
+def drain_recorded_first(
+    client: HTTPClient,
+    agent: dict[str, Any],
+    group_state: dict[str, Any],
+    persist: Callable[[], None] | None,
+    /,
+    **event: Any,
+) -> str:
+    """Pause one agent, recording it as controller-managed before asking for it.
+
+    A PATCH whose response is lost (a read timeout, a reset) may still have been
+    applied. Recorded only after the response, that no_schedule reads as an
+    operator's hold on the next cycle and the controller never restores it
+    (OBSERVED 2026-10-21: a 10 s read timeout on PATCH /api/agents/101 left the
+    six-slot infer-builder-ci agent paused for 7 hours). Recorded first, a pause
+    that did not land is forgotten on the next cycle, because the agent is still
+    schedulable there. The record is persisted before the request, so a restart
+    in between keeps it too.
+    """
+    agent_id = str(agent.get("id"))
+    managed = {str(item) for item in group_state.get("managed_agent_ids", [])}
+    group_state["managed_agent_ids"] = sorted(managed | {agent_id})
+    group_state["managed_no_schedule"] = True
+    if persist is not None:
+        persist()
+    try:
+        client.set_no_schedule(agent, True)
+    except (OSError, ValueError) as exc:
+        log_event(event="agent_drain_unconfirmed", agent_id=agent.get("id"), error=str(exc), **event)
+        raise
+    log_event(event="agent_drained", agent_id=agent.get("id"), **event)
+    return agent_id
+
+
 def fetch_text(url: str, timeout: float = 10) -> str:
     request = urllib.request.Request(
         url,
@@ -559,6 +593,7 @@ def run_cycle_v1(
     state: dict[str, Any],
     client: HTTPClient,
     apply: bool,
+    persist: Callable[[], None] | None = None,
 ) -> bool:
     remote_agents: dict[str, list[dict[str, Any]]] = {}
     for agent in client.agents():
@@ -733,17 +768,11 @@ def run_cycle_v1(
                 minimum_schedulable_agents=minimum_schedulable,
             )
             continue
-        managed_ids = {str(agent_id) for agent_id in agent_state.get("managed_agent_ids", [])}
-        drained = []
-        for agent in schedulable:
-            client.set_no_schedule(agent, True)
-            agent_id = str(agent.get("id"))
-            managed_ids.add(agent_id)
-            drained.append(agent_id)
-            log_event(event="agent_drained", agent=name, agent_id=agent.get("id"), reason=action)
+        drained = [
+            drain_recorded_first(client, agent, agent_state, persist, agent=name, reason=action)
+            for agent in schedulable
+        ]
         if drained:
-            agent_state["managed_agent_ids"] = sorted(managed_ids)
-            agent_state["managed_no_schedule"] = True
             schedulable_remaining -= 1
             changed = True
     return changed
@@ -754,6 +783,7 @@ def run_cycle_v2(
     state: dict[str, Any],
     client: HTTPClient,
     apply: bool,
+    persist: Callable[[], None] | None = None,
 ) -> bool:
     """Apply load admission by physical host, including every matching agent ID."""
     remote_agents = client.agents()
@@ -935,23 +965,19 @@ def run_cycle_v2(
                 minimum_schedulable_nodes=minimum_schedulable,
             )
             continue
-        managed_ids = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
-        drained = []
-        for agent in schedulable:
-            client.set_no_schedule(agent, True)
-            agent_id = str(agent.get("id"))
-            managed_ids.add(agent_id)
-            drained.append(agent_id)
-            log_event(
-                event="agent_drained",
+        drained = [
+            drain_recorded_first(
+                client,
+                agent,
+                node_state,
+                persist,
                 node=name,
-                agent_id=agent.get("id"),
                 agent=agent.get("name"),
                 reason=action,
             )
+            for agent in schedulable
+        ]
         if drained:
-            node_state["managed_agent_ids"] = sorted(managed_ids)
-            node_state["managed_no_schedule"] = True
             schedulable_nodes -= 1
             changed = True
     return changed
@@ -962,10 +988,11 @@ def run_cycle(
     state: dict[str, Any],
     client: HTTPClient,
     apply: bool,
+    persist: Callable[[], None] | None = None,
 ) -> bool:
     if config["version"] == 1:
-        return run_cycle_v1(config, state, client, apply)
-    return run_cycle_v2(config, state, client, apply)
+        return run_cycle_v1(config, state, client, apply, persist)
+    return run_cycle_v2(config, state, client, apply, persist)
 
 
 def validate_backing_storage(entry: dict[str, Any]) -> None:
@@ -1153,7 +1180,7 @@ def main(argv: list[str] | None = None) -> int:
         client = HTTPClient(config["woodpecker_url"], token)
         while True:
             try:
-                run_cycle(config, state, client, args.apply)
+                run_cycle(config, state, client, args.apply, lambda: save_state(args.state, state))
                 save_state(args.state, state)
             except (OSError, ValueError, urllib.error.HTTPError, urllib.error.URLError) as exc:
                 log_event(event="controller_error", error=str(exc))
