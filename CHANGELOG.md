@@ -1,3 +1,7 @@
+## 2026-10-23
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `domain-product-count` 0.3.7.
+
 ## 2026-10-22
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-graph` 0.4.43.
