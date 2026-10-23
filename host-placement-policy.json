@@ -516,20 +516,6 @@
         "html-proxy",
         "scc"
       ]
-    },
-    "0database-runtime": {
-      "cluster": "0database",
-      "capacity_label": "0database-runtime",
-      "state": "maintenance",
-      "roles": [
-        "fleet-compose-runtime"
-      ],
-      "allowed_runtimes": [
-        "compose"
-      ],
-      "allowed_placement": [
-        "replicable"
-      ]
     }
   }
 }
