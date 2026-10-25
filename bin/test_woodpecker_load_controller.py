@@ -790,5 +790,188 @@ class LiveFeatureTests(unittest.TestCase):
         self.assertEqual(manual["reasons"], ["manual_or_external_no_schedule"])
 
 
+class GradedAdmissionTests(unittest.TestCase):
+    """A host with several one-slot agents opens as many as its headroom allows, one step at a
+    time, instead of switching between all open and all drained."""
+
+    GRADED = {"load_per_cpu_full": 0.5, "open_samples": 2, "close_samples": 2}
+
+    def snapshot(self, load1, cpus=4, memory_available_pct=60.0):
+        return controller.NodeSnapshot(
+            0, 0, memory_available_pct, 50, load_per_cpu=load1 / cpus
+        )
+
+    def pressure(self, memory_available_pct=60.0, breaches=()):
+        return controller.Pressure(None, memory_available_pct, 50, tuple(breaches), not breaches)
+
+    def agents(self, closed=(), manual=()):
+        return [
+            {
+                "id": i,
+                "name": f"g{i}",
+                "capacity": 1,
+                "no_schedule": i in closed or i in manual,
+            }
+            for i in range(1, 5)
+        ]
+
+    def test_headroom_is_linear_between_the_full_level_and_the_stop_threshold(self):
+        def headroom(load_per_cpu):
+            return controller.graded_headroom(
+                self.snapshot(load_per_cpu * 4), self.pressure(), LOAD_THRESHOLDS, self.GRADED
+            )
+
+        self.assertEqual(headroom(0.2), 1.0)
+        self.assertAlmostEqual(headroom(1.75), 0.5)
+        self.assertEqual(headroom(3.0), 0.0)
+        self.assertEqual(headroom(9.0), 0.0)
+
+    def test_scarcest_signal_decides_and_unknown_signals_do_not_limit(self):
+        thresholds = dict(LOAD_THRESHOLDS, io_pressure_stop_pct=60, io_pressure_resume_pct=20)
+        calm = self.snapshot(1.0)
+        stalled = controller.Pressure(None, 60.0, 50, (), True, io_pressure_pct=40.0)
+        self.assertAlmostEqual(controller.graded_headroom(calm, stalled, thresholds, self.GRADED), 0.5)
+        unknown = controller.Pressure(None, 60.0, 50, (), True, io_pressure_pct=None)
+        self.assertEqual(controller.graded_headroom(calm, unknown, thresholds, self.GRADED), 1.0)
+        low_memory = controller.Pressure(None, 22.5, 50, (), False)
+        self.assertAlmostEqual(controller.graded_headroom(calm, low_memory, thresholds, self.GRADED), 0.5)
+
+    def test_closes_one_agent_after_the_sample_window_and_stops_at_its_share(self):
+        agents, state, managed = self.agents(), {}, set()
+        steps = []
+        for _ in range(8):
+            fresh = {str(a["id"]) for a in agents}
+            action, agent, facts = controller.graded_step(
+                state, agents, fresh, managed, 0.5, self.GRADED, False
+            )
+            steps.append((action, agent["id"] if agent else None))
+            if action == "close":
+                agent["no_schedule"] = True
+                managed.add(str(agent["id"]))
+        self.assertEqual([s for s in steps if s[0]], [("close", 4), ("close", 3)])
+        self.assertEqual(steps[0][0], None, "one cycle over share is not enough")
+        self.assertEqual(sum(not a["no_schedule"] for a in agents), 2)
+
+    def test_never_closes_the_last_open_agent(self):
+        agents, state = self.agents(closed={2, 3, 4}), {}
+        for _ in range(5):
+            action, agent, _facts = controller.graded_step(
+                state, agents, {"1", "2", "3", "4"}, {"2", "3", "4"}, 0.0, self.GRADED, False
+            )
+            self.assertIsNone(action)
+
+    def test_reopens_only_agents_the_controller_closed_and_never_a_manual_hold(self):
+        agents, state = self.agents(closed={3}, manual={4}), {}
+        managed = {"3"}
+        seen = []
+        for _ in range(6):
+            action, agent, _facts = controller.graded_step(
+                state, agents, {"1", "2", "3", "4"}, managed, 1.0, self.GRADED, False
+            )
+            if action == "open":
+                agent["no_schedule"] = False
+                managed.discard(str(agent["id"]))
+            seen.append((action, agent["id"] if agent else None))
+        self.assertEqual([s for s in seen if s[0]], [("open", 3)])
+        self.assertTrue(agents[3]["no_schedule"], "the operator's hold on agent 4 survives")
+
+    def test_a_hard_breach_blocks_reopening(self):
+        agents, state = self.agents(closed={3, 4}), {}
+        for _ in range(5):
+            action, _agent, _facts = controller.graded_step(
+                state, agents, {"1", "2", "3", "4"}, {"3", "4"}, 1.0, self.GRADED, True
+            )
+            self.assertIsNone(action)
+
+    def test_stale_agents_do_not_count_as_slots(self):
+        agents, state = self.agents(), {}
+        _action, _agent, facts = controller.graded_step(
+            state, agents, {"1", "2"}, set(), 1.0, self.GRADED, False
+        )
+        self.assertEqual((facts["total_slots"], facts["open_slots"]), (2, 2))
+
+    def test_capacity_weights_the_slots_of_a_multi_slot_agent(self):
+        agents = [
+            {"id": 1, "name": "g1", "capacity": 3, "no_schedule": False},
+            {"id": 2, "name": "g2", "capacity": 1, "no_schedule": False},
+        ]
+        _action, _agent, facts = controller.graded_step({}, agents, {"1", "2"}, set(), 0.5, self.GRADED, False)
+        self.assertEqual((facts["total_slots"], facts["desired_slots"]), (4, 2))
+
+    def test_cycle_closes_agents_of_a_loaded_host_and_leaves_the_other_host_alone(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["stop_samples"] = 10
+        config["resume_samples"] = 20
+        config["nodes"][0]["agent_names"] = ["g1", "g2", "g3", "g4"]
+        config["nodes"][0]["graded"] = dict(self.GRADED)
+        now = controller.time.time()
+        client = FakeClient(
+            [
+                {"id": i, "name": f"g{i}", "capacity": 1, "no_schedule": False, "last_contact": now}
+                for i in range(1, 5)
+            ]
+            + [{"id": 9, "name": "remote-agent", "capacity": 2, "no_schedule": False, "last_contact": now}]
+        )
+        state = {}
+        controller.validate_config(config)
+        with patch.object(
+            controller,
+            "fetch_text",
+            side_effect=lambda url: load_metrics(8) if "builder-a" in url else load_metrics(1),
+        ):
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(4, True)])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["4"])
+        self.assertEqual(state["nodes"]["builder-a"].get("graded_close_samples"), 0)
+
+    def test_graded_host_reopens_one_agent_per_window_after_recovery(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["stop_samples"] = 10
+        config["resume_samples"] = 1
+        config["nodes"][0]["agent_names"] = ["g1", "g2", "g3", "g4"]
+        config["nodes"][0]["graded"] = dict(self.GRADED)
+        now = controller.time.time()
+        client = FakeClient(
+            [
+                {"id": i, "name": f"g{i}", "capacity": 1, "no_schedule": i > 1, "last_contact": now}
+                for i in range(1, 5)
+            ]
+            + [{"id": 9, "name": "remote-agent", "capacity": 2, "no_schedule": False, "last_contact": now}]
+        )
+        state = {"nodes": {"builder-a": {"managed_agent_ids": ["2", "3", "4"]}}}
+        with patch.object(controller, "fetch_text", side_effect=lambda url: load_metrics(1)):
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(2, False)], "recovery reopens a single agent, not the whole host")
+
+    def test_config_validation_of_graded_admission(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["nodes"][0]["graded"] = dict(self.GRADED)
+        controller.validate_config(config)
+        for bad in (
+            {"load_per_cpu_full": 3.0},
+            {"memory_full_pct": 15},
+            {"min_open_slots": 0},
+            {"open_samples": 0},
+            {"surprise": 1},
+        ):
+            broken = copy.deepcopy(config)
+            broken["nodes"][0]["graded"] = dict(self.GRADED, **bad)
+            with self.assertRaises(ValueError, msg=str(bad)):
+                controller.validate_config(broken)
+
+    def test_nodes_without_graded_behave_exactly_as_before(self):
+        config = config_v2()
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+        state = {"nodes": {}}
+        with patch.object(controller, "fetch_text", return_value=METRICS):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [])
+
+
 if __name__ == "__main__":
     unittest.main()
