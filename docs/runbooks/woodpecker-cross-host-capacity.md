@@ -309,3 +309,29 @@ live headroom, and opens or closes ONE agent per step to match it.
   all at once. Running workflows are never killed.
 - A node without `graded` behaves exactly as before. Log events: `node_graded`,
   `agent_graded_closed`, `agent_graded_opened`.
+
+### Deployed with graded admission (2026-10-26)
+
+`ci.0exec.com` now runs the controller with `graded` blocks on two hosts; their extra
+agents are one-slot registrations that start paused (`no_schedule`) and are handed to the
+controller by listing their IDs in the node's `managed_agent_ids` in the controller state file
+while the controller is stopped (a paused agent the controller did not close is treated as an
+operator hold and is never reopened).
+
+| Node | Agents (open order) | Slots | Graded limits |
+|---|---|---:|---|
+| `infer-builder-ci` | `infer-builder-ci` (3), `-slot-2`, `-slot-3`, `-slot-4` (agent IDs 109-111) | 6 | min 2 open, load full 0.7/CPU, memory full 40% |
+| `0mcp-docker-build` (VM 130) | the registered 0exec agent (1), `0mcp-docker-0exec-slot-2`, `-slot-3` (IDs 114, 115) | 3 | min 1 open, load full 0.7/CPU, memory full 55% |
+
+The slot agents run from `/opt/woodpecker-agent-slots` (infer) and
+`/opt/woodpecker-ci-0exec-slots` (VM 130), one compose project each, with their tokens in
+`/opt/woodpecker-agent-tokens/agent-<id>.token` and in the vault as
+`woodpecker_agent_<id>_token`. VM 130 slots keep the 5 GiB per-step memory cap. `0own-build-agent`
+stays a single 4-slot agent under the hard I/O drain, and CT 108 runs no schedulable agent.
+
+Traps met while rolling this out: the controller reaches the tailnet metrics only through the
+`HTTP_PROXY` its unit sets, so a hand-run `--once` from a shell times out on `infer-builder-ci`;
+a dry run (`--once` without `--apply`) never reaches the graded step, so it proves only that the config loads;
+a `concurrency_limit` group on a workflow (the `domainscope-go-integration` group of
+go-url-categorizer-api allows one at a time) leaves workflows pending for hours with free slots, which is the
+workflow's own limit and not missing capacity.
