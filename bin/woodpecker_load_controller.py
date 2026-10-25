@@ -293,6 +293,37 @@ def evaluate_pressure(
     )
 
 
+def validate_graded(node: dict[str, Any], thresholds: dict[str, Any]) -> None:
+    """A node's optional graded admission: its "full" levels must sit on the healthy side of the
+    stop thresholds, or the linear share between them would be undefined."""
+    where = f"node {node.get('name')!r} graded"
+    graded = node["graded"]
+    if not isinstance(graded, dict):
+        raise ValueError(f"{where} must be an object")
+    unknown = set(graded) - GRADED_KEYS
+    if unknown:
+        raise ValueError(f"{where} has unknown keys: {sorted(unknown)}")
+    for key in ("min_open_slots", "open_samples", "close_samples"):
+        if key in graded:
+            value = graded[key]
+            if isinstance(value, bool) or not isinstance(value, int) or value < 1:
+                raise ValueError(f"{where} {key} must be a positive integer")
+    for key in ("load_per_cpu_full", "memory_full_pct", "io_full_pct"):
+        if key in graded:
+            value = graded[key]
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+                raise ValueError(f"{where} {key} must be a non-negative number")
+    effective = thresholds_for_node(thresholds, node)
+    load_stop = effective.get("load_per_cpu_stop")
+    if load_stop is not None and float(graded.get("load_per_cpu_full", effective["load_per_cpu_resume"])) >= load_stop:
+        raise ValueError(f"{where} load_per_cpu_full must be lower than load_per_cpu_stop")
+    if float(graded.get("memory_full_pct", effective["memory_resume_pct"])) <= effective["memory_stop_pct"]:
+        raise ValueError(f"{where} memory_full_pct must be higher than memory_stop_pct")
+    io_stop = effective.get("io_pressure_stop_pct")
+    if io_stop is not None and float(graded.get("io_full_pct", effective.get("io_pressure_resume_pct", 0))) >= io_stop:
+        raise ValueError(f"{where} io_full_pct must be lower than io_pressure_stop_pct")
+
+
 IO_THRESHOLD_KEYS = ("io_pressure_stop_pct", "io_pressure_resume_pct")
 
 
@@ -355,6 +386,113 @@ def drain_priority(pressure: Pressure) -> tuple[int, float, float, float]:
         -pressure.memory_available_pct,
         -pressure.disk_available_pct,
     )
+
+
+GRADED_KEYS = {
+    "min_open_slots",
+    "load_per_cpu_full",
+    "memory_full_pct",
+    "io_full_pct",
+    "open_samples",
+    "close_samples",
+}
+
+
+def _clamp01(value: float) -> float:
+    return max(0.0, min(1.0, value))
+
+
+def graded_headroom(
+    current: NodeSnapshot,
+    pressure: Pressure,
+    thresholds: dict[str, float],
+    graded: dict[str, Any],
+) -> float:
+    """How much of a host's slots may be open, 0.0 (none) to 1.0 (all).
+
+    Each signal is linear between its "full" level (everything open) and the node's stop
+    threshold (nothing open); the scarcest signal decides. A signal that is unknown or has no
+    threshold does not limit the host, the same rule the hard drain follows.
+    """
+    shares = []
+    load_stop = thresholds.get("load_per_cpu_stop")
+    if load_stop is not None and current.load_per_cpu is not None:
+        full = float(graded.get("load_per_cpu_full", thresholds["load_per_cpu_resume"]))
+        shares.append(_clamp01((load_stop - current.load_per_cpu) / (load_stop - full)))
+    elif pressure.cpu_pct is not None:
+        stop = thresholds["cpu_stop_pct"]
+        full = float(graded.get("cpu_full_pct", thresholds["cpu_resume_pct"]))
+        shares.append(_clamp01((stop - pressure.cpu_pct) / (stop - full)))
+    memory_stop = thresholds["memory_stop_pct"]
+    memory_full = float(graded.get("memory_full_pct", thresholds["memory_resume_pct"]))
+    shares.append(_clamp01((pressure.memory_available_pct - memory_stop) / (memory_full - memory_stop)))
+    io_stop = thresholds.get("io_pressure_stop_pct")
+    if io_stop is not None and pressure.io_pressure_pct is not None:
+        io_full = float(graded.get("io_full_pct", thresholds.get("io_pressure_resume_pct", 0)))
+        shares.append(_clamp01((io_stop - pressure.io_pressure_pct) / (io_stop - io_full)))
+    return min(shares)
+
+
+def agent_slots(agent: dict[str, Any]) -> int:
+    capacity = agent.get("capacity")
+    if isinstance(capacity, bool) or not isinstance(capacity, int) or capacity < 1:
+        return 1
+    return capacity
+
+
+def graded_step(
+    node_state: dict[str, Any],
+    ordered_agents: list[dict[str, Any]],
+    fresh_ids: set[str],
+    managed_ids: set[str],
+    headroom: float,
+    graded: dict[str, Any],
+    hard_breach: bool,
+) -> tuple[str | None, dict[str, Any] | None, dict[str, Any]]:
+    """Decide at most one admission step for a graded host: close its last open agent when it is
+    over its share, or reopen the first agent this controller closed when it has room.
+
+    Closing needs close_samples consecutive cycles over share, opening needs open_samples under
+    it (and no hard breach), so a host near a boundary does not flap. Agents are used in config
+    order: the first listed is the last to close. Only IDs the controller closed are reopened,
+    so an operator's manual hold survives. Returns (action, agent, facts for the log)."""
+    min_open = int(graded.get("min_open_slots", 1))
+    usable = [agent for agent in ordered_agents if str(agent.get("id")) in fresh_ids]
+    total = sum(agent_slots(agent) for agent in usable)
+    desired = min(total, max(min_open, int(round(headroom * total))))
+    open_agents = [agent for agent in usable if not bool(agent.get("no_schedule"))]
+    open_slots = sum(agent_slots(agent) for agent in open_agents)
+    facts = {"headroom": round(headroom, 3), "desired_slots": desired, "open_slots": open_slots, "total_slots": total}
+
+    close_candidate = open_agents[-1] if len(open_agents) > 1 else None
+    open_candidate = next(
+        (
+            agent
+            for agent in usable
+            if bool(agent.get("no_schedule")) and str(agent.get("id")) in managed_ids
+        ),
+        None,
+    )
+    want_close = (
+        close_candidate is not None
+        and open_slots - agent_slots(close_candidate) >= min_open
+        and open_slots - agent_slots(close_candidate) / 2 >= desired
+    )
+    want_open = (
+        not want_close
+        and not hard_breach
+        and open_candidate is not None
+        and open_slots + agent_slots(open_candidate) / 2 <= desired
+    )
+    node_state["graded_close_samples"] = int(node_state.get("graded_close_samples", 0)) + 1 if want_close else 0
+    node_state["graded_open_samples"] = int(node_state.get("graded_open_samples", 0)) + 1 if want_open else 0
+    if want_close and node_state["graded_close_samples"] >= int(graded.get("close_samples", 2)):
+        node_state["graded_close_samples"] = 0
+        return "close", close_candidate, facts
+    if want_open and node_state["graded_open_samples"] >= int(graded.get("open_samples", 6)):
+        node_state["graded_open_samples"] = 0
+        return "open", open_candidate, facts
+    return None, None, facts
 
 
 class HTTPClient:
@@ -768,6 +906,7 @@ def run_cycle_v2(
     thresholds = config["thresholds"]
     nodes_state = state.setdefault("nodes", {})
     observations = []
+    graded_inputs: dict[str, tuple[dict[str, Any], NodeSnapshot, Pressure]] = {}
     schedulable_nodes = 0
     for entry in config["nodes"]:
         name = entry["name"]
@@ -860,6 +999,11 @@ def run_cycle_v2(
             action = "restore"
         elif pressure.critical_storage_breach:
             action = "critical_drain"
+        if entry.get("graded") is not None:
+            # A graded host reopens one agent at a time (see graded_step), not all at once.
+            if action == "restore":
+                action = None
+            graded_inputs[name] = (entry, current, pressure)
         log_event(
             event="node_observed",
             node=name,
@@ -954,6 +1098,49 @@ def run_cycle_v2(
             node_state["managed_no_schedule"] = True
             schedulable_nodes -= 1
             changed = True
+
+    # Graded hosts that were not drained outright: open or close one agent to follow headroom.
+    stale_after = int(config.get("agent_stale_after_seconds", 120))
+    now = time.time()
+    for name, agents, _schedulable, node_state, pressure, action in observations:
+        if name not in graded_inputs or pressure is None:
+            continue
+        if action in {"drain", "critical_drain", "telemetry_quarantine"}:
+            continue
+        entry, current, _ = graded_inputs[name]
+        graded = entry["graded"]
+        order = {agent_name: index for index, agent_name in enumerate(entry["agent_names"])}
+        ordered = sorted(agents, key=lambda agent: (order.get(agent.get("name"), len(order)), int(agent.get("id") or 0)))
+        fresh_ids = {
+            str(agent.get("id"))
+            for agent in agents
+            if agent_readiness(agent, now, stale_after)["heartbeat_state"] == "fresh"
+        }
+        managed_ids = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
+        headroom = graded_headroom(current, pressure, thresholds_for_node(thresholds, entry), graded)
+        step, agent, facts = graded_step(
+            node_state, ordered, fresh_ids, managed_ids, headroom, graded, bool(pressure.breaches)
+        )
+        log_event(event="node_graded", node=name, proposed_action=step, **facts)
+        if step is None or agent is None:
+            continue
+        agent_id = str(agent.get("id"))
+        if step == "close":
+            client.set_no_schedule(agent, True)
+            managed_ids.add(agent_id)
+        else:
+            client.set_no_schedule(agent, False)
+            managed_ids.discard(agent_id)
+        node_state["managed_agent_ids"] = sorted(managed_ids)
+        node_state["managed_no_schedule"] = bool(managed_ids)
+        log_event(
+            event="agent_graded_closed" if step == "close" else "agent_graded_opened",
+            node=name,
+            agent_id=agent.get("id"),
+            agent=agent.get("name"),
+            **facts,
+        )
+        changed = True
     return changed
 
 
@@ -1072,6 +1259,8 @@ def validate_config(config: dict[str, Any]) -> None:
                         raise ValueError(f"node disk_thresholds {key} must be between 0 and 100")
                 if disk_thresholds["resume_pct"] <= disk_thresholds["stop_pct"]:
                     raise ValueError("node disk resume percentage must be higher than stop percentage")
+            if node.get("graded") is not None:
+                validate_graded(node, config["thresholds"])
             if (
                 "fail_closed_on_metrics_error" in node
                 and not isinstance(node["fail_closed_on_metrics_error"], bool)

@@ -16,7 +16,10 @@
   "nodes": [
     {
       "name": "builder-a",
-      "agent_names": ["builder-a-agent-1", "builder-a-agent-2"],
+      "agent_names": [
+        "builder-a-agent-1",
+        "builder-a-agent-2"
+      ],
       "metrics_url": "http://builder-a.example.internal:9100/metrics",
       "filesystem_mountpoint": "/",
       "backing_storage": {
@@ -30,11 +33,31 @@
     },
     {
       "name": "builder-b",
-      "agent_names": ["builder-b-agent"],
+      "agent_names": [
+        "builder-b-agent"
+      ],
       "metrics_url": "http://builder-b.example.internal:9100/metrics",
       "filesystem_mountpoint": "/",
       "io_pressure_stop_pct": 40,
       "io_pressure_resume_pct": 15
+    },
+    {
+      "name": "builder-c",
+      "agent_names": [
+        "builder-c-slot-1",
+        "builder-c-slot-2",
+        "builder-c-slot-3",
+        "builder-c-slot-4"
+      ],
+      "metrics_url": "http://builder-c.example.internal:9100/metrics",
+      "filesystem_mountpoint": "/",
+      "graded": {
+        "min_open_slots": 1,
+        "load_per_cpu_full": 0.5,
+        "memory_full_pct": 50,
+        "open_samples": 6,
+        "close_samples": 2
+      }
     }
   ]
 }

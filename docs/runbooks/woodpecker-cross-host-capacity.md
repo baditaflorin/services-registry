@@ -273,3 +273,39 @@ Stop the new controller instance, set the remote agent to `no_schedule=true`,
 and stop its Compose stack. Keep the repository webhook and authoritative
 control plane unchanged. Remove the private proxy/NAT service only after the
 agent has disconnected and no workflow is running there.
+
+## Graded admission: slots follow headroom (a node's optional `graded` block)
+
+By default the controller is on/off per host: it drains every agent of a host that stays
+over a stop threshold and restores them together. That wastes the host in between (it
+sat at 12% CPU with work pending because its slots were fixed) and overloads it at the
+edge. A node with a `graded` block instead gets a **share of its slots**, 0 to 1, from its
+live headroom, and opens or closes ONE agent per step to match it.
+
+```json
+{
+  "name": "infer-builder-ci",
+  "agent_names": ["infer-builder-ci", "infer-builder-ci-slot-2", "infer-builder-ci-slot-3"],
+  "metrics_url": "http://<node-exporter>:9100/metrics",
+  "graded": {"min_open_slots": 1, "load_per_cpu_full": 0.5, "memory_full_pct": 50,
+             "open_samples": 6, "close_samples": 2}
+}
+```
+
+- Each signal is linear between its *full* level (all slots open) and the node's stop
+  threshold (none): normalized load (or CPU %), available memory %, and I/O pressure when the
+  node has `io_pressure_*` limits. The scarcest signal decides; an unknown signal never
+  limits (same rule as the hard drain). Defaults for the full levels are the resume
+  thresholds.
+- Slots are the agents' `capacity` (an agent with capacity 3 is 3 slots). Use several
+  one-slot registrations on a host to get fine steps. Agents are used in `agent_names` order:
+  the first listed closes last. Agents without a fresh heartbeat are not counted.
+- `close_samples` consecutive cycles over share close the last open agent;
+  `open_samples` consecutive cycles under it (and no hard breach) reopen the first agent the
+  controller closed. At least `min_open_slots` stay open. Only agent IDs the controller closed
+  are reopened, so an operator's `no_schedule` hold survives.
+- The hard path is unchanged and wins: a sustained breach (memory, disk, I/O stop, load stop)
+  still drains the whole host, and the recovery then reopens it one agent at a time instead of
+  all at once. Running workflows are never killed.
+- A node without `graded` behaves exactly as before. Log events: `node_graded`,
+  `agent_graded_closed`, `agent_graded_opened`.
