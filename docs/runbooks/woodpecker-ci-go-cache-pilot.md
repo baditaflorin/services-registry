@@ -282,6 +282,14 @@ Held share of the pilot host over 07:00-16:00 UTC, from the controller's own log
 | 10-19, before the change | 67 % | I/O pressure 25 % |
 | 10-20 | 13 % | one held stretch, 07:51-09:09 UTC |
 | 10-21 | 42 % | 985 samples, mean I/O pressure 26.5 % |
+| 10-22 | 18 % | 1,002 samples, mean 21.1 %; backup-server schedule changed at about 07:50 UTC (below), one old-schedule verify job still ran 07:00-08:00 |
+| 10-23 | 0 % | 1,005 samples, mean 14.5 %, no backup-server task inside the window |
+
+Two cautions on reading this table. First, the nightly backup of the pilot VM itself became a weekly
+Sunday backup on 10-19, the same day as the disk change (the backup job's own comment says so), so
+part of the drop from 67 % may come from that and the data cannot separate the two. Second, three
+days are still too few: the check is a held share of 15 % or less on three working days in a row, and
+the backup-server schedule change below only started on 10-22.
 
 So the disk change helped, but one good day was not a trend. What still holds the agent is the
 backup server that shares the same two spinning disks (a VM on the same hypervisor, datastore on the
@@ -305,6 +313,15 @@ the control is the idle row, where the same host in the same hours was held 7 % 
 
 The lasting remedies are on the storage side (a log device or a special vdev in that pool, or
 moving verify, sync and the biggest backups out of 07-16 UTC); neither is part of this change.
+
+**Applied on 2026-10-22 at about 07:50 UTC (by the owner of the backup servers, not by this change):**
+the five weekly verify slices moved to the weekend and the five daily pull-syncs moved from 08:00 to
+17:00 UTC; both servers were read back afterwards and show the new times. Backup-server task minutes
+inside 07-16 UTC went from 464 (10-21) to 60 (10-22) and 0 (10-23). Nightly backups run in local time,
+so after the clock change on Sunday 10-25 they run one hour later in UTC (a VM backup from another site on that
+Sunday ended at 07:06 UTC, six minutes into the window). A check of 10-26 and 10-27 with the same
+target decides; until all three days are in, this is not done.
+
 Judge any of them by the number, on the controller host:
 
 ```sh
