@@ -309,3 +309,36 @@ live headroom, and opens or closes ONE agent per step to match it.
   all at once. Running workflows are never killed.
 - A node without `graded` behaves exactly as before. Log events: `node_graded`,
   `agent_graded_closed`, `agent_graded_opened`.
+
+### Deployed with graded admission (2026-10-26)
+
+`ci.0exec.com` now runs the controller with `graded` blocks on two hosts; their extra
+agents are one-slot registrations that start paused (`no_schedule`) and are handed to the
+controller by listing their IDs in the node's `managed_agent_ids` in the controller state file
+while the controller is stopped (a paused agent the controller did not close is treated as an
+operator hold and is never reopened).
+
+| Node | Agents (open order) | Slots | Graded limits |
+|---|---|---:|---|
+| `infer-builder-ci` | `infer-builder-ci` (3), `-slot-2`, `-slot-3`, `-slot-4` (agent IDs 109-111) | 6 | min 2 open, load full 0.7/CPU, memory full 40% |
+| `0mcp-docker-build` (VM 130) | the registered 0exec agent (1), `0mcp-docker-0exec-slot-2`, `-slot-3` (IDs 114, 115) | 3 | min 1 open, load full 0.7/CPU, memory full 55% |
+| `0own-build-worker` (VM 610) | `0own-build-agent` (99, now 1 slot), `0own-build-agent-slot-2`, `-3`, `-4` (IDs 116-118) | 4 | min 1 open, load full 0.7/CPU, memory full 50%, I/O full 8%; node I/O stop 45% / resume 25% |
+
+The slot agents run from `/opt/woodpecker-agent-slots` (infer) and
+`/opt/woodpecker-ci-0exec-slots` (VM 130), one compose project each, with their tokens in
+`/opt/woodpecker-agent-tokens/agent-<id>.token` and in the vault as
+`woodpecker_agent_<id>_token`. VM 130 slots keep the 5 GiB per-step memory cap. CT 108 runs no schedulable agent.
+
+Traps met while rolling this out: the controller reaches the tailnet metrics only through the
+`HTTP_PROXY` its unit sets, so a hand-run `--once` from a shell times out on `infer-builder-ci`;
+a dry run (`--once` without `--apply`) never reaches the graded step, so it proves only that the config loads;
+a `concurrency_limit` group on a workflow (the `domainscope-go-integration` group of
+go-url-categorizer-api allows one at a time) leaves workflows pending for hours with free slots, which is the
+workflow's own limit and not missing capacity.
+
+0own was split on 2026-10-26 (agent 99 paused, drained of its 3 running jobs, recreated with
+`WOODPECKER_MAX_WORKFLOWS=1`; its compose project is `own-woodpecker-agent`, so a bare
+`docker compose -f ...` in `/opt/woodpecker-agent` starts a SECOND container with the same token
+under project `woodpecker-agent`: always pass `-p own-woodpecker-agent`). Its two spinning disks run at 55-67% I/O
+pressure from the guests alone (VMs 610, 660, 630), so with the 45% stop limit its slots stay closed
+until the disks calm down; that is the intended behaviour, and it shows 0own is not a CI baseline host.
