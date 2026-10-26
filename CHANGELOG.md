@@ -1,5 +1,6 @@
 ## 2026-10-26
 
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.55, `domain-details` 1.4.6, `domain-newsletter-platform-detector` 0.4.22, `price-range` 1.9.25.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `analyze-headers` 1.4.10.
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `content-fingerprint` 0.1.19, `hub-scrapetheworld-org` 0.18.0, `keyword-density` 1.7.7.
 
