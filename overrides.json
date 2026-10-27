@@ -1148,7 +1148,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics. Country-specific false-positive review (2026-10-18): a 341-row non-null production-derived cohort covered 131 country codes; 278 static first-party HTML pages were retrieved (12 fetch failures, 50 non-HTML/status responses, one body over 2 MiB). Three Latvian/Swedish generic homepage titles (Sākumlapa, Startsida) appeared as company names. Exact-label filtering removed all three while host-correlated Latvian and Swedish brand controls still passed. PR #59 merged as 4fc4f31. v0.1.45 was signed and deployed to both replicas on one digest; direct health, selftest, and version smoke passed. TRL remains 4 because this sample does not establish coverage of bot-hostile or JS-heavy sites. 2026-10-18 country-by-country update: a private 102-row non-null cohort covered 102 non-US ISO3s. In 98 successful first-party replays, a Yemen-stratum Arabic generic homepage label appeared as a false organization-title candidate at score 0.60, while JSON-LD supplied the selected name. PR #61 added Arabic generic-home-title filtering with host-corroborated-brand positives and unrelated-brand negatives; the post-fix replay removed the candidate without changing the stored selected name. Version 0.1.46 was signed and deployed; direct health, self-test, version, and gateway audit passed. Country-specific legal-form follow-up (2026-10-20; source PR #69 merged as da6a922): a private 210-row production-derived cohort covered 42 markets; a 13-page first-party follow-up reproduced legal-suffix residues in Indian `Pvt. Ltd.` and Polish `Sp. z o.o.` display names, with same-page brand evidence supporting the stripped form. The targeted post-change replay reduced those suffix residues from 13 to 0. Stored values are candidates, not independent labels. No JS attempt applied because pages returned static names and sparse-shell retry was not eligible. Local tests, vet, build, and hosted CI passed. 2026-10-20 country-specific legal-form follow-up (source PR #69 merged as da6a922; release 0.1.52): a private 13-page first-party follow-up reproduced Indian Pvt. Ltd. and Polish Sp. z o.o. suffix residues; same-page brand evidence supported stripped forms, and targeted replay removed all 13 residues. Stored names remain candidates rather than independent labels. | 2026-10-20 saved replay had 213 HTML captures, 7 with valid UTF-8 and charset metadata after byte 1024; one extracted name showed mojibake before the fix and none after. Public first-party response confirmed UTF-8. Targeted sample result, not broad accuracy. Source PR #71 merged; release 0.1.53.",
-    "version": "0.1.55",
+    "version": "0.1.56",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
     "spiffe_workload": true
   },
@@ -1333,7 +1333,7 @@
     "coolify_app_uuid": "dlbmi07u5pew28vj7c3992fe"
   },
   "country-iso-matcher": {
-    "version": "0.1.25",
+    "version": "0.1.26",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "country-iso-matcher",
@@ -2300,7 +2300,7 @@
     "host_port": 18239,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.6.0",
+    "version": "0.6.1",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2974,7 +2974,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged). Country-localization follow-up (2026-10-18, PR #42 / commit 08636c8): a private 100-row production-derived candidate cohort covered 20 non-US countries. No rows were attributed to go_email_harvester, so historical email-extractor outputs were candidate leads only, not ground truth. First-party replay reproduced a static Polish same-host kontakt route miss (homepage-only result 0; linked route 4 mailto addresses). The fix follows kontakt after existing route keywords and preserves their priority under the four-page cap. Full replay changed six rows (+5 address hashes, 0 removed; 88 HTTP 200, 12 fetch failures; 68 nonempty and 20 empty). Release 1.4.25 is deployed to both pool replicas with a matching image digest; direct health/selftest/version and the gateway health audit passed. Internationalization follow-up (2026-10-18, code PR #44 / commit 7347543; release PR #45 / commit 8d3171f; tag 1.4.26): a private 46-row production-derived candidate cohort spanned 25 country codes. First-party visible text confirmed three misses for valid mailboxes whose local parts begin with RFC atext punctuation. The deterministic parser fix preserves valid punctuation-leading local parts while rejecting malformed dot boundaries and sentence punctuation; focused positive/negative regression cases pass. Historical outputs and candidate rows were leads, not ground-truth labels. The deployed 1.4.26 image was Cosign-verified at digest sha256:6dbf0deacd85…; both pool replicas report healthy on that digest, and direct health/selftest/version plus gateway health checks passed. Gateway selftest remains auth-gated (401); pool status retains pre-existing environment-contract drift. The targeted cohort does not justify raising TRL, so assessment remains 6/7. Country-role follow-up (2026-10-20; source PR #50 merged as 639bf13): a private 160-row DomainScope candidate cohort spanned 20 markets; 60 first-party sites were replayed. Current pages confirmed three role-label misses across DEU, COL, and MEX: `service` and Spanish `ventas` addresses were extracted without the expected support/sales role. Added role aliases; stored values remain candidate evidence, not independent labels. The service has no JS-render option; no rendered result is claimed. 2026-10-20 international mailto follow-up: a saved multilingual first-party parser-shape cohort from sibling email-extractor data contained two quote-wrapped mailbox candidates in the Swiss market; replay through this handler recovered both and 12 of 13 candidates overall. This is cross-service parser evidence, not a measured uplift on the separate 50-page email-harvester cohort, which did not contain the shape. Static mailto links make JS rendering inapplicable. Source PR #52 merged as c9077fa; version 1.4.30 tagged at ddad3b5. | Country loop 2026-10-20: public Polish first-party contact sample; baseline matched 0/3 phonetic addresses across 2 pages, patched matched 3/3. Saved 50-site/10-market cohort remained 42/115 before and after, so no broad lift is claimed.",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.32"
+    "version": "1.4.33"
   },
   "embed-iframe-classifier": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -4984,7 +4984,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18250,
     "placement": "replicable",
-    "version": "0.3.7",
+    "version": "0.3.8",
     "trl": 7,
     "trl_assessed_at": "2026-07-14",
     "trl_assessor": "codex-trl-audit-2026-07-14",
@@ -5040,7 +5040,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.44",
+    "version": "1.33.45",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -7016,7 +7016,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18245,
     "placement": "replicable",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",

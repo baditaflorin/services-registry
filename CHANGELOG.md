@@ -1,3 +1,7 @@
+## 2026-10-27
+
+- fleet-version-pin-sync: 7 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.56, `country-iso-matcher` 0.1.26, `domain-gift-card` 0.6.1, `email-harvester` 1.4.33, `language-detector` 0.3.8, `legal-entity` 1.33.45, `readability-index` 0.1.16.
+
 ## 2026-10-26
 
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.55, `domain-details` 1.4.6, `domain-newsletter-platform-detector` 0.4.22, `price-range` 1.9.25.
