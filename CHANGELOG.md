@@ -1,5 +1,6 @@
 ## 2026-10-27
 
+- fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.5, `contact-route-detector` 0.1.28, `pricing-tier-parser` 0.1.30.
 - fleet-version-pin-sync: 7 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.56, `country-iso-matcher` 0.1.26, `domain-gift-card` 0.6.1, `email-harvester` 1.4.33, `language-detector` 0.3.8, `legal-entity` 1.33.45, `readability-index` 0.1.16.
 
 ## 2026-10-26
