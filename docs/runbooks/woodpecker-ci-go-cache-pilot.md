@@ -284,12 +284,14 @@ Held share of the pilot host over 07:00-16:00 UTC, from the controller's own log
 | 10-21 | 42 % | 985 samples, mean I/O pressure 26.5 % |
 | 10-22 | 18 % | 1,002 samples, mean 21.1 %; backup-server schedule changed at about 07:50 UTC (below), one old-schedule verify job still ran 07:00-08:00 |
 | 10-23 | 0 % | 1,005 samples, mean 14.5 %, no backup-server task inside the window |
+| 10-26 | 0 % | 986 samples, mean 12.3 %, 232 backup-server task minutes inside the window (one large VM backup from another site, shifted one hour later in UTC by the clock change) |
+| 10-27 | 0 % | 997 samples, mean 7.7 %, no backup-server task inside the window |
 
 Two cautions on reading this table. First, the nightly backup of the pilot VM itself became a weekly
 Sunday backup on 10-19, the same day as the disk change (the backup job's own comment says so), so
-part of the drop from 67 % may come from that and the data cannot separate the two. Second, three
-days are still too few: the check is a held share of 15 % or less on three working days in a row, and
-the backup-server schedule change below only started on 10-22.
+part of the drop from 67 % may come from that and the data cannot separate the two. Second, the check
+is a held share of 15 % or less on three working days in a row, and the backup-server schedule change
+below only started on 10-22; the result of that check is stated after the "Applied" paragraph.
 
 So the disk change helped, but one good day was not a trend. What still holds the agent is the
 backup server that shares the same two spinning disks (a VM on the same hypervisor, datastore on the
@@ -320,7 +322,23 @@ the five weekly verify slices moved to the weekend and the five daily pull-syncs
 inside 07-16 UTC went from 464 (10-21) to 60 (10-22) and 0 (10-23). Nightly backups run in local time,
 so after the clock change on Sunday 10-25 they run one hour later in UTC (a VM backup from another site on that
 Sunday ended at 07:06 UTC, six minutes into the window). A check of 10-26 and 10-27 with the same
-target decides; until all three days are in, this is not done.
+target decides.
+
+**Result of the three-day check (2026-10-27, OBSERVED):** the held share over 07-16 UTC was 0 % on
+10-23, 10-26 and 10-27 (1,005, 986 and 997 samples), three working days in a row, against the target of
+15 % or less and the 42 % of 10-21. Each figure was written to a log by a scheduled read-only run at
+17:30 UTC on its own day, from the controller's journal, so it does not depend on a later re-derivation.
+What this does and does not show:
+
+- It shows the hold in working hours is gone while the backup schedule stays as changed on 10-22. It
+  does not show which of the two changes (the pilot VM's backup going weekly on 10-19, or the verify and
+  sync jobs leaving 07-16 UTC) or the disk setting did the work; the data cannot separate them.
+- Backup writes alone do not hold the agent: on 10-26 a VM backup from another site ran 232 minutes inside
+  the window and the held share was 0 %. The verify slices and the 08:00 readers of the daily pull-sync
+  are the likelier drivers (PREDICTED from the earlier busy/idle table; not tested by putting them back).
+- The result is for the backup schedule as it is today. If a verify job or the daily sync is moved back
+  into 07-16 UTC, re-run the check above before assuming it still holds.
+- This closes the held-share check only. The five acceptance criteria below are separate.
 
 Judge any of them by the number, on the controller host:
 
