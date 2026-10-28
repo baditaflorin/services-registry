@@ -1,5 +1,6 @@
 ## 2026-10-28
 
+- fleet-version-pin-sync: 19 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.32, `company-name-extractor` 0.1.60, `company-size` 3.5.66, `contact-route-detector` 0.1.30, `domain-ecommerce-platform` 0.5.28, `domain-geo-anchor` 0.1.21, `domain-integration-marketplace` 0.5.5, `domain-product-count` 0.3.9, `emotional-tone` 3.4.5, `infrastructure-fetch-cache` 0.3.56, `js-proxy` 0.12.5, `legal-entity` 1.33.48, `payment-detector` 1.6.12, `policy-clause-extractor` 0.1.19, `pricing-tier-parser` 0.1.32, `readability-index` 0.1.18, `revenue-model` 2.6.34, `shipping-regions` 1.7.30, `team-size` 3.0.22.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `infrastructure-fetch-cache` 0.3.54.
 - fleet-version-pin-sync: 7 registry version pin(s) set to the version the service runs, which is also its repository main: `biz-classifier` 2.8.40, `caa-checker` 1.4.20, `cdn-detector` 1.4.2, `data-inventory` 1.7.9, `http-protocol` 2.4.14, `ipv6-checker` 2.4.7, `keyword-density` 1.7.8.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `proxy` 0.2.12.
