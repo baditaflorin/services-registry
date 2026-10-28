@@ -765,7 +765,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.8.39",
+    "version": "2.8.40",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -896,7 +896,7 @@
     "description": "Microservice for Caa Checker",
     "host_port": 8325,
     "placement": "replicable",
-    "version": "1.4.19",
+    "version": "1.4.20",
     "trl": 8,
     "trl_assessed_at": "2026-08-20",
     "trl_assessor": "claude-session-2026-08-20",
@@ -1000,7 +1000,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1560,7 +1560,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Tested against 200 real domains confirmed to have a privacy_policy page. Fixed a broken word-boundary guard that let 'AWS' match inside 'laws'/'applicable laws' (13%->1% false positive rate), a case-insensitive Spanish regex mismatching the Polish word 'nie' as a sensitive ID-document flag, and a port config drift (8154 vs actual 8284) across 4 files. See github.com/baditaflorin/go_data_inventory PR #7.",
-    "version": "1.7.8",
+    "version": "1.7.9",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -4643,7 +4643,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.4.0 adds IDNA2008 (RFC 5891 lookup-profile) U-label->A-label host normalization in validateTargetURL before DNS, the SSRF gate, TLS SNI, the Host header, and the h3 ServerName; before this every Unicode IDN host (munchen.de, japanese, cyrillic .rf, greek .gr) hard-failed with a no-such-host 400 because Go's resolver/crypto-tls require ASCII A-labels and do not auto-encode U-labels. Live before->after: 6/6 U-label probes 400'd on 2.3.1; on 2.4.0 4 resolve+probe correctly and 2 fail honestly on the correctly-encoded A-label (hosts lack live A records). Uses golang.org/x/net/idna (already a direct dep, zero new modules). Sits on the existing RFC-compliant 5-protocol probe matrix + negotiated/advertised/inconclusive/unsupported capability classifier with evidence trail. New idn_test.go adds 7 table-driven tests across 4 scripts incl ports/IP literals/malformed-fallback/end-to-end validateTargetURL; go build/test/vet/gofmt all green.",
-    "version": "2.4.13",
+    "version": "2.4.14",
     "spiffe_workload": true
   },
   "iban-bic-validator": {
@@ -4778,7 +4778,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.0.0 uplift from TRL 3 to TRL 6:\n- Per-record A/AAAA resolution via miekg/dns with explicit TTL +\n  source-resolver attribution (1.1.1.1 / 8.8.8.8 fallback).\n- Family-pinned TCP probes (tcp4/tcp6) on ports 80 + 443 with a\n  3s connect timeout each; reports open/closed/timeout/skipped.\n- Real TLS handshake on reachable 443 with strict SNI (no\n  InsecureSkipVerify), reports offered + negotiated ALPN.\n- Dual-stack classification (ipv4-only / ipv6-only / dual-stack /\n  no-records).\n- Per-family connect_ms recorded so consumers can compute Happy\n  Eyeballs (RFC 8305) fallback cost.\n- SSRF guard refuses private/loopback/link-local/CGNAT addresses\n  unless ALLOW_PRIVATE=1.\n- Resolver + dialer interfaces injected from tests; 4-case\n  classification matrix + probe + happy-eyeballs unit tests pass.\n- 15s total request budget enforced via context.WithTimeout.",
-    "version": "2.4.6",
+    "version": "2.4.7",
     "spiffe_workload": true
   },
   "js-framework-version-extractor": {
@@ -4960,7 +4960,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 8292,
     "placement": "replicable",
-    "version": "1.7.7",
+    "version": "1.7.8",
     "internal_direct": true,
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
