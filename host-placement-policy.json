@@ -433,6 +433,17 @@
       "allowed_runtimes": [],
       "allowed_placement": []
     },
+    "0pipe-build": {
+      "cluster": "build",
+      "capacity_label": "pipe-build",
+      "state": "build-only",
+      "roles": [
+        "image-builder",
+        "ci-agent"
+      ],
+      "allowed_runtimes": [],
+      "allowed_placement": []
+    },
     "infer-pg-primary": {
       "cluster": "infer",
       "capacity_label": "infer-pg-primary",
