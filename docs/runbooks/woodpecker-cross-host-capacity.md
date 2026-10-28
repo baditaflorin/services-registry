@@ -396,13 +396,46 @@ Then 0own, the cap only (every agent there was already one slot): 8 minutes, eve
 memory dipped to 4.5 GiB under a heavy build without an OOM kill, restarts 0, `oom_kill` delta 0 over four minutes. That is a
 short window: the OOM panels on CI Operations show whether it holds over a day.
 
-**Not done yet.** The 0mcp VM (the only builder without this change) still runs five builds at once (3 ci.0exec slots plus the ci.0mcp agent with
-`WOODPECKER_MAX_WORKFLOWS=2`, which has no cap): give that agent one slot and the cap. Do it through the platform, not by hand on
-the VM: its compose (`/opt/woodpecker/docker-compose.yml`, project `woodpecker`) takes the setting from
-`/run/0mpc-secrets/woodpecker/runtime.env`, which OpenBao renders from `woodpecker.env.ctmpl.j2` of the `woodpecker_runtime`
-role in `proxmox_florin_server` (`WOODPECKER_MAX_WORKFLOWS={{ woodpecker_max_workflows }}`). The role default is 1 and the live
-agent runs 2, so the value is already set somewhere outside the default, and a hand edit would be reverted by the next converge.
-Add `WOODPECKER_BACKEND_DOCKER_LIMIT_MEM` and `WOODPECKER_BACKEND_DOCKER_LIMIT_MEM_SWAP` to that template and set the variable to 1. Routing the heavy repositories to
-dedicated agents by label (a workflow that asks for `memory=heavy` runs only on agents that carry it, so one heavy build per VM)
-needs a `labels:` entry in those two repositories' pipelines. More RAM per builder is the other lever; the 0infer host has
-about 6 GiB left.
+**More RAM, not fewer slots (2026-10-28, evening).** The 12 GiB budget above is what forces few slots, so the better answer to a
+long queue is more memory, and two of the three builders had it unused. `qm config` showed `0own-build-worker` (VM 610)
+configured for 32 GB but held at 12 GB by its balloon floor, and `docker-build-lv3` (VM 130) configured for 16 GB but
+running at 12.9; both hypervisors had about 12 GB free. Raised live, no reboot: VM 610 to 18 GB (`qm set 610 --balloon 18432`,
+then `echo "balloon 18432" | qm monitor 610`), VM 130 to 20 GB (`qm set 130 --memory 20480 --balloon 20480` hot-adds the
+memory, the monitor line sets the running target), and VM 702 (infer-builder-ci) from 12 to 15 GB (hotplug), after taking 8 GB
+back from the page cache of `infer-pg-primary` (VM 701: Postgres itself uses about 25 GB shared plus 5 GB anonymous, 20 GB
+of its 58 was reclaimable cache; balloon floor 59392 to 51200, memory pressure stayed 0). The guests put hot-added memory
+online by themselves (`/sys/devices/system/memory/auto_online_blocks` is `online`, check it before relying on it).
+
+What to know before doing it again:
+
+* In Proxmox `balloon` is the **minimum**, not the target. Raising it does not make a running guest grow while its host is
+  above the 80% auto-balloon threshold: set the target through the QEMU monitor (`balloon <MiB>`) as well.
+* Keep at least 4 GiB of `MemAvailable` on the hypervisor. VM 610's host had 12 GB free and VM 130's 13 GB before; both
+  held at 7.5 GB after.
+* On the 0infer host the memory taken from VM 701 did **not** show up as free: 14 to 17 GiB of its memory is neither VM,
+  page cache nor slab, it grew by about 3 GiB while the VMs shrank, and it has direct reclaim running. Do not give VM 702
+  more than the 3 GiB already added until that is understood, and do not re-inflate VM 701 (the host might not have the
+  RAM to give back). 0infer is 94% allocated: its other VMs have little slack (`infer-runtime` really uses about 18 of 28 GB,
+  `infer-tier0` has no balloon).
+* CPU is not what the builders lack where it matters: `infer-builder-ci` has 30 vCPUs at a load of about 6; the 0mcp
+  hypervisor (24 cores) runs at a load of about 30 and the 0own one (16 cores) at 12 to 15, so there is no CPU to give there.
+
+With the RAM, slot counts went up in proportion (about one slot per 3 GiB, the 5 GiB cap kept): the ci.0exec main agent of
+VM 130 from 1 to 3 (5 slots in all), of `infer-builder-ci` from 1 to 2 (5 in all); 0own's agent 99 had a long job and was left at 1
+(4 slots, I/O-bound anyway). The `ci_0exec` queue went from 173 pending and 9 running to 106 pending and 21 running within
+twenty minutes of the change.
+
+**Where VM 130's Woodpecker agents are configured.** Not by the `woodpecker_runtime` role of `proxmox_florin_server` (that
+role manages a server-plus-agent stack). VM 130's host-local configuration is mirrored in git in
+`proxmox_florin_server/config/0mcp/docker-build-lv3/` (`files/` is a byte-for-byte copy of the live files, `verify-live.sh`
+lists the differences) and `/opt/woodpecker/docker-compose.yml` there is the ci.0mcp agent's compose. Its
+`WOODPECKER_MAX_WORKFLOWS=2` is not in that file: it comes from `/opt/woodpecker/openbao/runtime.env.ctmpl`, an OpenBao
+template that is not tracked and was changed by hand on 2026-09-01 (backup `runtime.env.ctmpl.bak-pre-workflow-capacity-...`);
+an `environment:` entry in the tracked compose overrides it, which is where to set a cap or a different capacity. The
+guest inventory in `inventory/host_vars/proxmox-host.yml` says 12 cores and 12288 MB for this VM (live: 20 cores, now
+20 GB), so a `provision-guests` run would shrink it: keep that file in step with `qm config`.
+
+**Not done yet.** The ci.0mcp agent on VM 130 has no step cap (`WOODPECKER_MAX_WORKFLOWS=2`, set in the template above): put the two
+`WOODPECKER_BACKEND_DOCKER_LIMIT_MEM*` keys in the tracked compose. Routing the heavy repositories to dedicated agents by label
+(a workflow that asks for `memory=heavy` runs only on agents that carry it, so one heavy build per VM) needs a `labels:` entry
+in `go-url-categorizer-api` and `hub_scrapetheworld_org`.
