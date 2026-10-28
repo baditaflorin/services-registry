@@ -460,7 +460,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "TRL 7 requires validation against authoritative postal data under ADR 0001; this release adds localized heuristics but no postal-source cross-check.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8. Latest country loop: added Slovak address support (PR #79) and postcode-first Ukrainian address parsing (PR #80); replay preserved 45/53 reachable stored positives and recovered one supported Ukrainian stored-zero case. Release 3.4.27 includes both fixes; focused checks and CI passed. No JS-rendered evidence was returned by the renderer, so this release makes no rendered-page claim. Vietnamese structured-data replay on a sanitized cached sample: 124 rows across 22 markets; release 3.4.28 localized addressCountry normalization recovered 1 of 3 Vietnamese JSON-LD records; records without country context remain conservatively unclassified. | 2026-10-20 Turkish address replay: one public contact page among 19 reviewed had street, compound house number, postcode, city, and province cues but baseline ExtractStructured returned 0 matches; updated parser returns 1. Targeted one-page replay, not a cohort-wide recall estimate. Source PR #84 merged; release 3.4.29.",
-    "version": "3.4.30",
+    "version": "3.4.32",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -1127,7 +1127,7 @@
     "trl_evidence": "Standalone Go detector with bounded same-site fetches and one bounded JS-render retry for sparse shells. PR #33 adds Hungarian `kapcsolat` contact-route recognition and a route/candidate regression test. A private DomainScope manual first-party audit used 100 valid domains across 60 country strata; isolated headless Chrome loaded 48 pages from 40 countries, while 50 returned browser errors and 2 timed out. One rendered Hungarian (`lang=hu`) page exposed three visible same-site contact links that pre-fix local handler replay missed; after the fix, replay found one route and candidate. The Hungarian-English [dict.cc entry](https://enhu.dict.cc/?s=kapcsolat) maps the term to contact. This was manual page review, not historical service-output ground truth; the service fetch-cache URL path was not replayed because this checkout lacked its service-scoped credential. Release 0.1.18 is tagged at commit 058d7c0. On 2026-10-18, the full two-replica pool rollout completed; both replicas run the same signed immutable image, are healthy, and passed direct /health, /selftest, and /version checks. Public gateway /health and /version return HTTP 200; gateway /selftest returns HTTP 401 because it requires API-key authorization. Pool status reports both replicas healthy. No raw hosts or page content are recorded.  2026-10-19 Vietnamese localization audit: a frozen 50-record, five-locale cohort was split into 25 discovery and 25 ID-disjoint holdout rows. One independently confirmed Vietnamese contact-route miss occurred in each split; a localized label/path fix recovered both on replay, with other locale strata unchanged. Positive and near-miss negative fixtures pass (go_contact_route_detector PR #35). Version 0.1.20 image was signed and published; production rollout awaits the Dockerhost capacity gate.  2026-10-20 Turkish/Russian/Korean follow-up: current-origin PR #40 merged at 99e02d4; 150 production-derived candidate rows across 25 countries yielded 136 reachable homepages. Same-site localized contact labels improved route detections from 108 to 111 and candidate-bearing pages from 78 to 80; two off-site Russian label matches were guarded. These are repeatable first-party detector deltas, not independently human-labeled precision/recall. A sparse shell attempt received HTTP 401 before the service handler, so rendered output is unverified. Version 0.1.23 was tagged at the merge; production rollout is not verified. 2026-10-20 country-specific replay: a 200-row, non-null production-derived sample spanned 20 ISO3 markets (10 per stratum). One reachable Saudi first-party site had an explicit Arabic \u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 tel: contact CTA and returned no route before the fix; the updated handler recognizes the labeled route and Unicode digits. The data were used as candidates; only this manually verified first-party page is counted as a confirmed miss. The renderer endpoint returned 401, so no rendered DOM is claimed. Source PR #41 merged as 3e66897; release 0.1.24. 2026-10-20 follow-up: source PR #42 merged as f7c13eb; on the confirmed Arabic same-host contact-section miss, local Handler replay changed contact_route from false to true and routes from 0 to 2, while store-locator abstention remained. A separate first-party Thai page rendered in headless Chrome increased visible text from 0 to 1,490 characters and routes from 0 to 4, changing contact_form/contact_route from false to true; this is one manually inspected render, not a benchmark or service-output truth set. The renderer returned HTTP 401 for the Saudi sample target, so no rendered DOM is claimed for that case. Version 0.1.25 tagged at 9850325.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "The service bounded JS-render retry was not exercised through its fetch-cache endpoint in this checkout; manual Chrome inspection found no remaining thin shells in successful pages but does not establish service-render fidelity across sites. Route extraction does not verify that a destination is operational.",
-    "version": "0.1.28",
+    "version": "0.1.30",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "contact-route-detector", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -1148,7 +1148,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics. Country-specific false-positive review (2026-10-18): a 341-row non-null production-derived cohort covered 131 country codes; 278 static first-party HTML pages were retrieved (12 fetch failures, 50 non-HTML/status responses, one body over 2 MiB). Three Latvian/Swedish generic homepage titles (Sākumlapa, Startsida) appeared as company names. Exact-label filtering removed all three while host-correlated Latvian and Swedish brand controls still passed. PR #59 merged as 4fc4f31. v0.1.45 was signed and deployed to both replicas on one digest; direct health, selftest, and version smoke passed. TRL remains 4 because this sample does not establish coverage of bot-hostile or JS-heavy sites. 2026-10-18 country-by-country update: a private 102-row non-null cohort covered 102 non-US ISO3s. In 98 successful first-party replays, a Yemen-stratum Arabic generic homepage label appeared as a false organization-title candidate at score 0.60, while JSON-LD supplied the selected name. PR #61 added Arabic generic-home-title filtering with host-corroborated-brand positives and unrelated-brand negatives; the post-fix replay removed the candidate without changing the stored selected name. Version 0.1.46 was signed and deployed; direct health, self-test, version, and gateway audit passed. Country-specific legal-form follow-up (2026-10-20; source PR #69 merged as da6a922): a private 210-row production-derived cohort covered 42 markets; a 13-page first-party follow-up reproduced legal-suffix residues in Indian `Pvt. Ltd.` and Polish `Sp. z o.o.` display names, with same-page brand evidence supporting the stripped form. The targeted post-change replay reduced those suffix residues from 13 to 0. Stored values are candidates, not independent labels. No JS attempt applied because pages returned static names and sparse-shell retry was not eligible. Local tests, vet, build, and hosted CI passed. 2026-10-20 country-specific legal-form follow-up (source PR #69 merged as da6a922; release 0.1.52): a private 13-page first-party follow-up reproduced Indian Pvt. Ltd. and Polish Sp. z o.o. suffix residues; same-page brand evidence supported stripped forms, and targeted replay removed all 13 residues. Stored names remain candidates rather than independent labels. | 2026-10-20 saved replay had 213 HTML captures, 7 with valid UTF-8 and charset metadata after byte 1024; one extracted name showed mojibake before the fix and none after. Public first-party response confirmed UTF-8. Targeted sample result, not broad accuracy. Source PR #71 merged; release 0.1.53.",
-    "version": "0.1.56",
+    "version": "0.1.60",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
     "spiffe_workload": true
   },
@@ -1162,7 +1162,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20. 2026-10-18 country-by-country update: private 196-row non-US cohort across 59 country strata exposed a Ukrainian-language workforce-count false negative in v3.5.58. PR #99 added the noun-first staff-count pattern and customer/user negative controls. Version 3.5.59 is deployed; direct health, self-test, version, and gateway-health checks passed.",
-    "version": "3.5.62",
+    "version": "3.5.66",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2122,7 +2122,7 @@
     "trl_evidence": "Confirmed this repo's own trl:7 claim via independent audit rather than self-assessment. Found a real regression from an earlier merged PR: a demotion meant to catch one specific false-positive shape was over-broadly capping the weight of every platform-exclusive backend/CDN host match, systemically under-detecting 9 platforms (VTEX had only 12 detections fleet-wide vs. 10,041 for Shopify). Confirmed live: a real operating VTEX storefront was reported as having no e-commerce platform despite 7 independent VTEX asset references. Fixed by narrowing the demotion to only its intended tag shape. See github.com/baditaflorin/go_domain_ecommerce_platform PR #15. | 2026-10-20 Vietnamese localization follow-up: a current first-party storefront with executable Haravan runtime globals, Vietnamese dong prices, and localized purchase controls returned no platform hit before the fix and `haravan` after it. Added strong runtime fingerprints plus bounded Vietnamese commerce phrases; prose-only attribution/cart controls remain negative. This is a targeted first-party replay, not a cohort accuracy estimate. Source PR #58, release tag 0.5.24.",
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
-    "version": "0.5.24",
+    "version": "0.5.28",
     "proxy_read_timeout": "75s",
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -2279,7 +2279,7 @@
     "spiffe_workload": true
   },
   "domain-geo-anchor": {
-    "version": "0.1.18",
+    "version": "0.1.21",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -2392,7 +2392,7 @@
     "trl_ceiling_reason": "Hard bot protection, catalogs hosted on separate ecosystem domains, and authoritative ground-truth counts require platform APIs or different egress.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.5.2",
+    "version": "0.5.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2628,7 +2628,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "900-domain live audit. Fixed a real bug: the sitemap URL classifier only recognized English /product(s)/ path shapes, so any WooCommerce store with a translated permalink slug (Spanish, French, Italian, German, Turkish) was 100% invisible -- 12/12 evidenced live stores across 5 languages returned 0 products (e.g. one site went 0->1027). Fixed via locale-independent sitemap filename detection plus a translated-slug fallback list; sum of estimates +10.0% on a clean-paired 325-domain subset. See github.com/baditaflorin/go_domain_product_count PR #4.",
-    "version": "0.3.7",
+    "version": "0.3.9",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3007,7 +3007,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "CPU-only lexicon/cue method: no sarcasm/irony/syntactic context, and per-language cue lists are necessarily positive-skewed; reaching 6 needs RFC-grade evidence trails + production cross-checks beyond a lexicon.",
     "trl_evidence": "Corrected DOWNWARD from trl:6, which sat above this record's own documented trl_ceiling of 5 (CPU-only lexicon/cue method, no sarcasm/irony/syntactic context) -- a pre-existing contradiction (registered via PR #30, 'register-emotional-tone-3.3.0', predating this session's audit) not supported by real evidence beyond what the ceiling itself already caps. No code changes needed; this repo's own v3.3.0 chrome/boilerplate-exclusion work is genuine and already reflected in trl_ceiling=5. Pure registry bookkeeping correction, no PR. 2026-10-20 Arabic localization follow-up (source PR #47 merged as 72a043c; release 3.4.3): controlled minimal pair reproduced a false negative when optional Arabic vocalization marks were present; normalization strips those marks while preserving hamza/madda, with vocalized-positive and vocalized-negation regressions. No saved non-null independent tone cohort was available, so this is a controlled lexical regression rather than a measured production lift.",
-    "version": "3.4.3",
+    "version": "3.4.5",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4750,7 +4750,7 @@
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/_gw_health",
-    "version": "0.3.54",
+    "version": "0.3.56",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
@@ -4805,7 +4805,7 @@
     "description": "JS-rendering proxy (?url=)",
     "host_port": 18006,
     "placement": "replicable",
-    "version": "0.12.3",
+    "version": "0.12.5",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -5040,7 +5040,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.33.45",
+    "version": "1.33.48",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true
@@ -5707,7 +5707,7 @@
   },
   "payment-detector": {
     "container_port": 8298,
-    "version": "1.6.10",
+    "version": "1.6.12",
     "description": "Microservice for Payment Detector",
     "host_port": 8298,
     "placement": "replicable",
@@ -6704,7 +6704,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18271,
     "placement": "replicable",
-    "version": "0.1.16",
+    "version": "0.1.19",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6799,7 +6799,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "version": "0.1.30",
+    "version": "0.1.32",
     "trl": 5,
     "trl_assessed_at": "2026-10-20",
     "trl_assessor": "codex-rd-loop",
@@ -7016,7 +7016,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18245,
     "placement": "replicable",
-    "version": "0.1.16",
+    "version": "0.1.18",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -7103,7 +7103,7 @@
     "trl_evidence": "research tool, workflow pipeline"
   },
   "revenue-model": {
-    "version": "2.6.31",
+    "version": "2.6.34",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
@@ -7625,7 +7625,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13. | 2026-10-20 saved cohort: 87 rows across 20 markets. Targeted Swiss replay previously added CH from currency and company-location cues despite a Germany-only claim; fixed output is [DE]. One targeted regression, not a cohort-wide metric. Source PR #62 merged; release 1.7.26.",
-    "version": "1.7.27",
+    "version": "1.7.30",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7983,7 +7983,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (fresh 40-domain sample): found and fixed 2 real false-positive bugs -- schema.org Review-block author names (customer reviewers) counted as team members, and unfiltered schema.org Person names (CMS/theme boilerplate accounts) counted as employees. Also definitively resolved the cross-service field-contract question for go_company_size's integration: estimate.value/range_low/range_high/confidence/method, wrapped in the standard envelope -- that integration bug is now independently fixed on the go_company_size side (PR #20, merged same day). See PR #9 (merged). Supplementary country audit evidence (2026-10-18; TRL 6 rating unchanged): a production-derived candidate cohort of 108 recent non-null company-size rows across 11 country/language strata was used for candidate selection only, not as headcount labels. First-party Russian pages on 3 hosts contained 5 distinct explicit employee-count values that the prior parser did not emit. PR #36 added inflected Russian employee/worker nouns and team-anchored человек with customer-context controls. Release 3.0.17 (commit 70a050d57bd3d18b64b02412ba1ea90240334b43) is deployed to both pool replicas on the cosign-signed and verified image digest sha256:64ada9105f21…. Both replicas passed direct health, self-test, and version probes; gateway-health audit was 1/1 HTTP 200. The anonymous gateway self-test remains auth-gated (401). Thai localization replay (2026-10-20; focused public first-party sample, 11 pages): the prior parser emitted no localized headcount claims; version 3.0.19 recovered 8 explicit Thai employee totals, while 3 pages had no claimable count. This purposive replay is not random production coverage or independently labeled accuracy. | 2026-10-20 targeted Turkish first-party page replay improved headcount detection from 1/3 to 2/3. The saved DomainScope-derived candidates did not confirm a new Turkish miss and are not counted as a cohort lift. Source PR #41 merged at 1e3a63f; release 3.0.19.",
-    "version": "3.0.19",
+    "version": "3.0.22",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
