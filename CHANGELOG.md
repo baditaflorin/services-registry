@@ -1,3 +1,7 @@
+## 2026-10-28
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `proxy` 0.2.12.
+
 ## 2026-10-27
 
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `apikey-service` 0.10.5, `contact-route-detector` 0.1.28, `pricing-tier-parser` 0.1.30.
