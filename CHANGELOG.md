@@ -1,5 +1,6 @@
 ## 2026-10-28
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `infrastructure-fetch-cache` 0.3.54.
 - fleet-version-pin-sync: 7 registry version pin(s) set to the version the service runs, which is also its repository main: `biz-classifier` 2.8.40, `caa-checker` 1.4.20, `cdn-detector` 1.4.2, `data-inventory` 1.7.9, `http-protocol` 2.4.14, `ipv6-checker` 2.4.7, `keyword-density` 1.7.8.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `proxy` 0.2.12.
 
