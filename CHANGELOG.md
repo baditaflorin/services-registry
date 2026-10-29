@@ -1,5 +1,6 @@
 ## 2026-10-29
 
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `domain-gift-card` 0.6.4, `infrastructure-fetch-cache` 0.3.57, `passive-voice-detector` 0.1.15, `reading-time-estimator` 0.1.13.
 - fleet-version-pin-sync: 25 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.33, `company-name-extractor` 0.1.61, `contact-route-detector` 0.1.31, `country-iso-matcher` 0.1.27, `currency-detector` 1.5.18, `domain-backlink-profile` 0.3.13, `domain-ecommerce-platform` 0.5.29, `email-harvester` 1.4.34, `emotional-tone` 3.4.6, `google-taxonomy` 1.5.10, `html-proxy` 0.5.29, `keyphrase-extractor` 0.2.11, `keyword-density` 1.7.11, `language-detector` 0.3.10, `leadership-extractor` 0.2.12, `legal-entity` 1.33.51, `payment-detector` 1.6.13, `phone-extractor` 1.4.40, `policy-clause-extractor` 0.1.20, `price-range` 1.9.28, `revenue-model` 2.6.35, `seo-basics` 1.6.2, `shipping-regions` 1.7.31, `team-member-extractor` 0.2.12, `team-size` 3.0.23.
 
 ## 2026-10-28
