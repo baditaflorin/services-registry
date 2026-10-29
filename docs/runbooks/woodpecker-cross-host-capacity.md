@@ -442,9 +442,11 @@ in `go-url-categorizer-api` and `hub_scrapetheworld_org`.
 
 ## Agent records: names and labels must survive (2026-10-29)
 
-`PATCH /api/agents/{id}` **replaces** the record. A body with only `no_schedule` clears `name` and `custom_labels`. The agent keeps running, but the
-load controller finds agents by name, so it logs `node_missing` for the node and stops managing its slots (on 2026-10-28 eight infer, 0own and
-0mcp agents were invisible for about a day this way). The controller now sends `name`, `no_schedule` and `custom_labels`; any other script must do the same.
+`PATCH /api/agents/{id}` stores `name` and `no_schedule` from the body (Woodpecker 3.17); a body with only `no_schedule` stores an **empty name**
+(custom labels survive: tested 2026-10-30). The agent keeps running, but the load controller finds agents by name, so it logs `node_missing` for the
+node and stops managing its slots (on 2026-10-28 eight infer, 0own and 0mcp agents were invisible for about a day this way). Every script that
+PATCHes an agent must send `name` and `no_schedule` (the controller also sends `custom_labels`, as a safeguard). fleet-runner's `UpdateAgent`
+already sends the name.
 
 `bin/woodpecker_agent_names_check.py` (install: `templates/woodpecker-agent-names-check.{service,timer}`, one run a minute on the controller host)
 writes `woodpecker_agents_unnamed`, `woodpecker_agents_without_labels`, `woodpecker_load_controller_missing_agents{node}` and
