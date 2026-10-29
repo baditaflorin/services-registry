@@ -201,7 +201,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.4.33",
+    "version": "3.4.34",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -1068,7 +1068,7 @@
       "fleet-graph"
     ],
     "proxy_egress": true,
-    "version": "0.1.61",
+    "version": "0.1.62",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3218,7 +3218,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.3.9",
+    "version": "0.3.10",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3499,7 +3499,7 @@
     "proxy_egress": true,
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
     "network_exposure": "gateway-authenticated",
-    "version": "1.4.34",
+    "version": "1.4.35",
     "placement": "replicable"
   },
   {
@@ -3766,7 +3766,7 @@
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
     "trl": 7,
-    "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged). | 2026-10-20 targeted Romanian first-party replay: 2 official company history pages using the Romanian “înființată în YYYY” form returned the correct year after the parser fix; these were misses before. The saved 100-row cohort had 5 RO candidates but their HTML was unavailable, so no cohort-wide lift is claimed. Source go_founding_year PR #60 merged at b19eb32; release 3.6.11.",
+    "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged). | 2026-10-20 targeted Romanian first-party replay: 2 official company history pages using the Romanian \u201c\u00eenfiin\u021bat\u0103 \u00een YYYY\u201d form returned the correct year after the parser fix; these were misses before. The saved 100-row cohort had 5 RO candidates but their HTML was unavailable, so no cohort-wide lift is claimed. Source go_founding_year PR #60 merged at b19eb32; release 3.6.11.",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_assessed_at": "2026-08-01",
@@ -3781,7 +3781,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.6.11",
+    "version": "3.6.12",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -3865,7 +3865,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.38",
+    "version": "0.1.39",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4148,7 +4148,7 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": true,
-    "version": "0.1.12",
+    "version": "0.1.13",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -4737,7 +4737,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.3.10",
+    "version": "0.3.11",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5254,7 +5254,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.7.16",
+    "version": "2.7.17",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5417,7 +5417,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5775,7 +5775,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.20",
+    "version": "0.1.21",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -5902,7 +5902,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.32",
+    "version": "0.1.33",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -6140,7 +6140,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.18",
+    "version": "0.1.19",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -6179,7 +6179,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -7179,7 +7179,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.7.31",
+    "version": "1.7.32",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -7375,7 +7375,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.20",
+    "version": "0.1.21",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -10859,7 +10859,7 @@
       "go-apikey-service"
     ],
     "access_tier": "infra-privileged",
-    "version": "0.4.43",
+    "version": "0.4.44",
     "network_exposure": "gateway-authenticated"
   },
   {
