@@ -140,6 +140,7 @@ PRIVATE_SERVICE_REQUIRED_FIELDS: frozenset[str] = frozenset({
 PRIVATE_SERVICE_ALLOWED_FIELDS: frozenset[str] = PRIVATE_SERVICE_REQUIRED_FIELDS
 PRIVATE_SERVICE_FORBIDDEN_FIELDS: frozenset[str] = frozenset({
     "url", "health_url", "repo_url", "auth", "auth_help", "example_path",
+    "example_path_source", "params",
     "pages_url", "pages_source_branch", "cert_domain", "alias_urls",
     "graph_target_hosts",
     "extra_server_names", "vhost", "network_exposure",
@@ -323,7 +324,10 @@ PROJECTIONS = {
     "services.minimal.json": _pick(["id", "name", "mesh", "kind", "category",
                                     "language", "trl", "url", "lifecycle"]),
     # "Build an Open link" — URLs + auth hint, no TRL / deploy fields.
+    # params / example_path_source: the declared inputs and where example_path came from
+    # (overrides.json, written by bin/sync-service-params.py from each service.yaml).
     "services.urls.json":    _pick(["id", "url", "health_url", "example_path",
+                                    "example_path_source", "params",
                                     "auth_help", "lifecycle"]),
     # TRL audits — claude-haiku-trl-batch and friends only need these.
     "services.trl.json":     _pick_where(["id", "trl", "trl_ceiling",
@@ -1025,6 +1029,11 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # A curated auth-help string may be stricter than the generic
               # auth-type fallback (for example, header-only credentials).
               "auth_help",
+              # The service's declared inputs (name/required/type/description/
+              # example), copied from its service.yaml into overrides.json by
+              # bin/sync-service-params.py; `example_path_source` marks an
+              # example_path built from them rather than from a tested request.
+              "params", "example_path_source",
               # Hostnames that identify this service in bounded runtime
               # graph events. These are telemetry aliases only and never
               # alter nginx or request routing.
