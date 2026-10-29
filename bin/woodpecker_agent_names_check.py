@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Check that every Woodpecker agent record is intact and that the load controller can find its agents by name.
 
-A PATCH to /api/agents/{id} replaces the whole record. One that leaves out ``name`` (or ``custom_labels``) clears it, and the agent keeps
-running with a record the load controller cannot match: it reports ``node_missing`` and stops managing that node's slots. Nothing else
-notices, so this check writes Prometheus textfile metrics per plane:
+A PATCH to /api/agents/{id} that leaves out ``name`` stores an empty name (Woodpecker 3.17 persists only name and no_schedule; labels survive,
+tested 2026-10-30). The agent keeps running with a record the load controller cannot match: it reports ``node_missing`` and stops managing
+that node's slots. Nothing else notices, so this check writes Prometheus textfile metrics per plane:
 
 * ``woodpecker_agents_unnamed``: agents whose record has an empty name;
 * ``woodpecker_agents_without_labels``: agents whose record has no custom labels (routing labels such as site, mem, lv3 live there);

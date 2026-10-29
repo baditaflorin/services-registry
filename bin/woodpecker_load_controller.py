@@ -538,8 +538,9 @@ class HTTPClient:
         return self._request("/api/queue/info")
 
     def set_no_schedule(self, agent: dict[str, Any], value: bool) -> None:
-        # PATCH replaces the whole record: a body without name or custom_labels clears them, and the agent then keeps
-        # running with routing labels gone or a name the controller cannot match. Send everything the record holds.
+        # Woodpecker 3.17 stores only name and no_schedule from a PATCH, and a body without name stores an empty name (the agent keeps
+        # running, but the controller can no longer find it). Tested 2026-10-30: custom_labels survive a PATCH that leaves them out.
+        # They are sent anyway so a Woodpecker version that replaces the whole record cannot clear the routing labels.
         self._request(
             f"/api/agents/{agent['id']}",
             method="PATCH",
