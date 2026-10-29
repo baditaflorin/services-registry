@@ -439,3 +439,15 @@ guest inventory in `inventory/host_vars/proxmox-host.yml` says 12 cores and 1228
 `WOODPECKER_BACKEND_DOCKER_LIMIT_MEM*` keys in the tracked compose. Routing the heavy repositories to dedicated agents by label
 (a workflow that asks for `memory=heavy` runs only on agents that carry it, so one heavy build per VM) needs a `labels:` entry
 in `go-url-categorizer-api` and `hub_scrapetheworld_org`.
+
+## Agent records: names and labels must survive (2026-10-29)
+
+`PATCH /api/agents/{id}` **replaces** the record. A body with only `no_schedule` clears `name` and `custom_labels`. The agent keeps running, but the
+load controller finds agents by name, so it logs `node_missing` for the node and stops managing its slots (on 2026-10-28 eight infer, 0own and
+0mcp agents were invisible for about a day this way). The controller now sends `name`, `no_schedule` and `custom_labels`; any other script must do the same.
+
+`bin/woodpecker_agent_names_check.py` (install: `templates/woodpecker-agent-names-check.{service,timer}`, one run a minute on the controller host)
+writes `woodpecker_agents_unnamed`, `woodpecker_agents_without_labels`, `woodpecker_load_controller_missing_agents{node}` and
+`woodpecker_agent_names_check_up` per plane to the node-exporter textfile directory. The alerts are in proxmox_florin_server
+(`fleet-woodpecker-agent-records.yml`). Repair of an emptied name: restart the idle agent (it re-registers `WOODPECKER_HOSTNAME`; check
+`GET /api/agents/<id>/tasks` is empty first). A stale entry in a controller config (agent gone for good) is removed from the config, with a backup.

@@ -538,10 +538,16 @@ class HTTPClient:
         return self._request("/api/queue/info")
 
     def set_no_schedule(self, agent: dict[str, Any], value: bool) -> None:
+        # PATCH replaces the whole record: a body without name or custom_labels clears them, and the agent then keeps
+        # running with routing labels gone or a name the controller cannot match. Send everything the record holds.
         self._request(
             f"/api/agents/{agent['id']}",
             method="PATCH",
-            payload={"name": agent["name"], "no_schedule": value},
+            payload={
+                "name": agent["name"],
+                "no_schedule": value,
+                "custom_labels": agent.get("custom_labels") or {},
+            },
         )
 
 
