@@ -12,13 +12,17 @@ steps:
       - >-
         for path in bin/ci_authority_audit.py
         bin/ci_execution_report.py
+        bin/woodpecker_agent_names_check.py
         bin/woodpecker_load_controller.py
         bin/test_ci_authority_audit.py
         bin/test_ci_execution_report.py
+        bin/test_woodpecker_agent_names_check.py
         bin/test_woodpecker_load_controller.py
         ci-authorities.json
         ci-execution-report.json
         docs/runbooks/woodpecker-cross-host-capacity.md
+        templates/woodpecker-agent-names-check.service
+        templates/woodpecker-agent-names-check.timer
         templates/woodpecker-agent-token.path.env.example
         templates/woodpecker-cross-host-agent.compose.yml
         templates/woodpecker-load-controller.example.json

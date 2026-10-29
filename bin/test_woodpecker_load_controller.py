@@ -973,5 +973,16 @@ class GradedAdmissionTests(unittest.TestCase):
         self.assertEqual(client.changed, [])
 
 
+
+class HTTPClientPatchBody(unittest.TestCase):
+    def test_drain_patch_keeps_name_and_custom_labels(self):
+        client = controller.HTTPClient("http://woodpecker.invalid", "token")
+        sent = []
+        client._request = lambda path, method="GET", payload=None: sent.append((path, method, payload))
+        client.set_no_schedule({"id": 7, "name": "builder-a", "no_schedule": False, "custom_labels": {"site": "x", "mem": "l"}}, True)
+        client.set_no_schedule({"id": 8, "name": "builder-b", "no_schedule": True}, False)
+        self.assertEqual(sent[0], ("/api/agents/7", "PATCH", {"name": "builder-a", "no_schedule": True, "custom_labels": {"site": "x", "mem": "l"}}))
+        self.assertEqual(sent[1][2], {"name": "builder-b", "no_schedule": False, "custom_labels": {}})
+
 if __name__ == "__main__":
     unittest.main()

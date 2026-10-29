@@ -1,0 +1,17 @@
+[Unit]
+Description=Check Woodpecker agent records (names, labels) against the load controller configs
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# root: the token files are root-managed; the check only reads
+ExecStart=/usr/bin/python3 /usr/local/libexec/woodpecker-agent-names-check \
+  --plane ci.0exec,https://ci.0exec.com,/etc/woodpecker-load-controller/ci.0exec.token,/etc/woodpecker-load-controller/ci.0exec.json \
+  --plane ci.0mcp,https://ci.0mcp.com,/etc/woodpecker-load-controller/token,/etc/woodpecker-load-controller/ci.0mcp.json \
+  --output /var/lib/prometheus-node-exporter/textfile/woodpecker-agent-names.prom
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/prometheus-node-exporter/textfile
