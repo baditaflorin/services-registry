@@ -25,7 +25,7 @@ each a stable URL at the same path:
 | `services.ids.json`       | `["a11y-quick", "accessibility-score", …]`                 | ~5 KB | "what services exist" |
 | `services.names.json`     | `[{id, name}]`                                              | ~13 KB | rendering a picker or menu |
 | `services.minimal.json`   | `[{id, name, mesh, kind, category, language, trl, url}]`   | ~44 KB | catalog overview, list views |
-| `services.urls.json`      | `[{id, url, health_url, example_path, auth_help}]`         | ~63 KB | building Open links / smoke targets |
+| `services.urls.json`      | `[{id, url, health_url, example_path, example_path_source, params, auth_help}]` | ~245 KB | building Open links / smoke targets / input forms |
 | `services.trl.json`       | `[{id, trl, trl_ceiling, trl_assessed_at, trl_assessor}]`  | ~31 KB | TRL audits, re-scoring runs |
 | `services.ports.json`     | `[{id, host_port, container_port}]`                        | ~12 KB | port allocation, conflict checks |
 | `services.deploy.json`    | `[{id, mesh, kind, runtime, language, repo_url}]`          | ~40 KB | fleet-runner deploy targeting |
@@ -62,6 +62,8 @@ after writing `services.json`.
 | `docs/runbooks/woodpecker-cross-host-capacity.md` | reproduce the load-aware cross-host CI pool safely |
 | `templates/woodpecker-*` | public-safe agent, controller and private-route deployment templates |
 | `overrides.json`           | per-slug patches (curated names, descriptions, custom example URLs)|
+| `bin/extract-service-facts.py` | read every clone's `service.yaml` (test.url, api.params) into a deterministic facts file; run on the builder, read-only |
+| `bin/sync-service-params.py` | facts file -> `overrides.json`: `params` and a corrected `example_path` per service (dry run; `--apply` writes) |
 | `bin/sync.sh`              | (legacy) snapshot the previous three sources                       |
 | `bin/build.py`             | (legacy) merge those snapshots — superseded by `generate.py`       |
 | `sources/`                 | (legacy) upstream snapshots, gitignored                            |
@@ -80,6 +82,9 @@ after writing `services.json`.
   "health_url":   "https://go-js-proxy.0exec.com/_gw_health",
   "repo_url":     "https://github.com/baditaflorin/go-js-proxy",
   "example_path": "/?url=https://example.com",
+  "params": [
+    {"name": "url", "required": true, "type": "string", "description": "Page to render", "example": "https://example.com"}
+  ],
   "auth": {
     "type":        "api_key",
     "header":      "X-API-Key"
@@ -192,7 +197,10 @@ The registry is regenerated from GitHub topics on every run of
      --add-topic go
    ```
 3. (Optional) Add an entry to `overrides.json` if the auto-derived display
-   name / description / example query needs to be hand-curated:
+   name / description / example query needs to be hand-curated (`params` and a
+   working `example_path` for services with a `service.yaml` come from
+   `bin/sync-service-params.py`, not by hand; the example must carry every
+   required param, a test enforces it):
    ```json
    {
      "go-js-proxy": {

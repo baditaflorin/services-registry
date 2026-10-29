@@ -26,6 +26,8 @@
             { "required": ["auth"] },
             { "required": ["auth_help"] },
             { "required": ["example_path"] },
+            { "required": ["example_path_source"] },
+            { "required": ["params"] },
             { "required": ["pages_url"] },
             { "required": ["pages_source_branch"] },
             { "required": ["cert_domain"] },
@@ -96,6 +98,26 @@
     "health_url":   { "type": "string", "format": "uri" },
     "repo_url":     { "type": "string", "format": "uri", "description": "GitHub source repository" },
     "example_path": { "type": "string", "description": "Path + query that produces a real response; begins with '/'. Example: '/?url=https://example.com'. May be empty if the service has no canonical example." },
+    "example_path_source": {
+      "type": "string", "enum": ["derived-from-params"],
+      "description": "Present only when example_path was built by bin/sync-service-params.py from the declared params (no service-tested request carried them). Absent: example_path is hand-curated or the service's own sanitised test.url."
+    },
+    "params": {
+      "type": "array",
+      "description": "The inputs the service expects, copied from its own service.yaml `api.params` by bin/sync-service-params.py. Absent when the service declares none. A required param is required of the service, not necessarily of a GET link: a POST-only service takes its params in the request body.",
+      "items": {
+        "type": "object",
+        "required": ["name", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "name":        { "type": "string", "minLength": 1 },
+          "required":    { "type": "boolean" },
+          "type":        { "type": "string", "description": "As declared in service.yaml (string, integer, bool, ...)" },
+          "description": { "type": "string", "description": "Short (about 100 characters at most), one line" },
+          "example":     { "type": "string", "description": "A value the registry's own example_path or service.yaml sends for it; never a secret-shaped one" }
+        }
+      }
+    },
     "auth": {
       "type": "object",
       "required": ["type"],

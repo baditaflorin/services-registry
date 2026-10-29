@@ -26,6 +26,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.parse import parse_qsl
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build  # type: ignore[import]
@@ -958,6 +959,116 @@ class TestRegistryFilesAgree(unittest.TestCase):
             if entry.get("version") != want:
                 mismatches.append(f"{service_id}: services.json {entry.get('version')!r}, overrides.json {want!r}")
         self.assertEqual(mismatches, [], "set the version in overrides.json and run bin/generate.py --only <ids>")
+
+_ALLOW_BODY = "POST-only service: its required params are the JSON request body, a GET link cannot carry them"
+_ALLOW_PATH = "the required param is a {placeholder} of the endpoint's path, not a query param"
+_ALLOW_NO_SAFE = "a required param with no safe example value (a credential, or an id nobody can guess)"
+
+
+class TestParamsAndExamples(unittest.TestCase):
+    """`params` (each service's declared inputs, from its own service.yaml) rides through overrides.json -> services.json
+    and the urls slice, and a service's `example_path` must carry every required param: the hub builds its Open /
+    Run example links from it, and a link without one answers a 400 (on 2026-10-29, 161 of the 251 services that
+    declare a required param had such an example)."""
+
+    # (id, reason) for every service whose example_path cannot carry a required param; keep it explicit and short.
+    ALLOWED = (
+        [(i, _ALLOW_BODY) for i in (
+            "agent-approval", "agent-mailbox", "agent-quorum", "fleet-backoff-coordinator", "fleet-body-redactor",
+            "fleet-budget-tracker", "fleet-content-normalizer", "fleet-diff-engine", "fleet-eventlog", "fleet-exec",
+            "fleet-fingerprint-cache", "fleet-har-builder", "fleet-lock", "fleet-memory", "fleet-poc-curl",
+            "fleet-preflight", "fleet-resolver-quorum", "fleet-schema-validator", "fleet-target-reputation",
+            "fleet-webhook-verifier", "pentest-agent-state", "pentest-asset-inventory", "pentest-audit-log",
+            "pentest-continuous-monitor", "pentest-dedup-fingerprint", "pentest-exploit-verifier",
+            "pentest-finding-triage", "pentest-findings-store", "pentest-http-replay", "pentest-notify", "pentest-nuclei",
+            "pentest-orchestrator", "pentest-rate-coordinator", "pentest-scope-guard", "pentest-submit-bot",
+            "pentest-triager-listener", "pentest-trufflehog", "pentest-walkthrough")]
+        + [(i, _ALLOW_PATH) for i in ("fleet-dig", "fleet-payload-corpus", "fleet-persona", "fleet-secrets")]
+        + [(i, _ALLOW_NO_SAFE) for i in ("jwt-debugger", "pentest-asset-scope-resolver", "pentest-payloads")]
+    )
+
+    @staticmethod
+    def missing_required(entry):
+        """Names of the required params the entry's example_path does not carry with a value."""
+        query = {k for k, v in parse_qsl(entry.get("example_path", "").partition("?")[2], keep_blank_values=True) if v}
+        return [p["name"] for p in entry.get("params") or [] if p.get("required") and p["name"] not in query]
+
+    @classmethod
+    def setUpClass(cls):
+        root = Path(generate.ROOT)
+        cls.services = json.loads((root / "services.json").read_text())
+        cls.overrides = json.loads((root / "overrides.json").read_text())
+        cls.urls = json.loads((root / "services.urls.json").read_text())
+
+    def test_every_example_carries_its_required_params(self):
+        allowed = {i for i, _ in self.ALLOWED}
+        broken = [f"{e['id']}: example_path {e.get('example_path')!r} lacks required {self.missing_required(e)}"
+                  for e in self.services if self.missing_required(e) and e["id"] not in allowed]
+        self.assertEqual(broken, [], "fix example_path in overrides.json (bin/sync-service-params.py derives one from "
+                                     "service.yaml), or allow-list the service here with the reason it cannot carry it")
+
+    def test_the_allow_list_has_no_stale_entries(self):
+        by_id = {e["id"]: e for e in self.services}
+        self.assertEqual(len({i for i, _ in self.ALLOWED}), len(self.ALLOWED), "an id is allow-listed twice")
+        stale = [i for i, _ in self.ALLOWED if i not in by_id or not self.missing_required(by_id[i])]
+        self.assertEqual(stale, [], "these now carry their required params (or are gone): remove them from the allow-list")
+
+    def test_the_gate_catches_a_broken_example(self):
+        """The mutation check: break an example the way it was broken before and the gate must see it."""
+        entry = next(e for e in self.services if e["id"] == "zone-transfer")
+        self.assertEqual(self.missing_required(entry), [])
+        self.assertEqual(self.missing_required(dict(entry, example_path="/?url=https://example.com")), ["domain"])
+        self.assertEqual(self.missing_required(dict(entry, example_path="/go_zone_transfer?domain=")), ["domain"])
+        self.assertEqual(self.missing_required(dict(entry, example_path="/")), ["domain"])
+        self.assertEqual(self.missing_required({"example_path": "/", "params": [{"name": "q", "required": False}]}), [])
+
+    def test_no_example_carries_a_key_and_no_param_a_secret_shaped_value(self):
+        examples = json.dumps([e.get("example_path") for e in self.services])
+        self.assertNotRegex(examples, r"(?i)api_?key=|/t/[^/\"]+/")        # the hub adds the caller's key at click time
+        declared = json.dumps([e.get("params") for e in self.services])
+        self.assertNotRegex(declared, r"eyJ[\w-]{5,}\.[\w-]{5,}\.[\w-]{10,}|sk_live_|sk_test_|\bfb_[a-z0-9]{20,}|\b[a-f0-9]{40,}\b")
+        self.assertIsNone(generate.assert_no_secrets(self.services))
+
+    def test_services_json_and_the_urls_slice_carry_what_overrides_json_declares(self):
+        by_id = {e["id"]: e for e in self.services}
+        url_by_id = {e["id"]: e for e in self.urls}
+        mismatches = []
+        for slug, patch in self.overrides.items():
+            if slug.startswith("$") or slug not in by_id or not isinstance(patch, dict):
+                continue
+            for key in ("params", "example_path_source"):
+                if by_id[slug].get(key) != patch.get(key):
+                    mismatches.append(f"{slug}: services.json {key} differs from overrides.json")
+                if url_by_id[slug].get(key) != patch.get(key):
+                    mismatches.append(f"{slug}: services.urls.json {key} differs from overrides.json")
+        self.assertEqual(mismatches[:10], [], "run bin/generate.py --only <ids>")
+
+    def test_the_urls_slice_projects_params_and_source_but_the_public_mirror_does_not_yet(self):
+        entry = {"id": "x", "url": "https://x.example", "example_path": "/?q=a", "example_path_source": "derived-from-params",
+                 "params": [{"name": "q", "required": True}], "host_port": 1}
+        self.assertEqual(generate.PROJECTIONS["services.urls.json"](entry),
+                         {"id": "x", "url": "https://x.example", "example_path": "/?q=a",
+                          "example_path_source": "derived-from-params", "params": [{"name": "q", "required": True}]})
+        self.assertNotIn("params", generate.PROJECTIONS["services.minimal.json"](entry))
+        # services-public.json is allowlist-only and widening it needs an operator decision: not made here
+        self.assertNotIn("params", generate.PUBLIC_FIELDS)
+        self.assertNotIn("example_path_source", generate.PUBLIC_FIELDS)
+
+    def test_an_expand_child_inherits_params_from_its_override(self):
+        spec = dict(EXPAND_SPEC)
+        params = [{"name": "q", "required": True}]
+        by_slug = {"fleet-grafana": {"params": params, "example_path_source": "derived-from-params"}}
+        children = {c["id"]: c for c in generate.expand_entry(PARENT_FIXTURE, spec, by_slug, [])}
+        self.assertEqual(children["fleet-grafana"]["params"], params)
+        self.assertNotIn("params", children["fleet-discovery"])
+
+    def test_the_schema_knows_both_fields(self):
+        schema = json.loads((Path(generate.ROOT) / "schema" / "v1.json").read_text())
+        self.assertIn("params", schema["properties"])
+        self.assertEqual(schema["properties"]["example_path_source"]["enum"], ["derived-from-params"])
+        for field in ("params", "example_path_source"):
+            self.assertIn(field, generate.PRIVATE_SERVICE_FORBIDDEN_FIELDS)
+
 
 if __name__ == "__main__":
     unittest.main()

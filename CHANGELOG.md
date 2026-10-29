@@ -1,3 +1,7 @@
+## 2026-10-30
+
+- registry: `params` (each service's declared inputs: name, required, type, short description, example) and a corrected `example_path` for services whose `service.yaml` was read by `bin/extract-service-facts.py`, set in `overrides.json` by `bin/sync-service-params.py` and carried into `services.json` and `services.urls.json`; `example_path_source: "derived-from-params"` marks an example built from the params. A test now fails when a service's `example_path` lacks a required param.
+
 ## 2026-10-29
 
 - fleet-version-pin-sync: 10 registry version pin(s) set to the version the service runs, which is also its repository main: `company-size` 3.5.67, `contact-route-detector` 0.1.32, `domain-gift-card` 0.6.6, `domain-integration-marketplace` 0.5.6, `domain-newsletter-platform-detector` 0.4.23, `keyphrase-extractor` 0.2.12, `leadership-extractor` 0.2.13, `microformats2-extractor` 0.2.9, `price-range` 1.9.29, `team-member-extractor` 0.2.13.
