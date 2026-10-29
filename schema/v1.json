@@ -252,6 +252,20 @@
       "minLength": 1,
       "description": "Name of the other deployment that actually answers for this entry (e.g. 'domainscope'). The gateway routes the entry's vhost to it through the private upstream map in fleet-state/nginx-upstreams.json, so no container is expected from this entry's host_port on the docker hosts; host_port stays a reserved claim only. Container audits and the /selftest poller skip the dockerhost check for entries that set it. A name, never a URL: gateway upstreams are private deployment policy and must not be generated from the public catalog. Not in PUBLIC_FIELDS (allowlist), so excluded from services-public.json."
     },
+    "ci_resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mem_class", "mem_peak_p95_bytes", "mem_peak_max_bytes", "runs", "confidence", "measured_at"],
+      "properties": {
+        "mem_class": { "type": "string", "enum": ["xs", "s", "m", "l"], "description": "Per-step memory class of a CI build: xs <=256 MiB, s <=512 MiB, m <=4 GiB, l >4 GiB, by the p95 peak of the repository's heaviest step." },
+        "mem_peak_p95_bytes": { "type": "integer", "minimum": 0 },
+        "mem_peak_max_bytes": { "type": "integer", "minimum": 0 },
+        "runs": { "type": "integer", "minimum": 1, "description": "Distinct pipelines measured in the window." },
+        "confidence": { "type": "string", "enum": ["low", "ok"], "description": "low = fewer than 20 measured pipelines." },
+        "measured_at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }
+      },
+      "description": "Measured CI build resource profile of this service's repository, derived from Prometheus by bin/ci_resources.py (ci-resources.json) and merged by bin/generate.py. Never hand-edit. Kept out of services-public.json (not in PUBLIC_FIELDS)."
+    },
     "network_exposure": {
       "type": "string",
       "enum": ["loopback", "lan-internal", "gateway-ip-allowlisted", "gateway-authenticated", "gateway-public"],

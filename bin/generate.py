@@ -38,6 +38,7 @@ OVERRIDES_JSON       = ROOT / "overrides.json"
 SLUG_JSON            = ROOT / "slug.json"
 RENAMES_JSON         = ROOT / "renames.json"
 SUMMARY_TXT          = ROOT / "services.summary.txt"
+CI_RESOURCES_JSON    = ROOT / "ci-resources.json"
 
 # ─── G3: sanitized public mirror ───────────────────────────────────────
 #
@@ -1383,6 +1384,30 @@ def make_external_entry(spec: dict) -> dict:
     return entry
 
 
+CI_RESOURCES_FIELDS = ("mem_class", "mem_peak_p95_bytes", "mem_peak_max_bytes", "runs", "confidence")
+
+
+def apply_ci_resources(entries: list[dict], path: Path = CI_RESOURCES_JSON) -> None:
+    """Merge the measured CI build profile (ci-resources.json, derived by
+    bin/ci_resources.py) into each entry as `ci_resources`. Absent file or a
+    repo with no measurement leaves the entry untouched. Not in PUBLIC_FIELDS,
+    so it stays out of services-public.json and the slices."""
+    if not path.exists():
+        return
+    doc = json.loads(path.read_text())
+    by_id: dict[str, dict] = {}
+    for repo in doc.get("repos", {}).values():
+        for service_id in repo.get("ids", []):
+            by_id[service_id] = repo
+    for entry in entries:
+        repo = by_id.get(entry["id"])
+        if repo is None:
+            continue
+        merged = {k: repo[k] for k in CI_RESOURCES_FIELDS}
+        merged["measured_at"] = repo["last_seen"]
+        entry["ci_resources"] = merged
+
+
 def build(overrides: dict) -> list[dict]:
     by_slug, rules, expansions, externals = split_overrides(overrides)
     seen: dict[str, dict] = {}
@@ -1459,6 +1484,7 @@ def build(overrides: dict) -> list[dict]:
         validate_public_path_prefixes(entry)
         validate_cors(entry)
         validate_gateway_rate_limit(entry)
+    apply_ci_resources(entries)
     return entries
 
 
