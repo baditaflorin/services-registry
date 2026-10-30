@@ -13,8 +13,8 @@
 #      hostnames, the TTL is 1 h and the use limit is 2 calls per service plus 50. Nothing here widens any of them;
 #   3. runs verify-examples.py with --api-key-file (the key is never on a command line, in an environment variable of
 #      the check, or in any output);
-#   4. ALWAYS (EXIT/INT/TERM/HUP trap, also when the run fails): revokes the key (`fleet-runner key revoke
-#      examples-verifier` = the most recent active key of that slug, so the key is not on a command line either),
+#   4. ALWAYS (EXIT/INT/TERM/HUP trap, also when the run fails): revokes the key by its key id (`fleet-runner key
+#      revoke kid_...`, read from `key list`: an id is not a secret, so the key is on no command line),
 #      proves the revoked key is refused (HTTP 401) by the gateway and by the service itself, and shreds the files;
 #   5. copies services.examples.json to --out (default: services.examples.json of the checkout this script is in) and
 #      prints ONLY the tally, the services whose replicas diverge, and the states that changed against the file that
@@ -31,7 +31,7 @@
 # Environment: VERIFY_EXAMPLES_BUILDER (ssh target of the Proxmox host, default root@0docker.com),
 #              VERIFY_EXAMPLES_CT (container id of the builder, default 108).
 # Exit: 0 ok; 1 the run or a precondition failed; 2 usage; 3 the key could NOT be shown revoked (it still expires by
-#       itself after 1 h and by its use limit: revoke by hand with `fleet-runner key revoke examples-verifier`).
+#       itself after 1 h and by its use limit: `fleet-runner key list --filter examples-verifier`, then `key revoke <key_id>`).
 # Concurrency: a lock on the builder; a second run stops at once.
 set -euo pipefail
 
@@ -100,6 +100,29 @@ fr() {    # fleet-runner with the keystore environment, in a subshell so the adm
   ( set -a; . "$ENVF"; set +a; export FLEET_SECRETS_URL=https://fleet-secrets.0exec.com; exec fleet-runner "$@" </dev/null )
 }
 
+active_ids() {  # key ids (not secret) of the active keys of the slug, newest first
+  fr key list --json --filter "$SLUG" 2>/dev/null | python3 -I -c '
+import datetime, json, sys
+now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+try:
+    keys = json.load(sys.stdin)
+except ValueError:
+    sys.exit(0)
+act = [k for k in keys if k.get("user") == "examples-verifier" and not k.get("revoked_at") and (k.get("expires_at") or "9") > now]
+for k in sorted(act, key=lambda k: k.get("created_at") or "", reverse=True):
+    print(k["key_id"])
+'
+}
+
+revoke_active() {  # revoke every active key of the slug BY KEY ID (`key revoke <slug>` looks the slug up as a scope: ours is the hostnames)
+  local id rc=0
+  for id in $(active_ids); do
+    fr key revoke "$id" >>"$W/revoke.log" 2>&1 || rc=1
+  done
+  [ -z "$(active_ids)" ] || rc=1
+  return $rc
+}
+
 code() {  # code <url>: HTTP status of a GET with the key from the header file (curl reads -H @file: no key in argv)
   curl -s -o /dev/null -w '%{http_code}' --max-time 30 -H "@$HDRF" "$1" </dev/null 2>/dev/null || true
 }
@@ -113,7 +136,7 @@ cleanup() {
   if [ "$MINTED" = 1 ]; then
     local i
     for i in 1 2 3; do
-      if fr key revoke "$SLUG" >"$W/revoke.log" 2>&1; then revoked=1; break; fi
+      if revoke_active; then revoked=1; break; fi
       sleep "$PAUSE"
     done
     [ -s "$HDRF" ] && HAD_KEY=1
@@ -145,7 +168,7 @@ cleanup() {
   [ -n "$W" ] && [ -d "$W" ] && { find "$W" -type f -exec shred -u {} + 2>/dev/null; rm -rf "$W"; }
   # a key that was never stored (the mint failed) has nothing to prove; a stored one must be shown refused
   if [ "$MINTED" = 1 ] && { [ "$revoked" != 1 ] || { [ "$HAD_KEY" = 1 ] && [ "$proof" != ok ]; }; }; then
-    note "THE KEY IS NOT SHOWN REVOKED: it expires by itself within 1 h; revoke by hand: fleet-runner key revoke $SLUG"
+    note "THE KEY IS NOT SHOWN REVOKED: it expires by itself within 1 h; revoke by hand: fleet-runner key list --filter $SLUG, then fleet-runner key revoke <key_id>"
     exit 3
   fi
   [ "$rc" -ne 0 ] && exit "$rc"
@@ -213,16 +236,7 @@ BEFORE_GW="-"; BEFORE_LAN="-"
 note "targets: $N services, $(tr ',' '\n' <<<"$SCOPE" | wc -l) hostnames in scope, ttl 1h, use limit $LIMIT"
 
 # An active key of this slug is a leftover of a crashed run (the lock is ours): it is revoked before a new one is minted.
-ACTIVE="$(fr key list --json --filter "$SLUG" 2>/dev/null | python3 -I -c '
-import json, sys, datetime
-now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-try:
-    keys = json.load(sys.stdin)
-except ValueError:
-    sys.exit(0)
-print(sum(1 for k in keys if k.get("user") == "examples-verifier" and not k.get("revoked_at") and (k.get("expires_at") or "9") > now))
-')"
-ACTIVE="${ACTIVE:-0}"
+ACTIVE="$(active_ids | wc -l | tr -d ' ')"
 
 if [ "${DRY:-0}" = 1 ]; then
   note "DRY RUN: nothing is minted or run"
@@ -235,13 +249,12 @@ if [ "${DRY:-0}" = 1 ]; then
   exit 0
 fi
 
-while [ "$ACTIVE" -gt 0 ]; do
-  note "revoking a leftover active $SLUG key"
-  fr key revoke "$SLUG" >/dev/null 2>&1 || fail "cannot revoke the leftover $SLUG key"
-  ACTIVE=$(( ACTIVE - 1 ))
-done
+if [ "$ACTIVE" -gt 0 ]; then
+  note "revoking $ACTIVE leftover active $SLUG key(s)"
+  revoke_active || fail "cannot revoke the leftover $SLUG key(s)"
+fi
 
-MINTED=1   # set before the call: a key that was minted but not stored is still revoked by slug
+MINTED=1   # set before the call: a key that was minted but not stored is still found by the keystore list and revoked
 : > "$KEYF"
 fr key issue "$SLUG" --user "$SLUG" --scope "$SCOPE" --ttl 1h --use-limit "$LIMIT" \
    --note "verify-examples-run $(date -u +%FT%TZ) $SHA GET only, read-only use" >"$KEYF" 2>"$W/issue.log" \
