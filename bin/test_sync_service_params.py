@@ -82,9 +82,26 @@ class TestDecide(unittest.TestCase):
         f = F([P("domain", True)], test_url="/?domain=other.org")
         r = self.d(f, "/?domain=example.com")
         self.assertEqual((r["rule"], r["example_path"]), ("a", None))
-        r = self.d(F([P("q", False)], test_url="/?q=zzz"), "/?url=https://example.com")   # nothing required: untouched
+        r = self.d(F([P("q", False)]), "/?url=https://example.com")   # nothing required and no test.url: untouched
+        self.assertEqual((r["rule"], r["example_path"]), ("a", None))
+        r = self.d(F([P("q", False)], test_url="/?q=zzz"), "/?q=other")   # sends a declared param already: untouched
+        self.assertEqual((r["rule"], r["example_path"]), ("a", None))
+        r = self.d(F([P("q", False)], test_url="/health"), "/?url=https://example.com")   # test.url is no example
         self.assertEqual((r["rule"], r["example_path"]), ("a", None))
         self.assertEqual(self.d(F([P("target", True)]), "/go_x?target=a.com")["rule"], "a")  # carried, odd prefix or not
+
+    def test_b_when_nothing_is_required_an_example_that_sends_no_declared_param_gives_way_to_the_test_url(self):
+        # "one of url or origin" is declared with both optional; the category default ?target= made the real service answer 400.
+        f = F([P("url"), P("origin")], test_url="/?url=https://web.dev&api_key=default_token")
+        r = self.d(f, "/?target=example.com")
+        self.assertEqual((r["rule"], r["example_path"]), ("b", "/?url=https://web.dev"))
+        # names are compared without case, dashes or underscores
+        r = self.d(F([P("form_factor")], test_url="/?formFactor=PHONE"), "/?target=a.com")
+        self.assertEqual((r["rule"], r["example_path"]), ("b", "/?formFactor=PHONE"))
+        # a test.url that sends none of the declared params does not replace anything
+        self.assertEqual(self.d(F([P("url")], test_url="/?zzz=1"), "/?target=a.com")["example_path"], None)
+        # a bare example (no query) is left to the hub's own rule
+        self.assertEqual(self.d(F([P("url")], test_url="/?url=https://web.dev"), "/")["rule"], "a")
 
     def test_b_the_sanitised_test_url_when_it_carries_every_required_param(self):
         f = F([P("target", True)], test_url="/t/default_token/go_x?target=https://example.com&api_key=default_token")

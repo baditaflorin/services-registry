@@ -237,6 +237,18 @@ def from_params(facts, required):
     return path + ("?" + "&".join(pairs) if pairs else ""), None
 
 
+def from_declared_test_url(facts, current):
+    """The sanitised test.url when the current example's query names none of the declared params and the test.url's names one."""
+    declared = {norm(p["name"]) for p in facts.get("params") or []}
+    cur = {norm(k) for k in query_of(current)}
+    if not declared or not cur or cur & declared:
+        return None
+    path, _ = from_test_url(facts, [])
+    if path is None or not ({norm(k) for k in query_of(path)} & declared):
+        return None
+    return path
+
+
 def decide(facts, current):
     """What to do with one service's example_path.
 
@@ -244,6 +256,14 @@ def decide(facts, current):
     required = required_query(facts)
     names = [p["name"] for p in required]
     if carries(current or "", names):
+        if not names:
+            # Nothing is marked required (a service that takes "one of url or origin" declares each as optional), so the
+            # example can still be a path that sends none of the declared inputs. On 2026-10-30 a real call showed 5 such
+            # services answering 400 "missing": when the test.url sends a declared input, it replaces that example.
+            alt = from_declared_test_url(facts, current or "")
+            if alt is not None:
+                return {"rule": "b", "example_path": alt, "source": None,
+                        "reason": "example sends none of the declared params; the service's own test.url does"}
         return {"rule": "a", "example_path": None, "source": None,
                 "reason": "already carries every required query param" if names else "no required query param"}
     path, why_b = from_test_url(facts, required)
