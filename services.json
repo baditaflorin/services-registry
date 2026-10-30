@@ -6710,7 +6710,7 @@
     "url": "https://jwt-debugger.0crawl.com",
     "health_url": "https://jwt-debugger.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_jwt_debugger",
-    "example_path": "/go_jwt_debugger?url=https://example.com",
+    "example_path": "/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -6734,7 +6734,8 @@
         "name": "token",
         "required": true,
         "type": "string",
-        "description": "A compact-serialized JWT (header.payload.signature). May also be POSTed as JSON {\"token\":\"...\"}..."
+        "description": "A compact-serialized JWT (header.payload.signature). May also be POSTed as JSON {\"token\":\"...\"}...",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
       },
       {
         "name": "jwks",
@@ -12279,7 +12280,7 @@
     "url": "https://websocket-analyzer.0crawl.com",
     "health_url": "https://websocket-analyzer.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_websocket_analyzer",
-    "example_path": "/?target=https://echo.websocket.events",
+    "example_path": "/?target=https://echo.websocket.org",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -12307,7 +12308,7 @@
         "required": true,
         "type": "string",
         "description": "URL to scan; WebSocket endpoints are discovered from inline JS, same-origin script tags, and...",
-        "example": "https://echo.websocket.events"
+        "example": "https://echo.websocket.org"
       }
     ]
   },
@@ -14565,7 +14566,7 @@
     "url": "https://fleet-cert-watch.0exec.com",
     "health_url": "https://fleet-cert-watch.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/fleet-cert-watch",
-    "example_path": "/",
+    "example_path": "/certs",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -18179,7 +18180,7 @@
     "url": "https://ocr-pdf.0exec.com",
     "health_url": "https://ocr-pdf.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/ocr-pdf",
-    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
+    "example_path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -18213,7 +18214,7 @@
     "url": "https://ocr-pdf-express.0exec.com",
     "health_url": "https://ocr-pdf-express.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/ocr-pdf-express",
-    "example_path": "/?url=https://www.africau.edu/images/default/sample.pdf",
+    "example_path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
