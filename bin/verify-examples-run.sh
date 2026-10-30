@@ -95,6 +95,10 @@ HDRF=""
 MINTED=0
 HAD_KEY=0
 PYPID=""
+PROOF_GW=""
+PROOF_LAN=""
+BEFORE_GW="-"
+BEFORE_LAN="-"
 RUN_RC=1
 note() { echo "[builder] $*" >&2; }
 fail() { note "ERROR: $*"; exit 1; }
@@ -221,24 +225,22 @@ hosts = sorted({urlsplit(s["url"]).netloc for s in targets if str(s.get("url", "
 n = len(targets)
 open(w + "/scope", "w").write(",".join(hosts))
 open(w + "/count", "w").write(str(n))
-# the service with the shortest example path that is reachable both ways, for the revocation proof
+# candidates for the revocation proof: the services with the shortest example path that are reachable both ways (the
+# first one whose control call is not refused is used; some services are gated and refuse any key)
 cand = [s for s in targets if str(s.get("example_path", "")).startswith("/") and s.get("host_port")
         and s.get("runtime") == "compose" and str(s.get("url", "")).startswith("https://")]
 cand.sort(key=lambda s: (len(s["example_path"]), s["id"]))
 first_lan = (direct.split(",")[0] if direct else "10.10.10.20")
-if cand:
-    s = cand[0]
-    open(w + "/proof_gw", "w").write("https://%s%s" % (urlsplit(s["url"]).netloc, s["example_path"]))
-    open(w + "/proof_lan", "w").write("http://%s:%d%s" % (first_lan, int(s["host_port"]), s["example_path"]))
+with open(w + "/proof_pairs", "w") as f:
+    for s in cand[:15]:
+        f.write("https://%s%s http://%s:%d%s\n" % (urlsplit(s["url"]).netloc, s["example_path"], first_lan, int(s["host_port"]), s["example_path"]))
 PYEOF
 [ -s "$W/count" ] || fail "cannot compute the targets (see the error above)"
 N="$(cat "$W/count")"
 SCOPE="$(cat "$W/scope")"
 [ "$N" -ge 1 ] || fail "no service to check"
 LIMIT=$(( N * 2 + 50 ))
-PROOF_GW="$(cat "$W/proof_gw" 2>/dev/null || true)"; PROOF_LAN="$(cat "$W/proof_lan" 2>/dev/null || true)"
-[ -n "$PROOF_GW" ] && [ -n "$PROOF_LAN" ] || fail "no service to prove the revocation with"
-BEFORE_GW="-"; BEFORE_LAN="-"
+[ -s "$W/proof_pairs" ] || fail "no service to prove the revocation with"
 note "targets: $N services, $(tr ',' '\n' <<<"$SCOPE" | wc -l) hostnames in scope, ttl 1h, use limit $LIMIT"
 
 # An active key of this slug is a leftover of a crashed run (the lock is ours): it is revoked before a new one is minted.
@@ -249,7 +251,8 @@ if [ "${DRY:-0}" = 1 ]; then
   note "active $SLUG keys now: $ACTIVE (a real run revokes them first)"
   note "would mint: fleet-runner key issue $SLUG --user $SLUG --scope <$(tr ',' '\n' <<<"$SCOPE" | wc -l) hostnames> --ttl 1h --use-limit $LIMIT"
   note "would run:  verify-examples.py --services <$REF:services.json> --api-key-file <key> ${DIRECT:+--direct-hosts $DIRECT }${ONLY:+--only $ONLY}"
-  note "revocation proof would use: gateway $(sed 's#^\(https://[^/]*\).*#\1#' <<<"$PROOF_GW") and service $(sed 's#^\(http://[^/]*\).*#\1#' <<<"$PROOF_LAN")"
+  read -r PG PL < "$W/proof_pairs"
+  note "revocation proof: the first of $(wc -l < "$W/proof_pairs" | tr -d ' ') candidates whose control call is accepted, starting with gateway $(sed 's#^\(https://[^/]*\).*#\1#' <<<"$PG") and service $(sed 's#^\(http://[^/]*\).*#\1#' <<<"$PL")"
   trap - EXIT
   [ -n "$W" ] && rm -rf "$W"
   exit 0
@@ -275,8 +278,16 @@ PYEOF
 printf 'X-API-Key: %s\n' "$(tr -d '\n' < "$KEYF")" > "$HDRF"
 note "key minted (user $SLUG, ttl 1h, use limit $LIMIT); it is shown nowhere"
 
-BEFORE_GW="$(code "$PROOF_GW")"; BEFORE_LAN="$(code "$PROOF_LAN")"
-note "control before the run: gateway $BEFORE_GW, service $BEFORE_LAN (a 401 here makes that side's proof worthless)"
+# The control: a service where the fresh key is accepted on at least one side (a 401 on a side makes that side's proof worthless).
+while read -r gw lan; do
+  bg="$(code "$gw")"; bl="$(code "$lan")"
+  if [ "$bg" != 401 ] || [ "$bl" != 401 ]; then PROOF_GW="$gw"; PROOF_LAN="$lan"; BEFORE_GW="$bg"; BEFORE_LAN="$bl"; break; fi
+done < "$W/proof_pairs"
+if [ -z "$PROOF_GW" ]; then
+  note "WARNING: no candidate accepted the fresh key on either side: the revocation cannot be proven (the key is still revoked)"
+  PROOF_GW="$gw"; PROOF_LAN="$lan"; BEFORE_GW="$bg"; BEFORE_LAN="$bl"
+fi
+note "control before the run: gateway $BEFORE_GW, service $BEFORE_LAN (a 401 on a side makes that side's proof worthless)"
 
 note "running verify-examples.py"
 # In the background and waited for: bash runs a trap only after a foreground command ends, and a TERM must revoke at once.

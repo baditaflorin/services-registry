@@ -54,7 +54,8 @@ esac
 CURL = r"""#!/bin/sh
 # fake curl for the proof: -H @file carries the key; 401 once the fake keystore revoked it
 echo "curl $*" >> "$FAKE_STATE/argv.log"
-hdr=""; while [ $# -gt 0 ]; do [ "$1" = -H ] && hdr="$2"; shift; done
+url=""; hdr=""; while [ $# -gt 0 ]; do [ "$1" = -H ] && hdr="$2"; url="$1"; shift; done
+case "$url" in *refused-service*) printf 401; exit 0 ;; esac
 [ -n "$hdr" ] && [ -s "${hdr#@}" ] || { printf 000; exit 0; }
 if [ -e "$FAKE_STATE/revoked" ] && [ ! -e "$FAKE_STATE/still-accepted" ]; then printf 401; else printf 200; fi
 """
@@ -223,6 +224,17 @@ class TestRunScript(unittest.TestCase):
         (self.shims / "curl").write_text(curl)
         self.assertEqual(self.run_remote(), 0, self.err)
         self.assertIn("refusal is ok", self.err)
+
+    def test_the_proof_skips_a_gated_service_that_refuses_the_fresh_key(self):
+        reg = json.loads((self.repo / "services.json").read_text())
+        reg[0]["example_path"] = "/?q=refused-service"       # the shortest-path candidate is the one that refuses any key
+        reg[1]["example_path"] = "/?q=2-and-longer"
+        (self.repo / "services.json").write_text(json.dumps(reg))
+        subprocess.run(["git", "-C", str(self.repo), "-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qam", "gated"], check=True)
+        subprocess.run(["git", "-C", str(self.repo), "update-ref", "refs/remotes/origin/main", "HEAD"], check=True)
+        self.assertEqual(self.run_remote(), 0, self.err)
+        self.assertIn("refusal is ok", self.err)
+        self.assertIn("control before the run: gateway 200, service 200", self.err)
 
     def test_a_failed_mint_asks_the_keystore_for_active_keys_and_runs_nothing(self):
         (self.state / "mint-fails").touch()
