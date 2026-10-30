@@ -136,7 +136,8 @@ class TestRunScript(unittest.TestCase):
     def run_remote(self, *args, timeout=60, signal_when_hit=None):
         env = dict(os.environ, PATH=f"{self.shims}:{os.environ['PATH']}", FAKE_STATE=str(self.state),
                    VERIFY_EXAMPLES_REPO=str(self.repo), VERIFY_EXAMPLES_ENVFILE=str(self.tmp / "env"),
-                   VERIFY_EXAMPLES_WORKBASE=str(self.work), VERIFY_EXAMPLES_LOCKFILE=str(self.tmp / "lock"), VERIFY_EXAMPLES_PAUSE="0.1")
+                   VERIFY_EXAMPLES_WORKBASE=str(self.work), VERIFY_EXAMPLES_LOCKFILE=str(self.tmp / "lock"), VERIFY_EXAMPLES_PAUSE="0.1",
+                   VERIFY_EXAMPLES_PROOF_WAIT="3", VERIFY_EXAMPLES_PROOF_STEP="0.2")
         script = self.remote_script("--direct-hosts", "127.0.0.1", *args)
         (self.tmp / "remote.sh").write_text(script)
         with open(self.tmp / "remote.sh") as stdin:                         # stdin is the script, as with `ssh ... bash -s`
@@ -214,7 +215,16 @@ class TestRunScript(unittest.TestCase):
         self.assertEqual(self.run_remote(), 3)
         self.assertIn("unproven", self.err)
 
-    def test_a_failed_mint_is_revoked_by_slug_and_runs_nothing(self):
+    def test_a_refusal_that_shows_late_because_of_the_gateway_cache_is_still_a_proof(self):
+        # the fake curl keeps answering 200 for the first 2 calls after the revoke, then 401
+        curl = (self.shims / "curl").read_text().replace(
+            'if [ -e "$FAKE_STATE/revoked" ]',
+            'if [ -e "$FAKE_STATE/revoked" ] && [ "$(wc -l < "$FAKE_STATE/after" 2>/dev/null || echo 0)" -lt 4 ] && echo x >> "$FAKE_STATE/after"; then printf 200; elif [ -e "$FAKE_STATE/revoked" ]')
+        (self.shims / "curl").write_text(curl)
+        self.assertEqual(self.run_remote(), 0, self.err)
+        self.assertIn("refusal is ok", self.err)
+
+    def test_a_failed_mint_asks_the_keystore_for_active_keys_and_runs_nothing(self):
         (self.state / "mint-fails").touch()
         rc = self.run_remote()
         self.assertEqual(rc, 1)
