@@ -15,7 +15,8 @@
 #      the check, or in any output);
 #   4. ALWAYS (EXIT/INT/TERM/HUP trap, also when the run fails): revokes the key by its key id (`fleet-runner key
 #      revoke kid_...`, read from `key list`: an id is not a secret, so the key is on no command line),
-#      proves the revoked key is refused (HTTP 401) by the gateway and by the service itself, and shreds the files;
+#      proves the revoked key is refused (HTTP 401) by the gateway or by the service itself (polling up to 150 s: the
+#      gateway caches a verified key for 60 s), and shreds the files;
 #   5. copies services.examples.json to --out (default: services.examples.json of the checkout this script is in) and
 #      prints ONLY the tally, the services whose replicas diverge, and the states that changed against the file that
 #      was there before. Never the key.
@@ -84,7 +85,9 @@ umask 077
 REPO="${VERIFY_EXAMPLES_REPO:-/root/workspace/services-registry}"   # the overrides are for the tests; nothing sets them on the builder
 ENVF="${VERIFY_EXAMPLES_ENVFILE:-/root/.fleet-runner.env}"
 LOCKF="${VERIFY_EXAMPLES_LOCKFILE:-/root/.verify-examples.lock}"
-PAUSE="${VERIFY_EXAMPLES_PAUSE:-3}"   # seconds between revoke / proof retries
+PAUSE="${VERIFY_EXAMPLES_PAUSE:-3}"   # seconds between revoke retries
+PROOF_WAIT="${VERIFY_EXAMPLES_PROOF_WAIT:-150}"   # how long the refusal of the revoked key may take to show (gateway verify cache: 60 s)
+PROOF_STEP="${VERIFY_EXAMPLES_PROOF_STEP:-5}"
 SLUG=examples-verifier
 W=""
 KEYF=""
@@ -142,13 +145,16 @@ cleanup() {
     [ -s "$HDRF" ] && HAD_KEY=1
     if [ "$revoked" = 1 ] && [ "$HAD_KEY" = 1 ]; then
       proof="unproven"
-      local tries after_gw after_lan
-      for tries in 1 2 3 4 5 6; do
+      # The gateway caches a verified key for 60 s (conf.d/_verify_cache.conf: proxy_cache_valid 200 60s), so the first
+      # answers after the revoke can still be 200: poll until the refusal shows, or give up after PROOF_WAIT seconds.
+      local after_gw after_lan deadline=$(( SECONDS + PROOF_WAIT ))
+      while :; do
         after_gw="$(code "$PROOF_GW")"; after_lan="$(code "$PROOF_LAN")"
         if { [ "$BEFORE_GW" != 401 ] && [ "$after_gw" = 401 ]; } || { [ "$BEFORE_LAN" != 401 ] && [ "$after_lan" = 401 ]; }; then
           proof="ok"; break
         fi
-        sleep "$PAUSE"
+        [ "$SECONDS" -ge "$deadline" ] && break
+        sleep "$PROOF_STEP"
       done
       note "revoked key: gateway $BEFORE_GW -> ${after_gw:-?}, service $BEFORE_LAN -> ${after_lan:-?}: refusal is $proof"
     elif [ "$revoked" != 1 ]; then
