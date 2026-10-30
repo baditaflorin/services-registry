@@ -18,7 +18,10 @@ class TestClassify(unittest.TestCase):
         self.assertEqual(c(302, ""), "ok")
         self.assertEqual(c(401, ""), "gated")
         self.assertEqual(c(403, ""), "gated")
+        self.assertEqual(c(404, "404 page not found\n"), "not-found")
         self.assertEqual(c(404, ""), "not-found")
+        self.assertEqual(c(404, '{"status":"no_data","error":{"code":404}}'), "no-data")
+        self.assertEqual(c(404, "[1]"), "not-found")
         self.assertEqual(c(405, ""), "method")
         self.assertEqual(c(500, ""), "error")
         self.assertEqual(c(429, ""), "error")
@@ -33,6 +36,23 @@ class TestClassify(unittest.TestCase):
 
 SVC = {"id": "x", "kind": "container", "runtime": "compose", "host_port": 8123, "url": "https://x.0crawl.com",
        "example_path": "/?q=cats"}
+
+
+class TestDetail(unittest.TestCase):
+    def test_detail_names_the_reason(self):
+        self.assertEqual(ve.detail('{"status":"error","error":{"code":400,"message":"missing required query parameter \'q\'"}}'),
+                         "missing required query parameter 'q'")
+        self.assertEqual(ve.detail('{"error":"blocked"}'), "blocked")
+        self.assertEqual(ve.detail("404 page not found\n"), "404 page not found")
+        self.assertEqual(len(ve.detail("x" * 500)), 120)
+        self.assertEqual(ve.detail(""), "")
+
+    def test_only_a_failed_call_carries_a_detail(self):
+        with mock.patch.object(ve, "fetch", return_value=(200, "{}", "")):
+            self.assertNotIn("detail", ve.probe(SVC, 5, "k", ("h",))[1])
+        with mock.patch.object(ve, "fetch", return_value=(404, '{"status":"no_data"}', "")):
+            r = ve.probe(SVC, 5, "k", ("h",))[1]
+        self.assertEqual((r["state"], r["detail"]), ("no-data", "no_data"))
 
 
 class TestProbe(unittest.TestCase):
