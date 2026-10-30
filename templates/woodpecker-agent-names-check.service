@@ -5,11 +5,13 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-# root: the token files are root-managed; the check only reads
+# root: the token files are root-managed. --repair restores an emptied agent name from the remembered one (state below)
 ExecStart=/usr/bin/python3 /usr/local/libexec/woodpecker-agent-names-check \
   --plane ci.0exec,https://ci.0exec.com,/etc/woodpecker-load-controller/ci.0exec.token,/etc/woodpecker-load-controller/ci.0exec.json \
   --plane ci.0mcp,https://ci.0mcp.com,/etc/woodpecker-load-controller/token,/etc/woodpecker-load-controller/ci.0mcp.json \
+  --repair --state /var/lib/woodpecker-agent-names/state.json \
   --output /var/lib/prometheus-node-exporter/textfile/woodpecker-agent-names.prom
+StateDirectory=woodpecker-agent-names
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true

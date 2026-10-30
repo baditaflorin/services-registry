@@ -448,6 +448,12 @@ node and stops managing its slots (on 2026-10-28 eight infer, 0own and 0mcp agen
 PATCHes an agent must send `name` and `no_schedule` (the controller also sends `custom_labels`, as a safeguard). fleet-runner's `UpdateAgent`
 already sends the name.
 
+**Self-heal (2026-10-30).** The service runs the check with `--repair --state /var/lib/woodpecker-agent-names/state.json`: it remembers each agent's
+name by id and, when a record's name is empty, PATCHes the remembered name back (with the record's own `no_schedule` and labels, so a caller's
+drain stays). A wipe is undone within a minute. `woodpecker_agent_names_repaired_total` counts restores: a rise means some caller still PATCHes
+without a name (found 2026-10-30 in the nginx access log on VM104: `curl/8.5.0` calls from inside CT108 that pause and unpause agents around
+docker or slot changes, with a body that has no `name`). An agent whose name was never seen stays unnamed and alerts.
+
 `bin/woodpecker_agent_names_check.py` (install: `templates/woodpecker-agent-names-check.{service,timer}`, one run a minute on the controller host)
 writes `woodpecker_agents_unnamed`, `woodpecker_agents_without_labels`, `woodpecker_load_controller_missing_agents{node}` and
 `woodpecker_agent_names_check_up` per plane to the node-exporter textfile directory. The alerts are in proxmox_florin_server
