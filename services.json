@@ -15342,6 +15342,7 @@
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
+    "placement": "pinned",
     "host_port": 18143,
     "container_port": 18143,
     "depends_on": [
@@ -21964,6 +21965,7 @@
     },
     "auth_help": "no auth",
     "cert_domain": "wildcard.scrapetheworld.org",
+    "placement": "pinned",
     "host_port": 18023,
     "container_port": 8080,
     "proxy_read_timeout": "120s",
