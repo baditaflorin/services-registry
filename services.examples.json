@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-30T13:14:19Z",
+  "checked_at": "2026-10-30T15:06:53Z",
   "services": {
     "a11y-quick": {
       "path": "/?target=example.com",
@@ -813,12 +813,11 @@
     },
     "domain-open-source-presence": {
       "path": "/?url=https://grafana.com",
-      "http": 502,
-      "state": "error",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 2268,
-      "error": "",
-      "detail": "error"
+      "ms": 189,
+      "error": ""
     },
     "domain-pagination-rel": {
       "path": "/?domain=en.wikipedia.org",
@@ -1939,17 +1938,16 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 552,
+      "ms": 1192,
       "error": ""
     },
     "ocr-pdf-express": {
       "path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-      "http": 500,
-      "state": "error",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 702,
-      "error": "",
-      "detail": "OCR processing failed: 1 page already has text! - rasterizing text and running OCR anyway 1 [tesseract] Error opening da"
+      "ms": 2435,
+      "error": ""
     },
     "office-locations": {
       "path": "/?target=example.com",
