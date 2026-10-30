@@ -21,21 +21,33 @@ BASH = shutil.which("bash")
 GIT = shutil.which("git")
 
 FLEET_RUNNER = r"""#!/bin/sh
-# fake keystore: state in $FAKE_STATE
+# fake keystore: state in $FAKE_STATE. Like the real one, `key revoke <slug>` looks a SCOPE up (ours is the hostnames,
+# so a slug finds nothing); `key revoke kid_...` works.
 echo "fleet-runner $*" >> "$FAKE_STATE/argv.log"
 [ "$1" = key ] || exit 2
 case "$2" in
   issue)
     [ -e "$FAKE_STATE/mint-fails" ] && { echo "mint refused" >&2; exit 1; }
-    k="FAKEKEY$(date +%s%N)"; echo "$k" > "$FAKE_STATE/key"; rm -f "$FAKE_STATE/revoked"
+    k="FAKEKEY$(date +%s)$$"; echo "$k" > "$FAKE_STATE/key"; rm -f "$FAKE_STATE/revoked"; touch "$FAKE_STATE/minted"
     echo "issued kid_test prefix=${k%????????????}" >&2; printf '%s\n' "$k" ;;
   revoke)
     [ -e "$FAKE_STATE/revoke-fails" ] && { echo "keystore down" >&2; exit 1; }
-    touch "$FAKE_STATE/revoked"; echo "revoked $3" >&2 ;;
+    case "$3" in
+      kid_test) touch "$FAKE_STATE/revoked"; echo "revoked kid_test" ;;
+      kid_old) touch "$FAKE_STATE/leftover-revoked"; echo "revoked kid_old" ;;
+      kid_*) echo "no-op: $3 was already revoked or unknown" ;;
+      *) echo "no active key found for scope \"$3\"" >&2; exit 1 ;;
+    esac ;;
   list)
+    rows=""
     if [ -e "$FAKE_STATE/leftover" ] && [ ! -e "$FAKE_STATE/leftover-revoked" ]; then
-      echo '[{"user":"examples-verifier","key_id":"kid_old","revoked_at":"","expires_at":"2999-01-01T00:00:00Z"}]'
-    else echo '[]'; fi ;;
+      rows='{"user":"examples-verifier","key_id":"kid_old","created_at":"2026-10-29T00:00:00Z","revoked_at":"","expires_at":"2999-01-01T00:00:00Z"}'
+    fi
+    if [ -e "$FAKE_STATE/minted" ] && [ ! -e "$FAKE_STATE/revoked" ]; then
+      [ -n "$rows" ] && rows="$rows,"
+      rows="$rows"'{"user":"examples-verifier","key_id":"kid_test","created_at":"2026-10-30T00:00:00Z","revoked_at":"","expires_at":"2999-01-01T00:00:00Z","key":""}'
+    fi
+    echo "[$rows]" ;;
 esac
 """
 
@@ -63,11 +75,14 @@ class Service(BaseHTTPRequestHandler):
             Service.release.wait(30)
         ok = self.headers.get("X-API-Key", "") == Path(Service.key_file).read_text().strip()
         body = b'{"ok":true}' if ok else b'{"error":"denied"}'
-        self.send_response(200 if ok else 401)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.send_response(200 if ok else 401)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError):                     # the check was killed on purpose
+            pass
 
     def log_message(self, *a):
         pass
@@ -156,7 +171,8 @@ class TestRunScript(unittest.TestCase):
         doc = json.loads(self.out.split("===VERIFY-EXAMPLES-JSON-BEGIN===\n")[1].split("===VERIFY-EXAMPLES-JSON-END===")[0])
         self.assertEqual({k: v["state"] for k, v in doc["services"].items()}, {"svc-a": "ok", "svc-b": "ok"})
         log = self.argv_log()
-        self.assertIn("fleet-runner key revoke examples-verifier", log)
+        self.assertIn("fleet-runner key revoke kid_test", log)                # by key id: a slug would find no scope
+        self.assertNotIn("key revoke examples-verifier", log)
         self.assertIn("--ttl 1h --use-limit 54", log)                       # 2 services * 2 + 50
         scope = log.split("--scope ")[1].split(" ")[0]
         self.assertEqual(scope, "svc-a.example.test,svc-b.example.test")
@@ -202,19 +218,15 @@ class TestRunScript(unittest.TestCase):
         (self.state / "mint-fails").touch()
         rc = self.run_remote()
         self.assertEqual(rc, 1)
-        self.assertIn("key revoke examples-verifier", self.argv_log())      # minted-or-not, the slug is revoked
+        self.assertIn("key list", self.argv_log())                          # minted-or-not, the keystore is asked for active keys
         self.assertNotIn("===VERIFY-EXAMPLES-JSON-BEGIN===", self.out)
         self.assertEqual(list(self.work.iterdir()), [])
 
     def test_a_leftover_active_key_is_revoked_before_minting(self):
         (self.state / "leftover").touch()
-        # the shim's list keeps showing the leftover until a revoke ran: emulate by flipping after the first revoke
-        orig = (self.shims / "fleet-runner").read_text().replace(
-            "revoke)\n", "revoke)\n    touch \"$FAKE_STATE/leftover-revoked\"\n")
-        (self.shims / "fleet-runner").write_text(orig)
         self.assertEqual(self.run_remote(), 0, self.err)
         log = self.argv_log().splitlines()
-        first_revoke = next(i for i, l in enumerate(log) if "key revoke" in l)
+        first_revoke = next(i for i, l in enumerate(log) if "key revoke kid_old" in l)
         mint = next(i for i, l in enumerate(log) if "key issue" in l)
         self.assertLess(first_revoke, mint)
         self.assertIn("leftover", self.err)
