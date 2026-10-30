@@ -72,6 +72,63 @@ class TestParamValue(unittest.TestCase):
         self.assertFalse(ssp.is_secretish("target", "https://example.com"))
 
 
+class TestPublicSampleJwt(unittest.TestCase):
+    """Exactly one JWT may be stored: the jwt.io sample (HS256, John Doe, secret `your-256-bit-secret`). Every other JWT-shaped value stays refused."""
+    SAMPLE = ssp.PUBLIC_SAMPLE_JWT
+    ONE = SAMPLE.split(".")
+
+    def test_the_constant_is_the_documented_sample_and_verifies_with_its_published_secret(self):
+        import base64
+        import hashlib
+        import hmac
+
+        def unb64(s):
+            return base64.urlsafe_b64decode(s + "=" * (-len(s) % 4))
+
+        head, payload, sig = self.ONE
+        self.assertEqual(json.loads(unb64(head)), {"alg": "HS256", "typ": "JWT"})
+        self.assertEqual(json.loads(unb64(payload)), {"sub": "1234567890", "name": "John Doe", "iat": 1516239022})
+        mac = hmac.new(b"your-256-bit-secret", f"{head}.{payload}".encode(), hashlib.sha256).digest()
+        self.assertEqual(unb64(sig), mac)
+
+    def test_the_sample_as_a_whole_value_is_not_secretish(self):
+        self.assertFalse(ssp.is_secretish("token", self.SAMPLE))
+        self.assertFalse(ssp.is_secretish("jwt", self.SAMPLE))
+        self.assertEqual(ssp.param_value({"name": "token", "required": True, "example": self.SAMPLE}), (self.SAMPLE, "example"))
+
+    def test_every_other_jwt_shaped_value_is_still_refused(self):
+        head, payload, sig = self.ONE
+        other = [
+            "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",   # other header + payload
+            f"{head}.{payload}.{sig[:-1]}X",                                                                   # one character off
+            f"{head}.{payload}.",                                                                              # unsigned form
+            f"{head}.{payload}.{sig}x",                                                                        # sample plus a suffix
+            f"{head}.{payload}.{sig}.{sig}",
+            f"Bearer {self.SAMPLE}",                                                                           # sample inside another value
+            f"x={self.SAMPLE}",
+            f"{self.SAMPLE} eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",                                         # sample next to another JWT
+            "eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",                                                         # RFC 7519 alg=none sample
+        ]
+        for v in other:
+            self.assertTrue(ssp.is_secretish("token", v), v)
+            self.assertIsNone(ssp.param_value({"name": "token", "required": True, "example": v})[0], v)
+
+    def test_a_credential_named_param_never_takes_the_sample(self):
+        for name in ("api_key", "secret", "password", "access_token", "authorization", "private_key"):
+            self.assertTrue(ssp.is_secretish(name, self.SAMPLE), name)
+            self.assertIsNone(ssp.param_value({"name": name, "required": True, "example": self.SAMPLE})[0], name)
+
+    def test_the_sample_travels_through_a_test_url_and_the_example_params_but_a_neighbour_jwt_does_not(self):
+        f = F([P("token", True)], test_url=f"/t/default_token/?token={self.SAMPLE}")
+        self.assertEqual(ssp.from_test_url(f, ssp.required_query(f)), (f"/?token={self.SAMPLE}", None))
+        bad = F([P("token", True)], test_url="/t/default_token/?token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+        self.assertIsNone(ssp.from_test_url(bad, ssp.required_query(bad))[0])
+        self.assertEqual(ssp.registry_params(f, f"/?token={self.SAMPLE}")[0]["example"], self.SAMPLE)
+        self.assertNotIn("example", ssp.registry_params(bad, "/?token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")[0])
+        # an example that already carries the sample is kept (rule a), so a second run changes nothing
+        self.assertEqual(ssp.decide(f, f"/?token={self.SAMPLE}")["rule"], "a")
+
+
 class TestDecide(unittest.TestCase):
     """The rules in the order the task fixed them."""
 

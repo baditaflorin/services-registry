@@ -3828,6 +3828,7 @@
     "spiffe_workload": true
   },
   "fleet-cert-watch": {
+    "example_path": "/certs",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
@@ -5813,14 +5814,14 @@
   },
   "jwt-debugger": {
     "params": [
-      {"name": "token", "required": true, "type": "string", "description": "A compact-serialized JWT (header.payload.signature). May also be POSTed as JSON {\"token\":\"...\"}..."},
+      {"name": "token", "required": true, "type": "string", "description": "A compact-serialized JWT (header.payload.signature). May also be POSTed as JSON {\"token\":\"...\"}...", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"},
       {"name": "jwks", "required": false, "type": "string", "description": "Optional JWKS URL for signature verification. SSRF-guarded; private/loopback hosts are rejected."},
       {"name": "expected_iss", "required": false, "type": "string", "description": "If set, asserts the token's iss claim equals this value; mismatch produces a HIGH finding."},
       {"name": "expected_aud", "required": false, "type": "string", "description": "If set, asserts the token's aud claim contains this value; mismatch produces a HIGH finding."}
     ],
     "container_port": 8202,
     "description": "Microservice for Jwt Debugger",
-    "example_path": "/go_jwt_debugger?url=https://example.com",
+    "example_path": "/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
     "host_port": 8202,
     "placement": "replicable",
     "trl": 6,
@@ -6535,6 +6536,7 @@
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass) of this local-first academic-writing workbench. Verified privacy claim true via live browser network trace on a production build (zero external requests during normal use). Independently fuzz-tested the PDF line-wrapping algorithm against 500 random paragraphs using real pdf-lib font metrics (not the test suite's mocked measure) -- no overflow, no dropped content. Found and fixed a real bug: escapeLatex() only escaped 4 of 10 LaTeX special characters, so ordinary academic text ('O(n^2)', 'cost $5', 'dataset #1') produced a .tex export that fails to compile, undermining the app's 'submission-ready' claim. Fixed with a single-pass regex covering all special characters (avoiding a double-escape trap from naive chained replaceAll calls). Live-tested autosave survives a hard reload. trl bumped 3->4; trl_ceiling=5 pending real TeX-engine compilation testing of the export pipeline. See github.com/baditaflorin/numen PR #16 (merged)."
   },
   "ocr-pdf": {
+    "example_path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     "version": "0.1.2",
     "env": {
       "GRAPH_ENABLED": "true",
@@ -6553,6 +6555,7 @@
     "trl_evidence": "First-pass audit (Fastify + pdf-parse + shelling out to ocrmypdf): found the service was completely non-functional end-to-end, every issue reproduced locally before fixing. (1) The server couldn't boot at all -- 3 fastify plugins pinned to fastify-4-only majors after a prior commit bumped fastify itself to 5.x, every start threw a plugin-version-mismatch and silently exited (fastify's default logger is a no-op, zero log output). (2) OCR never actually ran -- the Dockerfile never installed ocrmypdf/tesseract/ghostscript, every request silently returned a fake 200 success with empty text. (3) The POST upload path was completely dead due to a routing bug. (4) --force-ocr destroyed good text layers (verified byte-for-byte). (5) Encrypted/corrupted PDFs and OCR failures silently swallowed into fake 200 success. (6) No OCR timeout -- a scan could hang indefinitely. (7) A real path-traversal vulnerability via upload filename that could have overwritten the service's own code, since the container chowns to the same user running the process. (8) Docker's own HEALTHCHECK was a no-op that would report healthy even while crash-looping. 13 of 17 dependency CVEs fixed. Non-Latin-script OCR mojibake documented as a ceiling driver, not fixed. Added a real integration test suite exercising all of this over HTTP against actual OCR fixtures. trl was a stale scaffold placeholder at 4, bumped to 6; trl_ceiling=7 added -- hardcoded single-language OCR with no failure signal, and an unmaintained ~2016-vintage bundled pdf.js showing real fragility, both structural. See PR #1 (merged)."
   },
   "ocr-pdf-express": {
+    "example_path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     "version": "0.2.0",
     "container_port": 5500,
     "description": "Express-based OCR / PDF (?url=)",
@@ -10172,7 +10175,7 @@
   },
   "websocket-analyzer": {
     "params": [
-      {"name": "target", "required": true, "type": "string", "description": "URL to scan; WebSocket endpoints are discovered from inline JS, same-origin script tags, and...", "example": "https://echo.websocket.events"}
+      {"name": "target", "required": true, "type": "string", "description": "URL to scan; WebSocket endpoints are discovered from inline JS, same-origin script tags, and...", "example": "https://echo.websocket.org"}
     ],
     "env": {
       "GRAPH_ENABLED": "true",
@@ -10181,7 +10184,7 @@
     },
     "container_port": 8334,
     "description": "Microservice for Websocket Analyzer",
-    "example_path": "/?target=https://echo.websocket.events",
+    "example_path": "/?target=https://echo.websocket.org",
     "host_port": 8334,
     "placement": "replicable",
     "trl": 7,

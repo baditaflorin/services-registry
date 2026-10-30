@@ -20,7 +20,9 @@ rather than another dry-run as the only gate.
 """
 from __future__ import annotations
 
+import importlib.util
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -960,6 +962,11 @@ class TestRegistryFilesAgree(unittest.TestCase):
                 mismatches.append(f"{service_id}: services.json {entry.get('version')!r}, overrides.json {want!r}")
         self.assertEqual(mismatches, [], "set the version in overrides.json and run bin/generate.py --only <ids>")
 
+_ssp_spec = importlib.util.spec_from_file_location("sync_service_params", Path(__file__).resolve().parent / "sync-service-params.py")
+_ssp = importlib.util.module_from_spec(_ssp_spec)
+_ssp_spec.loader.exec_module(_ssp)
+PUBLIC_SAMPLE_JWT = _ssp.PUBLIC_SAMPLE_JWT
+
 _ALLOW_BODY = "POST-only service: its required params are the JSON request body, a GET link cannot carry them"
 _ALLOW_PATH = "the required param is a {placeholder} of the endpoint's path, not a query param"
 _ALLOW_NO_SAFE = "a required param with no safe example value (a credential, or an id nobody can guess)"
@@ -984,7 +991,7 @@ class TestParamsAndExamples(unittest.TestCase):
             "pentest-orchestrator", "pentest-rate-coordinator", "pentest-scope-guard", "pentest-submit-bot",
             "pentest-triager-listener", "pentest-trufflehog", "pentest-walkthrough")]
         + [(i, _ALLOW_PATH) for i in ("fleet-dig", "fleet-payload-corpus", "fleet-persona", "fleet-secrets")]
-        + [(i, _ALLOW_NO_SAFE) for i in ("jwt-debugger", "pentest-asset-scope-resolver", "pentest-payloads")]
+        + [(i, _ALLOW_NO_SAFE) for i in ("pentest-asset-scope-resolver", "pentest-payloads")]
     )
 
     @staticmethod
@@ -1026,8 +1033,22 @@ class TestParamsAndExamples(unittest.TestCase):
         examples = json.dumps([e.get("example_path") for e in self.services])
         self.assertNotRegex(examples, r"(?i)api_?key=|/t/[^/\"]+/")        # the hub adds the caller's key at click time
         declared = json.dumps([e.get("params") for e in self.services])
-        self.assertNotRegex(declared, r"eyJ[\w-]{5,}\.[\w-]{5,}\.[\w-]{10,}|sk_live_|sk_test_|\bfb_[a-z0-9]{20,}|\b[a-f0-9]{40,}\b")
+        # the jwt.io sample JWT is the one documented public value that may appear (bin/sync-service-params.py PUBLIC_SAMPLE_JWT)
+        self.assertNotRegex(declared.replace(PUBLIC_SAMPLE_JWT, ""),
+                            r"eyJ[\w-]{5,}\.[\w-]{5,}\.[\w-]{10,}|sk_live_|sk_test_|\bfb_[a-z0-9]{20,}|\b[a-f0-9]{40,}\b")
         self.assertIsNone(generate.assert_no_secrets(self.services))
+
+    def test_jwt_debugger_example_is_the_public_sample_and_it_is_the_only_jwt_in_any_declared_param(self):
+        by_id = {e["id"]: e for e in self.services}
+        e = by_id["jwt-debugger"]
+        self.assertEqual(e["example_path"], "/?token=" + PUBLIC_SAMPLE_JWT)
+        self.assertEqual(self.missing_required(e), [])
+        token = next(p for p in e["params"] if p["name"] == "token")
+        self.assertEqual(token["example"], PUBLIC_SAMPLE_JWT)
+        jwt_shaped = re.compile(r"eyJ[\w-]{5,}\.[\w-]{5,}\.[\w-]*")
+        found = {(s["id"], m) for s in self.services for m in jwt_shaped.findall(json.dumps(s.get("params")))}
+        self.assertEqual({sid for sid, _ in found}, {"jwt-debugger"}, "another service stores a JWT-shaped value in a param example")
+        self.assertEqual({m for _, m in found}, {PUBLIC_SAMPLE_JWT})
 
     def test_services_json_and_the_urls_slice_carry_what_overrides_json_declares(self):
         by_id = {e["id"]: e for e in self.services}
