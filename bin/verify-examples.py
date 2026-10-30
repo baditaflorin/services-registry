@@ -10,13 +10,15 @@ is wrong.
 
 Output (default services.examples.json, derived data: never edit by hand, regenerate by running this):
 
-  {"checked_at": "...", "services": {"<id>": {"path", "http", "state", "via", "ms", "error"}}}
+  {"checked_at": "...", "services": {"<id>": {"path", "http", "state", "via", "ms", "error", "detail"?}}}
 
 States:
   ok             2xx or 3xx
   missing-param  400/422 whose body says a parameter is missing or required: the example needs another input
   rejected       any other 400/422: the route exists, the service refused this input
-  not-found      404: the route is wrong
+  no-data        404 with a JSON body: the route is right, the service has no data for this input (many extractors answer 404
+                 "no data" on purpose so a consumer does not record a false result)
+  not-found      404 without a JSON body (the mux's "404 page not found"): the route is wrong
   method         405: the route exists but not for GET
   gated          401/403: the key was not accepted (or none was given)
   error          5xx or 429: the route exists, the service or its backend failed
@@ -74,6 +76,26 @@ def load_registry(src):
     return items
 
 
+def _is_json_object(body):
+    try:
+        return isinstance(json.loads(body or ""), dict)
+    except ValueError:
+        return False
+
+
+def detail(body, limit=120):
+    """Why a call was not ok, in a few words: the JSON error message when there is one, else the start of the body."""
+    try:
+        obj = json.loads(body or "")
+    except ValueError:
+        obj = None
+    msg = ""
+    if isinstance(obj, dict):
+        e = obj.get("error")
+        msg = (e.get("message") if isinstance(e, dict) else e) or obj.get("message") or obj.get("status") or ""
+    return " ".join(str(msg or body or "").split())[:limit]
+
+
 def classify(http_status, body):
     """-> state for one answered (or unanswered) example call."""
     if http_status is None:
@@ -83,7 +105,7 @@ def classify(http_status, body):
     if http_status in (401, 403):
         return "gated"
     if http_status == 404:
-        return "not-found"
+        return "no-data" if _is_json_object(body) else "not-found"
     if http_status == 405:
         return "method"
     if http_status in (400, 422):
@@ -139,7 +161,10 @@ def probe(svc, timeout, api_key, direct_hosts):
         out["via"] = "edge"
     else:
         return sid, out
-    out.update(http=status, state=classify(status, body), ms=int((time.time() - t0) * 1000), error=err)
+    state = classify(status, body)
+    out.update(http=status, state=state, ms=int((time.time() - t0) * 1000), error=err)
+    if state not in ("ok", "unreachable"):
+        out["detail"] = detail(body)
     return sid, out
 
 
