@@ -4157,6 +4157,7 @@
     "description": "Fleet graph collector. Aggregates privacy-safe HTTP observation events from go-common/graph into retained SQLite buckets. The reader-authenticated /insights projection exposes declared versus observed service relationships, errors, freshness, and explicit count semantics; one end-to-end request can create an event at both instrumented ends. /viewer is a public no-data browser shell. Also serves writer ingest, a compact evidence-backed agent brief, expanded agent context, service neighbours, lookup, graph summary, and drift without exposing request paths, headers, payloads, credentials, or actor identity.",
     "example_path": "/viewer",
     "host_port": 18143,
+    "placement": "pinned",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-security-fleetinfra-batch",
@@ -10343,6 +10344,7 @@
   "hub-scrapetheworld-org": {
     "domain": "hub.scrapetheworld.org",
     "host_port": 18023,
+    "placement": "pinned",
     "container_port": 8080,
     "compose_service_name": "hub-dashboard",
     "compose_skip_networks": true,
