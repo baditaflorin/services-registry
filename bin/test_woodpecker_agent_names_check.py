@@ -63,5 +63,61 @@ class AgentNamesCheck(unittest.TestCase):
             check.parse_plane("only,two")
 
 
+
+class Repair(unittest.TestCase):
+    def agents(self, **names):
+        return [{"id": int(i[1:]), "name": n, "no_schedule": i == "i2", "custom_labels": {"site": "x"}} for i, n in names.items()]
+
+    def test_wipe_is_undone_keeping_the_callers_drain_and_labels(self):
+        known = {}
+        check.repair_names(self.agents(i1="a", i2="b"), known, lambda a, n: None)
+        self.assertEqual(known, {"1": "a", "2": "b"})
+        wiped = self.agents(i1="a", i2="")           # a caller PATCHed agent 2 without a name; it is drained (no_schedule)
+        sent = []
+        self.assertEqual(check.repair_names(wiped, known, lambda a, n: sent.append((a["id"], n, a["no_schedule"], a["custom_labels"]))), 1)
+        self.assertEqual(sent, [(2, "b", True, {"site": "x"})])
+        self.assertEqual(wiped[1]["name"], "b")
+
+    def test_unknown_id_and_taken_name_are_left_alone(self):
+        sent = []
+        self.assertEqual(check.repair_names(self.agents(i1="a", i2=""), {}, lambda a, n: sent.append(n)), 0)       # never seen
+        self.assertEqual(check.repair_names(self.agents(i1="b", i2=""), {"2": "b"}, lambda a, n: sent.append(n)), 0)  # name now used by another
+        self.assertEqual(sent, [])
+
+    def test_failed_patch_keeps_the_agent_unnamed_and_does_not_raise(self):
+        def boom(agent, name):
+            raise OSError("down")
+        agents = self.agents(i1="")
+        self.assertEqual(check.repair_names(agents, {"1": "a"}, boom), 0)
+        self.assertEqual(agents[0]["name"], "")
+
+    def test_collect_with_state_counts_restores_and_reports_unnamed_after_repair(self):
+        with tempfile.TemporaryDirectory() as d:
+            token = Path(d, "t"); token.write_text("tok\n")
+            state = {"p": {"names": {"1": "a"}, "repaired_total": 4}}
+            calls = []
+            text = check.collect([("p", "http://x", str(token), None)],
+                                 lambda url, tok: [{"id": 1, "name": "", "no_schedule": False, "custom_labels": {"a": "b"}}],
+                                 state, lambda url, tok, agent, name: calls.append((url, tok, agent["id"], name)))
+        self.assertEqual(calls, [("http://x", "tok", 1, "a")])
+        self.assertIn('woodpecker_agent_names_repaired_total{plane="p"} 5', text)
+        self.assertIn('woodpecker_agents_unnamed{plane="p"} 0', text)
+        self.assertEqual(state["p"]["repaired_total"], 5)
+
+    def test_without_state_nothing_is_written(self):
+        with tempfile.TemporaryDirectory() as d:
+            token = Path(d, "t"); token.write_text("tok\n")
+            calls = []
+            text = check.collect([("p", "http://x", str(token), None)], lambda u, t: [{"id": 1, "name": "", "custom_labels": {"a": "b"}}],
+                                 None, lambda *a: calls.append(a))
+        self.assertEqual(calls, [])
+        self.assertIn('woodpecker_agents_unnamed{plane="p"} 1', text)
+        self.assertNotIn("repaired_total{", text)
+
+    def test_repair_flag_needs_state(self):
+        with self.assertRaises(SystemExit):
+            check.main(["--plane", "p,http://x,/nonexistent", "--repair"])
+
+
 if __name__ == "__main__":
     unittest.main()
