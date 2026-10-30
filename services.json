@@ -16059,7 +16059,15 @@
         "description": "Client unix-ms timestamp (cache-buster)."
       }
     ],
-    "placement": "replicable"
+    "placement": "replicable",
+    "ci_resources": {
+      "mem_class": "xs",
+      "mem_peak_p95_bytes": 151309516,
+      "mem_peak_max_bytes": 151309516,
+      "runs": 1,
+      "confidence": "low",
+      "measured_at": "2026-10-28"
+    }
   },
   {
     "id": "fleet-poc-curl",
