@@ -11,7 +11,8 @@ source; services.json and the slices are generated from it by bin/generate.py).
 For each service that has a facts row and its own block in overrides.json:
 
   params           the declared inputs: name, required, type, short description, example when known (from
-                   service.yaml, else the value the final example_path sends for it; never a secret-shaped one).
+                   service.yaml, else the value the final example_path sends for it; never a secret-shaped one,
+                   except the public jwt.io sample JWT (PUBLIC_SAMPLE_JWT), matched as a whole value: it holds no credential).
   example_path     decided by the first rule that applies, looking at the required params a link can carry (all
                    but the {placeholders} of the endpoint's path):
     (a) keep       the current example_path already carries every one of them (or there are none): never replaced.
@@ -79,6 +80,11 @@ CREDENTIAL_NAMES = frozenset({"api_key", "apikey", "secret", "password", "passwd
                               "authorization", "private_key"})
 SECRET_VALUE = re.compile(r"eyJ[\w-]{5,}\.[\w-]{5,}\.[\w-]*|\bsk_(?:live|test)_|\bfb_[a-z0-9]{20,}|\b[a-f0-9]{32,}\b|"
                           r"-----BEGIN|\bgh[pousr]_\w{20,}|\bAKIA[0-9A-Z]{16}\b")
+# The one JWT that may be stored: the sample published on jwt.io (HS256, sub 1234567890, name John Doe, iat 1516239022,
+# signed with the secret `your-256-bit-secret`, which the same page prints). It carries no credential. It is matched as
+# a whole value, never by prefix or as a substring, so any other JWT-shaped value is still refused.
+PUBLIC_SAMPLE_JWT = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ."
+                     "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
 BODY_REASON = "its params travel in the request body"
 PLACEHOLDER = re.compile(r"[{}]")
 
@@ -90,8 +96,12 @@ def norm(name):
 
 
 def is_secretish(name, value):
-    """True when a param name or its value must not be copied into the registry."""
-    return (name or "").lower() in CREDENTIAL_NAMES or bool(SECRET_VALUE.search(str(value)))
+    """True when a param name or its value must not be copied into the registry. A credential-named param is always
+    refused; of the secret-shaped values only the whole, exact PUBLIC_SAMPLE_JWT is let through."""
+    if (name or "").lower() in CREDENTIAL_NAMES:
+        return True
+    value = str(value)
+    return value != PUBLIC_SAMPLE_JWT and bool(SECRET_VALUE.search(value))
 
 
 def query_of(path):
