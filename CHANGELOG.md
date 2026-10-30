@@ -1,5 +1,6 @@
 ## 2026-10-30
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `review-presence` 0.4.6.
 - registry: `params` (each service's declared inputs: name, required, type, short description, example) and a corrected `example_path` for services whose `service.yaml` was read by `bin/extract-service-facts.py`, set in `overrides.json` by `bin/sync-service-params.py` and carried into `services.json` and `services.urls.json`; `example_path_source: "derived-from-params"` marks an example built from the params. A test now fails when a service's `example_path` lacks a required param.
 
 ## 2026-10-29
