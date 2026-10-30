@@ -10,7 +10,18 @@ is wrong.
 
 Output (default services.examples.json, derived data: never edit by hand, regenerate by running this):
 
-  {"checked_at": "...", "services": {"<id>": {"path", "http", "state", "via", "ms", "error", "detail"?}}}
+  {"checked_at": "...", "services": {"<id>": {"path", "http", "state", "via", "ms", "error", "detail"?,
+                                              "replicas"?, "diverged"?}}}
+
+Replicas. A service marked placement "replicable" runs on several hosts behind the gateway (nginx upstream, same
+host_port on every member), and the gateway may send any user to any of them. So every host of --direct-hosts is
+called, not only the first that answers: a host "answers" when it returns any HTTP status (a refused connection or a
+timeout means the service does not run there). With one answering host the row is as before. With two or more it also
+carries `replicas: [{"host", "http", "state"}]` in --direct-hosts order, and `state`, `http`, `error` and `detail`
+are those of the WORST replica (order: WORST_FIRST below, the first host on a tie), so a broken or stale replica is
+never hidden by a healthy one. `diverged: true` is set when the replicas answer with different states. Which
+replicas exist is the gateway's business (fleet-runner pool-status): a replica on a host that is not in
+--direct-hosts, or that this machine cannot reach, is not seen.
 
 States:
   ok             2xx or 3xx
@@ -47,6 +58,9 @@ REGISTRY_URL = "https://raw.githubusercontent.com/baditaflorin/services-registry
 MAX_BODY = 16 * 1024
 UA = "verify-examples/1.0 (+services-registry)"
 SKIP_LIFECYCLE_STATUSES = {"sunset"}
+# Worst last. `gated` ranks low because it says "not measured" (our key was not accepted), not "the service is broken";
+# a replica that answers 5xx or the wrong route outranks a healthy one, and `unreachable` is never among answered replicas.
+WORST_FIRST = ("ok", "no-data", "gated", "method", "missing-param", "rejected", "not-found", "error", "unreachable")
 MISSING = re.compile(r"missing|required|must (?:be )?(?:provide|supplied|set)|not provided", re.I)
 
 
@@ -140,6 +154,17 @@ def eligible(svc):
     return (svc.get("lifecycle") or {}).get("status") not in SKIP_LIFECYCLE_STATUSES
 
 
+def severity(state):
+    return WORST_FIRST.index(state) if state in WORST_FIRST else len(WORST_FIRST)
+
+
+def judge(host, status, body, err):
+    """One host's answer as a replica record: (host, http, state, error, detail)."""
+    state = classify(status, body)
+    return {"host": host, "http": status, "state": state, "error": err,
+            "detail": detail(body) if state not in ("ok", "unreachable") else ""}
+
+
 def probe(svc, timeout, api_key, direct_hosts):
     sid = svc.get("id") or svc.get("slug")
     path = svc.get("example_path") or ""
@@ -149,22 +174,27 @@ def probe(svc, timeout, api_key, direct_hosts):
     t0 = time.time()
     port = svc.get("host_port")
     if direct_hosts and svc.get("runtime") == "compose" and port:
-        status, body, err = None, "", ""
-        for h in direct_hosts:
-            status, body, err = fetch("http://%s:%d%s" % (h, int(port), path), timeout, api_key)
-            if status is not None:
-                break
+        # Every host, in order: the key only ever goes to a --direct-hosts address (a registry host), on the service's own port.
+        calls = [judge(h, *fetch("http://%s:%d%s" % (h, int(port), path), timeout, api_key)) for h in direct_hosts]
+        answered = [c for c in calls if c["http"] is not None]
         out["via"] = "lan"
+        if not answered:                               # nobody runs it there: the last host's reason, as before
+            judged = calls[-1]
+        else:
+            judged = min(answered, key=lambda c: (-severity(c["state"]), answered.index(c)))
+            if len(answered) > 1:
+                out["replicas"] = [{"host": c["host"], "http": c["http"], "state": c["state"]} for c in answered]
+                if len({c["state"] for c in answered}) > 1:
+                    out["diverged"] = True
     elif api_key and str(svc.get("url", "")).startswith("https://"):
         host = urlsplit(svc["url"]).netloc
-        status, body, err = fetch("https://%s%s" % (host, path), timeout, api_key)
+        judged = judge(host, *fetch("https://%s%s" % (host, path), timeout, api_key))
         out["via"] = "edge"
     else:
         return sid, out
-    state = classify(status, body)
-    out.update(http=status, state=state, ms=int((time.time() - t0) * 1000), error=err)
-    if state not in ("ok", "unreachable"):
-        out["detail"] = detail(body)
+    out.update(http=judged["http"], state=judged["state"], ms=int((time.time() - t0) * 1000), error=judged["error"])
+    if judged["state"] not in ("ok", "unreachable"):
+        out["detail"] = judged["detail"]
     return sid, out
 
 
@@ -180,6 +210,12 @@ def tally(results):
     return dict(sorted(t.items()))
 
 
+def replica_summary(results):
+    """-> (services with more than one answering replica, ids whose replicas diverge)."""
+    multi = [k for k, r in results.items() if r.get("replicas")]
+    return len(multi), sorted(k for k, r in results.items() if r.get("diverged"))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--services", default=os.environ.get("VERIFY_EXAMPLES_SERVICES", REGISTRY_URL),
@@ -188,7 +224,8 @@ def main(argv=None):
     ap.add_argument("--api-key-file", default=os.environ.get("VERIFY_EXAMPLES_API_KEY_FILE", ""),
                     help="file with the API key sent as X-API-Key")
     ap.add_argument("--direct-hosts", default=os.environ.get("VERIFY_EXAMPLES_DIRECT_HOSTS", "10.10.10.20,10.10.10.30"),
-                    help="comma-separated docker-host IPs to try, in order, for compose services (registry host_port)")
+                    help="comma-separated docker-host addresses for compose services: every one is called on the registry "
+                         "host_port, and each that answers is a replica (the key is sent to these hosts only)")
     ap.add_argument("--timeout", type=float, default=20.0)
     ap.add_argument("--concurrency", type=int, default=6)
     ap.add_argument("--only", default="", help="comma-separated service ids (debug)")
@@ -217,7 +254,10 @@ def main(argv=None):
         results = dict(ex.map(lambda s: probe(s, a.timeout, api_key, direct), targets))
     with open(a.out, "w") as f:
         f.write(render(results))
+    n_multi, diverged = replica_summary(results)
     log("wrote %s: %s" % (a.out, json.dumps(tally(results))))
+    log("replicas: %d service(s) answered on more than one host; %d diverged%s" % (
+        n_multi, len(diverged), (": " + ", ".join(diverged)) if diverged else ""))
     return 0
 
 

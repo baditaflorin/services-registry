@@ -56,18 +56,99 @@ class TestDetail(unittest.TestCase):
 
 
 class TestProbe(unittest.TestCase):
-    def test_lan_first_host_that_answers_wins_and_key_is_sent(self):
+    def answers(self, table):
+        """fetch() fake: {host: (status, body, err)}; records every call as (url, key)."""
         calls = []
 
         def fake(url, timeout, key):
             calls.append((url, key))
-            return (None, "", "refused") if "10.0.0.1" in url else (200, "{}", "")
+            host = url.split("//")[1].split(":")[0]
+            return table[host]
 
+        return fake, calls
+
+    def test_one_answering_host_is_the_old_row_and_every_host_is_called_with_the_key(self):
+        fake, calls = self.answers({"10.0.0.1": (None, "", "URLError: refused"), "10.0.0.2": (200, "{}", "")})
         with mock.patch.object(ve, "fetch", fake):
             sid, r = ve.probe(SVC, 5, "k", ("10.0.0.1", "10.0.0.2"))
         self.assertEqual(sid, "x")
-        self.assertEqual([c[0] for c in calls], ["http://10.0.0.1:8123/?q=cats", "http://10.0.0.2:8123/?q=cats"])
-        self.assertEqual((r["state"], r["http"], r["via"]), ("ok", 200, "lan"))
+        self.assertEqual(calls, [("http://10.0.0.1:8123/?q=cats", "k"), ("http://10.0.0.2:8123/?q=cats", "k")])
+        self.assertEqual((r["state"], r["http"], r["via"], r["error"]), ("ok", 200, "lan", ""))
+        self.assertNotIn("replicas", r)
+        self.assertNotIn("diverged", r)
+
+    def test_a_host_that_answers_first_no_longer_hides_the_second(self):
+        fake, calls = self.answers({"a": (200, "{}", ""), "b": (200, "{}", "")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a", "b"))
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(r["replicas"], [{"host": "a", "http": 200, "state": "ok"}, {"host": "b", "http": 200, "state": "ok"}])
+        self.assertEqual(r["state"], "ok")
+        self.assertNotIn("diverged", r)
+
+    def test_replicas_that_differ_diverge_and_the_state_is_the_worst(self):
+        cases = [
+            # (first replica, second replica, expected state, expected http, who is the worst)
+            ((200, "{}"), (500, '{"error":"db down"}'), "error", 500, "b"),
+            ((404, "404 page not found\n"), (200, "{}"), "not-found", 404, "a"),           # a stale replica without the route
+            ((200, "{}"), (404, '{"status":"no_data"}'), "no-data", 404, "b"),
+            ((401, ""), (200, "{}"), "gated", 401, "a"),                                    # not measured outranks ok
+            ((400, "bad"), (404, "404 page not found"), "not-found", 404, "b"),
+            ((503, ""), (500, ""), "error", 503, "a"),                                      # same state: the first host
+        ]
+        for first, second, state, http, who in cases:
+            fake, _ = self.answers({"a": first + ("",), "b": second + ("",)})
+            with mock.patch.object(ve, "fetch", fake):
+                _, r = ve.probe(SVC, 5, "k", ("a", "b"))
+            self.assertEqual((r["state"], r["http"]), (state, http), (first, second))
+            self.assertEqual([c["host"] for c in r["replicas"]], ["a", "b"])
+            self.assertEqual(r.get("diverged"), True if ve.classify(*first) != ve.classify(*second) else None, (first, second))
+            self.assertEqual(max(r["replicas"], key=lambda c: ve.severity(c["state"]))["state"], state)
+            self.assertEqual(r["replicas"][0 if who == "a" else 1]["state"], state, (first, second))
+
+    def test_the_detail_and_error_are_the_worst_replicas(self):
+        fake, _ = self.answers({"a": (200, "{}", ""), "b": (500, '{"error":"db down"}', "")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a", "b"))
+        self.assertEqual((r["state"], r["detail"], r["diverged"]), ("error", "db down", True))
+
+    def test_a_host_that_does_not_answer_is_not_a_replica_but_three_hosts_are_all_called(self):
+        fake, calls = self.answers({"a": (200, "{}", ""), "b": (None, "", "refused"), "c": (500, "", "")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a", "b", "c"))
+        self.assertEqual(len(calls), 3)
+        self.assertEqual([c["host"] for c in r["replicas"]], ["a", "c"])
+        self.assertEqual((r["state"], r["diverged"]), ("error", True))
+
+    def test_nobody_answering_is_unreachable_with_the_last_reason_and_no_replicas(self):
+        fake, _ = self.answers({"a": (None, "", "first"), "b": (None, "", "last")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a", "b"))
+        self.assertEqual((r["state"], r["http"], r["error"]), ("unreachable", None, "last"))
+        self.assertNotIn("replicas", r)
+        self.assertNotIn("detail", r)
+
+    def test_the_key_goes_only_to_the_listed_hosts_on_the_services_own_port_and_never_to_a_redirect_target(self):
+        fake, calls = self.answers({"10.0.0.1": (200, "{}", ""), "10.0.0.2": (200, "{}", "")})
+        with mock.patch.object(ve, "fetch", fake):
+            ve.probe(dict(SVC, url="https://x.0crawl.com"), 5, "secret-key", ("10.0.0.1", "10.0.0.2"))
+        self.assertEqual({u.split("//")[1].split("/")[0] for u, _ in calls}, {"10.0.0.1:8123", "10.0.0.2:8123"})
+        self.assertTrue(all(k == "secret-key" for _, k in calls))
+        # a real redirect from a replica is refused, so the key cannot follow it to another host
+        import io
+        import urllib.error
+        err = urllib.error.HTTPError("http://10.0.0.1:8123/", 302, "Found", {}, io.BytesIO(b""))
+        with mock.patch.object(ve._opener, "open", side_effect=err) as o:
+            status, _, _ = ve.fetch("http://10.0.0.1:8123/", 5, "secret-key")
+        self.assertEqual(status, 302)
+        self.assertEqual(o.call_count, 1)
+
+    def test_state_order_knows_every_state_classify_can_return(self):
+        seen = {ve.classify(s, b) for s, b in [(None, ""), (200, ""), (401, ""), (404, "x"), (404, "{}"), (405, ""), (400, "missing"),
+                                                (400, "no"), (500, "")]}
+        self.assertEqual(seen - set(ve.WORST_FIRST), set())
+        self.assertEqual(ve.WORST_FIRST[0], "ok")
+        self.assertEqual(ve.severity("something-new"), len(ve.WORST_FIRST))
 
     def test_no_route_and_no_key_is_unprobed_and_makes_no_call(self):
         svc = dict(SVC, runtime="coolify", host_port=None)
@@ -94,6 +175,19 @@ class TestOutput(unittest.TestCase):
         out = json.loads(ve.render(res, now="2026-10-30T00:00:00Z"))
         self.assertEqual(list(out["services"]), ["a", "b"])
         self.assertEqual(ve.tally(res), {"gated": 1, "ok": 1})
+
+    def test_replicas_and_diverged_are_written_and_summarised(self):
+        res = {"a": {"path": "/", "http": 500, "state": "error", "via": "lan", "ms": 1, "error": "", "detail": "x",
+                     "replicas": [{"host": "h1", "http": 200, "state": "ok"}, {"host": "h2", "http": 500, "state": "error"}],
+                     "diverged": True},
+               "b": {"path": "/", "http": 200, "state": "ok", "via": "lan", "ms": 1, "error": "",
+                     "replicas": [{"host": "h1", "http": 200, "state": "ok"}, {"host": "h2", "http": 200, "state": "ok"}]},
+               "c": {"path": "/", "http": 200, "state": "ok", "via": "lan", "ms": 1, "error": ""}}
+        out = json.loads(ve.render(res, now="2026-10-30T00:00:00Z"))
+        self.assertTrue(out["services"]["a"]["diverged"])
+        self.assertEqual(len(out["services"]["b"]["replicas"]), 2)
+        self.assertEqual(ve.tally(res), {"error": 1, "ok": 2})
+        self.assertEqual(ve.replica_summary(res), (2, ["a"]))
 
     def test_redirects_are_not_followed_so_the_key_stays_on_the_host(self):
         self.assertIsNone(ve._NoRedirect().redirect_request(None, None, 302, "", {}, "http://evil/"))
