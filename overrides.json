@@ -769,7 +769,7 @@
   },
   "asn-lookup": {
     "params": [
-      {"name": "ip", "required": false, "type": "string", "description": "Single IP (v4 or v6) to look up."},
+      {"name": "ip", "required": false, "type": "string", "description": "Single IP (v4 or v6) to look up.", "example": "1.1.1.1"},
       {"name": "ips", "required": false, "type": "string", "description": "Comma-separated list of up to 50 IPs for bulk lookup."},
       {"name": "domain", "required": false, "type": "string", "description": "Hostname to resolve to A/AAAA, then ASN-look-up the first IP."},
       {"name": "target", "required": false, "type": "string", "description": "Legacy v1.x surface. Hostname, IP (v4/v6), or ASN (e.g. AS13335). Returns the legacy Response..."}
@@ -778,7 +778,7 @@
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8337,
     "description": "Microservice for Asn Lookup",
-    "example_path": "/go_asn_lookup?url=https://example.com",
+    "example_path": "/?ip=1.1.1.1",
     "host_port": 8337,
     "trl": 7,
     "trl_assessed_at": "2026-08-08",
@@ -849,17 +849,17 @@
   },
   "blocklist-checker": {
     "params": [
-      {"name": "ip", "required": false, "type": "string", "description": "IPv4 or IPv6 address to check against IP-shaped DNSBL zones."},
+      {"name": "ip", "required": false, "type": "string", "description": "IPv4 or IPv6 address to check against IP-shaped DNSBL zones.", "example": "8.8.8.8"},
       {"name": "domain", "required": false, "type": "string", "description": "Domain to check against URIBL/DBL-shaped zones."},
       {"name": "host", "required": false, "type": "string", "description": "Backwards-compat alias of ip/domain (auto-detected)."},
       {"name": "target", "required": false, "type": "string", "description": "Backwards-compat alias of ip/domain (TRL-5 shape)."},
-      {"name": "lists", "required": false, "type": "string", "description": "Comma-separated zone allowlist (e.g. zen.spamhaus.org,dbl.spamhaus.org)."}
+      {"name": "lists", "required": false, "type": "string", "description": "Comma-separated zone allowlist (e.g. zen.spamhaus.org,dbl.spamhaus.org).", "example": "zen.spamhaus.org"}
     ],
     "placement": "replicable",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "container_port": 8338,
     "description": "Microservice for Blocklist Checker",
-    "example_path": "/go_blocklist_checker?url=https://example.com",
+    "example_path": "/?ip=8.8.8.8&lists=zen.spamhaus.org",
     "host_port": 8338,
     "trl": 6,
     "trl_assessed_at": "2026-05-16",
@@ -1587,8 +1587,9 @@
     "coolify_app_uuid": "wh0m8f9qzim2oce4f7un33mx"
   },
   "crux-field-vitals": {
+    "example_path": "/?url=https://web.dev",
     "params": [
-      {"name": "url", "required": false, "type": "string", "description": "Page URL to query field data for (one of url or origin required)"},
+      {"name": "url", "required": false, "type": "string", "description": "Page URL to query field data for (one of url or origin required)", "example": "https://web.dev"},
       {"name": "origin", "required": false, "type": "string", "description": "Origin to query field data for (one of url or origin required)"},
       {"name": "form_factor", "required": false, "type": "string", "description": "PHONE | DESKTOP | TABLET | ALL (default ALL)"}
     ],
@@ -2934,8 +2935,9 @@
     "spiffe_workload": true
   },
   "domain-naptr-enum": {
+    "example_path": "/?domain=sip.example.com",
     "params": [
-      {"name": "domain", "required": false, "type": "string", "description": "Fully-qualified domain to query for NAPTR records (RFC 3403)."},
+      {"name": "domain", "required": false, "type": "string", "description": "Fully-qualified domain to query for NAPTR records (RFC 3403).", "example": "sip.example.com"},
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "phone", "required": false, "type": "string", "description": "E.164 phone number (`+CCNNN...`) for ENUM lookup against e164.arpa."}
     ],
@@ -2986,8 +2988,9 @@
     "spiffe_workload": true
   },
   "domain-open-source-presence": {
+    "example_path": "/?url=https://grafana.com",
     "params": [
-      {"name": "url", "required": false, "type": "string", "description": "Canonical fleet param. Full URL or bare host; tried first. Falls back to domain/target/q."},
+      {"name": "url", "required": false, "type": "string", "description": "Canonical fleet param. Full URL or bare host; tried first. Falls back to domain/target/q.", "example": "https://grafana.com"},
       {"name": "domain", "required": false, "type": "string", "description": "Registered domain to probe (legacy; still accepted)."}
     ],
     "container_port": 18196,
@@ -5126,8 +5129,9 @@
     "spiffe_workload": true
   },
   "funding-signal": {
+    "example_path": "/?brand=OpenAI",
     "params": [
-      {"name": "brand", "required": false, "type": "string", "description": "Brand / company name to look up (required if domain absent)"},
+      {"name": "brand", "required": false, "type": "string", "description": "Brand / company name to look up (required if domain absent)", "example": "OpenAI"},
       {"name": "domain", "required": false, "type": "string", "description": "Company domain; used for the press/news page scan and to derive the brand (required if brand absent)"}
     ],
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
@@ -5257,7 +5261,7 @@
   },
   "google-taxonomy": {
     "params": [
-      {"name": "text", "required": false, "type": "string", "description": "Free text to classify (POST body or ?text=…)."},
+      {"name": "text", "required": false, "type": "string", "description": "Free text to classify (POST body or ?text=…).", "example": "cotton t-shirt for men"},
       {"name": "q", "required": false, "type": "string", "description": "Fuzzy search query for /search."},
       {"name": "id", "required": false, "type": "int", "description": "Numeric Google taxonomy id for /lookup."},
       {"name": "limit", "required": false, "type": "int", "description": "Max results returned (default 10 for search, 5 for classify)."}
@@ -5266,7 +5270,7 @@
     "container_port": 8096,
     "placement": "replicable",
     "description": "Deterministic Google Product Taxonomy lookup, fuzzy search, and TF-IDF classifier with confidence-based abstention.",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/classify?text=cotton+t-shirt+for+men",
     "host_port": 8096,
     "trl": 7,
     "trl_assessed_at": "2026-07-30",
@@ -5498,8 +5502,9 @@
     "spiffe_workload": true
   },
   "iban-bic-validator": {
+    "example_path": "/?iban=GB82WEST12345698765432",
     "params": [
-      {"name": "iban", "required": false, "type": "string", "description": "IBAN to validate (ISO 13616). Spaces, hyphens and lower-case are tolerated and normalised..."},
+      {"name": "iban", "required": false, "type": "string", "description": "IBAN to validate (ISO 13616). Spaces, hyphens and lower-case are tolerated and normalised...", "example": "GB82WEST12345698765432"},
       {"name": "bic", "required": false, "type": "string", "description": "BIC / SWIFT code to validate (ISO 9362), 8 or 11 characters. Returns bic_valid, bic_country..."}
     ],
     "version": "0.1.14",
@@ -8054,8 +8059,9 @@
     }
   },
   "price-range": {
+    "example_path": "/?text=Plans+from+%249.99+to+%2499%2Fmo",
     "params": [
-      {"name": "text", "required": false, "type": "string", "description": "Raw text to scan for prices (alternative to url)."},
+      {"name": "text", "required": false, "type": "string", "description": "Raw text to scan for prices (alternative to url).", "example": "Plans from $9.99 to $99/mo"},
       {"name": "url", "required": false, "type": "string", "description": "URL to fetch and analyse (SSRF-gated via safehttp)."}
     ],
     "container_port": 8301,
@@ -8485,7 +8491,7 @@
   },
   "reverse-dns": {
     "params": [
-      {"name": "ip", "required": false, "type": "string", "description": "Single IPv4 or IPv6 address."},
+      {"name": "ip", "required": false, "type": "string", "description": "Single IPv4 or IPv6 address.", "example": "8.8.8.8"},
       {"name": "ips", "required": false, "type": "string", "description": "Up to 50 comma-separated IPs for bulk PTR/FCrDNS."},
       {"name": "cidr", "required": false, "type": "string", "description": "CIDR (max /24 v4 or /120 v6 - 256 hosts). Adds zone_cohesion."},
       {"name": "host", "required": false, "type": "string", "description": "Hostname; forward-resolves then probes each address (back-compat)."},
@@ -8493,7 +8499,7 @@
     ],
     "container_port": 8333,
     "description": "Microservice for Reverse Dns",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?ip=8.8.8.8",
     "host_port": 8333,
     "placement": "replicable",
     "trl": 6,

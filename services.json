@@ -554,7 +554,7 @@
     "url": "https://asn-lookup.0crawl.com",
     "health_url": "https://asn-lookup.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_asn_lookup",
-    "example_path": "/go_asn_lookup?url=https://example.com",
+    "example_path": "/?ip=1.1.1.1",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -579,7 +579,8 @@
         "name": "ip",
         "required": false,
         "type": "string",
-        "description": "Single IP (v4 or v6) to look up."
+        "description": "Single IP (v4 or v6) to look up.",
+        "example": "1.1.1.1"
       },
       {
         "name": "ips",
@@ -669,7 +670,7 @@
     "url": "https://blocklist-checker.0crawl.com",
     "health_url": "https://blocklist-checker.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_blocklist_checker",
-    "example_path": "/go_blocklist_checker?url=https://example.com",
+    "example_path": "/?ip=8.8.8.8&lists=zen.spamhaus.org",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -694,7 +695,8 @@
         "name": "ip",
         "required": false,
         "type": "string",
-        "description": "IPv4 or IPv6 address to check against IP-shaped DNSBL zones."
+        "description": "IPv4 or IPv6 address to check against IP-shaped DNSBL zones.",
+        "example": "8.8.8.8"
       },
       {
         "name": "domain",
@@ -718,7 +720,8 @@
         "name": "lists",
         "required": false,
         "type": "string",
-        "description": "Comma-separated zone allowlist (e.g. zen.spamhaus.org,dbl.spamhaus.org)."
+        "description": "Comma-separated zone allowlist (e.g. zen.spamhaus.org,dbl.spamhaus.org).",
+        "example": "zen.spamhaus.org"
       }
     ]
   },
@@ -2100,7 +2103,7 @@
     "url": "https://crux-field-vitals.0crawl.com",
     "health_url": "https://crux-field-vitals.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_crux_field_vitals",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=https://web.dev",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -2125,7 +2128,8 @@
         "name": "url",
         "required": false,
         "type": "string",
-        "description": "Page URL to query field data for (one of url or origin required)"
+        "description": "Page URL to query field data for (one of url or origin required)",
+        "example": "https://web.dev"
       },
       {
         "name": "origin",
@@ -4527,7 +4531,7 @@
     "url": "https://domain-naptr-enum.0crawl.com",
     "health_url": "https://domain-naptr-enum.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_naptr_enum",
-    "example_path": "/?target=example.com",
+    "example_path": "/?domain=sip.example.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -4552,7 +4556,8 @@
         "name": "domain",
         "required": false,
         "type": "string",
-        "description": "Fully-qualified domain to query for NAPTR records (RFC 3403)."
+        "description": "Fully-qualified domain to query for NAPTR records (RFC 3403).",
+        "example": "sip.example.com"
       },
       {
         "name": "q",
@@ -5668,7 +5673,7 @@
     "url": "https://funding-signal.0crawl.com",
     "health_url": "https://funding-signal.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_funding_signal",
-    "example_path": "/?target=example.com",
+    "example_path": "/?brand=OpenAI",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -5697,7 +5702,8 @@
         "name": "brand",
         "required": false,
         "type": "string",
-        "description": "Brand / company name to look up (required if domain absent)"
+        "description": "Brand / company name to look up (required if domain absent)",
+        "example": "OpenAI"
       },
       {
         "name": "domain",
@@ -5835,7 +5841,7 @@
     "url": "https://google-taxonomy.0crawl.com",
     "health_url": "https://google-taxonomy.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_google_taxonomy",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/classify?text=cotton+t-shirt+for+men",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -5862,7 +5868,8 @@
         "name": "text",
         "required": false,
         "type": "string",
-        "description": "Free text to classify (POST body or ?text=\u2026)."
+        "description": "Free text to classify (POST body or ?text=\u2026).",
+        "example": "cotton t-shirt for men"
       },
       {
         "name": "q",
@@ -6311,7 +6318,7 @@
     "url": "https://iban-bic-validator.0crawl.com",
     "health_url": "https://iban-bic-validator.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_iban_bic_validator",
-    "example_path": "/?target=example.com",
+    "example_path": "/?iban=GB82WEST12345698765432",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -6333,7 +6340,8 @@
         "name": "iban",
         "required": false,
         "type": "string",
-        "description": "IBAN to validate (ISO 13616). Spaces, hyphens and lower-case are tolerated and normalised..."
+        "description": "IBAN to validate (ISO 13616). Spaces, hyphens and lower-case are tolerated and normalised...",
+        "example": "GB82WEST12345698765432"
       },
       {
         "name": "bic",
@@ -8465,7 +8473,7 @@
     "url": "https://price-range.0crawl.com",
     "health_url": "https://price-range.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_price_range",
-    "example_path": "/?target=example.com",
+    "example_path": "/?text=Plans+from+%249.99+to+%2499%2Fmo",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -8495,7 +8503,8 @@
         "name": "text",
         "required": false,
         "type": "string",
-        "description": "Raw text to scan for prices (alternative to url)."
+        "description": "Raw text to scan for prices (alternative to url).",
+        "example": "Plans from $9.99 to $99/mo"
       },
       {
         "name": "url",
@@ -9231,7 +9240,7 @@
     "url": "https://reverse-dns.0crawl.com",
     "health_url": "https://reverse-dns.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_reverse_dns",
-    "example_path": "/?url=https://example.com",
+    "example_path": "/?ip=8.8.8.8",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -9257,7 +9266,8 @@
         "name": "ip",
         "required": false,
         "type": "string",
-        "description": "Single IPv4 or IPv6 address."
+        "description": "Single IPv4 or IPv6 address.",
+        "example": "8.8.8.8"
       },
       {
         "name": "ips",
@@ -13704,7 +13714,7 @@
     "url": "https://domain-open-source-presence.0exec.com",
     "health_url": "https://domain-open-source-presence.0exec.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_open_source_presence",
-    "example_path": "/?target=example.com",
+    "example_path": "/?url=https://grafana.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -13732,7 +13742,8 @@
         "name": "url",
         "required": false,
         "type": "string",
-        "description": "Canonical fleet param. Full URL or bare host; tried first. Falls back to domain/target/q."
+        "description": "Canonical fleet param. Full URL or bare host; tried first. Falls back to domain/target/q.",
+        "example": "https://grafana.com"
       },
       {
         "name": "domain",
