@@ -3367,29 +3367,6 @@
   },
   {
     "auth": {
-      "type": "none"
-    },
-    "auth_help": "no auth",
-    "category": "infrastructure",
-    "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
-    "example_path": "/",
-    "health_url": "http://dockerhost:18021/health",
-    "id": "keystore-mesh",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0exec",
-    "name": "Keystore mesh listener :18340",
-    "repo_url": "https://github.com/baditaflorin/go_apikey_service",
-    "runtime": "external",
-    "tags": [
-      "external",
-      "keystore-mesh",
-      "non-gateway"
-    ],
-    "url": "http://dockerhost:18340"
-  },
-  {
-    "auth": {
       "header": "X-API-Key",
       "type": "api_key"
     },
@@ -7319,6 +7296,30 @@
       "header": "X-API-Key",
       "type": "api_key"
     },
+    "auth_help": "Machine keys (keystore user machine:<host>) may only POST /v1/events, as that host; read keys listed in READERS query /v1/events, /v1/findings, /v1/hosts and /v1/status.",
+    "category": "infrastructure",
+    "description": "Central, tamper-evident log of what agents do on every machine: fleet-guard ships audit events with per-machine keystore keys; the service flags risky patterns, replicates between nodes like fleet-msg and serves read-only keys (the hub).",
+    "example_path": "/health",
+    "health_url": "https://fleet-activity.0exec.com/health",
+    "id": "fleet-activity",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Activity",
+    "placement": "replicable",
+    "repo_url": "https://github.com/baditaflorin/go-fleet-activity",
+    "runtime": "compose",
+    "tags": [],
+    "trl": 4,
+    "trl_assessed_at": "2026-10-16",
+    "trl_assessor": "claude-opus-5-5",
+    "url": "https://fleet-activity.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "observability",
     "description": "Alertmanager routing the 18 rules in prometheus/rules/fleet-alerts.yml to fleet-notify. Runs in host network mode, --web.listen-address=:18321. No browser UI use case of its own -- reached only by Prometheus, locally.",
@@ -9397,6 +9398,29 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Token-harvest path missing; caller must supply ?jwt=. Reaches TRL 7 with active replay against target's auth endpoint.",
     "url": "https://jwt-pentest.0exec.com"
+  },
+  {
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "category": "infrastructure",
+    "description": "Keystore mesh listener of go_apikey_service (one keystore node per server). Signed node-to-node replication traffic only: every request carries an ed25519 signature from a configured peer, and the gateway never routes it. Published by the keystore's own compose on each keystore host (MESH_PUBLISH).",
+    "example_path": "/",
+    "health_url": "http://dockerhost:18021/health",
+    "id": "keystore-mesh",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Keystore mesh listener :18340",
+    "repo_url": "https://github.com/baditaflorin/go_apikey_service",
+    "runtime": "external",
+    "tags": [
+      "external",
+      "keystore-mesh",
+      "non-gateway"
+    ],
+    "url": "http://dockerhost:18340"
   },
   {
     "auth": {
@@ -15024,29 +15048,5 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/z3-smt-game/"
-  },
-  {
-    "auth": {
-      "header": "X-API-Key",
-      "type": "api_key"
-    },
-    "auth_help": "Machine keys (keystore user machine:<host>) may only POST /v1/events, as that host; read keys listed in READERS query /v1/events, /v1/findings, /v1/hosts and /v1/status.",
-    "category": "infrastructure",
-    "description": "Central, tamper-evident log of what agents do on every machine: fleet-guard ships audit events with per-machine keystore keys; the service flags risky patterns, replicates between nodes like fleet-msg and serves read-only keys (the hub).",
-    "example_path": "/health",
-    "health_url": "https://fleet-activity.0exec.com/health",
-    "id": "fleet-activity",
-    "kind": "container",
-    "language": "go",
-    "mesh": "0exec",
-    "name": "Fleet Activity",
-    "placement": "replicable",
-    "repo_url": "https://github.com/baditaflorin/go-fleet-activity",
-    "runtime": "compose",
-    "tags": [],
-    "trl": 4,
-    "trl_assessed_at": "2026-10-16",
-    "trl_assessor": "claude-opus-5-5",
-    "url": "https://fleet-activity.0exec.com"
   }
 ]
