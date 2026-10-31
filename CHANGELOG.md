@@ -1,3 +1,7 @@
+## 2026-10-31
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-pixel` 0.4.3.
+
 ## 2026-10-30
 
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `ocr-pdf-express` 0.2.1, `review-presence` 0.4.7.
