@@ -37,9 +37,13 @@ version: 1
 # the service has `spiffe_workload: true` in overrides.json. Each trust domain
 # needs its own SPIRE server/agent enrollment; this mapping does not enroll or
 # deploy an agent.
+#
+# 0docker has no trust domain: it was declared but never had a SPIRE server, agent,
+# entry or service (ephemeral-credentials plan, phase 2). 0crawl keeps its own domain
+# while its workloads are also registered in 0exec.com as spiffe://0exec.com/ns/0crawl/sa/<id>
+# (fleet-state docs/architecture/ephemeral-credentials/MERGE-0CRAWL-INTO-0EXEC.md).
 spiffe_trust_domains:
   0crawl: 0crawl.com
-  0docker: 0docker.com
   0exec: 0exec.com
 
 # Each trust domain uses its own agent Workload API socket directory on a
@@ -47,7 +51,6 @@ spiffe_trust_domains:
 # new mesh agents use isolated subdirectories.
 spiffe_socket_directories:
   0crawl: /run/spire/sockets/0crawl
-  0docker: /run/spire/sockets/0docker
   0exec: /run/spire/sockets
 
 # Numeric group ownership of each host Workload API socket directory. The
