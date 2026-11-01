@@ -3703,7 +3703,9 @@
     "version": "1.4.7",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "internal_direct": true,
     "description": "Clearbit-style company firmographic profile: industry, employee band, founding year, legal entity, revenue model, office locations, funding — 8 fleet analyzers merged via composite-runner.",
@@ -3719,7 +3721,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "fleet-backoff-coordinator": {
     "params": [
@@ -9095,11 +9098,14 @@
     "trl_evidence": "First-pass audit: found and fixed a real data race between the background poll loop and on-demand API-triggered tests, both operating on the same shared *Service struct without holding the registry lock across blocking network calls (3 distinct races confirmed via go test -race, fixed by snapshotting fields under lock). Added the repo's first-ever test suite. Also surfaced an urgent ops finding: the dashboard's own canonical URL is currently serving a completely different service (a port-collision routing issue on the fleet host, not a code bug) -- flagged for the deploy/routing team. trl held at 5 pending broader test coverage; trl_ceiling=7 added. See PR #2 (merged).",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   ,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     }
   },
   "session-management": {
