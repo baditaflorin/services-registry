@@ -360,9 +360,10 @@ All five must hold before the setting is applied to a second host:
    no higher than on the other agents (check in Woodpecker for the same window).
    A failure that mentions a cache, checksum or "file exists" error counts as a
    failed pilot immediately.
-3. **Bounded disk.** The three directories together stay under the caps in the env
-   file (default 17 GB): `du -sh /var/cache/woodpecker-ci/*` at the end of day 1,
-   2 and 3.
+3. **Bounded disk.** The three directories each stay under their caps (`prune.sh` flags;
+   defaults 28 GB for go-build, 6 GB for go-mod, 3 GB for npm): the prune journal ends
+   every night with `done` and no `still ... cap` line (the one-liner is below); or
+   `du -sh /var/cache/woodpecker-ci/*` at the end of day 1, 2 and 3.
 4. **No memory regression.** The host's lowest available memory during the pilot is
    no lower than in the three days before (fleet metrics hub), and the `bench.sh`
    peak memory of `warm` is not above `cold`.
@@ -379,17 +380,11 @@ second host.
 |---|---|---|
 | 1 | Faster (`effect` below 0.75) | **Open.** The only production figure (0.84 to 0.94, 7 to 8 pairs) was taken before the disk fix and was inconclusive. The difference-in-differences cutover cannot separate the cache from the disk change on the same day; a controlled A/B on the pilot host (cache on versus off in the same hours) would. On a quiet host the cache itself is measured: cold 78 s, re-run 6 s. |
 | 2 | Not less reliable | **Not measured** since the hold went away. |
-| 3 | Bounded disk (all three directories under their caps, 17 GB together) | **Not met.** `go-build` has ended every daily prune above its 8,192 MB cap since 10-21 (OBSERVED in the prune journal on the pilot host): 18.8, 18.8, 21.6, 27.2, 18.8, 18.0, 23.1, 17.4, 21.4, 14.3, 16.0 and 18.3 GB (10-21 to 11-01), against 8.1 and 7.1 GB on 10-19 and 10-20. Before the 11-01 prune it stood at 32.8 GB. `go-mod` (5.1 GB of 6.1) and `npm` (0.35 GB of 3.1) are inside their caps. Total after the prune on 11-01: about 23.8 GB. |
+| 3 | Bounded disk (each directory under its cap) | **Was not met; cap raised, proof pending.** `go-build` ended every daily prune above its 8,192 MB cap from 10-21 to 11-01 (OBSERVED in the prune journal on the pilot host): 18.8, 18.8, 21.6, 27.2, 18.8, 18.0, 23.1, 17.4, 21.4, 14.3, 16.0 and 18.3 GB, against 8.1 and 7.1 GB on 10-19 and 10-20; it stood at 32.8 GB before the 11-01 prune. On 11-01 at 22:02 UTC, on the owner's go, the cap was raised to 28 GB (a drop-in on the prune unit); a run right after read `go-build 21489 MB <= 28672 MB, nothing to do`. `go-mod` (5.1 of 6.1 GB) and `npm` (0.35 of 3.1) were inside their caps throughout. Not proven yet: that a working day stays under 28 GB. The journal of the prune at 03:17 UTC on 11-03, after Monday's builds, decides. |
 | 4 | No memory regression | **Not measured.** |
 | 5 | Reversible | **Not exercised** (the rollback was never run). |
 
-Why criterion 3 fails: `prune.sh` deletes by file age down to files used in the last day, and
-stops there so it never touches a cache a running job is using. It logs `still N MB after deleting
-everything older than 0 days; cap M MB` and exits normally, so nothing alerts. The files used in one
-working day already come to 14 to 27 GB, so a cap of 8 GB cannot be reached by age alone. The choice is
-the owner's: raise the `go-build` cap to what a working day needs (disk cost: the pool under the pilot
-VM is 74 % full), or keep the cap and accept slower first builds after each prune. Either way, make the
-"still above cap" line an alert instead of a log line. Read it with:
+Why it failed: `prune.sh` deletes by file age down to files used in the last day, and stops there so it never touches a cache a running job is using. It logged `still N MB after deleting everything older than 0 days; cap M MB` and exited normally, so nothing alerted. The files used in one working day come to 14 to 27 GB, so a cap of 8 GB could not be reached by age alone. The caps were also never read from the env file that this runbook and the template named: `prune.sh` takes them as flags, so editing the env file would have changed nothing. Fixed here: the `go-build` default is now 28 GB, the template says where the caps really are, and the host got the same value through a drop-in. Still open: turn the "still above cap" line into an alert. Read the journal with:
 
 ```sh
 journalctl -u woodpecker-ci-cache-prune.service --since -14d --no-pager -o short-iso \
@@ -403,7 +398,8 @@ to speed them up and gives it back under pressure. The memory risk in a Go CI st
 is the compiler, and a warm cache makes that smaller, because less is compiled.
 The existing `GOFLAGS=-p=2` and the agent's slot count stay as they are.
 
-Cache sizes are PREDICTED to be a few GB per Go version; the caps in the env file
+Cache sizes were PREDICTED to be a few GB per Go version; measured on 10-21 to 11-01, one working
+day of go-build is 14 to 27 GB. The caps (`prune.sh` flags, not the env file)
 are the safety net and `prune.sh` enforces them without stopping running jobs.
 
 ## Rollback

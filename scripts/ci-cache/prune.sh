@@ -18,7 +18,9 @@
 set -euo pipefail
 
 ROOT=""
-GO_BUILD_MAX_MB=8192
+# A working day's go-build cache measured 14 to 27 GB on the pilot host (11-2026); 8 GB could not be
+# reached by age alone, so the prune ended above its cap every night.
+GO_BUILD_MAX_MB=28672
 GO_MOD_MAX_MB=6144
 NPM_MAX_MB=3072
 MOD_MIN_AGE_DAYS=14
