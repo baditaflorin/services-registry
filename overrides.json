@@ -525,7 +525,9 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "access_tier": "infra-privileged",
     "auth": {
@@ -586,7 +588,9 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "access_tier": "infra-privileged",
     "auth": {
@@ -3706,7 +3710,9 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18163,
     "description": "response-driven backoff coordinator",
@@ -3779,7 +3785,9 @@
     "env":     {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "fleet-budget-tracker",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18164,
     "description": "per-program scan-cost cap (atomic check-and-insert)",
@@ -3796,7 +3804,9 @@
     "env":     {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "fleet-call-tracer",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18161,
     "description": "per-request call trace collector (Speedscope flamegraph output)",
@@ -4041,7 +4051,9 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "fleet-eventlog",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     }
   },
   "fleet-exec": {
@@ -4123,7 +4135,9 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18153,
     "description": "WAF/soft-404/CDN-noise classifier",
@@ -4195,7 +4209,9 @@
   "fleet-host-guard": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "category": "observability",
     "container_port": 18207,
@@ -4784,7 +4800,9 @@
       "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-fleet-sandbox-targets-write-user",
       "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-fleet-sandbox-targets-write-password",
       "APP_ENVIRONMENT": "production",
-      "APP_VERSION": "0.1.2"
+      "APP_VERSION": "0.1.2",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18168,
     "description": "internal-only sandbox vulnerable apps (10 endpoints)",
@@ -4807,7 +4825,9 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "fleet-schema-validator",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18166,
     "description": "JSON Schema catalog + validator (8 baseline schemas)",
