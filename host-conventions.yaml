@@ -53,6 +53,18 @@ spiffe_socket_directories:
   0crawl: /run/spire/sockets/0crawl
   0exec: /run/spire/sockets
 
+# A mesh whose workloads may move to another trust domain's agent socket, per service
+# (overrides.json `spiffe_merged_identity: true`, default off; fleet-runner >= 0.7.748).
+# A 0crawl service that sets it mounts socket_directory (the 0exec agent) and holds
+# spiffe://0exec.com/ns/0crawl/sa/<id>, issued by the phase 2 merge. The selector label
+# io.spiffe.workload-id keeps the mesh's own identity, so rollback is only a socket change.
+# (fleet-state docs/architecture/ephemeral-credentials/MERGE-0CRAWL-INTO-0EXEC.md 5a)
+spiffe_identity_domain:
+  0crawl:
+    trust_domain: 0exec.com
+    namespace: 0crawl
+    socket_directory: /run/spire/sockets
+
 # Numeric group ownership of each host Workload API socket directory. The
 # renderer adds this supplementary group only to explicitly opted-in workloads.
 spiffe_socket_group_ids:
