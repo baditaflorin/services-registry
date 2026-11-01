@@ -1274,11 +1274,18 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "The service bounded JS-render retry was not exercised through its fetch-cache endpoint in this checkout; manual Chrome inspection found no remaining thin shells in successful pages but does not establish service-render fidelity across sites. Route extraction does not verify that a destination is operational.",
     "version": "0.1.34",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "contact-route-detector", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_SERVICE_ID": "contact-route-detector",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+    },
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "company-name-extractor": {
     "params": [
@@ -3519,7 +3526,12 @@
       {"name": "target", "required": true, "type": "string", "description": "Seed URL to crawl for email addresses (multi-page within domain)", "example": "https://example.com"},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source: source query overrides FLEET_FETCH_SOURCE (live when unset); archive mode never...", "example": "commoncrawl"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {
+      "GRAPH_ENABLED": "true",
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+    },
     "container_port": 8287,
     "description": "Extracts email addresses from live pages or Common Crawl captures.",
     "example_path": "/?target=https://example.com&source=commoncrawl",
@@ -3541,7 +3553,8 @@
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "email-harvester": {
     "params": [
