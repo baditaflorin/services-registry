@@ -571,7 +571,7 @@
     "example_path": "/",
     "host_port": 18304,
     "scope": "internal-only",
-    "version": "0.2.4",
+    "version": "0.3.0",
     "trl": 6,
     "trl_evidence": "First-pass audit of this shared fleet-infra request/reply message bus: found and fixed a real capacity-cap bypass -- Store.Reply only incremented the message counter for one of two data structures a reply gets stored in, so MAILBOX_MAX_MSGS silently drifted under sustained normal traffic (reverting the fix, a 500-cycle test drove the counter to -500, an unbounded-growth exploit). Confirmed 0 message loss/duplication under 5000 concurrent send/drain operations with go test -race. trl bumped 5->6; trl_ceiling=7 added -- deliberately in-RAM/single-process/ephemeral with a process-wide (not per-recipient) capacity budget. See PR #3 (merged).",
     "trl_assessed_at": "2026-08-01",
@@ -2988,7 +2988,7 @@
     "trl_ceiling_reason": "The shared JS-render upstream can degrade on cold or failed renders, limiting SLA-grade completeness.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.23",
+    "version": "0.4.24",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -4193,7 +4193,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-node SQLite. Lifts to 8 once paired with periodic snapshot backup and a multi-collector consensus design for high-RPS callers.",
     "trl_evidence": "Fleet graph collector v0.2.8: SQLite storage is bounded at the write path (the unused high-cardinality services_seen ledger is no longer populated), writes are serialized with a 500 ms busy timeout and request contexts, and periodic passive WAL checkpoints prevent unbounded disk growth. Production compaction on 2026-09-04 reduced the live database from 4.5 GB plus a 1.5 GB WAL to 176 KB while preserving every active graph edge and hourly rollup; direct /health and real /selftest both returned 200 after restart. The collector retains directed cycle-tolerant graph semantics, strict writer identity checks, canonical registry IDs, bounded agent contexts, and tested ingest-to-rollup retention.",
-    "version": "0.4.44",
+    "version": "0.4.45",
     "spiffe_workload": true
   },
   "fleet-har-builder": {
@@ -4874,7 +4874,7 @@
     "trl_ceiling_reason": "Single-node SQLite. Ceiling lifts to 8 once paired with sealed offsite master-key backup.",
     "trl_evidence": "v0.3.5 release: go-fleet-secrets PRs #14 and #15 hardened trusted-proxy identity handling and made /selftest an explicit unauthenticated health contract; deployed image f5fafff passed direct /health, /selftest, and /version smoke checks, followed by a gateway vhost render and reload. Existing audit-log redaction, consumer-ACL, rotation, and concurrency tests remain required.",
     "internal_direct": true,
-    "version": "0.7.5",
+    "version": "0.8.0",
     "spiffe_workload": true
   },
   "fleet-selftest-aggregator": {
@@ -5676,7 +5676,7 @@
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/_gw_health",
-    "version": "0.3.57",
+    "version": "0.3.58",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },

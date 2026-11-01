@@ -1,3 +1,7 @@
+## 2026-11-01
+
+- fleet-version-pin-sync: 5 registry version pin(s) set to the version the service runs, which is also its repository main: `agent-mailbox` 0.3.0, `domain-newsletter-platform-detector` 0.4.24, `fleet-graph` 0.4.45, `fleet-secrets` 0.8.0, `infrastructure-fetch-cache` 0.3.58.
+
 ## 2026-10-31
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `asn-lookup` 1.5.21.
