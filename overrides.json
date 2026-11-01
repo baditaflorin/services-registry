@@ -4148,7 +4148,8 @@
     "env": {
       "GRAPH_ENABLED": "false",
       "GRAPH_MTLS_ADDR": ":8443",
-      "GRAPH_MTLS_WRITER_IDS": "spiffe://0exec.com/ns/fleet/sa/agent-tools"
+      "GRAPH_MTLS_WRITER_IDS": "spiffe://0exec.com/ns/fleet/sa/agent-tools",
+      "GRAPH_MTLS_WRITER_NAMESPACES": "fleet,0crawl"
     },
     "access_tier": "infra-privileged",
     "container_port": 18143,
