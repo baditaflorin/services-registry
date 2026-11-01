@@ -3807,7 +3807,9 @@
       "GRAPH_SERVICE_ID": "fleet-call-tracer",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "FLEET_SECRETS_SPIFFE": "dual",
+      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443"
     },
     "container_port": 18161,
     "description": "per-request call trace collector (Speedscope flamegraph output)",
@@ -4138,7 +4140,9 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "FLEET_SECRETS_SPIFFE": "dual",
+      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443"
     },
     "container_port": 18153,
     "description": "WAF/soft-404/CDN-noise classifier",
@@ -4826,7 +4830,9 @@
       "GRAPH_SERVICE_ID": "fleet-schema-validator",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "FLEET_SECRETS_SPIFFE": "dual",
+      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443"
     },
     "container_port": 18166,
     "description": "JSON Schema catalog + validator (8 baseline schemas)",
