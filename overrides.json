@@ -5642,8 +5642,14 @@
       "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10",
       "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "scrapetheworld.org,okssh.com,0own.com,0prx.com,badita.org",
       "JS_PROXY_URL": "http://10.10.10.10:28006",
-      "JS_PROXY_FALLBACK_URL": "http://go-js-proxy:8080"
+      "JS_PROXY_FALLBACK_URL": "http://go-js-proxy:8080",
+      "SPIFFEAUTH_MODE": "dual",
+      "SPIFFEAUTH_PEERS_FILE": "/app/spiffe-peers.json",
+      "SPIFFEAUTH_JWT_AUDIENCE": "spiffe://0exec.com/ns/fleet/sa/infrastructure-fetch-cache",
+      "SPIFFEAUTH_TRUST_DOMAINS": "0exec.com",
+      "SPIFFEAUTH_UNMAPPED": "fallback"
     },
+    "spiffe_workload": true,
     "example_path": "/fetch?url=https://example.com/",
     "host_port": 18205,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
