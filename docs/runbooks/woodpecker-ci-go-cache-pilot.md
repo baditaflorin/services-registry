@@ -370,6 +370,32 @@ All five must hold before the setting is applied to a second host:
    once, and neither the switch nor the rollback cancels a pipeline (both are done
    behind a hold).
 
+### Where the five criteria stand (2026-11-01)
+
+Only criterion 3 has a fresh measurement; the others are open, so the setting is not ready for a
+second host.
+
+| # | Criterion | State on 2026-11-01 |
+|---|---|---|
+| 1 | Faster (`effect` below 0.75) | **Open.** The only production figure (0.84 to 0.94, 7 to 8 pairs) was taken before the disk fix and was inconclusive. The difference-in-differences cutover cannot separate the cache from the disk change on the same day; a controlled A/B on the pilot host (cache on versus off in the same hours) would. On a quiet host the cache itself is measured: cold 78 s, re-run 6 s. |
+| 2 | Not less reliable | **Not measured** since the hold went away. |
+| 3 | Bounded disk (all three directories under their caps, 17 GB together) | **Not met.** `go-build` has ended every daily prune above its 8,192 MB cap since 10-21 (OBSERVED in the prune journal on the pilot host): 18.8, 18.8, 21.6, 27.2, 18.8, 18.0, 23.1, 17.4, 21.4, 14.3, 16.0 and 18.3 GB (10-21 to 11-01), against 8.1 and 7.1 GB on 10-19 and 10-20. Before the 11-01 prune it stood at 32.8 GB. `go-mod` (5.1 GB of 6.1) and `npm` (0.35 GB of 3.1) are inside their caps. Total after the prune on 11-01: about 23.8 GB. |
+| 4 | No memory regression | **Not measured.** |
+| 5 | Reversible | **Not exercised** (the rollback was never run). |
+
+Why criterion 3 fails: `prune.sh` deletes by file age down to files used in the last day, and
+stops there so it never touches a cache a running job is using. It logs `still N MB after deleting
+everything older than 0 days; cap M MB` and exits normally, so nothing alerts. The files used in one
+working day already come to 14 to 27 GB, so a cap of 8 GB cannot be reached by age alone. The choice is
+the owner's: raise the `go-build` cap to what a working day needs (disk cost: the pool under the pilot
+VM is 74 % full), or keep the cap and accept slower first builds after each prune. Either way, make the
+"still above cap" line an alert instead of a log line. Read it with:
+
+```sh
+journalctl -u woodpecker-ci-cache-prune.service --since -14d --no-pager -o short-iso \
+  | grep -E 'prune.sh: (done|.*still)'
+```
+
 ## Memory and disk
 
 The caches live on disk, not in RAM. The kernel's page cache may use free memory
