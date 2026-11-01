@@ -1958,7 +1958,8 @@
     "container_port": 18189,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18189,
     "placement": "replicable",
@@ -2052,7 +2053,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "domain-ai-catalog-discovery",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     }
   },
   "domain-amp-detector": {
@@ -2292,7 +2294,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "example_path": "/?domain=stripe.com",
     "trl": 6,
@@ -2319,7 +2322,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "internal_direct": true,
     "trl": 7,
@@ -3058,7 +3062,8 @@
     "container_port": 18183,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18183,
     "trl": 7,
@@ -3253,7 +3258,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 8,
     "trl_evidence": "Live production-DB audit found primary_vendor='reamaze' as the single largest detected vendor (1,191 rows), with 49.5% being spam/parked .info domains. Traced the residual (post-earlier-fix) cases via live browser reproduction to GoDaddy Website Builder unconditionally loading Reamaze's shared JS bundle via a GoDaddy-specific loader file, whose bundled CSS/DOM boilerplate satisfied the detector's 'activation' marker regardless of merchant intent -- verified against reamaze.com's own genuine install, which never carries that GoDaddy-specific loader filename. Fixed (v0.3.8) with a targeted confidence cap keyed to the GoDaddy loader marker, with regression tests for both the false-positive and true-positive cases. See github.com/baditaflorin/go_domain_support_stack_detector PR #14 (merged). Rows with tool_version<0.3.8 are re-crawl candidates.",
@@ -3361,7 +3367,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 6,
     "trl_ceiling": 7,
@@ -3422,7 +3429,8 @@
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
