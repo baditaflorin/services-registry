@@ -4973,7 +4973,9 @@
   "fleet-vendor-disclosure-tracker": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
     },
     "container_port": 18167,
     "description": "vendor disclosure history tracker (PII-redacted)",
