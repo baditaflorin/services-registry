@@ -1,5 +1,6 @@
 ## 2026-11-01
 
+- registry: `host-conventions.yaml` `spiffe_identity_domain.0crawl` (trust domain 0exec.com, namespace 0crawl, socket directory /run/spire/sockets) + schema: the target of the per-service `spiffe_merged_identity` switch of fleet-runner 0.7.748. Inert until a service sets the switch (phase 3 cutover, MERGE-0CRAWL-INTO-0EXEC.md 5a).
 - fleet-version-pin-sync: 5 registry version pin(s) set to the version the service runs, which is also its repository main: `agent-mailbox` 0.3.0, `domain-newsletter-platform-detector` 0.4.24, `fleet-graph` 0.4.45, `fleet-secrets` 0.8.0, `infrastructure-fetch-cache` 0.3.58.
 
 ## 2026-10-31
