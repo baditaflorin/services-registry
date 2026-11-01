@@ -1,7 +1,11 @@
 import importlib.util
 import json
+import os
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parent / "fleet-version-pin-sync.py"
 _spec = importlib.util.spec_from_file_location("fleet_version_pin_sync", SCRIPT)
@@ -107,6 +111,105 @@ class TestChangelog(unittest.TestCase):
         self.assertEqual(vps.changelog_with("## 2026-10-17\n\n- x\n", "- y\n", "2026-10-17"), "## 2026-10-17\n\n- y\n- x\n")
         self.assertEqual(vps.changelog_with("## 2026-10-16\n\n- x\n", "- y\n", "2026-10-17"),
                          "## 2026-10-17\n\n- y\n\n## 2026-10-16\n\n- x\n")
+
+
+class TestStaleTargets(unittest.TestCase):
+    def test_only_a_changed_row_of_a_target_is_skippable(self):
+        targets = {"a": "2", "b": "3", "c": "4"}
+        self.assertEqual(vps.stale_targets(["a: changed ['trl_evidence', 'version']"], targets), {"a"})
+        self.assertEqual(vps.stale_targets(["a: changed ['trl_evidence', 'version']", "c: changed ['env', 'version']"], targets), {"a", "c"})
+        self.assertIsNone(vps.stale_targets([], targets))
+        self.assertIsNone(vps.stale_targets(["the set of services changed"], targets))
+        self.assertIsNone(vps.stale_targets(["a: row did not change"], targets))
+        self.assertIsNone(vps.stale_targets(["zzz: changed ['trl_evidence']"], targets))                      # not a target: something else moved
+        self.assertIsNone(vps.stale_targets(["a: changed ['trl_evidence', 'version']", "the set of services changed"], targets))
+        self.assertIsNone(vps.stale_targets(["a: changed ['version']"], targets))                              # version alone is the pin itself: wrong value, not stale
+
+
+class TestWaitAndMergeAndResume(unittest.TestCase):
+    OK = json.dumps({"statuses": [{"context": c, "state": "success"} for c in vps.CI_CONTEXTS]})
+
+    def _run(self, answers, merged):
+        """A fake `run`: gh api answers come from `answers` in order (an Exception is raised), `gh pr merge` is recorded."""
+        def fake(cmd, cwd=None, check=True, **kw):
+            if cmd[:2] == ["gh", "api"]:
+                a = answers.pop(0)
+                if isinstance(a, Exception):
+                    raise a
+                return mock.Mock(stdout=a, returncode=0)
+            if cmd[:3] == ["gh", "pr", "merge"]:
+                merged.append(cmd)
+                return mock.Mock(stdout="", returncode=0)
+            raise AssertionError(cmd)
+        return fake
+
+    def test_a_refused_status_call_is_retried_not_fatal(self):
+        merged, sleeps = [], []
+        answers = [RuntimeError("gh api ...: exit 1: gh: API rate limit exceeded"), RuntimeError("again"), self.OK]
+        with mock.patch.object(vps, "run", self._run(answers, merged)), mock.patch.object(vps.time, "sleep", sleeps.append):
+            vps.wait_and_merge("/w", 7, "abc", 3600)
+        self.assertEqual(len(merged), 1)
+        self.assertIn("--match-head-commit", merged[0])
+        self.assertEqual(sleeps, [120, 120])
+
+    def test_failed_ci_still_stops_and_a_deadline_still_ends_the_wait(self):
+        bad = json.dumps({"statuses": [{"context": vps.CI_CONTEXTS[0], "state": "failure"}]})
+        with mock.patch.object(vps, "run", self._run([bad], [])):
+            with self.assertRaises(RuntimeError):
+                vps.wait_and_merge("/w", 7, "abc", 3600)
+        with mock.patch.object(vps, "run", self._run([RuntimeError("down")] * 5, [])), mock.patch.object(vps.time, "sleep", lambda s: None):
+            with self.assertRaises(RuntimeError):
+                vps.wait_and_merge("/w", 7, "abc", 0)
+
+    def test_an_open_pull_request_is_resumed_and_exit_3_means_it_could_not_be_merged(self):
+        args = mock.Mock(ci_timeout=60, prom="")
+        pr = {"number": 9, "headRefName": "bot/version-pin-sync-x", "headRefOid": "deadbeef"}
+        with mock.patch.object(vps, "wait_and_merge") as wm:
+            self.assertEqual(vps.resume_open_pr("/w", pr, {}, args), 0)
+            wm.assert_called_once_with("/w", 9, "deadbeef", 60)
+        with mock.patch.object(vps, "wait_and_merge", side_effect=RuntimeError("CI failed on #9")):
+            self.assertEqual(vps.resume_open_pr("/w", pr, {}, args), 3)
+
+
+class TestFreshCheckout(unittest.TestCase):
+    """2026-10-20 18:21Z the job stopped at its own guard with edited overrides.json/services.json left in its work dir; from then on `checkout -B main origin/main`
+    refused to run over them and every run (18:21, 00:18, 06:18) failed there, so no pin was synced for 12 hours."""
+
+    def test_a_work_dir_left_dirty_by_a_failed_run_is_cleaned_and_follows_origin(self):
+        env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@example.invalid", "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.invalid",
+               "GIT_CONFIG_GLOBAL": "/dev/null", "GIT_CONFIG_SYSTEM": "/dev/null"}
+
+        def g(*args, cwd):
+            subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True, env=env)
+
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, env):
+            tmp = Path(tmp)
+            origin, seed, work = tmp / "origin.git", tmp / "seed", tmp / "work"
+            g("init", "-q", "--bare", "-b", "main", str(origin), cwd=tmp)
+            g("clone", "-q", str(origin), str(seed), cwd=tmp)
+            (seed / "overrides.json").write_text('{"a": {"version": "1"}}\n')
+            (seed / "services.json").write_text('[{"id": "a", "version": "1"}]\n')
+            g("add", "-A", cwd=seed)
+            g("commit", "-q", "-m", "one", cwd=seed)
+            g("push", "-q", "origin", "HEAD:main", cwd=seed)
+            with mock.patch.object(vps, "REPO_URL", str(origin)):
+                vps.fresh_checkout(work)                                          # the first run clones
+                # a run that died half-way: edited tracked files, an untracked file, even its own branch with a local commit
+                g("checkout", "-q", "-b", "bot/version-pin-sync-x", cwd=work)
+                (work / "overrides.json").write_text('{"a": {"version": "2"}}\n')
+                (work / "services.json").write_text("changed\n")
+                (work / "leftover.tmp").write_text("x\n")
+                g("commit", "-q", "-am", "half-way", cwd=work)
+                (work / "overrides.json").write_text("dirty again\n")
+                (seed / "overrides.json").write_text('{"a": {"version": "3"}}\n')   # origin moved on meanwhile
+                g("commit", "-q", "-am", "two", cwd=seed)
+                g("push", "-q", "origin", "HEAD:main", cwd=seed)
+                vps.fresh_checkout(work)                                          # must not raise
+            self.assertEqual((work / "overrides.json").read_text(), '{"a": {"version": "3"}}\n')
+            self.assertEqual((work / "services.json").read_text(), '[{"id": "a", "version": "1"}]\n')
+            self.assertFalse((work / "leftover.tmp").exists())
+            head = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=work, capture_output=True, text=True, env=env).stdout.strip()
+            self.assertEqual(head, "main")
 
 
 if __name__ == "__main__":

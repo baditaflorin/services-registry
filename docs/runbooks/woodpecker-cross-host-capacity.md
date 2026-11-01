@@ -273,3 +273,189 @@ Stop the new controller instance, set the remote agent to `no_schedule=true`,
 and stop its Compose stack. Keep the repository webhook and authoritative
 control plane unchanged. Remove the private proxy/NAT service only after the
 agent has disconnected and no workflow is running there.
+
+## Graded admission: slots follow headroom (a node's optional `graded` block)
+
+By default the controller is on/off per host: it drains every agent of a host that stays
+over a stop threshold and restores them together. That wastes the host in between (it
+sat at 12% CPU with work pending because its slots were fixed) and overloads it at the
+edge. A node with a `graded` block instead gets a **share of its slots**, 0 to 1, from its
+live headroom, and opens or closes ONE agent per step to match it.
+
+```json
+{
+  "name": "infer-builder-ci",
+  "agent_names": ["infer-builder-ci", "infer-builder-ci-slot-2", "infer-builder-ci-slot-3"],
+  "metrics_url": "http://<node-exporter>:9100/metrics",
+  "graded": {"min_open_slots": 1, "load_per_cpu_full": 0.5, "memory_full_pct": 50,
+             "open_samples": 6, "close_samples": 2}
+}
+```
+
+- Each signal is linear between its *full* level (all slots open) and the node's stop
+  threshold (none): normalized load (or CPU %), available memory %, and I/O pressure when the
+  node has `io_pressure_*` limits. The scarcest signal decides; an unknown signal never
+  limits (same rule as the hard drain). Defaults for the full levels are the resume
+  thresholds.
+- Slots are the agents' `capacity` (an agent with capacity 3 is 3 slots). Use several
+  one-slot registrations on a host to get fine steps. Agents are used in `agent_names` order:
+  the first listed closes last. Agents without a fresh heartbeat are not counted.
+- `close_samples` consecutive cycles over share close the last open agent;
+  `open_samples` consecutive cycles under it (and no hard breach) reopen the first agent the
+  controller closed. At least `min_open_slots` stay open. Only agent IDs the controller closed
+  are reopened, so an operator's `no_schedule` hold survives.
+- The hard path is unchanged and wins: a sustained breach (memory, disk, I/O stop, load stop)
+  still drains the whole host, and the recovery then reopens it one agent at a time instead of
+  all at once. Running workflows are never killed.
+- A node without `graded` behaves exactly as before. Log events: `node_graded`,
+  `agent_graded_closed`, `agent_graded_opened`.
+
+### Deployed with graded admission (2026-10-26)
+
+`ci.0exec.com` now runs the controller with `graded` blocks on two hosts; their extra
+agents are one-slot registrations that start paused (`no_schedule`) and are handed to the
+controller by listing their IDs in the node's `managed_agent_ids` in the controller state file
+while the controller is stopped (a paused agent the controller did not close is treated as an
+operator hold and is never reopened).
+
+| Node | Agents (open order) | Slots | Graded limits |
+|---|---|---:|---|
+| `infer-builder-ci` | `infer-builder-ci` (1 since 2026-10-28, was 3), `-slot-2`, `-slot-3`, `-slot-4` (agent IDs 109-111) | 4 | min 2 open, load full 0.7/CPU, memory full 40%; 5 GiB step cap on all four agents since 2026-10-28 |
+| `0mcp-docker-build` (VM 130) | the registered 0exec agent (1), `0mcp-docker-0exec-slot-2`, `-slot-3` (IDs 114, 115) | 3 | min 1 open, load full 0.7/CPU, memory full 55% |
+| `0own-build-worker` (VM 610) | `0own-build-agent` (99, now 1 slot), `0own-build-agent-slot-2`, `-3`, `-4` (IDs 116-118) | 4 | min 1 open, load full 0.7/CPU, memory full 50%, I/O full 8%; node I/O stop 45% / resume 25%; 5 GiB step cap on all four agents since 2026-10-28 |
+
+The slot agents run from `/opt/woodpecker-agent-slots` (infer) and
+`/opt/woodpecker-ci-0exec-slots` (VM 130), one compose project each, with their tokens in
+`/opt/woodpecker-agent-tokens/agent-<id>.token` and in the vault as
+`woodpecker_agent_<id>_token`. VM 130 slots keep the 5 GiB per-step memory cap. CT 108 runs no schedulable agent.
+
+Traps met while rolling this out: the controller reaches the tailnet metrics only through the
+`HTTP_PROXY` its unit sets, so a hand-run `--once` from a shell times out on `infer-builder-ci`;
+a dry run (`--once` without `--apply`) never reaches the graded step, so it proves only that the config loads;
+a `concurrency_limit` group on a workflow (the `domainscope-go-integration` group of
+go-url-categorizer-api allows one at a time) leaves workflows pending for hours with free slots, which is the
+workflow's own limit and not missing capacity.
+
+0own was split on 2026-10-26 (agent 99 paused, drained of its 3 running jobs, recreated with
+`WOODPECKER_MAX_WORKFLOWS=1`; its compose project is `own-woodpecker-agent`, so a bare
+`docker compose -f ...` in `/opt/woodpecker-agent` starts a SECOND container with the same token
+under project `woodpecker-agent`: always pass `-p own-woodpecker-agent`). Its two spinning disks run at 55-67% I/O
+pressure from the guests alone (VMs 610, 660, 630), so with the 45% stop limit its slots stay closed
+until the disks calm down; that is the intended behaviour, and it shows 0own is not a CI baseline host.
+
+## Memory budget per builder (measured 2026-10-28)
+
+Slots are not the only thing that limits a builder: its RAM is. Every CI builder VM has about 12 GiB
+(`0mcp-builder` 11.9, `0own-build-worker` 11.4, `infer-builder-ci` 11.9, CT 108 11) with 20, 10, 30 and 8 cores, so
+cores say nothing about how many builds fit.
+
+**What a build costs.** From the build sampler over 24 h: the median build peaks at 0.4 to 0.6 GiB, the 95th percentile at
+4.5 GiB, about 90 builds a day go above 4 GiB, about 15 above 5 GiB and 2 above 6 GiB, nearly all of them in
+`go-url-categorizer-api` and `hub_scrapetheworld_org`. One `node` step grew to 10 GB (killed 34 times on infer and 13 on 0own in
+24 h). A few heavy builds at once exhaust a VM, and a whole-VM OOM is far worse than the build it kills: load 265, ssh and
+node_exporter time out, the controller's `fail_closed_on_metrics_error` drains the host, and innocent steps die with it.
+
+**What happened on 2026-10-28.** The main agent of `infer-builder-ci` was raised from 3 to 7 workflows at 01:24Z (the backup
+`compose.yaml.bak-pre-cap7-20261028T0124Z` on the VM), most likely to work off a backlog. Kernel OOM kills there went from 2 in
+the six hours before to about 35 a day (37 whole-VM kills in 24 h; 0mcp-builder 24 whole-VM plus 31 kills of containers that hit
+their own 5 GiB cap; 0own-build-worker 14; CT 108 none), up to 12 builds ran at once, and the queue grew from 46 to 154
+pending: kills mean retries, retries mean a longer queue. A 7-slot agent is also a coarse unit for the graded controller:
+`min_open_slots: 2` is met by opening the whole 7-slot agent, so seven builds arrive together. The slot agents crash-looped
+(exit 137, about once a minute, 100+ restarts) and every crash left a workflow as `running` in the server database
+(agent 109, capacity 1, showed 7; agent 101 had 50 rows 12 days old), so **the `running` count in the database is not load**:
+count the step containers on the VM (`docker ps --filter name=wp_`).
+
+**The rule.**
+
+1. One-slot agents, and at most **4 builds at once per 12 GiB VM counting every agent on it**, whichever Woodpecker server it
+   belongs to (the 0mcp VM also runs the ci.0mcp agent; the 0own VM also runs a Forgejo agent).
+2. Every agent sets `WOODPECKER_BACKEND_DOCKER_LIMIT_MEM` and `WOODPECKER_BACKEND_DOCKER_LIMIT_MEM_SWAP` to `5368709120`
+   (5 GiB, the cap VM 130 already had), so a runaway step dies alone and fast instead of thrashing the VM.
+3. Do not raise `WOODPECKER_MAX_WORKFLOWS` to chew a backlog: capacity beyond the budget makes OOM kills, which make retries.
+4. Watch the OOM panels on CI Operations (`node_vmstat_oom_kill{role="ci-builder"}`) and tell the two kinds apart in the VM's
+   kernel log: `CONSTRAINT_NONE` is the VM running out of memory, `CONSTRAINT_MEMCG` is a capped container.
+
+Why 4 and 5 GiB, as a model rather than a measurement (about one build in ten is heavy at about 5 GiB, the rest about
+0.5 GiB, independent): the chance that two or more heavy builds run at once is 1% with 2 busy slots, 2.8% with 3, 5.2% with 4,
+11% with 6 and 34% with 12, and two heavy builds plus the VM's own 1.5 to 2 GiB already fill 12 GiB. With 4 slots and the cap a
+whole-VM OOM needs three heavy builds at once (0.4% when all four slots are busy); without the cap a single runaway is enough.
+
+**Changing a builder's slots or cap (worked on infer: about 22 minutes from drain to reopen, almost all of it waiting for builds to finish).** Drain the open agents of that VM through
+the API (`PATCH /api/agents/<id>` with `{"no_schedule": true}`, the controller's own token; the controller never reopens an
+agent it did not close, so reopen them yourself afterwards); wait until the VM's step containers are down to its own leftovers;
+back up the compose file (`compose.yaml.bak-pre-<change>-<UTC>`), edit it, and recreate with the project the container really
+belongs to (read it from the container's `com.docker.compose.project*` labels: a bare `docker compose` in the wrong directory
+starts a second container with the same token). Projects: infer `infer-builder-ci` (`/opt/woodpecker-agent`) and
+`woodpecker-slots` (`/opt/woodpecker-agent-slots`); 0own `own-woodpecker-agent` (`compose.yml` and
+`woodpecker-agent-ci-cache.override.yml`) and `woodpecker-0own-slots`; 0mcp `woodpecker-0exec-agent`
+(`/opt/woodpecker-ci-0exec-agent`), `woodpecker-0exec-slots` (`/opt/woodpecker-ci-0exec-slots`) and the ci.0mcp agent
+`woodpecker` (`/opt/woodpecker`). Check the environment of each agent, exactly one container per agent, restarts staying 0 and
+the kernel's `oom_kill` counter (`/proc/vmstat`) not moving. Result on infer: the crash loop stopped (restarts 0/0/0/0 over four
+minutes), load fell from 22 to 6, `MemAvailable` held at about 9 GiB, new step containers carry the 5 GiB limit, no OOM kill.
+Then 0own, the cap only (every agent there was already one slot): 8 minutes, every step container carried the limit, available
+memory dipped to 4.5 GiB under a heavy build without an OOM kill, restarts 0, `oom_kill` delta 0 over four minutes. That is a
+short window: the OOM panels on CI Operations show whether it holds over a day.
+
+**More RAM, not fewer slots (2026-10-28, evening).** The 12 GiB budget above is what forces few slots, so the better answer to a
+long queue is more memory, and two of the three builders had it unused. `qm config` showed `0own-build-worker` (VM 610)
+configured for 32 GB but held at 12 GB by its balloon floor, and `docker-build-lv3` (VM 130) configured for 16 GB but
+running at 12.9; both hypervisors had about 12 GB free. Raised live, no reboot: VM 610 to 18 GB (`qm set 610 --balloon 18432`,
+then `echo "balloon 18432" | qm monitor 610`), VM 130 to 20 GB (`qm set 130 --memory 20480 --balloon 20480` hot-adds the
+memory, the monitor line sets the running target), and VM 702 (infer-builder-ci) from 12 to 15 GB (hotplug), after taking 8 GB
+back from the page cache of `infer-pg-primary` (VM 701: Postgres itself uses about 25 GB shared plus 5 GB anonymous, 20 GB
+of its 58 was reclaimable cache; balloon floor 59392 to 51200, memory pressure stayed 0). The guests put hot-added memory
+online by themselves (`/sys/devices/system/memory/auto_online_blocks` is `online`, check it before relying on it).
+
+What to know before doing it again:
+
+* In Proxmox `balloon` is the **minimum**, not the target. Raising it does not make a running guest grow while its host is
+  above the 80% auto-balloon threshold: set the target through the QEMU monitor (`balloon <MiB>`) as well.
+* Keep at least 4 GiB of `MemAvailable` on the hypervisor. VM 610's host had 12 GB free and VM 130's 13 GB before; both
+  held at 7.5 GB after.
+* On the 0infer host the memory taken from VM 701 did **not** show up as free: 14 to 17 GiB of its memory is neither VM,
+  page cache nor slab, it grew by about 3 GiB while the VMs shrank, and it has direct reclaim running. Do not give VM 702
+  more than the 3 GiB already added until that is understood, and do not re-inflate VM 701 (the host might not have the
+  RAM to give back). 0infer is 94% allocated: its other VMs have little slack (`infer-runtime` really uses about 18 of 28 GB,
+  `infer-tier0` has no balloon).
+* CPU is not what the builders lack where it matters: `infer-builder-ci` has 30 vCPUs at a load of about 6; the 0mcp
+  hypervisor (24 cores) runs at a load of about 30 and the 0own one (16 cores) at 12 to 15, so there is no CPU to give there.
+
+With the RAM, slot counts went up in proportion (about one slot per 3 GiB, the 5 GiB cap kept): the ci.0exec main agent of
+VM 130 from 1 to 3 (5 slots in all), of `infer-builder-ci` from 1 to 2 (5 in all); 0own's agent 99 had a long job and was left at 1
+(4 slots, I/O-bound anyway). The `ci_0exec` queue went from 173 pending and 9 running to 106 pending and 21 running within
+twenty minutes of the change.
+
+**Where VM 130's Woodpecker agents are configured.** Not by the `woodpecker_runtime` role of `proxmox_florin_server` (that
+role manages a server-plus-agent stack). VM 130's host-local configuration is mirrored in git in
+`proxmox_florin_server/config/0mcp/docker-build-lv3/` (`files/` is a byte-for-byte copy of the live files, `verify-live.sh`
+lists the differences) and `/opt/woodpecker/docker-compose.yml` there is the ci.0mcp agent's compose. Its
+`WOODPECKER_MAX_WORKFLOWS=2` is not in that file: it comes from `/opt/woodpecker/openbao/runtime.env.ctmpl`, an OpenBao
+template that is not tracked and was changed by hand on 2026-09-01 (backup `runtime.env.ctmpl.bak-pre-workflow-capacity-...`);
+an `environment:` entry in the tracked compose overrides it, which is where to set a cap or a different capacity. The
+guest inventory in `inventory/host_vars/proxmox-host.yml` says 12 cores and 12288 MB for this VM (live: 20 cores, now
+20 GB), so a `provision-guests` run would shrink it: keep that file in step with `qm config`.
+
+**Not done yet.** The ci.0mcp agent on VM 130 has no step cap (`WOODPECKER_MAX_WORKFLOWS=2`, set in the template above): put the two
+`WOODPECKER_BACKEND_DOCKER_LIMIT_MEM*` keys in the tracked compose. Routing the heavy repositories to dedicated agents by label
+(a workflow that asks for `memory=heavy` runs only on agents that carry it, so one heavy build per VM) needs a `labels:` entry
+in `go-url-categorizer-api` and `hub_scrapetheworld_org`.
+
+## Agent records: names and labels must survive (2026-10-29)
+
+`PATCH /api/agents/{id}` stores `name` and `no_schedule` from the body (Woodpecker 3.17); a body with only `no_schedule` stores an **empty name**
+(custom labels survive: tested 2026-10-30). The agent keeps running, but the load controller finds agents by name, so it logs `node_missing` for the
+node and stops managing its slots (on 2026-10-28 eight infer, 0own and 0mcp agents were invisible for about a day this way). Every script that
+PATCHes an agent must send `name` and `no_schedule` (the controller also sends `custom_labels`, as a safeguard). fleet-runner's `UpdateAgent`
+already sends the name.
+
+**Self-heal (2026-10-30).** The service runs the check with `--repair --state /var/lib/woodpecker-agent-names/state.json`: it remembers each agent's
+name by id and, when a record's name is empty, PATCHes the remembered name back (with the record's own `no_schedule` and labels, so a caller's
+drain stays). A wipe is undone within a minute. `woodpecker_agent_names_repaired_total` counts restores: a rise means some caller still PATCHes
+without a name (found 2026-10-30 in the nginx access log on VM104: `curl/8.5.0` calls from inside CT108 that pause and unpause agents around
+docker or slot changes, with a body that has no `name`). An agent whose name was never seen stays unnamed and alerts.
+
+`bin/woodpecker_agent_names_check.py` (install: `templates/woodpecker-agent-names-check.{service,timer}`, one run a minute on the controller host)
+writes `woodpecker_agents_unnamed`, `woodpecker_agents_without_labels`, `woodpecker_load_controller_missing_agents{node}` and
+`woodpecker_agent_names_check_up` per plane to the node-exporter textfile directory. The alerts are in proxmox_florin_server
+(`fleet-woodpecker-agent-records.yml`). Repair of an emptied name: restart the idle agent (it re-registers `WOODPECKER_HOSTNAME`; check
+`GET /api/agents/<id>/tasks` is empty first). A stale entry in a controller config (agent gone for good) is removed from the config, with a backup.

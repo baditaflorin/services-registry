@@ -9,9 +9,15 @@ Type=oneshot
 EnvironmentFile=-/etc/default/fleet-edge-probe
 StateDirectory=fleet-edge-probe
 ExecStartPre=-/bin/sh -c 'curl -fsSL --max-time 25 "$EDGE_PROBE_SRC_URL" -o /var/lib/fleet-edge-probe/services.json.new && mv -f /var/lib/fleet-edge-probe/services.json.new /var/lib/fleet-edge-probe/services.json'
+# Optional: keep the edges data file (accepted public edge IPs, bin/fleet-edge-probe.edges.json) current the
+# same way. Only when EDGE_PROBE_EDGES_URL is set; also set EDGE_PROBE_EDGES=/var/lib/fleet-edge-probe/edges.json.
+# An invalid file makes the probe exit 2 (a unit failure), never a silent fallback.
+ExecStartPre=-/bin/sh -c '[ -z "$EDGE_PROBE_EDGES_URL" ] || { curl -fsSL --max-time 25 "$EDGE_PROBE_EDGES_URL" -o /var/lib/fleet-edge-probe/edges.json.new && mv -f /var/lib/fleet-edge-probe/edges.json.new /var/lib/fleet-edge-probe/edges.json; }'
 ExecStart=/usr/local/bin/fleet-edge-probe --services /var/lib/fleet-edge-probe/services.json --state /var/lib/fleet-edge-probe/state.json --prom=${EDGE_PROBE_PROM} --vantage=${EDGE_PROBE_VANTAGE} --ntfy=${EDGE_PROBE_NTFY} --runtime=${EDGE_PROBE_RUNTIME} --timeout 15 --concurrency 16
 # exit 1 == "a probed service is failing" (signal is in the metric / ntfy), not a unit failure.
-# exit 2 == usage/registry-fetch error == real unit failure.
+# exit 2 == usage/registry-fetch/edges-file error == real unit failure.
+# exit 3 == nothing eligible to probe (the filters left zero services) == real unit failure; it also
+#           writes fleet_edge_probe_eligible_services 0 and sends one ntfy alert per transition.
 SuccessExitStatus=0 1
 Nice=10
 IOSchedulingClass=idle

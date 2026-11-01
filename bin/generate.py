@@ -38,6 +38,7 @@ OVERRIDES_JSON       = ROOT / "overrides.json"
 SLUG_JSON            = ROOT / "slug.json"
 RENAMES_JSON         = ROOT / "renames.json"
 SUMMARY_TXT          = ROOT / "services.summary.txt"
+CI_RESOURCES_JSON    = ROOT / "ci-resources.json"
 
 # ─── G3: sanitized public mirror ───────────────────────────────────────
 #
@@ -140,6 +141,7 @@ PRIVATE_SERVICE_REQUIRED_FIELDS: frozenset[str] = frozenset({
 PRIVATE_SERVICE_ALLOWED_FIELDS: frozenset[str] = PRIVATE_SERVICE_REQUIRED_FIELDS
 PRIVATE_SERVICE_FORBIDDEN_FIELDS: frozenset[str] = frozenset({
     "url", "health_url", "repo_url", "auth", "auth_help", "example_path",
+    "example_path_source", "params",
     "pages_url", "pages_source_branch", "cert_domain", "alias_urls",
     "graph_target_hosts",
     "extra_server_names", "vhost", "network_exposure",
@@ -323,7 +325,10 @@ PROJECTIONS = {
     "services.minimal.json": _pick(["id", "name", "mesh", "kind", "category",
                                     "language", "trl", "url", "lifecycle"]),
     # "Build an Open link" — URLs + auth hint, no TRL / deploy fields.
+    # params / example_path_source: the declared inputs and where example_path came from
+    # (overrides.json, written by bin/sync-service-params.py from each service.yaml).
     "services.urls.json":    _pick(["id", "url", "health_url", "example_path",
+                                    "example_path_source", "params",
                                     "auth_help", "lifecycle"]),
     # TRL audits — claude-haiku-trl-batch and friends only need these.
     "services.trl.json":     _pick_where(["id", "trl", "trl_ceiling",
@@ -810,6 +815,88 @@ def validate_allowed_source_ips(entry: dict) -> None:
             )
 
 
+def validate_cors(entry: dict) -> None:
+    """`cors` is an opt-out switch: absent keeps the fleet default (permissive CORS), `false` removes it.
+
+    `true` would be a no-op that reads like a grant, and any other type is a typo that must not silently keep
+    or drop CORS, so only the boolean false is accepted."""
+    if "cors" not in entry:
+        return
+    if entry["cors"] is not False:
+        service_id = entry.get("id", "<unknown>")
+        sys.exit(f"ERROR: {service_id} cors must be the boolean false (absent keeps the fleet default)")
+
+
+def validate_public_path_prefixes(entry: dict) -> None:
+    """Validate request-path prefixes that bypass the keystore gate fail-closed.
+
+    This is a widening of attack surface (an unauthenticated route on an
+    otherwise keystore-gated service), so it is held to the same bar as
+    allowed_source_ips: non-empty, unique, strings only, and only on a
+    service that actually has a gate to exempt a prefix from.
+    """
+    if "public_path_prefixes" not in entry:
+        return
+    prefixes = entry["public_path_prefixes"]
+    service_id = entry.get("id", "<unknown>")
+    if not isinstance(prefixes, list) or not prefixes:
+        sys.exit(f"ERROR: {service_id} public_path_prefixes must be a non-empty array")
+    auth = entry.get("auth")
+    if not isinstance(auth, dict) or auth.get("type") != "api_key":
+        sys.exit(
+            f"ERROR: {service_id} public_path_prefixes is valid only for "
+            "auth.type='api_key' (a service with no gate has nothing to exempt)"
+        )
+    if not all(isinstance(value, str) for value in prefixes):
+        sys.exit(f"ERROR: {service_id} public_path_prefixes entries must be strings")
+    if len(prefixes) != len(set(prefixes)):
+        sys.exit(f"ERROR: {service_id} public_path_prefixes must contain unique entries")
+    for value in prefixes:
+        # Mirrors go-common's own guard at the container layer (KeystoreOpts.
+        # PublicPathPrefixes): "" and "/" would make the whole service
+        # public, which this field exists to avoid, not enable.
+        if value in ("", "/") or not value.startswith("/"):
+            sys.exit(
+                f"ERROR: {service_id} has invalid public_path_prefixes entry "
+                f"{value!r}; must be a path starting with '/', and not '/' itself"
+            )
+
+
+def validate_gateway_rate_limit(entry: dict) -> None:
+    """Validate the gateway rate-limit knob fail-closed.
+
+    "allowlisted-sources-exempt" makes fleet-runner nginx-render leave the
+    per-IP api_per_ip limit off the catchall location. That is a widening, so
+    it is accepted only where it cannot reach the internet: on a
+    gateway-ip-allowlisted vhost (whose allow/deny block admits fleet hosts
+    alone) that is keystore-gated. Any other value is a typo, refused rather
+    than ignored. The renderer applies the same rule (go_fleet_runner
+    nginx_gateway_rate_limit.go).
+    """
+    if "gateway_rate_limit" not in entry:
+        return
+    value = entry["gateway_rate_limit"]
+    service_id = entry.get("id", "<unknown>")
+    if value not in ("api_per_ip", "allowlisted-sources-exempt"):
+        sys.exit(
+            f"ERROR: {service_id} gateway_rate_limit must be 'api_per_ip' or "
+            f"'allowlisted-sources-exempt', not {value!r}"
+        )
+    if value == "api_per_ip":
+        return
+    if entry.get("network_exposure") != "gateway-ip-allowlisted":
+        sys.exit(
+            f"ERROR: {service_id} gateway_rate_limit='allowlisted-sources-exempt' "
+            "is valid only for network_exposure='gateway-ip-allowlisted'"
+        )
+    auth = entry.get("auth")
+    if not isinstance(auth, dict) or auth.get("type") != "api_key":
+        sys.exit(
+            f"ERROR: {service_id} gateway_rate_limit='allowlisted-sources-exempt' "
+            "requires api_key auth"
+        )
+
+
 def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
     topics = normalize_topics(repo.get("repositoryTopics") or [])
     mesh = mesh_of(topics)
@@ -943,6 +1030,11 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # A curated auth-help string may be stricter than the generic
               # auth-type fallback (for example, header-only credentials).
               "auth_help",
+              # The service's declared inputs (name/required/type/description/
+              # example), copied from its service.yaml into overrides.json by
+              # bin/sync-service-params.py; `example_path_source` marks an
+              # example_path built from them rather than from a tested request.
+              "params", "example_path_source",
               # Hostnames that identify this service in bounded runtime
               # graph events. These are telemetry aliases only and never
               # alter nginx or request routing.
@@ -963,6 +1055,27 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # renderer retains its standard loopback/LAN/gateway rules.
               # This is operational metadata and intentionally not public.
               "allowed_source_ips",
+              # Request path prefixes that bypass the keystore gate entirely
+              # (fleet-runner nginx-render → PublicPathPrefixes; the matching
+              # container-side knob is go-common's KeystoreOpts.
+              # PublicPathPrefixes / server.WithKeystoreAuthPublicPrefixes).
+              # For a handler whose own unguessable value is its access
+              # control — an out-of-band callback catcher keyed on a random,
+              # one-shot token in the path, reached by a caller that can
+              # never hold this service's key — not a way to make a route
+              # convenient to call. validate_public_path_prefixes() above
+              # enforces the same "" / "/" refusal as the container layer.
+              # Operational metadata; intentionally not public.
+              "public_path_prefixes",
+              # Gateway per-IP rate limit for the catchall location
+              # (fleet-runner nginx-render → RateLimitExempt).
+              # "allowlisted-sources-exempt" leaves api_per_ip off a
+              # gateway-ip-allowlisted vhost: a remote runtime host sends all
+              # of its pool replicas from one egress address, so one per-IP
+              # bucket throttled them against each other (2026-10-19, fetch
+              # cache). validate_gateway_rate_limit() above refuses it on any
+              # vhost the internet can reach. Operational metadata; not public.
+              "gateway_rate_limit",
               # Egress routing — `proxy_egress: true` flags services that
               # must route outbound HTTP via the Webshare residential
               # proxy (FLEET.md §6 — active scanners hitting bug-bounty
@@ -975,6 +1088,14 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # auth fallback + Upgrade/Connection headers in the nginx
               # template. Per-slug or expand-child override only.
               "ui_cookie_bridge",
+              # Per-service CORS opt-out. The gateway template includes
+              # snippets/cors.conf (Access-Control-Allow-Origin *, a 204 for
+              # any OPTIONS preflight) in every vhost; `cors: false` renders
+              # the vhost without it (fleet-runner nginx-render → NoCORS) so a
+              # cookie-authenticated browser UI (the hub) answers no
+              # cross-origin preflight. Only the boolean false is meaningful;
+              # validate_cors() refuses anything else. Operational; not public.
+              "cors",
               # NOTE: `scope` is deliberately NOT copied through anymore —
               # it's consumed as an input signal by compute_network_exposure()
               # below (13 slugs still set `scope: internal-only` in
@@ -1263,6 +1384,30 @@ def make_external_entry(spec: dict) -> dict:
     return entry
 
 
+CI_RESOURCES_FIELDS = ("mem_class", "mem_peak_p95_bytes", "mem_peak_max_bytes", "runs", "confidence")
+
+
+def apply_ci_resources(entries: list[dict], path: Path = CI_RESOURCES_JSON) -> None:
+    """Merge the measured CI build profile (ci-resources.json, derived by
+    bin/ci_resources.py) into each entry as `ci_resources`. Absent file or a
+    repo with no measurement leaves the entry untouched. Not in PUBLIC_FIELDS,
+    so it stays out of services-public.json and the slices."""
+    if not path.exists():
+        return
+    doc = json.loads(path.read_text())
+    by_id: dict[str, dict] = {}
+    for repo in doc.get("repos", {}).values():
+        for service_id in repo.get("ids", []):
+            by_id[service_id] = repo
+    for entry in entries:
+        repo = by_id.get(entry["id"])
+        if repo is None:
+            continue
+        merged = {k: repo[k] for k in CI_RESOURCES_FIELDS}
+        merged["measured_at"] = repo["last_seen"]
+        entry["ci_resources"] = merged
+
+
 def build(overrides: dict) -> list[dict]:
     by_slug, rules, expansions, externals = split_overrides(overrides)
     seen: dict[str, dict] = {}
@@ -1336,6 +1481,10 @@ def build(overrides: dict) -> list[dict]:
     entries = sorted(seen.values(), key=lambda e: (e.get("mesh", "private"), e["id"]))
     for entry in entries:
         validate_allowed_source_ips(entry)
+        validate_public_path_prefixes(entry)
+        validate_cors(entry)
+        validate_gateway_rate_limit(entry)
+    apply_ci_resources(entries)
     return entries
 
 

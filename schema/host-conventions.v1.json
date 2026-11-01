@@ -38,6 +38,23 @@
       },
       "additionalProperties": false
     },
+    "spiffe_identity_domain": {
+      "type": "object",
+      "description": "Per-mesh identity a workload holds after its service sets spiffe_merged_identity: the SVID comes from this trust domain's agent socket under the given namespace. Absent mesh = no such switch.",
+      "patternProperties": {
+        "^(0exec|0crawl|0docker)$": {
+          "type": "object",
+          "required": ["trust_domain", "namespace", "socket_directory"],
+          "additionalProperties": false,
+          "properties": {
+            "trust_domain": { "type": "string", "pattern": "^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$" },
+            "namespace": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+            "socket_directory": { "type": "string", "pattern": "^/run/spire/sockets(?:/[a-z0-9][a-z0-9-]*)?$" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "mesh_defaults": {
       "type": "object",
       "description": "Per-mesh layers applied on top of container_defaults. Key is the mesh slug.",

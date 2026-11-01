@@ -172,6 +172,20 @@ def version_only_change(old_services, new_services, targets):
     return problems
 
 
+def stale_targets(problems, targets):
+    """The target ids whose ONLY problem is that their generated row on main differs in more than `version` (`<id>: changed [...]`), or None when any other
+    problem is present (a changed set of services, a row that did not change, a row outside the targets): those still stop the run. A target whose entry in
+    services.json is stale against overrides.json (2026-10-20: six `trl_evidence` texts edited in overrides.json without regenerating) cannot be pinned by a
+    pins-only change; skipping it must not hold back the other pins (one stale row stopped every sync for 12 hours)."""
+    ids = set()
+    for problem in problems:
+        sid, sep, rest = problem.partition(": changed ")
+        if not sep or sid not in targets or "'version'" in rest and rest.strip() == "['version']":
+            return None
+        ids.add(sid)
+    return ids or None
+
+
 def changelog_with(text, line, today):
     """CHANGELOG.md with `line` added under today's `## YYYY-MM-DD` heading (created when missing)."""
     head = f"## {today}\n\n"
@@ -200,6 +214,10 @@ def fresh_checkout(workdir):
         workdir.parent.mkdir(parents=True, exist_ok=True)
         run(["git", "clone", "--quiet", REPO_URL, str(workdir)])
     git(workdir, "fetch", "--quiet", "origin", "main")
+    # The work dir is this job's own, and a run that stops half-way (2026-10-20 18:21Z: the "services.json changed more than the pins" guard) leaves its
+    # edits in it. `checkout -B main origin/main` refuses to run over them, so every later run died here for 12 hours: drop whatever is left FIRST.
+    git(workdir, "reset", "--quiet", "--hard")
+    git(workdir, "clean", "-fdq")
     git(workdir, "checkout", "--quiet", "-B", "main", "origin/main")
     git(workdir, "reset", "--quiet", "--hard", "origin/main")
     git(workdir, "clean", "-fdq")
@@ -253,7 +271,14 @@ def image_exists(names, version):
 def wait_and_merge(workdir, number, head, timeout_s):
     deadline = time.time() + timeout_s
     while time.time() < deadline:
-        st = json.loads(run(["gh", "api", f"repos/{GH_REPO}/commits/{head}/status"]).stdout)
+        try:
+            st = json.loads(run(["gh", "api", f"repos/{GH_REPO}/commits/{head}/status"]).stdout)
+        except RuntimeError as exc:
+            # The GitHub REST budget is shared by every agent and tool of the account and runs dry several times a day (2026-10-21 07:31Z): one refused status call
+            # killed the run with its pull request open, and every later run then refused to start. A failed look is not a failed CI: look again after a pause.
+            print(f"could not read the CI status of #{number} ({str(exc)[-160:]}); retrying", file=sys.stderr)
+            time.sleep(120)
+            continue
         states = {s["context"]: s["state"] for s in st.get("statuses", [])}
         if any(states.get(c) in ("failure", "error") for c in CI_CONTEXTS):
             raise RuntimeError(f"CI failed on #{number}: {states}")
@@ -281,6 +306,21 @@ def write_prom(path, counts, applied, ok):
     tmp.write_text("\n".join(lines) + "\n")
     os.chmod(tmp, 0o644)
     tmp.replace(target)
+
+
+def resume_open_pr(workdir, pr, counts, a):
+    """A pull request of this job is still open: a run died before it merged (CI still running, the GitHub budget gone). Do not open another on top of it: wait for CI on
+    that exact head and merge it (the same gate as a fresh one), and let the next run compute what is left. Exit 3 when it cannot be merged (CI failed, no verdict in time)."""
+    print(f"a version-pin-sync pull request is still open (#{pr['number']}): resuming it, not opening another", file=sys.stderr)
+    try:
+        wait_and_merge(workdir, pr["number"], pr["headRefOid"], a.ci_timeout)
+    except RuntimeError as exc:
+        write_prom(a.prom, counts, 0, False)
+        print(f"#{pr['number']} stays open: {exc}", file=sys.stderr)
+        return 3
+    print(f"merged #{pr['number']} (resumed)")
+    write_prom(a.prom, counts, 0, True)
+    return 0
 
 
 def main(argv=None):
@@ -328,21 +368,31 @@ def main(argv=None):
         print(f"refusing: {len(targets)} changes is more than --max-changes {a.max_changes}", file=sys.stderr)
         return 2
     open_prs = [pr for pr in json.loads(run(["gh", "pr", "list", "-R", GH_REPO, "--state", "open", "--limit", "100",
-                                             "--json", "number,headRefName"]).stdout)
+                                             "--json", "number,headRefName,headRefOid"]).stdout)
                 if pr["headRefName"].startswith("bot/version-pin-sync-")]
     if open_prs:
-        write_prom(a.prom, counts, 0, False)
-        print(f"a version-pin-sync pull request is still open (#{open_prs[0]['number']}): not opening another",
-              file=sys.stderr)
-        return 3
+        return resume_open_pr(wd, open_prs[0], counts, a)
     ok = False
     try:
         old_services = services
-        (wd / "overrides.json").write_text(set_pins((wd / "overrides.json").read_text(), targets))
-        run([sys.executable, "bin/generate.py", "--only", ",".join(sorted(targets))], cwd=wd)
-        problems = version_only_change(old_services, json.loads((wd / "services.json").read_text()), targets)
-        if problems:
-            raise RuntimeError("services.json changed more than the pins: " + "; ".join(problems[:10]))
+        original_overrides = (wd / "overrides.json").read_text()
+        skipped_stale = {}
+        for _attempt in range(3):
+            (wd / "overrides.json").write_text(set_pins(original_overrides, targets))
+            run([sys.executable, "bin/generate.py", "--only", ",".join(sorted(targets))], cwd=wd)
+            problems = version_only_change(old_services, json.loads((wd / "services.json").read_text()), targets)
+            if not problems:
+                break
+            stale = stale_targets(problems, targets)
+            if not stale or len(stale) >= len(targets):
+                raise RuntimeError("services.json changed more than the pins: " + "; ".join(problems[:10]))
+            for sid in sorted(stale):
+                skipped_stale[sid] = targets.pop(sid)
+            git(wd, "checkout", "--quiet", "--", ".")  # back to origin/main, then again for the remaining pins
+            print("skipping " + ", ".join(sorted(stale)) + ": their generated rows on main are stale against overrides.json "
+                  "(regenerate them first); the other pins go on", file=sys.stderr)
+        else:
+            raise RuntimeError("services.json still changed more than the pins after skipping stale rows: " + "; ".join(problems[:10]))
         run([sys.executable, "bin/check_service_version_regressions.py", "origin/main"], cwd=wd)
         run([sys.executable, "-m", "unittest", "discover", "-s", "bin", "-p", "test_*.py"], cwd=wd)
         today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
@@ -364,6 +414,8 @@ def main(argv=None):
                 "raised only when ghcr.io has that image. services.json changes only `version` in these rows "
                 "(asserted); the version-regression check and the unit tests passed before the push.\n\n"
                 + "\n".join(f"- `{r['id']}`: {r['reason']}" for r in rows if r["id"] in targets)
+                + ("\n\nNot synced (their generated row on main is stale against overrides.json: regenerate it, then the next run sets "
+                   "the pin): " + ", ".join(f"`{k}` {v}" for k, v in sorted(skipped_stale.items())) if skipped_stale else "")
                 + "\n\nMerged automatically when Woodpecker is green on this exact head.")
         url = run(["gh", "pr", "create", "-R", GH_REPO, "--base", "main", "--head", branch, "--title",
                    f"fix(registry): sync {len(targets)} version pin(s) to the running version", "--body", body],

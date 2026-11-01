@@ -287,6 +287,29 @@ def closest_rev(texts, mine):
     return best[3], best[2], best[0]  # commit, revisions behind, own lines
 
 
+def canonical_lines_missing(mine, theirs):
+    """the non-blank canonical lines this copy lacks (order kept, duplicates counted)"""
+    import collections
+    have = collections.Counter(l.strip() for l in mine.split("\n") if l.strip())
+    out = []
+    for l in theirs.split("\n"):
+        k = l.strip()
+        if k and have[k] > 0:
+            have[k] -= 1
+        elif k:
+            out.append(l)
+    return out
+
+
+def replace_safe(mine, theirs, own):
+    """A copy with NO lines of its own (every non-blank line also exists in the canonical revision it is closest to) holds nothing worth merging; it only
+    lacks canonical lines, and a three-way merge cannot bring those back because it treats the missing line as a local deletion. -> the canonical text and the
+    canonical lines the copy lacked, or None when the copy has lines of its own (that is a real merge) or already equals the canonical."""
+    if own != 0 or mine == theirs:
+        return None
+    return theirs, canonical_lines_missing(mine, theirs)
+
+
 def merge_prefer_canonical(registry, rev, mine, theirs):
     """three-way merge that always yields a text. Where both sides INSERTED at the same place (the base side of the conflict is empty) both are kept;
     where both CHANGED the same lines the canonical wins. -> (text, conflicts, overridden): the local wording the canonical replaced"""
@@ -340,11 +363,17 @@ def cmd_merge(a):
         with open(os.path.join(d, "CLAUDE.md"), errors="replace") as f:
             mine = f.read()
         rev, behind, own = closest_rev(texts, mine)
-        if a.prefer_canonical:
-            merged, nconf, over = merge_prefer_canonical(a.registry, rev, mine, theirs)
+        safe = replace_safe(mine, theirs, own) if getattr(a, "replace_safe", False) else None
+        if safe is not None:
+            merged, restored = safe
+            nconf, over = 0, []
+        elif a.prefer_canonical:
+            merged, nconf, over = merge_prefer_canonical(a.registry, rev, mine, theirs); restored = None
         else:
-            merged, nconf = merge_text(a.registry, rev, mine, theirs); over = []
+            merged, nconf = merge_text(a.registry, rev, mine, theirs); over = []; restored = None
         x = dict(repo=r["repo"], base=rev[:9], conflicts=nconf, overridden=len(over), canonical=plan["canonical_head"])
+        if restored is not None:
+            x["replaced_safe"] = len(restored)
         if nconf and not a.prefer_canonical:
             x["result"] = "conflict"
         elif merged == mine:
@@ -355,11 +384,17 @@ def cmd_merge(a):
             with open(os.path.join(d, "CLAUDE.md"), "w") as f:
                 f.write(merged)
             git(d, "add", "CLAUDE.md")
-            msg = "docs(claude): merge the services-registry canonical %s into the local CLAUDE.md [skip ci]" % plan["canonical_head"]
-            body = ("Three-way merge (git merge-file): base = canonical revision %s (the one this copy is closest to), ours = this repository's CLAUDE.md, theirs = the canonical now. "
-                    "Where both sides inserted at the same place both were kept; where both changed the same lines the canonical wording was used (%d such hunks).") % (x["base"], len(over))
-            if over:
-                body += "\n\nLocal wording replaced by the canonical (still in this repository's history):\n" + "\n".join("- " + o for o in over[:12])
+            if restored is not None:
+                msg = "docs(claude): restore the %d line(s) this CLAUDE.md lacked from the services-registry canonical %s [skip ci]" % (len(restored), plan["canonical_head"])
+                body = ("This copy had no lines of its own: every line also appears in canonical revision %s, the one it is closest to. It only lacked canonical lines, which a three-way "
+                        "merge cannot restore (it keeps the missing line as a local deletion), so the file now equals the canonical.") % x["base"]
+                body += "\n\nLines restored:\n" + "\n".join("- " + o[:160] for o in restored[:12])
+            else:
+                msg = "docs(claude): merge the services-registry canonical %s into the local CLAUDE.md [skip ci]" % plan["canonical_head"]
+                body = ("Three-way merge (git merge-file): base = canonical revision %s (the one this copy is closest to), ours = this repository's CLAUDE.md, theirs = the canonical now. "
+                        "Where both sides inserted at the same place both were kept; where both changed the same lines the canonical wording was used (%d such hunks).") % (x["base"], len(over))
+                if over:
+                    body += "\n\nLocal wording replaced by the canonical (still in this repository's history):\n" + "\n".join("- " + o for o in over[:12])
             body += "\n\nCo-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>"
             subprocess.run(["git", "-C", d] + ID + ["commit", "-q", "-m", msg, "-m", body], capture_output=True, text=True, check=True)
             p = subprocess.run(["git", "-C", d, "push", "-q", "origin", "HEAD"], capture_output=True, text=True)
@@ -370,7 +405,9 @@ def cmd_merge(a):
                     git(d, "reset", "-q", "--hard", "FETCH_HEAD")
                     with open(os.path.join(d, "CLAUDE.md"), errors="replace") as f:
                         mine2 = f.read()
-                    merged2, _, over2 = merge_prefer_canonical(a.registry, rev, mine2, theirs)
+                    rev2, _, own2 = closest_rev(texts, mine2)
+                    safe2 = replace_safe(mine2, theirs, own2) if getattr(a, "replace_safe", False) else None
+                    merged2, over2 = (safe2[0], []) if safe2 is not None else merge_prefer_canonical(a.registry, rev, mine2, theirs)[::2]
                     if merged2 != mine2:
                         with open(os.path.join(d, "CLAUDE.md"), "w") as f:
                             f.write(merged2)
@@ -449,7 +486,7 @@ def cmd_weekly(a):
         before[r["status"]] = before.get(r["status"], 0) + 1
     apply_ns = argparse.Namespace(out=a.work, limit=None, only=None, exclude=None, no_push=False, workers=a.apply_workers)
     cmd_apply(apply_ns)
-    merge_ns = argparse.Namespace(registry=a.registry, out=a.work, only=None, push=True, prefer_canonical=True, workers=a.apply_workers)
+    merge_ns = argparse.Namespace(registry=a.registry, out=a.work, only=None, push=True, prefer_canonical=True, replace_safe=True, workers=a.apply_workers)
     merged = cmd_merge(merge_ns)
     with open(os.path.join(a.work, "apply_log.jsonl")) as f:
         applied = [json.loads(l) for l in f if l.strip()]
@@ -476,7 +513,7 @@ if __name__ == "__main__":
     p = sp.add_parser("plan"); p.add_argument("--registry", required=True); p.add_argument("--out", required=True)
     p.add_argument("--repos"); p.add_argument("--repos-file"); p.add_argument("--workers", type=int, default=6)
     dv = sp.add_parser("diverged"); dv.add_argument("--registry", required=True); dv.add_argument("--out", required=True)
-    mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--prefer-canonical", action="store_true"); mg.add_argument("--workers", type=int, default=4)
+    mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--prefer-canonical", action="store_true"); mg.add_argument("--replace-safe", action="store_true", help="a copy with no lines of its own is replaced by the canonical (a three-way merge keeps the lines it lacks missing)"); mg.add_argument("--workers", type=int, default=4)
     wk = sp.add_parser("weekly"); wk.add_argument("--registry", required=True); wk.add_argument("--work", required=True); wk.add_argument("--extra", help="file with extra repository names (infrastructure repos that are not in services.json)")
     wk.add_argument("--workers", type=int, default=8); wk.add_argument("--apply-workers", type=int, default=5)
     q = sp.add_parser("apply"); q.add_argument("--out", required=True); q.add_argument("--limit", type=int); q.add_argument("--only"); q.add_argument("--exclude"); q.add_argument("--no-push", action="store_true"); q.add_argument("--workers", type=int, default=4)

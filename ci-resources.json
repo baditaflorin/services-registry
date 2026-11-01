@@ -1,0 +1,3398 @@
+{
+  "classes": {
+    "l": ">4 GiB",
+    "m": "<=4 GiB",
+    "s": "<=512 MiB",
+    "xs": "<=256 MiB"
+  },
+  "generated_at": "2026-10-29T09:17:47Z",
+  "repos": {
+    "country-iso-matcher": {
+      "confidence": "low",
+      "ids": [
+        "country-iso-matcher"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 258264268,
+      "mem_peak_p95_bytes": 258264268,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 148.51,
+          "mem_peak_max_bytes": 258264268,
+          "mem_peak_p95_bytes": 258264268,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "git-provider-api-broker": {
+      "confidence": "low",
+      "ids": [
+        "git-provider-api-broker"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 636171059,
+      "mem_peak_p95_bytes": 636171059,
+      "oom_suspect": false,
+      "runs": 3,
+      "steps": {
+        "quality": {
+          "cpu_seconds_p95": 233.12,
+          "mem_peak_max_bytes": 636171059,
+          "mem_peak_p95_bytes": 636171059,
+          "oom_suspect": false,
+          "runs": 3
+        }
+      }
+    },
+    "go-agent-approval": {
+      "confidence": "low",
+      "ids": [
+        "agent-approval"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 270008320,
+      "mem_peak_p95_bytes": 270008320,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 97.6,
+          "mem_peak_max_bytes": 270008320,
+          "mem_peak_p95_bytes": 270008320,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-agent-mailbox": {
+      "confidence": "low",
+      "ids": [
+        "agent-mailbox"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 495976448,
+      "mem_peak_p95_bytes": 495976448,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 112.05,
+          "mem_peak_max_bytes": 495976448,
+          "mem_peak_p95_bytes": 495976448,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-agent-quorum": {
+      "confidence": "low",
+      "ids": [
+        "agent-quorum"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 417962393,
+      "mem_peak_p95_bytes": 417962393,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 131.42,
+          "mem_peak_max_bytes": 417962393,
+          "mem_peak_p95_bytes": 417962393,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-agent-tools": {
+      "confidence": "low",
+      "ids": [
+        "agent-tools"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 59192115,
+      "mem_peak_p95_bytes": 59192115,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 0.61,
+          "mem_peak_max_bytes": 59192115,
+          "mem_peak_p95_bytes": 59192115,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-backoff-coordinator": {
+      "confidence": "low",
+      "ids": [
+        "fleet-backoff-coordinator"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 453194547,
+      "mem_peak_p95_bytes": 453194547,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 160.83,
+          "mem_peak_max_bytes": 453194547,
+          "mem_peak_p95_bytes": 453194547,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-backup": {
+      "confidence": "low",
+      "ids": [
+        "fleet-backup"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 585419980,
+      "mem_peak_p95_bytes": 585419980,
+      "oom_suspect": false,
+      "runs": 4,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 363.84,
+          "mem_peak_max_bytes": 585419980,
+          "mem_peak_p95_bytes": 585419980,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go-fleet-body-redactor": {
+      "confidence": "low",
+      "ids": [
+        "fleet-body-redactor"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 251343667,
+      "mem_peak_p95_bytes": 251343667,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 215.31,
+          "mem_peak_max_bytes": 251343667,
+          "mem_peak_p95_bytes": 251343667,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-budget-tracker": {
+      "confidence": "low",
+      "ids": [
+        "fleet-budget-tracker"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 463575449,
+      "mem_peak_p95_bytes": 463575449,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 123.53,
+          "mem_peak_max_bytes": 463575449,
+          "mem_peak_p95_bytes": 463575449,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-call-tracer": {
+      "confidence": "low",
+      "ids": [
+        "fleet-call-tracer"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 163577856,
+      "mem_peak_p95_bytes": 163577856,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 30.0,
+          "mem_peak_max_bytes": 163577856,
+          "mem_peak_p95_bytes": 163577856,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-capabilities": {
+      "confidence": "low",
+      "ids": [
+        "fleet-capabilities"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 451516825,
+      "mem_peak_p95_bytes": 451516825,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 79.8,
+          "mem_peak_max_bytes": 451516825,
+          "mem_peak_p95_bytes": 451516825,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-content-normalizer": {
+      "confidence": "low",
+      "ids": [
+        "fleet-content-normalizer"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 461688012,
+      "mem_peak_p95_bytes": 461688012,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 210.42,
+          "mem_peak_max_bytes": 461688012,
+          "mem_peak_p95_bytes": 461688012,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-counter": {
+      "confidence": "low",
+      "ids": [
+        "fleet-counter"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 268854886,
+      "mem_peak_p95_bytes": 268854886,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 124.43,
+          "mem_peak_max_bytes": 268854886,
+          "mem_peak_p95_bytes": 268854886,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-diff-engine": {
+      "confidence": "low",
+      "ids": [
+        "fleet-diff-engine"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 770598502,
+      "mem_peak_p95_bytes": 770598502,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 149.11,
+          "mem_peak_max_bytes": 770598502,
+          "mem_peak_p95_bytes": 770598502,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-dig": {
+      "confidence": "low",
+      "ids": [
+        "fleet-dig"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 305345331,
+      "mem_peak_p95_bytes": 305345331,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 88.03,
+          "mem_peak_max_bytes": 305345331,
+          "mem_peak_p95_bytes": 305345331,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-dns-sync": {
+      "confidence": "low",
+      "ids": [
+        "fleet-dns-sync"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 476682649,
+      "mem_peak_p95_bytes": 476682649,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 184.36,
+          "mem_peak_max_bytes": 476682649,
+          "mem_peak_p95_bytes": 476682649,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-engagement-timeline": {
+      "confidence": "low",
+      "ids": [
+        "fleet-engagement-timeline"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 492830720,
+      "mem_peak_p95_bytes": 492830720,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 56.61,
+          "mem_peak_max_bytes": 492830720,
+          "mem_peak_p95_bytes": 492830720,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-exec": {
+      "confidence": "low",
+      "ids": [
+        "fleet-exec"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 54809067,
+      "mem_peak_p95_bytes": 54809067,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 0.89,
+          "mem_peak_max_bytes": 54809067,
+          "mem_peak_p95_bytes": 54809067,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-fake": {
+      "confidence": "low",
+      "ids": [
+        "fleet-fake"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 307547340,
+      "mem_peak_p95_bytes": 307547340,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 189.71,
+          "mem_peak_max_bytes": 307547340,
+          "mem_peak_p95_bytes": 307547340,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-fingerprint-cache": {
+      "confidence": "low",
+      "ids": [
+        "fleet-fingerprint-cache"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 398668595,
+      "mem_peak_p95_bytes": 398668595,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 111.49,
+          "mem_peak_max_bytes": 398668595,
+          "mem_peak_p95_bytes": 398668595,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-graph": {
+      "confidence": "low",
+      "ids": [
+        "fleet-graph"
+      ],
+      "last_seen": "2026-10-23",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 706530508,
+      "mem_peak_p95_bytes": 706530508,
+      "oom_suspect": false,
+      "runs": 6,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.24,
+          "mem_peak_max_bytes": 19786629,
+          "mem_peak_p95_bytes": 19786629,
+          "oom_suspect": false,
+          "runs": 2
+        },
+        "test": {
+          "cpu_seconds_p95": 63.13,
+          "mem_peak_max_bytes": 706530508,
+          "mem_peak_p95_bytes": 706530508,
+          "oom_suspect": false,
+          "runs": 5
+        },
+        "viewer": {
+          "cpu_seconds_p95": 0.51,
+          "mem_peak_max_bytes": 96206848,
+          "mem_peak_p95_bytes": 96206848,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-har-builder": {
+      "confidence": "low",
+      "ids": [
+        "fleet-har-builder"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 864341196,
+      "mem_peak_p95_bytes": 864341196,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 335.92,
+          "mem_peak_max_bytes": 864341196,
+          "mem_peak_p95_bytes": 864341196,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-host-guard": {
+      "confidence": "low",
+      "ids": [
+        "fleet-host-guard"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 178677350,
+      "mem_peak_p95_bytes": 178677350,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 143.87,
+          "mem_peak_max_bytes": 178677350,
+          "mem_peak_p95_bytes": 178677350,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-ip": {
+      "confidence": "low",
+      "ids": [
+        "fleet-ip"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 317823385,
+      "mem_peak_p95_bytes": 317823385,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 12.31,
+          "mem_peak_max_bytes": 317823385,
+          "mem_peak_p95_bytes": 317823385,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-lock": {
+      "confidence": "low",
+      "ids": [
+        "fleet-lock"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 216950374,
+      "mem_peak_p95_bytes": 216950374,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 131.4,
+          "mem_peak_max_bytes": 216950374,
+          "mem_peak_p95_bytes": 216950374,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-mcp-gateway": {
+      "confidence": "low",
+      "ids": [
+        "fleet-mcp-gateway"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 638268211,
+      "mem_peak_p95_bytes": 638268211,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 88.44,
+          "mem_peak_max_bytes": 638268211,
+          "mem_peak_p95_bytes": 638268211,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-md": {
+      "confidence": "low",
+      "ids": [
+        "fleet-md"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 75445043,
+      "mem_peak_p95_bytes": 75445043,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 11.41,
+          "mem_peak_max_bytes": 75445043,
+          "mem_peak_p95_bytes": 75445043,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-memory": {
+      "confidence": "low",
+      "ids": [
+        "fleet-memory"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 647600537,
+      "mem_peak_p95_bytes": 647600537,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 110.4,
+          "mem_peak_max_bytes": 647600537,
+          "mem_peak_p95_bytes": 647600537,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-metrics-hub": {
+      "confidence": "ok",
+      "ids": [
+        "fleet-alertmanager",
+        "fleet-discovery",
+        "fleet-grafana",
+        "fleet-grafana-staging",
+        "fleet-prometheus"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 851653427,
+      "mem_peak_p95_bytes": 750570700,
+      "oom_suspect": false,
+      "runs": 39,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.21,
+          "mem_peak_max_bytes": 31981568,
+          "mem_peak_p95_bytes": 31981568,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "compose-config": {
+          "cpu_seconds_p95": 0.27,
+          "mem_peak_max_bytes": 99960750,
+          "mem_peak_p95_bytes": 99960750,
+          "oom_suspect": false,
+          "runs": 8
+        },
+        "discovery-test": {
+          "cpu_seconds_p95": 200.28,
+          "mem_peak_max_bytes": 851653427,
+          "mem_peak_p95_bytes": 750570700,
+          "oom_suspect": false,
+          "runs": 31
+        },
+        "prometheus-rules": {
+          "cpu_seconds_p95": 180.13,
+          "mem_peak_max_bytes": 212336640,
+          "mem_peak_p95_bytes": 195139993,
+          "oom_suspect": false,
+          "runs": 39
+        },
+        "python-metrics-tests": {
+          "cpu_seconds_p95": 15.97,
+          "mem_peak_max_bytes": 46001029,
+          "mem_peak_p95_bytes": 44155535,
+          "oom_suspect": false,
+          "runs": 32
+        }
+      }
+    },
+    "go-fleet-notify": {
+      "confidence": "low",
+      "ids": [
+        "fleet-notify"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 264450867,
+      "mem_peak_p95_bytes": 264450867,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 127.84,
+          "mem_peak_max_bytes": 264450867,
+          "mem_peak_p95_bytes": 264450867,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-payload-corpus": {
+      "confidence": "low",
+      "ids": [
+        "fleet-payload-corpus"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 82963333,
+      "mem_peak_p95_bytes": 82963333,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 148.35,
+          "mem_peak_max_bytes": 82963333,
+          "mem_peak_p95_bytes": 82963333,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-persona": {
+      "confidence": "low",
+      "ids": [
+        "fleet-persona"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 593389158,
+      "mem_peak_p95_bytes": 593389158,
+      "oom_suspect": false,
+      "runs": 3,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 272.13,
+          "mem_peak_max_bytes": 593389158,
+          "mem_peak_p95_bytes": 593389158,
+          "oom_suspect": false,
+          "runs": 3
+        }
+      }
+    },
+    "go-fleet-pipe": {
+      "confidence": "low",
+      "ids": [
+        "fleet-pipe"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 234042163,
+      "mem_peak_p95_bytes": 234042163,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 41.64,
+          "mem_peak_max_bytes": 234042163,
+          "mem_peak_p95_bytes": 234042163,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-pixel": {
+      "confidence": "low",
+      "ids": [
+        "fleet-pixel"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 151309516,
+      "mem_peak_p95_bytes": 151309516,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 108.94,
+          "mem_peak_max_bytes": 151309516,
+          "mem_peak_p95_bytes": 151309516,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-poc-curl": {
+      "confidence": "low",
+      "ids": [
+        "fleet-poc-curl"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 37843107,
+      "mem_peak_p95_bytes": 37843107,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 0.7,
+          "mem_peak_max_bytes": 37843107,
+          "mem_peak_p95_bytes": 37843107,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-preflight": {
+      "confidence": "low",
+      "ids": [
+        "fleet-preflight"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 191050547,
+      "mem_peak_p95_bytes": 191050547,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 137.13,
+          "mem_peak_max_bytes": 191050547,
+          "mem_peak_p95_bytes": 191050547,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-priority-queue": {
+      "confidence": "low",
+      "ids": [
+        "fleet-priority-queue"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 233937305,
+      "mem_peak_p95_bytes": 233937305,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 188.32,
+          "mem_peak_max_bytes": 233937305,
+          "mem_peak_p95_bytes": 233937305,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-read": {
+      "confidence": "low",
+      "ids": [
+        "fleet-read"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 193147699,
+      "mem_peak_p95_bytes": 193147699,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 3.33,
+          "mem_peak_max_bytes": 193147699,
+          "mem_peak_p95_bytes": 193147699,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-resolver-quorum": {
+      "confidence": "low",
+      "ids": [
+        "fleet-resolver-quorum"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 426455859,
+      "mem_peak_p95_bytes": 426455859,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 152.42,
+          "mem_peak_max_bytes": 426455859,
+          "mem_peak_p95_bytes": 426455859,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-fleet-sandbox-targets": {
+      "confidence": "low",
+      "ids": [
+        "fleet-sandbox-targets"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 543162368,
+      "mem_peak_p95_bytes": 543162368,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 178.37,
+          "mem_peak_max_bytes": 543162368,
+          "mem_peak_p95_bytes": 543162368,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-secrets": {
+      "confidence": "low",
+      "ids": [
+        "fleet-secrets"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 388392550,
+      "mem_peak_p95_bytes": 388392550,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 2.35,
+          "mem_peak_max_bytes": 388392550,
+          "mem_peak_p95_bytes": 388392550,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-selftest-aggregator": {
+      "confidence": "low",
+      "ids": [
+        "fleet-selftest-aggregator"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 348336947,
+      "mem_peak_p95_bytes": 348336947,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 245.85,
+          "mem_peak_max_bytes": 348336947,
+          "mem_peak_p95_bytes": 348336947,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-fleet-visualizer": {
+      "confidence": "low",
+      "ids": [
+        "fleet-visualizer"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 41020293,
+      "mem_peak_p95_bytes": 41020293,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 1.59,
+          "mem_peak_max_bytes": 41020293,
+          "mem_peak_p95_bytes": 41020293,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-github-app-token-broker": {
+      "confidence": "low",
+      "ids": [
+        "github-app-token-broker"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 307652198,
+      "mem_peak_p95_bytes": 307652198,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "quality": {
+          "cpu_seconds_p95": 237.52,
+          "mem_peak_max_bytes": 307652198,
+          "mem_peak_p95_bytes": 307652198,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-html-proxy": {
+      "confidence": "low",
+      "ids": [
+        "html-proxy"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 1699733307,
+      "mem_peak_p95_bytes": 1699733307,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 319.87,
+          "mem_peak_max_bytes": 1699733307,
+          "mem_peak_p95_bytes": 1699733307,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go-js-proxy": {
+      "confidence": "low",
+      "ids": [
+        "js-proxy"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 395732582,
+      "mem_peak_p95_bytes": 395732582,
+      "oom_suspect": false,
+      "runs": 6,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 258.96,
+          "mem_peak_max_bytes": 395732582,
+          "mem_peak_p95_bytes": 395732582,
+          "oom_suspect": false,
+          "runs": 6
+        }
+      }
+    },
+    "go-pentest-agent-state": {
+      "confidence": "low",
+      "ids": [
+        "pentest-agent-state"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 109156761,
+      "mem_peak_p95_bytes": 109156761,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 0.63,
+          "mem_peak_max_bytes": 109156761,
+          "mem_peak_p95_bytes": 109156761,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-asset-inventory": {
+      "confidence": "low",
+      "ids": [
+        "pentest-asset-inventory"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 714394828,
+      "mem_peak_p95_bytes": 714394828,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 205.0,
+          "mem_peak_max_bytes": 714394828,
+          "mem_peak_p95_bytes": 714394828,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-asset-scope-resolver": {
+      "confidence": "low",
+      "ids": [
+        "pentest-asset-scope-resolver"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 368469606,
+      "mem_peak_p95_bytes": 368469606,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 2.21,
+          "mem_peak_max_bytes": 368469606,
+          "mem_peak_p95_bytes": 368469606,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-authz-matrix": {
+      "confidence": "low",
+      "ids": [
+        "pentest-authz-matrix"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 218208665,
+      "mem_peak_p95_bytes": 218208665,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 126.75,
+          "mem_peak_max_bytes": 218208665,
+          "mem_peak_p95_bytes": 218208665,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-chaos-sync": {
+      "confidence": "low",
+      "ids": [
+        "pentest-chaos-sync"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 130547712,
+      "mem_peak_p95_bytes": 130547712,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 12.46,
+          "mem_peak_max_bytes": 130547712,
+          "mem_peak_p95_bytes": 130547712,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-codec": {
+      "confidence": "low",
+      "ids": [
+        "pentest-codec"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 131701145,
+      "mem_peak_p95_bytes": 131701145,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 3.99,
+          "mem_peak_max_bytes": 131701145,
+          "mem_peak_p95_bytes": 131701145,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-cors-misconfig-prober": {
+      "confidence": "low",
+      "ids": [
+        "pentest-cors-misconfig-prober"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 352006963,
+      "mem_peak_p95_bytes": 352006963,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 10.4,
+          "mem_peak_max_bytes": 352006963,
+          "mem_peak_p95_bytes": 352006963,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-pentest-github-dorks": {
+      "confidence": "low",
+      "ids": [
+        "pentest-github-dorks"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 58091110,
+      "mem_peak_p95_bytes": 58091110,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 1.2,
+          "mem_peak_max_bytes": 58091110,
+          "mem_peak_p95_bytes": 58091110,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go-url-categorizer-api": {
+      "confidence": "ok",
+      "ids": [
+        "url-categorizer-api"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "l",
+      "mem_peak_max_bytes": 6027986599,
+      "mem_peak_p95_bytes": 5368709120,
+      "oom_suspect": true,
+      "runs": 1836,
+      "steps": {
+        "frontend-bundle": {
+          "cpu_seconds_p95": 110.65,
+          "mem_peak_max_bytes": 2278480150,
+          "mem_peak_p95_bytes": 2124935069,
+          "oom_suspect": false,
+          "runs": 521
+        },
+        "frontend-eslint": {
+          "cpu_seconds_p95": 200.39,
+          "mem_peak_max_bytes": 2572685410,
+          "mem_peak_p95_bytes": 1535450808,
+          "oom_suspect": false,
+          "runs": 579
+        },
+        "frontend-overlay-e2e": {
+          "cpu_seconds_p95": 914.39,
+          "mem_peak_max_bytes": 2488933548,
+          "mem_peak_p95_bytes": 1763084075,
+          "oom_suspect": false,
+          "runs": 313
+        },
+        "frontend-presentation-flow-e2e": {
+          "cpu_seconds_p95": 49.66,
+          "mem_peak_max_bytes": 1539745775,
+          "mem_peak_p95_bytes": 1496796102,
+          "oom_suspect": false,
+          "runs": 58
+        },
+        "frontend-storybook-build": {
+          "cpu_seconds_p95": 105.63,
+          "mem_peak_max_bytes": 3180423282,
+          "mem_peak_p95_bytes": 2215129382,
+          "oom_suspect": false,
+          "runs": 358
+        },
+        "frontend-tests": {
+          "cpu_seconds_p95": 768.03,
+          "mem_peak_max_bytes": 5188320492,
+          "mem_peak_p95_bytes": 2993592204,
+          "oom_suspect": false,
+          "runs": 1669
+        },
+        "frontend-typecheck": {
+          "cpu_seconds_p95": 78.71,
+          "mem_peak_max_bytes": 1784558911,
+          "mem_peak_p95_bytes": 1555851902,
+          "oom_suspect": false,
+          "runs": 577
+        },
+        "frontend-visual": {
+          "cpu_seconds_p95": 104.6,
+          "mem_peak_max_bytes": 1906965479,
+          "mem_peak_p95_bytes": 1612760219,
+          "oom_suspect": false,
+          "runs": 318
+        },
+        "govulncheck": {
+          "cpu_seconds_p95": 184.73,
+          "mem_peak_max_bytes": 6027986599,
+          "mem_peak_p95_bytes": 5368709120,
+          "oom_suspect": true,
+          "runs": 22
+        },
+        "hermetic-untagged": {
+          "cpu_seconds_p95": 1144.94,
+          "mem_peak_max_bytes": 3089155227,
+          "mem_peak_p95_bytes": 1602022801,
+          "oom_suspect": false,
+          "runs": 390
+        },
+        "main-typecheck": {
+          "cpu_seconds_p95": 106.03,
+          "mem_peak_max_bytes": 1731945562,
+          "mem_peak_p95_bytes": 1621350154,
+          "oom_suspect": false,
+          "runs": 106
+        },
+        "test": {
+          "cpu_seconds_p95": 2408.27,
+          "mem_peak_max_bytes": 5829344362,
+          "mem_peak_p95_bytes": 4721242800,
+          "oom_suspect": true,
+          "runs": 633
+        }
+      }
+    },
+    "go_address_extractor": {
+      "confidence": "low",
+      "ids": [
+        "address-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 428028723,
+      "mem_peak_p95_bytes": 428028723,
+      "oom_suspect": false,
+      "runs": 7,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 144.46,
+          "mem_peak_max_bytes": 428028723,
+          "mem_peak_p95_bytes": 428028723,
+          "oom_suspect": false,
+          "runs": 7
+        }
+      }
+    },
+    "go_analyze_headers": {
+      "confidence": "low",
+      "ids": [
+        "analyze-headers"
+      ],
+      "last_seen": "2026-10-27",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 407791206,
+      "mem_peak_p95_bytes": 407791206,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 114.66,
+          "mem_peak_max_bytes": 407791206,
+          "mem_peak_p95_bytes": 407791206,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_apikey_scanner": {
+      "confidence": "low",
+      "ids": [
+        "apikey-scanner"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 211288064,
+      "mem_peak_p95_bytes": 211288064,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 132.9,
+          "mem_peak_max_bytes": 211288064,
+          "mem_peak_p95_bytes": 211288064,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_apikey_service": {
+      "confidence": "low",
+      "ids": [
+        "apikey-service",
+        "keystore-mesh"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 608698368,
+      "mem_peak_p95_bytes": 608698368,
+      "oom_suspect": false,
+      "runs": 4,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 276.21,
+          "mem_peak_max_bytes": 608698368,
+          "mem_peak_p95_bytes": 608698368,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go_asn_lookup": {
+      "confidence": "low",
+      "ids": [
+        "asn-lookup"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 503421337,
+      "mem_peak_p95_bytes": 503421337,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 162.6,
+          "mem_peak_max_bytes": 503421337,
+          "mem_peak_p95_bytes": 503421337,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_biz_classifier": {
+      "confidence": "low",
+      "ids": [
+        "biz-classifier"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 665740902,
+      "mem_peak_p95_bytes": 665740902,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 339.11,
+          "mem_peak_max_bytes": 665740902,
+          "mem_peak_p95_bytes": 665740902,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_brand_logo_extractor": {
+      "confidence": "low",
+      "ids": [
+        "brand-logo-extractor"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 138412032,
+      "mem_peak_p95_bytes": 138412032,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 133.13,
+          "mem_peak_max_bytes": 138412032,
+          "mem_peak_p95_bytes": 138412032,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_caa_checker": {
+      "confidence": "low",
+      "ids": [
+        "caa-checker"
+      ],
+      "last_seen": "2026-10-27",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 384722534,
+      "mem_peak_p95_bytes": 384722534,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 9.75,
+          "mem_peak_max_bytes": 384722534,
+          "mem_peak_p95_bytes": 384722534,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_company_name_extractor": {
+      "confidence": "low",
+      "ids": [
+        "company-name-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 916350566,
+      "mem_peak_p95_bytes": 916350566,
+      "oom_suspect": false,
+      "runs": 15,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.06,
+          "mem_peak_max_bytes": 6102712,
+          "mem_peak_p95_bytes": 6102712,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 229.8,
+          "mem_peak_max_bytes": 916350566,
+          "mem_peak_p95_bytes": 916350566,
+          "oom_suspect": false,
+          "runs": 14
+        }
+      }
+    },
+    "go_company_size": {
+      "confidence": "low",
+      "ids": [
+        "company-size"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 665636044,
+      "mem_peak_p95_bytes": 665636044,
+      "oom_suspect": false,
+      "runs": 10,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 176.92,
+          "mem_peak_max_bytes": 665636044,
+          "mem_peak_p95_bytes": 665636044,
+          "oom_suspect": false,
+          "runs": 10
+        }
+      }
+    },
+    "go_contact_route_detector": {
+      "confidence": "low",
+      "ids": [
+        "contact-route-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 715757977,
+      "mem_peak_p95_bytes": 715757977,
+      "oom_suspect": false,
+      "runs": 9,
+      "steps": {
+        "large-files": {
+          "cpu_seconds_p95": 0.87,
+          "mem_peak_max_bytes": 6967787,
+          "mem_peak_p95_bytes": 6967787,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 340.74,
+          "mem_peak_max_bytes": 715757977,
+          "mem_peak_p95_bytes": 715757977,
+          "oom_suspect": false,
+          "runs": 9
+        }
+      }
+    },
+    "go_content_fingerprint": {
+      "confidence": "low",
+      "ids": [
+        "content-fingerprint"
+      ],
+      "last_seen": "2026-10-26",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 245052211,
+      "mem_peak_p95_bytes": 245052211,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 14.91,
+          "mem_peak_max_bytes": 245052211,
+          "mem_peak_p95_bytes": 245052211,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_currency_detector": {
+      "confidence": "low",
+      "ids": [
+        "currency-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 696988467,
+      "mem_peak_p95_bytes": 696988467,
+      "oom_suspect": false,
+      "runs": 4,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 170.55,
+          "mem_peak_max_bytes": 696988467,
+          "mem_peak_p95_bytes": 696988467,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go_data_inventory": {
+      "confidence": "low",
+      "ids": [
+        "data-inventory"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 336697753,
+      "mem_peak_p95_bytes": 336697753,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 11.1,
+          "mem_peak_max_bytes": 336697753,
+          "mem_peak_p95_bytes": 336697753,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_ad_network": {
+      "confidence": "low",
+      "ids": [
+        "domain-ad-network"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 247883366,
+      "mem_peak_p95_bytes": 247883366,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 91.96,
+          "mem_peak_max_bytes": 247883366,
+          "mem_peak_p95_bytes": 247883366,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_app_render_mode": {
+      "confidence": "low",
+      "ids": [
+        "domain-app-render-mode"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 361129574,
+      "mem_peak_p95_bytes": 361129574,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 62.01,
+          "mem_peak_max_bytes": 361129574,
+          "mem_peak_p95_bytes": 361129574,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_backlink_profile": {
+      "confidence": "low",
+      "ids": [
+        "domain-backlink-profile"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 346659225,
+      "mem_peak_p95_bytes": 346659225,
+      "oom_suspect": false,
+      "runs": 4,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 249.65,
+          "mem_peak_max_bytes": 346659225,
+          "mem_peak_p95_bytes": 346659225,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go_domain_bimi_checker": {
+      "confidence": "low",
+      "ids": [
+        "domain-bimi-checker"
+      ],
+      "last_seen": "2026-10-26",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 429496729,
+      "mem_peak_p95_bytes": 429496729,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 127.49,
+          "mem_peak_max_bytes": 429496729,
+          "mem_peak_p95_bytes": 429496729,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_details": {
+      "confidence": "low",
+      "ids": [
+        "domain-details"
+      ],
+      "last_seen": "2026-10-27",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 417123532,
+      "mem_peak_p95_bytes": 417123532,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 11.75,
+          "mem_peak_max_bytes": 417123532,
+          "mem_peak_p95_bytes": 417123532,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_dnssec_validator": {
+      "confidence": "low",
+      "ids": [
+        "domain-dnssec-validator"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 142082048,
+      "mem_peak_p95_bytes": 142082048,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 118.6,
+          "mem_peak_max_bytes": 142082048,
+          "mem_peak_p95_bytes": 142082048,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_ecommerce_platform": {
+      "confidence": "low",
+      "ids": [
+        "domain-ecommerce-platform"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 995832627,
+      "mem_peak_p95_bytes": 995832627,
+      "oom_suspect": false,
+      "runs": 9,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.26,
+          "mem_peak_max_bytes": 23802675,
+          "mem_peak_p95_bytes": 23802675,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 801.41,
+          "mem_peak_max_bytes": 995832627,
+          "mem_peak_p95_bytes": 995832627,
+          "oom_suspect": false,
+          "runs": 9
+        }
+      }
+    },
+    "go_domain_faq_schema": {
+      "confidence": "low",
+      "ids": [
+        "domain-faq-schema"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 452775116,
+      "mem_peak_p95_bytes": 452775116,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 264.67,
+          "mem_peak_max_bytes": 452775116,
+          "mem_peak_p95_bytes": 452775116,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_domain_geo_anchor": {
+      "confidence": "low",
+      "ids": [
+        "domain-geo-anchor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 762419609,
+      "mem_peak_p95_bytes": 762419609,
+      "oom_suspect": false,
+      "runs": 6,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.06,
+          "mem_peak_max_bytes": 15487467,
+          "mem_peak_p95_bytes": 15487467,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 177.75,
+          "mem_peak_max_bytes": 762419609,
+          "mem_peak_p95_bytes": 762419609,
+          "oom_suspect": false,
+          "runs": 6
+        }
+      }
+    },
+    "go_domain_gift_card": {
+      "confidence": "low",
+      "ids": [
+        "domain-gift-card"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 513697382,
+      "mem_peak_p95_bytes": 513697382,
+      "oom_suspect": false,
+      "runs": 6,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.05,
+          "mem_peak_max_bytes": 6278873,
+          "mem_peak_p95_bytes": 6278873,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 160.13,
+          "mem_peak_max_bytes": 513697382,
+          "mem_peak_p95_bytes": 513697382,
+          "oom_suspect": false,
+          "runs": 5
+        }
+      }
+    },
+    "go_domain_integration_marketplace": {
+      "confidence": "low",
+      "ids": [
+        "domain-integration-marketplace"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 396990873,
+      "mem_peak_p95_bytes": 396990873,
+      "oom_suspect": false,
+      "runs": 5,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.1,
+          "mem_peak_max_bytes": 3841982,
+          "mem_peak_p95_bytes": 3841982,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 203.99,
+          "mem_peak_max_bytes": 396990873,
+          "mem_peak_p95_bytes": 396990873,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go_domain_newsletter_platform_detector": {
+      "confidence": "low",
+      "ids": [
+        "domain-newsletter-platform-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 252392243,
+      "mem_peak_p95_bytes": 252392243,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 99.65,
+          "mem_peak_max_bytes": 252392243,
+          "mem_peak_p95_bytes": 252392243,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_product_count": {
+      "confidence": "low",
+      "ids": [
+        "domain-product-count"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 437046476,
+      "mem_peak_p95_bytes": 437046476,
+      "oom_suspect": false,
+      "runs": 6,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 223.04,
+          "mem_peak_max_bytes": 437046476,
+          "mem_peak_p95_bytes": 437046476,
+          "oom_suspect": false,
+          "runs": 6
+        }
+      }
+    },
+    "go_domain_tracker_density": {
+      "confidence": "low",
+      "ids": [
+        "domain-tracker-density"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 228274995,
+      "mem_peak_p95_bytes": 228274995,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 115.44,
+          "mem_peak_max_bytes": 228274995,
+          "mem_peak_p95_bytes": 228274995,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_domain_viewport_meta": {
+      "confidence": "low",
+      "ids": [
+        "domain-viewport-meta"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 378535936,
+      "mem_peak_p95_bytes": 378535936,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 3.96,
+          "mem_peak_max_bytes": 378535936,
+          "mem_peak_p95_bytes": 378535936,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_email_extractor": {
+      "confidence": "low",
+      "ids": [
+        "email-extractor"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 181403648,
+      "mem_peak_p95_bytes": 181403648,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 86.69,
+          "mem_peak_max_bytes": 181403648,
+          "mem_peak_p95_bytes": 181403648,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_email_harvester": {
+      "confidence": "low",
+      "ids": [
+        "email-harvester"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 216426086,
+      "mem_peak_p95_bytes": 216426086,
+      "oom_suspect": false,
+      "runs": 3,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 123.25,
+          "mem_peak_max_bytes": 216426086,
+          "mem_peak_p95_bytes": 216426086,
+          "oom_suspect": false,
+          "runs": 3
+        }
+      }
+    },
+    "go_emotional_tone": {
+      "confidence": "low",
+      "ids": [
+        "emotional-tone"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 640575078,
+      "mem_peak_p95_bytes": 640575078,
+      "oom_suspect": false,
+      "runs": 6,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 226.33,
+          "mem_peak_max_bytes": 640575078,
+          "mem_peak_p95_bytes": 640575078,
+          "oom_suspect": false,
+          "runs": 6
+        }
+      }
+    },
+    "go_founding_year": {
+      "confidence": "low",
+      "ids": [
+        "founding-year"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 190316544,
+      "mem_peak_p95_bytes": 190316544,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 85.94,
+          "mem_peak_max_bytes": 190316544,
+          "mem_peak_p95_bytes": 190316544,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_funding_detector": {
+      "confidence": "low",
+      "ids": [
+        "funding-detector"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 390070272,
+      "mem_peak_p95_bytes": 390070272,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 7.16,
+          "mem_peak_max_bytes": 390070272,
+          "mem_peak_p95_bytes": 390070272,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_funding_signal": {
+      "confidence": "low",
+      "ids": [
+        "funding-signal"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 181403648,
+      "mem_peak_p95_bytes": 181403648,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 5.82,
+          "mem_peak_max_bytes": 181403648,
+          "mem_peak_p95_bytes": 181403648,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_gdpr_compliance": {
+      "confidence": "low",
+      "ids": [
+        "gdpr-compliance"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 191469977,
+      "mem_peak_p95_bytes": 191469977,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 107.22,
+          "mem_peak_max_bytes": 191469977,
+          "mem_peak_p95_bytes": 191469977,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_google_taxonomy": {
+      "confidence": "low",
+      "ids": [
+        "google-taxonomy"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 330930585,
+      "mem_peak_p95_bytes": 330930585,
+      "oom_suspect": false,
+      "runs": 7,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 177.8,
+          "mem_peak_max_bytes": 330930585,
+          "mem_peak_p95_bytes": 330930585,
+          "oom_suspect": false,
+          "runs": 7
+        }
+      }
+    },
+    "go_hiring_footprint": {
+      "confidence": "low",
+      "ids": [
+        "hiring-footprint"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 153406668,
+      "mem_peak_p95_bytes": 153406668,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 143.97,
+          "mem_peak_max_bytes": 153406668,
+          "mem_peak_p95_bytes": 153406668,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_http_protocol": {
+      "confidence": "low",
+      "ids": [
+        "http-protocol"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 403806617,
+      "mem_peak_p95_bytes": 403806617,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 15.52,
+          "mem_peak_max_bytes": 403806617,
+          "mem_peak_p95_bytes": 403806617,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_infrastructure_fetch_cache": {
+      "confidence": "low",
+      "ids": [
+        "infrastructure-fetch-cache"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 556059852,
+      "mem_peak_p95_bytes": 556059852,
+      "oom_suspect": false,
+      "runs": 10,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 194.43,
+          "mem_peak_max_bytes": 556059852,
+          "mem_peak_p95_bytes": 556059852,
+          "oom_suspect": false,
+          "runs": 10
+        }
+      }
+    },
+    "go_ipv6_checker": {
+      "confidence": "low",
+      "ids": [
+        "ipv6-checker"
+      ],
+      "last_seen": "2026-10-27",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 233622732,
+      "mem_peak_p95_bytes": 233622732,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 7.13,
+          "mem_peak_max_bytes": 233622732,
+          "mem_peak_p95_bytes": 233622732,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_keyphrase_extractor": {
+      "confidence": "low",
+      "ids": [
+        "keyphrase-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 846410547,
+      "mem_peak_p95_bytes": 846410547,
+      "oom_suspect": false,
+      "runs": 7,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 364.57,
+          "mem_peak_max_bytes": 846410547,
+          "mem_peak_p95_bytes": 846410547,
+          "oom_suspect": false,
+          "runs": 7
+        }
+      }
+    },
+    "go_keyword_density": {
+      "confidence": "low",
+      "ids": [
+        "keyword-density"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 504365056,
+      "mem_peak_p95_bytes": 504365056,
+      "oom_suspect": false,
+      "runs": 8,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 171.38,
+          "mem_peak_max_bytes": 504365056,
+          "mem_peak_p95_bytes": 504365056,
+          "oom_suspect": false,
+          "runs": 8
+        }
+      }
+    },
+    "go_language_detector": {
+      "confidence": "low",
+      "ids": [
+        "language-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 752038707,
+      "mem_peak_p95_bytes": 752038707,
+      "oom_suspect": false,
+      "runs": 5,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 188.71,
+          "mem_peak_max_bytes": 752038707,
+          "mem_peak_p95_bytes": 752038707,
+          "oom_suspect": false,
+          "runs": 5
+        }
+      }
+    },
+    "go_leadership_extractor": {
+      "confidence": "low",
+      "ids": [
+        "leadership-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 657037721,
+      "mem_peak_p95_bytes": 657037721,
+      "oom_suspect": false,
+      "runs": 11,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 181.81,
+          "mem_peak_max_bytes": 657037721,
+          "mem_peak_p95_bytes": 657037721,
+          "oom_suspect": false,
+          "runs": 11
+        }
+      }
+    },
+    "go_legal_entity": {
+      "confidence": "low",
+      "ids": [
+        "legal-entity"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 692269875,
+      "mem_peak_p95_bytes": 692269875,
+      "oom_suspect": false,
+      "runs": 12,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.24,
+          "mem_peak_max_bytes": 16137584,
+          "mem_peak_p95_bytes": 16137584,
+          "oom_suspect": false,
+          "runs": 3
+        },
+        "test": {
+          "cpu_seconds_p95": 204.16,
+          "mem_peak_max_bytes": 692269875,
+          "mem_peak_p95_bytes": 692269875,
+          "oom_suspect": false,
+          "runs": 12
+        }
+      }
+    },
+    "go_office_locations": {
+      "confidence": "low",
+      "ids": [
+        "office-locations"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 96290734,
+      "mem_peak_p95_bytes": 96290734,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 7.03,
+          "mem_peak_max_bytes": 96290734,
+          "mem_peak_p95_bytes": 96290734,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_outlink_graph": {
+      "confidence": "low",
+      "ids": [
+        "outlink-graph"
+      ],
+      "last_seen": "2026-10-27",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 371825049,
+      "mem_peak_p95_bytes": 371825049,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 134.69,
+          "mem_peak_max_bytes": 371825049,
+          "mem_peak_p95_bytes": 371825049,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_passive_voice_detector": {
+      "confidence": "low",
+      "ids": [
+        "passive-voice-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 799014912,
+      "mem_peak_p95_bytes": 799014912,
+      "oom_suspect": false,
+      "runs": 11,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 173.26,
+          "mem_peak_max_bytes": 799014912,
+          "mem_peak_p95_bytes": 799014912,
+          "oom_suspect": false,
+          "runs": 11
+        }
+      }
+    },
+    "go_payment_detector": {
+      "confidence": "low",
+      "ids": [
+        "payment-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 732010905,
+      "mem_peak_p95_bytes": 732010905,
+      "oom_suspect": false,
+      "runs": 4,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 130.83,
+          "mem_peak_max_bytes": 732010905,
+          "mem_peak_p95_bytes": 732010905,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go_phone_extractor": {
+      "confidence": "low",
+      "ids": [
+        "phone-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 342569779,
+      "mem_peak_p95_bytes": 342569779,
+      "oom_suspect": false,
+      "runs": 3,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 207.4,
+          "mem_peak_max_bytes": 342569779,
+          "mem_peak_p95_bytes": 342569779,
+          "oom_suspect": false,
+          "runs": 3
+        }
+      }
+    },
+    "go_policy_clause_extractor": {
+      "confidence": "low",
+      "ids": [
+        "policy-clause-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 420583833,
+      "mem_peak_p95_bytes": 420583833,
+      "oom_suspect": false,
+      "runs": 8,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.07,
+          "mem_peak_max_bytes": 6283067,
+          "mem_peak_p95_bytes": 6283067,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 200.02,
+          "mem_peak_max_bytes": 420583833,
+          "mem_peak_p95_bytes": 420583833,
+          "oom_suspect": false,
+          "runs": 8
+        }
+      }
+    },
+    "go_price_range": {
+      "confidence": "low",
+      "ids": [
+        "price-range"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 1052770304,
+      "mem_peak_p95_bytes": 1052770304,
+      "oom_suspect": false,
+      "runs": 9,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.18,
+          "mem_peak_max_bytes": 19157483,
+          "mem_peak_p95_bytes": 19157483,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 145.59,
+          "mem_peak_max_bytes": 1052770304,
+          "mem_peak_p95_bytes": 1052770304,
+          "oom_suspect": false,
+          "runs": 9
+        }
+      }
+    },
+    "go_pricing_tier_parser": {
+      "confidence": "low",
+      "ids": [
+        "pricing-tier-parser"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 946654412,
+      "mem_peak_p95_bytes": 946654412,
+      "oom_suspect": false,
+      "runs": 8,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 134.64,
+          "mem_peak_max_bytes": 946654412,
+          "mem_peak_p95_bytes": 946654412,
+          "oom_suspect": false,
+          "runs": 8
+        }
+      }
+    },
+    "go_promo_code_detector": {
+      "confidence": "low",
+      "ids": [
+        "promo-code-detector"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 154140672,
+      "mem_peak_p95_bytes": 154140672,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 4.88,
+          "mem_peak_max_bytes": 154140672,
+          "mem_peak_p95_bytes": 154140672,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_proxy_fingerprint": {
+      "confidence": "low",
+      "ids": [
+        "proxy-fingerprint"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 118593945,
+      "mem_peak_p95_bytes": 118593945,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 1.08,
+          "mem_peak_max_bytes": 118593945,
+          "mem_peak_p95_bytes": 118593945,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_readability_index": {
+      "confidence": "low",
+      "ids": [
+        "readability-index"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 456969420,
+      "mem_peak_p95_bytes": 456969420,
+      "oom_suspect": false,
+      "runs": 7,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 333.61,
+          "mem_peak_max_bytes": 456969420,
+          "mem_peak_p95_bytes": 456969420,
+          "oom_suspect": false,
+          "runs": 7
+        }
+      }
+    },
+    "go_reading_time_estimator": {
+      "confidence": "low",
+      "ids": [
+        "reading-time-estimator"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 587517132,
+      "mem_peak_p95_bytes": 587517132,
+      "oom_suspect": false,
+      "runs": 4,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 131.08,
+          "mem_peak_max_bytes": 587517132,
+          "mem_peak_p95_bytes": 587517132,
+          "oom_suspect": false,
+          "runs": 4
+        }
+      }
+    },
+    "go_revenue_model": {
+      "confidence": "low",
+      "ids": [
+        "revenue-model"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 626629017,
+      "mem_peak_p95_bytes": 626629017,
+      "oom_suspect": false,
+      "runs": 8,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 301.23,
+          "mem_peak_max_bytes": 626629017,
+          "mem_peak_p95_bytes": 626629017,
+          "oom_suspect": false,
+          "runs": 8
+        }
+      }
+    },
+    "go_reverse_dns": {
+      "confidence": "low",
+      "ids": [
+        "reverse-dns"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 361758720,
+      "mem_peak_p95_bytes": 361758720,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 7.5,
+          "mem_peak_max_bytes": 361758720,
+          "mem_peak_p95_bytes": 361758720,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_robots_parser": {
+      "confidence": "low",
+      "ids": [
+        "robots-parser"
+      ],
+      "last_seen": "2026-10-25",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 153826099,
+      "mem_peak_p95_bytes": 153826099,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 108.19,
+          "mem_peak_max_bytes": 153826099,
+          "mem_peak_p95_bytes": 153826099,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_security_txt": {
+      "confidence": "low",
+      "ids": [
+        "security-txt"
+      ],
+      "last_seen": "2026-10-27",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 554172416,
+      "mem_peak_p95_bytes": 554172416,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 132.28,
+          "mem_peak_max_bytes": 554172416,
+          "mem_peak_p95_bytes": 554172416,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_seo_basics": {
+      "confidence": "low",
+      "ids": [
+        "seo-basics"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 271686041,
+      "mem_peak_p95_bytes": 271686041,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 175.56,
+          "mem_peak_max_bytes": 271686041,
+          "mem_peak_p95_bytes": 271686041,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_shipping_regions": {
+      "confidence": "low",
+      "ids": [
+        "shipping-regions"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 794296320,
+      "mem_peak_p95_bytes": 794296320,
+      "oom_suspect": false,
+      "runs": 10,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 185.17,
+          "mem_peak_max_bytes": 794296320,
+          "mem_peak_p95_bytes": 794296320,
+          "oom_suspect": false,
+          "runs": 10
+        }
+      }
+    },
+    "go_sitemap_finder": {
+      "confidence": "low",
+      "ids": [
+        "sitemap-finder"
+      ],
+      "last_seen": "2026-10-28",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 349804953,
+      "mem_peak_p95_bytes": 349804953,
+      "oom_suspect": false,
+      "runs": 3,
+      "steps": {
+        "compose-config": {
+          "cpu_seconds_p95": 0.82,
+          "mem_peak_max_bytes": 69352816,
+          "mem_peak_p95_bytes": 69352816,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "verify": {
+          "cpu_seconds_p95": 299.53,
+          "mem_peak_max_bytes": 349804953,
+          "mem_peak_p95_bytes": 349804953,
+          "oom_suspect": false,
+          "runs": 3
+        }
+      }
+    },
+    "go_social_proof_extractor": {
+      "confidence": "low",
+      "ids": [
+        "social-proof-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 204262604,
+      "mem_peak_p95_bytes": 204262604,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 81.92,
+          "mem_peak_max_bytes": 204262604,
+          "mem_peak_p95_bytes": 204262604,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "go_team_member_extractor": {
+      "confidence": "low",
+      "ids": [
+        "team-member-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 417018675,
+      "mem_peak_p95_bytes": 417018675,
+      "oom_suspect": false,
+      "runs": 7,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 341.6,
+          "mem_peak_max_bytes": 417018675,
+          "mem_peak_p95_bytes": 417018675,
+          "oom_suspect": false,
+          "runs": 7
+        }
+      }
+    },
+    "go_team_size": {
+      "confidence": "low",
+      "ids": [
+        "team-size"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 411251507,
+      "mem_peak_p95_bytes": 411251507,
+      "oom_suspect": false,
+      "runs": 8,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.08,
+          "mem_peak_max_bytes": 3567255,
+          "mem_peak_p95_bytes": 3567255,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "test": {
+          "cpu_seconds_p95": 202.77,
+          "mem_peak_max_bytes": 411251507,
+          "mem_peak_p95_bytes": 411251507,
+          "oom_suspect": false,
+          "runs": 8
+        }
+      }
+    },
+    "go_testimonial_extractor": {
+      "confidence": "low",
+      "ids": [
+        "testimonial-extractor"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 412614656,
+      "mem_peak_p95_bytes": 412614656,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 79.65,
+          "mem_peak_max_bytes": 412614656,
+          "mem_peak_p95_bytes": 412614656,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "go_tos_finder": {
+      "confidence": "low",
+      "ids": [
+        "tos-finder"
+      ],
+      "last_seen": "2026-10-26",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 238760755,
+      "mem_peak_p95_bytes": 238760755,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "test": {
+          "cpu_seconds_p95": 158.05,
+          "mem_peak_max_bytes": 238760755,
+          "mem_peak_p95_bytes": 238760755,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "hub_scrapetheworld_org": {
+      "confidence": "ok",
+      "ids": [
+        "hub-scrapetheworld-org"
+      ],
+      "last_seen": "2026-10-29",
+      "mem_class": "l",
+      "mem_peak_max_bytes": 7905961050,
+      "mem_peak_p95_bytes": 6043018985,
+      "oom_suspect": true,
+      "runs": 178,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.26,
+          "mem_peak_max_bytes": 21265121,
+          "mem_peak_p95_bytes": 21265121,
+          "oom_suspect": false,
+          "runs": 7
+        },
+        "repo-checks": {
+          "cpu_seconds_p95": 0.17,
+          "mem_peak_max_bytes": 30723276,
+          "mem_peak_p95_bytes": 30723276,
+          "oom_suspect": false,
+          "runs": 6
+        },
+        "validate": {
+          "cpu_seconds_p95": 235.83,
+          "mem_peak_max_bytes": 828794470,
+          "mem_peak_p95_bytes": 565392179,
+          "oom_suspect": false,
+          "runs": 178
+        },
+        "web-test": {
+          "cpu_seconds_p95": 1464.95,
+          "mem_peak_max_bytes": 7905961050,
+          "mem_peak_p95_bytes": 6043018985,
+          "oom_suspect": true,
+          "runs": 59
+        }
+      }
+    },
+    "mesh-agenda-runner": {
+      "confidence": "low",
+      "ids": [
+        "mesh-agenda-runner"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 853540864,
+      "mem_peak_p95_bytes": 853540864,
+      "oom_suspect": false,
+      "runs": 3,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 155.91,
+          "mem_peak_max_bytes": 853540864,
+          "mem_peak_p95_bytes": 853540864,
+          "oom_suspect": false,
+          "runs": 3
+        }
+      }
+    },
+    "mesh-bingo-blitz": {
+      "confidence": "low",
+      "ids": [
+        "mesh-bingo-blitz"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 719847424,
+      "mem_peak_p95_bytes": 719847424,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 48.77,
+          "mem_peak_max_bytes": 719847424,
+          "mem_peak_p95_bytes": 719847424,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-book-club-lottery": {
+      "confidence": "low",
+      "ids": [
+        "mesh-book-club-lottery"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 726034022,
+      "mem_peak_p95_bytes": 726034022,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 98.64,
+          "mem_peak_max_bytes": 726034022,
+          "mem_peak_p95_bytes": 726034022,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-borrow-board": {
+      "confidence": "low",
+      "ids": [
+        "mesh-borrow-board"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 7032799,
+      "mem_peak_p95_bytes": 7032799,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 0.51,
+          "mem_peak_max_bytes": 7032799,
+          "mem_peak_p95_bytes": 7032799,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-breakout-pairs": {
+      "confidence": "low",
+      "ids": [
+        "mesh-breakout-pairs"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 6529482,
+      "mem_peak_p95_bytes": 6529482,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.2,
+          "mem_peak_max_bytes": 6529482,
+          "mem_peak_p95_bytes": 6529482,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-budget-pot": {
+      "confidence": "low",
+      "ids": [
+        "mesh-budget-pot"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 843369676,
+      "mem_peak_p95_bytes": 843369676,
+      "oom_suspect": false,
+      "runs": 10,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 78.27,
+          "mem_peak_max_bytes": 843369676,
+          "mem_peak_p95_bytes": 843369676,
+          "oom_suspect": false,
+          "runs": 10
+        }
+      }
+    },
+    "mesh-caption-clash": {
+      "confidence": "low",
+      "ids": [
+        "mesh-caption-clash"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 6401556,
+      "mem_peak_p95_bytes": 6401556,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 0.2,
+          "mem_peak_max_bytes": 6401556,
+          "mem_peak_p95_bytes": 6401556,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-card-sorter": {
+      "confidence": "low",
+      "ids": [
+        "mesh-card-sorter"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 326421708,
+      "mem_peak_p95_bytes": 326421708,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 36.95,
+          "mem_peak_max_bytes": 326421708,
+          "mem_peak_p95_bytes": 326421708,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "mesh-choice-board": {
+      "confidence": "low",
+      "ids": [
+        "mesh-choice-board"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 12373196,
+      "mem_peak_p95_bytes": 12373196,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 0.14,
+          "mem_peak_max_bytes": 12373196,
+          "mem_peak_p95_bytes": 12373196,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-cohort-scheduler": {
+      "confidence": "low",
+      "ids": [
+        "mesh-cohort-scheduler"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 8278507,
+      "mem_peak_p95_bytes": 8278507,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 0.2,
+          "mem_peak_max_bytes": 8278507,
+          "mem_peak_p95_bytes": 8278507,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-crowd-map": {
+      "confidence": "low",
+      "ids": [
+        "mesh-crowd-map"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 88436899,
+      "mem_peak_p95_bytes": 88436899,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 0.33,
+          "mem_peak_max_bytes": 88436899,
+          "mem_peak_p95_bytes": 88436899,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-daily-question": {
+      "confidence": "low",
+      "ids": [
+        "mesh-daily-question"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 228904140,
+      "mem_peak_p95_bytes": 228904140,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 18.26,
+          "mem_peak_max_bytes": 228904140,
+          "mem_peak_p95_bytes": 228904140,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-decision-room": {
+      "confidence": "low",
+      "ids": [
+        "mesh-decision-room"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 493984153,
+      "mem_peak_p95_bytes": 493984153,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 30.43,
+          "mem_peak_max_bytes": 493984153,
+          "mem_peak_p95_bytes": 493984153,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-five-second-rule": {
+      "confidence": "low",
+      "ids": [
+        "mesh-five-second-rule"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 1563368095,
+      "mem_peak_p95_bytes": 1563368095,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 30.19,
+          "mem_peak_max_bytes": 1563368095,
+          "mem_peak_p95_bytes": 1563368095,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-invite-pocket": {
+      "confidence": "low",
+      "ids": [
+        "mesh-invite-pocket"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 386190540,
+      "mem_peak_p95_bytes": 386190540,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 2.38,
+          "mem_peak_max_bytes": 386190540,
+          "mem_peak_p95_bytes": 386190540,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-memory-match": {
+      "confidence": "low",
+      "ids": [
+        "mesh-memory-match"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 562456166,
+      "mem_peak_p95_bytes": 562456166,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 49.36,
+          "mem_peak_max_bytes": 562456166,
+          "mem_peak_p95_bytes": 562456166,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-milestone-map": {
+      "confidence": "low",
+      "ids": [
+        "mesh-milestone-map"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 751199846,
+      "mem_peak_p95_bytes": 751199846,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 130.03,
+          "mem_peak_max_bytes": 751199846,
+          "mem_peak_p95_bytes": 751199846,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-queue": {
+      "confidence": "low",
+      "ids": [
+        "mesh-queue"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 620127846,
+      "mem_peak_p95_bytes": 620127846,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 92.2,
+          "mem_peak_max_bytes": 620127846,
+          "mem_peak_p95_bytes": 620127846,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-quick-draw-duel": {
+      "confidence": "low",
+      "ids": [
+        "mesh-quick-draw-duel"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 698771046,
+      "mem_peak_p95_bytes": 698771046,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 101.64,
+          "mem_peak_max_bytes": 698771046,
+          "mem_peak_p95_bytes": 698771046,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-role-draw": {
+      "confidence": "low",
+      "ids": [
+        "mesh-role-draw"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "s",
+      "mem_peak_max_bytes": 447112806,
+      "mem_peak_p95_bytes": 447112806,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "clone": {
+          "cpu_seconds_p95": 0.03,
+          "mem_peak_max_bytes": 8933867,
+          "mem_peak_p95_bytes": 8933867,
+          "oom_suspect": false,
+          "runs": 1
+        },
+        "verify": {
+          "cpu_seconds_p95": 45.51,
+          "mem_peak_max_bytes": 447112806,
+          "mem_peak_p95_bytes": 447112806,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-room-norms": {
+      "confidence": "low",
+      "ids": [
+        "mesh-room-norms"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "xs",
+      "mem_peak_max_bytes": 171232460,
+      "mem_peak_p95_bytes": 171232460,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 21.76,
+          "mem_peak_max_bytes": 171232460,
+          "mem_peak_p95_bytes": 171232460,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    },
+    "mesh-scoreboard": {
+      "confidence": "low",
+      "ids": [
+        "mesh-scoreboard"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 900936499,
+      "mem_peak_p95_bytes": 900936499,
+      "oom_suspect": false,
+      "runs": 2,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 197.74,
+          "mem_peak_max_bytes": 900936499,
+          "mem_peak_p95_bytes": 900936499,
+          "oom_suspect": false,
+          "runs": 2
+        }
+      }
+    },
+    "mesh-volunteer-desk": {
+      "confidence": "low",
+      "ids": [
+        "mesh-volunteer-desk"
+      ],
+      "last_seen": "2026-10-22",
+      "mem_class": "m",
+      "mem_peak_max_bytes": 590138572,
+      "mem_peak_p95_bytes": 590138572,
+      "oom_suspect": false,
+      "runs": 1,
+      "steps": {
+        "verify": {
+          "cpu_seconds_p95": 56.35,
+          "mem_peak_max_bytes": 590138572,
+          "mem_peak_p95_bytes": 590138572,
+          "oom_suspect": false,
+          "runs": 1
+        }
+      }
+    }
+  },
+  "source": "prometheus woodpecker_build_step_memory_peak_bytes_24h",
+  "unmapped": {
+    "count": 12,
+    "mem_peak_p95_max_bytes": 2928093954,
+    "runs": 288
+  },
+  "version": 1,
+  "window_days": 7
+}

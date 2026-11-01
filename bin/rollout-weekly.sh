@@ -34,6 +34,9 @@ sync_extra_repos() {
 [ -d "$W/services-registry/.git" ] || git clone -q git@github.com:baditaflorin/services-registry.git "$W/services-registry" || exit 2
 git -C "$W/services-registry" fetch -q origin && git -C "$W/services-registry" checkout -q -B main origin/main || exit 2
 sync_extra_repos
+# Propose the regeneration of the GENERATED blocks (the verbs list drifts whenever the runner gains a verb) as ONE pull request on the branch
+# docs/regen-generated-blocks. Never merges: a person reviews it. Informational: a failure here does not stop the rollout.
+{ python3 "$W/services-registry/bin/regen_generated_blocks.py" --work "$W" 2>&1 || echo "failed (informational)"; } | sed 's/^/regen: /'
 echo "=== fleet CLAUDE.md rollout $(date -u +%FT%TZ) (registry $(git -C "$W/services-registry" rev-parse --short origin/main))"
 python3 "$W/services-registry/bin/rollout_claude_md.py" weekly --registry "$W/services-registry" --work "$W" --extra "$W/extra_repos.txt"
 rc=$?

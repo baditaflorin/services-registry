@@ -10,8 +10,9 @@ follow redirects and only assert HTTP 200, and `fleet-runner smoke` can run
 with -insecure. This asserts the things those skip:
 
   1  dns_nxdomain        hostname resolves
-  2  gateway_drift       A record points at the expected gateway for `runtime`
-                         (compose -> 176.9.123.221 ; coolify -> 65.108.75.123)
+  2  gateway_drift       A record is outside the accepted public edge set for the
+                         service (built-in per-runtime default, extended by the optional
+                         edges data file and by EDGE_PROBE_GATEWAY_EXTRA; see the README)
   3  tls_untrusted       TLS chain validates with the system trust store (no -k)
   4  cert_host_mismatch  leaf cert SAN actually covers this hostname
   5  cert_registry_mismatch  SAN matches registry `cert_domain`
@@ -29,24 +30,46 @@ Services whose registry entry has lifecycle.status == "sunset" are not probed
 (they are deliberately retired and answer 410); they are reported as `skipped`
 and stay visible via fleet_edge_probe_service_skipped / fleet_edge_probe_skipped_total.
 
-Exit: 0 = all probed services pass ; 1 = >=1 failure ; 2 = usage/fetch error.
+Exit: 0 = all probed services pass ; 1 = >=1 failure ; 2 = usage/fetch error ;
+3 = nothing eligible to probe (the filters left zero services: this vantage is blind).
+Exit 3 still writes fleet_edge_probe_eligible_services 0 to the --prom textfile and, with
+--state and --ntfy, sends one alert when the run enters that state.
 
 stdlib only. Needs: python3, curl.
 """
 
 from __future__ import annotations
-import argparse, json, os, socket, ssl, subprocess, sys, time, urllib.request
+import argparse, ipaddress, json, os, socket, ssl, subprocess, sys, time, urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from urllib.parse import urlsplit
 
 REGISTRY_URL = "https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.json"
 
-# Known public gateway IPs by runtime. Extend here as topology changes.
+# Built-in default: known public gateway IPs by runtime. This is the first layer of the
+# accepted-edge table (see EdgeTable): the optional edges data file and the per-vantage
+# EDGE_PROBE_GATEWAY_EXTRA only ADD to it, so deleting a file or unsetting a variable can
+# never make the check stricter than this default.
 GATEWAY_IPS = {
     "compose": {"176.9.123.221"},
     "coolify": {"65.108.75.123"},
 }
+
+# Optional data file (JSON, schema in the README) next to the script / checkout, and the
+# per-vantage environment variable carrying extra accepted addresses.
+DEFAULT_EDGES_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  "fleet-edge-probe.edges.json")
+EDGES_ENV = "EDGE_PROBE_EDGES"
+GATEWAY_EXTRA_ENV = "EDGE_PROBE_GATEWAY_EXTRA"
+EDGES_SCHEMA_VERSION = 1
+EDGES_FILE_KEYS = {"schema", "description", "runtime", "mesh", "any"}
+
+EXIT_OK, EXIT_FAIL, EXIT_USAGE, EXIT_NOTHING_ELIGIBLE = 0, 1, 2, 3
+
+# registry `network_exposure` values that mean "no public edge to probe". The schema enum
+# (schema/v1.json) spells them lan-internal / loopback; "internal" is the older spelling
+# this script used to compare against, which no registry value ever matched.
+NOT_PUBLIC_EXPOSURES = {"internal", "lan-internal", "loopback"}
 
 # registry `lifecycle.status` values that mean "deliberately retired, do not probe".
 # schema/v1.json defines active|sunset only; extend here if the schema grows more.
@@ -68,6 +91,192 @@ SEVERITY = {  # codes not listed default to "fail"
 
 def log(*a):
     print(*a, file=sys.stderr, flush=True)
+
+
+class EdgeConfigError(ValueError):
+    """The edges data file or EDGE_PROBE_GATEWAY_EXTRA is malformed (a usage error, exit 2)."""
+
+
+def parse_ipv4_list(values, where: str) -> frozenset[str]:
+    """Validate IPv4 addresses (only A records are compared). Raises EdgeConfigError."""
+    out = set()
+    for v in values:
+        if not isinstance(v, str):
+            raise EdgeConfigError(f"{where}: {v!r} is not an IP address string")
+        try:
+            ip = ipaddress.ip_address(v.strip())
+        except ValueError:
+            raise EdgeConfigError(f"{where}: {v!r} is not an IP address") from None
+        if ip.version != 4:
+            raise EdgeConfigError(f"{where}: {v!r} is not IPv4 (the probe compares A records)")
+        out.add(str(ip))
+    return frozenset(out)
+
+
+def parse_gateway_extra(spec: str) -> frozenset[str]:
+    """`EDGE_PROBE_GATEWAY_EXTRA` / --gateway-extra: comma-separated IPv4 addresses."""
+    items = [t.strip() for t in (spec or "").split(",") if t.strip()]
+    return parse_ipv4_list(items, GATEWAY_EXTRA_ENV)
+
+
+class EdgeTable:
+    """Accepted public edge addresses, layered. Every layer only ADDS addresses.
+
+      1  runtime/mesh base sets  - the built-in GATEWAY_IPS plus the edges file's
+                                   `runtime` and `mesh` maps. A service is checked
+                                   for gateway_drift only if its runtime or mesh has
+                                   a base set (an unknown runtime is never checked).
+      2  any                     - edges file `any`: accepted for every checked service
+                                   (a second public edge that fronts everything).
+      3  extra                   - per-vantage EDGE_PROBE_GATEWAY_EXTRA: the internal
+                                   split-horizon address an internal vantage resolves to.
+
+    An A record that intersects the union passes; one outside it is gateway_drift.
+    """
+
+    def __init__(self, runtime=None, mesh=None, any_ips=(), extra=()):
+        self.runtime = {k: frozenset(v) for k, v in (runtime or {}).items()}
+        self.mesh = {k: frozenset(v) for k, v in (mesh or {}).items()}
+        self.any = frozenset(any_ips)
+        self.extra = frozenset(extra)
+
+    def accepted(self, svc: dict) -> frozenset[str]:
+        """Addresses an A record may carry for svc; empty means "no expectation, not checked"."""
+        base = (self.runtime.get(svc.get("runtime", ""), frozenset())
+                | self.mesh.get(svc.get("mesh", ""), frozenset()))
+        if not base:
+            return frozenset()
+        return base | self.any | self.extra
+
+
+def default_edge_table() -> EdgeTable:
+    """Built-in layer only (reads GATEWAY_IPS at call time)."""
+    return EdgeTable(runtime=GATEWAY_IPS)
+
+
+def load_edges_file(path: str) -> dict:
+    """Parse + validate an edges data file (schema in the README). Raises EdgeConfigError."""
+    try:
+        with open(path) as f:
+            doc = json.load(f)
+    except OSError as e:
+        raise EdgeConfigError(f"cannot read edges file {path}: {e.strerror or e}") from None
+    except ValueError as e:
+        raise EdgeConfigError(f"edges file {path} is not valid JSON: {e}") from None
+    if not isinstance(doc, dict):
+        raise EdgeConfigError(f"edges file {path}: top level must be an object")
+    unknown = sorted(set(doc) - EDGES_FILE_KEYS)
+    if unknown:  # a typo like "runtimes" must not silently disable an edge
+        raise EdgeConfigError(f"edges file {path}: unknown key(s) {unknown}; "
+                              f"allowed: {sorted(EDGES_FILE_KEYS)}")
+    if doc.get("schema") != EDGES_SCHEMA_VERSION:
+        raise EdgeConfigError(f"edges file {path}: \"schema\" must be {EDGES_SCHEMA_VERSION}, "
+                              f"got {doc.get('schema')!r}")
+    out = {"runtime": {}, "mesh": {}, "any": frozenset()}
+    for axis in ("runtime", "mesh"):
+        m = doc.get(axis, {})
+        if not isinstance(m, dict):
+            raise EdgeConfigError(f"edges file {path}: \"{axis}\" must be an object")
+        for key, ips in m.items():
+            if not key or not isinstance(ips, list):
+                raise EdgeConfigError(f"edges file {path}: \"{axis}\".{key!r} must be a list of IPs")
+            out[axis][key] = parse_ipv4_list(ips, f"edges file {path} {axis}.{key}")
+    any_ips = doc.get("any", [])
+    if not isinstance(any_ips, list):
+        raise EdgeConfigError(f"edges file {path}: \"any\" must be a list of IPs")
+    out["any"] = parse_ipv4_list(any_ips, f"edges file {path} any")
+    return out
+
+
+def build_edge_table(edges_path: str = "", extra_spec: str = "") -> EdgeTable:
+    """Layer: built-in GATEWAY_IPS -> edges file (explicit path, else the default file if
+    present) -> extra addresses. An explicit path that is unreadable or invalid raises
+    EdgeConfigError; so does an invalid default file (never silently ignored)."""
+    runtime = {k: set(v) for k, v in GATEWAY_IPS.items()}
+    mesh: dict[str, set[str]] = {}
+    any_ips: frozenset[str] = frozenset()
+    path = edges_path or (DEFAULT_EDGES_FILE if os.path.exists(DEFAULT_EDGES_FILE) else "")
+    if path:
+        data = load_edges_file(path)
+        for k, v in data["runtime"].items():
+            runtime.setdefault(k, set()).update(v)
+        for k, v in data["mesh"].items():
+            mesh.setdefault(k, set()).update(v)
+        any_ips = data["any"]
+    return EdgeTable(runtime, mesh, any_ips, parse_gateway_extra(extra_spec))
+
+
+def parse_runtime_filter(spec: str) -> frozenset[str] | None:
+    """`--runtime`: comma list of runtimes, or `all`/empty for no runtime filter (None)."""
+    tokens = [t.strip().lower() for t in (spec or "").split(",") if t.strip()]
+    if not tokens or "all" in tokens:
+        return None
+    return frozenset(tokens)
+
+
+def select_services(reg: list[dict], runtimes, only: set[str], sample: int = 0):
+    """Apply the eligibility filters. Returns (eligible, detail).
+
+    `eligible` keeps services whose registry lifecycle is sunset (probe_or_skip reports
+    them as skipped, as before). `detail` is JSON-able and explains an empty selection:
+    every registry entry is counted once, under the first reason that excluded it, so
+    `registry_entries == sum(excluded) + matched`.
+    """
+    excluded = {"kind": 0, "external": 0, "url": 0, "network_exposure": 0, "runtime": 0, "only": 0}
+    elig: list[dict] = []
+    runtime_counts: dict[str, int] = {}
+    for e in reg:
+        rt = str(e.get("runtime") or "").lower()
+        runtime_counts[rt or "(none)"] = runtime_counts.get(rt or "(none)", 0) + 1
+        if e.get("kind") != "container":
+            excluded["kind"] += 1
+        elif rt == "external":
+            excluded["external"] += 1
+        elif not str(e.get("url", "")).startswith("https://"):
+            excluded["url"] += 1
+        elif e.get("network_exposure") in NOT_PUBLIC_EXPOSURES:
+            excluded["network_exposure"] += 1
+        elif runtimes is not None and rt not in runtimes:
+            excluded["runtime"] += 1
+        elif only and e.get("id") not in only:
+            excluded["only"] += 1
+        else:
+            elig.append(e)
+    if sample:
+        elig = elig[:sample]
+    detail = {
+        "registry_entries": len(reg),
+        "filters": {"runtime": sorted(runtimes) if runtimes is not None else "all",
+                    "only": sorted(only), "sample": sample},
+        "excluded": excluded,
+        "matched": len(elig),
+        "lifecycle_skipped": sum(1 for e in elig if lifecycle_skip_status(e)),
+        "registry_runtimes": dict(sorted(runtime_counts.items())),
+        "requested_runtime_counts": ({r: runtime_counts.get(r, 0) for r in sorted(runtimes)}
+                                     if runtimes is not None else {}),
+    }
+    return elig, detail
+
+
+def describe_selection(detail: dict) -> str:
+    """One human line naming the filters and how many services each one excluded."""
+    f, x = detail["filters"], detail["excluded"]
+    rt = f["runtime"] if f["runtime"] == "all" else ",".join(f["runtime"])
+    parts = [
+        f"of {detail['registry_entries']} registry entries, {detail['matched']} matched "
+        f"({detail['lifecycle_skipped']} of them sunset, never probed)",
+        f"filters: runtime={rt} only={','.join(f['only']) or '-'} sample={f['sample'] or '-'}",
+        "excluded by kind != container: %d; by runtime external (never probed): %d; "
+        "by url not https: %d; by network_exposure not public: %d; "
+        "by runtime not in filter: %d; by --only: %d" % (
+            x["kind"], x["external"], x["url"], x["network_exposure"], x["runtime"], x["only"]),
+    ]
+    if detail["requested_runtime_counts"]:
+        parts.append("requested runtimes in this registry: " + ", ".join(
+            f"{k}={v}" for k, v in detail["requested_runtime_counts"].items()))
+    parts.append("registry runtimes: " + ", ".join(
+        f"{k}={v}" for k, v in detail["registry_runtimes"].items()))
+    return "; ".join(parts)
 
 
 def load_registry(src: str) -> list[dict]:
@@ -257,8 +466,11 @@ def probe(svc: dict, args) -> dict:
         add("dns_nxdomain")
         return _result(slug, host, runtime, fails, {"a": []})
 
-    # 2 gateway drift
-    want = GATEWAY_IPS.get(runtime)
+    # 2 gateway drift: an A record in the accepted union passes (built-in default,
+    # edges file, per-vantage extras); one outside it is drift. args without an
+    # `edge_table` (older callers, tests) get the built-in layer only.
+    edges = getattr(args, "edge_table", None) or default_edge_table()
+    want = edges.accepted(svc)
     if want and not (a & want):
         add("gateway_drift")
 
@@ -305,7 +517,7 @@ def probe(svc: dict, args) -> dict:
             add("example_unreachable")
 
     meta = {"a": sorted(a), "san": san, "health_code": hcode, "health_final": hfinal,
-            "cert_err": cert_err}
+            "cert_err": cert_err, "want": sorted(want)}
     return _result(slug, host, runtime, fails, meta)
 
 
@@ -318,8 +530,8 @@ def _result(slug, host, runtime, fails, meta):
     }
 
 
-def notify_ntfy(url: str, newly_broken, recovered):
-    lines = []
+def notify_ntfy(url: str, newly_broken, recovered, notes=()):
+    lines = list(notes)
     if newly_broken:
         lines.append("🔴 NEW edge failures:")
         for r in newly_broken:
@@ -328,19 +540,21 @@ def notify_ntfy(url: str, newly_broken, recovered):
         lines.append("🟢 recovered: " + ", ".join(r["slug"] for r in recovered))
     if not lines:
         return
-    # allow https://user:pass@host/topic
-    parts = urlsplit(url)
-    headers = {"Title": "fleet-edge-probe", "Priority": "high", "Tags": "warning"}
-    if parts.username:
-        import base64
-        tok = base64.b64encode(f"{parts.username}:{parts.password or ''}".encode()).decode()
-        headers["Authorization"] = f"Basic {tok}"
-        url = parts._replace(netloc=parts.hostname + (f":{parts.port}" if parts.port else "")).geturl()
     try:
+        # allow https://user:pass@host/topic
+        parts = urlsplit(url)
+        headers = {"Title": "fleet-edge-probe", "Priority": "high", "Tags": "warning"}
+        if parts.username:
+            import base64
+            tok = base64.b64encode(f"{parts.username}:{parts.password or ''}".encode()).decode()
+            headers["Authorization"] = f"Basic {tok}"
+            url = parts._replace(netloc=parts.hostname + (f":{parts.port}" if parts.port else "")).geturl()
         req = urllib.request.Request(url, data="\n".join(lines).encode(), method="POST", headers=headers)
         urllib.request.urlopen(req, timeout=10)
     except OSError as e:
         log(f"ntfy post failed: {e}")
+    except Exception as e:  # a malformed URL must not crash the run, nor be echoed (it may carry user:pass)
+        log(f"ntfy post failed: {e.__class__.__name__}")
 
 
 PROM_HELP = {
@@ -351,11 +565,12 @@ PROM_HELP = {
     "fleet_edge_probe_hard_fail_total": "count of services with a hard edge failure",
     "fleet_edge_probe_service_skipped": "1 per service not probed because its registry lifecycle.status is sunset (label lifecycle)",
     "fleet_edge_probe_skipped_total": "count of services skipped because of registry lifecycle",
+    "fleet_edge_probe_eligible_services": "count of services this vantage actually probes (0 = this vantage is blind)",
     "fleet_edge_probe_last_run": "unix ts of the last completed run",
 }
 
 
-def write_prom(path: str, results: list[dict], vantage: str):
+def write_prom(path: str, results: list[dict], vantage: str, eligible: int | None = None, up: int = 1):
     def esc(s):
         return str(s).replace("\\", "\\\\").replace('"', '\\"')
     hard = sum(1 for r in results if r["hard_fail"])
@@ -364,7 +579,10 @@ def write_prom(path: str, results: list[dict], vantage: str):
         lines.append(f"# HELP {m} {h}")
         lines.append(f"# TYPE {m} gauge")
     v = f'vantage="{esc(vantage)}"'
-    lines.append(f"fleet_edge_probe_up{{{v}}} 1")
+    if eligible is None:
+        eligible = sum(1 for r in results if not r.get("skipped"))
+    lines.append(f"fleet_edge_probe_up{{{v}}} {up}")
+    lines.append(f"fleet_edge_probe_eligible_services{{{v}}} {eligible}")
     lines.append(f"fleet_edge_probe_last_run{{{v}}} {int(time.time())}")
     lines.append(f"fleet_edge_probe_hard_fail_total{{{v}}} {hard}")
     lines.append(f"fleet_edge_probe_skipped_total{{{v}}} {sum(1 for r in results if r.get('skipped'))}")
@@ -392,7 +610,9 @@ def main():
                     help="path or URL to services.json (default: local checkout, else raw GitHub)")
     ap.add_argument("--only", default="", help="comma-separated slugs to probe")
     ap.add_argument("--sample", type=int, default=0, help="probe only the first N eligible services")
-    ap.add_argument("--runtime", default="", help="filter: compose|coolify|external")
+    ap.add_argument("--runtime", default="",
+                    help="filter: one runtime or a comma list (compose,coolify; `external` entries "
+                         "are never probed), or `all`/empty for every probeable runtime")
     ap.add_argument("--timeout", type=float, default=15.0)
     ap.add_argument("--expiry-days", type=int, default=14)
     ap.add_argument("--concurrency", type=int, default=12)
@@ -401,13 +621,26 @@ def main():
     ap.add_argument("--state", default=None, help="state file for alert-on-transition")
     ap.add_argument("--ntfy", default=os.environ.get("EDGE_PROBE_NTFY", ""),
                     help="ntfy topic URL (https://[user:pass@]host/topic) to POST "
-                         "newly-broken/recovered (only with --state)")
+                         "newly-broken/recovered and nothing-eligible transitions (only with --state)")
     ap.add_argument("--prom", default=os.environ.get("EDGE_PROBE_PROM", ""),
                     help="write Prometheus textfile-collector metrics to this path "
                          "(e.g. /var/lib/prometheus/node-exporter/fleet_edge_probe.prom)")
     ap.add_argument("--vantage", default=os.environ.get("EDGE_PROBE_VANTAGE", socket.gethostname()),
                     help="label for where this probe ran (default: hostname)")
+    ap.add_argument("--edges", default=os.environ.get(EDGES_ENV, ""),
+                    help="edges data file (JSON; schema in the README) adding accepted public edge "
+                         f"IPs (default: ${EDGES_ENV}, else fleet-edge-probe.edges.json next to the "
+                         "script if present)")
+    ap.add_argument("--gateway-extra", default=os.environ.get(GATEWAY_EXTRA_ENV, ""),
+                    help="comma-separated extra accepted A-record addresses for THIS vantage, e.g. "
+                         f"the internal split-horizon gateway address (default: ${GATEWAY_EXTRA_ENV})")
     args = ap.parse_args()
+
+    try:
+        args.edge_table = build_edge_table(args.edges, args.gateway_extra)
+    except EdgeConfigError as e:
+        log(f"edge configuration error: {e}")
+        return EXIT_USAGE
 
     src = args.services
     if not src:
@@ -421,29 +654,17 @@ def main():
         reg = load_registry(src)
     except Exception as e:
         log(f"cannot load registry from {src}: {e}")
-        return 2
+        return EXIT_USAGE
+    if not isinstance(reg, list):
+        log(f"registry {src} is not a JSON list of services")
+        return EXIT_USAGE
 
     only = {s.strip() for s in args.only.split(",") if s.strip()}
-    elig = []
-    for e in reg:
-        if e.get("kind") != "container":
-            continue
-        if not str(e.get("url", "")).startswith("https://"):
-            continue
-        if e.get("runtime") == "external":
-            continue
-        if e.get("network_exposure") == "internal":
-            continue
-        if args.runtime and e.get("runtime") != args.runtime:
-            continue
-        if only and e.get("id") not in only:
-            continue
-        elig.append(e)
-    if args.sample:
-        elig = elig[: args.sample]
-    if not elig:
-        log("no eligible services matched filters")
-        return 2
+    runtimes = parse_runtime_filter(args.runtime)
+    elig, detail = select_services(reg, runtimes, only, args.sample)
+    for rt, n in detail["requested_runtime_counts"].items():
+        if n == 0:
+            log(f"warning: --runtime {rt} matches 0 services in this registry")
 
     log(f"probing {len(elig)} services (timeout={args.timeout}s, concurrency={args.concurrency}) ...")
     results = []
@@ -456,13 +677,22 @@ def main():
     broken = [r for r in results if not r["ok"]]
     hard = [r for r in results if r["hard_fail"]]
     skipped = [r for r in results if r.get("skipped")]
+    eligible = len(results) - len(skipped)  # services actually probed
+    nothing = eligible == 0
+    if nothing:
+        # the filters left nothing to probe: a failure, never a quiet success
+        log("NOTHING ELIGIBLE: " + describe_selection(detail))
 
     ts = datetime.now(timezone.utc).isoformat()
     if args.json:
-        print(json.dumps({"ts": ts, "probed": len(results) - len(skipped),
-                          "skipped": len(skipped),
-                          "broken": len(broken), "hard_fail": len(hard),
-                          "results": results}, indent=2))
+        report = {"ts": ts, "probed": eligible, "eligible": eligible,
+                  "skipped": len(skipped),
+                  "broken": len(broken), "hard_fail": len(hard)}
+        if nothing:
+            report["nothing_eligible"] = True
+            report["detail"] = detail
+        report["results"] = results
+        print(json.dumps(report, indent=2))
     else:
         for r in results:
             if r.get("skipped"):
@@ -479,6 +709,8 @@ def main():
                     extra += f"  cert={m['cert_err']}"
                 if "offsite_redirect" in r["fails"]:
                     extra += f"  ->{m.get('health_final')}"
+                if "gateway_drift" in r["fails"]:
+                    extra += f"  A={m.get('a')} want={m.get('want')}"
                 if m.get("san"):
                     extra += f"  SAN={m['san'][:3]}"
             print(f"{tag:4}  {r['slug']:<34} {r['host']:<40} {r['runtime']:<8}{extra}")
@@ -486,35 +718,54 @@ def main():
               f"ok={len(results)-len(broken)-len(skipped)}  "
               f"warn={len(broken)-len(hard)}  fail={len(hard)}  skipped={len(skipped)}")
 
-    # alert-on-transition
+    # alert-on-transition (state first, then the textfile, then the network: a hung or
+    # failing ntfy POST must never keep the metric from being written)
+    notes: list[str] = []
+    newly_broken, recovered = [], []
     if args.state:
-        prev = {}
+        prev, prev_nothing = {}, False
         if os.path.exists(args.state):
             try:
-                prev = {r["slug"]: r for r in json.load(open(args.state)).get("results", [])}
+                with open(args.state) as f:
+                    doc = json.load(f)
+                prev = {r["slug"]: r for r in doc.get("results", [])}
+                prev_nothing = bool(doc.get("nothing_eligible"))
             except Exception:
-                prev = {}
+                prev, prev_nothing = {}, False
         newly_broken = [r for r in broken if prev.get(r["slug"], {}).get("ok", True)]
         recovered = [r for r in results if r["ok"] and not r.get("skipped")
                      and prev.get(r["slug"]) and not prev[r["slug"]]["ok"]]
-        try:
-            json.dump({"ts": ts, "results": results}, open(args.state, "w"), indent=2)
+        state_doc = {"ts": ts, "eligible": eligible, "nothing_eligible": nothing, "results": results}
+        if nothing:
+            state_doc["detail"] = detail
+        try:  # atomic: a torn state file would repeat every alert on the next run
+            with open(args.state + ".tmp", "w") as f:
+                json.dump(state_doc, f, indent=2)
+            os.replace(args.state + ".tmp", args.state)
         except OSError as e:
             log(f"cannot write state {args.state}: {e}")
         if newly_broken:
             log(f"NEW failures: {[r['slug'] for r in newly_broken]}")
         if recovered:
             log(f"recovered: {[r['slug'] for r in recovered]}")
-        if args.ntfy and (newly_broken or recovered):
-            notify_ntfy(args.ntfy, newly_broken, recovered)
+        if nothing and not prev_nothing:
+            notes.append(f"🟠 edge probe on {args.vantage} has NOTHING to probe and is blind "
+                         f"(one alert per transition): {describe_selection(detail)}")
+        elif prev_nothing and not nothing:
+            notes.append(f"🟢 edge probe on {args.vantage} probes {eligible} services again")
 
     if args.prom:
         try:
-            write_prom(args.prom, results, args.vantage)
+            write_prom(args.prom, results, args.vantage, eligible=eligible, up=0 if nothing else 1)
         except OSError as e:
             log(f"cannot write prom textfile {args.prom}: {e}")
 
-    return 1 if hard else 0
+    if args.state and args.ntfy and (newly_broken or recovered or notes):
+        notify_ntfy(args.ntfy, newly_broken, recovered, notes)
+
+    if nothing:
+        return EXIT_NOTHING_ELIGIBLE
+    return EXIT_FAIL if hard else EXIT_OK
 
 
 if __name__ == "__main__":

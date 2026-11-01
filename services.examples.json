@@ -1,0 +1,3154 @@
+{
+  "checked_at": "2026-10-30T15:06:53Z",
+  "services": {
+    "a11y-quick": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3314,
+      "error": ""
+    },
+    "accessibility-audit": {
+      "path": "/?target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 68,
+      "error": ""
+    },
+    "accessibility-score": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 51,
+      "error": ""
+    },
+    "ad-density": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 693,
+      "error": ""
+    },
+    "address-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 45,
+      "error": ""
+    },
+    "admin-finder": {
+      "path": "/go_admin_finder?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5651,
+      "error": ""
+    },
+    "agent-approval": {
+      "path": "/pending",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 21,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "agent-mailbox": {
+      "path": "/",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 17,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "agent-quorum": {
+      "path": "/",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 19,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "agent-tools": {
+      "path": "/manifest",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 23,
+      "error": ""
+    },
+    "analyze-headers": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1093,
+      "error": ""
+    },
+    "api-extractor": {
+      "path": "/go_api_extractor?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 620,
+      "error": ""
+    },
+    "api-first": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5246,
+      "error": ""
+    },
+    "apikey-scanner": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 469,
+      "error": ""
+    },
+    "apikey-service": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "asn-lookup": {
+      "path": "/?ip=1.1.1.1",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 67,
+      "error": ""
+    },
+    "biz-classifier": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 571,
+      "error": ""
+    },
+    "blocklist-checker": {
+      "path": "/?ip=8.8.8.8&lists=zen.spamhaus.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 29,
+      "error": ""
+    },
+    "brand-color-palette": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 239,
+      "error": ""
+    },
+    "brand-logo-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "{\"cache_hit\":true,\"source\":\"\",\"input\":\"url\",\"logo_url\":\"\",\"width\":0,\"height\":0,\"format\":\"\",\"candidates\":[],\"version\":\"0."
+    },
+    "broken-links": {
+      "path": "/go_broken_links?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "bucket-finder": {
+      "path": "/go_bucket_finder?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 753,
+      "error": ""
+    },
+    "c-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 59,
+      "error": ""
+    },
+    "caa-checker": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 25,
+      "error": ""
+    },
+    "captcha-detector": {
+      "path": "/go_captcha_detector?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 7449,
+      "error": ""
+    },
+    "cas": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 18,
+      "error": ""
+    },
+    "catalog-service": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3,
+      "error": ""
+    },
+    "cdn-detector": {
+      "path": "/?target=https://www.cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1825,
+      "error": ""
+    },
+    "citation-reference-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 19,
+      "error": ""
+    },
+    "clickjacking-tester": {
+      "path": "/go_clickjacking_tester?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 17,
+      "error": ""
+    },
+    "cognitive-load": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 202,
+      "error": ""
+    },
+    "color-contrast-checker": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16,
+      "error": ""
+    },
+    "comment-extractor": {
+      "path": "/?target=google.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1559,
+      "error": ""
+    },
+    "company-name-extractor": {
+      "path": "/?target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 41,
+      "error": ""
+    },
+    "company-size": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1729,
+      "error": ""
+    },
+    "composite-runner": {
+      "path": "/?recipe=firmographic&target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12821,
+      "error": ""
+    },
+    "compression-tester": {
+      "path": "/?target=https://www.cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 325,
+      "error": ""
+    },
+    "consent-simulator": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3401,
+      "error": ""
+    },
+    "contact-route-detector": {
+      "path": "/?url=https://example.com/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 17,
+      "error": ""
+    },
+    "content-fingerprint": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "cookie-checker": {
+      "path": "/?target=https://github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1289,
+      "error": ""
+    },
+    "cors-scanner": {
+      "path": "/go_cors_scanner?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2162,
+      "error": ""
+    },
+    "cors-tester": {
+      "path": "/go_cors_tester?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2327,
+      "error": ""
+    },
+    "country-iso-matcher": {
+      "path": "/api/convert?country=Germany",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2,
+      "error": ""
+    },
+    "crawl-web-application": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 804,
+      "error": ""
+    },
+    "crlf-tester": {
+      "path": "/go_crlf_tester?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9816,
+      "error": ""
+    },
+    "crux-field-vitals": {
+      "path": "/?url=https://web.dev",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 327,
+      "error": ""
+    },
+    "crypto-finder": {
+      "path": "/go_crypto_finder?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 603,
+      "error": ""
+    },
+    "css-framework-detector": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 17,
+      "error": ""
+    },
+    "currency-detector": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1126,
+      "error": ""
+    },
+    "customer-logos": {
+      "path": "/?target=example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 220,
+      "error": "",
+      "detail": "success"
+    },
+    "d3-graph": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "data-format-converter": {
+      "path": "/?text=%7B%22a%22%3A1%7D&from=json&to=yaml",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "data-inventory": {
+      "path": "/?url=https%3A%2F%2Fwww.example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 809,
+      "error": ""
+    },
+    "db-geo-geocode": {
+      "path": "/?text=Bucharest",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 69,
+      "error": ""
+    },
+    "debug-detector": {
+      "path": "/go_debug_detector?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2632,
+      "error": ""
+    },
+    "dependency-counter": {
+      "path": "/?url=https://github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1212,
+      "error": ""
+    },
+    "dir-listing": {
+      "path": "/?target=google.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 4213,
+      "error": ""
+    },
+    "dns-record": {
+      "path": "/?domain=cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 289,
+      "error": ""
+    },
+    "dom-complexity-metrics": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16,
+      "error": ""
+    },
+    "domain-abuse-contact-rollup": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6011,
+      "error": ""
+    },
+    "domain-ad-network": {
+      "path": "/?domain=nytimes.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9777,
+      "error": ""
+    },
+    "domain-ai-bot-policy-scanner": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1034,
+      "error": ""
+    },
+    "domain-ai-catalog-discovery": {
+      "path": "/?target=example.com&probe=false",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "domain-amp-detector": {
+      "path": "/?domain=www.bbc.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "{\"domain\":\"www.bbc.com\",\"result\":\"no_data\",\"reason\":\"target_http_404\",\"upstream_status\":404,\"fetched_url\":\"https://www.b"
+    },
+    "domain-analytics-stack": {
+      "path": "/?domain=stripe.com",
+      "http": 502,
+      "state": "error",
+      "via": "lan",
+      "ms": 16842,
+      "error": "",
+      "detail": "error"
+    },
+    "domain-anycast-footprint": {
+      "path": "/?domain=cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3454,
+      "error": ""
+    },
+    "domain-app-render-mode": {
+      "path": "/?domain=vercel.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1650,
+      "error": ""
+    },
+    "domain-backlink-profile": {
+      "path": "/?domain=google.com",
+      "http": 504,
+      "state": "error",
+      "via": "lan",
+      "ms": 11574,
+      "error": "",
+      "detail": "timeout"
+    },
+    "domain-bimi-checker": {
+      "path": "/?domain=cnn.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1450,
+      "error": ""
+    },
+    "domain-breadcrumb-schema": {
+      "path": "/?domain=www.bbc.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 123,
+      "error": ""
+    },
+    "domain-cache-policy": {
+      "path": "/?domain=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6274,
+      "error": ""
+    },
+    "domain-cms-version": {
+      "path": "/?domain=wordpress.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1493,
+      "error": ""
+    },
+    "domain-compliance-claim-scanner": {
+      "path": "/?domain=stripe.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 11012,
+      "error": "",
+      "detail": "no_data"
+    },
+    "domain-ct-log-watcher": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2581,
+      "error": ""
+    },
+    "domain-dane-tlsa": {
+      "path": "/?domain=mail.protonmail.ch",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5029,
+      "error": ""
+    },
+    "domain-deployment-fingerprint": {
+      "path": "/?domain=vercel.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5740,
+      "error": ""
+    },
+    "domain-details": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 23,
+      "error": ""
+    },
+    "domain-dnssec-validator": {
+      "path": "/?domain=cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 56,
+      "error": ""
+    },
+    "domain-documentation-platform-detector": {
+      "path": "/?domain=stripe.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 6474,
+      "error": "",
+      "detail": "unreachable"
+    },
+    "domain-ecommerce-platform": {
+      "path": "/?domain=allbirds.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3453,
+      "error": ""
+    },
+    "domain-email-deliverability-score": {
+      "path": "/?domain=google.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5021,
+      "error": ""
+    },
+    "domain-error-monitoring": {
+      "path": "/?domain=sentry.io",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15251,
+      "error": ""
+    },
+    "domain-events-platform": {
+      "path": "/?domain=eventbrite.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12995,
+      "error": ""
+    },
+    "domain-experimentation-stack": {
+      "path": "/?domain=optimizely.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1664,
+      "error": ""
+    },
+    "domain-faq-schema": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 54,
+      "error": ""
+    },
+    "domain-favicon-completeness": {
+      "path": "/?domain=github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14344,
+      "error": ""
+    },
+    "domain-font-stack": {
+      "path": "/?domain=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 32,
+      "error": ""
+    },
+    "domain-geo-anchor": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2800,
+      "error": ""
+    },
+    "domain-gift-card": {
+      "path": "/?domain=starbucks.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16878,
+      "error": ""
+    },
+    "domain-glue-records": {
+      "path": "/?domain=google.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 127,
+      "error": ""
+    },
+    "domain-http3-quic-detector": {
+      "path": "/?domain=cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 135,
+      "error": ""
+    },
+    "domain-image-alt-coverage": {
+      "path": "/?domain=wikipedia.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 21,
+      "error": ""
+    },
+    "domain-integration-marketplace": {
+      "path": "/?domain=intercom.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16093,
+      "error": ""
+    },
+    "domain-interactive-demo": {
+      "path": "/?domain=navattic.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5112,
+      "error": ""
+    },
+    "domain-liveness-state": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 820,
+      "error": ""
+    },
+    "domain-martech-stack": {
+      "path": "/?domain=hubspot.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 10392,
+      "error": ""
+    },
+    "domain-mobile-app-resolver": {
+      "path": "/?domain=stripe.com",
+      "http": null,
+      "state": "unreachable",
+      "via": "lan",
+      "ms": 20020,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+    },
+    "domain-naptr-enum": {
+      "path": "/?domain=sip.example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 97,
+      "error": ""
+    },
+    "domain-newsletter-platform-detector": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "domain-open-source-presence": {
+      "path": "/?url=https://grafana.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 189,
+      "error": ""
+    },
+    "domain-pagination-rel": {
+      "path": "/?domain=en.wikipedia.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1281,
+      "error": ""
+    },
+    "domain-passive-dns-history": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1767,
+      "error": ""
+    },
+    "domain-podcast-presence": {
+      "path": "/?domain=darknetdiaries.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5087,
+      "error": ""
+    },
+    "domain-product-count": {
+      "path": "/?domain=https://example.com&source=commoncrawl",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 145,
+      "error": ""
+    },
+    "domain-ratelimit-headers": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 783,
+      "error": ""
+    },
+    "domain-rbl-reputation": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 152,
+      "error": ""
+    },
+    "domain-saas-host-mapper": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 52,
+      "error": ""
+    },
+    "domain-structured-data-rollup": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "domain-support-stack-detector": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "domain-tech-eol-flagger": {
+      "path": "/?domain=wordpress.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1296,
+      "error": ""
+    },
+    "domain-third-party-fetch-map": {
+      "path": "/?domain=www.cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1219,
+      "error": ""
+    },
+    "domain-tracker-density": {
+      "path": "/?domain=nytimes.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1441,
+      "error": ""
+    },
+    "domain-trust-composite-grader": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 782,
+      "error": ""
+    },
+    "domain-viewport-meta": {
+      "path": "/?domain=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 33,
+      "error": ""
+    },
+    "domain-well-known-catalog": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1962,
+      "error": ""
+    },
+    "domain-wikidata-entity": {
+      "path": "/?domain=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 22,
+      "error": ""
+    },
+    "dtss": {
+      "path": "/?target=example.com",
+      "http": null,
+      "state": "unreachable",
+      "via": "lan",
+      "ms": 20020,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+    },
+    "email-extractor": {
+      "path": "/?target=https://example.com&source=commoncrawl",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 1433,
+      "error": "",
+      "detail": "{\"tool\":\"go_email_extractor\",\"version\":\"1.6.42\",\"target\":\"https://example.com\",\"fetch_source\":{\"source\":\"commoncrawl\",\"a"
+    },
+    "email-harvester": {
+      "path": "/?target=https://www.iana.org/help/contact",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2262,
+      "error": ""
+    },
+    "embed-iframe-classifier": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 18,
+      "error": ""
+    },
+    "emotional-tone": {
+      "path": "/?target=example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 577,
+      "error": "",
+      "detail": "no_data: insufficient_content"
+    },
+    "env-finder": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5000,
+      "error": ""
+    },
+    "feed-finder": {
+      "path": "/?target=https://news.ycombinator.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2130,
+      "error": ""
+    },
+    "file-inclusion": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1377,
+      "error": ""
+    },
+    "firmographic-profile": {
+      "path": "/?target=stripe.com",
+      "http": null,
+      "state": "unreachable",
+      "via": "lan",
+      "ms": 20031,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+    },
+    "fleet-activity": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-alertmanager": {
+      "path": "/-/healthy",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 0,
+      "error": ""
+    },
+    "fleet-backoff-coordinator": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8,
+      "error": ""
+    },
+    "fleet-backup": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 10,
+      "error": ""
+    },
+    "fleet-body-redactor": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "fleet-budget-tracker": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "fleet-build-broker": {
+      "path": "",
+      "http": null,
+      "state": "unprobed",
+      "via": "",
+      "ms": 0,
+      "error": ""
+    },
+    "fleet-call-tracer": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8,
+      "error": ""
+    },
+    "fleet-capabilities": {
+      "path": "/capabilities.json",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "fleet-cert-watch": {
+      "path": "/certs",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-content-normalizer": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "fleet-counter": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-diff-engine": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "fleet-dig": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-discovery": {
+      "path": "/sd",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-dns-sync": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 8,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "fleet-engagement-timeline": {
+      "path": "/timeline?program=selftest",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16,
+      "error": ""
+    },
+    "fleet-eventlog": {
+      "path": "/topics",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 8,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "fleet-exec": {
+      "path": "/langs",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "fleet-fake": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-fingerprint-cache": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8,
+      "error": ""
+    },
+    "fleet-grafana": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6,
+      "error": ""
+    },
+    "fleet-grafana-staging": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 4,
+      "error": ""
+    },
+    "fleet-graph": {
+      "path": "/viewer",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 0,
+      "error": ""
+    },
+    "fleet-har-builder": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "fleet-host-guard": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "fleet-ip": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 7,
+      "error": ""
+    },
+    "fleet-lock": {
+      "path": "/locks",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 9,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "fleet-mcp-gateway": {
+      "path": "/gateway/tools",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15,
+      "error": ""
+    },
+    "fleet-md": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-memory": {
+      "path": "/recall?q=example",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 11,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "fleet-notify": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-payload-corpus": {
+      "path": "/?target=example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "fleet-persona": {
+      "path": "/v1/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-pipe": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-pixel": {
+      "path": "/pix.gif?app=mesh-test&event=pv",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-poc-curl": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "fleet-port": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "fleet-preflight": {
+      "path": "/checks",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 17,
+      "error": ""
+    },
+    "fleet-priority-queue": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 19,
+      "error": ""
+    },
+    "fleet-prometheus": {
+      "path": "/-/healthy",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-pwgen": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-q": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-read": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-resolver-quorum": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 18,
+      "error": ""
+    },
+    "fleet-sandbox-targets": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 22,
+      "error": ""
+    },
+    "fleet-schema-validator": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "fleet-secrets": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "fleet-selftest-aggregator": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "fleet-tail": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-target-reputation": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "fleet-tech-inferrer": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "fleet-token-ledger": {
+      "path": "/v1/balance",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15,
+      "error": ""
+    },
+    "fleet-vendor-disclosure-tracker": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "fleet-visualizer": {
+      "path": "/public",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-webhook": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "fleet-webhook-verifier": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "founding-year": {
+      "path": "/?url=stripe.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 5895,
+      "error": "",
+      "detail": "unreachable: upstream_4xx"
+    },
+    "funding-detector": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1017,
+      "error": ""
+    },
+    "funding-signal": {
+      "path": "/?brand=OpenAI",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1884,
+      "error": ""
+    },
+    "gdpr-compliance": {
+      "path": "/?target=https://bbc.co.uk",
+      "http": null,
+      "state": "unreachable",
+      "via": "lan",
+      "ms": 20021,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+    },
+    "geo-geocode": {
+      "path": "/?text=Bucharest",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 118,
+      "error": ""
+    },
+    "geo-places": {
+      "path": "/?query=coffee+Bucharest",
+      "http": 302,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "git-provider-api-broker": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 0,
+      "error": ""
+    },
+    "github-app-token-broker": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 0,
+      "error": ""
+    },
+    "go-oauth-mapper": {
+      "path": "/?target=https://accounts.google.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1584,
+      "error": ""
+    },
+    "go-session-fixation": {
+      "path": "/go_session_fixation?target=https://github.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 11,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "google-taxonomy": {
+      "path": "/classify?text=cotton+t-shirt+for+men",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 152,
+      "error": ""
+    },
+    "graphql-introspection": {
+      "path": "/go_graphql_introspection?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2267,
+      "error": ""
+    },
+    "heading-outline-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 175,
+      "error": ""
+    },
+    "hidden-fields": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 113,
+      "error": ""
+    },
+    "hiring-footprint": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 950,
+      "error": ""
+    },
+    "host-header": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2616,
+      "error": ""
+    },
+    "hsts-checker": {
+      "path": "/go_hsts_checker?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 527,
+      "error": ""
+    },
+    "html-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 472,
+      "error": ""
+    },
+    "http-method-tester": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8020,
+      "error": ""
+    },
+    "http-protocol": {
+      "path": "/?target=https://www.cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 120,
+      "error": ""
+    },
+    "hub-scrapetheworld-org": {
+      "path": "/",
+      "http": 302,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "iban-bic-validator": {
+      "path": "/?iban=GB82WEST12345698765432",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 20,
+      "error": ""
+    },
+    "idor-finder": {
+      "path": "/go_idor_finder?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 724,
+      "error": ""
+    },
+    "iframe-analyzer": {
+      "path": "/?target=https://www.youtube.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1528,
+      "error": ""
+    },
+    "information-leakage": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1381,
+      "error": ""
+    },
+    "infrastructure-fetch-cache": {
+      "path": "/fetch?url=https://example.com/",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 8,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "ipv6-checker": {
+      "path": "/?host=cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 43,
+      "error": ""
+    },
+    "js-framework-version-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 20,
+      "error": ""
+    },
+    "js-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2905,
+      "error": ""
+    },
+    "js-proxy-network": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2804,
+      "error": ""
+    },
+    "jsbundle-routes": {
+      "path": "/go_jsbundle_route_extractor?target=https://stripe.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "jsbundle-secrets": {
+      "path": "/go_jsbundle_secrets?target=https://stripe.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "jsonp-finder": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 164,
+      "error": ""
+    },
+    "jwt-debugger": {
+      "path": "/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "jwt-pentest": {
+      "path": "/go_jwt_pentest?jwt=eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0In0.",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 11,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "keyphrase-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 115,
+      "error": ""
+    },
+    "keyword-density": {
+      "path": "/?target=https://example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "no_data: insufficient_content"
+    },
+    "language-detector": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "leadership-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 728,
+      "error": ""
+    },
+    "legal-entity": {
+      "path": "/?target=example.com",
+      "http": 502,
+      "state": "error",
+      "via": "lan",
+      "ms": 2454,
+      "error": "",
+      "detail": "{\"tool\":\"go_legal_entity\",\"Version\":\"1.33.51\",\"target\":\"https://example.com\",\"fetch_source\":\"live\",\"pages_inspected\":[\"h"
+    },
+    "license-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 25,
+      "error": ""
+    },
+    "linkedin-attributes": {
+      "path": "/?url=https://www.linkedin.com/in/baditaflorin",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 131,
+      "error": "",
+      "detail": "LinkedIn badge attributes not found or invalid URL"
+    },
+    "list-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "loadbalancer-detect": {
+      "path": "/go_loadbalancer_detect?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2713,
+      "error": ""
+    },
+    "login-analyzer": {
+      "path": "/?target=https://github.com/login",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1044,
+      "error": ""
+    },
+    "menu-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 22,
+      "error": ""
+    },
+    "merchant-profile": {
+      "path": "/?target=gymshark.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3113,
+      "error": ""
+    },
+    "microformats2-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 19,
+      "error": ""
+    },
+    "mime-trap": {
+      "path": "/go_mime_trap?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 777,
+      "error": ""
+    },
+    "mobile-friendly": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 23,
+      "error": ""
+    },
+    "nlp-extractinfo": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 64,
+      "error": ""
+    },
+    "node-js-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 644,
+      "error": ""
+    },
+    "node-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 950,
+      "error": ""
+    },
+    "node-search-bing": {
+      "path": "/?query=anthropic+claude",
+      "http": 500,
+      "state": "error",
+      "via": "lan",
+      "ms": 8269,
+      "error": "",
+      "detail": "Error fetching search results"
+    },
+    "node-search-duck": {
+      "path": "/?query=anthropic+claude",
+      "http": null,
+      "state": "unreachable",
+      "via": "lan",
+      "ms": 20020,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+    },
+    "ocr-pdf": {
+      "path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1192,
+      "error": ""
+    },
+    "ocr-pdf-express": {
+      "path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2435,
+      "error": ""
+    },
+    "office-locations": {
+      "path": "/?target=example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 475,
+      "error": "",
+      "detail": "success"
+    },
+    "open-redirect": {
+      "path": "/go_open_redirect?target=example.com",
+      "http": null,
+      "state": "unreachable",
+      "via": "lan",
+      "ms": 20020,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+    },
+    "outlink-graph": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "page-load-metrics": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 7500,
+      "error": ""
+    },
+    "passive-voice-detector": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "payment-detector": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 235,
+      "error": ""
+    },
+    "pentest-agent-state": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 11,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-asset-inventory": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 18,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-asset-scope-resolver": {
+      "path": "/",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 17,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-attack-chainer": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "pentest-audit-log": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 16,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-authz-matrix": {
+      "path": "/?target=example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 18,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-bounty-pilot": {
+      "path": "/",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 16,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-bounty-scope-checker": {
+      "path": "/check?target=api.github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 21,
+      "error": ""
+    },
+    "pentest-cert-transparency": {
+      "path": "/subdomains?domain=example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 17,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-chaos-sync": {
+      "path": "/lookup?root=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 30,
+      "error": ""
+    },
+    "pentest-codec": {
+      "path": "/encode?algo=base64&input=hello",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 21,
+      "error": ""
+    },
+    "pentest-continuous-monitor": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-cookie-pwn": {
+      "path": "/?url=https://example.com&test_session=1",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 9,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-cors-misconfig-prober": {
+      "path": "/probe?url=https%3A%2F%2Fexample.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-cvss": {
+      "path": "/score?vector=CVSS%3A3.1%2FAV%3AN%2FAC%3AL%2FPR%3AN%2FUI%3AN%2FS%3AU%2FC%3AH%2FI%3AH%2FA%3AH",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "pentest-dedup-fingerprint": {
+      "path": "/stats",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 23,
+      "error": ""
+    },
+    "pentest-dependency-cve": {
+      "path": "/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 10,
+      "error": ""
+    },
+    "pentest-disclosure-policy-finder": {
+      "path": "/check?target=hackerone.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-exploit-verifier": {
+      "path": "/capabilities",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2,
+      "error": ""
+    },
+    "pentest-favicon-hash": {
+      "path": "/hash?url=https://example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-finding-triage": {
+      "path": "/rules",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "pentest-findings-store": {
+      "path": "/findings?limit=1",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15,
+      "error": ""
+    },
+    "pentest-github-dorks": {
+      "path": "/dorks",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-http-replay": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 13,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-httpx": {
+      "path": "/probe?url=https%3A%2F%2Fexample.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-job-queue": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-js-bundle-scanner": {
+      "path": "/?target=https://example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 9,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-leak-bounty-policy": {
+      "path": "/search?token=sk_live_xxx",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 20,
+      "error": ""
+    },
+    "pentest-notify": {
+      "path": "/sinks",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-nuclei": {
+      "path": "/templates",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-oob-collector": {
+      "path": "/sessions?limit=1",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 22,
+      "error": ""
+    },
+    "pentest-orchestrator": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 16,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-payloads": {
+      "path": "/classes",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "pentest-payoff-tracker": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-rate-coordinator": {
+      "path": "/stats",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-reflection-hunter": {
+      "path": "/?url=https://example.com&params=q,promo&escalate=1",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 9,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-report-templater": {
+      "path": "/templates",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16,
+      "error": ""
+    },
+    "pentest-scope-guard": {
+      "path": "/programs",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 18,
+      "error": ""
+    },
+    "pentest-screenshot": {
+      "path": "/shot?url=https://example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-secrets-scanner": {
+      "path": "/rules",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 10,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-session-state": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16,
+      "error": ""
+    },
+    "pentest-ssrf-prober": {
+      "path": "/?target=example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 16,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-subfinder": {
+      "path": "/enum?domain=example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-submit-bot": {
+      "path": "/quota",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "pentest-takeover-checker": {
+      "path": "/check?host=example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-takeover-fingerprints": {
+      "path": "/fingerprints",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "pentest-target-normalizer": {
+      "path": "/?q=https://EXAMPLE.com/path",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15,
+      "error": ""
+    },
+    "pentest-triager-listener": {
+      "path": "/stats",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15,
+      "error": ""
+    },
+    "pentest-trufflehog": {
+      "path": "/",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 13,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-waf-detect": {
+      "path": "/?url=https://example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 9,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-walkthrough": {
+      "path": "/preflight",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 13,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-wayback-urls": {
+      "path": "/urls?domain=example.com&limit=5",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 14,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "pentest-wordlists": {
+      "path": "/lists",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15,
+      "error": ""
+    },
+    "pentest-ywh-sync": {
+      "path": "/programs",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3451,
+      "error": ""
+    },
+    "phone-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 19,
+      "error": "",
+      "detail": "no_data"
+    },
+    "policy-clause-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "postmessage": {
+      "path": "/go_postmessage_listener_finder?target=https://stripe.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 13,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "press-mentions": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1960,
+      "error": ""
+    },
+    "price-range": {
+      "path": "/?text=Plans+from+%249.99+to+%2499%2Fmo",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 9,
+      "error": ""
+    },
+    "pricing-tier-parser": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "promo-code-detector": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 11,
+      "error": ""
+    },
+    "proto-pollution": {
+      "path": "/go_prototype_pollution_static?target=https://example.com",
+      "http": 403,
+      "state": "gated",
+      "via": "lan",
+      "ms": 12,
+      "error": "",
+      "detail": "Forbidden"
+    },
+    "proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 653,
+      "error": ""
+    },
+    "proxy-fingerprint": {
+      "path": "/?target=https://www.cloudflare.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2413,
+      "error": ""
+    },
+    "pwa-manifest": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1056,
+      "error": ""
+    },
+    "python-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 526,
+      "error": ""
+    },
+    "quote-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 137,
+      "error": ""
+    },
+    "random-proxy": {
+      "path": "/?url=https://example.com",
+      "http": 400,
+      "state": "rejected",
+      "via": "lan",
+      "ms": 107,
+      "error": "",
+      "detail": "Got more than 8190 bytes when reading: b'a11y-quick.0crawl.com,accessibility-audit.0crawl.com,accessibility-score.0crawl"
+    },
+    "ratelimit-tester": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5316,
+      "error": ""
+    },
+    "readability-index": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 49,
+      "error": ""
+    },
+    "reading-time-estimator": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "redirect-tracer": {
+      "path": "/?target=https://stripe.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 347,
+      "error": "",
+      "detail": "success"
+    },
+    "remote-detector": {
+      "path": "/?url=gitlab.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8873,
+      "error": ""
+    },
+    "revenue-model": {
+      "path": "/?target=example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 1055,
+      "error": "",
+      "detail": "no_data"
+    },
+    "reverse-dns": {
+      "path": "/?ip=8.8.8.8",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 49,
+      "error": ""
+    },
+    "review-presence": {
+      "path": "/?domain=example.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 15,
+      "error": "",
+      "detail": "{\"sources\":[],\"domain\":\"example.com\",\"version\":\"0.4.7\",\"took_ms\":5,\"degraded\":[\"fetchcache_static:hit\",\"fetchcache_rende"
+    },
+    "robots-analyzer": {
+      "path": "/go_robots_analyzer?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6014,
+      "error": ""
+    },
+    "robots-parser": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 707,
+      "error": ""
+    },
+    "scan-port": {
+      "path": "/?host=scanme.nmap.org&profile=top10",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1040,
+      "error": ""
+    },
+    "scan-port-banner": {
+      "path": "/?host=scanme.nmap.org&port=22",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1252,
+      "error": ""
+    },
+    "scan-port-ssh": {
+      "path": "/?host=scanme.nmap.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2691,
+      "error": ""
+    },
+    "scc": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "schema-extractor": {
+      "path": "/?target=https://stripe.com",
+      "http": 404,
+      "state": "no-data",
+      "via": "lan",
+      "ms": 2215,
+      "error": "",
+      "detail": "target could not be fetched"
+    },
+    "search-bing-go": {
+      "path": "/?q=anthropic+claude",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 793,
+      "error": ""
+    },
+    "search-duck": {
+      "path": "/?query=anthropic+claude",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1405,
+      "error": ""
+    },
+    "search-duck-go": {
+      "path": "/?q=anthropic+claude",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1322,
+      "error": ""
+    },
+    "seasonal-detector": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "secrets-scanner": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 629,
+      "error": ""
+    },
+    "security-header-analyzer": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 601,
+      "error": ""
+    },
+    "security-headers": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5404,
+      "error": ""
+    },
+    "security-txt": {
+      "path": "/go_security_txt?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 576,
+      "error": ""
+    },
+    "seo-audit": {
+      "path": "/?target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 21,
+      "error": ""
+    },
+    "seo-basics": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "service-worker-detector": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "services-dashboard": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2,
+      "error": ""
+    },
+    "session-management": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 936,
+      "error": ""
+    },
+    "shipping-regions": {
+      "path": "/?url=https://www.etsy.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2063,
+      "error": ""
+    },
+    "simulate-ddos": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 0,
+      "error": ""
+    },
+    "sitemap-finder": {
+      "path": "/?url=google.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8125,
+      "error": ""
+    },
+    "smuggling-probe": {
+      "path": "/go_smuggling_probe?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 255,
+      "error": ""
+    },
+    "social-graph": {
+      "path": "/?target=https://github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1435,
+      "error": ""
+    },
+    "social-proof-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "sourcemap-finder": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 494,
+      "error": ""
+    },
+    "structured-data-validator": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "subdomain-finder": {
+      "path": "/?domain=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5003,
+      "error": ""
+    },
+    "subdomain-takeover": {
+      "path": "/go_subdomain_takeover?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 44,
+      "error": ""
+    },
+    "substack-scraper": {
+      "path": "/?target=https://yann.substack.com/",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6187,
+      "error": ""
+    },
+    "svg-icon-inventory": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 17,
+      "error": ""
+    },
+    "svi": {
+      "path": "/?url=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 552,
+      "error": ""
+    },
+    "swagger-finder": {
+      "path": "/go_swagger_finder?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1023,
+      "error": ""
+    },
+    "table-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 16,
+      "error": ""
+    },
+    "task-credential-broker": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
+      "error": ""
+    },
+    "team-member-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3239,
+      "error": ""
+    },
+    "team-size": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 14,
+      "error": ""
+    },
+    "tech-stack": {
+      "path": "/?target=https://vercel.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1115,
+      "error": ""
+    },
+    "technology-stack": {
+      "path": "/?target=https://vercel.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 8688,
+      "error": ""
+    },
+    "telnet-banner": {
+      "path": "/?host=towel.blinkenlights.nl&port=23",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 5113,
+      "error": ""
+    },
+    "testimonial-extractor": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "tos-finder": {
+      "path": "/?target=https://github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 4298,
+      "error": ""
+    },
+    "trust-decay": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 106,
+      "error": ""
+    },
+    "typosquat-finder": {
+      "path": "/?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15392,
+      "error": ""
+    },
+    "ugc-detector": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 37,
+      "error": ""
+    },
+    "update-frequency": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2643,
+      "error": ""
+    },
+    "url-shortener": {
+      "path": "/?target=https://bit.ly/3ZqxX0Z",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3266,
+      "error": ""
+    },
+    "user-demographics": {
+      "path": "/?target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 15021,
+      "error": ""
+    },
+    "utils-readcontent": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 69,
+      "error": ""
+    },
+    "vendor-security-scorecard": {
+      "path": "/?target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 20,
+      "error": ""
+    },
+    "video-content": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 12,
+      "error": ""
+    },
+    "voice-search": {
+      "path": "/?target=https://en.wikipedia.org/wiki/HTML",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 140,
+      "error": ""
+    },
+    "wayback-checker": {
+      "path": "/?target=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3024,
+      "error": ""
+    },
+    "web-vitals-report": {
+      "path": "/?target=stripe.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 13,
+      "error": ""
+    },
+    "website-carbon": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1695,
+      "error": ""
+    },
+    "websocket-analyzer": {
+      "path": "/?target=https://echo.websocket.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 730,
+      "error": ""
+    },
+    "wellknown-scanner": {
+      "path": "/?target=https://github.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 7326,
+      "error": ""
+    },
+    "wp-plugins": {
+      "path": "/?target=https://wordpress.org",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6429,
+      "error": ""
+    },
+    "wps": {
+      "path": "/?target=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1257,
+      "error": ""
+    },
+    "xss-payload": {
+      "path": "/go_xss_payload?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1907,
+      "error": ""
+    },
+    "xss-scanner": {
+      "path": "/?target=https://httpbin.org/forms/post",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 4660,
+      "error": ""
+    },
+    "zone-transfer": {
+      "path": "/go_zone_transfer?domain=example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 6064,
+      "error": ""
+    }
+  }
+}

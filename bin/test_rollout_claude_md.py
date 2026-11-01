@@ -84,6 +84,45 @@ class RolloutTest(unittest.TestCase):
         rev, behind, own = R.closest_rev(texts, V2 + "an own line\n")
         self.assertEqual((rev, behind, own), (self.revs[1], 1, 1))
 
+    def test_replace_safe_only_for_a_copy_with_no_lines_of_its_own(self):
+        lacking = V3.replace("run cleanup\n", "")  # canonical minus one line, nothing added: own == 0 against V3
+        texts = R.history(self.reg)
+        rev, behind, own = R.closest_rev(texts, lacking)
+        self.assertEqual(own, 0)
+        text, restored = R.replace_safe(lacking, V3, own)
+        self.assertEqual(text, V3)
+        self.assertEqual([l.strip() for l in restored], ["run cleanup"])
+        self.assertIsNone(R.replace_safe(V3, V3, 0), "an identical copy needs nothing")
+        self.assertIsNone(R.replace_safe(V3 + "an own line\n", V3, 1), "a copy with its own line is a real merge, never replaced")
+
+    def test_a_three_way_merge_cannot_restore_the_missing_line_but_replace_safe_does(self):
+        lacking = V3.replace("run cleanup\n", "")
+        text, conflicts, over = R.merge_prefer_canonical(self.reg, self.revs[2], lacking, V3)
+        self.assertEqual(text, lacking, "the merge keeps the missing line as a local deletion: the reason this mode exists")
+
+    def test_cmd_merge_with_replace_safe_pushes_the_canonical_to_a_copy_that_lacked_a_line(self):
+        out = os.path.join(self.tmp.name, "work"); os.makedirs(os.path.join(out, "clones"))
+        bare = os.path.join(self.tmp.name, "origin.git")
+        def g(cwd, *a):
+            r = subprocess.run(["git", "-C", cwd] + list(a), capture_output=True, text=True, env=ENV); assert r.returncode == 0, r.stderr; return r.stdout.strip()
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "main", bare], check=True)
+        clone = os.path.join(out, "clones", "go_lacking")
+        subprocess.run(["git", "clone", "-q", bare, clone], check=True, capture_output=True)
+        with open(os.path.join(clone, "CLAUDE.md"), "w") as f:
+            f.write(V3.replace("run cleanup\n", ""))
+        g(clone, "add", "-A"); g(clone, "commit", "-q", "-m", "x"); g(clone, "push", "-q", "origin", "HEAD:main")
+        with open(os.path.join(out, "CLAUDE.md.canonical"), "w") as f:
+            f.write(V3)
+        with open(os.path.join(out, "plan.json"), "w") as f:
+            json.dump({"canonical_head": "abc123def", "rows": [{"repo": "go_lacking", "status": "diverged"}]}, f)
+        ns = type("A", (), dict(registry=self.reg, out=out, only=None, push=True, prefer_canonical=True, replace_safe=True, workers=1))()
+        res = R.cmd_merge(ns)
+        self.assertEqual(res[0]["result"], "pushed")
+        self.assertEqual(res[0]["replaced_safe"], 1)
+        g(clone, "fetch", "-q", "origin")
+        self.assertEqual(g(clone, "show", "origin/main:CLAUDE.md") + "\n", V3)
+        self.assertIn("restore the 1 line(s)", g(clone, "log", "-1", "--format=%B", "origin/main"))
+
     def test_repo_names_come_from_services_json_and_the_extra_file(self):
         with open(os.path.join(self.reg, "services.json"), "w") as f:
             f.write(json.dumps({"services": [{"repo_url": "https://github.com/baditaflorin/go_a"}, {"repo_url": "https://github.com/baditaflorin/go_b.git"}, {"repo_url": "https://example.com/x/y"}, {}]}))
