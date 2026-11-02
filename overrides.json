@@ -366,7 +366,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "accent-coach": {
     "trl": 4,
@@ -426,7 +427,8 @@
       "fleet-graph"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "ad-density": {
     "params": [
@@ -455,6 +457,7 @@
       "infrastructure-fetch-cache"
     ],
     "spiffe_workload": true,
+    "spiffe_merged_identity": true,
     "fetch_cache_api_key_file_mount": true
   },
   "address-extractor": {
@@ -485,6 +488,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
+    "spiffe_merged_identity": true,
     "fetch_cache_api_key_file_mount": true
   },
   "admin-finder": {
@@ -662,7 +666,8 @@
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "anon-conf-poll": {
     "trl": 4,
@@ -726,7 +731,8 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "apikey-scanner": {
     "params": [
@@ -849,7 +855,8 @@
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "blocklist-checker": {
     "params": [
@@ -1339,6 +1346,7 @@
       "founding-year"
     ],
     "spiffe_workload": true,
+    "spiffe_merged_identity": true,
     "placement": "replicable"
   },
   "complete-gardener-planner": {
@@ -1451,7 +1459,8 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "cookie-checker": {
     "params": [
@@ -1683,7 +1692,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "currency-detector": {
     "params": [
