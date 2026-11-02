@@ -1277,9 +1277,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "contact-route-detector",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -3528,9 +3526,7 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
     "container_port": 8287,
     "description": "Extracts email addresses from live pages or Common Crawl captures.",
@@ -5723,9 +5719,7 @@
       "IPV6_CHECKER_BATCH_REQUESTS": "8",
       "IPV6_CHECKER_BATCH_RPS": "1000",
       "IPV6_CHECKER_BATCH_BURST": "256",
-      "IPV6_CHECKER_BATCH_IPV6_ADDRESSES": "1",
-      "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "IPV6_CHECKER_BATCH_IPV6_ADDRESSES": "1"
     },
     "container_port": 8244,
     "description": "Microservice for Ipv6 Checker",
