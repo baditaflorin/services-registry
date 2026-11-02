@@ -934,7 +934,8 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "broken-links": {
     "params": [
@@ -959,7 +960,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "bucket-finder": {
     "params": [
@@ -1018,7 +1020,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "captcha-detector": {
     "params": [
@@ -1043,7 +1046,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "cas": {
     "params": [
@@ -1128,7 +1132,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "chatwrapped": {
     "trl": 7,
@@ -1163,7 +1168,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "clickjacking-tester": {
     "params": [
@@ -1215,7 +1221,8 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "color-contrast-checker": {
     "params": [
@@ -1243,7 +1250,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "comment-extractor": {
     "params": [
@@ -1313,7 +1321,8 @@
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics. Country-specific false-positive review (2026-10-18): a 341-row non-null production-derived cohort covered 131 country codes; 278 static first-party HTML pages were retrieved (12 fetch failures, 50 non-HTML/status responses, one body over 2 MiB). Three Latvian/Swedish generic homepage titles (Sākumlapa, Startsida) appeared as company names. Exact-label filtering removed all three while host-correlated Latvian and Swedish brand controls still passed. PR #59 merged as 4fc4f31. v0.1.45 was signed and deployed to both replicas on one digest; direct health, selftest, and version smoke passed. TRL remains 4 because this sample does not establish coverage of bot-hostile or JS-heavy sites. 2026-10-18 country-by-country update: a private 102-row non-null cohort covered 102 non-US ISO3s. In 98 successful first-party replays, a Yemen-stratum Arabic generic homepage label appeared as a false organization-title candidate at score 0.60, while JSON-LD supplied the selected name. PR #61 added Arabic generic-home-title filtering with host-corroborated-brand positives and unrelated-brand negatives; the post-fix replay removed the candidate without changing the stored selected name. Version 0.1.46 was signed and deployed; direct health, self-test, version, and gateway audit passed. Country-specific legal-form follow-up (2026-10-20; source PR #69 merged as da6a922): a private 210-row production-derived cohort covered 42 markets; a 13-page first-party follow-up reproduced legal-suffix residues in Indian `Pvt. Ltd.` and Polish `Sp. z o.o.` display names, with same-page brand evidence supporting the stripped form. The targeted post-change replay reduced those suffix residues from 13 to 0. Stored values are candidates, not independent labels. No JS attempt applied because pages returned static names and sparse-shell retry was not eligible. Local tests, vet, build, and hosted CI passed. 2026-10-20 country-specific legal-form follow-up (source PR #69 merged as da6a922; release 0.1.52): a private 13-page first-party follow-up reproduced Indian Pvt. Ltd. and Polish Sp. z o.o. suffix residues; same-page brand evidence supported stripped forms, and targeted replay removed all 13 residues. Stored names remain candidates rather than independent labels. | 2026-10-20 saved replay had 213 HTML captures, 7 with valid UTF-8 and charset metadata after byte 1024; one extracted name showed mojibake before the fix and none after. Public first-party response confirmed UTF-8. Targeted sample result, not broad accuracy. Source PR #71 merged; release 0.1.53.",
     "version": "0.1.66",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "company-size": {
     "params": [
@@ -1592,7 +1601,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "crlf-tester": {
     "params": [
@@ -1634,7 +1644,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "crypto-finder": {
     "params": [
@@ -1722,6 +1733,7 @@
       "infrastructure-fetch-cache"
     ],
     "spiffe_workload": true,
+    "spiffe_merged_identity": true,
     "fetch_cache_api_key_file_mount": true
   },
   "cursorparty": {
@@ -1757,7 +1769,8 @@
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "d3-graph": {
     "version": "0.1.1",
@@ -1796,7 +1809,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "data-inventory": {
     "example_path": "/?url=https%3A%2F%2Fwww.example.com",
@@ -1826,6 +1840,7 @@
     ],
     "fetch_cache_api_key_file_mount": true,
     "spiffe_workload": true,
+    "spiffe_merged_identity": true,
     "placement": "replicable"
   },
   "db-geo-geocode": {
@@ -1898,7 +1913,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "dir-listing": {
     "params": [
@@ -1973,7 +1989,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-abuse-contact-rollup": {
     "example_path": "/?domain=example.com",
@@ -2023,7 +2040,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-ai-bot-policy-scanner": {
     "example_path": "/?domain=example.com",
@@ -2105,7 +2123,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-analytics-stack": {
     "example_path": "/?domain=stripe.com",
@@ -2133,7 +2152,8 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-anycast-footprint": {
     "params": [
@@ -2156,7 +2176,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-app-render-mode": {
     "example_path": "/?domain=vercel.com",
@@ -2181,7 +2202,8 @@
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-backlink-profile": {
     "params": [
@@ -2205,7 +2227,8 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-bimi-checker": {
     "example_path": "/?domain=cnn.com",
@@ -2229,7 +2252,8 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-breadcrumb-schema": {
     "example_path": "/?domain=www.bbc.com",
