@@ -170,7 +170,11 @@ class PruneTests(unittest.TestCase):
         self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
         values = self.prom_values(prom)
         mb = 1024 * 1024
-        self.assertEqual(values['ci_cache_prune_size_bytes{cache="go-build"}'], 2 * mb)
+        # du counts directory blocks on ext4/overlayfs (4 KB each, CI) and not on APFS, so a 2 MB file
+        # measures 2 or 3 MB depending on the filesystem: the size is a whole number of MB in that range
+        size = values['ci_cache_prune_size_bytes{cache="go-build"}']
+        self.assertEqual(size % mb, 0, "sizes are rounded up to whole MB, then converted to bytes")
+        self.assertTrue(2 * mb <= size <= 3 * mb, size)
         self.assertEqual(values['ci_cache_prune_cap_bytes{cache="go-build"}'], 1 * mb)
         self.assertEqual(values['ci_cache_prune_over_cap{cache="go-build"}'], 1)
         self.assertEqual(values['ci_cache_prune_over_cap{cache="npm"}'], 0)
