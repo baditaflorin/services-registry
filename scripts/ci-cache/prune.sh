@@ -2,7 +2,7 @@
 # Keep the shared CI caches on one Woodpecker agent host under a disk cap.
 #
 #   prune.sh --root /var/cache/woodpecker-ci [--go-build-max-mb N]
-#            [--go-mod-max-mb N] [--npm-max-mb N] [--mod-min-age-days D] [--dry-run]
+#            [--go-mod-max-mb N] [--npm-max-mb N] [--mod-min-age-days D] [--prom FILE] [--dry-run]
 #
 # Safe to run while pipelines run: it only deletes whole files or whole module
 # directories that have not been touched for a while, oldest first, and a missing
@@ -13,11 +13,18 @@
 # Go itself already trims build cache entries unused for 5 days; this script is
 # the hard cap on top of that, and the only pruning for the module and npm caches.
 #
+# A cache that is still over its cap after everything the script may delete is gone (the
+# files of the last day, modules younger than --mod-min-age-days) is a failure, not a quiet
+# log line: the script prints ALERT on stderr and exits 3. --prom FILE writes a node_exporter
+# textfile (replaced atomically, never in a dry run) with the size, the cap and an over-cap
+# flag of each cache and the time of the run, for templates/prometheus-ci-cache-prune.rules.yml.
+#
 # Portable on purpose (find -mtime, du -sk, no GNU-only flags) so it can be tested
-# on a laptop. Exit status: 0 ok, 2 usage or refused root.
+# on a laptop. Exit status: 0 ok, 2 usage or refused root, 3 a cache is still over its cap.
 set -euo pipefail
 
 ROOT=""
+PROM=""
 # A working day's go-build cache measured 14 to 27 GB on the pilot host (11-2026); 8 GB could not be
 # reached by age alone, so the prune ended above its cap every night.
 GO_BUILD_MAX_MB=28672
@@ -36,8 +43,9 @@ while [[ $# -gt 0 ]]; do
     --go-mod-max-mb) GO_MOD_MAX_MB="${2:-}"; shift 2 ;;
     --npm-max-mb) NPM_MAX_MB="${2:-}"; shift 2 ;;
     --mod-min-age-days) MOD_MIN_AGE_DAYS="${2:-}"; shift 2 ;;
+    --prom) PROM="${2:-}"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
-    -h|--help) sed -n '2,19p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,23p' "$0"; exit 0 ;;
     *) die "unknown argument: $1" ;;
   esac
 done
@@ -50,6 +58,7 @@ case "${ROOT}" in
     die "refusing to prune ${ROOT}: it is not a dedicated cache directory" ;;
 esac
 [[ -d "${ROOT}" ]] || die "${ROOT} does not exist"
+[[ -z "${PROM}" || "${PROM}" == /* ]] || die "--prom must be an absolute path"
 for v in "${GO_BUILD_MAX_MB}" "${GO_MOD_MAX_MB}" "${NPM_MAX_MB}" "${MOD_MIN_AGE_DAYS}"; do
   [[ "${v}" =~ ^[0-9]+$ ]] || die "limits and ages must be non-negative integers (got '${v}')"
 done
@@ -127,4 +136,59 @@ prune_modcache() {
 trim_by_age "${ROOT}/go-build" "${GO_BUILD_MAX_MB}"
 prune_modcache "${ROOT}/go-mod" "${GO_MOD_MAX_MB}"
 trim_by_age "${ROOT}/npm" "${NPM_MAX_MB}"
-log "done: go-build $(size_mb "${ROOT}/go-build") MB, go-mod $(size_mb "${ROOT}/go-mod") MB, npm $(size_mb "${ROOT}/npm") MB"
+
+go_build_mb="$(size_mb "${ROOT}/go-build")"
+go_mod_mb="$(size_mb "${ROOT}/go-mod")"
+npm_mb="$(size_mb "${ROOT}/npm")"
+log "done: go-build ${go_build_mb} MB, go-mod ${go_mod_mb} MB, npm ${npm_mb} MB"
+
+# A dry run deletes nothing, so it has no say on whether a cap can be reached.
+if (( DRY_RUN )); then exit 0; fi
+
+cache_rows() { # one "<name> <size_mb> <cap_mb>" row per cache, from the sizes measured after the prune
+  echo "go-build ${go_build_mb} ${GO_BUILD_MAX_MB}"
+  echo "go-mod ${go_mod_mb} ${GO_MOD_MAX_MB}"
+  echo "npm ${npm_mb} ${NPM_MAX_MB}"
+}
+
+# write_prom: the textfile is replaced atomically (a scrape never sees half a file). node_exporter
+# only reads *.prom, so the dot-prefixed temp file is invisible to it. A file that cannot be written
+# is a warning, not a prune failure: the stale-run rule catches a metric that stops arriving.
+write_prom() {
+  local dir tmp name size cap over
+  dir="$(dirname "${PROM}")"
+  if [[ ! -d "${dir}" || ! -w "${dir}" ]]; then
+    echo "prune.sh: WARNING: cannot write ${PROM}: ${dir} is not a writable directory" >&2
+    return 0
+  fi
+  tmp="$(mktemp "${dir}/.ci-cache-prune.XXXXXX")" || { echo "prune.sh: WARNING: cannot create a temp file in ${dir}" >&2; return 0; }
+  {
+    echo "# HELP ci_cache_prune_last_run_timestamp_seconds Unix time when prune.sh last finished a real (not dry) run."
+    echo "# TYPE ci_cache_prune_last_run_timestamp_seconds gauge"
+    echo "ci_cache_prune_last_run_timestamp_seconds $(date +%s)"
+    echo "# HELP ci_cache_prune_size_bytes Size of a shared CI cache after the prune, rounded up to a whole MB."
+    echo "# TYPE ci_cache_prune_size_bytes gauge"
+    while read -r name size cap; do echo "ci_cache_prune_size_bytes{cache=\"${name}\"} $(( size * 1048576 ))"; done < <(cache_rows)
+    echo "# HELP ci_cache_prune_cap_bytes Disk cap the prune aims for."
+    echo "# TYPE ci_cache_prune_cap_bytes gauge"
+    while read -r name size cap; do echo "ci_cache_prune_cap_bytes{cache=\"${name}\"} $(( cap * 1048576 ))"; done < <(cache_rows)
+    echo "# HELP ci_cache_prune_over_cap 1 when the cache is still above its cap after pruning everything the script may delete."
+    echo "# TYPE ci_cache_prune_over_cap gauge"
+    while read -r name size cap; do
+      over=0; if (( size > cap )); then over=1; fi
+      echo "ci_cache_prune_over_cap{cache=\"${name}\"} ${over}"
+    done < <(cache_rows)
+  } > "${tmp}"
+  chmod 0644 "${tmp}" && mv -f "${tmp}" "${PROM}" || { rm -f "${tmp}"; echo "prune.sh: WARNING: could not replace ${PROM}" >&2; }
+}
+
+if [[ -n "${PROM}" ]]; then write_prom; fi
+
+OVER=""
+while read -r name size cap; do
+  if (( size > cap )); then OVER="${OVER} ${name}"; fi
+done < <(cache_rows)
+if [[ -n "${OVER}" ]]; then
+  echo "prune.sh: ALERT: still over the cap after deleting everything allowed:${OVER}; exiting 3 so the unit shows as failed" >&2
+  exit 3
+fi

@@ -116,7 +116,10 @@ name; `docker inspect` shows it as the label `com.docker.compose.project`).
    `scripts/ci-cache/prune.sh --root /var/cache/woodpecker-ci`, for example with the
    systemd timer in `templates/woodpecker-ci-cache-prune.{service,timer}` (install
    steps in the service file's header; 03:15 UTC, low priority). Go also trims its
-   own build cache entries that were unused for 5 days; this is the hard cap.
+   own build cache entries that were unused for 5 days; this is the hard cap. A cache
+   still over its cap after the prune makes the script exit 3 (the unit shows as failed),
+   and `--prom FILE` writes the sizes for `templates/prometheus-ci-cache-prune.rules.yml`
+   (see "Switching the cap alert on" below).
 7. **Measure after 3 days** (so enough runs land on the pilot):
 
    ```sh
@@ -362,8 +365,9 @@ All five must hold before the setting is applied to a second host:
    failed pilot immediately.
 3. **Bounded disk.** The three directories each stay under their caps (`prune.sh` flags;
    defaults 28 GB for go-build, 6 GB for go-mod, 3 GB for npm): the prune journal ends
-   every night with `done` and no `still ... cap` line (the one-liner is below); or
-   `du -sh /var/cache/woodpecker-ci/*` at the end of day 1, 2 and 3.
+   every night with `done` and no `still ... cap` line (the one-liner is below), or, once
+   the alert is on, `ci_cache_prune_over_cap` is 0 for all three caches and `CiCacheOverCap`
+   never fired; or `du -sh /var/cache/woodpecker-ci/*` at the end of day 1, 2 and 3.
 4. **No memory regression.** The host's lowest available memory during the pilot is
    no lower than in the three days before (fleet metrics hub), and the `bench.sh`
    peak memory of `warm` is not above `cold`.
@@ -384,12 +388,23 @@ second host.
 | 4 | No memory regression | **Not measured.** |
 | 5 | Reversible | **Not exercised** (the rollback was never run). |
 
-Why it failed: `prune.sh` deletes by file age down to files used in the last day, and stops there so it never touches a cache a running job is using. It logged `still N MB after deleting everything older than 0 days; cap M MB` and exited normally, so nothing alerted. The files used in one working day come to 14 to 27 GB, so a cap of 8 GB could not be reached by age alone. The caps were also never read from the env file that this runbook and the template named: `prune.sh` takes them as flags, so editing the env file would have changed nothing. Fixed here: the `go-build` default is now 28 GB, the template says where the caps really are, and the host got the same value through a drop-in. Still open: turn the "still above cap" line into an alert. Read the journal with:
+Why it failed: `prune.sh` deletes by file age down to files used in the last day, and stops there so it never touches a cache a running job is using. It logged `still N MB after deleting everything older than 0 days; cap M MB` and exited normally, so nothing alerted. The files used in one working day come to 14 to 27 GB, so a cap of 8 GB could not be reached by age alone. The caps were also never read from the env file that this runbook and the template named: `prune.sh` takes them as flags, so editing the env file would have changed nothing. Fixed here: the `go-build` default is now 28 GB, the template says where the caps really are, and the host got the same value through a drop-in. Built here so that it cannot go quiet again: `prune.sh` now exits 3 with an `ALERT` line when a cache is still over its cap after deleting everything it may (a dry run never does), and `--prom FILE` writes a node_exporter textfile (size, cap and over-cap flag per cache, and the time of the run). `templates/prometheus-ci-cache-prune.rules.yml` turns that into `CiCacheOverCap` and `CiCachePruneStale` (no finished run for 36 hours). Tests run the real script on throw-away directories; `promtool` was not available when this was written, so the two expressions were read, not run by Prometheus. Not switched on anywhere yet (below). Read the journal with:
 
 ```sh
 journalctl -u woodpecker-ci-cache-prune.service --since -14d --no-pager -o short-iso \
-  | grep -E 'prune.sh: (done|.*still)'
+  | grep -E 'prune.sh: (done|ALERT|.*still)'
 ```
+
+### Switching the cap alert on
+
+The pilot host runs the older `prune.sh` (copied to `/root/ci-cache-pilot/scripts/`) with a drop-in that only sets the go-build cap, and no rule is loaded on Prometheus, so nothing alerts today. In this order, each step by its owner, and not before the 11-03 prune has been read (it is the proof for the current script):
+
+1. Copy the new `prune.sh` over the old one on the pilot host. Check it with `prune.sh --root /var/cache/woodpecker-ci --dry-run`, which deletes nothing and writes no textfile. (A dry run walks the whole tree and takes a long time on a full cache.)
+2. Add ` --prom /var/lib/prometheus/node-exporter/ci-cache-prune.prom` to the `ExecStart=` line of the drop-in `caps.conf` (the directory is the one the host's dedicated exporter on port 9101 reads, next to `woodpecker-build-resources.prom`), then `systemctl daemon-reload`.
+3. After the next nightly run, or one `systemctl start woodpecker-ci-cache-prune.service`: the file exists, mode 0644, and `curl -s http://<exporter address>:9101/metrics | grep ci_cache_prune` shows the four metrics.
+4. Load the rule file on the Prometheus host (`promtool check rules` first), reload, and confirm both alerts show as inactive for that instance. Until then the exit status is the only signal.
+
+To go back: remove `--prom` from the drop-in, delete the textfile, remove the rule file. The old script still works with the same flags.
 
 ## Memory and disk
 
