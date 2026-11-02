@@ -1,3 +1,7 @@
+## 2026-11-02
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `hub-scrapetheworld-org` 0.20.6.
+
 ## 2026-11-01
 
 - registry: `host-conventions.yaml` `spiffe_identity_domain.0crawl` (trust domain 0exec.com, namespace 0crawl, socket directory /run/spire/sockets) + schema: the target of the per-service `spiffe_merged_identity` switch of fleet-runner 0.7.748. Inert until a service sets the switch (phase 3 cutover, MERGE-0CRAWL-INTO-0EXEC.md 5a).
