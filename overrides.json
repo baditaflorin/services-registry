@@ -483,7 +483,8 @@
     "version": "3.4.39",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -664,7 +665,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
@@ -931,7 +933,8 @@
     "version": "0.1.29",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -1310,7 +1313,7 @@
       {"name": "html", "required": false, "type": "string", "description": "Raw HTML (skips fetch)"},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source live or commoncrawl; defaults to FLEET_FETCH_SOURCE, then live. Common Crawl uses..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "compose_service_name": "go_company_name_extractor",
     "host_port": 18325,
     "placement": "replicable",
@@ -2028,7 +2031,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18214,
     "description": "Ad-network detector with validated ads.txt seller records and executable-context matching for 18 in-page advertising providers.",
     "example_path": "/?domain=nytimes.com",
@@ -2191,7 +2194,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18224,
     "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
@@ -2215,7 +2218,7 @@
       {"name": "domain", "required": true, "type": "string", "description": "Fully-qualified domain to profile (e.g. example.com).", "example": "google.com"},
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18210,
     "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
     "example_path": "/?domain=google.com",
@@ -2706,7 +2709,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source: live (default) or commoncrawl; archive mode analyzes captured static responses and..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18232,
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "host_port": 18232,
@@ -2733,7 +2736,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18221,
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
@@ -6121,7 +6124,8 @@
     "trl_evidence": "Multi-stage leadership-team extraction over a fetched HTML page. Detection runs three passes in priority order on the parsed DOM (golang.org/x/net/html): (1) schema.org Person JSON-LD carrying a jobTitle — walks every <script type=application/ld+json>, descends @graph and nested objects, handles @type as string OR array, and reads name/givenName+familyName/description/url/sameAs via stdlib encoding/json; (2) schema.org Person microdata (itemtype=schema.org/Person, http or https), pulling name/jobTitle/description and itemprop=url/sameAs + bare anchor hrefs; (3) a heuristic card walk used only when no structured data is present (flagged heuristic_fallback) — it scans repeated person cards (list items, articles, sections, figures, table cells, and team/staff/member-classed divs), skips grid wrappers that contain nested cards, and derives a name (preferring a heading) plus a title line. Every candidate is then FILTERED to leadership: the title must match a curated keyword set, and survivors are classified into exactly one normalized rank (c_suite, founder, president, vp, director, board, other_leadership) by case-insensitive, word-boundary regexes. Priority order is deliberate — vp is tested before president so 'Vice President' never lands in the president bucket despite containing the substring 'President', and \\b boundaries keep 'Director' from matching inside 'Directory'. c_suite matches the CxO acronyms plus the spelled 'Chief … Officer' shape; founder covers Founder/Co-Founder/Cofounder/Founding Partner; vp covers VP/SVP/EVP and (Senior|Executive )?Vice President; president covers President + Managing Director; director covers Director/Executive Director/Head of; board covers Chair(man|woman|person)/Board Member/Board of Directors/Trustee; other_leadership is a Partner/Principal/Owner/General Manager catch-all. Returns leaders[] (name/title/rank/bio omitempty/links non-nil), count, by_rank (rank→count), and detection (json_ld|microdata|heuristic). Relative profile hrefs/photo URLs are resolved against the final fetched URL; in text= mode (no fetch) they are returned as-authored. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so many producers scanning the same URL trigger one upstream fetch, in plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) plus localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Non-fatal conditions pushed to degraded[] (fetch_failed:<err>, no_extractable_text, heuristic_fallback, jsonld_parse_error, no_leaders) instead of failing the response; a page with text but no leaders still returns 200. ~30 unit tests cover every rank bucket, the Vice-President-vs-President disambiguation, the Directory-is-not-Director word-boundary guard, non-leadership rejection, case-insensitivity, the JSON-LD Person path (incl. @graph + @type array + missing-jobTitle skip + parse-error degraded), the microdata Person path, the heuristic card fallback + non-leader filtering + card links, by_rank counts, no-leaders degraded, dedupe across passes, omitempty/non-nil JSON shape, relative-link resolution, parse-input aliases, missing-param 400, SSRF rejection, and the text-mode handler. /selftest exercises the full pure-logic pipeline (CEO + VP detected, engineer filtered, ranks asserted) plus a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling vs higher: the structured-data paths are exact, but the heuristic fallback recognises only common team-page shapes — it is not layout-agnostic and does not infer roles from arbitrary running prose, which would need NLP-grade entity/role extraction.",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "version": "0.2.17",
