@@ -401,8 +401,8 @@ The pilot host runs the older `prune.sh` (copied to `/root/ci-cache-pilot/script
 
 1. Copy the new `prune.sh` over the old one on the pilot host. Check it with `prune.sh --root /var/cache/woodpecker-ci --dry-run`, which deletes nothing and writes no textfile. (A dry run walks the whole tree and takes a long time on a full cache.)
 2. Add ` --prom /var/lib/prometheus/node-exporter/ci-cache-prune.prom` to the `ExecStart=` line of the drop-in `caps.conf` (the directory is the one the host's dedicated exporter on port 9101 reads, next to `woodpecker-build-resources.prom`), then `systemctl daemon-reload`.
-3. After the next nightly run, or one `systemctl start woodpecker-ci-cache-prune.service`: the file exists, mode 0644, and `curl -s http://<exporter address>:9101/metrics | grep ci_cache_prune` shows the four metrics.
-4. Load the rule file on the Prometheus host (`promtool check rules` first), reload, and confirm both alerts show as inactive for that instance. Until then the exit status is the only signal.
+3. After the next nightly run, or one `systemctl start woodpecker-ci-cache-prune.service`: the file exists, mode 0644, and `curl -s http://100.88.44.116:9101/metrics | grep ci_cache_prune` shows the four metrics. (Prometheus on the monitoring VM already scrapes that exporter through its Scanopy `file_sd` list, with `host="0own-build-worker"`, OBSERVED 2026-11-02.)
+4. Ship the rules through `proxmox_florin_server`, not by copying a file onto the monitoring VM: `config/prometheus/rules/fleet-ci-cache-prune.yml` (this template, grouped by `host`) plus a promtool test in `tests/promtool/`, and a section in its `docs/runbooks/fleet-observability.md`. The fleet's `monitoring_vm` role puts rule files on the VM, so a copy made by hand would be lost on a rebuild. After the deploy confirm both alerts show as inactive for `host="0own-build-worker"`. Until then the exit status is the only signal.
 
 To go back: remove `--prom` from the drop-in, delete the textfile, remove the rule file. The old script still works with the same flags.
 
