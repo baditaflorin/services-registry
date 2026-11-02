@@ -853,7 +853,8 @@
     "version": "2.8.40",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "go-fleet-secrets",
@@ -905,7 +906,8 @@
     "version": "0.1.16",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -1299,7 +1301,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "contact-route-detector",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -1353,7 +1356,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "go-fleet-secrets",
@@ -1773,7 +1777,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
@@ -1838,7 +1843,8 @@
     "version": "1.7.9",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -2143,7 +2149,7 @@
       {"name": "render", "required": false, "type": "string", "description": "Set to js to force one RenderJS audit even when static HTML already has detections."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18215,
     "description": "Analytics stack detector - GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "host_port": 18215,
@@ -2325,7 +2331,8 @@
     "description": "CMS core + version detector (WordPress/Drupal/Joomla/Ghost/Next.js/etc.).",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18216,
     "placement": "replicable",
@@ -3168,7 +3175,7 @@
       {"name": "render", "required": false, "type": "string", "description": "auto (default) tries Chromium for empty JS shells, including shells with partial podcast..."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18227,
     "description": "Podcast presence detector — RSS feed + linked platforms + embedded players.",
@@ -3199,7 +3206,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
-      "PYROSCOPE_UPLOAD_RATE": "30s"
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18242,
     "description": "Estimates e-commerce catalog size from live pages or Common Crawl captures.",
@@ -3598,7 +3606,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8287,
     "description": "Extracts email addresses from live pages or Common Crawl captures.",
@@ -5248,7 +5257,7 @@
       {"name": "target", "required": true, "type": "string", "description": "Company website URL. Funding signals are extracted from /about, /press, /investors and related...", "example": "example.com"}
     ],
     "version": "2.7.3",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8290,
     "description": "Microservice for Funding Detector",
     "host_port": 8290,
@@ -5273,7 +5282,7 @@
       {"name": "brand", "required": false, "type": "string", "description": "Brand / company name to look up (required if domain absent)", "example": "OpenAI"},
       {"name": "domain", "required": false, "type": "string", "description": "Company domain; used for the press/news page scan and to derive the brand (required if brand absent)"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18293,
     "host_port": 18293,
     "placement": "replicable",
@@ -5297,7 +5306,7 @@
     ],
     "version": "1.26.8",
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8291,
     "description": "Microservice for Gdpr Compliance",
     "example_path": "/?target=https://bbc.co.uk",
@@ -6138,7 +6147,8 @@
     ],
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8293,
     "description": "Microservice for Legal Entity",
