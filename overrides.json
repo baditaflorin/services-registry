@@ -2069,7 +2069,8 @@
     "container_port": 18195,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18195,
     "placement": "replicable",
@@ -2527,7 +2528,8 @@
     "container_port": 18197,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18197,
     "placement": "replicable",
@@ -2579,7 +2581,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18181,
     "trl": 7,
@@ -3072,7 +3075,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 7,
     "trl_evidence": "Investigated the same 'false written on failed fetch' pattern (18.4% of rows, substack.com itself affected). Found this repo's own contract was already fixed in-repo back on 2026-06-09 (a prior, unrelated commit adopted go-common/meshresult and switched failure paths to omit the data field entirely rather than assert false) -- confirmed via git history. The corruption continues accruing daily regardless, proof the root cause lives entirely in the separate ingestion/orchestrator component, not this repo. No fix forced, no PR opened. Second of 4 sibling services confirming the same root cause -- see the fleet-wide note below.",
@@ -3097,7 +3101,8 @@
     "container_port": 18196,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18196,
     "placement": "replicable",
@@ -3299,7 +3304,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 7,
     "trl_evidence": "Live production-DB audit found 143,413 wordpress_com-classified rows, but only 0.07% have real wordpress.com CNAME evidence -- appearing to be a live false-positive bug. Investigated and found the opposite: a prior 'Pass 3' fix (merged 2026-05-31) that correctly reserves wordpress_com for real CNAME matches is genuinely deployed and correct -- live-verified against the currently-deployed v0.3.7 binary and confirmed 28/28 post-fix-tool_version rows are all genuine matches. Root cause of the bad aggregate: 99.98% of wordpress_com rows carry a blank tool_version, meaning they predate the fix and have never been reprocessed -- a pipeline backfill gap, not a code or deployment defect. No code change made. Priority re-crawl target: all domain_saas_host rows with blank/NULL tool_version (~2.88M rows fleet-wide).",
@@ -3327,7 +3333,8 @@
     "version": "0.3.26",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "internal_direct": true,
     "trl": 7,
@@ -3414,7 +3421,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
-      "PYROSCOPE_UPLOAD_RATE": "30s"
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found no internal contradictions, but a fresh pass found and fixed a real bug: multi-tenant infrastructure CDN hosts (cloudfront.net, s3.amazonaws.com) are PSL 'private' suffixes, so each tenant subdomain was treated as its own registrable domain -- a page pulling assets from 2+ distinct CloudFront distributions (a common real pattern) was reported as referencing multiple distinct third-party vendors. Live query found 1,045 domains (14% of CloudFront users) affected, +1,727 phantom domain counts from CloudFront alone. Fixed (v0.4.6) by folding known multi-tenant infra-CDN hosts to one shared vendor identity for aggregation only, verified against a real 4-distribution production page. See github.com/baditaflorin/go_domain_third_party_fetch_map PR #15 (merged). Rows with tool_version<0.4.6 are re-crawl candidates.",
@@ -5241,7 +5249,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "Domain or URL to analyse. Aliases accepted: ?target=, ?domain=. Aggregates direct page claims...", "example": "stripe.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8289,
     "description": "Microservice for Founding Year",
     "host_port": 8289,
@@ -6568,7 +6576,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL to analyze for mobile-friendliness signals", "example": "https://example.com"},
       {"name": "url", "required": false, "type": "string", "description": "Backwards-compatible alias for `target`"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8294,
     "mem_limit": "2g",
     "description": "Microservice for Mobile Friendly",
