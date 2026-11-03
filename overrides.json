@@ -6781,7 +6781,9 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "open-indie-studio": {
     "trl": 4,
@@ -6950,7 +6952,9 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "pentest-agent-state": {
     "params": [
@@ -8258,7 +8262,9 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "price-range": {
     "example_path": "/?text=Plans+from+%249.99+to+%2499%2Fmo",
@@ -8665,7 +8671,9 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "research-flow": {
     "trl": 4,
@@ -8699,7 +8707,9 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "reverse-dns": {
     "params": [
@@ -9759,7 +9769,9 @@
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "tech-stack": {
     "example_path": "/?target=https://vercel.com",
@@ -9894,7 +9906,9 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "trust-decay": {
     "params": [
