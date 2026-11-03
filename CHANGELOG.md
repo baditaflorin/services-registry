@@ -1,3 +1,7 @@
+## 2026-11-03
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `infrastructure-fetch-cache` 0.3.60.
+
 ## 2026-11-02
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `infrastructure-fetch-cache` 0.3.59.
