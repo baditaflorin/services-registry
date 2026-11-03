@@ -4,5 +4,14 @@
     "country-iso-matcher": "lv3",
     "reverse-dns": "lv3",
     "github-app-token-broker": "domainscope"
+  },
+  "clusters": {
+    "0own-staging": {
+      "environment": "staging",
+      "bastion": "",
+      "dockerhost": "0own-staging-runtime",
+      "deploy_user": "debian",
+      "compose_root": "/opt/staging"
+    }
   }
 }
