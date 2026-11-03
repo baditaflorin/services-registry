@@ -1,0 +1,30 @@
+# Deploy on VM 630 (0own-openobserve) as /opt/oo-relay/compose.yaml. See
+# docs/operations/openobserve-log-relay.md for the runbook; do not deploy
+# without the founder's go-ahead.
+services:
+  oo-relay:
+    image: ${OO_RELAY_IMAGE:?set a pinned relay image tag}
+    container_name: oo-relay
+    restart: unless-stopped
+    # Must match the group that can read the two secret files (runbook, "Host step").
+    user: "65532:65532"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 32
+    mem_limit: 128m
+    cpus: 0.50
+    extra_hosts:
+      # VM 630 cannot reach its own public IP (hairpin): send the relay to the local Caddy, which holds the valid cert.
+      - "openobserve.0own.com:host-gateway"
+    ports:
+      # Tailnet address of VM 630 only. Never publish on the public edge.
+      - "100.90.206.116:18084:8080"
+    environment:
+      OPENOBSERVE_USER: admin@0docker.com
+      OPENOBSERVE_PASSWORD_FILE: /run/secrets/openobserve_password
+      OO_RELAY_TOKEN_FILE: /run/secrets/relay_tokens
+    volumes:
+      - /opt/openobserve/secrets/openobserve_root_password:/run/secrets/openobserve_password:ro
+      - /opt/openobserve/secrets/oo_log_relay_tokens:/run/secrets/relay_tokens:ro

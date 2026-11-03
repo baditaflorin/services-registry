@@ -42,7 +42,7 @@ steps:
     depends_on: []
     image: python:3.13-alpine
     commands:
-      - apk add --no-cache git bash
+      - apk add --no-cache git bash curl
       - |
         target="$${CI_COMMIT_TARGET_BRANCH:-$${CI_REPO_DEFAULT_BRANCH}}"
         source="$${CI_COMMIT_SOURCE_BRANCH:-$${CI_COMMIT_BRANCH}}"
@@ -55,6 +55,15 @@ steps:
       - python3 bin/check_service_version_regressions.py origin/main
       - python3 -m py_compile bin/ci_authority_audit.py bin/ci_execution_report.py bin/ci_resources.py bin/woodpecker_load_controller.py
       - python3 bin/ci_resources.py --check --max-age-days 100000
+
+  relay-tests:
+    depends_on: []
+    image: golang:1.27.3-alpine@sha256:f2c872bcee949b7be9c490efd02b48a8a2fbf947cdf533f1c58525ec9d8170fd
+    commands:
+      - cd bin/oo-relay
+      - test -z "$(gofmt -l .)"
+      - go vet ./...
+      - go test -count=1 ./...
 
   claude-md-format:
     depends_on: []
