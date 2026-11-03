@@ -5794,7 +5794,8 @@
       "SPIFFEAUTH_PEERS_FILE": "/app/spiffe-peers.json",
       "SPIFFEAUTH_JWT_AUDIENCE": "spiffe://0exec.com/ns/fleet/sa/infrastructure-fetch-cache",
       "SPIFFEAUTH_TRUST_DOMAINS": "0exec.com",
-      "SPIFFEAUTH_UNMAPPED": "fallback"
+      "SPIFFEAUTH_UNMAPPED": "fallback",
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "spiffe_workload": true,
     "example_path": "/fetch?url=https://example.com/",
