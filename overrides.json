@@ -1224,7 +1224,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -2276,7 +2277,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18230,
     "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
     "host_port": 18230,
@@ -2600,7 +2601,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 18225,
     "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "host_port": 18225,
@@ -2628,7 +2629,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18226,
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
@@ -2654,7 +2655,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18211,
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
@@ -2686,7 +2687,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18231,
     "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
@@ -2870,7 +2872,8 @@
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_SOURCE": "commoncrawl"
+      "FLEET_FETCH_SOURCE": "commoncrawl",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18223,
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
@@ -2898,7 +2901,8 @@
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18243,
     "description": "Integration / marketplace / app-directory page detector with count estimate.",
@@ -2928,7 +2932,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18240,
     "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
@@ -2978,7 +2982,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18213,
     "description": "Martech stack detector — HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
@@ -3118,7 +3122,8 @@
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18229,
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
@@ -3432,7 +3437,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "render", "required": false, "type": "string", "description": "`js` inspects the hydrated DOM; `auto` measures static HTML and then attempts a bounded..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "proxy_read_timeout": "75s",
     "container_port": 18238,
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
@@ -3486,7 +3491,8 @@
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_SOURCE": "commoncrawl"
+      "FLEET_FETCH_SOURCE": "commoncrawl",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18233,
     "depends_on": [
@@ -3686,7 +3692,7 @@
       {"name": "target", "required": false, "type": "string", "description": "Legacy alias of url= kept for v2 callers.", "example": "example.com"},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source for URL input: live or archive-only commoncrawl."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8288,
     "description": "Microservice for Emotional Tone",
     "host_port": 8288,
@@ -6031,7 +6037,8 @@
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
-      "GRAPH_SAMPLE_RATE": "0.10"
+      "GRAPH_SAMPLE_RATE": "0.10",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 18286,
     "host_port": 18286,
@@ -6070,7 +6077,8 @@
     "trl_evidence": "Second-pass re-audit (fresh ~80-domain sample): explicitly verified the fetch-cache pattern here is deliberate/correct (pinned by a dedicated test, negligible TTL for this one-shot use case). Found and fixed a real bug: extractDoc counted never-rendered <iframe>/<object>/<canvas> HTML fallback text as page content, producing false 'severe keyword stuffing' verdicts on real small-business sites (confirmed on 35 production rows, one example jumping from 89% density on a mangled Maps-embed artifact to a correct 3.55% on the real top term). See PR #9 (merged).",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6186,7 +6194,8 @@
       "PYROSCOPE_BASIC_AUTH_USER_SECRET": "pyroscope-license-extractor-write-user",
       "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-license-extractor-write-password",
       "APP_ENVIRONMENT": "production",
-      "APP_VERSION": "0.1.12"
+      "APP_VERSION": "0.1.12",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
@@ -6240,7 +6249,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "list-extractor",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -8462,7 +8472,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "version": "0.1.15",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "quote-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "quote-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
     "spiffe_merged_identity": true,
@@ -8534,7 +8544,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "readability-index",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18245,
