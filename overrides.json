@@ -1732,12 +1732,12 @@
       "APIKEY_SERVICE_URL": "https://apikey-service.0exec.com",
       "APIKEY_SERVICE_URLS": "http://172.21.0.1:18021,https://apikey-service.0exec.com",
       "CT_MAX_BANDWIDTH_MB": "50",
-      "CT_MEM_BUDGET_MB": "2048"
+      "CT_MEM_BUDGET_MB": "1536"
     },
     "example_path": "/health",
     "host_port": 18336,
     "internal_direct": true,
-    "mem_limit": "3g",
+    "mem_limit": "2g",
     "pids_limit": 1024,
     "placement": "pinned",
     "proxy_egress": false,
