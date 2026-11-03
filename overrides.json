@@ -9780,7 +9780,9 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "telnet-banner": {
     "params": [
