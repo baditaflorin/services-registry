@@ -1719,6 +1719,19 @@
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
+  "ct-names": {
+    "container_port": 18336,
+    "cpus": 2,
+    "depends_on": ["apikey-service"],
+    "description": "Private Certificate Transparency name service. Streams the public CT logs of all TLDs (country-code and generic, .com included), keeps one sorted set of registered domain names per TLD with first/last seen, and serves immutable snapshots and diffs (new / gone) to DomainScope. Stores names only, never certificates. Single writer with a local data volume; reads the logs over direct egress, no proxy. \"Gone\" means no certificate seen for gone_after_days, not deregistered.",
+    "example_path": "/health",
+    "host_port": 18336,
+    "internal_direct": true,
+    "mem_limit": "1536m",
+    "placement": "pinned",
+    "proxy_egress": false,
+    "scope": "internal-only"
+  },
   "currency-detector": {
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL to scan for currencies used (pricing/checkout pages)", "example": "example.com"},
