@@ -375,16 +375,16 @@ All five must hold before the setting is applied to a second host:
    once, and neither the switch nor the rollback cancels a pipeline (both are done
    behind a hold).
 
-### Where the five criteria stand (2026-11-01)
+### Where the five criteria stand (2026-11-03)
 
 Only criterion 3 has a fresh measurement; the others are open, so the setting is not ready for a
 second host.
 
-| # | Criterion | State on 2026-11-01 |
+| # | Criterion | State on 2026-11-03 |
 |---|---|---|
 | 1 | Faster (`effect` below 0.75) | **Open.** The only production figure (0.84 to 0.94, 7 to 8 pairs) was taken before the disk fix and was inconclusive. The difference-in-differences cutover cannot separate the cache from the disk change on the same day; a controlled A/B on the pilot host (cache on versus off in the same hours) would. On a quiet host the cache itself is measured: cold 78 s, re-run 6 s. |
 | 2 | Not less reliable | **Not measured** since the hold went away. |
-| 3 | Bounded disk (each directory under its cap) | **Was not met; cap raised, proof pending.** `go-build` ended every daily prune above its 8,192 MB cap from 10-21 to 11-01 (OBSERVED in the prune journal on the pilot host): 18.8, 18.8, 21.6, 27.2, 18.8, 18.0, 23.1, 17.4, 21.4, 14.3, 16.0 and 18.3 GB, against 8.1 and 7.1 GB on 10-19 and 10-20; it stood at 32.8 GB before the 11-01 prune. On 11-01 at 22:02 UTC, on the owner's go, the cap was raised to 28 GB (a drop-in on the prune unit); a run right after read `go-build 21489 MB <= 28672 MB, nothing to do`. `go-mod` (5.1 of 6.1 GB) and `npm` (0.35 of 3.1) were inside their caps throughout. Not proven yet: that a working day stays under 28 GB. The journal of the prune at 03:17 UTC on 11-03, after Monday's builds, decides. |
+| 3 | Bounded disk (each directory under its cap) | **Was not met until the cap was raised; met on the one working day measured since (11-03).** `go-build` ended every daily prune above its 8,192 MB cap from 10-21 to 11-01 (OBSERVED in the prune journal on the pilot host): 18.8, 18.8, 21.6, 27.2, 18.8, 18.0, 23.1, 17.4, 21.4, 14.3, 16.0 and 18.3 GB, against 8.1 and 7.1 GB on 10-19 and 10-20; it stood at 32.8 GB before the 11-01 prune. On 11-01 at 22:02 UTC, on the owner's go, the cap was raised to 28 GB (a drop-in on the prune unit); a run right after read `go-build 21489 MB <= 28672 MB, nothing to do`. `go-mod` (5.1 of 6.1 GB) and `npm` (0.35 of 3.1) were inside their caps throughout. Measured since (OBSERVED in the prune journal, read by the scheduled check and again by hand): the 11-02 prune read `go-build` 25,221 MB; the 11-03 prune, which started at 03:24 UTC after Monday's builds, found it at 42,265 MB, deleted everything older than 1 day (the 0-day step was not needed) and ended at 24,951 MB, 3.7 GB under the cap, with `go-mod` 5,080 and `npm` 358 MB and result success. Not proven: that is one working day. A busier day, or one whose files of the last day alone exceed 28 GB, would end above the cap, and the script on the host still only logs a line for that until the new `prune.sh` (exit 3 and a textfile) is installed there. |
 | 4 | No memory regression | **Not measured.** |
 | 5 | Reversible | **Not exercised** (the rollback was never run). |
 
