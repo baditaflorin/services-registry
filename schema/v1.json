@@ -247,6 +247,10 @@
       "enum": ["api_per_ip", "allowlisted-sources-exempt"],
       "description": "Gateway per-IP rate limit on the vhost's catchall location. Absent or 'api_per_ip' renders limit_req zone=api_per_ip. 'allowlisted-sources-exempt' renders none and is valid only for a keystore-gated, network_exposure='gateway-ip-allowlisted' service, whose allow/deny block admits fleet hosts alone; a remote runtime host sends all of its pool replicas from one egress address, so a per-IP bucket throttled them against each other. Kept out of services-public.json."
     },
+    "gateway_jwt_skip": {
+      "type": "boolean",
+      "description": "true lets the gateway answer the vhost's /_verify_key subrequest without asking the keystore when the request carries a JWT-SVID (X-Spiffe-Jwt) from an enabled caller on a fleet address; the upstream then receives no X-Auth-* and must verify the JWT-SVID (or a key) itself and refuse the request otherwise. Valid only for a keystore-gated, network_exposure='gateway-ip-allowlisted' service. Who may skip is decided in the gateway's conf.d/_gw_jwt_skip.conf (go_fleet_runner snippets/gw_jwt_skip.conf). Kept out of services-public.json."
+    },
     "served_by": {
       "type": "string",
       "minLength": 1,
