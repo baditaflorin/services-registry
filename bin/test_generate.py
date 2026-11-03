@@ -512,6 +512,7 @@ class TestPrivateServiceContract(unittest.TestCase):
                     "country-iso-matcher": "lv3",
                     "reverse-dns": "lv3",
                     "github-app-token-broker": "domainscope",
+                    "ct-names": "0own",
                 }
             },
         )

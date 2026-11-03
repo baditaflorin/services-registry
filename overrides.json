@@ -1722,6 +1722,27 @@
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
+  "ct-names": {
+    "compose_bind_to_gateway_upstream": true,
+    "container_port": 18336,
+    "cpus": 2,
+    "depends_on": ["apikey-service"],
+    "description": "Private Certificate Transparency name service. Streams the public CT logs (Static CT API tiles and RFC 6962), keeps one sorted set of registered domain names per TLD (country-code TLDs by default, CT_SCOPE) with first/last seen, and serves immutable snapshots and diffs (new / gone) to DomainScope. Stores names only, never certificates. Single writer with a local data volume on the 0own runtime; reads the logs over direct egress, no proxy. \"Gone\" means no certificate seen for gone_after_days, not deregistered.",
+    "env": {
+      "APIKEY_SERVICE_URL": "https://apikey-service.0exec.com",
+      "APIKEY_SERVICE_URLS": "http://172.21.0.1:18021,https://apikey-service.0exec.com",
+      "CT_MAX_BANDWIDTH_MB": "50",
+      "CT_MEM_BUDGET_MB": "1536"
+    },
+    "example_path": "/health",
+    "host_port": 18336,
+    "internal_direct": true,
+    "mem_limit": "2g",
+    "pids_limit": 1024,
+    "placement": "pinned",
+    "proxy_egress": false,
+    "scope": "internal-only"
+  },
   "currency-detector": {
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL to scan for currencies used (pricing/checkout pages)", "example": "example.com"},
