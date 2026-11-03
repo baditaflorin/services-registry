@@ -6763,7 +6763,7 @@
       {"name": "target", "required": true, "type": "string", "description": "Domain or URL to scan for office addresses (homepage + contact/about/locations pages)", "example": "example.com"},
       {"name": "url", "required": false, "type": "string", "description": "Alias for `target` (TRL-6 spec field name)"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8295,
     "description": "Microservice for Office Locations",
     "host_port": 8295,
@@ -6953,7 +6953,8 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -8265,7 +8266,8 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -8676,7 +8678,8 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -8712,7 +8715,8 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -9779,7 +9783,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "team-size",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -9920,7 +9925,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
