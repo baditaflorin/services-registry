@@ -13617,6 +13617,36 @@
     }
   },
   {
+    "id": "ct-names",
+    "name": "Ct Names",
+    "description": "Private Certificate Transparency name service. Streams the public CT logs (Static CT API tiles and RFC 6962), keeps one sorted set of registered domain names per TLD (country-code TLDs by default, CT_SCOPE) with first/last seen, and serves immutable snapshots and diffs (new / gone) to DomainScope. Stores names only, never certificates. Single writer with a local data volume on the 0own runtime; reads the logs over direct egress, no proxy. \"Gone\" means no certificate seen for gone_after_days, not deregistered.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://ct-names.0exec.com",
+    "health_url": "https://ct-names.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-ct-names",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "wildcard.0exec.com",
+    "placement": "pinned",
+    "host_port": 18336,
+    "container_port": 18336,
+    "internal_direct": true,
+    "depends_on": [
+      "apikey-service"
+    ],
+    "proxy_egress": false,
+    "network_exposure": "gateway-ip-allowlisted"
+  },
+  {
     "id": "d3-graph",
     "name": "D3 Graph",
     "description": "d3-graph \u2014 d3-graph.0exec.com",
@@ -18599,11 +18629,12 @@
       "88.198.68.213/32"
     ],
     "gateway_rate_limit": "allowlisted-sources-exempt",
+    "gateway_jwt_skip": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "access_tier": "infra-privileged",
-    "version": "0.3.60",
+    "version": "0.3.63",
     "network_exposure": "gateway-ip-allowlisted",
     "ci_resources": {
       "mem_class": "m",

@@ -862,6 +862,36 @@ def validate_public_path_prefixes(entry: dict) -> None:
             )
 
 
+def validate_gateway_jwt_skip(entry: dict) -> None:
+    """Validate the gateway JWT-skip flag fail-closed.
+
+    True makes fleet-runner nginx-render let the vhost's /_verify_key
+    subrequest answer 200 without asking the keystore when the request carries
+    a JWT-SVID (which callers and from where is decided in
+    conf.d/_gw_jwt_skip.conf). The gateway adds no trust: the upstream
+    receives no X-Auth-* and must verify the JWT-SVID or a key itself. So it
+    is accepted only where the internet cannot reach (gateway-ip-allowlisted)
+    and where a keystore gate exists to skip (api_key auth). The renderer
+    applies the same rule (go_fleet_runner nginx_gateway_jwt_skip.go).
+    """
+    if "gateway_jwt_skip" not in entry:
+        return
+    value = entry["gateway_jwt_skip"]
+    service_id = entry.get("id", "<unknown>")
+    if not isinstance(value, bool):
+        sys.exit(f"ERROR: {service_id} gateway_jwt_skip must be a boolean, not {value!r}")
+    if not value:
+        return
+    if entry.get("network_exposure") != "gateway-ip-allowlisted":
+        sys.exit(
+            f"ERROR: {service_id} gateway_jwt_skip=true is valid only for "
+            "network_exposure='gateway-ip-allowlisted'"
+        )
+    auth = entry.get("auth")
+    if not isinstance(auth, dict) or auth.get("type") != "api_key":
+        sys.exit(f"ERROR: {service_id} gateway_jwt_skip=true requires api_key auth")
+
+
 def validate_gateway_rate_limit(entry: dict) -> None:
     """Validate the gateway rate-limit knob fail-closed.
 
@@ -1076,6 +1106,14 @@ def make_entry(repo: dict, by_slug: dict, rules: list[dict]) -> dict | None:
               # cache). validate_gateway_rate_limit() above refuses it on any
               # vhost the internet can reach. Operational metadata; not public.
               "gateway_rate_limit",
+              # Gateway skip of the keystore check for a request that carries
+              # a JWT-SVID (fleet-runner nginx-render -> GatewayJWTSkip,
+              # conf.d/_gw_jwt_skip.conf). The upstream must verify the JWT
+              # itself and refuse a request with no identity and no key;
+              # validate_gateway_jwt_skip() above allows it only on a
+              # keystore-gated gateway-ip-allowlisted vhost. Operational
+              # metadata; not public.
+              "gateway_jwt_skip",
               # Egress routing — `proxy_egress: true` flags services that
               # must route outbound HTTP via the Webshare residential
               # proxy (FLEET.md §6 — active scanners hitting bug-bounty
@@ -1484,6 +1522,7 @@ def build(overrides: dict) -> list[dict]:
         validate_public_path_prefixes(entry)
         validate_cors(entry)
         validate_gateway_rate_limit(entry)
+        validate_gateway_jwt_skip(entry)
     apply_ci_resources(entries)
     return entries
 

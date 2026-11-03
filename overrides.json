@@ -690,7 +690,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8336,
     "description": "Microservice for Api Extractor",
@@ -707,7 +708,9 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "api-first": {
     "params": [
@@ -1720,14 +1723,22 @@
     "spiffe_merged_identity": true
   },
   "ct-names": {
+    "compose_bind_to_gateway_upstream": true,
     "container_port": 18336,
     "cpus": 2,
     "depends_on": ["apikey-service"],
-    "description": "Private Certificate Transparency name service. Streams the public CT logs of all TLDs (country-code and generic, .com included), keeps one sorted set of registered domain names per TLD with first/last seen, and serves immutable snapshots and diffs (new / gone) to DomainScope. Stores names only, never certificates. Single writer with a local data volume; reads the logs over direct egress, no proxy. \"Gone\" means no certificate seen for gone_after_days, not deregistered.",
+    "description": "Private Certificate Transparency name service. Streams the public CT logs (Static CT API tiles and RFC 6962), keeps one sorted set of registered domain names per TLD (country-code TLDs by default, CT_SCOPE) with first/last seen, and serves immutable snapshots and diffs (new / gone) to DomainScope. Stores names only, never certificates. Single writer with a local data volume on the 0own runtime; reads the logs over direct egress, no proxy. \"Gone\" means no certificate seen for gone_after_days, not deregistered.",
+    "env": {
+      "APIKEY_SERVICE_URL": "https://apikey-service.0exec.com",
+      "APIKEY_SERVICE_URLS": "http://172.21.0.1:18021,https://apikey-service.0exec.com",
+      "CT_MAX_BANDWIDTH_MB": "50",
+      "CT_MEM_BUDGET_MB": "2048"
+    },
     "example_path": "/health",
     "host_port": 18336,
     "internal_direct": true,
-    "mem_limit": "1536m",
+    "mem_limit": "3g",
+    "pids_limit": 1024,
     "placement": "pinned",
     "proxy_egress": false,
     "scope": "internal-only"
@@ -2079,7 +2090,8 @@
     "container_port": 18195,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18195,
     "placement": "replicable",
@@ -2537,7 +2549,8 @@
     "container_port": 18197,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18197,
     "placement": "replicable",
@@ -2589,7 +2602,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18181,
     "trl": 7,
@@ -3082,7 +3096,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 7,
     "trl_evidence": "Investigated the same 'false written on failed fetch' pattern (18.4% of rows, substack.com itself affected). Found this repo's own contract was already fixed in-repo back on 2026-06-09 (a prior, unrelated commit adopted go-common/meshresult and switched failure paths to omit the data field entirely rather than assert false) -- confirmed via git history. The corruption continues accruing daily regardless, proof the root cause lives entirely in the separate ingestion/orchestrator component, not this repo. No fix forced, no PR opened. Second of 4 sibling services confirming the same root cause -- see the fleet-wide note below.",
@@ -3107,7 +3122,8 @@
     "container_port": 18196,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "host_port": 18196,
     "placement": "replicable",
@@ -3309,7 +3325,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 7,
     "trl_evidence": "Live production-DB audit found 143,413 wordpress_com-classified rows, but only 0.07% have real wordpress.com CNAME evidence -- appearing to be a live false-positive bug. Investigated and found the opposite: a prior 'Pass 3' fix (merged 2026-05-31) that correctly reserves wordpress_com for real CNAME matches is genuinely deployed and correct -- live-verified against the currently-deployed v0.3.7 binary and confirmed 28/28 post-fix-tool_version rows are all genuine matches. Root cause of the bad aggregate: 99.98% of wordpress_com rows carry a blank tool_version, meaning they predate the fix and have never been reprocessed -- a pipeline backfill gap, not a code or deployment defect. No code change made. Priority re-crawl target: all domain_saas_host rows with blank/NULL tool_version (~2.88M rows fleet-wide).",
@@ -3337,7 +3354,8 @@
     "version": "0.3.26",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "internal_direct": true,
     "trl": 7,
@@ -3424,7 +3442,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
-      "PYROSCOPE_UPLOAD_RATE": "30s"
+      "PYROSCOPE_UPLOAD_RATE": "30s",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found no internal contradictions, but a fresh pass found and fixed a real bug: multi-tenant infrastructure CDN hosts (cloudfront.net, s3.amazonaws.com) are PSL 'private' suffixes, so each tenant subdomain was treated as its own registrable domain -- a page pulling assets from 2+ distinct CloudFront distributions (a common real pattern) was reported as referencing multiple distinct third-party vendors. Live query found 1,045 domains (14% of CloudFront users) affected, +1,727 phantom domain counts from CloudFront alone. Fixed (v0.4.6) by folding known multi-tenant infra-CDN hosts to one shared vendor identity for aggregation only, verified against a real 4-distribution production page. See github.com/baditaflorin/go_domain_third_party_fetch_map PR #15 (merged). Rows with tool_version<0.4.6 are re-crawl candidates.",
@@ -5251,7 +5270,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "Domain or URL to analyse. Aliases accepted: ?target=, ?domain=. Aggregates direct page claims...", "example": "stripe.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8289,
     "description": "Microservice for Founding Year",
     "host_port": 8289,
@@ -5771,6 +5790,7 @@
     ],
     "access_tier": "infra-privileged",
     "gateway_rate_limit": "allowlisted-sources-exempt",
+    "gateway_jwt_skip": true,
     "allowed_source_ips": [
       "65.108.75.123/32", "157.90.1.174/32", "88.198.68.213/32"
     ],
@@ -5795,7 +5815,8 @@
       "SPIFFEAUTH_PEERS_FILE": "/app/spiffe-peers.json",
       "SPIFFEAUTH_JWT_AUDIENCE": "spiffe://0exec.com/ns/fleet/sa/infrastructure-fetch-cache",
       "SPIFFEAUTH_TRUST_DOMAINS": "0exec.com",
-      "SPIFFEAUTH_UNMAPPED": "fallback"
+      "SPIFFEAUTH_UNMAPPED": "fallback",
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "spiffe_workload": true,
     "example_path": "/fetch?url=https://example.com/",
@@ -5809,7 +5830,7 @@
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/_gw_health",
-    "version": "0.3.60",
+    "version": "0.3.63",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
@@ -6577,7 +6598,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL to analyze for mobile-friendliness signals", "example": "https://example.com"},
       {"name": "url", "required": false, "type": "string", "description": "Backwards-compatible alias for `target`"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8294,
     "mem_limit": "2g",
     "description": "Microservice for Mobile Friendly",
@@ -6597,7 +6618,9 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "named-entity-recognizer": {
     "params": [
@@ -6772,7 +6795,7 @@
       {"name": "target", "required": true, "type": "string", "description": "Domain or URL to scan for office addresses (homepage + contact/about/locations pages)", "example": "example.com"},
       {"name": "url", "required": false, "type": "string", "description": "Alias for `target` (TRL-6 spec field name)"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8295,
     "description": "Microservice for Office Locations",
     "host_port": 8295,
@@ -6791,7 +6814,9 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "open-indie-studio": {
     "trl": 4,
@@ -6850,7 +6875,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL of the page to map outlinks for (alias url= also accepted)", "example": "example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "container_port": 8296,
     "description": "Microservice for Outlink Graph",
     "host_port": 8296,
@@ -6869,7 +6894,9 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "page-load-metrics": {
     "params": [
@@ -6920,7 +6947,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "version": "0.1.20",
     "trl": 5,
@@ -6931,7 +6959,9 @@
     "trl_evidence": "Heuristic passive-voice detector over a real HTML text extractor (golang.org/x/net/html tokenizer, no regex): prunes script/style/noscript/svg/template/head/iframe subtrees, prefers the first <article>/<main> region then falls back to <body>, collapses whitespace and inserts block-element boundaries so words aren't glued. Splits prose into sentences on terminal punctuation (collapsing punctuation runs, trailing-fragment aware) and flags each sentence as passive when a form of to-be (am/is/are/was/were/be/been/being) or a get-passive (get/gets/getting/got/gotten) is followed \u2014 within a small window that skips up to three intervening adverbs/negators so 'has been carefully reviewed' still matches \u2014 by a past participle. Participles are identified heuristically: regular -ed forms (with a curated exclusion list for short non-verbal -ed words like red/bed/embed) plus a curated list of ~110 common irregular past participles (done/made/seen/taken/given/written/known/shown/held/thrown/etc.). Reports the flagged sentences with their matched trigger (auxiliary + participle), total sentence count, passive sentence count, and the passive ratio as a percentage. Input is fetched through the fleet HTTP fetch cache (go-common/fleetfetch) so 20 producers analysing the same URL trigger one upstream fetch; plain-HTML render mode. SSRF defense-in-depth: input-time block of literal loopback/private/link-local IPs (safehttp block list) + localhost/.local names, with cache-side + safehttp-fallback dial-time guards catching DNS-resolved private IPs. Direct text= mode scores pasted content with no fetch. Per-failure notes pushed to a non-nil degraded[] (fetch_failed, no_extractable_text, low_sample:<n>_sentences) instead of failing the response; inputs below five sentences flagged as statistically noisy. ~30 unit tests cover sentence splitting, classic be-passives (was thrown, is being reviewed, has been done), get-passives (got hit, gets done), active sentences NOT flagged, irregular participles, adverb-interrupted passives, the adverb window not overreaching into unrelated clauses, passive-ratio math, the participle classifier, tokenisation, low-sample handling, missing-param 400, SSRF rejection, text= mode, plus the reused HTML-extraction cases (script/style stripping, article preference, whitespace collapse, block boundaries). /selftest exercises the pure-logic pipeline (a known passive flags, a known active does not, ratio math, extraction, SSRF guard) AND a live example.com fetch through the cache so the deploy smoke-gate has a real signal. TRL-4 ceiling: heuristic participle detection without a POS tagger or dependency parser, English-only \u2014 it will miss participles outside the curated list and false-positive on adjectival participles ('the painted wall'), copular complements, and get as a main verb, where a full NLP parser would not. Country-language follow-up (2026-10-20; source PR #34 merged as 732007c): a private 460-candidate cohort covered 23 country cohorts. Current first-party pages produced 358 successful fetches, 341 text bodies, and 7,415 sentences. Before the change, the English/French baseline detected none of 20 broad Spanish `ser + participle + por` candidate sentences; final replay detected 17/22 simple candidates plus 1/1 compound `haber + sido + participle + por` candidate. Candidate grammar patterns are not independent labels, and five simple candidates remain unadjudicated. Added conservative Spanish simple/compound handling with explicit-agent checks and regressions; local Go tests, vet, build, and diff checks passed. This detector has no JS-render interface; rendered output was not claimed.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "payment-detector": {
     "params": [
@@ -6955,8 +6985,11 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "pentest-agent-state": {
     "params": [
@@ -8142,7 +8175,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "phone-extractor",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "example_path": "/?url=https://example.com",
     "host_port": 8139,
@@ -8157,7 +8191,9 @@
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "physical-kanban-sync": {
     "trl": 4,
@@ -8185,7 +8221,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "policy-clause-extractor",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18271,
@@ -8203,7 +8240,9 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "polyglot-nlp-toolkit": {
     "trl": 4,
@@ -8259,8 +8298,11 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "price-range": {
     "example_path": "/?text=Plans+from+%249.99+to+%2499%2Fmo",
@@ -8288,8 +8330,11 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "pricing-tier-parser": {
     "params": [
@@ -8306,7 +8351,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "version": "0.1.36",
     "trl": 5,
@@ -8320,7 +8366,9 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "project-bootstrap-meta": {
     "trl": 2,
@@ -8662,8 +8710,11 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "research-flow": {
     "trl": 4,
@@ -8696,8 +8747,11 @@
     "fetch_cache_api_key_file_mount": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "reverse-dns": {
     "params": [
@@ -8917,8 +8971,11 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "scc",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "schema-extractor": {
     "params": [
@@ -8946,8 +9003,11 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "schlieren-imaging-simulator": {
     "trl": 4,
@@ -9059,8 +9119,11 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "seasonal-detector",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "secrets-scanner": {
     "params": [
@@ -9187,7 +9250,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "seo-basics",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8308,
     "version": "1.6.2",
@@ -9205,7 +9269,9 @@
     "trl_evidence": "1.3.1: multi-sitemap parsing (RFC 9309 §2.2.4 allows multiple Sitemap: directives) with per-sitemap reachability/Content-Type probe; canonical reachability probe (status + same-host + self-reference); pathsEqualish handles trailing-slash equivalence. 9/10 corpus PASS.",
     "mcp_ready": true,
     "mcp_tool_count": 1,
-    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
+    "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "service-worker-detector": {
     "params": [
@@ -9217,7 +9283,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "service-worker-detector",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "container_port": 18259,
@@ -9235,7 +9302,9 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "services-dashboard": {
     "version": "1.10.8",
@@ -9283,7 +9352,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8310,
     "description": "Microservice for Shipping Regions",
@@ -9302,7 +9372,9 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": ["infrastructure-fetch-cache"],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "show-me-the-way": {
     "trl": 4,
@@ -9380,7 +9452,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8312,
     "description": "Microservice for Social Graph",
@@ -9400,7 +9473,9 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "social-proof-extractor": {
     "params": [
@@ -9712,8 +9787,11 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "team-member-extractor",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "team-size": {
     "params": [
@@ -9737,11 +9815,14 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "team-size",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "tech-stack": {
     "example_path": "/?target=https://vercel.com",
@@ -9774,7 +9855,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8315,
     "description": "Microservice for Technology Stack",
@@ -9793,7 +9875,9 @@
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "telnet-banner": {
     "params": [
@@ -9873,8 +9957,11 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
-    }
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+    },
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "trust-decay": {
     "params": [
@@ -10187,7 +10274,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8321,
     "description": "Microservice for User Demographics",
@@ -10208,7 +10296,9 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "utils-readcontent": {
     "version": "0.1.0",
@@ -10267,7 +10357,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual"
     },
     "container_port": 8322,
     "description": "Video-content detector: schema.org VideoObject parsing, platform detection (YouTube/Vimeo/Wistia), autoplay + accessibility scoring.",
@@ -10286,7 +10377,9 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "voice-search": {
     "example_path": "/?target=https://en.wikipedia.org/wiki/HTML",

@@ -6642,6 +6642,27 @@
       "type": "api_key"
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "category": "infrastructure",
+    "description": "Private Certificate Transparency name service. Streams the public CT logs (Static CT API tiles and RFC 6962), keeps one sorted set of registered domain names per TLD (country-code TLDs by default, CT_SCOPE) with first/last seen, and serves immutable snapshots and diffs (new / gone) to DomainScope. Stores names only, never certificates. Single writer with a local data volume on the 0own runtime; reads the logs over direct egress, no proxy. \"Gone\" means no certificate seen for gone_after_days, not deregistered.",
+    "example_path": "/health",
+    "health_url": "https://ct-names.0exec.com/health",
+    "id": "ct-names",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Ct Names",
+    "placement": "pinned",
+    "repo_url": "https://github.com/baditaflorin/go-ct-names",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://ct-names.0exec.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "visualization",
     "description": "d3-graph \u2014 d3-graph.0exec.com",
     "example_path": "/",
