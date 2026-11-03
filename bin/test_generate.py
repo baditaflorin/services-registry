@@ -827,6 +827,46 @@ class TestGatewayRateLimit(unittest.TestCase):
         self.assertNotIn("gateway_rate_limit", generate.PUBLIC_FIELDS)
 
 
+class TestGatewayJwtSkip(unittest.TestCase):
+    BASE = {
+        "id": "infrastructure-fetch-cache",
+        "network_exposure": "gateway-ip-allowlisted",
+        "auth": {"type": "api_key"},
+    }
+
+    def test_accepts_true_on_keystore_gated_allowlisted_vhost(self):
+        generate.validate_gateway_jwt_skip({**self.BASE, "gateway_jwt_skip": True})
+
+    def test_accepts_false_anywhere_and_omitted(self):
+        generate.validate_gateway_jwt_skip({**self.BASE, "network_exposure": "gateway-public", "gateway_jwt_skip": False})
+        generate.validate_gateway_jwt_skip(self.BASE)
+
+    def test_refuses_true_where_the_internet_reaches_or_no_key_gate(self):
+        for change in (
+            {"network_exposure": "gateway-authenticated"},
+            {"network_exposure": "gateway-public"},
+            {"network_exposure": None},
+            {"auth": {"type": "none"}},
+            {"auth": None},
+        ):
+            with self.subTest(change=change), self.assertRaises(SystemExit):
+                generate.validate_gateway_jwt_skip({**self.BASE, **change, "gateway_jwt_skip": True})
+
+    def test_refuses_non_booleans(self):
+        for value in ("true", 1, None, ["true"]):
+            with self.subTest(value=value), self.assertRaises(SystemExit):
+                generate.validate_gateway_jwt_skip({**self.BASE, "gateway_jwt_skip": value})
+
+    def test_fetch_cache_override_validates(self):
+        overrides = json.loads((Path(generate.ROOT) / "overrides.json").read_text())
+        entry = overrides["infrastructure-fetch-cache"]
+        self.assertIs(entry.get("gateway_jwt_skip"), True)
+        generate.validate_gateway_jwt_skip({**self.BASE, **entry, "id": "infrastructure-fetch-cache"})
+
+    def test_kept_out_of_the_public_projection(self):
+        self.assertNotIn("gateway_jwt_skip", generate.PUBLIC_FIELDS)
+
+
 class TestComputeNetworkExposure(unittest.TestCase):
     """compute_network_exposure() derives network_exposure from the same
     signals that drive nginx-render's template — regression guard for the
