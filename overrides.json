@@ -361,7 +361,8 @@
     "version": "1.5.17",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -1430,7 +1431,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -9868,7 +9870,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8315,
     "description": "Microservice for Technology Stack",
