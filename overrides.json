@@ -6256,6 +6256,7 @@
     "spiffe_merged_identity": true
   },
   "legal-identifiers": {
+    "compose_bind_to_gateway_upstream": true,
     "container_port": 18335,
     "host_port": 18335,
     "depends_on": ["infrastructure-fetch-cache"],
