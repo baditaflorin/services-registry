@@ -6259,6 +6259,7 @@
     "container_port": 18335,
     "host_port": 18335,
     "depends_on": ["infrastructure-fetch-cache"],
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
     "description": "Finds the company numbers a website states (register numbers, VAT and tax IDs, for example CUI, UID, ABN, SIREN, Companies House) with per-country rule packs and few false positives. Personal numbers are reported by kind only, never by value. Also importable as the legalid Go library.",
     "example_path": "/?url=https://example.com",
     "params": [
