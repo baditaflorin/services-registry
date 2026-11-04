@@ -2060,7 +2060,8 @@
     "version": "0.2.10",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -2074,7 +2075,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18189,
     "placement": "replicable",
@@ -2096,7 +2098,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18214,
     "description": "Ad-network detector with validated ads.txt seller records and executable-context matching for 18 in-page advertising providers.",
     "example_path": "/?domain=nytimes.com",
@@ -2125,7 +2127,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18195,
     "placement": "replicable",
@@ -2171,7 +2174,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "domain-ai-catalog-discovery",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "domain-amp-detector": {
@@ -2180,7 +2184,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18222,
     "description": "Strict AMP detector requiring the root marker, official runtime, same-site canonical, and verified AMP alternatives.",
     "example_path": "/?domain=www.bbc.com",
@@ -2209,7 +2213,7 @@
       {"name": "render", "required": false, "type": "string", "description": "Set to js to force one RenderJS audit even when static HTML already has detections."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18215,
     "description": "Analytics stack detector - GA4/GTM/Segment/Mixpanel/Plausible/Fathom/Heap/Amplitude/Matomo/Hotjar/FullStory SDK IDs.",
     "host_port": 18215,
@@ -2234,7 +2238,7 @@
       {"name": "domain", "required": true, "type": "string", "description": "Fully-qualified domain to fingerprint (e.g. cloudflare.com).", "example": "cloudflare.com"},
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18220,
     "description": "Anycast vs unicast routing detector (multi-resolver IP convergence + ASN check).",
     "example_path": "/?domain=cloudflare.com",
@@ -2260,7 +2264,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18224,
     "description": "Front-end framework + render mode (SSR/CSR/SSG) detector.",
@@ -2284,7 +2288,7 @@
       {"name": "domain", "required": true, "type": "string", "description": "Fully-qualified domain to profile (e.g. example.com).", "example": "google.com"},
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18210,
     "description": "Inbound-link / referring-domain estimator (Common Crawl + Web Archive).",
     "example_path": "/?domain=google.com",
@@ -2311,7 +2315,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "selector", "required": false, "type": "string", "description": "BIMI DNS selector label; defaults to `default`."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18218,
     "description": "BIMI logo record + VMC certificate checker (brand email indicators).",
     "host_port": 18218,
@@ -2336,7 +2340,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18230,
     "description": "schema.org BreadcrumbList JSON-LD + microdata detector + validator.",
     "host_port": 18230,
@@ -2361,7 +2365,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."},
       {"name": "source", "required": false, "type": "string", "description": "Target response source: live or commoncrawl. Archive requests never fall back to live."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18235,
     "description": "HTTP cache hygiene scorer (RFC 7234/9111).",
     "host_port": 18235,
@@ -2392,7 +2396,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18216,
     "placement": "replicable",
@@ -2422,7 +2427,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?domain=stripe.com",
     "trl": 6,
@@ -2450,7 +2456,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "internal_direct": true,
     "trl": 7,
@@ -2480,7 +2487,8 @@
     "container_port": 18219,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "description": "DANE/TLSA record presence + cert binding validation (RFC 6698).",
     "host_port": 18219,
@@ -2503,7 +2511,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18241,
     "description": "Unified deployment fingerprint (PaaS + serverless + edge-compute detector).",
     "host_port": 18241,
@@ -2534,7 +2542,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "domain-details",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?domain=example.com",
     "host_port": 8085,
@@ -2559,7 +2568,8 @@
     "container_port": 18180,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18180,
     "placement": "replicable",
@@ -2584,7 +2594,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18197,
     "placement": "replicable",
@@ -2606,7 +2617,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."},
       {"name": "render", "required": false, "type": "string", "description": "Render mode: auto (default, static first then a bounded JS attempt without a published..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18212,
     "description": "E-commerce platform detector (Shopify/Magento/Woo/BigCommerce/etc.).",
     "host_port": 18212,
@@ -2637,7 +2648,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18181,
     "trl": 7,
@@ -2662,7 +2674,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18225,
     "description": "Front-end error monitoring detector - Sentry/Datadog RUM/Bugsnag/Rollbar/Raygun/etc.",
     "host_port": 18225,
@@ -2690,7 +2702,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18226,
     "description": "Events / webinar platform detector - Zoom/Hopin/Luma/Eventbrite/Bevy/Cvent/etc.",
@@ -2716,7 +2728,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18211,
     "description": "A/B-testing + feature-flag stack detector (Optimizely/VWO/LaunchDarkly/Split.io/etc.).",
@@ -2749,7 +2761,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18231,
     "description": "schema.org FAQPage JSON-LD + microdata detector + validator.",
@@ -2779,7 +2792,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source: live (default) or commoncrawl; archive mode analyzes captured static responses and..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18232,
     "description": "Favicon + Web App Manifest icon-set completeness checker.",
     "host_port": 18232,
@@ -2806,7 +2819,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_SOURCE": "commoncrawl", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18221,
     "description": "Web font stack detector - Google Fonts/Adobe Fonts/self-hosted + family count + font-display hygiene.",
     "host_port": 18221,
@@ -2833,7 +2846,8 @@
     "version": "0.1.21",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18317,
     "placement": "replicable",
@@ -2852,7 +2866,7 @@
     ],
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18239,
     "description": "Gift-card offering detector with content-validated URL probes that reject soft 404s and homepage redirects.",
     "host_port": 18239,
@@ -2877,7 +2891,8 @@
     "container_port": 18237,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "description": "Glue record presence at parent zone (RFC 1034 3.6.1 / RFC 8499).",
     "host_port": 18237,
@@ -2904,7 +2919,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found apple.com/amazon.com/microsoft.com/facebook.com/wikipedia.org all falsely graded F (https_available=false) in the same batch google.com/cloudflare.com/github.com correctly passed. Cross-validated against an independent table (domain_tls) confirming no real outage. Root-caused: classifyProbeError checked the 'tls' substring before checking timeout-ness, so Go's literal error string 'net/http: TLS handshake timeout' got misfiled as a non-retryable TLS error instead of a retryable connect timeout -- major CDN/WAF-fronted domains with heavier handshakes got zero retries. Fixed (v0.4.5) by checking timeout-ness first; confirmed the fleet's safehttp fetch-cache bug does not apply here (this is a HEAD-only availability check, not GET). See github.com/baditaflorin/go_domain_http3_quic_detector PR #10 (merged). Rows with tool_version<0.4.5 are re-crawl candidates.",
@@ -2934,7 +2950,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "FLEET_FETCH_SOURCE": "commoncrawl",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18223,
     "description": "Image alt-text coverage analyzer (WCAG 1.1.1 signal).",
@@ -2963,7 +2980,8 @@
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18243,
     "description": "Integration / marketplace / app-directory page detector with count estimate.",
@@ -2993,7 +3011,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18240,
     "description": "Product-demo / sandbox embed detector (Storylane/Navattic/Arcade/etc.).",
@@ -3020,7 +3038,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Explicit URL to fetch (overrides the inferred https://<domain>/)."}
     ],
     "version": "0.4.2",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18217,
     "description": "Domain liveness classifier — live / under-construction / login-wall / parked / default-server-page / error.",
     "example_path": "/?domain=example.com",
@@ -3043,7 +3061,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18213,
     "description": "Martech stack detector — HubSpot/Marketo/Pardot/Eloqua/Mailchimp/etc.",
@@ -3074,7 +3092,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18187,
     "placement": "replicable",
@@ -3102,7 +3121,8 @@
     "container_port": 18236,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "description": "NAPTR + ENUM (E.164) record discovery (RFC 3403/2916/6116).",
     "host_port": 18236,
@@ -3131,7 +3151,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 7,
     "trl_evidence": "Investigated the same 'false written on failed fetch' pattern (18.4% of rows, substack.com itself affected). Found this repo's own contract was already fixed in-repo back on 2026-06-09 (a prior, unrelated commit adopted go-common/meshresult and switched failure paths to omit the data field entirely rather than assert false) -- confirmed via git history. The corruption continues accruing daily regardless, proof the root cause lives entirely in the separate ingestion/orchestrator component, not this repo. No fix forced, no PR opened. Second of 4 sibling services confirming the same root cause -- see the fleet-wide note below.",
@@ -3157,7 +3178,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18196,
     "placement": "replicable",
@@ -3186,7 +3208,8 @@
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18229,
     "description": "WHATWG rel=next/prev + Link-header pagination detector.",
@@ -3243,7 +3266,7 @@
       {"name": "render", "required": false, "type": "string", "description": "auto (default) tries Chromium for empty JS shells, including shells with partial podcast..."}
     ],
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18227,
     "description": "Podcast presence detector — RSS feed + linked platforms + embedded players.",
@@ -3275,7 +3298,8 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
       "PYROSCOPE_UPLOAD_RATE": "30s",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18242,
     "description": "Estimates e-commerce catalog size from live pages or Common Crawl captures.",
@@ -3305,7 +3329,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "source", "required": false, "type": "string", "description": "Target response source: live or commoncrawl. Archive requests skip HEAD and never fall back to live."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18234,
     "description": "Validated RateLimit and Retry-After detector with evidence-driven endpoint discovery and HEAD-to-GET fallback.",
     "host_port": 18234,
@@ -3335,7 +3359,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found grade F essentially never fires (0/10,757 current-version rows; only 40 F rows exist fleet-wide, all stale). Root-caused: 2 of 7 configured DNSBL zones (SORBS) have been completely dead since the provider was decommissioned on 2026-06-05 (over two years live-verified as NXDOMAIN against 3 independent resolvers) -- every lookup against them silently returns 'not listed' with no error signal, degrading real IP-reputation coverage. Fixed (v0.4.4) by removing the dead zones, matching a prior same-class fix for uribl.com. False-positive handling (RBL timeout/rate-limit misread as a hit) independently verified correct against a live 120-domain sample. See github.com/baditaflorin/go_domain_rbl_reputation PR #12 (merged). Rows with tool_version<0.4.4 are re-crawl candidates.",
@@ -3360,7 +3385,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 7,
     "trl_evidence": "Live production-DB audit found 143,413 wordpress_com-classified rows, but only 0.07% have real wordpress.com CNAME evidence -- appearing to be a live false-positive bug. Investigated and found the opposite: a prior 'Pass 3' fix (merged 2026-05-31) that correctly reserves wordpress_com for real CNAME matches is genuinely deployed and correct -- live-verified against the currently-deployed v0.3.7 binary and confirmed 28/28 post-fix-tool_version rows are all genuine matches. Root cause of the bad aggregate: 99.98% of wordpress_com rows carry a blank tool_version, meaning they predate the fix and have never been reprocessed -- a pipeline backfill gap, not a code or deployment defect. No code change made. Priority re-crawl target: all domain_saas_host rows with blank/NULL tool_version (~2.88M rows fleet-wide).",
@@ -3389,7 +3415,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "internal_direct": true,
     "trl": 7,
@@ -3419,7 +3446,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 8,
     "trl_evidence": "Live production-DB audit found primary_vendor='reamaze' as the single largest detected vendor (1,191 rows), with 49.5% being spam/parked .info domains. Traced the residual (post-earlier-fix) cases via live browser reproduction to GoDaddy Website Builder unconditionally loading Reamaze's shared JS bundle via a GoDaddy-specific loader file, whose bundled CSS/DOM boilerplate satisfied the detector's 'activation' marker regardless of merchant intent -- verified against reamaze.com's own genuine install, which never carries that GoDaddy-specific loader filename. Fixed (v0.3.8) with a targeted confidence cap keyed to the GoDaddy loader marker, with regression tests for both the false-positive and true-positive cases. See github.com/baditaflorin/go_domain_support_stack_detector PR #14 (merged). Rows with tool_version<0.3.8 are re-crawl candidates.",
@@ -3445,7 +3473,8 @@
     "placement": "replicable",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 7,
     "trl_evidence": "Live production-DB audit found a plausible eol distribution (php-7.4.33, jquery-1.8.3, nginx-1.24.0 dominate, all genuinely EOL) -- the healthiest of a 30-service DB sweep. A source-level audit still found and fixed a real, systemic false negative: jQuery signatures required a version directly adjacent to 'jquery' in the filename, never matching WordPress's own bundled-jQuery shape (wp-includes/js/jquery/jquery.min.js?ver=X.Y.Z) -- live re-fetch of 12 real WordPress sites already flagged with an EOL WP core found 11/12 also carried this exact pattern with a genuinely EOL jQuery 1.x, none previously detected. Fixed (v0.4.3) with a signature scoped to WordPress's script-loader-pinned ver= filename shape, verified not to bleed into jQuery UI/Migrate/Validate. See github.com/baditaflorin/go_domain_tech_eol_flagger PR #13 (merged). Rows with tool_version<0.4.3 are re-crawl candidates.",
@@ -3477,7 +3506,8 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
       "PYROSCOPE_UPLOAD_RATE": "30s",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 6,
     "trl_evidence": "Live production-DB audit found no internal contradictions, but a fresh pass found and fixed a real bug: multi-tenant infrastructure CDN hosts (cloudfront.net, s3.amazonaws.com) are PSL 'private' suffixes, so each tenant subdomain was treated as its own registrable domain -- a page pulling assets from 2+ distinct CloudFront distributions (a common real pattern) was reported as referencing multiple distinct third-party vendors. Live query found 1,045 domains (14% of CloudFront users) affected, +1,727 phantom domain counts from CloudFront alone. Fixed (v0.4.6) by folding known multi-tenant infra-CDN hosts to one shared vendor identity for aggregation only, verified against a real 4-distribution production page. See github.com/baditaflorin/go_domain_third_party_fetch_map PR #15 (merged). Rows with tool_version<0.4.6 are re-crawl candidates.",
@@ -3503,7 +3533,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "render", "required": false, "type": "string", "description": "`js` inspects the hydrated DOM; `auto` measures static HTML and then attempts a bounded..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "proxy_read_timeout": "75s",
     "container_port": 18238,
     "description": "Tracker density + categorization (DuckDuckGo Tracker Radar, CC0).",
@@ -3530,7 +3560,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 6,
     "trl_ceiling": 7,
@@ -3558,7 +3589,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "FLEET_FETCH_SOURCE": "commoncrawl",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18233,
     "depends_on": [
@@ -3594,7 +3626,8 @@
       "PYROSCOPE_UPLOAD_RATE": "30s",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "trl": 6,
     "trl_assessed_at": "2026-08-01",
@@ -3616,7 +3649,7 @@
       {"name": "facts", "required": false, "type": "string", "description": "`0` skips the optional facts query (logo, country, inception, headcount, Crunchbase id) and..."},
       {"name": "render", "required": false, "type": "string", "description": "Optional only after no_data. static scans homepage markup; auto scans static markup then..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18228,
     "description": "Wikidata + Wikipedia entity linkage for a domain (P856 match).",
     "host_port": 18228,
@@ -3638,7 +3671,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL or domain to score", "example": "example.com"}
     ],
     "version": "2.1.10",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8286,
     "description": "Microservice for Dtss",
     "host_port": 8286,
@@ -3679,7 +3712,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8287,
     "description": "Extracts email addresses from live pages or Common Crawl captures.",
@@ -3709,7 +3743,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL to scan for email addresses", "example": "https://www.iana.org/help/contact"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "container_port": 8137,
     "description": "Microservice for Email Harvester",
@@ -3732,7 +3766,7 @@
       {"name": "text", "required": false, "type": "string", "description": "Raw HTML to scan directly, skipping the fetch (useful for testing and pasted markup; relative..."},
       {"name": "render", "required": false, "type": "string", "description": "Set to js for explicit Chromium rendering, or auto for one static-first JS retry when a known..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18255,
     "description": "Inventories and classifies every <iframe>, <embed>, and <object> on a web page or raw HTML: resolved-absolute src/data, host, and a curated provider/category label (youtube/vimeo video, google_maps/openstreetmap maps, twitter/facebook social, spotify/soundcloud audio, google_docs/codepen docs, typeform/airtable forms, ads_analytics), plus per-provider and per-category counts.",
     "example_path": "/?url=https://example.com",
@@ -3758,7 +3792,7 @@
       {"name": "target", "required": false, "type": "string", "description": "Legacy alias of url= kept for v2 callers.", "example": "example.com"},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source for URL input: live or archive-only commoncrawl."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8288,
     "description": "Microservice for Emotional Tone",
     "host_port": 8288,
@@ -3784,7 +3818,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL to scan for exposed env files and inline credential leakage", "example": "https://example.com"},
       {"name": "url", "required": false, "type": "string", "description": "Backward-compat alias for target"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "container_port": 8344,
     "description": "Microservice for Env Finder",
@@ -3811,7 +3845,7 @@
       {"name": "source", "required": false, "type": "string", "description": "Use live (default) or commoncrawl archive-only retrieval for the homepage and bounded feed probes."},
       {"name": "render", "required": false, "type": "string", "description": "Set to auto to try a confirmed JavaScript-rendered homepage after direct live discovery finds no..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8164,
     "description": "Microservice for Feed Finder",
     "example_path": "/?target=https://news.ycombinator.com",
@@ -3847,7 +3881,7 @@
       {"name": "url", "required": true, "type": "string", "description": "Target URL to probe for LFI/RFI vulnerabilities. Existing query params are fuzzed; if none...", "example": "https://example.com"},
       {"name": "param", "required": false, "type": "string", "description": "Restrict probing to a single named parameter (overrides auto-detect)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "container_port": 8221,
     "description": "Microservice for File Inclusion",
@@ -5313,7 +5347,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "Domain or URL to analyse. Aliases accepted: ?target=, ?domain=. Aggregates direct page claims...", "example": "stripe.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8289,
     "description": "Microservice for Founding Year",
     "host_port": 8289,
@@ -5338,7 +5372,7 @@
       {"name": "target", "required": true, "type": "string", "description": "Company website URL. Funding signals are extracted from /about, /press, /investors and related...", "example": "example.com"}
     ],
     "version": "2.7.3",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8290,
     "description": "Microservice for Funding Detector",
     "host_port": 8290,
@@ -5363,7 +5397,7 @@
       {"name": "brand", "required": false, "type": "string", "description": "Brand / company name to look up (required if domain absent)", "example": "OpenAI"},
       {"name": "domain", "required": false, "type": "string", "description": "Company domain; used for the press/news page scan and to derive the brand (required if brand absent)"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18293,
     "host_port": 18293,
     "placement": "replicable",
@@ -5387,7 +5421,7 @@
     ],
     "version": "1.26.8",
     "mem_limit": "256m",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8291,
     "description": "Microservice for Gdpr Compliance",
     "example_path": "/?target=https://bbc.co.uk",
@@ -5447,7 +5481,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL whose OAuth 2.0 / OpenID Connect configuration should be mapped (well-known discovery + JWKS...", "example": "https://accounts.google.com"},
       {"name": "session_id", "required": false, "type": "string", "description": "ID of a session in go-pentest-session-state whose OAuthClient config is used to drive active..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8330,
     "deploy_quirk": "live deploy dir was /opt/services/go_oauth_mapper/ until 2026-05-16. Renamed to /opt/services/oauth-mapper/ to align container_name with registry id. Image still ghcr.io/baditaflorin/go_oauth_mapper:latest (GH repo unchanged). fleet-runner force-build will need --image-override or a repo rename to fully auto-deploy via canonical paths.",
     "deploy_quirk_resolved_at": "2026-05-16",
@@ -5498,7 +5532,7 @@
       {"name": "id", "required": false, "type": "int", "description": "Numeric Google taxonomy id for /lookup."},
       {"name": "limit", "required": false, "type": "int", "description": "Max results returned (default 10 for search, 5 for classify)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8096,
     "placement": "replicable",
     "description": "Deterministic Google Product Taxonomy lookup, fuzzy search, and TF-IDF classifier with confidence-based abstention.",
@@ -5533,7 +5567,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "graphql-introspection",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/go_graphql_introspection?url=https://example.com",
     "host_port": 8147,
@@ -5562,7 +5597,7 @@
       {"name": "text", "required": false, "type": "string", "description": "Raw HTML to analyse directly, skipping the fetch (useful for testing and pasted markup)."},
       {"name": "source", "required": false, "type": "string", "description": "Fetch source for URL mode: live (default) or commoncrawl. Archive results include crawl ID and..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18247,
     "description": "Extracts the heading structure (h1-h6) of a web page or raw HTML and builds a nested document outline plus accessibility diagnostics — per-level counts, max nesting depth, and structure warnings (no_h1, multiple_h1, first_heading_not_h1, skipped_level, empty_heading).",
     "example_path": "/?url=https://example.com",
@@ -5596,7 +5631,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hidden-fields",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?target=https://example.com",
     "host_port": 8345,
@@ -5627,7 +5663,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "host-header",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?url=https://example.com",
     "host_port": 8240,
@@ -5644,7 +5681,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "URL (or host) to test for Strict-Transport-Security configuration. Aliases ?target= and ?domain=...", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8328,
     "description": "Microservice for Hsts Checker",
     "example_path": "/go_hsts_checker?url=https://example.com",
@@ -5702,7 +5739,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "http-method-tester",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?url=https://example.com",
     "host_port": 8087,
@@ -5720,7 +5758,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL whose HTTP protocol support to probe (http/0.9, /1.0, /1.1, /2, /3)", "example": "https://www.cloudflare.com"},
       {"name": "url", "required": false, "type": "string", "description": "Backward-compat alias for `target`."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8241,
     "description": "Microservice for Http Protocol",
     "example_path": "/?target=https://www.cloudflare.com",
@@ -5743,7 +5781,7 @@
       {"name": "bic", "required": false, "type": "string", "description": "BIC / SWIFT code to validate (ISO 9362), 8 or 11 characters. Returns bic_valid, bic_country..."}
     ],
     "version": "0.1.14",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18291,
     "host_port": 18291,
     "placement": "replicable",
@@ -5762,7 +5800,7 @@
       {"name": "ids_to_test", "required": false, "type": "array", "description": "POST-only — explicit integer IDs to test alongside the auto-generated variants."},
       {"name": "auth_header", "required": false, "type": "string", "description": "POST-only — Authorization header value forwarded to the target. Overridden by..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "container_port": 8242,
     "description": "Microservice for Idor Finder",
@@ -5783,7 +5821,7 @@
       {"name": "probe_headers", "required": false, "type": "string", "description": "Set to \"1\" to HEAD-probe up to 5 third-party iframe sources for X-Frame-Options/CSP"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "version": "1.3.10",
     "container_port": 8243,
     "description": "Microservice for Iframe Analyzer",
@@ -5810,7 +5848,7 @@
       {"name": "url", "required": true, "type": "string", "description": "URL to scan for server/framework/infrastructure information leakage. Probes baseline +...", "example": "https://example.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8083,
     "description": "Detects information disclosure patterns: internal paths, version strings, stack traces, build IDs in HTML/headers/error pages.",
     "example_path": "/?url=https://example.com",
@@ -5895,7 +5933,8 @@
       "IPV6_CHECKER_BATCH_REQUESTS": "8",
       "IPV6_CHECKER_BATCH_RPS": "1000",
       "IPV6_CHECKER_BATCH_BURST": "256",
-      "IPV6_CHECKER_BATCH_IPV6_ADDRESSES": "1"
+      "IPV6_CHECKER_BATCH_IPV6_ADDRESSES": "1",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8244,
     "description": "Microservice for Ipv6 Checker",
@@ -5934,7 +5973,8 @@
     "spiffe_merged_identity": true,
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "js-proxy": {
@@ -6041,7 +6081,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL to scan for JSONP endpoints", "example": "https://example.com"},
       {"name": "url", "required": false, "type": "string", "description": "Backward-compat alias for target"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "container_port": 8158,
     "description": "Microservice for Jsonp Finder",
@@ -6075,7 +6115,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Not a domain crawler -- confirmed via exhaustive DB search that no stored JWT corpus exists in this fleet. Built a 5,242-case corpus from 1,000 real domain names. Fixed 2 security-relevant false negatives: string-typed exp/iat/nbf claims (real-world non-conformant issuers) silently treated as absent, so an already-expired token showed no expiry claim at all; alg=none tokens with a stale non-empty signature attached went unflagged. Also fixed 'Bearer <jwt>' prefix handling. Zero regressions across 5,242 cases. See github.com/baditaflorin/go_jwt_debugger PR #6.",
     "version": "1.4.4",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "jwt-debugger", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "jwt-debugger", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -6115,7 +6155,8 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
       "GRAPH_SAMPLE_RATE": "0.10",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18286,
     "host_port": 18286,
@@ -6155,7 +6196,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6187,7 +6229,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6219,7 +6262,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "version": "0.2.17",
@@ -6233,7 +6277,8 @@
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8293,
     "description": "Microservice for Legal Entity",
@@ -6286,7 +6331,8 @@
       "PYROSCOPE_BASIC_AUTH_PASSWORD_SECRET": "pyroscope-license-extractor-write-password",
       "APP_ENVIRONMENT": "production",
       "APP_VERSION": "0.1.12",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
@@ -6341,7 +6387,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "list-extractor",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -6382,7 +6429,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL-6 uplift 2026-05-16. Detection now stacks four orthogonal signal\nfamilies: (1) DNS multi-A / round-robin lookup, (2) parallel HEAD\nmulti-fetch with Server / ETag / Date-skew / cookie diversity scoring,\n(3) a vendor signature matrix covering F5 BIG-IP, AWS ALB/ELB,\nHAProxy, Citrix NetScaler, Barracuda, Pulse Secure, Nginx Plus, plus\nCDN families (Cloudflare, CloudFront, Fastly, Akamai), (4) a\nclassifier producing none|proxy|cdn|lb|cluster with an explicit\nadditive confidence formula. Evidence trail surfaced per vendor\nmatch. 19 unit + integration tests covering single-host, AWS ALB,\nF5 BIG-IP, multi-IP round-robin, plain-nginx no-LB, generic-fallback\nand vendor-suppression cases. Backward-compatible with v1.x callers\nvia the legacy `analysis` JSON sub-field. ADR: docs/adr/0001-trl-uplift-to-6.md.",
     "version": "1.5.5",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "loadbalancer-detect", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "loadbalancer-detect", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -6414,7 +6461,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL of the login page to analyze (form, OAuth buttons, WebAuthn, MFA hints, CAPTCHA)", "example": "https://github.com/login"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8170,
     "description": "Microservice for Login Analyzer",
     "example_path": "/?target=https://github.com/login",
@@ -10749,7 +10796,7 @@
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Public company domain to inspect", "example": "example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18322,
     "depends_on": [
       "apikey-service",
