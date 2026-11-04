@@ -6255,6 +6255,17 @@
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
+  "legal-identifiers": {
+    "container_port": 18335,
+    "host_port": 18335,
+    "depends_on": ["infrastructure-fetch-cache"],
+    "description": "Finds the company numbers a website states (register numbers, VAT and tax IDs, for example CUI, UID, ABN, SIREN, Companies House) with per-country rule packs and few false positives. Personal numbers are reported by kind only, never by value. Also importable as the legalid Go library.",
+    "example_path": "/?url=https://example.com",
+    "params": [
+      {"name": "url", "required": true, "type": "string", "description": "Domain or URL of the site to read", "example": "https://example.com"}
+    ],
+    "fetch_cache_api_key_file_mount": true
+  },
   "license-extractor": {
     "params": [
       {"name": "url", "required": false, "type": "string", "description": "URL of the page to scan (aliases: target, q). One of url/text is required.", "example": "https://example.com"},

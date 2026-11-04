@@ -7428,6 +7428,42 @@
     }
   },
   {
+    "id": "legal-identifiers",
+    "name": "Legal Identifiers",
+    "description": "Finds the company numbers a website states (register numbers, VAT and tax IDs, for example CUI, UID, ABN, SIREN, Companies House) with per-country rule packs and few false positives. Personal numbers are reported by kind only, never by value. Also importable as the legalid Go library.",
+    "category": "legal_analysis",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://legal-identifiers.0crawl.com",
+    "health_url": "https://legal-identifiers.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_legal_identifiers",
+    "example_path": "/?url=https://example.com",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "wildcard.0crawl.com",
+    "host_port": 18335,
+    "container_port": 18335,
+    "depends_on": [
+      "infrastructure-fetch-cache"
+    ],
+    "params": [
+      {
+        "name": "url",
+        "required": true,
+        "type": "string",
+        "description": "Domain or URL of the site to read",
+        "example": "https://example.com"
+      }
+    ],
+    "network_exposure": "gateway-authenticated"
+  },
+  {
     "id": "license-extractor",
     "name": "License Extractor",
     "description": "Detect the software/content license(s) of a web page or raw HTML/text \u2014 walks the DOM for structured signals (link rel=license, license anchors, JSON-LD license fields) and scans extracted text for license names, normalizing to SPDX identifiers (MIT, Apache-2.0, GPL/LGPL/AGPL, BSD, MPL-2.0, ISC, Unlicense, Creative Commons), plus copyright-line extraction.",
