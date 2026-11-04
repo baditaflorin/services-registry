@@ -408,7 +408,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8273,
     "description": "Microservice for Accessibility Score",
@@ -451,7 +452,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -485,7 +487,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -508,7 +511,8 @@
       "PYROSCOPE_SERVER_ADDRESS": "https://openobserve.0own.com/pyroscope",
       "PYROSCOPE_UPLOAD_RATE": "60s",
       "APP_ENVIRONMENT": "production",
-      "APP_VERSION": "1.7.8"
+      "APP_VERSION": "1.7.8",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8335,
     "description": "Microservice for Admin Finder",
@@ -669,7 +673,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": ["infrastructure-fetch-cache"],
     "fetch_cache_api_key_file_mount": true,
@@ -694,7 +699,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8336,
     "description": "Microservice for Api Extractor",
@@ -735,7 +741,8 @@
     "version": "1.5.23",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -754,7 +761,8 @@
     "version": "1.7.9",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8230,
     "description": "Microservice for Apikey Scanner",
@@ -795,7 +803,7 @@
       {"name": "target", "required": false, "type": "string", "description": "Legacy v1.x surface. Hostname, IP (v4/v6), or ASN (e.g. AS13335). Returns the legacy Response..."}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8337,
     "description": "Microservice for Asn Lookup",
     "example_path": "/?ip=1.1.1.1",
@@ -878,7 +886,7 @@
       {"name": "lists", "required": false, "type": "string", "description": "Comma-separated zone allowlist (e.g. zen.spamhaus.org,dbl.spamhaus.org).", "example": "zen.spamhaus.org"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8338,
     "description": "Microservice for Blocklist Checker",
     "example_path": "/?ip=8.8.8.8&lists=zen.spamhaus.org",
@@ -913,7 +921,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -942,7 +951,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -972,7 +982,8 @@
     "version": "1.6.13",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -983,7 +994,7 @@
       {"name": "url", "required": false, "type": "string", "description": "Legacy page-scan mode. Fetches the URL and regex-extracts any bucket references in the response...", "example": "https://example.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8339,
     "description": "Microservice for Bucket Finder",
     "example_path": "/go_bucket_finder?url=https://example.com",
@@ -1032,7 +1043,8 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -1058,7 +1070,8 @@
     "version": "1.2.15",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -1071,7 +1084,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8279,
     "description": "Microservice for Cas",
@@ -1145,7 +1159,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -1181,7 +1196,8 @@
     "version": "0.1.19",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -1192,7 +1208,7 @@
       {"name": "probe_frame", "required": false, "type": "string", "description": "When \"1\", include an HTML iframe snippet for analyst-side framing verification"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8225,
     "description": "Microservice for Clickjacking Tester",
     "example_path": "/go_clickjacking_tester?target=example.com",
@@ -1231,7 +1247,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -1264,7 +1281,8 @@
     "version": "0.1.14",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -1274,7 +1292,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL to extract HTML comments from", "example": "google.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "comment-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "comment-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8340,
     "description": "Microservice for Comment Extractor",
     "example_path": "/?target=google.com",
@@ -5445,7 +5463,7 @@
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) probes only /login. active probes the full CommonLoginPaths gazetteer."},
       {"name": "session_id", "required": false, "type": "string", "description": "ID of a session in go-pentest-session-state. When the session's LoginFlow declares kind=json, an..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.5.6",
     "access_tier": "vetted-pentest",
@@ -5970,7 +5988,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL of a page to inspect. Recovers original source from JS bundles via source maps, then...", "example": "https://stripe.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "version": "0.3.6",
     "access_tier": "vetted-pentest",
     "container_port": 8312,
@@ -5991,7 +6009,7 @@
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) inspects only bundles linked from the page. active additionally probes common..."}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "version": "0.4.7",
     "access_tier": "vetted-pentest",
     "container_port": 8311,
@@ -6056,7 +6074,7 @@
       {"name": "session_id", "required": false, "type": "string", "description": "ID of a session in go-pentest-session-state. Used with ?target= to apply primary cookies+headers..."},
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) is offline analysis. harvest mode is triggered automatically when ?target= is..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.2.7",
     "access_tier": "vetted-pentest",
@@ -7067,7 +7085,7 @@
       {"name": "program", "required": true, "type": "string"},
       {"name": "apex", "required": true, "type": "string"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.2.7",
     "access_tier": "vetted-pentest",
@@ -7128,7 +7146,7 @@
     "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design."
   },
   "pentest-authz-matrix": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18152,
@@ -7142,7 +7160,7 @@
     "coolify_app_uuid": "e11vdd4lnk03y17hljdpb9d3"
   },
   "pentest-bounty-pilot": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18179,
@@ -7281,7 +7299,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.7.9",
     "access_tier": "vetted-pentest",
@@ -7377,7 +7395,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "Domain or URL — bare host accepted (https:// is assumed).", "example": "hackerone.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.2.6",
     "access_tier": "vetted-pentest",
@@ -7422,7 +7440,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.2.6",
     "access_tier": "vetted-pentest",
@@ -7492,7 +7510,7 @@
       {"name": "dorks", "required": false, "type": "string", "description": "Comma-separated subset of dork ids to run (default = all). Names from /dorks."},
       {"name": "max_results", "required": false, "type": "int", "description": "Cap per-dork (default 30, max 100)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18123,
@@ -7542,7 +7560,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "Target URL or bare hostname (https:// assumed).", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.2.7",
     "access_tier": "vetted-pentest",
@@ -7587,7 +7605,7 @@
     "version": "0.2.4"
   },
   "pentest-js-bundle-scanner": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18178,
@@ -7795,7 +7813,7 @@
     "version": "0.2.5"
   },
   "pentest-reflection-hunter": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18175,
@@ -7876,7 +7894,7 @@
       {"name": "text", "required": false, "type": "string"},
       {"name": "url", "required": false, "type": "string"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.5.6",
     "access_tier": "vetted-pentest",
@@ -7921,7 +7939,7 @@
       {"name": "verify", "required": false, "type": "bool", "description": "When true"},
       {"name": "body", "required": false, "type": "string", "description": "Optional JSON body template for post-json mode. URL-shaped leaves get replaced."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.3.10",
     "access_tier": "vetted-pentest",
@@ -7939,7 +7957,7 @@
       {"name": "domain", "required": true, "type": "string", "description": "Apex domain (acme.com).", "example": "example.com"},
       {"name": "sources", "required": false, "type": "string", "description": "Comma-separated subset of sources to query (default = all). Names from /sources."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.3.6",
     "access_tier": "vetted-pentest",
@@ -7984,7 +8002,7 @@
     "params": [
       {"name": "host", "required": true, "type": "string", "example": "example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18121,
@@ -8073,7 +8091,7 @@
       {"name": "timeout_sec", "required": false, "type": "integer", "description": "Default 600. Capped at 1800."},
       {"name": "program", "required": false, "type": "string", "description": "Optional bug-bounty program slug attached to forwarded findings."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18120,
@@ -8139,7 +8157,7 @@
       {"name": "domain", "required": true, "type": "string", "example": "example.com"},
       {"name": "limit", "required": false, "type": "int", "example": "5"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "version": "0.4.8",
     "access_tier": "vetted-pentest",
@@ -8284,7 +8302,7 @@
       {"name": "target", "required": false, "type": "string", "description": "Legacy v0.1 — full HTML page URL. Walks <script src> tags + jsbundle.RecoverAll. Returns the...", "example": "https://stripe.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "access_tier": "vetted-pentest",
     "container_port": 8313,
     "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
@@ -8439,7 +8457,7 @@
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) is static-scan only. active is currently equivalent to passive; the..."}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "version": "0.2.5",
     "access_tier": "vetted-pentest",
     "container_port": 8314,
