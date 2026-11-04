@@ -3836,7 +3836,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "internal_direct": true,
     "description": "Clearbit-style company firmographic profile: industry, employee band, founding year, legal entity, revenue model, office locations, funding — 8 fleet analyzers merged via composite-runner.",
@@ -5281,7 +5282,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged). | 2026-10-20 targeted Romanian first-party replay: 2 official company history pages using the Romanian “înființată în YYYY” form returned the correct year after the parser fix; these were misses before. The saved 100-row cohort had 5 RO candidates but their HTML was unavailable, so no cohort-wide lift is claimed. Source go_founding_year PR #60 merged at b19eb32; release 3.6.11.",
-    "version": "3.6.18",
+    "version": "3.6.19",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -6238,7 +6239,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18270,
     "placement": "replicable",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -8230,7 +8231,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18271,
     "placement": "replicable",
-    "version": "0.1.21",
+    "version": "0.1.22",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -9453,7 +9454,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8312,
     "description": "Microservice for Social Graph",
@@ -9953,7 +9955,7 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "version": "1.9.10",
+    "version": "1.9.11",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",
