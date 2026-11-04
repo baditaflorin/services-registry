@@ -529,6 +529,24 @@
         "scc",
         "ct-names"
       ]
+    },
+    "0pipe-runtime": {
+      "cluster": "0pipe",
+      "capacity_label": "0pipe-runtime",
+      "state": "restricted",
+      "roles": [
+        "fleet-compose-runtime"
+      ],
+      "allowed_runtimes": [
+        "compose"
+      ],
+      "allowed_placement": [
+        "replicable"
+      ],
+      "allowed_service_ids": [
+        "payment-detector",
+        "data-inventory"
+      ]
     }
   }
 }
