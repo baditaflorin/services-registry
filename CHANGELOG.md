@@ -1,3 +1,7 @@
+## 2026-11-04
+
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `founding-year` 3.6.19, `license-extractor` 0.1.13, `policy-clause-extractor` 0.1.22, `tos-finder` 1.9.11.
+
 ## 2026-11-03
 
 - registry: `ct-names` (go-ct-names, the private Certificate Transparency name service for DomainScope) registered as a PINNED service on the `0own` cluster (`clusters.json` placement), port 18336 (reserved in the runner ledger), `internal_direct`, `scope: internal-only`, `proxy_egress: false` (it reads the public CT logs directly), `compose_bind_to_gateway_upstream` (published on the 0own tailnet address only, like git-provider-api-broker), 2 CPUs, `mem_limit` 3g (2 GiB memory budget), `pids_limit` 1024, and the env the 0own runtime needs: keystore URLs (local replica first, public vhost second) and `CT_MAX_BANDWIDTH_MB=50` for the first catch-up (raise later here). `ct-names` is also listed in the `0own-runtime` allowlist of `host-placement-policy.json` as an explicit exception: it stays `pinned`, so placement-plan still refuses to move or pool it, and the schema (`replicable` only) is unchanged. The generated files need `python3 bin/generate.py --only ct-names` after the repo has the topics `mesh-0exec`, `category-infrastructure`, `lang-go` (not `category-domains`: that category switches the proxy on).
