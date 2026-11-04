@@ -534,7 +534,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "access_tier": "infra-privileged",
     "auth": {
@@ -597,7 +598,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "access_tier": "infra-privileged",
     "auth": {
@@ -4132,6 +4134,9 @@
     }
   },
   "fleet-dns-sync": {
+    "env": {
+      "XAUTH_TRUST_MODE": "shadow"
+    },
     "params": [
       {"name": "dry_run", "required": false, "type": "boolean", "description": "If 1, returns the plan without touching Hetzner. Default 0 (apply)."}
     ],
@@ -4208,7 +4213,8 @@
       "GRAPH_SERVICE_ID": "fleet-eventlog",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "fleet-exec": {
@@ -4242,7 +4248,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "fleet-exec",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "fleet-fake": {
@@ -4447,7 +4454,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "fleet-lock",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "fleet-mcp-gateway": {
@@ -4513,7 +4521,8 @@
     "version": "0.2.1",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "access_tier": "infra-privileged",
     "auth": {
@@ -10736,7 +10745,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_SERVICE_ID": "git-provider-api-broker"
+      "GRAPH_SERVICE_ID": "git-provider-api-broker",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "github-app-token-broker": {
