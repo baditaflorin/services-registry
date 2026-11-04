@@ -7,8 +7,17 @@ small relay holds it instead. This is the generic version of the fixed-query
 CrUX relay (`go-url-categorizer-api`, `docs/operations/crux-openobserve-readonly-relay.md`);
 the code, its tests and the query rules are in `bin/oo-relay/README.md`.
 
-Status: code merged-ready in a PR; **not deployed**. Deploying needs the
-founder (VM 630 access, a vault secret, a tailnet ACL). The steps are below.
+Status: **deployed on VM 630 on 2026-11-04** (image `oo-relay:acb5593`, built
+from the merged commit and loaded with `docker save | docker load`; compose in
+`/opt/oo-relay`, listening on `100.90.206.116:18084`, one token). Open items:
+the tailnet grant for CT108 -> `100.90.206.116:18084`
+(`proxmox_florin_server#673`, applied by a human with
+`scripts/tailscale-policy-ct108.sh plan` then `apply`) and the vault secret
+`oo-log-relay-token`, which needs a vault writer key an agent does not hold.
+The token currently exists only as the two files (VM 630
+`/opt/openobserve/secrets/oo_log_relay_tokens`, CT 108
+`/root/.config/oo-relay/token`); copy it into the vault from one of them, never
+print it.
 
 ## What agents get
 
@@ -47,12 +56,14 @@ Acceptance query (DomainScope prod, the Extended traits backfill run of
 in OpenObserve):
 
 ```sh
-bin/oo logs domainscope-api --host 0docker_docker_prod \
+bin/oo logs domainscope-api --host debian13-docker-prod \
   --from 2026-11-03T12:00:00Z --to 2026-11-03T18:30:00Z \
   --grep '[ext-traits-backfill]' --limit 500
 ```
 
-With `--from`, lines come oldest first, so the start of the run is at the top.
+The `host` label of the DomainScope production Docker host is
+`debian13-docker-prod` (it was `0docker_docker_prod` in older notes); if a
+query with `--host` returns nothing, try without `--host` first. With `--from`, lines come oldest first, so the start of the run is at the top.
 If the relay prints `note: the relay stopped at its row limit`, run the same
 command again with `--from` set to the printed `next_start` (that exact
 microsecond repeats once). Without `--from`, `--since` counts back from now,
@@ -147,7 +158,7 @@ step in 2 was skipped (fail closed).
 # from a machine allowed by the ACL; the token is read from the file, not typed
 curl -fsS http://100.90.206.116:18084/healthz
 OO_RELAY_URL=http://100.90.206.116:18084 OO_RELAY_TOKEN_FILE=<file> \
-  bin/oo logs domainscope-api --host 0docker_docker_prod --since 2d --grep '[ext-traits-backfill]' --limit 500
+  bin/oo logs domainscope-api --host debian13-docker-prod --since 2d --grep '[ext-traits-backfill]' --limit 500
 ```
 
 Also check that a request without the token returns `401` and that a body with

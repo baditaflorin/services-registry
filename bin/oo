@@ -178,7 +178,7 @@
 #   `since-redeploy` and `context` work; every command that needs SQL or the
 #   whole fleet (query, errors, containers, hosts, summary, ...) says so and
 #   exits 2. A relay problem is an error, never "no matching lines".
-#   Example: oo logs domainscope-api --host 0docker_docker_prod \
+#   Example: oo logs domainscope-api --host debian13-docker-prod \
 #     --from 2026-11-03T12:00:00Z --to 2026-11-03T18:30:00Z \
 #     --grep '[ext-traits-backfill]' --limit 500
 #
