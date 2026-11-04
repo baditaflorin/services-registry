@@ -7255,7 +7255,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
   },
   "pentest-cookie-pwn": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18174,
@@ -7620,7 +7620,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18108,
@@ -8076,7 +8077,7 @@
     "coolify_app_uuid": "wtcxvmvxvcglclch4ogbuz5g"
   },
   "pentest-waf-detect": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18295,
