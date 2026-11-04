@@ -28,9 +28,14 @@
 #       full metadata (took_detail, trace_id, etc) when a human wants to
 #       read it directly.
 #
-#   oo logs <container_name> [--since DURATION] [--grep PATTERN] [--limit N] [--host HOST]
+#   oo logs <container_name> [--since DURATION | --from TIME [--to TIME]] [--grep PATTERN] [--limit N] [--host HOST]
 #       Convenience wrapper: every log line for one container, newest
 #       first. --grep does a substring match on the message field.
+#       --from/--to (ISO8601 like 2026-11-03T12:00:00Z, or epoch seconds)
+#       ask for an absolute window instead of "the last --since"; --to
+#       defaults to now. With --from the OLDEST --limit lines of that
+#       window are shown (so you see how a run started; page on by moving
+#       --from past the last line, the relay prints a next_start hint).
 #       --host disambiguates if the same container name exists on more
 #       than one docker host (rare, but container names aren't globally
 #       unique across the fleet).
@@ -152,6 +157,31 @@
 #
 # DURATION: Ns / Nm / Nh / Nd (default: 1h). Examples: 30s, 15m, 2h, 3d.
 #
+# RELAY MODE (no OpenObserve password needed): set OO_RELAY_URL and `oo`
+#   sends logs/grep/since-redeploy/context to the read-only log relay on
+#   VM 630 (bin/oo-relay, docs/operations/openobserve-log-relay.md) instead
+#   of to OpenObserve. The relay holds the root password; you only need its
+#   bearer token, and that can stay off your machine:
+#     OO_RELAY_URL=http://<tailnet address>:18084
+#     OO_RELAY_VIA=direct   (default) POST straight to the relay from this
+#                           machine; the token comes from OO_RELAY_TOKEN_FILE
+#                           (a file, mode 0600 or 0400, 64 hex characters).
+#     OO_RELAY_VIA=bastion  run the POST on Builder CT 108 through the bastion
+#                           you already ssh to (FLEET_BASTION); the token is
+#                           read there from OO_RELAY_REMOTE_TOKEN_FILE
+#                           (default /root/.config/oo-relay/token) and never
+#                           reaches this machine. OO_RELAY_LXC (default 108),
+#                           OO_RELAY_SOCKS (default 127.0.0.1:1055, CT 108's
+#                           userspace tailscale proxy; set to "" to disable).
+#   The relay reads one container at a time over at most 7 days and returns at
+#   most 500 lines, so in relay mode: `logs`, `grep` (needs --container),
+#   `since-redeploy` and `context` work; every command that needs SQL or the
+#   whole fleet (query, errors, containers, hosts, summary, ...) says so and
+#   exits 2. A relay problem is an error, never "no matching lines".
+#   Example: oo logs domainscope-api --host 0docker_docker_prod \
+#     --from 2026-11-03T12:00:00Z --to 2026-11-03T18:30:00Z \
+#     --grep '[ext-traits-backfill]' --limit 500
+#
 # ENV (required): OPENOBSERVE_USER, OPENOBSERVE_PASSWORD, and either
 #   OPENOBSERVE_URL or OPENOBSERVE_HOST — see bin/fleet-runner.env.example.
 #   Real credentials live in
@@ -191,6 +221,12 @@ OO_SCHEME="${OPENOBSERVE_SCHEME:-http}"
 OO_URL="${OPENOBSERVE_URL:-}"
 OO_ORG="${OPENOBSERVE_ORG:-default}"
 OO_SAVE_DIR="${OO_SAVE_DIR:-$HOME/.oo}"
+OO_RELAY_URL="${OO_RELAY_URL:-}"
+OO_RELAY_VIA="${OO_RELAY_VIA:-direct}"
+OO_RELAY_TOKEN_FILE="${OO_RELAY_TOKEN_FILE:-}"
+OO_RELAY_REMOTE_TOKEN_FILE="${OO_RELAY_REMOTE_TOKEN_FILE:-/root/.config/oo-relay/token}"
+OO_RELAY_LXC="${OO_RELAY_LXC:-108}"
+OO_RELAY_SOCKS="${OO_RELAY_SOCKS-127.0.0.1:1055}"
 OO_SAVE_FILE="${OO_SAVE_DIR}/queries.json"
 
 # Heuristic "this line looks like an error" match, shared by errors/check/
@@ -234,7 +270,15 @@ usage() {
   sed -n '2,/^set -euo/p' "$0" | sed '$d' | sed 's/^# \{0,1\}//'
 }
 
+relay_mode() {
+  [[ -n "$OO_RELAY_URL" ]]
+}
+
 require_creds() {
+  if relay_mode; then
+    require_relay
+    return 0
+  fi
   : "${OPENOBSERVE_USER:?OPENOBSERVE_USER is not set — see bin/fleet-runner.env.example}"
   : "${OPENOBSERVE_PASSWORD:?OPENOBSERVE_PASSWORD is not set — see bin/fleet-runner.env.example}"
   if [[ -n "$OO_URL" ]]; then
@@ -285,6 +329,187 @@ duration_to_seconds() {
 # mechanism in oo_search_range for the other half of that fix.
 sql_escape() {
   printf '%s' "${1//\'/\'\'}"
+}
+
+# ---------------------------------------------------------------------------
+# Relay mode (see the RELAY MODE note in the header).
+#
+# The token is never put on a command line or in the environment of another
+# process: direct mode hands it to curl through a config file descriptor
+# (process substitution), bastion mode reads it on the remote host.
+# ---------------------------------------------------------------------------
+
+# Commands that can be answered from one container's lines, so the relay can serve them.
+relay_supports() {
+  case "$1" in
+    logs|grep|since-redeploy|context|-h|--help|help|"") return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+require_relay() {
+  if [[ ! "$OO_RELAY_URL" =~ ^https?://[A-Za-z0-9.-]+(:[0-9]{1,5})?$ ]]; then
+    echo "OO_RELAY_URL must be an http(s) origin without a path, e.g. http://100.90.206.116:18084" >&2
+    exit 1
+  fi
+  case "$OO_RELAY_VIA" in
+    direct)
+      if [[ -z "$OO_RELAY_TOKEN_FILE" ]]; then
+        echo "OO_RELAY_TOKEN_FILE is not set (a file holding the relay token), or use OO_RELAY_VIA=bastion — see 'oo help'" >&2
+        exit 1
+      fi
+      if [[ ! -f "$OO_RELAY_TOKEN_FILE" || ! -r "$OO_RELAY_TOKEN_FILE" ]]; then
+        echo "cannot read OO_RELAY_TOKEN_FILE" >&2
+        exit 1
+      fi
+      local mode
+      mode=$(stat -c %a "$OO_RELAY_TOKEN_FILE" 2>/dev/null || stat -f %Lp "$OO_RELAY_TOKEN_FILE")
+      if [[ "$mode" != "600" && "$mode" != "400" ]]; then
+        echo "OO_RELAY_TOKEN_FILE must be mode 600 or 400 (is $mode)" >&2
+        exit 1
+      fi
+      ;;
+    bastion)
+      if [[ ! "$OO_RELAY_REMOTE_TOKEN_FILE" =~ ^/[A-Za-z0-9._/-]+$ || ! "$OO_RELAY_LXC" =~ ^[0-9]{1,6}$ ]]; then
+        echo "invalid OO_RELAY_REMOTE_TOKEN_FILE or OO_RELAY_LXC" >&2
+        exit 1
+      fi
+      if [[ -n "$OO_RELAY_SOCKS" && ! "$OO_RELAY_SOCKS" =~ ^[A-Za-z0-9.-]+:[0-9]{1,5}$ ]]; then
+        echo "invalid OO_RELAY_SOCKS (host:port)" >&2
+        exit 1
+      fi
+      ;;
+    *) echo "OO_RELAY_VIA must be direct or bastion" >&2; exit 1 ;;
+  esac
+}
+
+# relay_post — JSON payload on stdin, the relay's raw JSON answer on stdout.
+# Prints nothing (and returns non-zero) when the request could not be made.
+relay_post() {
+  local payload
+  payload=$(cat)
+  case "$OO_RELAY_VIA" in
+    direct)
+      local token
+      token=$(tr -d '\r\n' <"$OO_RELAY_TOKEN_FILE")
+      if [[ ! "$token" =~ ^[0-9a-f]{64}$ ]]; then
+        echo "OO_RELAY_TOKEN_FILE does not hold a 64-hex-character relay token" >&2
+        return 1
+      fi
+      curl -sS --connect-timeout 10 --max-time 60 \
+        -K <(printf 'header = "Authorization: Bearer %s"\n' "$token") \
+        -X POST "${OO_RELAY_URL%/}/v1/logs" -H 'Content-Type: application/json' \
+        --data-binary "$payload"
+      ;;
+    bastion)
+      local b64 script remote proxy=""
+      b64=$(printf '%s' "$payload" | base64 | tr -d '\n')
+      [[ -n "$OO_RELAY_SOCKS" ]] && proxy="--proxy socks5h://${OO_RELAY_SOCKS}"
+      script='set -euo pipefail
+tok=$(tr -d "\r\n" < '"$OO_RELAY_REMOTE_TOKEN_FILE"')
+[[ $tok =~ ^[0-9a-f]{64}$ ]] || { echo "relay token file on the builder is missing or malformed" >&2; exit 3; }
+printf %s '"$b64"' | base64 -d | curl -sS --connect-timeout 10 --max-time 60 '"$proxy"' -K <(printf "header = \"Authorization: Bearer %s\"\n" "$tok") -X POST '"${OO_RELAY_URL%/}"'/v1/logs -H "Content-Type: application/json" --data-binary @-'
+      printf -v remote 'pct exec %s -- bash -c %q' "$OO_RELAY_LXC" "$script"
+      ssh "$BASTION" "$remote"
+      ;;
+  esac
+}
+
+# relay_fetch CONTAINER HOST CONTAINS START_US END_US LIMIT ORDER — one relay
+# call. ALWAYS prints valid JSON: {"hits":[...]} on success (same hit shape
+# OpenObserve returns, so the formatters below are shared), or
+# {"_oo_error": "..."} on any failure — the same contract as oo_search_range.
+relay_fetch() {
+  local payload rc=0
+  payload=$(python3 -c '
+import json, sys, datetime
+c, host, contains, start, end, limit, order = sys.argv[1:8]
+def rfc(us):
+    return datetime.datetime.fromtimestamp(int(us) / 1e6, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+try:
+    body = {"container_name": c, "start": rfc(start), "end": rfc(end), "limit": int(limit), "order": order}
+except ValueError as e:
+    print(json.dumps({"_oo_error": "invalid numeric argument (--limit or time range): " + str(e)}))
+    sys.exit(1)
+if host: body["host"] = host
+if contains: body["contains"] = contains
+print(json.dumps(body))
+' "$1" "$2" "$3" "$4" "$5" "$6" "$7") || rc=$?
+  if [[ "$rc" -ne 0 ]]; then
+    printf '%s\n' "$payload"
+    return 0
+  fi
+  printf '%s' "$payload" | { relay_post || true; } | python3 -c '
+import json, sys
+raw = sys.stdin.read()
+def err(m):
+    print(json.dumps({"_oo_error": m})); sys.exit(0)
+if not raw.strip():
+    err("empty response from the relay (connection/timeout failure — check OO_RELAY_URL, OO_RELAY_VIA, tailnet access, and any error printed above)")
+try:
+    d = json.loads(raw)
+except json.JSONDecodeError:
+    err("non-JSON response from the relay: " + raw.strip()[:300])
+if d.get("status") != "ok":
+    err("relay: " + str(d.get("status", "error")) + (" - " + d["error"] if d.get("error") else ""))
+hits = [{"_timestamp": r["timestamp_unix_micros"], "host": r.get("host", ""),
+         "container_name": r.get("container_name", ""), "message": r.get("message", "")}
+        for r in d.get("rows", [])]
+if d.get("truncated"):
+    hint = ("next_start=" + d["next_start"]) if d.get("next_start") else ("next_end=" + d.get("next_end", ""))
+    print("note: the relay stopped at its row limit; more lines exist (" + hint + ")", file=sys.stderr)
+print(json.dumps({"hits": hits}))
+' "$@"
+}
+
+# relay_print_hits REVERSE LABEL — formatter shared by the relay branches.
+# REVERSE=1 when the relay returned newest-first. LABEL=host or host/container.
+relay_print_hits() {
+  python3 -c '
+import json, sys, datetime
+d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
+hits = d.get("hits", [])
+if not hits:
+    print("(no matching log lines — check --since / --host / container name)", file=sys.stderr)
+if sys.argv[1] == "1":
+    hits = list(reversed(hits))
+for h in hits:
+    ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+    label = h.get("host", "?") if sys.argv[2] == "host" else h.get("host", "?") + "/" + h.get("container_name", "?")
+    msg = h.get("message", "")
+    print(f"{ts} [{label}] {msg}")
+' "$1" "$2"
+}
+
+# time_to_us TIME — ISO8601 (with Z or an offset; no zone means UTC) or epoch
+# seconds, as epoch microseconds.
+time_to_us() {
+  python3 -c '
+import sys, datetime
+v = sys.argv[1]
+try:
+    print(int(v) * 1000000)
+except ValueError:
+    try:
+        dt = datetime.datetime.fromisoformat(v.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        print(int(dt.timestamp() * 1000000))
+    except Exception:
+        print("invalid time: " + v + " (use ISO8601 like 2026-11-03T12:00:00Z, or epoch seconds)", file=sys.stderr)
+        sys.exit(1)
+' "$1"
+}
+
+# relay_now_us / relay_since_us DURATION — epoch microseconds.
+relay_now_us() { echo $(( $(date +%s) * 1000000 )); }
+relay_since_us() {
+  local secs
+  secs=$(duration_to_seconds "$1") || exit 1
+  echo $(( $(date +%s) * 1000000 - secs * 1000000 ))
 }
 
 # oo_search_range SQL START_US END_US LIMIT — the primitive: an absolute
@@ -424,10 +649,12 @@ cmd_query() {
 }
 
 cmd_logs() {
-  local container="${1:?usage: oo logs <container_name> [--since 1h] [--grep pattern] [--limit 100] [--host HOST]}"; shift || true
-  local since="1h" limit="100" grep_pat="" host_filter=""
+  local container="${1:?usage: oo logs <container_name> [--since 1h | --from TIME [--to TIME]] [--grep pattern] [--limit 100] [--host HOST]}"; shift || true
+  local since="1h" limit="100" grep_pat="" host_filter="" from_t="" to_t=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
+      --from) from_t="$2"; shift 2 ;;
+      --to) to_t="$2"; shift 2 ;;
       --since) since="$2"; shift 2 ;;
       --limit) limit="$2"; shift 2 ;;
       --grep) grep_pat="$2"; shift 2 ;;
@@ -436,14 +663,30 @@ cmd_logs() {
     esac
   done
   require_creds
+  local win_start="" win_end=""
+  if [[ -n "$from_t" || -n "$to_t" ]]; then
+    [[ -n "$from_t" ]] || { echo "--to needs --from" >&2; exit 1; }
+    win_start=$(time_to_us "$from_t") || exit 1
+    if [[ -n "$to_t" ]]; then win_end=$(time_to_us "$to_t") || exit 1; else win_end=$(relay_now_us); fi
+  fi
+  if relay_mode; then
+    if [[ -n "$win_start" ]]; then
+      relay_fetch "$container" "$host_filter" "$grep_pat" "$win_start" "$win_end" "$limit" asc | relay_print_hits 0 host
+    else
+      relay_fetch "$container" "$host_filter" "$grep_pat" "$(relay_since_us "$since")" "$(relay_now_us)" "$limit" desc | relay_print_hits 1 host
+    fi
+    return
+  fi
   container=$(sql_escape "$container")
   host_filter=$(sql_escape "$host_filter")
   grep_pat=$(sql_escape "$grep_pat")
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
   [[ -n "$grep_pat" ]] && where="${where} AND message LIKE '%${grep_pat}%'"
-  local sql="SELECT _timestamp, host, container_name, stream, message FROM docker_logs WHERE ${where} ORDER BY _timestamp DESC LIMIT ${limit}"
-  oo_search "$sql" "$since" "$limit" | python3 -c '
+  local order_sql="DESC" reverse_out="1"
+  [[ -n "$win_start" ]] && { order_sql="ASC"; reverse_out="0"; }
+  local sql="SELECT _timestamp, host, container_name, stream, message FROM docker_logs WHERE ${where} ORDER BY _timestamp ${order_sql} LIMIT ${limit}"
+  { if [[ -n "$win_start" ]]; then oo_search_range "$sql" "$win_start" "$win_end" "$limit"; else oo_search "$sql" "$since" "$limit"; fi; } | python3 -c '
 import json, sys, datetime
 d = json.load(sys.stdin)
 if "_oo_error" in d:
@@ -452,12 +695,12 @@ if "_oo_error" in d:
 hits = d.get("hits", [])
 if not hits:
     print("(no matching log lines — check --since / --host / container name)", file=sys.stderr)
-for h in reversed(hits):
+for h in (reversed(hits) if sys.argv[1] == "1" else hits):
     ts = datetime.datetime.fromtimestamp(h["_timestamp"] / 1e6, datetime.UTC).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
     host = h.get("host", "?")
     msg = h.get("message", "")
     print(f"{ts} [{host}] {msg}")
-'
+' "$reverse_out"
 }
 
 cmd_grep() {
@@ -473,6 +716,14 @@ cmd_grep() {
     esac
   done
   require_creds
+  if relay_mode; then
+    if [[ -z "$container_filter" ]]; then
+      echo "error: in relay mode grep needs --container NAME (the relay reads one container at a time, not the whole fleet)" >&2
+      exit 2
+    fi
+    relay_fetch "$container_filter" "$host_filter" "$pattern" "$(relay_since_us "$since")" "$(relay_now_us)" "$limit" desc | relay_print_hits 1 host-container
+    return
+  fi
   pattern=$(sql_escape "$pattern")
   container_filter=$(sql_escape "$container_filter")
   host_filter=$(sql_escape "$host_filter")
@@ -550,6 +801,30 @@ cmd_since_redeploy() {
     esac
   done
   require_creds
+  if relay_mode; then
+    echo "# finding the earliest log line for '${container}' in the last ${window} (approximates its current instance's start — widen --window if it's been up longer than that)" >&2
+    local rfirst
+    rfirst=$(relay_fetch "$container" "$host_filter" "" "$(relay_since_us "$window")" "$(relay_now_us)" 1 asc | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+if "_oo_error" in d:
+    print("error: " + d["_oo_error"], file=sys.stderr)
+    sys.exit(1)
+hits = d.get("hits", [])
+print(hits[0]["_timestamp"] if hits else "")
+') || exit 1
+    if [[ -z "$rfirst" ]]; then
+      echo "no log lines found for '${container}' in the last ${window} — check the container name / --host, or widen --window" >&2
+      exit 1
+    fi
+    local rb ra rend rnow
+    rb=$(duration_to_seconds "$before"); ra=$(duration_to_seconds "$after")
+    rend=$(( rfirst + ra * 1000000 )); rnow=$(relay_now_us)
+    (( rend > rnow )) && rend=$rnow
+    echo "# earliest line found at $(python3 -c 'import sys, datetime; print(datetime.datetime.fromtimestamp(int(sys.argv[1]) / 1e6, datetime.timezone.utc).isoformat())' "$rfirst") UTC — showing --before ${before} through --after ${after} around it" >&2
+    relay_fetch "$container" "$host_filter" "" "$(( rfirst - rb * 1000000 ))" "$rend" "$limit" asc | relay_print_hits 0 host
+    return
+  fi
   container=$(sql_escape "$container")
   host_filter=$(sql_escape "$host_filter")
   local where="container_name = '${container}'"
@@ -626,8 +901,10 @@ cmd_context() {
     esac
   done
   require_creds
-  container=$(sql_escape "$container")
-  host_filter=$(sql_escape "$host_filter")
+  if ! relay_mode; then
+    container=$(sql_escape "$container")
+    host_filter=$(sql_escape "$host_filter")
+  fi
   local where="container_name = '${container}'"
   [[ -n "$host_filter" ]] && where="${where} AND host = '${host_filter}'"
 
@@ -654,6 +931,10 @@ except ValueError:
   now_us=$(( $(date +%s) * 1000000 ))
   (( end_us > now_us )) && end_us=$now_us
 
+  if relay_mode; then
+    relay_fetch "$container" "$host_filter" "" "$start_us" "$end_us" "$limit" asc | relay_print_hits 0 host
+    return
+  fi
   local sql="SELECT _timestamp, host, message FROM docker_logs WHERE ${where} ORDER BY _timestamp ASC LIMIT ${limit}"
   oo_search_range "$sql" "$start_us" "$end_us" "$limit" | python3 -c '
 import json, sys, datetime
@@ -1302,6 +1583,11 @@ print(json.dumps(d, indent=2))
 
 main() {
   local cmd="${1:-}"; shift || true
+  if relay_mode && ! relay_supports "$cmd"; then
+    echo "error: 'oo ${cmd}' needs SQL or fleet-wide search, which the read-only log relay does not offer." >&2
+    echo "In relay mode use: logs, grep --container, since-redeploy, context. (Unset OO_RELAY_URL to use OpenObserve directly with its credentials.)" >&2
+    exit 2
+  fi
   case "$cmd" in
     query) cmd_query "$@" ;;
     logs) cmd_logs "$@" ;;
