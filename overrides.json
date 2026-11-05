@@ -6759,9 +6759,6 @@
     "spiffe_merged_identity": true
   },
   "named-entity-recognizer": {
-    "env": {
-      "XAUTH_TRUST_MODE": "shadow"
-    },
     "params": [
       {"name": "text", "required": false, "type": "string", "description": "Raw text (or HTML) to analyse directly. Also accepted as the POST/PUT request body for large..."},
       {"name": "url", "required": false, "type": "string", "description": "URL of a page to fetch (via the fleet HTTP fetch cache) and strip to visible text before...", "example": "https://example.com"},
@@ -10394,7 +10391,6 @@
       "legal-entity",
       "menu-extractor",
       "mobile-friendly",
-      "named-entity-recognizer",
       "office-locations",
       "page-load-metrics",
       "outlink-graph",
