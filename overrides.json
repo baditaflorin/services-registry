@@ -604,7 +604,7 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
       "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "infra-privileged",
     "auth": {
