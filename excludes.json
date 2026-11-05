@@ -13,6 +13,10 @@
     {
       "repo": "cookiecutter-data-science",
       "reason": "public data-science project template, not a fleet service. Its own origin/master already deliberately removed fleet docs (\"chore: remove misapplied fleet-service docs (CLAUDE.md, SERVICE-TEMPLATE.md, .githooks) #1\"). Without this exclude, the next CLAUDE.md sweep re-adds them via inject/push and collides with that decision (hit during the 2026-08-23 cosign/--services doc fix propagation)."
+    },
+    {
+      "repo": "go_named_entity_recognizer",
+      "reason": "service named-entity-recognizer is SUNSET since 2026-09-27 (registry tombstone: port 18285 stays reserved, deploy refuses it, the vhost answers 410) and its GitHub repository is archived (read-only), so a fleet-wide push, bump or CLAUDE.md sweep can only fail on it. No container, image or volume runs on any compose host. Do not auto-clone, do not run fleet-wide ops on it."
     }
   ]
 }
