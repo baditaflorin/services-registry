@@ -1,3 +1,7 @@
+## 2026-11-05
+
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `legal-identifiers` 0.5.0, `search-bing-go` 0.3.0.
+
 ## 2026-11-04
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `legal-identifiers` 0.4.0.
