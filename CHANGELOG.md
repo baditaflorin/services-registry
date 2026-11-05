@@ -1,5 +1,6 @@
 ## 2026-11-05
 
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.40, `domain-gift-card` 0.6.10, `hub-scrapetheworld-org` 0.20.8, `testimonial-extractor` 0.1.17.
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `legal-identifiers` 0.5.0, `search-bing-go` 0.3.0.
 
 ## 2026-11-04
