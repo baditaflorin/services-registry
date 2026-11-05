@@ -6337,9 +6337,21 @@
     "description": "Finds the company numbers a website states (register numbers, VAT and tax IDs, for example CUI, UID, ABN, SIREN, Companies House) with per-country rule packs and few false positives. Personal numbers are reported by kind only, never by value. Also importable as the legalid Go library.",
     "example_path": "/?url=https://example.com",
     "params": [
-      {"name": "url", "required": true, "type": "string", "description": "Domain or URL of the site to read", "example": "https://example.com"}
+      {"name": "url", "required": true, "type": "string", "description": "Domain or URL of the site to read (alias target)", "example": "https://example.com"},
+      {"name": "fetch", "required": false, "type": "string", "description": "First fetch path: commoncrawl (default), cache or proxy; later paths are tried per page when one has nothing"},
+      {"name": "fallback", "required": false, "type": "string", "description": "Paths tried after fetch, comma-separated (cache,proxy by default; none for archive-only)"},
+      {"name": "country", "required": false, "type": "string", "description": "ISO code of the site's country; inferred from the domain when absent"},
+      {"name": "max_pages", "required": false, "type": "integer", "description": "Most HTML pages read on the site, the home page included (1 to 8, default 5)"},
+      {"name": "roles", "required": false, "type": "boolean", "description": "Read the role of the company each number belongs to (default true); off, a number a credit introduces is left out"},
+      {"name": "follow_offsite", "required": false, "type": "boolean", "description": "Read the site a home page lands on when it is another registrable domain (default false; the answer's offsite_to names that host)"}
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "trl": 5,
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Existence of a number needs the jurisdiction's own register or a paid company-data feed; the service checks grammar, check digits and the role of the company on the page, not that the register holds the number.",
+    "trl_assessed_at": "2026-11-05",
+    "trl_assessor": "claude-sonnet-5.5 phase 2 session",
+    "trl_evidence": "2026-11-02 skeleton: the legalid rule engine (36 country grammars, moved from DomainScope with identical verdicts and all tests) is the library. 2026-11-04 phase 2 (0.5.0, deployed): the site reader of DomainScope (legalnotice) and the fetch chain commoncrawl>cache>proxy are in the service. 2026-11-05 shadow run on 182 DomainScope domains in 16 countries: 182/182 answered 200 and complete, median 5 s; 120 of 126 domains with stored numbers give identical numbers, 54 of 56 without give none. Proxy path under load (8 and 16 at a time, 182 sites each): 0 egress failures, p99 18-22 s, 178/182 same numbers as the default chain. Italy and Spain against an older extractor (60 domains each): the same number as the operator for 47/60 (IT) and 43/60 (ES); every miss checked on the live site and explained (sites down, redirects, changed numbers, a stale archive capture, the ES identity rule, the page budget). Not shown: precision on Italy and Spain (no labelled pages are kept), a re-run of the ES eval after any change to its identity rule."
   },
   "license-extractor": {
     "params": [
