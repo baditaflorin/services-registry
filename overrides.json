@@ -3240,7 +3240,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "FLEET_FETCH_CACHE_SPIFFE": "dual"
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18183,
     "trl": 7,
@@ -3933,7 +3934,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18163,
     "description": "response-driven backoff coordinator",
@@ -3952,7 +3954,8 @@
   "fleet-backup": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "compose_dir": "/opt/services/fleet-backup",
     "category": "observability",
@@ -4009,7 +4012,8 @@
       "GRAPH_SERVICE_ID": "fleet-budget-tracker",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18164,
     "description": "per-program scan-cost cap (atomic check-and-insert)",
@@ -4030,7 +4034,8 @@
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
       "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
       "FLEET_SECRETS_SPIFFE": "dual",
-      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443"
+      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18161,
     "description": "per-request call trace collector (Speedscope flamegraph output)",
@@ -4048,7 +4053,7 @@
   },
   "fleet-capabilities": {
     "version": "0.1.9",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "compose_dir": "/opt/services/fleet-capabilities",
     "container_port": 18206,
     "description": "G9 fleet capability aggregator. Walks the catalog and probes /openapi + /health + /version + /selftest on every kind=container entry in parallel; surfaces one aggregate at /capabilities.json (5-min in-process TTL, served stale during refresh). Plain net/http outbound (ADR-0024). Failed sub-probes recorded in errors[]; we never drop a service silently. Summary rollup (container_reachable, openapi_published, selftest_green/red/not_implemented) for one-glance fleet status.",
@@ -4236,7 +4241,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18162,
     "description": "per-program event timeline aggregator (6 siblings)",
@@ -4370,7 +4376,8 @@
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
       "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
       "FLEET_SECRETS_SPIFFE": "dual",
-      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443"
+      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18153,
     "description": "WAF/soft-404/CDN-noise classifier",
@@ -4442,7 +4449,8 @@
   "fleet-host-guard": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "category": "observability",
     "container_port": 18207,
@@ -4544,7 +4552,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_SERVICE_ID": "fleet-mcp-gateway"
+      "GRAPH_SERVICE_ID": "fleet-mcp-gateway",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "fleet-md": {
@@ -4842,7 +4851,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SERVICE_ID": "go-fleet-preflight",
-      "GRAPH_TARGET_ALIASES": "go-fleet-dns-sync=fleet-dns-sync,go-fleet-secrets=fleet-secrets"
+      "GRAPH_TARGET_ALIASES": "go-fleet-dns-sync=fleet-dns-sync,go-fleet-secrets=fleet-secrets",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": [
       "fleet-dns-sync",
@@ -4861,7 +4871,8 @@
     ],
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18169,
     "description": "composite-scored findings priority ranker",
@@ -5038,7 +5049,8 @@
       "APP_ENVIRONMENT": "production",
       "APP_VERSION": "0.1.2",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18168,
     "description": "internal-only sandbox vulnerable apps (10 endpoints)",
@@ -5065,7 +5077,8 @@
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
       "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
       "FLEET_SECRETS_SPIFFE": "dual",
-      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443"
+      "FLEET_SECRETS_SPIFFE_URL": "https://go-fleet-secrets:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18166,
     "description": "JSON Schema catalog + validator (8 baseline schemas)",
@@ -5112,7 +5125,8 @@
       "GRAPH_ENABLED": "true",
       "POLL_SERVICE_ALLOWLIST": "fleet-preflight",
       "SAFEHTTP_ALLOW_PRIVATE_HOSTS": "fleet-preflight.0exec.com",
-      "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10"
+      "SAFEHTTP_ALLOW_PRIVATE_IPS": "10.10.10.10",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "host_port": 18165,
     "trl": 6,
@@ -5170,7 +5184,8 @@
     ],
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18171,
     "description": "target reputation lookup (5 sources)",
@@ -5217,7 +5232,8 @@
     "version": "0.1.5",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "description": "Prepaid token balances for fleet callers, keyed on the existing keystore identity. POST /v1/charge deducts tokens and returns 402 with an x402-shaped body when balance is insufficient (ADR-0033).",
     "host_port": 18314,
@@ -5234,7 +5250,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18167,
     "description": "vendor disclosure history tracker (PII-redacted)",
@@ -5253,7 +5270,8 @@
   "fleet-visualizer": {
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 18144,
     "depends_on": [
@@ -6734,6 +6752,9 @@
     "spiffe_merged_identity": true
   },
   "named-entity-recognizer": {
+    "env": {
+      "XAUTH_TRUST_MODE": "shadow"
+    },
     "params": [
       {"name": "text", "required": false, "type": "string", "description": "Raw text (or HTML) to analyse directly. Also accepted as the POST/PUT request body for large..."},
       {"name": "url", "required": false, "type": "string", "description": "URL of a page to fetch (via the fleet HTTP fetch cache) and strip to visible text before...", "example": "https://example.com"},
@@ -7299,7 +7320,7 @@
     "params": [
       {"name": "root", "required": true, "type": "string", "description": "Apex/root domain to look up (acme.com). Case-insensitive. Legacy ?domain= alias still accepted.", "example": "example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18128,
     "description": "Background syncer for ProjectDiscovery Chaos public dataset. SQLite-backed (modernc.org/sqlite, CGo-free) cache of subdomains keyed by root_domain; daily refresh; O(log N) lookups; zero target-network traffic.",
     "example_path": "/lookup?root=example.com",
@@ -7436,7 +7457,7 @@
       {"name": "dom_html", "required": false, "type": "string", "description": "Optional DOM markup. Hashed structurally — tag and attribute names only, no values."},
       {"name": "error_text", "required": false, "type": "string", "description": "Optional error text. Filename:line references stripped before hashing."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18132,
     "description": "Semantic dedup of findings. Normalizes query-param order, UUIDs in path, timestamps, whitespace in body, then sha256s. Stops one XSS reported by 4 scanners from looking like 4 dupes.",
     "example_path": "/stats",
@@ -7571,7 +7592,7 @@
       {"name": "dedup_key", "required": false, "type": "string", "description": "Natural-key fingerprint. Defaults to program|target|vuln_class. Collisions mean the same finding..."},
       {"name": "evidence", "required": false, "type": "object", "description": "Opaque JSON blob attached to the finding (payload, request/response, screenshot URL, …)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18103,
     "description": "Central deduplicated findings store for the pentest fleet. SQLite-backed (pure Go modernc); collapses same finding from multiple scanners via dedup_key with seen_count.",
     "example_path": "/findings?limit=1",
@@ -7780,7 +7801,7 @@
       {"name": "ttl_seconds", "required": false, "type": "int", "description": "How long the session lives. Defaults to 86400 (24h)."},
       {"name": "webhook_url", "required": false, "type": "string", "description": "Optional URL to POST a hit notification to (v0.2 — not yet wired)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18106,
     "description": "Out-of-band HTTP callback catcher for blind XSS/SSRF/RCE findings. Allocates short-lived tokens, public /c/{token} catch endpoint, authenticated polling API. v0.2 wraps projectdiscovery/interactsh for DNS exfil.",
     "example_path": "/sessions?limit=1",
@@ -7934,7 +7955,7 @@
       {"name": "target", "required": true, "type": "string", "description": "Canonical target string (use go-pentest-target-normalizer first)."},
       {"name": "program", "required": true, "type": "string", "description": "Bug-bounty program id (h1-acme, bc-foo, ...). Must be loaded via POST /programs or SEED_FILE."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18105,
     "description": "Hard scope check before any active prober fires. POST /check {target, program_id} -> {allowed, reason, matched_by}. Matches hostname/wildcard/CIDR/regex; exclusions always win. Legal floor of the pentest fleet.",
     "example_path": "/programs",
@@ -8066,7 +8087,7 @@
       {"name": "weakness_id", "required": false, "type": "string", "description": "Platform-specific weakness/VRT/CWE id."},
       {"name": "severity_rating", "required": false, "type": "string", "description": "none|low|medium|high|critical. Normalized from P1..P5 if provided."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18136,
     "description": "Files findings to HackerOne / Bugcrowd / Intigriti via their APIs, or via security.txt email as fallback. Rate-limit + daily-cap aware. Dry-run mode for verification. The actual money step.",
     "example_path": "/quota",
@@ -8149,7 +8170,7 @@
       {"name": "program", "required": false, "type": "string", "description": "Bug-bounty program slug (h1-shopify, bc-gitlab, ...). Used for filtering."},
       {"name": "finding_id", "required": false, "type": "string", "description": "findings-store id, so payoff-tracker can join triage prediction against actual platform outcome."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "version": "0.2.7",
     "container_port": 18147,
     "description": "Inbound half of submit-bot. POST /watch registers a submitted bounty report; a 15-min ticker polls HackerOne / Bugcrowd / Intigriti and records state changes (new -> triaged -> duplicate/informative/n_a/resolved). Without it the fleet cannot learn its own duplicate rate or payoff per program.",
@@ -9470,7 +9491,8 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_SPIFFE_COLLECTOR_ID": "spiffe://0exec.com/ns/fleet/sa/fleet-graph",
-      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443"
+      "GRAPH_SPIFFE_COLLECTOR_URL": "https://go-fleet-graph:8443",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "session-management": {
@@ -9558,7 +9580,8 @@
     "description": "Discovers a site's sitemaps via robots.txt + common-path probes, follows sitemapindex chains, decompresses .gz, returns URL inventory sorted by lastmod with an evidence trail.",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?url=google.com",
     "host_port": 8311,
@@ -9839,7 +9862,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "svi",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8313,
     "description": "Microservice for Svi",
@@ -10131,7 +10155,8 @@
     ],
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "GRAPH_ENABLED": "true"
+      "GRAPH_ENABLED": "true",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8317,
     "description": "Microservice for Trust Decay",
@@ -10416,7 +10441,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "url-shortener",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8320,
     "description": "Microservice for Url Shortener",
@@ -10790,7 +10816,8 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "xss-scanner",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "XAUTH_TRUST_MODE": "shadow"
     }
   },
   "yq": {
