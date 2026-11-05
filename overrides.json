@@ -6308,7 +6308,7 @@
     "spiffe_merged_identity": true
   },
   "legal-identifiers": {
-    "version": "0.4.0",
+    "version": "0.5.0",
     "compose_bind_to_gateway_upstream": true,
     "container_port": 18335,
     "host_port": 18335,
@@ -9184,7 +9184,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "depends on paid API or browser crawling",
     "trl_evidence": "TRL 5 uplift on 2026-05-16 (see docs/adr/0001-trl-uplift-to-5.md).\n- Direct Bing scrape (no proxy dep), parsed with golang.org/x/net/html.\n- /ck/a redirect decoder: strip 2-char prefix, try Std/URL/RawStd/RawURL base64 with padding fallback.\n- Pagination 1-5 (?page=, mapped to first=1/11/21/...); cc (?cc=, default us); safesearch off|moderate|strict (-> adlt=).\n- 5-UA rotating pool (Chrome/Firefox/Safari/Edge), stable per cache key; Referer https://www.bing.com/.\n- In-process TTL cache (1h), key = sha256(q|page|cc|safesearch).\n- Stable JSON envelope: {q, page, cc, safesearch, results[{title,url,snippet,position}], count, duration_ms, cached}.\n- Per-request 8s, total handler 12s budget.\n- 14 test cases across pkg/bing (parser fixtures + httptest.Server-driven handler + UA pool).",
-    "version": "0.2.6",
+    "version": "0.3.0",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
