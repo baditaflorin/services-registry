@@ -2149,6 +2149,7 @@
     "spiffe_workload": true
   },
   "domain-ai-catalog-discovery": {
+    "compose_dir": "/opt/services/domain-ai-catalog-discovery",
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "Target domain or URL to inspect for AI Catalogs and MCP Server Cards.", "example": "example.com"},
       {"name": "probe", "required": false, "type": "boolean", "description": "Whether to fallback-probe the well-known locations (ai-catalog.json, mcp/server-card.json, mcp...", "example": "false"},
@@ -2837,6 +2838,7 @@
     "spiffe_merged_identity": true
   },
   "domain-geo-anchor": {
+    "compose_dir": "/opt/services/domain-geo-anchor",
     "example_path": "/?domain=example.com",
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Fully-qualified domain to anchor (e.g. www.example.de).", "example": "example.com"},
@@ -4447,6 +4449,7 @@
     "spiffe_workload": true
   },
   "fleet-host-guard": {
+    "compose_dir": "/opt/services/fleet-host-guard",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -4678,6 +4681,7 @@
     "version": "0.2.3",
     "spiffe_workload": true  },
   "fleet-persona": {
+    "compose_dir": "/opt/services/fleet-persona",
     "params": [
       {"name": "anonId", "required": true, "type": "string", "description": "128-bit hex (32 chars). Client-generated, never PII."},
       {"name": "writeToken", "required": false, "type": "string", "description": "128-bit hex paired with anonId. Required for PUT and DELETE."}
@@ -5888,6 +5892,7 @@
     "coolify_app_uuid": "dgfll92zgusjswf1nzxpwbmk"
   },
   "infrastructure-fetch-cache": {
+    "compose_dir": "/opt/services/go-infrastructure-fetch-cache",
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "Absolute http(s) URL to fetch through the cache.", "example": "https://example.com/"},
       {"name": "max_age", "required": false, "type": "integer", "description": "Override default 60s TTL (seconds; 0 = don't cache this call)."},
@@ -10957,6 +10962,7 @@
     "version": "0.1.6"
   },
   "task-credential-broker": {
+    "compose_dir": "/opt/services/task-credential-broker",
     "name": "Task Credential Broker",
     "description": "Shared task identity and short-lived credential lease broker for Go services.",
     "auth": {
