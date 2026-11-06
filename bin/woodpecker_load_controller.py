@@ -603,7 +603,7 @@ def load_json(path: Path, default: Any = None) -> Any:
         return json.load(handle)
 
 
-def save_state(path: Path, state: dict[str, Any], *, durable: bool = False) -> None:
+def save_state(path: Path, state: dict[str, Any], *, durable: bool = True) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:

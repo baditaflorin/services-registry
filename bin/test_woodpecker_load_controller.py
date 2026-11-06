@@ -635,7 +635,7 @@ class LostPauseResponseTests(unittest.TestCase):
             with patch.object(controller.os, "fsync", side_effect=sync):
                 controller.drain_recorded_first(
                     client, client.remote_agents[0], state,
-                    lambda: controller.save_state(path, state, durable=True),
+                    lambda: controller.save_state(path, state),
                 )
             self.assertEqual(events, ["sync", "sync", "pause"])
 

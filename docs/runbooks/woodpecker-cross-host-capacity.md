@@ -240,7 +240,9 @@ and absolute free-byte floor for the complete configured resume_samples
 window. The controller restores only registration IDs it recorded as drained.
 An ID already held with no_schedule by an operator remains held. The
 controller records an ID, and writes its state file, before it sends the
-pause, so a pause whose response is lost (a read timeout after Woodpecker
+pause. Every replacement checkpoint syncs its file and parent directory, so
+later routine snapshots also retain the recovery record across a power loss.
+A pause whose response is lost (a read timeout after Woodpecker
 applied it) is still restored, and a pause that never landed is forgotten on
 the next cycle because the agent is still schedulable. Such a request logs
 `agent_drain_unconfirmed` with the agent ID. For v1,
