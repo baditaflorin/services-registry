@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 	"unicode/utf8"
 )
@@ -28,6 +29,10 @@ const (
 type relay struct {
 	tokens      [][]byte
 	fleetTokens [][]byte
+	censusMu    sync.Mutex
+	censusCache []byte
+	censusAt    time.Time
+	censusBusy  bool
 	upstream    string
 	user        string
 	password    string
@@ -56,6 +61,7 @@ func (r *relay) routes() http.Handler {
 	mux.HandleFunc("GET /version", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, 200, map[string]string{"version": strings.TrimSpace(relayVersion), "commit": relayCommit})
 	})
+	mux.Handle("GET /v1/fleet/trace-census", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(r.traceCensus)))
 	mux.Handle("GET /v1/fleet/coverage", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(r.fleetCoverage)))
 	mux.Handle("POST /v1/fleet/logs", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, false) })))
 	mux.Handle("POST /v1/fleet/traces", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, true) })))
@@ -268,6 +274,7 @@ func parseHits(body []byte) ([]hit, error) {
 }
 
 func writeJSON(w http.ResponseWriter, status int, value any) {
+	w.Header().Set("Cache-Control", "no-store")
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Cache-Control", "no-store")
 	w.WriteHeader(status)
