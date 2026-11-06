@@ -1,5 +1,6 @@
 ## 2026-11-06
 
+- fleet-version-pin-sync: 5 registry version pin(s) set to the version the service runs, which is also its repository main: `ct-names` 0.2.2, `domain-faq-schema` 0.2.33, `hub-scrapetheworld-org` 0.20.11, `price-range` 1.9.34, `social-proof-extractor` 0.1.27.
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `html-proxy` 0.5.34, `hub-scrapetheworld-org` 0.20.10, `search-bing-go` 0.4.1.
 
 ## 2026-11-05

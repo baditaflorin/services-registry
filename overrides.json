@@ -1752,7 +1752,7 @@
     "spiffe_merged_identity": true
   },
   "ct-names": {
-    "version": "0.2.1",
+    "version": "0.2.2",
     "compose_bind_to_gateway_upstream": true,
     "container_port": 18336,
     "cpus": 2,
@@ -2774,7 +2774,7 @@
     "host_port": 18231,
     "placement": "replicable",
     "trl": 7,
-    "version": "0.2.32",
+    "version": "0.2.33",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -8481,7 +8481,7 @@
       {"name": "url", "required": false, "type": "string", "description": "URL to fetch and analyse (SSRF-gated via safehttp)."}
     ],
     "container_port": 8301,
-    "version": "1.9.33",
+    "version": "1.9.34",
     "description": "Microservice for Price Range",
     "host_port": 8301,
     "placement": "replicable",
@@ -9693,7 +9693,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.26"
+    "version": "0.1.27"
   ,
     "env": {
       "GRAPH_ENABLED": "true",
@@ -10884,7 +10884,7 @@
     "cors": false,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
-    "version": "0.20.10",
+    "version": "0.20.11",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
