@@ -8,6 +8,7 @@ package main
 
 import (
 	"crypto/subtle"
+	_ "embed"
 	"encoding/hex"
 	"fmt"
 	"log"
@@ -23,7 +24,8 @@ const (
 	maxTokens      = 8
 )
 
-var relayVersion = "0.2.0"
+//go:embed VERSION
+var relayVersion string
 var relayCommit = "unknown"
 
 func main() {

@@ -54,7 +54,7 @@ func (r *relay) routes() http.Handler {
 		writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
 	mux.HandleFunc("GET /version", func(w http.ResponseWriter, _ *http.Request) {
-		writeJSON(w, 200, map[string]string{"version": relayVersion, "commit": relayCommit})
+		writeJSON(w, 200, map[string]string{"version": strings.TrimSpace(relayVersion), "commit": relayCommit})
 	})
 	mux.Handle("GET /v1/fleet/coverage", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(r.fleetCoverage)))
 	mux.Handle("POST /v1/fleet/logs", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, false) })))

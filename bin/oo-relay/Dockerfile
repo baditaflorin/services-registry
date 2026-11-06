@@ -2,7 +2,7 @@ FROM golang:1.27.3-alpine@sha256:f2c872bcee949b7be9c490efd02b48a8a2fbf947cdf533f
 
 ARG VCS_REF=unknown
 WORKDIR /src
-COPY go.mod ./
+COPY go.mod VERSION ./
 COPY *.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w -X main.relayCommit=${VCS_REF}" -o /out/oo-relay .
 
