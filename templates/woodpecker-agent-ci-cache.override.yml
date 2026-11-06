@@ -1,0 +1,41 @@
+# Opt-in compose override: mount shared Go and npm caches into EVERY step
+# container this Woodpecker agent starts. Apply it to ONE host first (the pilot),
+# measure, then widen. Hosts that do not pass this file are unchanged.
+#
+# Use it next to the agent's base compose file (templates/
+# woodpecker-cross-host-agent.compose.yml):
+#
+#   docker compose -f docker-compose.yml \
+#     -f woodpecker-agent-ci-cache.override.yml \
+#     --env-file .env up -d woodpecker-cross-host-agent
+#
+# What it does: WOODPECKER_BACKEND_DOCKER_VOLUMES is the agent's list of default
+# volumes (comma separated host:container pairs) added to every pipeline
+# container. The agent talks to the HOST's Docker through docker.sock, so the left
+# side of each pair is a path on the host, not inside the agent container.
+#
+# The container paths are the defaults of the official golang and node images
+# running as root, which is how the fleet's canonical template runs them
+# (templates/woodpecker-go-ci.yml: image golang:<ver>, go build, go test):
+#
+#   GOCACHE    /root/.cache/go-build  compiled packages AND cached passing test results
+#   GOMODCACHE /go/pkg/mod            downloaded modules (and downloaded toolchains)
+#   npm cache  /root/.npm             what `npm ci --prefer-offline` reads
+#
+# So no repository needs any change: a repo that already runs
+# `image: golang:1.25` + `go build ./... && go test ./...` starts hitting the cache
+# on its next run. The Go build cache is content addressed (keyed by Go version,
+# flags and the hash of every input) and is documented as safe for concurrent
+# use by several go commands, so the agent's parallel workflow slots can share it.
+#
+# Variables (set them in the agent's .env; defaults shown):
+#   WOODPECKER_CI_CACHE_ROOT   host directory that holds the caches
+#                              (default /var/cache/woodpecker-ci)
+#
+# Rollback: stop passing this file and recreate the agent. The cache directories
+# can be deleted at any time; the next run is just a cold run.
+services:
+  woodpecker-cross-host-agent:
+    environment:
+      WOODPECKER_BACKEND_DOCKER_VOLUMES: >-
+        ${WOODPECKER_CI_CACHE_ROOT:-/var/cache/woodpecker-ci}/go-build:/root/.cache/go-build,${WOODPECKER_CI_CACHE_ROOT:-/var/cache/woodpecker-ci}/go-mod:/go/pkg/mod,${WOODPECKER_CI_CACHE_ROOT:-/var/cache/woodpecker-ci}/npm:/root/.npm

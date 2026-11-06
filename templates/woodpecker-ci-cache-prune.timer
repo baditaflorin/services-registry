@@ -1,0 +1,12 @@
+# Daily, away from the usual nightly backup window; Persistent runs it once after a missed
+# start (host was down at 03:15). The random delay spreads hosts that share a clock.
+[Unit]
+Description=Daily prune of the shared Woodpecker CI caches
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+RandomizedDelaySec=10m
+Persistent=true
+
+[Install]
+WantedBy=timers.target
