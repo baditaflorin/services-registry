@@ -1557,7 +1557,7 @@
       }
     ],
     "proxy_egress": true,
-    "version": "0.1.67",
+    "version": "0.1.71",
     "network_exposure": "gateway-authenticated",
     "ci_resources": {
       "mem_class": "m",
@@ -5783,7 +5783,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.8",
+    "version": "1.4.10",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -6382,7 +6382,7 @@
       }
     ],
     "proxy_egress": true,
-    "version": "0.1.14",
+    "version": "0.1.15",
     "network_exposure": "gateway-authenticated",
     "ci_resources": {
       "mem_class": "xs",
@@ -7498,7 +7498,7 @@
       }
     ],
     "network_exposure": "gateway-authenticated",
-    "version": "0.5.2",
+    "version": "0.5.5",
     "trl": 5,
     "trl_evidence": "2026-11-02 skeleton: the legalid rule engine (36 country grammars, moved from DomainScope with identical verdicts and all tests) is the library. 2026-11-04 phase 2 (0.5.0, deployed): the site reader of DomainScope (legalnotice) and the fetch chain commoncrawl>cache>proxy are in the service. 2026-11-05 shadow run on 182 DomainScope domains in 16 countries: 182/182 answered 200 and complete, median 5 s; 120 of 126 domains with stored numbers give identical numbers, 54 of 56 without give none. Proxy path under load (8 and 16 at a time, 182 sites each): 0 egress failures, p99 18-22 s, 178/182 same numbers as the default chain. Italy and Spain against an older extractor (60 domains each): the same number as the operator for 47/60 (IT) and 43/60 (ES); every miss checked on the live site and explained (sites down, redirects, changed numbers, a stale archive capture, the ES identity rule, the page budget). Not shown: precision on Italy and Spain (no labelled pages are kept), a re-run of the ES eval after any change to its identity rule.",
     "trl_ceiling": 7,
@@ -7796,7 +7796,7 @@
         "description": "Raw HTML to scan directly, skipping the fetch (useful for testing and pasted markup)."
       }
     ],
-    "version": "0.1.10",
+    "version": "0.1.11",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -7834,7 +7834,7 @@
       "composite-runner"
     ],
     "proxy_egress": true,
-    "version": "1.1.7",
+    "version": "1.1.8",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -11196,7 +11196,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.6.8",
+    "version": "2.6.11",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -13628,7 +13628,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.2.7",
+    "version": "1.2.8",
     "network_exposure": "gateway-authenticated"
   },
   {

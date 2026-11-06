@@ -1356,7 +1356,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live accuracy on bot-hostile / JS-heavy sites is bounded by the upstream fetch tier and fetch-cache freshness; TRL 7+ needs sustained domainscope production evidence.",
     "trl_evidence": "v0.1.4 reallocated host_port 18325 via go_fleet_runner allocate-port --count 1 after services-registry #208 registered domain-ai-catalog-discovery as the rightful owner of 18324 (live squatter). Unit + dogfood cover entity_kind heuristics and display_name ranking. Mesh 0crawl / category domains via GitHub topics. Country-specific false-positive review (2026-10-18): a 341-row non-null production-derived cohort covered 131 country codes; 278 static first-party HTML pages were retrieved (12 fetch failures, 50 non-HTML/status responses, one body over 2 MiB). Three Latvian/Swedish generic homepage titles (Sākumlapa, Startsida) appeared as company names. Exact-label filtering removed all three while host-correlated Latvian and Swedish brand controls still passed. PR #59 merged as 4fc4f31. v0.1.45 was signed and deployed to both replicas on one digest; direct health, selftest, and version smoke passed. TRL remains 4 because this sample does not establish coverage of bot-hostile or JS-heavy sites. 2026-10-18 country-by-country update: a private 102-row non-null cohort covered 102 non-US ISO3s. In 98 successful first-party replays, a Yemen-stratum Arabic generic homepage label appeared as a false organization-title candidate at score 0.60, while JSON-LD supplied the selected name. PR #61 added Arabic generic-home-title filtering with host-corroborated-brand positives and unrelated-brand negatives; the post-fix replay removed the candidate without changing the stored selected name. Version 0.1.46 was signed and deployed; direct health, self-test, version, and gateway audit passed. Country-specific legal-form follow-up (2026-10-20; source PR #69 merged as da6a922): a private 210-row production-derived cohort covered 42 markets; a 13-page first-party follow-up reproduced legal-suffix residues in Indian `Pvt. Ltd.` and Polish `Sp. z o.o.` display names, with same-page brand evidence supporting the stripped form. The targeted post-change replay reduced those suffix residues from 13 to 0. Stored values are candidates, not independent labels. No JS attempt applied because pages returned static names and sparse-shell retry was not eligible. Local tests, vet, build, and hosted CI passed. 2026-10-20 country-specific legal-form follow-up (source PR #69 merged as da6a922; release 0.1.52): a private 13-page first-party follow-up reproduced Indian Pvt. Ltd. and Polish Sp. z o.o. suffix residues; same-page brand evidence supported stripped forms, and targeted replay removed all 13 residues. Stored names remain candidates rather than independent labels. | 2026-10-20 saved replay had 213 HTML captures, 7 with valid UTF-8 and charset metadata after byte 1024; one extracted name showed mojibake before the fix and none after. Public first-party response confirmed UTF-8. Targeted sample result, not broad accuracy. Source PR #71 merged; release 0.1.53.",
-    "version": "0.1.67",
+    "version": "0.1.71",
     "depends_on": ["infrastructure-fetch-cache", "fleet-graph"],
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -1427,7 +1427,7 @@
     "depends_on": [
       "sitemap-finder"
     ],
-    "version": "1.2.7",
+    "version": "1.2.8",
     "spiffe_workload": true
   },
   "compression-tester": {
@@ -3906,7 +3906,7 @@
   "firmographic-profile": {
     "container_port": 18297,
     "host_port": 18297,
-    "version": "1.4.8",
+    "version": "1.4.10",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -6337,7 +6337,7 @@
     "spiffe_merged_identity": true
   },
   "legal-identifiers": {
-    "version": "0.5.2",
+    "version": "0.5.5",
     "compose_bind_to_gateway_upstream": true,
     "container_port": 18335,
     "host_port": 18335,
@@ -6544,7 +6544,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18266,
     "placement": "replicable",
-    "version": "0.1.10",
+    "version": "0.1.11",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6578,7 +6578,7 @@
       "composite-runner"
     ],
     "spiffe_workload": true,
-    "version": "1.1.7"
+    "version": "1.1.8"
   },
   "mesh-bench-archive": {
     "trl": 5,
@@ -9660,7 +9660,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "No audit-reset commit found -- genuine incremental hardening across 10+ rounds. Confirmed real table domain_social_profiles (~1.29M rows, tool_name='social-graph'). Tested against 600 real domains. Fixed: Weibo URL-routing prefixes (u/p/n) were being stored as the actual handle -- confirmed live in production, 144 rows literally have handle=\"u\", and CJK nicknames under /n/ were replaced with the literal string \"n\"; also fixed hyphenated-domain brand matching and wired Facebook's fb-page widget as a genuine owned-profile signal while correctly leaving fb-like alone (its link is often self-referential, not an identity claim). On a 517-domain corpus: domains with >=1 owned profile 169->179, zero regressions, no new false positives in a 25-profile precision spot-check. See github.com/baditaflorin/go_social_graph PR #18.",
-    "version": "2.6.8",
+    "version": "2.6.11",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -10909,7 +10909,7 @@
     "trl_assessed_at": "2026-09-29",
     "trl_assessor": "codex",
     "trl_evidence": "Independent Go service tests pass. A 243-candidate production-derived replay covered 37 countries and 57 country-language strata; two first-party Polish hiring pages previously returned no_data and both classify after the Polish matcher change. Stored outputs are sampling signals, not independent labels; no broader precision/recall claim is made.",
-    "version": "0.1.14",
+    "version": "0.1.15",
     "category": "domains",
     "tags": [
       "domains",
