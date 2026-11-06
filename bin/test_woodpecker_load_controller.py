@@ -563,6 +563,229 @@ class BackingStorageTests(unittest.TestCase):
         self.assertTrue(next(agent for agent in client.remote_agents if agent["id"] == 2)["no_schedule"])
 
 
+class LostResponseClient(FakeClient):
+    """A pause PATCH whose response never arrives: urlopen's read times out.
+
+    With applied=True the server had already set no_schedule (the 2026-10-21
+    case: the gateway logged the controller's PATCH /api/agents/101 as 499 and
+    the agent stayed paused); with applied=False the request never landed.
+    """
+
+    def __init__(self, agents, applied):
+        super().__init__(agents)
+        self.applied = applied
+
+    def set_no_schedule(self, agent, value):
+        if value and not self.applied:
+            raise TimeoutError("The read operation timed out")
+        super().set_no_schedule(agent, value)
+        if value:
+            raise TimeoutError("The read operation timed out")
+
+
+def agent_by_id(client, agent_id):
+    return next(agent for agent in client.remote_agents if agent["id"] == agent_id)
+
+
+class LostPauseResponseTests(unittest.TestCase):
+    def test_state_sync_failure_prevents_the_pause_and_keeps_previous_state(self):
+        import json
+        import tempfile
+
+        client = FakeClient([{"id": 7, "name": "builder-agent", "no_schedule": False}])
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory, "state.json")
+            path.write_text('{"previous": true}\n', encoding="utf-8")
+            state = {}
+            with patch.object(controller.os, "fsync", side_effect=OSError("fixture sync failure")):
+                with self.assertRaises(OSError):
+                    controller.drain_recorded_first(
+                        client, client.remote_agents[0], state,
+                        lambda: controller.save_state(path, state, durable=True),
+                    )
+            self.assertEqual(json.loads(path.read_text()), {"previous": True})
+            self.assertEqual(list(Path(directory).iterdir()), [path])
+        self.assertEqual(client.changed, [])
+        self.assertFalse(client.remote_agents[0]["no_schedule"])
+
+    def test_pause_state_syncs_file_and_directory_before_sending_request(self):
+        import json
+        import tempfile
+
+        client = FakeClient([{"id": 7, "name": "builder-agent", "no_schedule": False}])
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory, "state.json")
+            state = {}
+            events = []
+            real_sync = controller.os.fsync
+            real_patch = client.set_no_schedule
+
+            def sync(fd):
+                real_sync(fd)
+                events.append("sync")
+
+            def pause(agent, value):
+                self.assertEqual(events, ["sync", "sync"])
+                self.assertEqual(json.loads(path.read_text())["managed_agent_ids"], ["7"])
+                self.assertEqual(path.stat().st_mode & 0o777, 0o600)
+                events.append("pause")
+                real_patch(agent, value)
+
+            client.set_no_schedule = pause
+            with patch.object(controller.os, "fsync", side_effect=sync):
+                controller.drain_recorded_first(
+                    client, client.remote_agents[0], state,
+                    lambda: controller.save_state(path, state, durable=True),
+                )
+            self.assertEqual(events, ["sync", "sync", "pause"])
+
+    def quarantine_builder_b(self, applied):
+        config = config_v2()
+        config["nodes"][1]["fail_closed_on_metrics_error"] = True
+        client = LostResponseClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "remote-agent", "no_schedule": False},
+            ],
+            applied,
+        )
+        state = {
+            "nodes": {
+                "builder-a": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "builder-b": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        persisted = []
+
+        def fetch(url):
+            if "builder-b" in url:
+                raise TimeoutError("timed out")
+            return METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=fetch):
+            with self.assertRaises(TimeoutError):
+                controller.run_cycle_v2(
+                    config, state, client, apply=True, persist=lambda: persisted.append(copy.deepcopy(state))
+                )
+        # The record reached the state file before the request went out.
+        self.assertEqual(len(persisted), 1)
+        self.assertEqual(persisted[0]["nodes"]["builder-b"]["managed_agent_ids"], ["2"])
+        return config, client, persisted[0]
+
+    def test_v2_pause_applied_but_unanswered_is_restored_by_the_controller(self):
+        config, client, state = self.quarantine_builder_b(applied=True)
+        self.assertTrue(agent_by_id(client, 2)["no_schedule"])
+
+        # The process restarts from the file written before the request; the
+        # node recovers (two samples: the quarantine dropped the CPU baseline).
+        for metrics in (RECOVERED_METRICS, RECOVERED_METRICS_NEXT):
+            with patch.object(controller, "fetch_text", return_value=metrics):
+                controller.run_cycle_v2(config, state, client, apply=True)
+
+        self.assertEqual(client.changed, [(2, True), (2, False)])
+        self.assertFalse(agent_by_id(client, 2)["no_schedule"])
+        self.assertEqual(state["nodes"]["builder-b"]["managed_agent_ids"], [])
+
+    def test_v2_pause_that_never_landed_is_forgotten_and_not_mistaken_for_a_hold(self):
+        config, client, state = self.quarantine_builder_b(applied=False)
+        self.assertFalse(agent_by_id(client, 2)["no_schedule"])
+
+        with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS):
+            controller.run_cycle_v2(config, state, client, apply=True)
+
+        self.assertEqual(client.changed, [])
+        self.assertEqual(state["nodes"]["builder-b"]["managed_agent_ids"], [])
+        self.assertFalse(state["nodes"]["builder-b"]["managed_no_schedule"])
+
+    def test_v1_pause_applied_but_unanswered_is_restored_by_the_controller(self):
+        config = config_v1()
+        client = LostResponseClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 3, "name": "remote-agent", "no_schedule": False},
+            ],
+            applied=True,
+        )
+        state = {
+            "agents": {
+                "builder-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+                "remote-agent": {"previous_snapshot": controller.NodeSnapshot(80, 100, 30, 20).__dict__},
+            }
+        }
+        persisted = []
+
+        def unreadable_backing(url):
+            return BACKING_MISMATCHED if "pve-host" in url else METRICS
+
+        with patch.object(controller, "fetch_text", side_effect=unreadable_backing):
+            with self.assertRaises(TimeoutError):
+                controller.run_cycle_v1(
+                    config, state, client, apply=True, persist=lambda: persisted.append(copy.deepcopy(state))
+                )
+        state = persisted[-1]
+        self.assertEqual(state["agents"]["builder-agent"]["managed_agent_ids"], ["1"])
+
+        samples = iter(
+            [
+                (RECOVERED_METRICS, BACKING_HEALTHY),
+                (RECOVERED_METRICS_NEXT, BACKING_HEALTHY),
+                (RECOVERED_METRICS_NEXT2, BACKING_HEALTHY),
+            ]
+        )
+        for _ in range(3):
+            guest, backing = next(samples)
+            with patch.object(
+                controller, "fetch_text", side_effect=lambda url: backing if "pve-host" in url else guest
+            ):
+                controller.run_cycle_v1(config, state, client, apply=True)
+
+        self.assertEqual(client.changed, [(1, True), (1, False)])
+        self.assertFalse(agent_by_id(client, 1)["no_schedule"])
+
+    def test_main_writes_the_record_to_the_state_file_although_the_cycle_failed(self):
+        import json
+        import tempfile
+
+        config = config_v2()
+        config["nodes"][1]["fail_closed_on_metrics_error"] = True
+        client = LostResponseClient(
+            [
+                {"id": 1, "name": "builder-agent", "no_schedule": False},
+                {"id": 2, "name": "remote-agent", "no_schedule": False},
+            ],
+            applied=True,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            config_path = Path(tmp, "config.json")
+            config_path.write_text(json.dumps(config), encoding="utf-8")
+            token_path = Path(tmp, "token")
+            token_path.write_text("test-token\n", encoding="utf-8")
+            state_path = Path(tmp, "state.json")
+
+            def fetch(url):
+                if "builder-b" in url:
+                    raise TimeoutError("timed out")
+                return METRICS
+
+            with patch.object(controller, "HTTPClient", return_value=client), patch.object(
+                controller, "fetch_text", side_effect=fetch
+            ):
+                code = controller.main(
+                    [
+                        "--config", str(config_path),
+                        "--state", str(state_path),
+                        "--token-file", str(token_path),
+                        "--apply",
+                        "--once",
+                    ]
+                )
+
+            self.assertEqual(code, 1)
+            saved = json.loads(state_path.read_text(encoding="utf-8"))
+        self.assertEqual(saved["nodes"]["builder-b"]["managed_agent_ids"], ["2"])
+        self.assertTrue(saved["nodes"]["builder-b"]["managed_no_schedule"])
+
+
 IO_THRESHOLDS = dict(THRESHOLDS, io_pressure_stop_pct=40, io_pressure_resume_pct=15)
 
 
@@ -925,6 +1148,38 @@ class GradedAdmissionTests(unittest.TestCase):
         self.assertEqual(client.changed, [(4, True)])
         self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["4"])
         self.assertEqual(state["nodes"]["builder-a"].get("graded_close_samples"), 0)
+
+    def test_graded_pause_lost_response_reconciles_after_restart_and_preserves_manual_hold(self):
+        for applied in (True, False):
+            with self.subTest(applied=applied):
+                config = config_v2()
+                config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+                config["stop_samples"], config["resume_samples"] = 10, 20
+                config["nodes"][0]["agent_names"] = ["g1", "g2", "g3", "g4"]
+                config["nodes"][0]["graded"] = dict(self.GRADED)
+                now = controller.time.time()
+                client = LostResponseClient(
+                    [{"id": i, "name": f"g{i}", "capacity": 1,
+                      "no_schedule": i == 3, "last_contact": now} for i in range(1, 5)]
+                    + [{"id": 9, "name": "remote-agent", "capacity": 2,
+                        "no_schedule": False, "last_contact": now}], applied,
+                )
+                state, persisted = {}, []
+                with patch.object(controller, "fetch_text", side_effect=lambda url: load_metrics(8) if "builder-a" in url else load_metrics(1)):
+                    controller.run_cycle_v2(config, state, client, apply=True)
+                    with self.assertRaises(TimeoutError):
+                        controller.run_cycle_v2(config, state, client, apply=True,
+                                                persist=lambda: persisted.append(copy.deepcopy(state)))
+                self.assertEqual(len(persisted), 1)
+                self.assertEqual(persisted[0]["nodes"]["builder-a"]["managed_agent_ids"], ["4"])
+                state = persisted[0]
+                with patch.object(controller, "fetch_text", return_value=load_metrics(1)):
+                    for _ in range(2):
+                        controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [(4, True), (4, False)] if applied else [])
+                self.assertFalse(agent_by_id(client, 4)["no_schedule"])
+                self.assertTrue(agent_by_id(client, 3)["no_schedule"])
+                self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], [])
 
     def test_graded_host_reopens_one_agent_per_window_after_recovery(self):
         config = config_v2()
