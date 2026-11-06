@@ -5760,7 +5760,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit: the repo contains two implementations -- a small unused root-module library using the correct safehttp client, and the ACTUALLY DEPLOYED src/ hexagonal service which hand-rolled its own SSRF/dial/cache stack. Found and fixed a critical bug in the deployed service: an SSRF-checking dialer was built but then unconditionally overridden by a plain DNS-caching dialer with zero SSRF check -- the default client profile never had transport-layer SSRF protection at all. Live-proved: pre-fix, the real factory-built client successfully dialed 127.0.0.1:1. Confirmed real fleet-wide reach -- several domain-analysis services (gdpr-compliance, broken-links, payment-detector, etc) route through this proxy as a fallback tier. Fixed by wiring the checker into the actual dial path for both client profiles, closing SSRF-via-redirect and DNS-rebind gaps too. Also fixed the recurring fetch-cache-masking bug (CacheMiddleware ignored Cache-Control entirely) and an unbounded response-body read for chunked responses (Content-Length -1 fell through to unbounded io.ReadAll). Flagged, not fixed: a credit/auth-bypass path trusts a client-supplied X-Real-IP header, safe only if the gateway always overwrites it -- needs deploy-topology context. trl held at 6; trl_ceiling=7 added, held back specifically because this security control passed its own unit test while the real wiring silently discarded it -- should be integration-verified before trusting above 7. See PR #11 (merged), plus 3 pre-existing stale PRs (#1/#2 dependency bumps, #7 a real headless-Chrome pool leak fix from 2026-06) now CONFLICTING against this fix and left for manual follow-up.",
-    "version": "0.5.31"
+    "version": "0.5.34"
   },
   "http-method-tester": {
     "params": [
@@ -9225,7 +9225,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "depends on paid API or browser crawling",
     "trl_evidence": "TRL 5 uplift on 2026-05-16 (see docs/adr/0001-trl-uplift-to-5.md).\n- Direct Bing scrape (no proxy dep), parsed with golang.org/x/net/html.\n- /ck/a redirect decoder: strip 2-char prefix, try Std/URL/RawStd/RawURL base64 with padding fallback.\n- Pagination 1-5 (?page=, mapped to first=1/11/21/...); cc (?cc=, default us); safesearch off|moderate|strict (-> adlt=).\n- 5-UA rotating pool (Chrome/Firefox/Safari/Edge), stable per cache key; Referer https://www.bing.com/.\n- In-process TTL cache (1h), key = sha256(q|page|cc|safesearch).\n- Stable JSON envelope: {q, page, cc, safesearch, results[{title,url,snippet,position}], count, duration_ms, cached}.\n- Per-request 8s, total handler 12s budget.\n- 14 test cases across pkg/bing (parser fixtures + httptest.Server-driven handler + UA pool).",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -10884,7 +10884,7 @@
     "cors": false,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
-    "version": "0.20.9",
+    "version": "0.20.10",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
