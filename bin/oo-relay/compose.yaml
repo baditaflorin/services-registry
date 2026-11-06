@@ -25,6 +25,8 @@ services:
       OPENOBSERVE_USER: admin@0docker.com
       OPENOBSERVE_PASSWORD_FILE: /run/secrets/openobserve_password
       OO_RELAY_TOKEN_FILE: /run/secrets/relay_tokens
+      OO_RELAY_FLEET_TOKEN_FILE: /run/secrets/fleet_reader_tokens
     volumes:
       - /opt/openobserve/secrets/openobserve_root_password:/run/secrets/openobserve_password:ro
       - /opt/openobserve/secrets/oo_log_relay_tokens:/run/secrets/relay_tokens:ro
+      - /opt/openobserve/secrets/oo_hub_reader_tokens:/run/secrets/fleet_reader_tokens:ro

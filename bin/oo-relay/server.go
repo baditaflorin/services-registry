@@ -26,13 +26,14 @@ const (
 )
 
 type relay struct {
-	tokens   [][]byte
-	upstream string
-	user     string
-	password string
-	client   *http.Client
-	now      func() time.Time
-	gate     chan struct{}
+	tokens      [][]byte
+	fleetTokens [][]byte
+	upstream    string
+	user        string
+	password    string
+	client      *http.Client
+	now         func() time.Time
+	gate        chan struct{}
 }
 
 func newRelay(tokens [][]byte, upstream, user, password string) *relay {
@@ -41,7 +42,7 @@ func newRelay(tokens [][]byte, upstream, user, password string) *relay {
 		upstream: strings.TrimRight(upstream, "/"),
 		user:     user,
 		password: password,
-		client:   &http.Client{Timeout: upstreamTimeout},
+		client:   &http.Client{Timeout: upstreamTimeout, Transport: &http.Transport{Proxy: nil}, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }},
 		now:      time.Now,
 		gate:     make(chan struct{}, maxConcurrent),
 	}
@@ -52,11 +53,20 @@ func (r *relay) routes() http.Handler {
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) {
 		writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})
+	mux.HandleFunc("GET /version", func(w http.ResponseWriter, _ *http.Request) {
+		writeJSON(w, 200, map[string]string{"version": relayVersion, "commit": relayCommit})
+	})
+	mux.Handle("GET /v1/fleet/coverage", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(r.fleetCoverage)))
+	mux.Handle("POST /v1/fleet/logs", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, false) })))
+	mux.Handle("POST /v1/fleet/traces", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, true) })))
 	mux.Handle("POST /v1/logs", r.authenticate(http.HandlerFunc(r.logs)))
 	return mux
 }
 
 func (r *relay) authenticate(next http.Handler) http.Handler {
+	return r.authenticateTokens(r.tokens, next)
+}
+func (r *relay) authenticateTokens(tokens [][]byte, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		const prefix = "Bearer "
 		authorization := req.Header.Get("Authorization")
@@ -67,7 +77,7 @@ func (r *relay) authenticate(next http.Handler) http.Handler {
 		provided := []byte(strings.TrimPrefix(authorization, prefix))
 		ok := 0
 		// Compare against every token without stopping early.
-		for _, t := range r.tokens {
+		for _, t := range tokens {
 			if len(provided) == len(t) {
 				ok |= subtle.ConstantTimeCompare(provided, t)
 			}

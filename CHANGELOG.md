@@ -1,3 +1,8 @@
+## 2026-11-07
+
+- Release the OpenObserve relay v0.2.0 with a dedicated Hub reader identity, fixed stream coverage, bounded logs and sanitized scalar trace waterfalls. Legacy log identities retain their existing scope.
+- Preserve root credentials on the aggregator, reject partial queries and redirects, and test identity separation, query bounds, redaction and nanosecond timing under the race detector.
+
 ## 2026-11-06
 
 - Record eight verified production release versions: `company-name-extractor` 0.1.71, `composite-runner` 1.2.8, `firmographic-profile` 1.4.10, `hiring-footprint` 0.1.15, `legal-identifiers` 0.5.5, `menu-extractor` 0.1.11, `merchant-profile` 1.1.8, `social-graph` 2.6.11. Source main and live versions match; authenticated version image aliases exist. The composite runner records an independently verified existing external release with identical staged/live platform bytes; no new rollout is implied. Exactly eight version fields change out of 535 catalog services; runtime, images and placements are unchanged by this metadata update.
