@@ -156,11 +156,9 @@ func (r *relay) fleetRead(w http.ResponseWriter, req *http.Request, traces bool)
 			if len(filtered) >= q.Limit {
 				break
 			}
-			if in.Container != "" && h.Container != in.Container {
-				continue
-			}
-			if in.Host != "" && h.Host != in.Host {
-				continue
+			if h.Micros < q.StartMicros || h.Micros > q.EndMicros || (in.Container != "" && h.Container != in.Container) || (in.Host != "" && h.Host != in.Host) {
+				writeJSON(w, 502, map[string]string{"status": "unavailable", "error": "log evidence did not match the requested identity or time range"})
+				return
 			}
 			filtered = append(filtered, h)
 		}
@@ -171,7 +169,7 @@ func (r *relay) fleetRead(w http.ResponseWriter, req *http.Request, traces bool)
 		writeJSON(w, 200, out)
 		return
 	}
-	out, err := shapeTrace(body, q.Limit)
+	out, err := shapeTrace(body, q, in)
 	if err != nil {
 		writeJSON(w, 502, map[string]string{"status": "unavailable", "error": "trace evidence schema is invalid"})
 		return
@@ -255,7 +253,8 @@ func safeScalar(s string, n int) string {
 	}
 	return s
 }
-func shapeTrace(body []byte, limit int) (traceResponse, error) {
+func shapeTrace(body []byte, q builtQuery, in fleetRead) (traceResponse, error) {
+	limit := q.Limit
 	out := traceResponse{Status: "ok", Stream: "default", Limit: limit, Rows: []traceRow{}}
 	var env struct {
 		Hits    []map[string]json.RawMessage `json:"hits"`
@@ -277,7 +276,7 @@ func shapeTrace(body []byte, limit int) (traceResponse, error) {
 		start, e1 := strconv.ParseInt(scalar(h, "start_time"), 10, 64)
 		end, e2 := strconv.ParseInt(scalar(h, "end_time"), 10, 64)
 		at, e3 := strconv.ParseInt(scalar(h, "_timestamp"), 10, 64)
-		if e1 != nil || e2 != nil || e3 != nil || start <= 0 || end < start {
+		if e1 != nil || e2 != nil || e3 != nil || start <= 0 || end < start || at < q.StartMicros || at > q.EndMicros || (in.Trace != "" && trace != in.Trace) || (in.Service != "" && scalar(h, "service_name") != in.Service) {
 			return out, errors.New("invalid trace timing")
 		}
 		parent := scalar(h, "reference_parent_span_id")

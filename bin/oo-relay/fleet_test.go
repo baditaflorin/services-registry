@@ -2,9 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -79,7 +81,7 @@ func TestFleetTraceProjectionHasOnlyScalarEvidence(t *testing.T) {
 		if strings.Contains(string(b), "SELECT *") || strings.Contains(string(b), "events") {
 			t.Error("unreviewed trace attributes requested")
 		}
-		return `{"hits":[{"_timestamp":1794003364259052,"trace_id":"320d1728d013361507a7afdf06d5199d","span_id":"06e38a60f407ed19","reference_parent_span_id":"dd3ac4d33fec7ede","service_name":"go-infrastructure-fetch-cache","operation_name":"GET /path?token=private","start_time":1794003364259052495,"end_time":1794003364260461739,"duration":1409,"span_status":"UNSET","http_response_status_code":"404","events":"password=secret-value"}]}`
+		return fmt.Sprintf(`{"hits":[{"_timestamp":%d,"trace_id":"320d1728d013361507a7afdf06d5199d","span_id":"06e38a60f407ed19","reference_parent_span_id":"dd3ac4d33fec7ede","service_name":"go-infrastructure-fetch-cache","operation_name":"GET /path?token=private","start_time":%d,"end_time":%d,"duration":1409,"span_status":"UNSET","http_response_status_code":"404","events":"password=secret-value"}]}`, fixedNow.Add(-time.Minute).UnixMicro(), fixedNow.Add(-time.Minute).UnixNano()+495, fixedNow.Add(-time.Minute).UnixNano()+495+1409244)
 	})
 	code, body := fleetPost(t, s, "/v1/fleet/traces", tokenB, fleetBody)
 	if code != 200 {
@@ -90,7 +92,7 @@ func TestFleetTraceProjectionHasOnlyScalarEvidence(t *testing.T) {
 		t.Fatal(body)
 	}
 	row := out.Rows[0]
-	if row.Start != "1794003364259052495" || row.Duration != 0.001409244 || row.Parent != "dd3ac4d33fec7ede" || row.Operation != "GET /path" || row.Status != "UNSET" {
+	if row.Start != strconv.FormatInt(fixedNow.Add(-time.Minute).UnixNano()+495, 10) || row.Duration != 0.001409244 || row.Parent != "dd3ac4d33fec7ede" || row.Operation != "GET /path" || row.Status != "UNSET" {
 		t.Fatalf("timing/identity lost: %+v", row)
 	}
 	if strings.Contains(body, "secret-value") || strings.Contains(body, "private") || strings.Contains(body, "events") {
@@ -122,5 +124,35 @@ func TestFleetCoverageOmitsUnrelatedStreamsAndCredentials(t *testing.T) {
 	body, _ := io.ReadAll(resp.Body)
 	if resp.StatusCode != 200 || strings.Contains(string(body), "do-not-export") || strings.Contains(string(body), "private_other") || !strings.Contains(string(body), "instrumentation") {
 		t.Fatal(resp.StatusCode, string(body))
+	}
+}
+
+func TestFleetReaderRejectsMisScopedUpstreamRows(t *testing.T) {
+	for _, traces := range []bool{false, true} {
+		for _, bad := range []string{"identity", "time"} {
+			s, _ := fleetTestRelay(t, func(r *http.Request) string {
+				at := fixedNow.Add(-time.Minute).UnixMicro()
+				if bad == "time" {
+					at = fixedNow.Add(-2 * time.Hour).UnixMicro()
+				}
+				if !traces {
+					return fmt.Sprintf(`{"hits":[{"_timestamp":%d,"container_name":"wrong","host":"node","message":"line"}]}`, at)
+				}
+				return fmt.Sprintf(`{"hits":[{"_timestamp":%d,"trace_id":"320d1728d013361507a7afdf06d5199d","span_id":"06e38a60f407ed19","service_name":"wrong","start_time":%d,"end_time":%d}]}`, at, at*1000, at*1000+1000)
+			})
+			path := "/v1/fleet/logs"
+			extra := `,"container_name":"expected"`
+			if traces {
+				path = "/v1/fleet/traces"
+				extra = `,"service_name":"expected","trace_id":"320d1728d013361507a7afdf06d5199d"`
+			}
+			if bad == "time" {
+				extra = ""
+			}
+			body := strings.TrimSuffix(fleetBody, "}") + extra + "}"
+			if code, out := fleetPost(t, s, path, tokenB, body); code != 502 {
+				t.Fatal(traces, bad, code, out)
+			}
+		}
 	}
 }
