@@ -85,3 +85,15 @@ go vet ./... && go test ./...        # stdlib only; also runs in Woodpecker (rel
 
 Deploy: `Dockerfile` and `compose.yaml` in this directory; runbook in
 `docs/operations/openobserve-log-relay.md`.
+
+## Hub fleet reader v0.2.0
+
+A distinct token file named by `OO_RELAY_FLEET_TOKEN_FILE` enables four fixed, read-only projections for the Hub. Its tokens must differ from legacy log tokens and the OpenObserve credential. Existing `/v1/logs` identities do not gain these permissions.
+
+- `GET /v1/fleet/coverage` returns metadata for `docker_logs`, `host_logs` and the `default` traces stream only. Retention totals and last observation times do not prove instrumentation coverage.
+- `POST /v1/fleet/logs` accepts exact optional `container_name` and `host`, optional `contains`, RFC3339 `start`/`end`, and `limit`1–100. The time span is at most24hours. With no exact identity it returns a bounded fleet sample. Returned fields and redaction are the same as `/v1/logs`.
+- `POST /v1/fleet/traces` accepts exact optional `service_name`, optional32-character lowercase hexadecimal `trace_id`, RFC3339 `start`/`end`, and `limit`1–100. It projects IDs, parent ID, service, operation without query strings, timing, span status and HTTP method/status only. Nanosecond timestamps are decimal strings to preserve precision; `duration_seconds` is calculated from integer start/end times. No attributes, events, links, request headers or payloads are exposed.
+
+Unknown fields, arbitrary SQL, stream/org choices, identity injection and oversized windows fail before an upstream request. Partial upstream searches are errors, not empty successes. Redirects are refused and environment proxies are ignored. The existing OpenObserve password remains on VM630.
+
+`GET /v1/fleet/trace-census` returns up to100 reported service names with span counts and last-seen times in a fixed1-hour window, cached for5minutes. It establishes observed tracing only; it does not infer a fleet-wide instrumentation percentage or a healthy service from absence. Partial queries fail explicitly.

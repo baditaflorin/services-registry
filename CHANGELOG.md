@@ -1,3 +1,8 @@
+## 2026-11-07
+
+- Release the OpenObserve relay v0.2.0 with a dedicated Hub reader identity, fixed stream coverage, bounded logs and sanitized scalar trace waterfalls. Legacy log identities retain their existing scope.
+- Preserve root credentials on the aggregator, reject partial queries and redirects, and test identity separation, query bounds, redaction and nanosecond timing under the race detector.
+
 ## 2026-11-06
 
 - Woodpecker admission now persists controller ownership before every pause request, including graded slot reductions. A timeout after the API applies a pause can no longer leave it treated as a permanent operator hold; restore behavior and pre-existing operator holds remain protected. Restart/lost-response, failed-persistence and graded-path regressions cover the state transition.

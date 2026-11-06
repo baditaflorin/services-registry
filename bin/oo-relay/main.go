@@ -8,6 +8,7 @@ package main
 
 import (
 	"crypto/subtle"
+	_ "embed"
 	"encoding/hex"
 	"fmt"
 	"log"
@@ -22,6 +23,10 @@ const (
 	openObserveURL = "https://openobserve.0own.com"
 	maxTokens      = 8
 )
+
+//go:embed VERSION
+var relayVersion string
+var relayCommit = "unknown"
 
 func main() {
 	tokenPath := os.Getenv("OO_RELAY_TOKEN_FILE")
@@ -47,6 +52,20 @@ func main() {
 	}
 
 	r := newRelay(tokens, openObserveURL, user, string(password))
+	if path := os.Getenv("OO_RELAY_FLEET_TOKEN_FILE"); path != "" {
+		fleetTokens, e := readTokens(path, string(password))
+		if e != nil {
+			log.Fatalf("read fleet reader tokens: %v", e)
+		}
+		for _, a := range fleetTokens {
+			for _, b := range tokens {
+				if subtle.ConstantTimeCompare(a, b) == 1 {
+					log.Fatal("fleet reader identity must be distinct from legacy log identities")
+				}
+			}
+		}
+		r.fleetTokens = fleetTokens
+	}
 	server := &http.Server{
 		Addr:              listen,
 		Handler:           r.routes(),
