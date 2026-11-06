@@ -7,8 +7,26 @@ small relay holds it instead. This is the generic version of the fixed-query
 CrUX relay (`go-url-categorizer-api`, `docs/operations/crux-openobserve-readonly-relay.md`);
 the code, its tests and the query rules are in `bin/oo-relay/README.md`.
 
-Status: code merged-ready in a PR; **not deployed**. Deploying needs the
-founder (VM 630 access, a vault secret, a tailnet ACL). The steps are below.
+Status: v0.2.0 is deployed on VM 630 as of 2026-11-06 23:18:40 UTC. Source
+`ac362bd5dc172499f827792d3750fcc46eb8039e` (PR #1133, main CI #4083) is tagged
+`oo-relay-v0.2.0` and runs as pinned `oo-relay:ac362bd5dc17`. The local Docker
+image ID is `sha256:f8eabf134e004c42a726a22a6513ea42f105fd696fc77ffe6a7c1b94e14df114`;
+this is not an OCI manifest digest. The existing tailnet bind remains
+`100.90.206.116:18084`.
+
+The separate Hub reader identity enables fixed coverage, logs, traces and
+observed-service census projections. CT108 reads them through its existing
+SOCKS route; OpenObserve credentials remain on VM 630. Live reads, four missing
+auth checks, legacy/new token separation, an unchanged legacy log read, and a
+90-second health/zero-restart soak passed. Hub logs and its explicitly reported
+canonical trace service name were both observed. Stream/census totals do not
+establish a fleet instrumentation percentage.
+
+The old `oo-relay:acb5593` image is retained. Timestamped backups are
+`/opt/oo-relay/compose.yaml.backup-20261106T231840Z` and
+`/opt/oo-relay/.env.backup-20261106T231840Z`; the machine-local rollout receipt is
+`/opt/oo-relay/hub-reader-deploy-receipt.json`. Rollback restores those two files
+and runs `docker compose up -d --no-deps oo-relay`, without changing OpenObserve.
 
 ## What agents get
 
