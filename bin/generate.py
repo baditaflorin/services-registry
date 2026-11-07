@@ -1448,6 +1448,9 @@ def apply_ci_resources(entries: list[dict], path: Path = CI_RESOURCES_JSON) -> N
 
 def build(overrides: dict) -> list[dict]:
     by_slug, rules, expansions, externals = split_overrides(overrides)
+    managed_repos = overrides.get("$managed_repos", [])
+    if not isinstance(managed_repos, list):
+        sys.exit("ERROR: $managed_repos must be an array of repository objects")
     seen: dict[str, dict] = {}
     for mesh in MESHES:
         for repo in gh_repos_with_topic(f"mesh-{mesh}"):
@@ -1458,6 +1461,22 @@ def build(overrides: dict) -> list[dict]:
                 print(f"WARN: duplicate slug {entry['id']} (kept first)", file=sys.stderr)
                 continue
             seen[entry["id"]] = entry
+
+    # Explicitly managed repositories outside the account scanned by gh.
+    # They use the same topic-derived entry and override rules as fleet repos.
+    for repo in managed_repos:
+        if not isinstance(repo, dict) or not repo.get("name") or not repo.get("url"):
+            sys.exit("ERROR: $managed_repos entries require a name and URL")
+        if not re.fullmatch(r"https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo["url"]):
+            sys.exit("ERROR: $managed_repos URL must identify a GitHub repository")
+        if repo["url"].rsplit("/", 1)[-1].lower() != repo["name"].lower():
+            sys.exit("ERROR: $managed_repos name must match its URL")
+        entry = make_entry(repo, by_slug, rules)
+        if entry is None:
+            sys.exit("ERROR: $managed_repos entries require a valid mesh topic")
+        if entry["id"] in seen:
+            sys.exit(f"ERROR: $managed_repos id {entry['id']!r} duplicates a registry entry")
+        seen[entry["id"]] = entry
 
     # $expand — one GitHub repo emits N catalog entries. Use this when a
     # compose project ships multiple independently-addressable services

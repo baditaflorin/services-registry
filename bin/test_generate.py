@@ -154,6 +154,41 @@ class TestSplitOverrides(unittest.TestCase):
         self.assertEqual(externals[0]["id"], "plausible")
 
 
+class TestExplicitManagedRepositories(unittest.TestCase):
+    def setUp(self):
+        self.repo = {
+            "name": "Mentoring",
+            "url": "https://github.com/Leanistic/Mentoring",
+            "repositoryTopics": [{"name": "mesh-custom"}, {"name": "lang-node"}],
+        }
+        self.overrides = {
+            "$managed_repos": [self.repo],
+            "mentoring": {"domain": "mentor.badita.org", "host_port": 18100,
+                          "container_port": 3000, "auth": {"type": "none"}},
+        }
+
+    @patch.object(generate, "load_private_services", return_value=[])
+    @patch.object(generate, "gh_repos_with_topic", return_value=[])
+    def test_managed_repo_uses_standard_custom_mesh(self, _repos, _private):
+        entry = generate.build(self.overrides)[0]
+        self.assertEqual(entry["id"], "mentoring")
+        self.assertEqual(entry["repo_url"], self.repo["url"])
+        self.assertEqual(entry["url"], "https://mentor.badita.org")
+        self.assertEqual(entry["runtime"], "compose")
+        self.assertEqual(entry["language"], "node")
+        self.assertEqual(entry["host_port"], 18100)
+
+    @patch.object(generate, "load_private_services", return_value=[])
+    @patch.object(generate, "gh_repos_with_topic", return_value=[])
+    def test_duplicate_and_mismatched_repositories_fail_closed(self, _repos, _private):
+        self.overrides["$managed_repos"].append(self.repo)
+        with self.assertRaisesRegex(SystemExit, "duplicates"):
+            generate.build(self.overrides)
+        self.overrides["$managed_repos"] = [{**self.repo, "name": "wrong"}]
+        with self.assertRaisesRegex(SystemExit, "name must match"):
+            generate.build(self.overrides)
+
+
 class TestQualityContractProjection(unittest.TestCase):
     def test_generator_applies_curated_catalog_version_override(self):
         repo = {
