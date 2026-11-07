@@ -23176,6 +23176,34 @@
     }
   },
   {
+    "id": "mentoring",
+    "name": "Mentoring",
+    "description": "Mentoring and evaluation platform",
+    "category": "dashboard",
+    "mesh": "custom",
+    "kind": "container",
+    "language": "node",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://mentor.badita.org",
+    "health_url": "https://mentor.badita.org/health",
+    "repo_url": "https://github.com/baditaflorin/mentoring",
+    "example_path": "/auth/signin",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "cert_domain": "mentor.badita.org",
+    "trl": 4,
+    "trl_evidence": "Container and database canary passed; initial production deployment is pending.",
+    "trl_assessed_at": "2026-11-07",
+    "trl_assessor": "codex",
+    "host_port": 18100,
+    "container_port": 3000,
+    "version": "0.1.0",
+    "network_exposure": "gateway-public"
+  },
+  {
     "id": "accent-coach",
     "name": "Accent Coach",
     "description": "Private browser-based accent coach that analyzes speech and drills phoneme-level pronunciation.",
