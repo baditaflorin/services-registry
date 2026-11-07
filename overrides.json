@@ -2445,7 +2445,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.5.6",
+    "version": "0.5.9",
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
     "fetch_cache_api_key_file_mount": true
@@ -2609,7 +2609,7 @@
     "trl_evidence": "Fresh audit (DB pass found no anomaly) found and fixed a real, production-confirmed false positive: classify() pinned primary_platform=swagger_ui from swagger-ui-dist's bundled JS filenames alone, with no check the page was ever wired to a real API spec -- a cluster of unrelated small-business sites (several real-estate-agent pages) all serve the byte-identical, never-configured stock demo page pointed at Swagger's own public petstore.swagger.io sample spec. swagger_ui was the #2 most common detected platform (575 domains) fleet-wide. Fixed (v0.4.9) by skipping a swagger_ui match when the body still carries the literal default demo URL; verified live all 7 sampled false positives flip to no_data while genuine installs remain detected. See github.com/baditaflorin/go_domain_documentation_platform_detector PR #14 (merged). Rows with tool_version<0.4.9 are re-crawl candidates. On 2026-10-20, PR #61 added Arabic API documentation recognition after a saved Saudi Arabic non-null page reproduced a no_data false negative; the patched local handler classified it as custom at confidence 55. A headless Chrome render confirmed the content was already present after hydration, so this fix targets Arabic documentation wording rather than rendering. No raw page or domain is included.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.5.9",
+    "version": "0.5.10",
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
     "fetch_cache_api_key_file_mount": true
@@ -3093,7 +3093,7 @@
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Registered domain to probe.", "example": "stripe.com"}
     ],
-    "version": "0.5.24",
+    "version": "0.5.25",
     "container_port": 18187,
     "env": {
       "GRAPH_ENABLED": "true",
@@ -3166,7 +3166,7 @@
     "trl_ceiling_reason": "The shared JS-render upstream can degrade on cold or failed renders, limiting SLA-grade completeness.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.25",
+    "version": "0.4.26",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3418,7 +3418,7 @@
     "container_port": 18188,
     "host_port": 18188,
     "placement": "replicable",
-    "version": "0.3.27",
+    "version": "0.3.28",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -3460,7 +3460,7 @@
     "trl_evidence": "Live production-DB audit found primary_vendor='reamaze' as the single largest detected vendor (1,191 rows), with 49.5% being spam/parked .info domains. Traced the residual (post-earlier-fix) cases via live browser reproduction to GoDaddy Website Builder unconditionally loading Reamaze's shared JS bundle via a GoDaddy-specific loader file, whose bundled CSS/DOM boilerplate satisfied the detector's 'activation' marker regardless of merchant intent -- verified against reamaze.com's own genuine install, which never carries that GoDaddy-specific loader filename. Fixed (v0.3.8) with a targeted confidence cap keyed to the GoDaddy loader marker, with regression tests for both the false-positive and true-positive cases. See github.com/baditaflorin/go_domain_support_stack_detector PR #14 (merged). Rows with tool_version<0.3.8 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3790,7 +3790,7 @@
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "spiffe_workload": true,
     "spiffe_merged_identity": true,
-    "version": "0.2.8"
+    "version": "0.2.9"
   },
   "emotional-tone": {
     "params": [
@@ -3867,7 +3867,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.6.3",
+    "version": "1.6.4",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -5577,7 +5577,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Part of a fleet-wide TRL audit (round 15). Found and fixed a genuine, high-impact bug: closed a generic-head-noun false-positive loophole in the abstain gate. Not bumped to 8: no cross-check mechanism exists and the 852K-row backlog hasn't been reprocessed/validated end-to-end. See github.com/baditaflorin/go_google_taxonomy PR #6.",
-    "version": "1.5.13",
+    "version": "1.5.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -6441,7 +6441,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.1.10",
+    "version": "0.1.11",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6705,7 +6705,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `url`."},
       {"name": "text", "required": false, "type": "string", "description": "Raw HTML to analyse directly, skipping the fetch (useful for testing and pasted markup)."}
     ],
-    "version": "0.2.9",
+    "version": "0.2.11",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18260,
     "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} — returning items[], rels, rel-urls, and a summary roll-up.",
@@ -8706,7 +8706,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "quote-extractor", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
@@ -9301,7 +9301,7 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "version": "2.7.6",
+    "version": "2.7.7",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "seasonal-detector",
@@ -10158,7 +10158,7 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "version": "1.9.12",
+    "version": "1.9.16",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",
