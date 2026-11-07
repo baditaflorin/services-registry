@@ -1,5 +1,6 @@
 ## 2026-11-07
 
+- Record fourteen verified production release versions after signed staging, sequential pool checks and immutable alias verification across forty replicas. Capacity-held release versions remain unchanged.
 - Release the OpenObserve relay v0.2.0 with a dedicated Hub reader identity, fixed stream coverage, bounded logs and sanitized scalar trace waterfalls. Legacy log identities retain their existing scope.
 - Preserve root credentials on the aggregator, reject partial queries and redirects, and test identity separation, query bounds, redaction and nanosecond timing under the race detector.
 
