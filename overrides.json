@@ -404,7 +404,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL whose HTML to score against WCAG 2.2 AA (alias url= accepted)", "example": "https://example.com"}
     ],
-    "version": "2.7.5",
+    "version": "2.7.6",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -483,7 +483,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "TRL 7 requires validation against authoritative postal data under ADR 0001; this release adds localized heuristics but no postal-source cross-check.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8. Latest country loop: added Slovak address support (PR #79) and postcode-first Ukrainian address parsing (PR #80); replay preserved 45/53 reachable stored positives and recovered one supported Ukrainian stored-zero case. Release 3.4.27 includes both fixes; focused checks and CI passed. No JS-rendered evidence was returned by the renderer, so this release makes no rendered-page claim. Vietnamese structured-data replay on a sanitized cached sample: 124 rows across 22 markets; release 3.4.28 localized addressCountry normalization recovered 1 of 3 Vietnamese JSON-LD records; records without country context remain conservatively unclassified. | 2026-10-20 Turkish address replay: one public contact page among 19 reviewed had street, compound house number, postcode, city, and province cues but baseline ExtractStructured returned 0 matches; updated parser returns 1. Targeted one-page replay, not a cohort-wide recall estimate. Source PR #84 merged; release 3.4.29.",
-    "version": "3.4.41",
+    "version": "3.4.43",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -918,7 +918,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.17",
+    "version": "0.1.18",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -1156,7 +1156,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -1323,7 +1323,7 @@
     "trl_evidence": "Standalone Go detector with bounded same-site fetches and one bounded JS-render retry for sparse shells. PR #33 adds Hungarian `kapcsolat` contact-route recognition and a route/candidate regression test. A private DomainScope manual first-party audit used 100 valid domains across 60 country strata; isolated headless Chrome loaded 48 pages from 40 countries, while 50 returned browser errors and 2 timed out. One rendered Hungarian (`lang=hu`) page exposed three visible same-site contact links that pre-fix local handler replay missed; after the fix, replay found one route and candidate. The Hungarian-English [dict.cc entry](https://enhu.dict.cc/?s=kapcsolat) maps the term to contact. This was manual page review, not historical service-output ground truth; the service fetch-cache URL path was not replayed because this checkout lacked its service-scoped credential. Release 0.1.18 is tagged at commit 058d7c0. On 2026-10-18, the full two-replica pool rollout completed; both replicas run the same signed immutable image, are healthy, and passed direct /health, /selftest, and /version checks. Public gateway /health and /version return HTTP 200; gateway /selftest returns HTTP 401 because it requires API-key authorization. Pool status reports both replicas healthy. No raw hosts or page content are recorded.  2026-10-19 Vietnamese localization audit: a frozen 50-record, five-locale cohort was split into 25 discovery and 25 ID-disjoint holdout rows. One independently confirmed Vietnamese contact-route miss occurred in each split; a localized label/path fix recovered both on replay, with other locale strata unchanged. Positive and near-miss negative fixtures pass (go_contact_route_detector PR #35). Version 0.1.20 image was signed and published; production rollout awaits the Dockerhost capacity gate.  2026-10-20 Turkish/Russian/Korean follow-up: current-origin PR #40 merged at 99e02d4; 150 production-derived candidate rows across 25 countries yielded 136 reachable homepages. Same-site localized contact labels improved route detections from 108 to 111 and candidate-bearing pages from 78 to 80; two off-site Russian label matches were guarded. These are repeatable first-party detector deltas, not independently human-labeled precision/recall. A sparse shell attempt received HTTP 401 before the service handler, so rendered output is unverified. Version 0.1.23 was tagged at the merge; production rollout is not verified. 2026-10-20 country-specific replay: a 200-row, non-null production-derived sample spanned 20 ISO3 markets (10 per stratum). One reachable Saudi first-party site had an explicit Arabic \u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 tel: contact CTA and returned no route before the fix; the updated handler recognizes the labeled route and Unicode digits. The data were used as candidates; only this manually verified first-party page is counted as a confirmed miss. The renderer endpoint returned 401, so no rendered DOM is claimed. Source PR #41 merged as 3e66897; release 0.1.24. 2026-10-20 follow-up: source PR #42 merged as f7c13eb; on the confirmed Arabic same-host contact-section miss, local Handler replay changed contact_route from false to true and routes from 0 to 2, while store-locator abstention remained. A separate first-party Thai page rendered in headless Chrome increased visible text from 0 to 1,490 characters and routes from 0 to 4, changing contact_form/contact_route from false to true; this is one manually inspected render, not a benchmark or service-output truth set. The renderer returned HTTP 401 for the Saudi sample target, so no rendered DOM is claimed for that case. Version 0.1.25 tagged at 9850325.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "The service bounded JS-render retry was not exercised through its fetch-cache endpoint in this checkout; manual Chrome inspection found no remaining thin shells in successful pages but does not establish service-render fidelity across sites. Route extraction does not verify that a destination is operational.",
-    "version": "0.1.38",
+    "version": "0.1.39",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "contact-route-detector",
@@ -1377,7 +1377,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20. 2026-10-18 country-by-country update: private 196-row non-US cohort across 59 country strata exposed a Ukrainian-language workforce-count false negative in v3.5.58. PR #99 added the noun-first staff-count pattern and customer/user negative controls. Version 3.5.59 is deployed; direct health, self-test, version, and gateway-health checks passed.",
-    "version": "3.5.71",
+    "version": "3.5.74",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1447,7 +1447,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Pass-3 found the prior probe client used fleetfetch.NewHTTPClient(RenderDefault), which despite its name routes every GET through the shared Redis fetch-cache, silently ignoring Transport.DisableCompression and collapsing the five independent Accept-Encoding negotiations into one warm cached body. On 1000 real v1.6.1 rows this produced 344/1000 (34%) recording supports_gzip=false while supports_br=true (implausible; gzip is the universal fallback). Replaced with a direct *http.Transport using safehttp.GuardedDialer (same SSRF/DNS-rebind guard, no new dep) + DisableCompression=true + ProxyFromEnvironment, so each offer and the raw wire bytes reach the origin. Re-probed the FP cohort live against deployed v1.6.2: 18/20 (90%) now correctly report gzip honored, 2 are genuine true negatives. 27 unit tests green.",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1501,7 +1501,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.19",
+    "version": "0.1.20",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -1752,7 +1752,7 @@
     "spiffe_merged_identity": true
   },
   "ct-names": {
-    "version": "0.2.2",
+    "version": "0.2.3",
     "compose_bind_to_gateway_upstream": true,
     "container_port": 18336,
     "cpus": 2,
@@ -1792,7 +1792,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.20",
+    "version": "1.5.22",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -1828,7 +1828,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "CPU-only DOM heuristics plateau at principled multilingual structural extraction; exact brand disambiguation / image recognition (vs structural alt/anchor/grid signals) and SLA-grade live verdicts would need a browser engine or paid logo-recognition feed. No persisted logo-detail table exists to certify live accuracy against.",
     "trl_evidence": "Confirmed honestly earned; no trl>ceiling contradiction. 720-domain live audit found and fixed 3 real false-positive classes: Wix CDN media-hash leaks (27->0), numbered generic placeholders like 'Client 8' (22->0), color-variant social icon labels like 'Facebook - Black' (3->0). One domain's verdict corrected from social_proof to the honest weak_signal. See github.com/baditaflorin/go_customer_logos PR #15.",
-    "version": "3.8.13",
+    "version": "3.8.14",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -1899,7 +1899,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Tested against 200 real domains confirmed to have a privacy_policy page. Fixed a broken word-boundary guard that let 'AWS' match inside 'laws'/'applicable laws' (13%->1% false positive rate), a case-insensitive Spanish regex mismatching the Polish word 'nie' as a sensitive ID-document flag, and a port config drift (8154 vs actual 8284) across 4 files. See github.com/baditaflorin/go_data_inventory PR #7.",
-    "version": "1.7.10",
+    "version": "1.7.11",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -2276,7 +2276,7 @@
     "host_port": 18224,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.4.2",
+    "version": "0.4.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2803,7 +2803,7 @@
     "host_port": 18232,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.3.15",
+    "version": "0.3.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2964,7 +2964,7 @@
     "host_port": 18223,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.3.21",
+    "version": "0.3.22",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3728,7 +3728,7 @@
     "host_port": 8287,
     "internal_direct": true,
     "placement": "replicable",
-    "version": "1.6.43",
+    "version": "1.6.45",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
@@ -4029,7 +4029,7 @@
     "trl_assessor": "claude-opus-4-7-session-2026-05-16-batch4",
     "trl_ceiling": 7,
     "trl_evidence": "NEW fleet primitive (batch 4, 2026-05-16). per-program scan-cost cap (atomic check-and-insert). /selftest + INTEGRATIONS.md shipped. ADR-0014. See services-registry/docs/adr/0014-fleet-budget-tracker.md.",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "spiffe_workload": true
   },
   "fleet-call-tracer": {
@@ -4058,7 +4058,7 @@
     "spiffe_workload": true
   },
   "fleet-capabilities": {
-    "version": "0.1.9",
+    "version": "0.1.10",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "compose_dir": "/opt/services/fleet-capabilities",
     "container_port": 18206,
@@ -4235,7 +4235,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Per-zone instance; ceiling lifts with multi-zone via parallel deployments.",
     "trl_evidence": "reconcile_runs + reconcile_actions tables, dry_run mode, /reconcile manual trigger, /runs query, /selftest with httptest-stubbed Hetzner Cloud + registry (0 mutations in dry-run, 3 POSTs in apply)",
-    "version": "0.3.10",
+    "version": "0.3.11",
     "spiffe_workload": true
   },
   "fleet-engagement-timeline": {
@@ -4515,7 +4515,7 @@
       {"name": "ttl_seconds", "required": false, "type": "integer", "description": "Lease lifetime; defaults to LOCK_DEFAULT_TTL (30s), clamped to LOCK_MAX_TTL (1h)."},
       {"name": "wait_seconds", "required": false, "type": "integer", "description": "Long-poll up to N seconds for the lock to free instead of returning 409 (clamped to LOCK_MAX_WAIT)."}
     ],
-    "version": "0.2.4",
+    "version": "0.2.5",
     "access_tier": "infra-privileged",
     "auth": {
       "header": "X-API-Key",
@@ -5237,7 +5237,7 @@
     "spiffe_workload": true
   },
   "fleet-token-ledger": {
-    "version": "0.1.5",
+    "version": "0.1.6",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -5404,7 +5404,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "Company website URL. Funding signals are extracted from /about, /press, /investors and related...", "example": "example.com"}
     ],
-    "version": "2.7.4",
+    "version": "2.7.5",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8290,
     "description": "Microservice for Funding Detector",
@@ -5452,7 +5452,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "URL of the public site whose GDPR compliance signals are evaluated", "example": "https://bbc.co.uk"}
     ],
-    "version": "1.26.9",
+    "version": "1.26.10",
     "mem_limit": "256m",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "FLEET_FETCH_CACHE_SPIFFE": "dual", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 8291,
@@ -5636,7 +5636,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18247,
     "placement": "replicable",
-    "version": "0.3.12",
+    "version": "0.3.14",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6302,7 +6302,7 @@
       "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.2.17",
+    "version": "0.2.20",
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -6959,7 +6959,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15. | 2026-10-20 saved cohort had 120 rows across 48 locale labels and 114 successful first-party replays. One Swiss row stored CH but two CH-9001/CH-3003 lines were classified NL; the fix honors country-prefixed postcodes and exact Dutch formatting. This confirms a sampled false-positive class, not a precision estimate. Source PR #63 merged; release 2.7.15. | 2026-10-20 cross-country office-location follow-up: a saved 120-record cohort across 48 locale labels and 1,800 captures contained one successful static false-positive where dated tour copy yielded a low-confidence office candidate. A narrow heuristic guard requires both a date and explicit travel/itinerary language in nearby text; a synthetic regression rejects the travel result while a street-name control remains eligible. This addresses one reproduced false-positive class and does not claim cohort-wide recall improvement. Source PR #64, release 2.7.16.",
-    "version": "2.7.24",
+    "version": "2.7.28",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7121,7 +7121,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL whose payment stack should be reverse-recon'd", "example": "example.com"}
     ],
     "container_port": 8298,
-    "version": "1.6.19",
+    "version": "1.6.25",
     "description": "Microservice for Payment Detector",
     "host_port": 8298,
     "placement": "replicable",
@@ -7725,7 +7725,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Single-node SQLite. Fine up to ~10k jobs/sec; graduates to NATS JetStream or Postgres skip-locked beyond that.",
     "trl_evidence": "idempotency_key column with partial UNIQUE index, /metrics short-circuit middleware, /selftest, TestEnqueue_IdempotencyKey_Concurrent (50-goroutine race)",
-    "version": "0.2.4"
+    "version": "0.2.5"
   },
   "pentest-js-bundle-scanner": {
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
@@ -8355,7 +8355,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "libphonenumber-grade extraction, region detection, context windows. ~50KB of focused logic. TRL re-audit (2026-08-08, first since the initial 2026-05-13 batch) targeted the fleet-wide bare-safehttp.NewClient() fetch-cache bug. Found: handler.go's httpClient var is built via bare safehttp.NewClient() (no WithoutFetchCache/WithForceHTTP2), but tracing every call site shows it is dead code -- since commit eb7135f (v1.3.1, \"route HTML fetch through fleetfetch cache\") no code path calls httpClient.Do/.Get; the live page-fetch path is fetchClient (fleetfetch), a separate client with its own intentional, already-surfaced cache (FetchProvenance / X-FetchCache-* fields on every response). So the \"silently serves stale/cached responses\" bug does NOT currently affect production traffic through this service -- unlike sibling services (go_oauth_mapper, asn-lookup, sourcemap-finder) where the equivalent client was live and exploitable. Still hardened httpClient with WithoutFetchCache()+WithForceHTTP2() as defense-in-depth against a future revival silently reinheriting the fleet cache (main.go's server.New installs a process-wide DefaultFetchDelegate resolved at call time, not construction time). Added TestHTTPClient_BypassesProcessWideFetchCache, verified to fail pre-fix / pass post-fix. Also ran a quick extraction sanity pass (international +44/+33/+49, extensions, tel_href, vanity numbers, JS-DOM-split-span obfuscation) -- all extracted correctly, no new false positives. One real false-negative class found (not fixed, flagged for a follow-up pass): phone separators rendered as Unicode typographic dashes (en dash U+2013, hyphen U+2010, non-breaking hyphen U+2011 -- e.g. from HTML entities or CMS \"smart typography\" like WordPress wptexturize) are silently dropped by candidateRegex, which only accepts ASCII hyphen. Bumped to v1.4.7. See github.com/baditaflorin/go_phone_extractor PR #18 (open, not merged). | Country loop (2026-10-20): 200 candidate rows across 20 country strata exposed an ambiguous unprefixed Egyptian fixed-line class in ordinary text on a US-classified page; three of four baseline pairs reproduced on fresh first-party fetches. The patch removes these four candidate pairs in replay while preserving explicitly labelled and +prefixed Egyptian numbers. The live page set shifted between passes and one additional stored positive was unreachable; stored outputs are not independent labels. | Country loop (2026-10-20): sanitized rendered-text replay of one public Hindi government contact page changed from 0 phone outputs at base to 7/7 valid text outputs on the 1.4.38 branch with region IN. The capture did not establish raw HTML or a full live API response, so hidden tel: or schema.org markup is unverified. No raw phone values were recorded.",
-    "version": "1.4.47",
+    "version": "1.4.48",
     "coolify_app_uuid": "zocev1v9az8wg2vzzzbwukat",
     "depends_on": [
       "infrastructure-fetch-cache"
@@ -8447,7 +8447,7 @@
       {"name": "target", "required": true, "type": "string", "description": "Domain or URL to scan for press/media mentions (homepage + press/news/media pages)", "example": "example.com"}
     ],
     "container_port": 8300,
-    "version": "2.5.20",
+    "version": "2.5.22",
     "description": "Microservice for Press Mentions",
     "host_port": 8300,
     "placement": "replicable",
@@ -8481,7 +8481,7 @@
       {"name": "url", "required": false, "type": "string", "description": "URL to fetch and analyse (SSRF-gated via safehttp)."}
     ],
     "container_port": 8301,
-    "version": "1.9.34",
+    "version": "1.9.39",
     "description": "Microservice for Price Range",
     "host_port": 8301,
     "placement": "replicable",
@@ -8526,7 +8526,7 @@
       "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.1.36",
+    "version": "0.1.40",
     "trl": 5,
     "trl_assessed_at": "2026-10-20",
     "trl_assessor": "codex-rd-loop",
@@ -8906,7 +8906,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "Company website URL. Page content is inspected on candidate pricing, plans, donation, shop, API...", "example": "example.com"}
     ],
-    "version": "2.6.39",
+    "version": "2.6.41",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
@@ -8983,7 +8983,7 @@
     "trl_ceiling_reason": "Authoritative third-party rating and review counts require a headless browser or paid platform APIs because major profile pages hard-block server-side fetches.",
     "trl_assessed_at": "2026-07-30",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
-    "version": "0.4.11",
+    "version": "0.4.13",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -9180,7 +9180,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.5.2",
+    "version": "2.5.4",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -9559,7 +9559,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13. | 2026-10-20 saved cohort: 87 rows across 20 markets. Targeted Swiss replay previously added CH from currency and company-location cues despite a Germany-only claim; fixed output is [DE]. One targeted regression, not a cohort-wide metric. Source PR #62 merged; release 1.7.26.",
-    "version": "1.7.37",
+    "version": "1.7.42",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -9983,7 +9983,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.2.18",
+    "version": "0.2.20",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "team-member-extractor",
@@ -10884,7 +10884,7 @@
     "cors": false,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
-    "version": "0.22.0",
+    "version": "0.26.0",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
