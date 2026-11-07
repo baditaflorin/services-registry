@@ -1194,7 +1194,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.1.19",
+    "version": "0.1.21",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -2774,7 +2774,7 @@
     "host_port": 18231,
     "placement": "replicable",
     "trl": 7,
-    "version": "0.2.33",
+    "version": "0.2.36",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3763,7 +3763,7 @@
     "trl_ceiling_reason": "Emails hidden behind JavaScript or forms require rendering and interaction.",
     "trl_evidence": "First-pass audit: confirmed genuinely differentiated from sibling go_email_extractor (light 4-page keyword crawl, no confidence scoring, vs. the extractor's deep 20-page BFS with MX/disposable validation) -- and confirmed via domain_email_contact.tool_name that this service isn't wired into the production enrichment pipeline at all (0 rows attributed vs. the sibling's 1M+). Found and fixed 3 real bugs, all confirmed live: (1) zero local-part placeholder filtering, unlike the sibling -- confirmed on the identical architectink.com domain the sibling's own audit found; (2) 9 missing junk-domain gazetteer entries (company.com, mystore.com, etc, hundreds of live occurrences each); (3) a greedy TLD regex producing malformed run-on domains (gmail.comdisclaimer) -- confirmed this is a SHARED bug also present in go_email_extractor, reproducing identically on the same URL, meaning that sibling's earlier fix did not close this specific gap. trl/trl_ceiling held at 6/7 -- what's blocking 6->7 isn't these bugs, it's the complete absence of production-scale evidence for this specific service. See PR #6 (merged). Country-localization follow-up (2026-10-18, PR #42 / commit 08636c8): a private 100-row production-derived candidate cohort covered 20 non-US countries. No rows were attributed to go_email_harvester, so historical email-extractor outputs were candidate leads only, not ground truth. First-party replay reproduced a static Polish same-host kontakt route miss (homepage-only result 0; linked route 4 mailto addresses). The fix follows kontakt after existing route keywords and preserves their priority under the four-page cap. Full replay changed six rows (+5 address hashes, 0 removed; 88 HTTP 200, 12 fetch failures; 68 nonempty and 20 empty). Release 1.4.25 is deployed to both pool replicas with a matching image digest; direct health/selftest/version and the gateway health audit passed. Internationalization follow-up (2026-10-18, code PR #44 / commit 7347543; release PR #45 / commit 8d3171f; tag 1.4.26): a private 46-row production-derived candidate cohort spanned 25 country codes. First-party visible text confirmed three misses for valid mailboxes whose local parts begin with RFC atext punctuation. The deterministic parser fix preserves valid punctuation-leading local parts while rejecting malformed dot boundaries and sentence punctuation; focused positive/negative regression cases pass. Historical outputs and candidate rows were leads, not ground-truth labels. The deployed 1.4.26 image was Cosign-verified at digest sha256:6dbf0deacd85…; both pool replicas report healthy on that digest, and direct health/selftest/version plus gateway health checks passed. Gateway selftest remains auth-gated (401); pool status retains pre-existing environment-contract drift. The targeted cohort does not justify raising TRL, so assessment remains 6/7. Country-role follow-up (2026-10-20; source PR #50 merged as 639bf13): a private 160-row DomainScope candidate cohort spanned 20 markets; 60 first-party sites were replayed. Current pages confirmed three role-label misses across DEU, COL, and MEX: `service` and Spanish `ventas` addresses were extracted without the expected support/sales role. Added role aliases; stored values remain candidate evidence, not independent labels. The service has no JS-render option; no rendered result is claimed. 2026-10-20 international mailto follow-up: a saved multilingual first-party parser-shape cohort from sibling email-extractor data contained two quote-wrapped mailbox candidates in the Swiss market; replay through this handler recovered both and 12 of 13 candidates overall. This is cross-service parser evidence, not a measured uplift on the separate 50-page email-harvester cohort, which did not contain the shape. Static mailto links make JS rendering inapplicable. Source PR #52 merged as c9077fa; version 1.4.30 tagged at ddad3b5. | Country loop 2026-10-20: public Polish first-party contact sample; baseline matched 0/3 phonetic addresses across 2 pages, patched matched 3/3. Saved 50-site/10-market cohort remained 42/115 before and after, so no broad lift is claimed.",
     "coolify_app_uuid": "j7ue4czbvfvr16ey6k1s0u4e",
-    "version": "1.4.39"
+    "version": "1.4.41"
   },
   "embed-iframe-classifier": {
     "params": [
@@ -3810,7 +3810,7 @@
     "trl_ceiling": 5,
     "trl_ceiling_reason": "CPU-only lexicon/cue method: no sarcasm/irony/syntactic context, and per-language cue lists are necessarily positive-skewed; reaching 6 needs RFC-grade evidence trails + production cross-checks beyond a lexicon.",
     "trl_evidence": "Corrected DOWNWARD from trl:6, which sat above this record's own documented trl_ceiling of 5 (CPU-only lexicon/cue method, no sarcasm/irony/syntactic context) -- a pre-existing contradiction (registered via PR #30, 'register-emotional-tone-3.3.0', predating this session's audit) not supported by real evidence beyond what the ceiling itself already caps. No code changes needed; this repo's own v3.3.0 chrome/boilerplate-exclusion work is genuine and already reflected in trl_ceiling=5. Pure registry bookkeeping correction, no PR. 2026-10-20 Arabic localization follow-up (source PR #47 merged as 72a043c; release 3.4.3): controlled minimal pair reproduced a false negative when optional Arabic vocalization marks were present; normalization strips those marks while preserving hamza/madda, with vocalized-positive and vocalized-negation regressions. No saved non-null independent tone cohort was available, so this is a controlled lexical regression rather than a measured production lift.",
-    "version": "3.4.11",
+    "version": "3.4.12",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -5391,7 +5391,7 @@
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Live verdict on bot-hostile mega-brands (bmw.de/leroymerlin.fr/decathlon.fr/mango.com) is bounded by the upstream fetch tier: their about/company pages return empty bodies (JS-heavy/bot-blocked), so non-English founding text never reaches the parser and the verdict falls back to whois. There is no domainscope/stored-output table to measure live accuracy against. TRL 8 (SLA-grade live extraction) is not provable without a warmer fetch/render tier or a persisted output table; the extractor logic itself is sound and fully unit-tested.",
     "trl_evidence": "Second-pass re-audit: found and fixed a live fetch-cache-masking bug, confirmed via before/after debug logging directly on the fleet host showing requests rerouting away from the cache post-fix. Also resolved the founding-year side of a cross-service field-mismatch investigation with go_company_size: the actual contract is data.best_estimate.year (int) / data.consensus_year (int) -- no field named 'founding_year' exists; corrected a stale doc comment. Flagged (not fixed, out of scope) a shared-DB provenance bug where founding-year/company-size/api-first all clobber the same tool_name/tool_version columns. See PR #13 (merged). | 2026-10-20 targeted Romanian first-party replay: 2 official company history pages using the Romanian “înființată în YYYY” form returned the correct year after the parser fix; these were misses before. The saved 100-row cohort had 5 RO candidates but their HTML was unavailable, so no cohort-wide lift is claimed. Source go_founding_year PR #60 merged at b19eb32; release 3.6.11.",
-    "version": "3.6.20",
+    "version": "3.6.21",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7103,7 +7103,7 @@
       "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.1.20",
+    "version": "0.1.22",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -8789,7 +8789,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18245,
     "placement": "replicable",
-    "version": "0.1.23",
+    "version": "0.1.25",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -8822,7 +8822,7 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.1.18",
+    "version": "0.1.20",
     "trl": 6,
     "trl_assessed_at": "2026-10-18",
     "trl_assessor": "codex-gpt-6",
@@ -9273,7 +9273,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit (confirmed genuinely distinct from sibling go-search-duck -- different mesh, different upstream endpoint, different API contract, no shared code). Found and fixed 2 real bugs: (1) the recurring fetch-cache-masking bug, which would defeat this service's retry-through-fresh-proxy-IP logic and leak cached DDG responses across unrelated services. (2) A bot-challenge page misreported as 'zero results' then CACHED as a false-empty result for the full 1h TTL -- exactly the risk this service's own ADR warned about but never guarded against; fixed with DOM-based bot-challenge detection (stable anomaly-modal/challenge-form markers) that skips the cache entirely. Live DDG testing (kept conservative, ~5 requests) confirmed correct behavior for a coherent browser persona vs. a bare request. trl held at 5; trl_ceiling=6 added -- DDG's HTML-Lite endpoint has no official API/SLA and actively detects/blocks this exact traffic pattern, a structural adversarial limit no further engineering removes. See PR #4 (merged).",
-    "version": "0.4.23",
+    "version": "0.4.24",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z"
@@ -10112,7 +10112,7 @@
       {"name": "text", "required": false, "type": "string", "description": "Raw HTML to scan directly, skipping the fetch (useful for testing and pasted markup)."},
       {"name": "render", "required": false, "type": "string", "description": "Use js to request Chromium, or auto to retry with Chromium after a static fetch failure, an..."}
     ],
-    "version": "0.1.17",
+    "version": "0.1.20",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "testimonial-extractor",
@@ -10884,7 +10884,7 @@
     "cors": false,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
-    "version": "0.27.0",
+    "version": "0.28.0",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
