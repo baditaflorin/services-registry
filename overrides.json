@@ -6698,6 +6698,22 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "Second-pass re-audit (supersedes an unreliable 2026-05-14 cursory pass). Corrected assumption: this is a shared ripple/tap-pulse effect across a physical row of phones (Yjs/y-webrtc), not a stroke-drawing canvas. Found and fixed two real bugs: (1) untrusted peer awareness data let NaN/Infinity through a weak typeof check, poisoning the mesh clock offset for the whole room and baking permanent, un-garbage-collectable NaN entries into the shared doc; (2) the periodic ripple GC deleted dead entries by count-from-front rather than by identity, an assumption that breaks under concurrent multi-peer taps and could delete a live ripple while a dead one survived. Both fixed and regression-tested (2 of 3 new tests confirmed to fail pre-fix). Also corrected a false privacy claim: docs claimed encrypted SDP signaling, but y-webrtc's encryption is opt-in and never enabled here, so signaling is plaintext (TLS-in-transit only) -- doc corrected rather than bolting on a false sense of security. trl bumped 3->5. See github.com/baditaflorin/mesh-wave-canvas PR #1 (merged)."
   },
+  "mentoring": {
+    "name": "Mentoring",
+    "description": "Mentoring and evaluation platform",
+    "category": "dashboard",
+    "domain": "mentor.badita.org",
+    "cert_domain": "mentor.badita.org",
+    "host_port": 18100,
+    "container_port": 3000,
+    "version": "0.1.0",
+    "example_path": "/auth/signin",
+    "auth": {"type": "none"},
+    "trl": 4,
+    "trl_evidence": "Container and database canary passed; initial production deployment is pending.",
+    "trl_assessed_at": "2026-11-07",
+    "trl_assessor": "codex"
+  },
   "microformats2-extractor": {
     "params": [
       {"name": "url", "required": false, "type": "string", "description": "URL of the page to analyse (aliases: target, q). One of url/text is required.", "example": "https://example.com"},
