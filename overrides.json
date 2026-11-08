@@ -1828,7 +1828,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "CPU-only DOM heuristics plateau at principled multilingual structural extraction; exact brand disambiguation / image recognition (vs structural alt/anchor/grid signals) and SLA-grade live verdicts would need a browser engine or paid logo-recognition feed. No persisted logo-detail table exists to certify live accuracy against.",
     "trl_evidence": "Confirmed honestly earned; no trl>ceiling contradiction. 720-domain live audit found and fixed 3 real false-positive classes: Wix CDN media-hash leaks (27->0), numbered generic placeholders like 'Client 8' (22->0), color-variant social icon labels like 'Facebook - Black' (3->0). One domain's verdict corrected from social_proof to the honest weak_signal. See github.com/baditaflorin/go_customer_logos PR #15.",
-    "version": "3.8.14",
+    "version": "3.8.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3608,7 +3608,7 @@
     "host_port": 18233,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.5.3",
+    "version": "0.5.4",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -6255,7 +6255,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18250,
     "placement": "replicable",
-    "version": "0.3.15",
+    "version": "0.3.20",
     "trl": 7,
     "trl_assessed_at": "2026-07-14",
     "trl_assessor": "codex-trl-audit-2026-07-14",
@@ -6302,7 +6302,7 @@
       "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.2.20",
+    "version": "0.2.21",
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -7058,7 +7058,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.5.7",
+    "version": "2.5.8",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -8542,7 +8542,7 @@
       "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.1.40",
+    "version": "0.1.41",
     "trl": 5,
     "trl_assessed_at": "2026-10-20",
     "trl_assessor": "codex-rd-loop",
@@ -9068,7 +9068,7 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "1.7.1",
+    "version": "1.7.2",
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
@@ -9196,7 +9196,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.5.4",
+    "version": "2.5.5",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -10174,7 +10174,7 @@
       "infrastructure-fetch-cache"
     ],
     "fetch_cache_api_key_file_mount": true,
-    "version": "1.9.16",
+    "version": "1.9.18",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "tos-finder",

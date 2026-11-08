@@ -1,5 +1,6 @@
 ## 2026-11-08
 
+- fleet-version-pin-sync: 9 registry version pin(s) set to the version the service runs, which is also its repository main: `customer-logos` 3.8.15, `domain-viewport-meta` 0.5.4, `language-detector` 0.3.20, `leadership-extractor` 0.2.21, `outlink-graph` 2.5.8, `pricing-tier-parser` 0.1.41, `robots-parser` 1.7.2, `schema-extractor` 2.5.5, `tos-finder` 1.9.18.
 - fleet-version-pin-sync: 11 registry version pin(s) set to the version the service runs, which is also its repository main: `ad-density` 2.7.4, `api-first` 1.5.25, `asn-lookup` 1.5.23, `data-inventory` 1.7.12, `domain-liveness-state` 0.4.4, `domain-pagination-rel` 0.2.21, `domain-saas-host-mapper` 0.3.19, `hub-scrapetheworld-org` 0.29.4, `redirect-tracer` 1.7.6, `user-demographics` 2.5.14, `video-content` 2.4.6.
 
 ## 2026-11-07
