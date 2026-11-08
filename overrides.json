@@ -483,7 +483,7 @@
     "trl_ceiling": 6,
     "trl_ceiling_reason": "TRL 7 requires validation against authoritative postal data under ADR 0001; this release adds localized heuristics but no postal-source cross-check.",
     "trl_evidence": "Cleared a stale trl_ceiling_reason (\"CPU-only tops at TRL 5\") that contradicted this record's own already-null trl_ceiling -- no technical basis for a TRL-5 ceiling; the service runs CPU-only at production scale (>1M domain_address rows). This pass: mined domain_address (1,024,085 rows) and re-crawled 400 real business domains. Fixed a completeness bug (comma-required road/city separator dropped full addresses to bare STATE/ZIP fragments), a new false-positive it exposed (phone digits misread as house numbers), added unit/suite splitting and PO Box support. Held at trl:6 per this repo's own ADR 0001, which reserves TRL 7 for cross-checking against an authoritative postal dataset (not added here). See github.com/baditaflorin/go_address_extractor PR #8. Latest country loop: added Slovak address support (PR #79) and postcode-first Ukrainian address parsing (PR #80); replay preserved 45/53 reachable stored positives and recovered one supported Ukrainian stored-zero case. Release 3.4.27 includes both fixes; focused checks and CI passed. No JS-rendered evidence was returned by the renderer, so this release makes no rendered-page claim. Vietnamese structured-data replay on a sanitized cached sample: 124 rows across 22 markets; release 3.4.28 localized addressCountry normalization recovered 1 of 3 Vietnamese JSON-LD records; records without country context remain conservatively unclassified. | 2026-10-20 Turkish address replay: one public contact page among 19 reviewed had street, compound house number, postcode, city, and province cues but baseline ExtractStructured returned 0 matches; updated parser returns 1. Targeted one-page replay, not a cohort-wide recall estimate. Source PR #84 merged; release 3.4.29.",
-    "version": "3.4.43",
+    "version": "3.4.44",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -1323,7 +1323,7 @@
     "trl_evidence": "Standalone Go detector with bounded same-site fetches and one bounded JS-render retry for sparse shells. PR #33 adds Hungarian `kapcsolat` contact-route recognition and a route/candidate regression test. A private DomainScope manual first-party audit used 100 valid domains across 60 country strata; isolated headless Chrome loaded 48 pages from 40 countries, while 50 returned browser errors and 2 timed out. One rendered Hungarian (`lang=hu`) page exposed three visible same-site contact links that pre-fix local handler replay missed; after the fix, replay found one route and candidate. The Hungarian-English [dict.cc entry](https://enhu.dict.cc/?s=kapcsolat) maps the term to contact. This was manual page review, not historical service-output ground truth; the service fetch-cache URL path was not replayed because this checkout lacked its service-scoped credential. Release 0.1.18 is tagged at commit 058d7c0. On 2026-10-18, the full two-replica pool rollout completed; both replicas run the same signed immutable image, are healthy, and passed direct /health, /selftest, and /version checks. Public gateway /health and /version return HTTP 200; gateway /selftest returns HTTP 401 because it requires API-key authorization. Pool status reports both replicas healthy. No raw hosts or page content are recorded.  2026-10-19 Vietnamese localization audit: a frozen 50-record, five-locale cohort was split into 25 discovery and 25 ID-disjoint holdout rows. One independently confirmed Vietnamese contact-route miss occurred in each split; a localized label/path fix recovered both on replay, with other locale strata unchanged. Positive and near-miss negative fixtures pass (go_contact_route_detector PR #35). Version 0.1.20 image was signed and published; production rollout awaits the Dockerhost capacity gate.  2026-10-20 Turkish/Russian/Korean follow-up: current-origin PR #40 merged at 99e02d4; 150 production-derived candidate rows across 25 countries yielded 136 reachable homepages. Same-site localized contact labels improved route detections from 108 to 111 and candidate-bearing pages from 78 to 80; two off-site Russian label matches were guarded. These are repeatable first-party detector deltas, not independently human-labeled precision/recall. A sparse shell attempt received HTTP 401 before the service handler, so rendered output is unverified. Version 0.1.23 was tagged at the merge; production rollout is not verified. 2026-10-20 country-specific replay: a 200-row, non-null production-derived sample spanned 20 ISO3 markets (10 per stratum). One reachable Saudi first-party site had an explicit Arabic \u062a\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 tel: contact CTA and returned no route before the fix; the updated handler recognizes the labeled route and Unicode digits. The data were used as candidates; only this manually verified first-party page is counted as a confirmed miss. The renderer endpoint returned 401, so no rendered DOM is claimed. Source PR #41 merged as 3e66897; release 0.1.24. 2026-10-20 follow-up: source PR #42 merged as f7c13eb; on the confirmed Arabic same-host contact-section miss, local Handler replay changed contact_route from false to true and routes from 0 to 2, while store-locator abstention remained. A separate first-party Thai page rendered in headless Chrome increased visible text from 0 to 1,490 characters and routes from 0 to 4, changing contact_form/contact_route from false to true; this is one manually inspected render, not a benchmark or service-output truth set. The renderer returned HTTP 401 for the Saudi sample target, so no rendered DOM is claimed for that case. Version 0.1.25 tagged at 9850325.",
     "trl_ceiling": 6,
     "trl_ceiling_reason": "The service bounded JS-render retry was not exercised through its fetch-cache endpoint in this checkout; manual Chrome inspection found no remaining thin shells in successful pages but does not establish service-render fidelity across sites. Route extraction does not verify that a destination is operational.",
-    "version": "0.1.39",
+    "version": "0.1.40",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "contact-route-detector",
@@ -1377,7 +1377,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Authoritative headcount needs a paid data provider (LinkedIn / Clearbit / Crunchbase). CPU-only static-HTML inference plateaus at principled multi-signal banding with confidence -- it cannot certify an exact employee count.",
     "trl_evidence": "Confirmed honestly earned on the core band-fusion engine (400-domain live audit, no false-positive/negative patterns beyond documented guards). Found a significant gap: sibling-service composition (go_team_size/go_founding_year, the ADR's claimed 'primary source of truth') has been completely broken in production for 2.5 months -- 4 compounding bugs (missing env vars, no auth, wrong envelope format, field type mismatch), proven by employees_source='team-size-compose' recording zero hits across ~725k rows. Fixed and verified live against the real deployed sibling containers. See github.com/baditaflorin/go_company_size PR #20. 2026-10-18 country-by-country update: private 196-row non-US cohort across 59 country strata exposed a Ukrainian-language workforce-count false negative in v3.5.58. PR #99 added the noun-first staff-count pattern and customer/user negative controls. Version 3.5.59 is deployed; direct health, self-test, version, and gateway-health checks passed.",
-    "version": "3.5.74",
+    "version": "3.5.75",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2164,7 +2164,7 @@
     "container_port": 18324,
     "description": "Discovers AI Catalogs and MCP Server Cards via passive crawl detection and well-known probing.",
     "example_path": "/?target=example.com&probe=false",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "trl": 4,
     "trl_assessed_at": "2026-09-17",
     "trl_assessor": "fleet-bot-squatter-recovery",
@@ -2878,7 +2878,7 @@
     "host_port": 18239,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.6.11",
+    "version": "0.6.16",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3623,7 +3623,7 @@
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Registered domain to probe.", "example": "example.com"}
     ],
-    "version": "0.3.5",
+    "version": "0.3.6",
     "container_port": 18194,
     "description": "Semantic /.well-known/ coverage scanner that rejects wildcard routes, soft 404s, malformed documents, and wrong redirects.",
     "host_port": 18194,
@@ -3728,7 +3728,7 @@
     "host_port": 8287,
     "internal_direct": true,
     "placement": "replicable",
-    "version": "1.6.45",
+    "version": "1.6.46",
     "trl": 7,
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-redo30-batch",
@@ -6975,7 +6975,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Live re-probe surfaced an un-guarded country-resolution edge (embedded-postal recovery); SLA-grade band-8 needs that hardened plus a labelled multi-country precision eval.",
     "trl_evidence": "The prior ceiling_reason cited two blockers that were actually closed within days back in May 2026 and never re-assessed -- a documentation-honesty gap, not a trl>ceiling contradiction. This pass found and fixed 2 real precision bugs on a 500-domain live sample (alpha-3 country codes leaking unnormalized; legal-suffix footers/suite numbers stamped into the city field). See github.com/baditaflorin/go_office_locations PR #15. | 2026-10-20 saved cohort had 120 rows across 48 locale labels and 114 successful first-party replays. One Swiss row stored CH but two CH-9001/CH-3003 lines were classified NL; the fix honors country-prefixed postcodes and exact Dutch formatting. This confirms a sampled false-positive class, not a precision estimate. Source PR #63 merged; release 2.7.15. | 2026-10-20 cross-country office-location follow-up: a saved 120-record cohort across 48 locale labels and 1,800 captures contained one successful static false-positive where dated tour copy yielded a low-confidence office candidate. A narrow heuristic guard requires both a date and explicit travel/itinerary language in nearby text; a synthetic regression rejects the travel result while a street-name control remains eligible. This addresses one reproduced false-positive class and does not claim cohort-wide recall improvement. Source PR #64, release 2.7.16.",
-    "version": "2.7.28",
+    "version": "2.7.29",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -7137,7 +7137,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL whose payment stack should be reverse-recon'd", "example": "example.com"}
     ],
     "container_port": 8298,
-    "version": "1.6.25",
+    "version": "1.6.26",
     "description": "Microservice for Payment Detector",
     "host_port": 8298,
     "placement": "replicable",
@@ -8497,7 +8497,7 @@
       {"name": "url", "required": false, "type": "string", "description": "URL to fetch and analyse (SSRF-gated via safehttp)."}
     ],
     "container_port": 8301,
-    "version": "1.9.39",
+    "version": "1.9.40",
     "description": "Microservice for Price Range",
     "host_port": 8301,
     "placement": "replicable",
@@ -9999,7 +9999,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.2.20",
+    "version": "0.2.21",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "team-member-extractor",
