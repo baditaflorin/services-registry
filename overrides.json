@@ -448,7 +448,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Reaches TRL 7 with TCFv2 consent banner + sentinel-class detection.",
     "trl_evidence": "Confirmed honestly earned. Found and fixed a real production bug: domain-parking 'for sale' pages return HTML for every path including /ads.txt, and a permissive parser accepted raw HTML/JS as bogus ads.txt data -- 88% of a 400-domain flagged sample had zero real parsed records, 98.6% leaked raw HTML. Fixed with an IAB-directive allowlist + HTML-body rejection; 0/400 false positives after. TCFv2/CMP consent-detection ceiling condition independently re-verified as real. See github.com/baditaflorin/go_ad_density PR #11.",
-    "version": "2.7.3",
+    "version": "2.7.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -739,7 +739,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.24",
+    "version": "1.5.25",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -815,7 +815,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Multi-resolver Team Cymru DNS client (1.1.1.1 + 8.8.8.8) via miekg/dns with parallel-fanout / first-non-empty-wins semantics; RDAP fallback via openrdap when Cymru is unreachable; per-IP 24h in-memory TTL cache; bulk endpoint with 10-worker pool, per-lookup 2s and total 30s caps; private/reserved IPs refused unless ALLOW_PRIVATE=1. TRL-7: hosting-attribution guard against CDN/WAF edge IP false positives (Cloudflare, Fastly, Akamai, Incapsula) flagged as hosting_attribution=cdn_fronted with CDN label and LOW confidence; hyperscaler ASNs (AWS/Google/Azure/Alibaba) marked cloud_ambiguous at MEDIUM confidence; honest error taxonomy (status=no_data / status=unreachable, never a service error); transient resolver failures retried once, deadline-bounded; /selftest exercises CDN-attribution guard offline; ≥25 hermetic test cases including CDN-fronted-vs-direct in both directions and full resolve-failure taxonomy. Fleet fetch-cache-opt-out audit (2026-08-08): confirmed the safehttp client's options slice (main.go, extracted into buildSafeHTTPOptions in the fix) omitted WithoutFetchCache()/WithForceHTTP2() -- same bug class as the 2026-07 go_page_load_metrics incident, whereby a client without either opt-out is silently eligible for the fleet-wide DefaultFetchDelegate and gets answered from cached bytes instead of a live origin fetch. Added both options plus a regression test (TestBuildSafeHTTPOptions_OptsOutOfFetchCache) verified to fail without the fix and pass with it. Live-verified against real RIPEStat/Cymru lookups (1.1.1.1, 8.8.8.8, AS13335) post-fix: correct ASN/org/country data returned. IMPORTANT caveat: this service's safeHTTP client is not currently wired into any live call path -- RIPEStat/RDAP/quorum calls all use separate plain http.Client instances (see main.go's pre-existing comment) -- so the fix has zero live blast-radius today; it is pre-work for when those call sites get rewired onto safeHTTP. Bumped 1.5.6->1.5.7. trl/trl_ceiling unchanged (fix doesn't affect current live behavior). See github.com/baditaflorin/go_asn_lookup PR #10 (open, not merged).",
-    "version": "1.5.22",
+    "version": "1.5.23",
     "coolify_app_uuid": "gmhjeope5wg7owardeoio2ae"
   },
   "audience-field-sculpture": {
@@ -1899,7 +1899,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Tested against 200 real domains confirmed to have a privacy_policy page. Fixed a broken word-boundary guard that let 'AWS' match inside 'laws'/'applicable laws' (13%->1% false positive rate), a case-insensitive Spanish regex mismatching the Polish word 'nie' as a sensitive ID-document flag, and a port config drift (8154 vs actual 8284) across 4 files. See github.com/baditaflorin/go_data_inventory PR #7.",
-    "version": "1.7.11",
+    "version": "1.7.12",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -3043,7 +3043,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Explicit URL to fetch (overrides the inferred https://<domain>/)."}
     ],
-    "version": "0.4.3",
+    "version": "0.4.4",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18217,
     "description": "Domain liveness classifier — live / under-construction / login-wall / parked / default-server-page / error.",
@@ -3222,7 +3222,7 @@
     "host_port": 18229,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.2.20",
+    "version": "0.2.21",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3385,7 +3385,7 @@
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Registered domain to probe.", "example": "example.com"}
     ],
-    "version": "0.3.18",
+    "version": "0.3.19",
     "container_port": 18191,
     "host_port": 18191,
     "placement": "replicable",
@@ -8863,7 +8863,7 @@
     "example_path": "/?target=https://stripe.com",
     "host_port": 8332,
     "placement": "replicable",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "trl": 5,
     "trl_assessed_at": "2026-08-20",
     "trl_assessor": "claude-session-2026-08-20",
@@ -10511,7 +10511,7 @@
     "proxy_read_timeout": "120s",
     "trl": 8,
     "trl_assessed_at": "2026-07-30",
-    "version": "2.5.13",
+    "version": "2.5.14",
     "trl_assessor": "claude-sonnet-5-2026-07-30-real-data-batch-a-b-c",
     "trl_ceiling": 8,
     "trl_ceiling_reason": "Single-fetch homepage inference cannot reach production-grade (TRL 8+) audience certainty without persistence/cross-checks; also gated by the shared fleetfetch tier (RenderJS 502 fleet-wide).",
@@ -10592,7 +10592,7 @@
     "example_path": "/?target=https://example.com",
     "host_port": 8322,
     "placement": "replicable",
-    "version": "2.4.5",
+    "version": "2.4.6",
     "trl": 7,
     "trl_assessed_at": "2026-07-14",
     "trl_assessor": "codex-trl-audit-2026-07-14",
@@ -10900,7 +10900,7 @@
     "cors": false,
     "description": "Self-service admin dashboard: API key issuance/list/revoke against go-apikey-service, plus routing to the SVC_* recon/search/OCR/NLP tool set.",
     "proxy_read_timeout": "120s",
-    "version": "0.28.0",
+    "version": "0.29.4",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "hub-scrapetheworld-org",
