@@ -1,3 +1,7 @@
+## 2026-11-09
+
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `domain-faq-schema` 0.2.37, `founding-year` 3.6.22, `gdpr-compliance` 1.26.11, `readability-index` 0.1.26.
+
 ## 2026-11-08
 
 - fleet-version-pin-sync: 10 registry version pin(s) set to the version the service runs, which is also its repository main: `biz-classifier` 2.8.44, `cognitive-load` 1.7.5, `content-fingerprint` 0.1.21, `currency-detector` 1.5.23, `domain-favicon-completeness` 0.3.17, `domain-product-count` 0.3.21, `policy-clause-extractor` 0.1.25, `review-presence` 0.4.14, `seo-basics` 1.6.5, `shipping-regions` 1.7.43.
