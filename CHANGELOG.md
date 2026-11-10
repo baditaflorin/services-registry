@@ -1,3 +1,7 @@
+## 2026-11-10
+
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `funding-signal` 0.1.47, `legal-entity` 1.33.58, `office-locations` 2.7.30, `tos-finder` 1.9.19.
+
 ## 2026-11-09
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.72.
