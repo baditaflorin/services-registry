@@ -7447,6 +7447,12 @@
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "trl_evidence": "2026-11-02 skeleton: the legalid rule engine (36 country grammars, moved from DomainScope with identical verdicts and all tests) is the library. 2026-11-04 phase 2 (0.5.0, deployed): the site reader of DomainScope (legalnotice) and the fetch chain commoncrawl>cache>proxy are in the service. 2026-11-05 shadow run on 182 DomainScope domains in 16 countries: 182/182 answered 200 and complete, median 5 s; 120 of 126 domains with stored numbers give identical numbers, 54 of 56 without give none. Proxy path under load (8 and 16 at a time, 182 sites each): 0 egress failures, p99 18-22 s, 178/182 same numbers as the default chain. Italy and Spain against an older extractor (60 domains each): the same number as the operator for 47/60 (IT) and 43/60 (ES); every miss checked on the live site and explained (sites down, redirects, changed numbers, a stale archive capture, the ES identity rule, the page budget). Not shown: precision on Italy and Spain (no labelled pages are kept), a re-run of the ES eval after any change to its identity rule.",
+    "trl_ceiling": 7,
+    "trl_ceiling_reason": "Existence of a number needs the jurisdiction's own register or a paid company-data feed; the service checks grammar, check digits and the role of the company on the page, not that the register holds the number.",
+    "trl_assessed_at": "2026-11-05",
+    "trl_assessor": "claude-sonnet-5.5 phase 2 session",
     "host_port": 18335,
     "container_port": 18335,
     "depends_on": [
@@ -7497,14 +7503,8 @@
         "description": "Read the site a home page lands on when it is another registrable domain (default false; the answer's offsite_to names that host)"
       }
     ],
-    "network_exposure": "gateway-authenticated",
     "version": "0.5.5",
-    "trl": 5,
-    "trl_evidence": "2026-11-02 skeleton: the legalid rule engine (36 country grammars, moved from DomainScope with identical verdicts and all tests) is the library. 2026-11-04 phase 2 (0.5.0, deployed): the site reader of DomainScope (legalnotice) and the fetch chain commoncrawl>cache>proxy are in the service. 2026-11-05 shadow run on 182 DomainScope domains in 16 countries: 182/182 answered 200 and complete, median 5 s; 120 of 126 domains with stored numbers give identical numbers, 54 of 56 without give none. Proxy path under load (8 and 16 at a time, 182 sites each): 0 egress failures, p99 18-22 s, 178/182 same numbers as the default chain. Italy and Spain against an older extractor (60 domains each): the same number as the operator for 47/60 (IT) and 43/60 (ES); every miss checked on the live site and explained (sites down, redirects, changed numbers, a stale archive capture, the ES identity rule, the page budget). Not shown: precision on Italy and Spain (no labelled pages are kept), a re-run of the ES eval after any change to its identity rule.",
-    "trl_ceiling": 7,
-    "trl_ceiling_reason": "Existence of a number needs the jurisdiction's own register or a paid company-data feed; the service checks grammar, check digits and the role of the company on the page, not that the register holds the number.",
-    "trl_assessed_at": "2026-11-05",
-    "trl_assessor": "claude-sonnet-5.5 phase 2 session"
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "license-extractor",
@@ -13724,8 +13724,8 @@
       "apikey-service"
     ],
     "proxy_egress": false,
-    "network_exposure": "gateway-ip-allowlisted",
-    "version": "0.2.5"
+    "version": "0.2.5",
+    "network_exposure": "gateway-ip-allowlisted"
   },
   {
     "id": "d3-graph",
@@ -22841,6 +22841,36 @@
     "proxy_egress": true,
     "version": "0.1.15",
     "network_exposure": "gateway-authenticated"
+  },
+  {
+    "id": "site-capsule",
+    "name": "Site Capsule",
+    "description": "Private site reader for DomainScope. Reads one domain's real website (up to 4 pages: home, about, services or products, contact) through the fleet fetch cache, cleans each page into model-readable text with a site-aware extractor, and returns a capsule with an honest state (ok, thin, unreachable, error_page, parked, blocked, robots_disallowed, not_html). No model inside, nothing stored inside. Obeys robots.txt, one request a second per site. Opens no connection to the internet itself: every byte goes through the fetch cache, whose direct fallback is disabled in code.",
+    "category": "web_analysis",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://site-capsule.0exec.com",
+    "health_url": "https://site-capsule.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go-site-capsule",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "wildcard.0exec.com",
+    "host_port": 18337,
+    "container_port": 18337,
+    "internal_direct": true,
+    "depends_on": [
+      "apikey-service",
+      "infrastructure-fetch-cache"
+    ],
+    "proxy_egress": false,
+    "network_exposure": "gateway-ip-allowlisted"
   },
   {
     "id": "sitemap-parser-backend-18322",

@@ -11636,6 +11636,26 @@
   },
   {
     "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "category": "web_analysis",
+    "description": "Private site reader for DomainScope. Reads one domain's real website (up to 4 pages: home, about, services or products, contact) through the fleet fetch cache, cleans each page into model-readable text with a site-aware extractor, and returns a capsule with an honest state (ok, thin, unreachable, error_page, parked, blocked, robots_disallowed, not_html). No model inside, nothing stored inside. Obeys robots.txt, one request a second per site. Opens no connection to the internet itself: every byte goes through the fetch cache, whose direct fallback is disabled in code.",
+    "example_path": "/health",
+    "health_url": "https://site-capsule.0exec.com/health",
+    "id": "site-capsule",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Site Capsule",
+    "repo_url": "https://github.com/baditaflorin/go-site-capsule",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://site-capsule.0exec.com"
+  },
+  {
+    "auth": {
       "type": "none"
     },
     "auth_help": "no auth",
