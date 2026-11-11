@@ -9608,6 +9608,19 @@
     "trl_evidence": "Safety-first re-audit (no live network traffic generated -- static analysis + non-networked unit tests only): confirmed the target-allowlist and hard request/concurrency caps (MaxRequests=50, MaxConcurrentWorkers=5, hardcoded Go constants never read from env/request params) are real, fail-closed, and non-bypassable -- already fixed 5 days prior in a merged PR that replaced a genuinely dangerous unbounded earlier version. Wrote new tests positively proving each control (credential-URL rejection, redirect revalidation, cap enforcement against a huge requested volume). Fixed a stale smoke-test config that always 404'd. Flagged, NOT fixed (needs human judgment): the repo ships a committed .env with AUTH_TOKEN=retired shared auth setting and README examples use the same token -- currently inert since the allowlist is empty, but a latent risk if ops ever configures a real allowlist without rotating this token. trl bumped 2->4 (catching up to the already-shipped safety fix); trl_ceiling stays 4 -- this tool deliberately never produces the evidence trail the 6-7 'real' band requires. See PR #4 (merged).",
     "coolify_app_uuid": "f9apfdnpdg5hgsovtq3mpw64"
   },
+  "site-capsule": {
+    "container_port": 18337,
+    "cpus": 2,
+    "depends_on": ["apikey-service", "infrastructure-fetch-cache"],
+    "description": "Private site reader for DomainScope. Reads one domain's real website (up to 4 pages: home, about, services or products, contact) through the fleet fetch cache, cleans each page into model-readable text with a site-aware extractor, and returns a capsule with an honest state (ok, thin, unreachable, error_page, parked, blocked, robots_disallowed, not_html). No model inside, nothing stored inside. Obeys robots.txt, one request a second per site. Opens no connection to the internet itself: every byte goes through the fetch cache, whose direct fallback is disabled in code.",
+    "example_path": "/health",
+    "fetch_cache_api_key_file_mount": true,
+    "host_port": 18337,
+    "internal_direct": true,
+    "mem_limit": "1g",
+    "proxy_egress": false,
+    "scope": "internal-only"
+  },
   "sitemap-finder": {
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "URL to find sitemaps for", "example": "google.com"}
