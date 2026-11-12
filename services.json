@@ -5834,7 +5834,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "3.6.22",
+    "version": "3.6.23",
     "network_exposure": "gateway-authenticated",
     "ci_resources": {
       "mem_class": "xs",
@@ -7503,7 +7503,7 @@
         "description": "Read the site a home page lands on when it is another registrable domain (default false; the answer's offsite_to names that host)"
       }
     ],
-    "version": "0.5.5",
+    "version": "0.6.0",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -7569,7 +7569,7 @@
         "description": "Raw HTML or text to scan directly, skipping the fetch (useful for testing and pasted content)."
       }
     ],
-    "version": "0.1.14",
+    "version": "0.1.15",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -22870,7 +22870,8 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": false,
-    "network_exposure": "gateway-ip-allowlisted"
+    "network_exposure": "gateway-ip-allowlisted",
+    "version": "0.1.1"
   },
   {
     "id": "sitemap-parser-backend-18322",
