@@ -1,5 +1,6 @@
 ## 2026-11-12
 
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `funding-signal` 0.1.48, `search-duck-go` 0.4.26.
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `founding-year` 3.6.23, `legal-identifiers` 0.6.0, `license-extractor` 0.1.15, `site-capsule` 0.1.1.
 - Register `site-capsule` (repo `go-site-capsule` 0.1.0, private): the site reader for the DomainScope site-profile pilot. Port 18337 on the 0docker dockerhost, key-gated, `internal_direct`, `proxy_egress: false` (every byte goes through the fleet fetch cache), file-backed fetch-cache key mount, 2 CPUs and 1 GiB.
 
