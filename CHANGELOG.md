@@ -1,3 +1,7 @@
+## 2026-11-13
+
+- fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `founding-year` 3.6.24, `legal-identifiers` 0.7.0, `license-extractor` 0.1.16.
+
 ## 2026-11-12
 
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `firmographic-profile` 1.4.11, `site-capsule` 0.2.0.
