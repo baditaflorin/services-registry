@@ -32,6 +32,41 @@ repo's own `service.yaml` (plus optional `deploy.yaml` and
 `slug.json`). This file is intentionally generic — it explains the
 _fleet_, not any one service.
 
+## Contract in brief
+
+The weekly rollout copies this file into every fleet repository, so this is the contract an agent
+reads first. `AGENTS.md` holds the same rules with the risk-tier table and the pre-action review.
+
+This contract keeps four things true: work starts from fresh `origin/main`; production matches the
+registry; every release leaves a receipt chain; no secret or private topology reaches a commit, log
+or chat. Judge your work against those, not against "pushed" or "tests passed".
+
+**Evidence and done**
+
+- Start from the rawest source: `fleet-runner state`, `whois <fqdn>`, `pool-status`. Do not re-probe
+  hosts by hand, and do not treat a green `/health` or a registry field as proof.
+- Tag every fact that gates a decision OBSERVED (read live this session, with source and age) or
+  PREDICTED (inferred from config, docs or an old snapshot). Only observed facts block or approve.
+- A dry run or `plan` proves less than a real run. Name the checks that sit after its return and
+  are therefore unproven.
+- State acceptance criteria up front, with a number where you can ("0 findings", "0 non-200 reads
+  in N requests"). Verify them with something other than yourself: `fleet-runner converge`,
+  `fleet-runner audit --all`, `fleet-runner state snapshot`, the deploy smoke gates, the target
+  system's own log. If a check does not exist, say so in the receipt rather than claiming done.
+
+**Hard rules**
+
+- Never hand-pick a port: take it from `fleet-runner allocate-port`.
+- Release with `fleet-runner bump-version <repo> patch|minor|major --push`. A tag that is not
+  pushed is not a release.
+- On the builder, do not run `docker buildx ls` (one hung call holds buildx's global lock and
+  stalls every build) and do not start a service with `./binary &` (it orphans and squats a
+  registered port).
+- Print environment variable names, never values. Scan output for `://user:pass@`, JWTs and webhook
+  URLs before showing it.
+- Do not create billable cloud resources, credentials, logins or access-list entries unprompted.
+  State the block and hand the user one command for that step.
+
 ## Graph-first workflow
 
 For every change to a registered service, establish the graph boundary
