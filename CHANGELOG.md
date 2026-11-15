@@ -1,3 +1,7 @@
+## 2026-11-15
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `legal-identifiers` 0.8.1.
+
 ## 2026-11-13
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `legal-identifiers` 0.8.0.
