@@ -398,7 +398,8 @@
     "depends_on": [
       "composite-runner"
     ],
-    "spiffe_workload": true
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "accessibility-score": {
     "params": [
@@ -6584,6 +6585,7 @@
       "composite-runner"
     ],
     "spiffe_workload": true,
+    "spiffe_merged_identity": true,
     "version": "1.1.8"
   },
   "mesh-bench-archive": {
