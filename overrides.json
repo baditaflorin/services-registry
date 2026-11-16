@@ -8612,7 +8612,7 @@
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) is static-scan only. active is currently equivalent to passive; the..."}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "version": "0.2.6",
     "access_tier": "vetted-pentest",
     "container_port": 8314,
