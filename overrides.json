@@ -2564,7 +2564,9 @@
     "coolify_app_uuid": "v13jzf9xaz3harln0i8xcne2",
     "depends_on": [
       "infrastructure-fetch-cache"
-    ]
+    ],
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "domain-dnssec-validator": {
     "example_path": "/?domain=cloudflare.com",
@@ -9625,7 +9627,8 @@
     "internal_direct": true,
     "mem_limit": "1g",
     "proxy_egress": false,
-    "scope": "internal-only"
+    "scope": "internal-only",
+    "spiffe_workload": true
   },
   "sitemap-finder": {
     "params": [
@@ -10229,7 +10232,9 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "trust-no-one-anonymizer": {
     "trl": 4,
@@ -10323,7 +10328,9 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "fetch_cache_api_key_file_mount": true
+    "fetch_cache_api_key_file_mount": true,
+    "spiffe_workload": true,
+    "spiffe_merged_identity": true
   },
   "urban-farm-year": {
     "trl": 3,
