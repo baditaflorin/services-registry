@@ -5741,7 +5741,7 @@
     "container_port": 3002,
     "description": "Microservice for Go Html Proxy",
     "env": {
-      "PROXY_SUPPLIER": "webshare_multi",
+      "PROXY_SUPPLIER": "${PROXY_SUPPLIER:-webshare_direct}",
       "FEATURE_TRACING": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
@@ -9277,7 +9277,7 @@
       {"name": "safesearch", "required": false, "type": "string", "description": "off|moderate|strict, default moderate"}
     ],
     "env": {
-      "PROXY_SUPPLIER": "webshare_multi",
+      "PROXY_SUPPLIER": "${PROXY_SUPPLIER:-webshare_direct}",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
     },
