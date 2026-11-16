@@ -2551,6 +2551,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "domain-details",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
     "example_path": "/?domain=example.com",
@@ -9622,6 +9623,7 @@
     "container_port": 18337,
     "cpus": 2,
     "depends_on": ["apikey-service", "infrastructure-fetch-cache"],
+    "env": {"FLEET_FETCH_CACHE_SPIFFE": "dual"},
     "description": "Private site reader for DomainScope. Reads one domain's real website (up to 4 pages: home, about, services or products, contact) through the fleet fetch cache, cleans each page into model-readable text with a site-aware extractor, and returns a capsule with an honest state (ok, thin, unreachable, error_page, parked, blocked, robots_disallowed, not_html). No model inside, nothing stored inside. Obeys robots.txt, one request a second per site. Opens no connection to the internet itself: every byte goes through the fetch cache, whose direct fallback is disabled in code.",
     "example_path": "/health",
     "fetch_cache_api_key_file_mount": true,
@@ -10216,6 +10218,7 @@
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8317,
@@ -10309,6 +10312,7 @@
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "update-frequency",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
     "container_port": 8319,
