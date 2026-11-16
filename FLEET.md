@@ -645,6 +645,38 @@ endpoint catalog, and isn't a bug-bounty target, set `proxy_egress:
 false`. Keep the proxy on for anything probing third-party
 *production* infra (HTTP fuzzing, takeover, screenshot, etc.).
 
+### Shared proxy environment versus named Webshare pools
+
+`proxy_egress: true` materializes the fleet's shared legacy `HTTP_PROXY` and
+`HTTPS_PROXY` settings. It does not select a Webshare account-plan or enable
+per-plan pool selection. Applications that only honor those environment
+variables continue using the shared proxy endpoint.
+
+`PROXY_SUPPLIER=webshare_direct` is a separate go-common supplier setting for
+applications that explicitly initialize `proxysupplier`. Named Webshare pools
+are another explicit application capability. A service needs all of the
+following before `PROXY_SUPPLIER=webshare_multi` has an effect:
+
+1. Its code must use the go-common Webshare pool selector and report the
+   result of each selected attempt. Any retries or class fallback are consumer
+   policy.
+2. Its service configuration must select `webshare_multi` and provide
+   `WEBSHARE_POOLS_FILE`, backed by a Vault-managed configuration file whose
+   API-key values live in separate secret files. See the
+   [go-common pool schema](https://github.com/baditaflorin/go-common/blob/main/docs/webshare-multi-pools.md).
+3. The generated Compose environment must pass through the service's setting
+   (for example, `${PROXY_SUPPLIER:-webshare_direct}`). A hardcoded fleet
+   environment value overrides the service `.env` and masks its opt-in.
+
+The shared `HTTP_PROXY`/`HTTPS_PROXY` variables remain unchanged when a
+service opts into named pools; which path is used depends on its code.
+`proxy_egress: true` alone does not migrate a service, and calling a proxy
+backend only inherits the egress policy of requests that actually reach that
+backend. A residential pool is never enabled just by listing it in the
+pool file: consumer code must gate it with a typed failure policy, destination
+allowlist, and bounded usage policy. See the pool schema for the consumer
+selection API; the supplier does not make fallback decisions.
+
 **A bare-host process outside the container-deploy path needs a manual
 copy, not `proxy_egress`.** `proxy_egress` only materializes
 `HTTP_PROXY`/`HTTPS_PROXY` into a service's compose `.env` — it has no

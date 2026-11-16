@@ -285,6 +285,19 @@ reference the var with an empty-string default so compose is happy
 when it's unset (`${PIPE_PUBLIC_BASE_URL:-}`), matching the pattern
 already used for `proxy_egress:` vars.
 
+`proxy_egress: true` and named Webshare pools configure different layers.
+The former supplies the shared `HTTP_PROXY`/`HTTPS_PROXY` environment; it does
+not enable account-plan selection. If the application code implements the
+go-common Webshare selector, opt in through per-service configuration with
+`PROXY_SUPPLIER: webshare_multi` and a `WEBSHARE_POOLS_FILE` path backed by a
+Vault-managed file and separate API-key files. Ensure the generated Compose
+environment passes that value through instead of hardcoding the global
+`webshare_direct` default. The [pool schema and selector contract](https://github.com/baditaflorin/go-common/blob/main/docs/webshare-multi-pools.md)
+describe the required config and selector contract. Any retry or class
+fallback remains consumer policy. Do not infer support from
+`proxy_egress: true`, and do not enable residential selection
+without a bounded, destination-specific policy in the consumer.
+
 **Do NOT put secrets here.** `fleet-runner deploy` rejects any
 `extra_env:` key containing `TOKEN`, `SECRET`, `PASSWORD`, `PASSWD`,
 `APIKEY`, `API_KEY`, `PRIVATE_KEY`, or `CREDENTIAL` — those go in the
