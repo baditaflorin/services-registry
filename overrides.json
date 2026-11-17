@@ -7860,7 +7860,7 @@
       {"name": "severity", "required": false, "type": "string", "description": "Comma-sep severities (default: medium,high,critical)."},
       {"name": "rate_limit", "required": false, "type": "integer", "description": "Requests/sec cap (default 150)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18115,
