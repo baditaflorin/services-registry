@@ -10328,13 +10328,37 @@
         "required": false,
         "type": "string",
         "description": "off|moderate|strict, default moderate (Bing adlt=)"
+      },
+      {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string",
+        "description": "Strict exact pool pin; no fallback; explicit route requests bypass result caches."
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string",
+        "description": "Provider selector; defaults to DC unless proxy_class=residential is explicit."
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string",
+        "description": "dc|residential; allowed only with proxy_provider and residential requires a durable budget permit."
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string",
+        "description": "Named ordered route chain; explicit route requests return X-Proxy-Route-Receipt."
       }
     ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.4.1",
+    "version": "0.4.3",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -18768,7 +18792,7 @@
     "placement": "replicable",
     "host_port": 18006,
     "container_port": 8080,
-    "version": "0.12.5",
+    "version": "0.12.6",
     "network_exposure": "gateway-authenticated",
     "ci_resources": {
       "mem_class": "s",
@@ -18777,7 +18801,35 @@
       "runs": 6,
       "confidence": "low",
       "measured_at": "2026-10-29"
-    }
+    },
+    "params": [
+      {
+        "name": "url",
+        "required": true,
+        "type": "string",
+        "example": "https://example.com"
+      },
+      {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string"
+      }
+    ]
   },
   {
     "id": "js-proxy-network",
@@ -18828,6 +18880,26 @@
         "example": "https://example.com"
       },
       {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string"
+      },
+      {
         "name": "timeout_ms",
         "required": false,
         "type": "int"
@@ -18861,7 +18933,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.9.2",
+    "version": "0.9.3",
     "network_exposure": "gateway-authenticated"
   },
   {
