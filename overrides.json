@@ -8343,7 +8343,7 @@
       {"name": "domain", "required": true, "type": "string", "example": "example.com"},
       {"name": "limit", "required": false, "type": "int", "example": "5"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.4.9",
     "access_tier": "vetted-pentest",
