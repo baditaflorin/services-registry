@@ -7180,7 +7180,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18146,
@@ -7210,7 +7210,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18131,
@@ -7254,7 +7254,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18149,
@@ -7277,7 +7277,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18119,
@@ -7345,7 +7345,7 @@
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Apex domain (acme.com). Wildcard matching is done by crt.sh; we filter results to subdomains of...", "example": "example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "version": "0.1.9",
     "access_tier": "vetted-pentest",
     "container_port": 18109,
