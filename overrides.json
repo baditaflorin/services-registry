@@ -7447,7 +7447,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18134,
@@ -7606,7 +7606,7 @@
       {"name": "evidence", "required": false, "type": "object", "description": "Verifier-specific evidence from the finding (e.g., {\"jwt\":\"…\"} for jwt-alg-none)."},
       {"name": "async", "required": false, "type": "boolean", "description": "If true, enqueue into go-pentest-job-queue and return {job_id}. Else run inline with a 60s timeout."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "access_tier": "vetted-pentest",
     "container_port": 18137,
     "description": "Gate between possible-finding and submit-bot. Runs deterministic confirmation per vuln class: SSRF via OOB callback, XSS via marker reflection, IDOR via session-stripped re-fetch, JWT alg-none, open-redirect, subdomain-takeover.",
@@ -7723,7 +7723,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18130,
@@ -7834,7 +7834,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18108,
@@ -7907,7 +7907,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18138,
