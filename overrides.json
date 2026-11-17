@@ -7270,7 +7270,7 @@
       {"name": "program", "required": true, "type": "string"},
       {"name": "apex", "required": true, "type": "string"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.2.8",
     "access_tier": "vetted-pentest",
@@ -7331,7 +7331,7 @@
     "trl_evidence": "Pure-Go SQLite, deterministic (ts,actor,action,target,program,tool) hash for dedup, append-only by design."
   },
   "pentest-authz-matrix": {
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18152,
@@ -7484,7 +7484,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.7.10",
     "access_tier": "vetted-pentest",
@@ -7580,7 +7580,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "Domain or URL — bare host accepted (https:// is assumed).", "example": "hackerone.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.2.7",
     "access_tier": "vetted-pentest",
@@ -8124,7 +8124,7 @@
       {"name": "verify", "required": false, "type": "bool", "description": "When true"},
       {"name": "body", "required": false, "type": "string", "description": "Optional JSON body template for post-json mode. URL-shaped leaves get replaced."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.3.11",
     "access_tier": "vetted-pentest",
