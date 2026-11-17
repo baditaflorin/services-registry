@@ -11144,6 +11144,7 @@
   "fleet-usage-ledger": {
     "name": "Fleet Usage Ledger",
     "description": "Authenticated project-scoped append-only physical usage records without pricing.",
+    "mem_limit": "512m",
     "host_port": 18339,
     "container_port": 18339,
     "example_path": "/health",
