@@ -7695,7 +7695,7 @@
       {"name": "dorks", "required": false, "type": "string", "description": "Comma-separated subset of dork ids to run (default = all). Names from /dorks."},
       {"name": "max_results", "required": false, "type": "int", "description": "Cap per-dork (default 30, max 100)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18123,
@@ -7860,7 +7860,7 @@
       {"name": "severity", "required": false, "type": "string", "description": "Comma-sep severities (default: medium,high,critical)."},
       {"name": "rate_limit", "required": false, "type": "integer", "description": "Requests/sec cap (default 150)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18115,
@@ -8277,7 +8277,7 @@
       {"name": "timeout_sec", "required": false, "type": "integer", "description": "Default 600. Capped at 1800."},
       {"name": "program", "required": false, "type": "string", "description": "Optional bug-bounty program slug attached to forwarded findings."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18120,
