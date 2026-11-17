@@ -6916,7 +6916,7 @@
       {"name": "proxy_profile", "required": false, "type": "string", "description": "Configured ordered profile; mutually exclusive with proxy_pool and proxy_provider."},
       {"name": "proxy_class", "required": false, "type": "string", "description": "dc or residential; valid only with proxy_provider."}
     ],
-    "version": "0.1.4",
+    "version": "0.1.5",
     "depends_on": ["html-proxy"],
     "env": {
       "GRAPH_ENABLED": "true",
@@ -6945,7 +6945,7 @@
       {"name": "proxy_profile", "required": false, "type": "string", "description": "Configured ordered profile; mutually exclusive with proxy_pool and proxy_provider."},
       {"name": "proxy_class", "required": false, "type": "string", "description": "dc or residential; valid only with proxy_provider."}
     ],
-    "version": "0.1.5",
+    "version": "0.1.6",
     "depends_on": ["html-proxy"],
     "env": {
       "GRAPH_ENABLED": "true",
