@@ -5548,7 +5548,7 @@
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) probes only /login. active probes the full CommonLoginPaths gazetteer."},
       {"name": "session_id", "required": false, "type": "string", "description": "ID of a session in go-pentest-session-state. When the session's LoginFlow declares kind=json, an..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.5.7",
     "access_tier": "vetted-pentest",
@@ -6084,7 +6084,7 @@
       {"name": "target", "required": true, "type": "string", "description": "URL of a page to inspect. Recovers original source from JS bundles via source maps, then...", "example": "https://stripe.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "version": "0.3.7",
     "access_tier": "vetted-pentest",
     "container_port": 8312,
@@ -6105,7 +6105,7 @@
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) inspects only bundles linked from the page. active additionally probes common..."}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "version": "0.4.8",
     "access_tier": "vetted-pentest",
     "container_port": 8311,
@@ -6170,7 +6170,7 @@
       {"name": "session_id", "required": false, "type": "string", "description": "ID of a session in go-pentest-session-state. Used with ?target= to apply primary cookies+headers..."},
       {"name": "mode", "required": false, "type": "string", "description": "passive (default) is offline analysis. harvest mode is triggered automatically when ?target= is..."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.2.8",
     "access_tier": "vetted-pentest",
@@ -8453,7 +8453,7 @@
       {"name": "target", "required": false, "type": "string", "description": "Legacy v0.1 — full HTML page URL. Walks <script src> tags + jsbundle.RecoverAll. Returns the...", "example": "https://stripe.com"}
     ],
     "placement": "replicable",
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "access_tier": "vetted-pentest",
     "container_port": 8313,
     "example_path": "/go_postmessage_listener_finder?target=https://stripe.com",
