@@ -652,6 +652,12 @@ false`. Keep the proxy on for anything probing third-party
 per-plan pool selection. Applications that only honor those environment
 variables continue using the shared proxy endpoint.
 
+For the provider-neutral per-request API—pool/provider/profile selectors,
+safe candidate descriptors, exact selection, and consumer-owned retry and
+residential admission policy—see the [go-common route guide](https://github.com/baditaflorin/go-common/blob/main/docs/provider-neutral-routes.md).
+The [Webshare pool schema](https://github.com/baditaflorin/go-common/blob/main/docs/webshare-multi-pools.md)
+describes the Webshare catalog file referenced by that route configuration.
+
 `PROXY_SUPPLIER=webshare_direct` is a separate go-common supplier setting for
 applications that explicitly initialize `proxysupplier`. Named Webshare pools
 are another explicit application capability. A service needs all of the
@@ -674,8 +680,8 @@ service opts into named pools; which path is used depends on its code.
 backend only inherits the egress policy of requests that actually reach that
 backend. A residential pool is never enabled just by listing it in the
 pool file: consumer code must gate it with a typed failure policy, destination
-allowlist, and bounded usage policy. See the pool schema for the consumer
-selection API; the supplier does not make fallback decisions.
+allowlist, and bounded usage policy. See the go-common route guide for the
+consumer's selection API; the supplier does not make fallback decisions.
 
 **A bare-host process outside the container-deploy path needs a manual
 copy, not `proxy_egress`.** `proxy_egress` only materializes
