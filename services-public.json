@@ -553,6 +553,30 @@
       "type": "api_key"
     },
     "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "category": "archive",
+    "description": "Owner-scoped immutable HTTP capture storage with content-addressed gzip bodies and route provenance metadata.",
+    "example_path": "/health",
+    "health_url": "https://capture-store.0crawl.com/health",
+    "id": "capture-store",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0crawl",
+    "name": "Capture Store",
+    "placement": "pinned",
+    "repo_url": "https://github.com/baditaflorin/go_capture_store",
+    "runtime": "compose",
+    "tags": [],
+    "trl": 5,
+    "trl_assessed_at": "2026-11-17",
+    "trl_assessor": "codex-capture-store-2026-11-17",
+    "url": "https://capture-store.0crawl.com"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
     "category": "domains",
     "description": "Microservice for Cas",
     "example_path": "/?target=example.com",

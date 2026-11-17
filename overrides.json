@@ -11123,4 +11123,18 @@
     "trl_evidence": "v0.1.0: unit tests for the hash-chained store (tamper detected on reload), role enforcement, ingest masking, the rule engine against the 2026-10-14 incident commands, and two-node replication over HTTP; first production node pending.",
     "version": "0.7.1"
   }
+,
+  "capture-store": {
+    "name": "Capture Store",
+    "description": "Owner-scoped immutable HTTP capture storage with content-addressed gzip bodies and route provenance metadata.",
+    "host_port": 18338,
+    "container_port": 18338,
+    "example_path": "/health",
+    "placement": "pinned",
+    "trl": 5,
+    "trl_evidence": "Initial service release. Unit and race tests cover owner isolation, verified principal boundaries, idempotency conflicts and concurrent replay, immutable gzip objects and checksum validation, bounded compare text, metadata validation, and the console SDK receipt fixture. No production retention history or backup/restore coverage is established; the initial SQLite/filesystem backend is single-instance.",
+    "trl_assessed_at": "2026-11-17",
+    "trl_assessor": "codex-capture-store-2026-11-17",
+    "version": "1.0.1"
+  }
 }

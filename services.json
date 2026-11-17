@@ -1096,6 +1096,36 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "capture-store",
+    "name": "Capture Store",
+    "description": "Owner-scoped immutable HTTP capture storage with content-addressed gzip bodies and route provenance metadata.",
+    "category": "archive",
+    "mesh": "0crawl",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [],
+    "url": "https://capture-store.0crawl.com",
+    "health_url": "https://capture-store.0crawl.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_capture_store",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "wildcard.0crawl.com",
+    "trl": 5,
+    "trl_evidence": "Initial service release. Unit and race tests cover owner isolation, verified principal boundaries, idempotency conflicts and concurrent replay, immutable gzip objects and checksum validation, bounded compare text, metadata validation, and the console SDK receipt fixture. No production retention history or backup/restore coverage is established; the initial SQLite/filesystem backend is single-instance.",
+    "trl_assessed_at": "2026-11-17",
+    "trl_assessor": "codex-capture-store-2026-11-17",
+    "placement": "pinned",
+    "host_port": 18338,
+    "container_port": 18338,
+    "version": "1.0.1",
+    "network_exposure": "gateway-authenticated"
+  },
+  {
     "id": "cas",
     "name": "Cas",
     "description": "Microservice for Cas",
