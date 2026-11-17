@@ -18785,6 +18785,12 @@
         "example": "https://example.com/"
       },
       {
+        "name": "capture",
+        "required": false,
+        "type": "boolean",
+        "description": "Explicitly store one fresh live response to the optional capture store. Requires source=live; defaults to false."
+      },
+      {
         "name": "max_age",
         "required": false,
         "type": "integer",
@@ -18815,7 +18821,7 @@
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
     "access_tier": "infra-privileged",
-    "version": "0.3.66",
+    "version": "0.3.68",
     "network_exposure": "gateway-ip-allowlisted",
     "ci_resources": {
       "mem_class": "m",
