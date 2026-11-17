@@ -19365,8 +19365,58 @@
     "host_port": 18016,
     "container_port": 3413,
     "proxy_egress": true,
-    "version": "0.1.2",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.1.3",
+    "network_exposure": "gateway-authenticated",
+    "params": [
+      {
+        "name": "query",
+        "required": true,
+        "type": "string",
+        "example": "anthropic claude"
+      },
+      {
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "output",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "final",
+        "required": false,
+        "type": "boolean"
+      },
+      {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string",
+        "description": "Strict pool pin; mutually exclusive with proxy_provider and proxy_profile."
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string",
+        "description": "Strict provider pin; may be paired with proxy_class; mutually exclusive with proxy_pool and..."
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string",
+        "description": "Configured ordered profile; mutually exclusive with proxy_pool and proxy_provider."
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string",
+        "description": "dc or residential; valid only with proxy_provider."
+      }
+    ],
+    "depends_on": [
+      "html-proxy"
+    ]
   },
   {
     "id": "node-search-duck",
@@ -19401,8 +19451,58 @@
     "host_port": 18015,
     "container_port": 3403,
     "proxy_egress": true,
-    "version": "0.1.3",
-    "network_exposure": "gateway-authenticated"
+    "version": "0.1.4",
+    "network_exposure": "gateway-authenticated",
+    "params": [
+      {
+        "name": "query",
+        "required": true,
+        "type": "string",
+        "example": "anthropic claude"
+      },
+      {
+        "name": "limit",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "output",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "final",
+        "required": false,
+        "type": "boolean"
+      },
+      {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string",
+        "description": "Strict pool pin; mutually exclusive with proxy_provider and proxy_profile."
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string",
+        "description": "Strict provider pin; may be paired with proxy_class; mutually exclusive with proxy_pool and..."
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string",
+        "description": "Configured ordered profile; mutually exclusive with proxy_pool and proxy_provider."
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string",
+        "description": "dc or residential; valid only with proxy_provider."
+      }
+    ],
+    "depends_on": [
+      "html-proxy"
+    ]
   },
   {
     "id": "ocr-pdf",
