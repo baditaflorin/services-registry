@@ -1123,7 +1123,8 @@
     "host_port": 18338,
     "container_port": 18338,
     "version": "1.0.2",
-    "network_exposure": "gateway-authenticated"
+    "network_exposure": "gateway-authenticated",
+    "large_client_header_buffers": "2 32k"
   },
   {
     "id": "cas",

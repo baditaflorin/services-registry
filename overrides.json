@@ -11133,6 +11133,7 @@
     "host_port": 18338,
     "container_port": 18338,
     "example_path": "/health",
+    "large_client_header_buffers": "2 32k",
     "placement": "pinned",
     "trl": 5,
     "trl_evidence": "Initial service release. Unit and race tests cover owner isolation, verified principal boundaries, idempotency conflicts and concurrent replay, immutable gzip objects and checksum validation, bounded compare text, metadata validation, and the console SDK receipt fixture. No production retention history or backup/restore coverage is established; the initial SQLite/filesystem backend is single-instance.",
