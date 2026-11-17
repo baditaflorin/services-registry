@@ -7625,7 +7625,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.2.7",
     "access_tier": "vetted-pentest",
@@ -7745,7 +7745,7 @@
     "params": [
       {"name": "url", "required": true, "type": "string", "description": "Target URL or bare hostname (https:// assumed).", "example": "https://example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.2.8",
     "access_tier": "vetted-pentest",
@@ -8079,7 +8079,7 @@
       {"name": "text", "required": false, "type": "string"},
       {"name": "url", "required": false, "type": "string"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.5.7",
     "access_tier": "vetted-pentest",
@@ -8142,7 +8142,7 @@
       {"name": "domain", "required": true, "type": "string", "description": "Apex domain (acme.com).", "example": "example.com"},
       {"name": "sources", "required": false, "type": "string", "description": "Comma-separated subset of sources to query (default = all). Names from /sources."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "version": "0.3.7",
     "access_tier": "vetted-pentest",
@@ -8187,7 +8187,7 @@
     "params": [
       {"name": "host", "required": true, "type": "string", "example": "example.com"}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18121,
