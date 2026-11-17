@@ -658,6 +658,15 @@ residential admission policy—see the [go-common route guide](https://github.co
 The [Webshare pool schema](https://github.com/baditaflorin/go-common/blob/main/docs/webshare-multi-pools.md)
 describes the Webshare catalog file referenced by that route configuration.
 
+Explicit route receipts and fetch-cache captures are separate evidence layers.
+A capture can record the requested selector and actual provider/account/pool/
+class attempts only after its consumer validates the response receipt. The
+capture-store field `route_verified` records that consumer-side check; it is not
+independent network attestation. The fetch-cache writer is optional and
+best-effort, and it skips cached, truncated, or over-limit bodies. See the
+[route guide's capture and observability notes](https://github.com/baditaflorin/go-common/blob/main/docs/provider-neutral-routes.md#capture-evidence-and-observability-boundaries)
+for the deployed-consumer snapshot and the current metrics coverage boundary.
+
 `PROXY_SUPPLIER=webshare_direct` is a separate go-common supplier setting for
 applications that explicitly initialize `proxysupplier`. Named Webshare pools
 are another explicit application capability. A service needs all of the
