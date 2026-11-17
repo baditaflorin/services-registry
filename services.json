@@ -27080,5 +27080,37 @@
     "deployment_mode": "iac-rendered",
     "host_port": 18100,
     "container_port": 5001
+  },
+  {
+    "id": "fleet-usage-ledger",
+    "name": "Fleet Usage Ledger",
+    "description": "Authenticated project-scoped append-only physical usage records without pricing.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infrastructure"
+    ],
+    "url": "https://fleet-usage-ledger.0exec.com",
+    "health_url": "https://fleet-usage-ledger.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_fleet_usage_ledger",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Initial SQLite single-instance implementation has local tests for authenticated namespace isolation, replay conflict, pagination, and restart. Fleet deployment, restore and operational durability are not yet verified.",
+    "trl_assessed_at": "2026-11-17",
+    "trl_assessor": "codex-usage-ledger",
+    "placement": "pinned",
+    "host_port": 18339,
+    "container_port": 18339,
+    "version": "0.1.0",
+    "network_exposure": "gateway-ip-allowlisted"
   }
 ]
