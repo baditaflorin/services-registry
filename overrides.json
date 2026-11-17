@@ -4674,7 +4674,7 @@
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "GRAPH_ENABLED": "true",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18156,
@@ -7834,7 +7834,7 @@
       {"name": "severity", "required": false, "type": "string", "description": "Comma-sep severities (default: medium,high,critical)."},
       {"name": "rate_limit", "required": false, "type": "integer", "description": "Requests/sec cap (default 150)."}
     ],
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "placement": "replicable",
     "access_tier": "vetted-pentest",
     "container_port": 18115,
@@ -7927,7 +7927,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18148,
@@ -7953,7 +7953,7 @@
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
-      "XAUTH_TRUST_MODE": "shadow"
+      "XAUTH_TRUST_MODE": "enforce"
     },
     "access_tier": "vetted-pentest",
     "container_port": 18104,
@@ -8033,7 +8033,7 @@
       {"name": "wait_ms", "required": false, "type": "integer", "description": "Sleep after navigation completes, before screenshot. Default 1000."}
     ],
     "proxy_egress": false,
-    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
+    "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "enforce"},
     "version": "0.3.4",
     "access_tier": "vetted-pentest",
     "container_port": 18129,
