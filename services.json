@@ -10418,13 +10418,37 @@
         "required": false,
         "type": "string",
         "description": "off|moderate|strict, default moderate"
+      },
+      {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string",
+        "description": "strict pin to one configured route pool; never falls back"
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string",
+        "description": "select within one configured provider; optional proxy_class=dc|residential"
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string",
+        "description": "dc|residential; only valid with proxy_provider"
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string",
+        "description": "strict ordered fallback profile from PROXY_ROUTING_FILE"
       }
     ],
     "proxy_egress": true,
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.4.28",
+    "version": "0.4.29",
     "network_exposure": "gateway-authenticated"
   },
   {
@@ -18647,13 +18671,33 @@
         "required": true,
         "type": "string",
         "example": "https://example.com"
+      },
+      {
+        "name": "proxy_pool",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_provider",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_class",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "proxy_profile",
+        "required": false,
+        "type": "string"
       }
     ],
     "graph_target_hosts": [
       "go.proxy.okssh.com",
       "proxy.html.go.0prx.com"
     ],
-    "version": "0.5.35",
+    "version": "0.5.36",
     "network_exposure": "gateway-authenticated",
     "ci_resources": {
       "mem_class": "m",
