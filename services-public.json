@@ -15160,5 +15160,31 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "url": "https://baditaflorin.github.io/z3-smt-game/"
+  },
+  {
+    "auth": {
+      "header": "X-API-Key",
+      "type": "api_key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "category": "infrastructure",
+    "description": "Authenticated project-scoped append-only physical usage records without pricing.",
+    "example_path": "/health",
+    "health_url": "https://fleet-usage-ledger.0exec.com/health",
+    "id": "fleet-usage-ledger",
+    "kind": "container",
+    "language": "go",
+    "mesh": "0exec",
+    "name": "Fleet Usage Ledger",
+    "placement": "pinned",
+    "repo_url": "https://github.com/baditaflorin/go_fleet_usage_ledger",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infrastructure"
+    ],
+    "trl": 4,
+    "trl_assessed_at": "2026-11-17",
+    "trl_assessor": "codex-usage-ledger",
+    "url": "https://fleet-usage-ledger.0exec.com"
   }
 ]
