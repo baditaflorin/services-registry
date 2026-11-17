@@ -1,5 +1,6 @@
 ## 2026-11-17
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `robots-parser` 1.7.3.
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `domain-ct-log-watcher` 0.5.2, `infrastructure-fetch-cache` 0.3.66, `trust-decay` 2.7.3.
 
 ## 2026-11-15
