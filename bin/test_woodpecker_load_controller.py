@@ -275,6 +275,42 @@ class HysteresisTests(unittest.TestCase):
 
 
 class HostAdmissionTests(unittest.TestCase):
+    def test_worker_lease_expiry_is_utc_and_fail_closed(self):
+        deadline = "2026-12-17T14:59:50Z"
+        before = controller.datetime(2026, 12, 17, 14, 59, 49, tzinfo=controller.timezone.utc).timestamp()
+        at = controller.datetime(2026, 12, 17, 14, 59, 50, tzinfo=controller.timezone.utc).timestamp()
+        self.assertEqual(controller.worker_lease_expiry(deadline, before), (False, None))
+        self.assertEqual(controller.worker_lease_expiry(deadline, at), (True, deadline))
+        self.assertEqual(controller.worker_lease_expiry("2026-12-17T14:59:50+00:00", before), (True, "invalid expires_at"))
+        self.assertEqual(controller.worker_lease_expiry(123, before), (True, "invalid expires_at"))
+
+    def test_expired_worker_drains_even_when_it_is_the_minimum_schedulable_node(self):
+        config = config_v2()
+        config["nodes"] = [config["nodes"][0]]
+        config["nodes"][0]["expires_at"] = "2000-01-01T00:00:00Z"
+        config["nodes"][0]["graded"] = {"min_open_slots": 1}
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+        state = {"nodes": {}}
+        with patch.object(controller, "fetch_text", side_effect=AssertionError("expired worker must not need metrics")):
+            changed = controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertTrue(changed)
+        self.assertEqual(client.changed, [(1, True)])
+        self.assertTrue(client.remote_agents[0]["no_schedule"])
+        self.assertTrue(state["nodes"]["builder-a"]["lease_expired"])
+
+    def test_malformed_worker_expiry_fails_closed_without_reopening_a_held_agent(self):
+        config = config_v2()
+        config["nodes"] = [config["nodes"][0]]
+        config["nodes"][0]["expires_at"] = "not-a-timestamp"
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": True}])
+        state = {"nodes": {}}
+        with patch.object(controller, "fetch_text", side_effect=AssertionError("expired worker must not need metrics")):
+            changed = controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertFalse(changed)
+        self.assertEqual(client.changed, [])
+        self.assertTrue(client.remote_agents[0]["no_schedule"])
+        self.assertEqual(state["nodes"]["builder-a"]["lease_expiry_reason"], "invalid expires_at")
+
     def test_config_v2_requires_unique_node_and_agent_names(self):
         config = config_v2()
         controller.validate_config(config)

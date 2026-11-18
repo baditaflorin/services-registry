@@ -195,6 +195,15 @@ addresses or tokens in Git. The current controller service is the
 `ci.0mcp.com` controller and queue independent. It does not change scheduling
 on `ci.0exec.com`; each control plane can only drain agents registered to it.
 
+A node may carry `expires_at` as a UTC timestamp in `YYYY-MM-DDTHH:MM:SSZ`
+format. At or after the deadline the controller marks every matching agent
+`no_schedule`, even if this would take that plane below its normal minimum
+schedulable-node count. This gate stops new work and does not cancel workflows
+already running on the worker. A malformed non-empty expiry also fails closed
+and drains the node. Clearing or extending the deadline does not automatically
+resume agents that the expiry gate closed; review the lease and deliberately
+clear `no_schedule` after the extension is verified.
+
 Start with `--once` and without `--apply`. Confirm every configured agent name
 appears, each host's metrics URL succeeds, and the host-level observations match
 the physical topology. For a host reachable only through Tailscale userspace
