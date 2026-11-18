@@ -2379,7 +2379,7 @@
     "host_port": 18235,
     "placement": "replicable",
     "trl": 6,
-    "version": "0.3.26",
+    "version": "0.3.27",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3480,7 +3480,7 @@
       {"name": "domain", "required": true, "type": "string", "description": "Registered domain to probe.", "example": "wordpress.org"},
       {"name": "render", "required": false, "type": "string", "description": "auto (default) requests bounded Chromium after inconclusive static evidence or an eligible..."}
     ],
-    "version": "0.5.4",
+    "version": "0.5.5",
     "container_port": 18186,
     "host_port": 18186,
     "placement": "replicable",
@@ -5537,7 +5537,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.10",
+    "version": "1.5.11",
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -5815,7 +5815,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "v2.4.0 adds IDNA2008 (RFC 5891 lookup-profile) U-label->A-label host normalization in validateTargetURL before DNS, the SSRF gate, TLS SNI, the Host header, and the h3 ServerName; before this every Unicode IDN host (munchen.de, japanese, cyrillic .rf, greek .gr) hard-failed with a no-such-host 400 because Go's resolver/crypto-tls require ASCII A-labels and do not auto-encode U-labels. Live before->after: 6/6 U-label probes 400'd on 2.3.1; on 2.4.0 4 resolve+probe correctly and 2 fail honestly on the correctly-encoded A-label (hosts lack live A records). Uses golang.org/x/net/idna (already a direct dep, zero new modules). Sits on the existing RFC-compliant 5-protocol probe matrix + negotiated/advertised/inconclusive/unsupported capability classifier with evidence trail. New idn_test.go adds 7 table-driven tests across 4 scripts incl ports/IP literals/malformed-fallback/end-to-end validateTargetURL; go build/test/vet/gofmt all green.",
-    "version": "2.4.15",
+    "version": "2.4.16",
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -6211,7 +6211,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `url`."},
       {"name": "text", "required": false, "type": "string", "description": "Raw text (or HTML) to analyse directly, skipping the fetch."}
     ],
-    "version": "0.2.17",
+    "version": "0.2.21",
     "description": "Extracts keyphrases and topics with RAKE and TextRank; Japanese pages use Kagome morphological segmentation.",
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -6281,7 +6281,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18250,
     "placement": "replicable",
-    "version": "0.3.20",
+    "version": "0.3.21",
     "trl": 7,
     "trl_assessed_at": "2026-07-14",
     "trl_assessor": "codex-trl-audit-2026-07-14",
@@ -6328,7 +6328,7 @@
       "XAUTH_TRUST_MODE": "shadow"
     },
     "depends_on": ["infrastructure-fetch-cache"],
-    "version": "0.2.21",
+    "version": "0.2.22",
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -6415,7 +6415,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18270,
     "placement": "replicable",
-    "version": "0.1.16",
+    "version": "0.1.17",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6467,7 +6467,7 @@
     "depends_on": [
       "infrastructure-fetch-cache"
     ],
-    "version": "0.1.11",
+    "version": "0.1.12",
     "trl": 7,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6502,7 +6502,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "TRL-6 uplift 2026-05-16. Detection now stacks four orthogonal signal\nfamilies: (1) DNS multi-A / round-robin lookup, (2) parallel HEAD\nmulti-fetch with Server / ETag / Date-skew / cookie diversity scoring,\n(3) a vendor signature matrix covering F5 BIG-IP, AWS ALB/ELB,\nHAProxy, Citrix NetScaler, Barracuda, Pulse Secure, Nginx Plus, plus\nCDN families (Cloudflare, CloudFront, Fastly, Akamai), (4) a\nclassifier producing none|proxy|cdn|lb|cluster with an explicit\nadditive confidence formula. Evidence trail surfaced per vendor\nmatch. 19 unit + integration tests covering single-host, AWS ALB,\nF5 BIG-IP, multi-IP round-robin, plain-nginx no-LB, generic-fallback\nand vendor-suppression cases. Backward-compatible with v1.x callers\nvia the legacy `analysis` JSON sub-field. ADR: docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "1.5.5",
+    "version": "1.5.6",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "loadbalancer-detect", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "spiffe_workload": true,
     "spiffe_merged_identity": true
@@ -6547,7 +6547,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "2026-08-20 re-audit (clean-slate, fresh clone of origin/main @ 42cb246): confirmed the 2026-07-31 fetch-cache-masking fix (fleetfetch.WithoutCache on fetchClient) is still the sole live-fetch path in fetch()/Handler; the old httpClient (safehttp.NewClient) is dead code, unreferenced by any production path. TRL 6 holds; the trl_ceiling:4 contradiction from the stale 2026-05-16 assessment was already resolved on 2026-07-31 (PR #9) and remains resolved -- clearing trl_ceiling here to stop it re-surfacing as a false contradiction.\nFound and fixed a new, real correctness bug in oauth.go's matchProvider: the external-URL branch was already guarded (2026-07 fix) against classifying an OAuth/SSO provider from an attacker/redirect-controlled query string (only host+path may match); the relative-path branch (same-origin SAML/OIDC routes) had no equivalent guard and matched needles against the full href (path+query), so a same-origin link like \"/logout?return=/saml/consume\" was misreported as a real SSO provider -- inflating confidence (+0.15) and flipping auth_method from \"unknown\" to \"oauth-only\"/\"oauth+password\" on pages with zero actual SSO. Reproduced deterministically (matchProvider(\"/logout?return=/saml/consume\") returned \"saml\" pre-fix); fixed by matching only u.EscapedPath(), mirroring the external-URL branch. 2 new regression tests added (19 total: 17 pre-existing + 2 new); go build/vet/test clean. Version bumped 1.4.7 -> 1.4.8. PR: https://github.com/baditaflorin/go_login_analyzer/pull/14 (open, not merged).",
-    "version": "1.4.11",
+    "version": "1.4.12",
     "spiffe_workload": true,
     "spiffe_merged_identity": true
   },
@@ -6570,7 +6570,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18266,
     "placement": "replicable",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -6748,7 +6748,7 @@
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `url`."},
       {"name": "text", "required": false, "type": "string", "description": "Raw HTML to analyse directly, skipping the fetch (useful for testing and pasted markup)."}
     ],
-    "version": "0.2.11",
+    "version": "0.2.12",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "container_port": 18260,
     "description": "Parses microformats2 (mf2) markup from a web page or raw HTML into canonical mf2 JSON. Detects h-* root items (h-card, h-entry, h-event, h-feed, h-product, h-review, h-recipe, h-adr, h-geo and any other h-*), reads p-/u-/dt-/e- properties on descendants, applies the implied name/url/photo rules, nests h-* items inside properties (e.g. p-author h-card) and as children[], and collects rel values into rels{} and rel-urls{} — returning items[], rels, rel-urls, and a summary roll-up.",
@@ -7061,7 +7061,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Canonical 26-payload bypass set with class taxonomy\n(absolute / protocol-relative / userinfo / scheme-abuse / encoding /\nsuffix / unicode / CRLF). 17-name redirect-param matrix. eTLD+1\nescape detection via golang.org/x/net/publicsuffix (Mozilla PSL).\nMulti-hop chain tracing up to 5 hops with javascript:/data: refusal\nand unfollowed-Location-on-cap evaluation. Per-request 4s, total 30s,\nworker pool 4. handler_test.go + chain_test.go cover vulnerable\necho server, safe server, same-host ignore, dangerous-scheme labeling,\nhop cap, eTLD+1 comparison (incl. multi-label TLDs), back-compat\n?url= alias, SSRF guard. See docs/adr/0001-trl-uplift-to-6.md.",
-    "version": "2.3.5",
+    "version": "2.3.6",
     "coolify_app_uuid": "aj6l0wno9j8d35m7qwbu17ux"
   },
   "open-school-lab": {
@@ -7168,7 +7168,7 @@
       "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.1.22",
+    "version": "0.1.23",
     "trl": 5,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -7417,7 +7417,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; ≥6 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across ≥3 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
-    "version": "0.2.8",
+    "version": "0.2.9",
     "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
   },
   "pentest-codec": {
@@ -8464,7 +8464,7 @@
     "example_path": "/?url=https://example.com",
     "host_port": 18271,
     "placement": "replicable",
-    "version": "0.1.25",
+    "version": "0.1.26",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -8591,7 +8591,7 @@
       "FLEET_FETCH_CACHE_SPIFFE": "dual",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.1.43",
+    "version": "0.1.44",
     "trl": 5,
     "trl_assessed_at": "2026-10-20",
     "trl_assessor": "codex-rd-loop",
@@ -8633,7 +8633,7 @@
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "XAUTH_TRUST_MODE": "shadow"
     },
-    "version": "0.2.13",
+    "version": "0.2.14",
     "trl": 6,
     "trl_assessed_at": "2026-06-01",
     "trl_assessor": "claude-opus-4.8",
@@ -8702,7 +8702,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "RFC 7230 Via header parser (multi-header, comment-aware) + RFC 7239 Forwarded.\n17-vendor signature table (Cloudflare, Akamai, CloudFront, Fastly, Vercel,\nNetlify, BunnyCDN, KeyCDN, CDN77, StackPath, Sucuri, Incapsula, Azure\nFront Door, Google, Varnish, GitHub Pages, generic CDN). Topology\nclassification (direct / reverse_proxy / forward_proxy / cdn / multi_layer).\nChain-depth inference from max(via_hops, distinct_vendors, generic_floor).\nActive X-Forwarded-For probe to detect transparent forwarding (echo,\ncache-key flip, Vary advertisement). 28 unit tests + 6 httptest end-to-end\nscenarios across canned vendor headers. SSRF-safe via go-common/safehttp.",
-    "version": "1.4.6",
+    "version": "1.4.7",
     "env": {"GRAPH_ENABLED": "true", "GRAPH_SERVICE_ID": "proxy-fingerprint", "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com", "XAUTH_TRUST_MODE": "shadow"},
     "mcp_ready": true,
     "mcp_tool_count": 1,
@@ -9245,7 +9245,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "2.5.5",
+    "version": "2.5.6",
     "depends_on": [
       "go-fleet-secrets",
       "infrastructure-fetch-cache"
@@ -10813,7 +10813,7 @@
     "trl_ceiling": 7,
     "trl_ceiling_reason": null,
     "trl_evidence": "4 probes (origin/auth/subprotocol/framesize) with hard 1MiB cap, in-process WS fixtures for /selftest, safehttpAllowLoopback() toggle for test-time SSRF guard\n\n2026-08-20 audit (claude-sonnet-5-trl-audit-2026-08-20): fresh clone of origin/main (68f7ee9) reviewed end-to-end against its stated purpose (WS endpoint discovery + CSWSH/auth/subprotocol/frame-size probing via nhooyr.io/websocket). Confirmed a real, live-verified correctness bug: dial.go's dialWS, probes.go's dialProbe, and discover.go's httpClient all built safehttp.NewClient() bare. A WebSocket handshake is a plain GET with Upgrade headers and no body -- eligible for the fleet-wide fetch-cache delegate the same as any ordinary GET -- but the cache has no notion of a 101 Switching Protocols upgrade and can only hand back a synthetic HTTP response, so once FLEET_FETCH_CACHE_URL is set (fleet-wide since go-common@v0.88.0) every origin/auth/subprotocol probe would dial-error on a non-101 status and silently report 'no finding' against a genuinely vulnerable target -- defeating this tool's entire purpose under a normal fleet deploy. Fixed in PR https://github.com/baditaflorin/go_websocket_analyzer/pull/10 (open, not merged) by adding .WithoutFetchCache() to all three clients. Added TestDialProbe_BypassesFetchCache: installs a stub FetchDelegate as the process-wide default and asserts it is never consulted and the missing-origin-check finding still surfaces against the open fixture; verified this test fails on the pre-fix code (delegate called, finding suppressed) and passes after. Bumped 0.2.3->0.2.4. TRL 7 reaffirmed post-fix -- probe architecture and detection logic are sound once the cache bypass is in place; PR is pending merge.",
-    "version": "0.2.14",
+    "version": "0.2.15",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
