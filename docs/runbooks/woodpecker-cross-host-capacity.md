@@ -271,8 +271,11 @@ while host storage is still low.
    The report classifies pipelines by physical host. Unknown agent IDs remain
    `unattributed`; do not assume they ran on 0docker.
    When registering a worker, add its exact Woodpecker agent name and physical
-   host to `ci-execution-report.json`'s `agent_hosts` map so completed runs are
-   attributed correctly. Remove that name mapping when the worker is retired.
+   host to `ci-execution-report.json`'s `agent_hosts` map and its registration
+   ID to `agent_id_hosts`. Keep the ID mapping after rotation or retirement so
+   historical runs remain attributable after Woodpecker removes the agent from
+   `/api/agents`; remove the name mapping only after that registration stops
+   running workflows.
 
 The 2026-08-28 deployment proof reran `services-registry` pipeline 20 on
 `0mcp-docker-exec-agent`; it passed. Both local agents were restored afterward.
