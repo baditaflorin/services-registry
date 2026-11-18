@@ -80,6 +80,7 @@ class ConfigTests(unittest.TestCase):
             "90": "0mcp",
             "91": "0docker",
             "98": "0docker",
+            "140": "kamateratmp",
         }
         for agent_id, physical_host in expected.items():
             with self.subTest(agent_id=agent_id):
