@@ -86,6 +86,12 @@ class ConfigTests(unittest.TestCase):
                 self.assertEqual(
                     exec_plane["agent_id_hosts"].get(agent_id), physical_host
                 )
+        self.assertEqual(
+            exec_plane["agent_hosts"].get(
+                "kamateratmp-build-ag-from-139-r-20261118t022839"
+            ),
+            "kamateratmp",
+        )
 
     def test_duplicate_plane_names_fail(self):
         config = {
