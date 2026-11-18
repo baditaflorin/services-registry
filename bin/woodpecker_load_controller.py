@@ -25,6 +25,7 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
+from datetime import datetime, timezone
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
@@ -671,6 +672,28 @@ def log_event(**fields: Any) -> None:
     print(json.dumps(fields, sort_keys=True), flush=True)
 
 
+def worker_lease_expiry(expires_at: Any, now: float | None = None) -> tuple[bool, str | None]:
+    """Return whether an optional UTC lease deadline has passed.
+
+    A malformed non-empty deadline is expired so a bad lease value closes the
+    worker to new pipelines instead of silently leaving it schedulable.
+    """
+    if expires_at is None or expires_at == "":
+        return False, None
+    if not isinstance(expires_at, str) or not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", expires_at
+    ):
+        return True, "invalid expires_at"
+    try:
+        deadline = datetime.strptime(expires_at, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return True, "invalid expires_at"
+    current = time.time() if now is None else now
+    if current >= deadline.timestamp():
+        return True, expires_at
+    return False, None
+
+
 def agent_readiness(
     agent: dict[str, Any],
     now: float,
@@ -965,6 +988,8 @@ def run_cycle_v2(
     observations = []
     graded_inputs: dict[str, tuple[dict[str, Any], NodeSnapshot, Pressure]] = {}
     schedulable_nodes = 0
+    changed = False
+    now = time.time()
     for entry in config["nodes"]:
         name = entry["name"]
         configured_names = set(entry["agent_names"])
@@ -976,9 +1001,6 @@ def run_cycle_v2(
             log_event(event="node_missing", node=name)
             continue
 
-        schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
-        if schedulable:
-            schedulable_nodes += 1
         node_state = nodes_state.setdefault(name, {})
         by_id = {str(agent.get("id")): agent for agent in agents if agent.get("id") is not None}
         previously_managed = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
@@ -995,6 +1017,48 @@ def run_cycle_v2(
             managed_ids,
             int(config.get("agent_stale_after_seconds", 120)),
         )
+
+        expired, expiry_reason = worker_lease_expiry(entry.get("expires_at"), now)
+        if expired:
+            schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
+            node_state["lease_expired"] = True
+            node_state["lease_expiry_reason"] = expiry_reason
+            node_state["managed_agent_ids"] = sorted(managed_ids)
+            node_state["managed_no_schedule"] = bool(managed_ids)
+            log_event(
+                event="worker_lease_expired",
+                node=name,
+                expires_at=entry.get("expires_at"),
+                reason=expiry_reason,
+                agents_to_drain=[agent.get("id") for agent in schedulable],
+                apply=apply,
+            )
+            if apply:
+                for agent in schedulable:
+                    try:
+                        client.set_no_schedule(agent, True)
+                    except Exception as exc:
+                        log_event(
+                            event="worker_lease_expiry_drain_failed",
+                            node=name,
+                            agent_id=agent.get("id"),
+                            agent=agent.get("name"),
+                            error=str(exc),
+                        )
+                    else:
+                        changed = True
+                        log_event(
+                            event="worker_lease_agent_drained",
+                            node=name,
+                            agent_id=agent.get("id"),
+                            agent=agent.get("name"),
+                            reason=expiry_reason,
+                        )
+            continue
+
+        schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
+        if schedulable:
+            schedulable_nodes += 1
 
         backing_config = entry.get("backing_storage")
         try:
@@ -1084,7 +1148,6 @@ def run_cycle_v2(
     if not apply:
         return False
 
-    changed = False
     minimum_schedulable = int(config.get("minimum_schedulable_nodes", 1))
     # Restore healthy capacity before drains; only controller-managed IDs can be
     # restored, so a manual no_schedule hold survives recovery.
@@ -1154,7 +1217,6 @@ def run_cycle_v2(
 
     # Graded hosts that were not drained outright: open or close one agent to follow headroom.
     stale_after = int(config.get("agent_stale_after_seconds", 120))
-    now = time.time()
     for name, agents, _schedulable, node_state, pressure, action in observations:
         if name not in graded_inputs or pressure is None:
             continue
