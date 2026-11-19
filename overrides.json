@@ -10203,7 +10203,7 @@
       {"name": "text", "required": false, "type": "string", "description": "Raw HTML to scan directly, skipping the fetch (useful for testing and pasted markup)."},
       {"name": "render", "required": false, "type": "string", "description": "Use js to request Chromium, or auto to retry with Chromium after a static fetch failure, an..."}
     ],
-    "version": "0.1.22",
+    "version": "0.1.23",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_SERVICE_ID": "testimonial-extractor",
@@ -11140,7 +11140,7 @@
     "trl_evidence": "Initial service release. Unit and race tests cover owner isolation, verified principal boundaries, idempotency conflicts and concurrent replay, immutable gzip objects and checksum validation, bounded compare text, metadata validation, and the console SDK receipt fixture. No production retention history or backup/restore coverage is established; the initial SQLite/filesystem backend is single-instance.",
     "trl_assessed_at": "2026-11-17",
     "trl_assessor": "codex-capture-store-2026-11-17",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "fleet-usage-ledger": {
     "name": "Fleet Usage Ledger",
