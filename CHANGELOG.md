@@ -1,3 +1,7 @@
+## 2026-11-19
+
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.80, `html-proxy` 0.5.41.
+
 ## 2026-11-18
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `company-name-extractor` 0.1.77.
