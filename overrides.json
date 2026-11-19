@@ -9279,6 +9279,7 @@
       {"name": "proxy_profile", "required": false, "type": "string", "description": "Named ordered route chain; explicit route requests return X-Proxy-Route-Receipt."}
     ],
     "env": {
+      "PROXY_SUPPLIER": "${PROXY_SUPPLIER:-webshare_multi}",
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
       "XAUTH_TRUST_MODE": "shadow"
