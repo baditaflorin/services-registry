@@ -1,5 +1,6 @@
 ## 2026-11-20
 
+- fleet-version-pin-sync: 13 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.46, `brand-logo-extractor` 0.1.33, `company-size` 3.5.76, `founding-year` 3.6.25, `leadership-extractor` 0.2.25, `menu-extractor` 0.1.13, `microformats2-extractor` 0.2.13, `office-locations` 2.7.31, `payment-detector` 1.6.27, `press-mentions` 2.5.23, `review-presence` 0.4.16, `testimonial-extractor` 0.1.24, `tos-finder` 1.9.20.
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.3, `domain-ecommerce-platform` 0.5.33.
 
 ## 2026-11-19
