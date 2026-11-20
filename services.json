@@ -26552,6 +26552,31 @@
     "trl_assessor": "claude-haiku-trl-batch"
   },
   {
+    "id": "pybot-go",
+    "name": "Pybot Go",
+    "description": "A compact, CPU-only Go chatbot inspired by Hugging Face PyBot.",
+    "category": "app",
+    "mesh": "pages",
+    "kind": "static",
+    "language": "wasm",
+    "runtime": "github-pages",
+    "tags": [
+      "chatbot",
+      "cpu-only",
+      "no-llm",
+      "webassembly"
+    ],
+    "url": "https://pybot.0sample.com",
+    "health_url": "https://pybot.0sample.com",
+    "repo_url": "https://github.com/baditaflorin/pybot-go",
+    "example_path": "/",
+    "auth": {
+      "type": "none"
+    },
+    "auth_help": "no auth",
+    "pages_url": "https://pybot.0sample.com"
+  },
+  {
     "id": "react-data-grid",
     "name": "React Data Grid",
     "description": "Feature-rich and customizable data grid React component",
