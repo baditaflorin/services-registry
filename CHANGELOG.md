@@ -1,3 +1,7 @@
+## 2026-11-20
+
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.3, `domain-ecommerce-platform` 0.5.33.
+
 ## 2026-11-19
 
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.0, `testimonial-extractor` 0.1.23.
