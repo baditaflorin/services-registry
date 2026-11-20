@@ -1794,7 +1794,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "1.5.23",
+    "version": "1.5.24",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -2115,7 +2115,7 @@
     "trl_assessed_at": "2026-07-31",
     "trl_assessor": "claude-sonnet-5-2026-07-31-real-data-batch",
     "trl_evidence": "1,266-domain live audit (ads.txt + 18 in-page ad-network signatures). Fixed a real bug: Google Ad Manager out-of-page/interstitial slots were detected but their network code was never extracted. Zero false positives on manual spot-check across the full sample. Independently re-validated this repo's own pre-existing trl:7 self-claim rather than assuming it. See github.com/baditaflorin/go_domain_ad_network PR #5.",
-    "version": "0.4.20",
+    "version": "0.4.21",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -2448,7 +2448,7 @@
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
-    "version": "0.5.10",
+    "version": "0.5.11",
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
     "fetch_cache_api_key_file_mount": true
@@ -2615,7 +2615,7 @@
     "trl_evidence": "Fresh audit (DB pass found no anomaly) found and fixed a real, production-confirmed false positive: classify() pinned primary_platform=swagger_ui from swagger-ui-dist's bundled JS filenames alone, with no check the page was ever wired to a real API spec -- a cluster of unrelated small-business sites (several real-estate-agent pages) all serve the byte-identical, never-configured stock demo page pointed at Swagger's own public petstore.swagger.io sample spec. swagger_ui was the #2 most common detected platform (575 domains) fleet-wide. Fixed (v0.4.9) by skipping a swagger_ui match when the body still carries the literal default demo URL; verified live all 7 sampled false positives flip to no_data while genuine installs remain detected. See github.com/baditaflorin/go_domain_documentation_platform_detector PR #14 (merged). Rows with tool_version<0.4.9 are re-crawl candidates. On 2026-10-20, PR #61 added Arabic API documentation recognition after a saved Saudi Arabic non-null page reproduced a no_data false negative; the patched local handler classified it as custom at confidence 55. A headless Chrome render confirmed the content was already present after hydration, so this fix targets Arabic documentation wording rather than rendering. No raw page or domain is included.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.5.11",
+    "version": "0.5.12",
     "depends_on": ["infrastructure-fetch-cache"],
     "spiffe_workload": true,
     "fetch_cache_api_key_file_mount": true
@@ -3099,7 +3099,7 @@
     "params": [
       {"name": "domain", "required": true, "type": "string", "description": "Registered domain to probe.", "example": "stripe.com"}
     ],
-    "version": "0.5.26",
+    "version": "0.5.27",
     "container_port": 18187,
     "env": {
       "GRAPH_ENABLED": "true",
@@ -3172,7 +3172,7 @@
     "trl_ceiling_reason": "The shared JS-render upstream can degrade on cold or failed renders, limiting SLA-grade completeness.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.27",
+    "version": "0.4.28",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3199,7 +3199,7 @@
     "trl_evidence": "First-pass audit (fresh 250-domain sample + live spot-check of 30 known OSS companies, 27/30 correct): found and fixed 2 real bugs -- an inconsistent length threshold meant exactly-3-character brand tokens (e.g. 'n8n') could never match via containment, confirmed live losing a 200k+-star OSS company entirely (fixed with a careful prefix-anchored rule, not a naive blanket match which a stress test showed would introduce new false positives); and a GitHub API rate-limit quota-doubling bug on failed lookups. Confirmed fetch-cache masking doesn't apply (uses fleetfetch by design) and confirmed a real, live GitHub unauthenticated rate-limit exhaustion (60/hour shared fleet-wide). Flagged (not overridden) a catalog/repo discrepancy: this repo's own service.yaml had self-bumped to trl=7 without a fresh assessor stamp. trl held at 6 pending that reconciliation; trl_ceiling=8 added. See PR #12 (merged).",
     "trl_assessed_at": "2026-08-01",
     "trl_assessor": "claude-sonnet-5-2026-08-01-infra-recon-batch",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -3466,7 +3466,7 @@
     "trl_evidence": "Live production-DB audit found primary_vendor='reamaze' as the single largest detected vendor (1,191 rows), with 49.5% being spam/parked .info domains. Traced the residual (post-earlier-fix) cases via live browser reproduction to GoDaddy Website Builder unconditionally loading Reamaze's shared JS bundle via a GoDaddy-specific loader file, whose bundled CSS/DOM boilerplate satisfied the detector's 'activation' marker regardless of merchant intent -- verified against reamaze.com's own genuine install, which never carries that GoDaddy-specific loader filename. Fixed (v0.3.8) with a targeted confidence cap keyed to the GoDaddy loader marker, with regression tests for both the false-positive and true-positive cases. See github.com/baditaflorin/go_domain_support_stack_detector PR #14 (merged). Rows with tool_version<0.3.8 are re-crawl candidates.",
     "trl_assessed_at": "2026-08-07",
     "trl_assessor": "claude-sonnet-5-2026-08-07-domainscope-db-forensics-batch",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
@@ -8971,7 +8971,7 @@
     "params": [
       {"name": "target", "required": true, "type": "string", "description": "Company website URL. Page content is inspected on candidate pricing, plans, donation, shop, API...", "example": "example.com"}
     ],
-    "version": "2.6.41",
+    "version": "2.6.42",
     "container_port": 8303,
     "description": "Microservice for Revenue Model",
     "host_port": 8303,
@@ -9634,7 +9634,7 @@
     "trl_ceiling": null,
     "trl_ceiling_reason": null,
     "trl_evidence": "Standalone service (not a go_composite_runner recipe). Tested against domain_shipping_regions/domain_shipping_region_items (~2.8M rows) plus a fresh 1,400-domain sample. Fixed a carrier-brand country-name false positive ('Canada Post', 'Australia Post' read as shipping destinations, 3.1% of tested domains, confirmed on the repo's own etsy.com smoke-test URL) and a negation/exclusion polarity inversion ('we do not ship to X', 'ship worldwide except X' registered as positive destinations, 3% prevalence, confirmed on dancesafe.org where 8 explicitly-embargoed countries showed as shippable). See github.com/baditaflorin/go_shipping_regions PR #13. | 2026-10-20 saved cohort: 87 rows across 20 markets. Targeted Swiss replay previously added CH from currency and company-location cues despite a Germany-only claim; fixed output is [DE]. One targeted regression, not a cohort-wide metric. Source PR #62 merged; release 1.7.26.",
-    "version": "1.7.43",
+    "version": "1.7.44",
     "mcp_ready": true,
     "mcp_tool_count": 1,
     "mcp_assessed_at": "2026-08-07T11:47:15.89009327Z",
