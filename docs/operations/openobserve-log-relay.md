@@ -35,6 +35,11 @@ and runs `docker compose up -d --no-deps oo-relay`, without changing OpenObserve
   `end`, at most 7 days and 500 lines, oldest first or newest first.
 - Only `_timestamp`, `container_name`, `host`, `message` come back; messages
   are masked for known credential shapes and cut at 8 KB.
+- v0.3.0 adds `POST /v1/logs/count`: how many lines per UTC day (or hour, span
+  at most 24 h) one container wrote, optionally only those containing a
+  substring. Numbers only. `oo count <container> --since 7d --grep TEXT` calls
+  it. It is in the source but NOT deployed: VM 630 still runs v0.2.0 until the
+  deploy steps below are approved and done.
 - No SQL, no other stream, no organization choice, no write endpoint.
 - Failures are explicit (`401`, `400`, `429`, `502 unavailable`). A relay or
   OpenObserve problem is never reported as "zero matching lines".
@@ -42,7 +47,8 @@ and runs `docker compose up -d --no-deps oo-relay`, without changing OpenObserve
 ## Using it from an agent
 
 `bin/oo` has a relay mode, selected by `OO_RELAY_URL`. It serves `logs`,
-`grep --container`, `since-redeploy` and `context`; the commands that need SQL
+`grep --container`, `since-redeploy`, `context` and (relay v0.3.0 or later)
+`count`; the commands that need SQL
 or a fleet-wide search (`query`, `errors`, `containers`, `hosts`, `summary`, ...)
 refuse with exit 2 in relay mode.
 

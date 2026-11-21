@@ -37,6 +37,32 @@ queries), `502` `unavailable` (OpenObserve did not answer; this is not zero rows
 
 There are no write endpoints, no SQL input, no stream or organization choice.
 
+## Counting lines: `POST /v1/logs/count` (v0.3.0)
+
+`/v1/logs` stops at 500 rows, so it cannot answer "how many requests per day".
+`POST /v1/logs/count` uses the same bearer token and the same rules for
+`container_name`, `host`, `contains`, `start`, `end` (at most 7 days) and adds
+`bucket`: `day` (default, UTC days) or `hour` (UTC hours, span at most 24 hours).
+It returns numbers only, never a message:
+
+`{"status":"ok","stream":"docker_logs","bucket":"day","total":N,"exact":true,"buckets":[{"start","end","count"}]}`
+
+Each bucket is its own `SELECT COUNT(*) AS n FROM docker_logs WHERE ...` over the
+bucket's time window, one upstream query per bucket (at most 8 day buckets or 25
+hour buckets), under the same concurrency gate. The relay does not use
+OpenObserve's `histogram()`, so it does not depend on that function's output
+format. The first bucket starts at the requested `start` and the last ends at the
+requested `end`; a row exactly on a bucket boundary may sit on either side.
+
+A substring that contains `%`, `_` or `\` is matched loosely (see "How the query
+is built"). `/v1/logs` drops the extra rows by re-checking them; a count never
+reads the rows, so it cannot, and the answer then carries `"exact": false` and is
+an upper bound. A partial, malformed or failed upstream answer is a `502`, never
+a zero. `oo count` in `bin/oo` calls it in relay mode.
+
+Not yet checked against the live OpenObserve: the unit tests use a fake upstream.
+After deploying, compare one `oo count` with a `oo logs` of a small window.
+
 ## How the query is built
 
 `query.go` renders exactly one SQL shape:
