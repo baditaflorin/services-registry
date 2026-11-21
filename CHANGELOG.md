@@ -1,3 +1,7 @@
+## 2026-11-21
+
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `domain-structured-data-rollup` 0.3.30, `site-capsule` 0.3.1.
+
 ## 2026-11-20
 
 - fleet-version-pin-sync: 10 registry version pin(s) set to the version the service runs, which is also its repository main: `currency-detector` 1.5.24, `domain-ad-network` 0.4.21, `domain-compliance-claim-scanner` 0.5.11, `domain-documentation-platform-detector` 0.5.12, `domain-mobile-app-resolver` 0.5.27, `domain-newsletter-platform-detector` 0.4.28, `domain-open-source-presence` 0.3.6, `domain-support-stack-detector` 0.4.8, `revenue-model` 2.6.42, `shipping-regions` 1.7.44.

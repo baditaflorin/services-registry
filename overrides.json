@@ -3424,7 +3424,7 @@
     "container_port": 18188,
     "host_port": 18188,
     "placement": "replicable",
-    "version": "0.3.29",
+    "version": "0.3.30",
     "env": {
       "GRAPH_ENABLED": "true",
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
@@ -9668,7 +9668,7 @@
     "coolify_app_uuid": "f9apfdnpdg5hgsovtq3mpw64"
   },
   "site-capsule": {
-    "version": "0.2.3",
+    "version": "0.3.1",
     "container_port": 18337,
     "cpus": 2,
     "depends_on": ["apikey-service", "infrastructure-fetch-cache"],
