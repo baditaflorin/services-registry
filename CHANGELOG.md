@@ -1,5 +1,6 @@
 ## 2026-11-22
 
+- fleet-prometheus: `mem_limit` raised from 4g to 8g. On 2026-11-22 the 4 GiB cap put `go-fleet-prometheus` in an OOM loop (killed at about 4.17 GB RSS while replaying a 25 GB TSDB WAL, roughly every five minutes, so the 0docker alerts and exporter were blind). The live container was raised with `docker update` first; this makes it durable across `render-compose`.
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.6, `search-bing-go` 0.4.6, `site-capsule` 0.3.3.
 
 ## 2026-11-21
