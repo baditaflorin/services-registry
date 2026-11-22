@@ -38,7 +38,8 @@ written, and the entry stays in the ID, TRL and MCP views.
   reports it as skipped with `lifecycle="on_demand"`.
 - To bring it back: set `status` to `active` (drop the on_demand fields) in a
   pull request, then deploy it with `fleet-runner deploy`.
-- Stopping the container itself is a separate, deliberate action. `restart:
-  always` and the daily compose rewrite will start it again until fleet-runner
-  learns to leave an `on_demand` service stopped; the fleet-runner change is
-  tracked apart from this one.
+- Stopping the container itself is a separate, deliberate action. With
+  go_fleet_runner#1045, `deploy` refuses an on_demand service and `render-compose`
+  leaves its directory alone, so a `--push --restart` run does not start it. A
+  Docker daemon restart or host reboot still starts a container left on
+  `restart: always`.
