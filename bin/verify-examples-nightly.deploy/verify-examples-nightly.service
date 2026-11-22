@@ -1,0 +1,15 @@
+[Unit]
+Description=Nightly registry example check (verify-examples): every service's example_path, scoped 1 h key
+Documentation=https://github.com/baditaflorin/services-registry/blob/main/bin/verify-examples-nightly.deploy/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=HOME=/root
+StateDirectory=verify-examples
+# The check takes about 4 minutes; the revocation proof waits up to 150 s after it.
+TimeoutStartSec=30min
+Nice=15
+IOSchedulingClass=idle
+ExecStart=/usr/local/bin/verify-examples-nightly
