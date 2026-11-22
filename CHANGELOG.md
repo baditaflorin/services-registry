@@ -1,3 +1,7 @@
+## 2026-11-22
+
+- fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.6, `search-bing-go` 0.4.6, `site-capsule` 0.3.3.
+
 ## 2026-11-21
 
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `domain-structured-data-rollup` 0.3.30, `site-capsule` 0.3.1.
