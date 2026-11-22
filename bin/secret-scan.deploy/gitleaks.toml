@@ -1,0 +1,41 @@
+# Fleet secret scan: gitleaks default rules + the fleet's own key shape.
+# Scans the checked-in tree of each repo's origin/main (not history). Values are always redacted in reports.
+title = "fleet secret scan"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id          = "fleet-api-key"
+description = "Fleet API key shape (fb_ + 32 hex)"
+regex       = '''\bfb_[a-f0-9]{32}\b'''
+tags        = ["fleet", "secret"]
+
+[[rules]]
+id          = "fleet-ak-key"
+description = "Fleet ak_ key (ak_ + 24 or more alphanumerics)"
+regex       = '''\bak_[A-Za-z0-9]{24,}\b'''
+tags        = ["fleet", "secret"]
+
+[[rules]]
+id          = "credentials-in-url"
+description = "user:password@host in an http(s) URL"
+regex       = '''https?://[A-Za-z0-9._~%-]{3,}:[A-Za-z0-9._~%!$&*+=-]{6,}@[A-Za-z0-9.-]+\.[a-z]{2,}'''
+tags        = ["url", "secret"]
+[[rules.allowlists]]
+description = "placeholders"
+regexes     = ['''(?i)://(user|username|USER|\$\{?[A-Z_]+\}?|<[^>]+>|\{\{[^}]+\}\}|%s|%v|admin|example|foo|me|x):''']
+
+[allowlist]
+description = "dependency and generated files"
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)vendor/''',
+  '''(^|/)go\.sum$''',
+  '''package-lock\.json$''',
+  '''yarn\.lock$''',
+  '''pnpm-lock\.yaml$''',
+  '''(^|/)dist/''',
+  '''\.min\.js$''',
+  '''\.svg$''',
+]
