@@ -1,5 +1,6 @@
 ## 2026-11-22
 
+- verify-examples: refreshed `services.examples.json` (321 of 390 examples answer ok; last run was 2026-10-30). A service that no docker host answers on (it runs on a host the check does not probe) is now asked through its public address with the same scoped key, instead of being reported `unreachable`: ct-names, domain-integration-marketplace, ocr-pdf-express, open-redirect and sitemap-finder were never down. `verify-examples-run.sh` no longer crashes when the keystore lists no key. Still failing: domain-analytics-stack (502), domain-backlink-profile (504), legal-entity (502), node-search-bing (500), testimonial-extractor (503 "auth backend unavailable").
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.6, `search-bing-go` 0.4.6, `site-capsule` 0.3.3.
 
 ## 2026-11-21
