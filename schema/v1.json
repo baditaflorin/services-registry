@@ -81,17 +81,22 @@
       "type": "object",
       "required": ["status"],
       "properties": {
-        "status": { "type": "string", "enum": ["active", "sunset"] },
+        "status": { "type": "string", "enum": ["active", "sunset", "on_demand"] },
         "sunset_at": { "type": "string", "format": "date" },
         "reason": { "type": "string", "minLength": 1 },
-        "successor": { "type": "string" }
+        "successor": { "type": "string" },
+        "on_demand_since": { "type": "string", "format": "date" },
+        "review_by": { "type": "string", "format": "date" }
       },
       "allOf": [{
         "if": { "properties": { "status": { "const": "sunset" } }, "required": ["status"] },
         "then": { "required": ["sunset_at", "reason"] }
+      }, {
+        "if": { "properties": { "status": { "const": "on_demand" } }, "required": ["status"] },
+        "then": { "required": ["on_demand_since", "reason"] }
       }],
       "additionalProperties": false,
-      "description": "Service lifecycle. Sunset records remain in the catalog as tombstones; fleet-runner refuses deployment and MCP discovery excludes them."
+      "description": "Service lifecycle. Sunset records remain in the catalog as tombstones; fleet-runner refuses deployment and MCP discovery excludes them. on_demand means deliberately not running now but wanted later: the entry, port and routes stay, probes skip it, and it is brought back by setting status active."
     },
     "tags":         { "type": "array", "items": { "type": "string" } },
     "url":          { "type": "string", "format": "uri", "description": "Public base URL of the service, no trailing slash" },

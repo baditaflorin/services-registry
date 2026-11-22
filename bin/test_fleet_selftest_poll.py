@@ -113,6 +113,7 @@ class SelftestPollTests(unittest.TestCase):
         self.assertFalse(fsp.eligible(dict(ok, kind="static")))
         self.assertFalse(fsp.eligible(dict(ok, url="http://a.example.test")))
         self.assertFalse(fsp.eligible(dict(ok, lifecycle={"status": "sunset"})))
+        self.assertFalse(fsp.eligible(dict(ok, lifecycle={"status": "on_demand"})))
         self.assertFalse(fsp.eligible(dict(ok, runtime="external")))
         self.assertFalse(fsp.eligible(dict(ok, network_exposure="lan-internal")))
 

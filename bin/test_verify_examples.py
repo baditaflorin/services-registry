@@ -197,6 +197,7 @@ class TestOutput(unittest.TestCase):
         self.assertFalse(ve.eligible(dict(SVC, network_exposure="lan-internal")))
         self.assertFalse(ve.eligible(dict(SVC, served_by="other")))
         self.assertFalse(ve.eligible(dict(SVC, lifecycle={"status": "sunset"})))
+        self.assertFalse(ve.eligible(dict(SVC, lifecycle={"status": "on_demand"})))
 
 
 if __name__ == "__main__":

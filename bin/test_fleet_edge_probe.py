@@ -108,6 +108,7 @@ class ProbeVerdictTests(unittest.TestCase):
 
 
 SUNSET = {"status": "sunset", "sunset_at": "2026-09-27", "reason": "retired"}
+ON_DEMAND = {"status": "on_demand", "on_demand_since": "2026-11-22", "reason": "not needed now"}
 
 
 class LifecycleSkipTests(unittest.TestCase):
@@ -116,6 +117,14 @@ class LifecycleSkipTests(unittest.TestCase):
             r = fep.probe_or_skip(svc(id="old", lifecycle=SUNSET), ARGS)
         self.assertTrue(r["skipped"])
         self.assertEqual(r["lifecycle"], "sunset")
+        self.assertFalse(r["hard_fail"])
+        self.assertEqual(r["fails"], [])
+
+    def test_on_demand_is_skipped_without_probing(self):
+        with mock.patch.object(fep, "probe", side_effect=AssertionError("must not probe")):
+            r = fep.probe_or_skip(svc(id="later", lifecycle=ON_DEMAND), ARGS)
+        self.assertTrue(r["skipped"])
+        self.assertEqual(r["lifecycle"], "on_demand")
         self.assertFalse(r["hard_fail"])
         self.assertEqual(r["fails"], [])
 

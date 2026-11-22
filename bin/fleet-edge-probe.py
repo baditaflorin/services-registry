@@ -26,7 +26,7 @@ with -insecure. This asserts the things those skip:
  11  example_unreachable GET <url><example_path> -> 200/401/403 and same host
                          (401/403 == "edge wired, auth on" == fine)
 
-Services whose registry entry has lifecycle.status == "sunset" are not probed
+Services whose registry entry has lifecycle.status == "sunset" or "on_demand" are not probed
 (they are deliberately retired and answer 410); they are reported as `skipped`
 and stay visible via fleet_edge_probe_service_skipped / fleet_edge_probe_skipped_total.
 
@@ -72,8 +72,8 @@ EXIT_OK, EXIT_FAIL, EXIT_USAGE, EXIT_NOTHING_ELIGIBLE = 0, 1, 2, 3
 NOT_PUBLIC_EXPOSURES = {"internal", "lan-internal", "loopback"}
 
 # registry `lifecycle.status` values that mean "deliberately retired, do not probe".
-# schema/v1.json defines active|sunset only; extend here if the schema grows more.
-SKIP_LIFECYCLE_STATUSES = {"sunset"}
+# sunset = retired for good; on_demand = deliberately not running now, to be started when needed.
+SKIP_LIFECYCLE_STATUSES = {"sunset", "on_demand"}
 
 # JSON `status` values (case-insensitive) accepted as a healthy /health body.
 HEALTHY_STATUS_VALUES = ("ok", "healthy", "up", "success")
@@ -264,7 +264,7 @@ def describe_selection(detail: dict) -> str:
     rt = f["runtime"] if f["runtime"] == "all" else ",".join(f["runtime"])
     parts = [
         f"of {detail['registry_entries']} registry entries, {detail['matched']} matched "
-        f"({detail['lifecycle_skipped']} of them sunset, never probed)",
+        f"({detail['lifecycle_skipped']} of them sunset or on_demand, never probed)",
         f"filters: runtime={rt} only={','.join(f['only']) or '-'} sample={f['sample'] or '-'}",
         "excluded by kind != container: %d; by runtime external (never probed): %d; "
         "by url not https: %d; by network_exposure not public: %d; "
@@ -563,7 +563,7 @@ PROM_HELP = {
     "fleet_edge_probe_service_hard_fail": "1 if the service has a page-worthy edge failure",
     "fleet_edge_probe_fail_code": "1 per (service, assertion code) that failed",
     "fleet_edge_probe_hard_fail_total": "count of services with a hard edge failure",
-    "fleet_edge_probe_service_skipped": "1 per service not probed because its registry lifecycle.status is sunset (label lifecycle)",
+    "fleet_edge_probe_service_skipped": "1 per service not probed because its registry lifecycle.status is sunset or on_demand (label lifecycle)",
     "fleet_edge_probe_skipped_total": "count of services skipped because of registry lifecycle",
     "fleet_edge_probe_eligible_services": "count of services this vantage actually probes (0 = this vantage is blind)",
     "fleet_edge_probe_last_run": "unix ts of the last completed run",

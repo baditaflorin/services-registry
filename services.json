@@ -18113,6 +18113,38 @@
     "network_exposure": "gateway-authenticated"
   },
   {
+    "id": "fleet-usage-ledger",
+    "name": "Fleet Usage Ledger",
+    "description": "Authenticated project-scoped append-only physical usage records without pricing.",
+    "category": "infrastructure",
+    "mesh": "0exec",
+    "kind": "container",
+    "language": "go",
+    "runtime": "compose",
+    "tags": [
+      "fleet-infrastructure"
+    ],
+    "url": "https://fleet-usage-ledger.0exec.com",
+    "health_url": "https://fleet-usage-ledger.0exec.com/health",
+    "repo_url": "https://github.com/baditaflorin/go_fleet_usage_ledger",
+    "example_path": "/health",
+    "auth": {
+      "type": "api_key",
+      "header": "X-API-Key"
+    },
+    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
+    "cert_domain": "wildcard.0exec.com",
+    "trl": 4,
+    "trl_evidence": "Initial SQLite single-instance implementation has local tests for authenticated namespace isolation, replay conflict, pagination, and restart. Fleet deployment, restore and operational durability are not yet verified.",
+    "trl_assessed_at": "2026-11-17",
+    "trl_assessor": "codex-usage-ledger",
+    "placement": "pinned",
+    "host_port": 18339,
+    "container_port": 18339,
+    "version": "0.1.2",
+    "network_exposure": "gateway-ip-allowlisted"
+  },
+  {
     "id": "fleet-vendor-disclosure-tracker",
     "name": "Fleet Vendor Disclosure Tracker",
     "description": "vendor disclosure history tracker (PII-redacted)",
@@ -18727,6 +18759,7 @@
       "go.proxy.okssh.com",
       "proxy.html.go.0prx.com"
     ],
+    "proxy_egress": true,
     "version": "0.5.41",
     "network_exposure": "gateway-authenticated",
     "ci_resources": {
@@ -18736,8 +18769,7 @@
       "runs": 2,
       "confidence": "low",
       "measured_at": "2026-10-29"
-    },
-    "proxy_egress": true
+    }
   },
   {
     "id": "infrastructure-fetch-cache",
@@ -18873,16 +18905,6 @@
     "placement": "replicable",
     "host_port": 18006,
     "container_port": 8080,
-    "version": "0.12.8",
-    "network_exposure": "gateway-authenticated",
-    "ci_resources": {
-      "mem_class": "s",
-      "mem_peak_p95_bytes": 395732582,
-      "mem_peak_max_bytes": 395732582,
-      "runs": 6,
-      "confidence": "low",
-      "measured_at": "2026-10-29"
-    },
     "params": [
       {
         "name": "url",
@@ -18910,7 +18932,17 @@
         "required": false,
         "type": "string"
       }
-    ]
+    ],
+    "version": "0.12.8",
+    "network_exposure": "gateway-authenticated",
+    "ci_resources": {
+      "mem_class": "s",
+      "mem_peak_p95_bytes": 395732582,
+      "mem_peak_max_bytes": 395732582,
+      "runs": 6,
+      "confidence": "low",
+      "measured_at": "2026-10-29"
+    }
   },
   {
     "id": "js-proxy-network",
@@ -19401,9 +19433,9 @@
     "placement": "replicable",
     "host_port": 18016,
     "container_port": 3413,
-    "proxy_egress": true,
-    "version": "0.1.6",
-    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "html-proxy"
+    ],
     "params": [
       {
         "name": "query",
@@ -19451,9 +19483,9 @@
         "description": "dc or residential; valid only with proxy_provider."
       }
     ],
-    "depends_on": [
-      "html-proxy"
-    ]
+    "proxy_egress": true,
+    "version": "0.1.6",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "node-search-duck",
@@ -19487,9 +19519,9 @@
     "placement": "replicable",
     "host_port": 18015,
     "container_port": 3403,
-    "proxy_egress": true,
-    "version": "0.1.7",
-    "network_exposure": "gateway-authenticated",
+    "depends_on": [
+      "html-proxy"
+    ],
     "params": [
       {
         "name": "query",
@@ -19537,9 +19569,9 @@
         "description": "dc or residential; valid only with proxy_provider."
       }
     ],
-    "depends_on": [
-      "html-proxy"
-    ]
+    "proxy_egress": true,
+    "version": "0.1.7",
+    "network_exposure": "gateway-authenticated"
   },
   {
     "id": "ocr-pdf",
@@ -20131,6 +20163,12 @@
     ],
     "rename_status": "redirect",
     "rename_retire_at": "2026-06-18",
+    "lifecycle": {
+      "status": "on_demand",
+      "on_demand_since": "2026-11-22",
+      "reason": "Pentest dataset sync, not used right now. Stopped to free 9 GB on the 0docker host; start it again when a pentest needs it.",
+      "review_by": "2027-02-22"
+    },
     "trl": 6,
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; \u22656 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across \u22653 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
     "trl_ceiling": 7,
@@ -23124,8 +23162,8 @@
       "infrastructure-fetch-cache"
     ],
     "proxy_egress": false,
-    "network_exposure": "gateway-ip-allowlisted",
-    "version": "0.3.3"
+    "version": "0.3.3",
+    "network_exposure": "gateway-ip-allowlisted"
   },
   {
     "id": "sitemap-parser-backend-18322",
@@ -27105,37 +27143,5 @@
     "deployment_mode": "iac-rendered",
     "host_port": 18100,
     "container_port": 5001
-  },
-  {
-    "id": "fleet-usage-ledger",
-    "name": "Fleet Usage Ledger",
-    "description": "Authenticated project-scoped append-only physical usage records without pricing.",
-    "category": "infrastructure",
-    "mesh": "0exec",
-    "kind": "container",
-    "language": "go",
-    "runtime": "compose",
-    "tags": [
-      "fleet-infrastructure"
-    ],
-    "url": "https://fleet-usage-ledger.0exec.com",
-    "health_url": "https://fleet-usage-ledger.0exec.com/health",
-    "repo_url": "https://github.com/baditaflorin/go_fleet_usage_ledger",
-    "example_path": "/health",
-    "auth": {
-      "type": "api_key",
-      "header": "X-API-Key"
-    },
-    "auth_help": "API key required in X-API-Key or Authorization: Bearer",
-    "cert_domain": "wildcard.0exec.com",
-    "trl": 4,
-    "trl_evidence": "Initial SQLite single-instance implementation has local tests for authenticated namespace isolation, replay conflict, pagination, and restart. Fleet deployment, restore and operational durability are not yet verified.",
-    "trl_assessed_at": "2026-11-17",
-    "trl_assessor": "codex-usage-ledger",
-    "placement": "pinned",
-    "host_port": 18339,
-    "container_port": 18339,
-    "version": "0.1.2",
-    "network_exposure": "gateway-ip-allowlisted"
   }
 ]
