@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # verify-examples-run.sh: run bin/verify-examples.py without a human, on the builder, with a short-lived key.
 #
-#   bin/verify-examples-run.sh [--only id1,id2] [--dry] [--ref REF] [--out FILE] [--direct-hosts A,B]
+#   bin/verify-examples-run.sh [--only id1,id2] [--dry] [--ref REF] [--out FILE] [--direct-hosts A,B] [--local]
 #
 # What it does (the builder is LXC 108, reached with `ssh <builder> pct exec 108 -- bash -s`):
 #   1. reads services.json and bin/verify-examples.py from REF (default origin/main) of the builder's clone with
@@ -29,6 +29,9 @@
 # --direct-hosts   docker-host addresses probed for each compose service (default: verify-examples.py's own list).
 #          At most 2: the use limit allows 2 calls per service.
 #
+# --local  run the builder part in this shell instead of over ssh: for a script that already runs ON the builder
+#          (the nightly timer, bin/verify-examples-nightly.deploy/).
+#
 # Environment: VERIFY_EXAMPLES_BUILDER (ssh target of the Proxmox host, default root@0docker.com),
 #              VERIFY_EXAMPLES_CT (container id of the builder, default 108).
 # Exit: 0 ok; 1 the run or a precondition failed; 2 usage; 3 the key could NOT be shown revoked (it still expires by
@@ -45,6 +48,7 @@ DRY=0
 OUT="$HERE/../services.examples.json"
 DIRECT=""
 PRINT_REMOTE=0
+LOCAL=0
 
 usage() { sed -n "2,35p" "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; }
 die() { echo "verify-examples-run: $1" >&2; exit "${2:-1}"; }
@@ -56,6 +60,7 @@ while [ $# -gt 0 ]; do
     --ref)          [ $# -ge 2 ] || die "--ref needs a value" 2; REF="$2"; shift 2 ;;
     --out)          [ $# -ge 2 ] || die "--out needs a value" 2; OUT="$2"; shift 2 ;;
     --direct-hosts) [ $# -ge 2 ] || die "--direct-hosts needs a value" 2; DIRECT="$2"; shift 2 ;;
+    --local)        LOCAL=1; shift ;;
     --print-remote) PRINT_REMOTE=1; shift ;;   # the script that would run on the builder, for review and tests
     -h|--help)      usage; exit 0 ;;
     *)              die "unknown argument: $1 (see --help)" 2 ;;
@@ -112,7 +117,7 @@ active_ids() {  # key ids (not secret) of the active keys of the slug, newest fi
 import datetime, json, sys
 now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 try:
-    keys = json.load(sys.stdin)
+    keys = json.load(sys.stdin) or []   # `key list --json` prints null when no key exists
 except ValueError:
     sys.exit(0)
 act = [k for k in keys if k.get("user") == "examples-verifier" and not k.get("revoked_at") and (k.get("expires_at") or "9") > now]
@@ -305,9 +310,13 @@ REMOTE
 } > "$TMP/remote.sh"
 
 if [ "$PRINT_REMOTE" = 1 ]; then cat "$TMP/remote.sh"; exit 0; fi
-echo "verify-examples-run: builder $BUILDER ct $CT, ref $REF${ONLY:+, only $ONLY}$([ "$DRY" = 1 ] && echo ', DRY')" >&2
+echo "verify-examples-run: $([ "$LOCAL" = 1 ] && echo "local (on the builder)" || echo "builder $BUILDER ct $CT"), ref $REF${ONLY:+, only $ONLY}$([ "$DRY" = 1 ] && echo ', DRY')" >&2
 set +e
-ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 "$BUILDER" "pct exec $CT -- bash -s" < "$TMP/remote.sh" > "$TMP/stdout" 2> >(cat >&2)
+if [ "$LOCAL" = 1 ]; then
+  bash -s < "$TMP/remote.sh" > "$TMP/stdout" 2> >(cat >&2)
+else
+  ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=30 "$BUILDER" "pct exec $CT -- bash -s" < "$TMP/remote.sh" > "$TMP/stdout" 2> >(cat >&2)
+fi
 RC=$?
 set -e
 

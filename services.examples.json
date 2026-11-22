@@ -1,12 +1,12 @@
 {
-  "checked_at": "2026-10-30T15:06:53Z",
+  "checked_at": "2026-11-22T10:13:36Z",
   "services": {
     "a11y-quick": {
       "path": "/?target=example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3314,
+      "ms": 3209,
       "error": ""
     },
     "accessibility-audit": {
@@ -14,7 +14,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 68,
+      "ms": 179,
       "error": ""
     },
     "accessibility-score": {
@@ -22,7 +22,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 51,
+      "ms": 185,
       "error": ""
     },
     "ad-density": {
@@ -30,7 +30,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 693,
+      "ms": 784,
       "error": ""
     },
     "address-extractor": {
@@ -38,7 +38,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 45,
+      "ms": 272,
       "error": ""
     },
     "admin-finder": {
@@ -46,7 +46,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5651,
+      "ms": 5047,
       "error": ""
     },
     "agent-approval": {
@@ -54,7 +54,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 21,
+      "ms": 25,
       "error": "",
       "detail": "Forbidden"
     },
@@ -63,7 +63,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 17,
+      "ms": 11,
       "error": "",
       "detail": "Forbidden"
     },
@@ -72,7 +72,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 19,
+      "ms": 18,
       "error": "",
       "detail": "Forbidden"
     },
@@ -81,7 +81,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 23,
+      "ms": 98,
       "error": ""
     },
     "analyze-headers": {
@@ -89,7 +89,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1093,
+      "ms": 762,
       "error": ""
     },
     "api-extractor": {
@@ -97,7 +97,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 620,
+      "ms": 663,
       "error": ""
     },
     "api-first": {
@@ -105,7 +105,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5246,
+      "ms": 4716,
       "error": ""
     },
     "apikey-scanner": {
@@ -113,7 +113,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 469,
+      "ms": 161,
       "error": ""
     },
     "apikey-service": {
@@ -121,7 +121,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 2,
       "error": ""
     },
     "asn-lookup": {
@@ -129,7 +129,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 67,
+      "ms": 62,
       "error": ""
     },
     "biz-classifier": {
@@ -137,7 +137,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 571,
+      "ms": 506,
       "error": ""
     },
     "blocklist-checker": {
@@ -145,7 +145,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 29,
+      "ms": 107,
       "error": ""
     },
     "brand-color-palette": {
@@ -153,7 +153,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 239,
+      "ms": 324,
       "error": ""
     },
     "brand-logo-extractor": {
@@ -161,7 +161,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 12,
+      "ms": 143,
       "error": "",
       "detail": "{\"cache_hit\":true,\"source\":\"\",\"input\":\"url\",\"logo_url\":\"\",\"width\":0,\"height\":0,\"format\":\"\",\"candidates\":[],\"version\":\"0."
     },
@@ -170,7 +170,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 85,
       "error": ""
     },
     "bucket-finder": {
@@ -178,7 +178,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 753,
+      "ms": 1075,
       "error": ""
     },
     "c-proxy": {
@@ -186,7 +186,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 59,
+      "ms": 48,
       "error": ""
     },
     "caa-checker": {
@@ -194,7 +194,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 25,
+      "ms": 65,
       "error": ""
     },
     "captcha-detector": {
@@ -202,7 +202,15 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 7449,
+      "ms": 834,
+      "error": ""
+    },
+    "capture-store": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
       "error": ""
     },
     "cas": {
@@ -210,7 +218,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 18,
+      "ms": 39,
       "error": ""
     },
     "catalog-service": {
@@ -218,7 +226,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3,
+      "ms": 2,
       "error": ""
     },
     "cdn-detector": {
@@ -226,7 +234,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1825,
+      "ms": 1372,
       "error": ""
     },
     "citation-reference-extractor": {
@@ -234,7 +242,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 19,
+      "ms": 95,
       "error": ""
     },
     "clickjacking-tester": {
@@ -242,7 +250,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 17,
+      "ms": 160,
       "error": ""
     },
     "cognitive-load": {
@@ -250,7 +258,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 202,
+      "ms": 360,
       "error": ""
     },
     "color-contrast-checker": {
@@ -258,7 +266,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16,
+      "ms": 82,
       "error": ""
     },
     "comment-extractor": {
@@ -266,7 +274,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1559,
+      "ms": 1545,
       "error": ""
     },
     "company-name-extractor": {
@@ -274,7 +282,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 41,
+      "ms": 606,
       "error": ""
     },
     "company-size": {
@@ -282,7 +290,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1729,
+      "ms": 2465,
       "error": ""
     },
     "composite-runner": {
@@ -290,7 +298,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12821,
+      "ms": 7812,
       "error": ""
     },
     "compression-tester": {
@@ -298,7 +306,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 325,
+      "ms": 541,
       "error": ""
     },
     "consent-simulator": {
@@ -306,7 +314,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3401,
+      "ms": 5319,
       "error": ""
     },
     "contact-route-detector": {
@@ -314,7 +322,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 17,
+      "ms": 41,
       "error": ""
     },
     "content-fingerprint": {
@@ -322,7 +330,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 153,
       "error": ""
     },
     "cookie-checker": {
@@ -330,7 +338,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1289,
+      "ms": 1381,
       "error": ""
     },
     "cors-scanner": {
@@ -338,7 +346,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2162,
+      "ms": 1601,
       "error": ""
     },
     "cors-tester": {
@@ -346,7 +354,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2327,
+      "ms": 2548,
       "error": ""
     },
     "country-iso-matcher": {
@@ -354,7 +362,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2,
+      "ms": 4,
       "error": ""
     },
     "crawl-web-application": {
@@ -362,7 +370,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 804,
+      "ms": 572,
       "error": ""
     },
     "crlf-tester": {
@@ -370,7 +378,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9816,
+      "ms": 12343,
       "error": ""
     },
     "crux-field-vitals": {
@@ -378,7 +386,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 327,
+      "ms": 75,
       "error": ""
     },
     "crypto-finder": {
@@ -386,7 +394,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 603,
+      "ms": 333,
       "error": ""
     },
     "css-framework-detector": {
@@ -394,7 +402,15 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 17,
+      "ms": 128,
+      "error": ""
+    },
+    "ct-names": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "edge",
+      "ms": 53,
       "error": ""
     },
     "currency-detector": {
@@ -402,7 +418,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1126,
+      "ms": 886,
       "error": ""
     },
     "customer-logos": {
@@ -410,7 +426,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 220,
+      "ms": 461,
       "error": "",
       "detail": "success"
     },
@@ -419,7 +435,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 3,
       "error": ""
     },
     "data-format-converter": {
@@ -427,7 +443,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 104,
       "error": ""
     },
     "data-inventory": {
@@ -435,7 +451,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 809,
+      "ms": 1096,
       "error": ""
     },
     "db-geo-geocode": {
@@ -443,7 +459,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 69,
+      "ms": 59,
       "error": ""
     },
     "debug-detector": {
@@ -451,7 +467,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2632,
+      "ms": 1773,
       "error": ""
     },
     "dependency-counter": {
@@ -459,7 +475,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1212,
+      "ms": 1112,
       "error": ""
     },
     "dir-listing": {
@@ -467,7 +483,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 4213,
+      "ms": 2884,
       "error": ""
     },
     "dns-record": {
@@ -475,7 +491,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 289,
+      "ms": 1433,
       "error": ""
     },
     "dom-complexity-metrics": {
@@ -483,7 +499,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16,
+      "ms": 105,
       "error": ""
     },
     "domain-abuse-contact-rollup": {
@@ -491,7 +507,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6011,
+      "ms": 1862,
       "error": ""
     },
     "domain-ad-network": {
@@ -499,7 +515,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9777,
+      "ms": 2142,
       "error": ""
     },
     "domain-ai-bot-policy-scanner": {
@@ -507,7 +523,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1034,
+      "ms": 1045,
       "error": ""
     },
     "domain-ai-catalog-discovery": {
@@ -515,7 +531,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 41,
       "error": ""
     },
     "domain-amp-detector": {
@@ -523,7 +539,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 10,
+      "ms": 207,
       "error": "",
       "detail": "{\"domain\":\"www.bbc.com\",\"result\":\"no_data\",\"reason\":\"target_http_404\",\"upstream_status\":404,\"fetched_url\":\"https://www.b"
     },
@@ -532,7 +548,7 @@
       "http": 502,
       "state": "error",
       "via": "lan",
-      "ms": 16842,
+      "ms": 5142,
       "error": "",
       "detail": "error"
     },
@@ -541,7 +557,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3454,
+      "ms": 3481,
       "error": ""
     },
     "domain-app-render-mode": {
@@ -549,7 +565,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1650,
+      "ms": 1454,
       "error": ""
     },
     "domain-backlink-profile": {
@@ -557,7 +573,7 @@
       "http": 504,
       "state": "error",
       "via": "lan",
-      "ms": 11574,
+      "ms": 13575,
       "error": "",
       "detail": "timeout"
     },
@@ -566,7 +582,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1450,
+      "ms": 2642,
       "error": ""
     },
     "domain-breadcrumb-schema": {
@@ -574,7 +590,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 123,
+      "ms": 187,
       "error": ""
     },
     "domain-cache-policy": {
@@ -582,7 +598,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6274,
+      "ms": 1727,
       "error": ""
     },
     "domain-cms-version": {
@@ -590,7 +606,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1493,
+      "ms": 1557,
       "error": ""
     },
     "domain-compliance-claim-scanner": {
@@ -598,7 +614,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 11012,
+      "ms": 5967,
       "error": "",
       "detail": "no_data"
     },
@@ -607,7 +623,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2581,
+      "ms": 2498,
       "error": ""
     },
     "domain-dane-tlsa": {
@@ -615,7 +631,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5029,
+      "ms": 5314,
       "error": ""
     },
     "domain-deployment-fingerprint": {
@@ -623,7 +639,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5740,
+      "ms": 1905,
       "error": ""
     },
     "domain-details": {
@@ -631,7 +647,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 23,
+      "ms": 711,
       "error": ""
     },
     "domain-dnssec-validator": {
@@ -639,7 +655,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 56,
+      "ms": 82,
       "error": ""
     },
     "domain-documentation-platform-detector": {
@@ -647,7 +663,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 6474,
+      "ms": 2057,
       "error": "",
       "detail": "unreachable"
     },
@@ -656,7 +672,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3453,
+      "ms": 5615,
       "error": ""
     },
     "domain-email-deliverability-score": {
@@ -664,7 +680,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5021,
+      "ms": 889,
       "error": ""
     },
     "domain-error-monitoring": {
@@ -672,7 +688,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15251,
+      "ms": 18250,
       "error": ""
     },
     "domain-events-platform": {
@@ -680,7 +696,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12995,
+      "ms": 12394,
       "error": ""
     },
     "domain-experimentation-stack": {
@@ -688,7 +704,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1664,
+      "ms": 3335,
       "error": ""
     },
     "domain-faq-schema": {
@@ -696,7 +712,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 54,
+      "ms": 684,
       "error": ""
     },
     "domain-favicon-completeness": {
@@ -704,7 +720,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14344,
+      "ms": 14769,
       "error": ""
     },
     "domain-font-stack": {
@@ -712,7 +728,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 32,
+      "ms": 348,
       "error": ""
     },
     "domain-geo-anchor": {
@@ -720,7 +736,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2800,
+      "ms": 873,
       "error": ""
     },
     "domain-gift-card": {
@@ -728,7 +744,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16878,
+      "ms": 7834,
       "error": ""
     },
     "domain-glue-records": {
@@ -736,7 +752,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 127,
+      "ms": 285,
       "error": ""
     },
     "domain-http3-quic-detector": {
@@ -744,7 +760,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 135,
+      "ms": 350,
       "error": ""
     },
     "domain-image-alt-coverage": {
@@ -752,7 +768,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 21,
+      "ms": 448,
       "error": ""
     },
     "domain-integration-marketplace": {
@@ -760,7 +776,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16093,
+      "ms": 6990,
       "error": ""
     },
     "domain-interactive-demo": {
@@ -768,7 +784,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5112,
+      "ms": 3641,
       "error": ""
     },
     "domain-liveness-state": {
@@ -776,7 +792,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 820,
+      "ms": 994,
       "error": ""
     },
     "domain-martech-stack": {
@@ -784,23 +800,23 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 10392,
+      "ms": 2009,
       "error": ""
     },
     "domain-mobile-app-resolver": {
       "path": "/?domain=stripe.com",
-      "http": null,
-      "state": "unreachable",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 20020,
-      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+      "ms": 12496,
+      "error": ""
     },
     "domain-naptr-enum": {
       "path": "/?domain=sip.example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 97,
+      "ms": 66,
       "error": ""
     },
     "domain-newsletter-platform-detector": {
@@ -808,7 +824,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 56,
       "error": ""
     },
     "domain-open-source-presence": {
@@ -816,7 +832,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 189,
+      "ms": 3059,
       "error": ""
     },
     "domain-pagination-rel": {
@@ -824,7 +840,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1281,
+      "ms": 2962,
       "error": ""
     },
     "domain-passive-dns-history": {
@@ -832,7 +848,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1767,
+      "ms": 1376,
       "error": ""
     },
     "domain-podcast-presence": {
@@ -840,7 +856,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5087,
+      "ms": 3459,
       "error": ""
     },
     "domain-product-count": {
@@ -848,7 +864,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 145,
+      "ms": 640,
       "error": ""
     },
     "domain-ratelimit-headers": {
@@ -856,7 +872,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 783,
+      "ms": 956,
       "error": ""
     },
     "domain-rbl-reputation": {
@@ -864,7 +880,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 152,
+      "ms": 165,
       "error": ""
     },
     "domain-saas-host-mapper": {
@@ -872,7 +888,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 52,
+      "ms": 77,
       "error": ""
     },
     "domain-structured-data-rollup": {
@@ -880,7 +896,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 26,
       "error": ""
     },
     "domain-support-stack-detector": {
@@ -888,7 +904,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 59,
       "error": ""
     },
     "domain-tech-eol-flagger": {
@@ -896,7 +912,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1296,
+      "ms": 1347,
       "error": ""
     },
     "domain-third-party-fetch-map": {
@@ -904,7 +920,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1219,
+      "ms": 1248,
       "error": ""
     },
     "domain-tracker-density": {
@@ -912,7 +928,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1441,
+      "ms": 2760,
       "error": ""
     },
     "domain-trust-composite-grader": {
@@ -920,7 +936,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 782,
+      "ms": 2322,
       "error": ""
     },
     "domain-viewport-meta": {
@@ -928,7 +944,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 33,
+      "ms": 518,
       "error": ""
     },
     "domain-well-known-catalog": {
@@ -936,7 +952,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1962,
+      "ms": 893,
       "error": ""
     },
     "domain-wikidata-entity": {
@@ -944,32 +960,32 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 22,
+      "ms": 3223,
       "error": ""
     },
     "dtss": {
       "path": "/?target=example.com",
-      "http": null,
-      "state": "unreachable",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 20020,
-      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+      "ms": 3455,
+      "error": ""
     },
     "email-extractor": {
       "path": "/?target=https://example.com&source=commoncrawl",
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 1433,
+      "ms": 2698,
       "error": "",
-      "detail": "{\"tool\":\"go_email_extractor\",\"version\":\"1.6.42\",\"target\":\"https://example.com\",\"fetch_source\":{\"source\":\"commoncrawl\",\"a"
+      "detail": "{\"tool\":\"go_email_extractor\",\"version\":\"1.6.47\",\"target\":\"https://example.com\",\"fetch_source\":{\"source\":\"commoncrawl\",\"a"
     },
     "email-harvester": {
       "path": "/?target=https://www.iana.org/help/contact",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2262,
+      "ms": 2920,
       "error": ""
     },
     "embed-iframe-classifier": {
@@ -977,7 +993,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 18,
+      "ms": 240,
       "error": ""
     },
     "emotional-tone": {
@@ -985,7 +1001,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 577,
+      "ms": 766,
       "error": "",
       "detail": "no_data: insufficient_content"
     },
@@ -994,7 +1010,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5000,
+      "ms": 4173,
       "error": ""
     },
     "feed-finder": {
@@ -1002,7 +1018,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2130,
+      "ms": 2588,
       "error": ""
     },
     "file-inclusion": {
@@ -1010,16 +1026,16 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1377,
+      "ms": 1889,
       "error": ""
     },
     "firmographic-profile": {
       "path": "/?target=stripe.com",
-      "http": null,
-      "state": "unreachable",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 20031,
-      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+      "ms": 15895,
+      "error": ""
     },
     "fleet-activity": {
       "path": "/health",
@@ -1034,7 +1050,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 0,
+      "ms": 1,
       "error": ""
     },
     "fleet-backoff-coordinator": {
@@ -1042,7 +1058,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8,
+      "ms": 23,
       "error": ""
     },
     "fleet-backup": {
@@ -1050,7 +1066,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 10,
+      "ms": 23,
       "error": ""
     },
     "fleet-body-redactor": {
@@ -1058,7 +1074,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 29,
       "error": ""
     },
     "fleet-budget-tracker": {
@@ -1066,7 +1082,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 29,
       "error": ""
     },
     "fleet-build-broker": {
@@ -1082,7 +1098,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8,
+      "ms": 19,
       "error": ""
     },
     "fleet-capabilities": {
@@ -1090,7 +1106,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 26,
       "error": ""
     },
     "fleet-cert-watch": {
@@ -1098,7 +1114,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 13,
       "error": ""
     },
     "fleet-content-normalizer": {
@@ -1106,7 +1122,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 22,
       "error": ""
     },
     "fleet-counter": {
@@ -1122,7 +1138,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 27,
       "error": ""
     },
     "fleet-dig": {
@@ -1146,7 +1162,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 8,
+      "ms": 284,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1155,7 +1171,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16,
+      "ms": 536,
       "error": ""
     },
     "fleet-eventlog": {
@@ -1163,7 +1179,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 8,
+      "ms": 172,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1172,7 +1188,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 277,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1189,7 +1205,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8,
+      "ms": 1171,
       "error": ""
     },
     "fleet-grafana": {
@@ -1197,7 +1213,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6,
+      "ms": 5,
       "error": ""
     },
     "fleet-grafana-staging": {
@@ -1213,7 +1229,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 0,
+      "ms": 1,
       "error": ""
     },
     "fleet-har-builder": {
@@ -1221,7 +1237,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 1056,
       "error": ""
     },
     "fleet-host-guard": {
@@ -1229,7 +1245,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 1426,
       "error": ""
     },
     "fleet-ip": {
@@ -1245,7 +1261,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 9,
+      "ms": 1326,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1254,7 +1270,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15,
+      "ms": 579,
       "error": ""
     },
     "fleet-md": {
@@ -1270,7 +1286,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 11,
+      "ms": 443,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1287,7 +1303,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 437,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1312,7 +1328,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 2,
       "error": ""
     },
     "fleet-poc-curl": {
@@ -1320,7 +1336,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 279,
       "error": ""
     },
     "fleet-port": {
@@ -1328,7 +1344,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 537,
       "error": ""
     },
     "fleet-preflight": {
@@ -1336,7 +1352,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 17,
+      "ms": 359,
       "error": ""
     },
     "fleet-priority-queue": {
@@ -1344,7 +1360,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 19,
+      "ms": 247,
       "error": ""
     },
     "fleet-prometheus": {
@@ -1352,7 +1368,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 3,
       "error": ""
     },
     "fleet-pwgen": {
@@ -1368,7 +1384,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 2,
       "error": ""
     },
     "fleet-read": {
@@ -1384,7 +1400,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 18,
+      "ms": 299,
       "error": ""
     },
     "fleet-sandbox-targets": {
@@ -1392,7 +1408,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 22,
+      "ms": 170,
       "error": ""
     },
     "fleet-schema-validator": {
@@ -1400,7 +1416,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 151,
       "error": ""
     },
     "fleet-secrets": {
@@ -1408,7 +1424,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 107,
       "error": ""
     },
     "fleet-selftest-aggregator": {
@@ -1416,7 +1432,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 61,
       "error": ""
     },
     "fleet-tail": {
@@ -1432,7 +1448,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 36,
       "error": ""
     },
     "fleet-tech-inferrer": {
@@ -1440,7 +1456,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 44,
       "error": ""
     },
     "fleet-token-ledger": {
@@ -1448,7 +1464,15 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15,
+      "ms": 31,
+      "error": ""
+    },
+    "fleet-usage-ledger": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 1,
       "error": ""
     },
     "fleet-vendor-disclosure-tracker": {
@@ -1456,7 +1480,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 71,
       "error": ""
     },
     "fleet-visualizer": {
@@ -1464,7 +1488,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 4,
       "error": ""
     },
     "fleet-webhook": {
@@ -1480,7 +1504,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 33,
       "error": ""
     },
     "founding-year": {
@@ -1488,7 +1512,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 5895,
+      "ms": 2430,
       "error": "",
       "detail": "unreachable: upstream_4xx"
     },
@@ -1497,7 +1521,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1017,
+      "ms": 430,
       "error": ""
     },
     "funding-signal": {
@@ -1505,23 +1529,23 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1884,
+      "ms": 795,
       "error": ""
     },
     "gdpr-compliance": {
       "path": "/?target=https://bbc.co.uk",
-      "http": null,
-      "state": "unreachable",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 20021,
-      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+      "ms": 15156,
+      "error": ""
     },
     "geo-geocode": {
       "path": "/?text=Bucharest",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 118,
+      "ms": 336,
       "error": ""
     },
     "geo-places": {
@@ -1529,7 +1553,7 @@
       "http": 302,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 2,
       "error": ""
     },
     "git-provider-api-broker": {
@@ -1537,7 +1561,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 0,
+      "ms": 1,
       "error": ""
     },
     "github-app-token-broker": {
@@ -1545,7 +1569,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 0,
+      "ms": 1,
       "error": ""
     },
     "go-oauth-mapper": {
@@ -1553,7 +1577,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1584,
+      "ms": 1433,
       "error": ""
     },
     "go-session-fixation": {
@@ -1561,7 +1585,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 11,
+      "ms": 61,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1570,7 +1594,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 152,
+      "ms": 34,
       "error": ""
     },
     "graphql-introspection": {
@@ -1578,7 +1602,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2267,
+      "ms": 2257,
       "error": ""
     },
     "heading-outline-extractor": {
@@ -1586,7 +1610,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 175,
+      "ms": 28,
       "error": ""
     },
     "hidden-fields": {
@@ -1594,7 +1618,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 113,
+      "ms": 54,
       "error": ""
     },
     "hiring-footprint": {
@@ -1602,7 +1626,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 950,
+      "ms": 1103,
       "error": ""
     },
     "host-header": {
@@ -1610,7 +1634,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2616,
+      "ms": 2265,
       "error": ""
     },
     "hsts-checker": {
@@ -1618,7 +1642,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 527,
+      "ms": 1797,
       "error": ""
     },
     "html-proxy": {
@@ -1626,7 +1650,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 472,
+      "ms": 457,
       "error": ""
     },
     "http-method-tester": {
@@ -1634,7 +1658,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8020,
+      "ms": 4866,
       "error": ""
     },
     "http-protocol": {
@@ -1642,7 +1666,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 120,
+      "ms": 172,
       "error": ""
     },
     "hub-scrapetheworld-org": {
@@ -1658,7 +1682,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 20,
+      "ms": 41,
       "error": ""
     },
     "idor-finder": {
@@ -1666,7 +1690,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 724,
+      "ms": 1044,
       "error": ""
     },
     "iframe-analyzer": {
@@ -1674,7 +1698,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1528,
+      "ms": 1729,
       "error": ""
     },
     "information-leakage": {
@@ -1682,7 +1706,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1381,
+      "ms": 1755,
       "error": ""
     },
     "infrastructure-fetch-cache": {
@@ -1690,7 +1714,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 8,
+      "ms": 49,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1699,7 +1723,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 43,
+      "ms": 74,
       "error": ""
     },
     "js-framework-version-extractor": {
@@ -1707,7 +1731,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 20,
+      "ms": 34,
       "error": ""
     },
     "js-proxy": {
@@ -1715,7 +1739,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2905,
+      "ms": 2674,
       "error": ""
     },
     "js-proxy-network": {
@@ -1723,7 +1747,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2804,
+      "ms": 3138,
       "error": ""
     },
     "jsbundle-routes": {
@@ -1731,7 +1755,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 37,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1740,7 +1764,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 19,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1749,7 +1773,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 164,
+      "ms": 102,
       "error": ""
     },
     "jwt-debugger": {
@@ -1757,7 +1781,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 37,
       "error": ""
     },
     "jwt-pentest": {
@@ -1765,7 +1789,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 11,
+      "ms": 20,
       "error": "",
       "detail": "Forbidden"
     },
@@ -1774,7 +1798,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 115,
+      "ms": 229,
       "error": ""
     },
     "keyword-density": {
@@ -1782,7 +1806,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 12,
+      "ms": 65,
       "error": "",
       "detail": "no_data: insufficient_content"
     },
@@ -1791,7 +1815,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 67,
       "error": ""
     },
     "leadership-extractor": {
@@ -1799,7 +1823,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 728,
+      "ms": 201,
       "error": ""
     },
     "legal-entity": {
@@ -1807,33 +1831,40 @@
       "http": 502,
       "state": "error",
       "via": "lan",
-      "ms": 2454,
+      "ms": 2387,
       "error": "",
-      "detail": "{\"tool\":\"go_legal_entity\",\"Version\":\"1.33.51\",\"target\":\"https://example.com\",\"fetch_source\":\"live\",\"pages_inspected\":[\"h"
+      "detail": "{\"tool\":\"go_legal_entity\",\"Version\":\"1.33.58\",\"target\":\"https://example.com\",\"fetch_source\":\"live\",\"pages_inspected\":[\"h"
+    },
+    "legal-identifiers": {
+      "path": "/?url=https://example.com",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 564,
+      "error": ""
     },
     "license-extractor": {
       "path": "/?url=https://example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 25,
+      "ms": 31,
       "error": ""
     },
     "linkedin-attributes": {
       "path": "/?url=https://www.linkedin.com/in/baditaflorin",
-      "http": 404,
-      "state": "no-data",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 131,
-      "error": "",
-      "detail": "LinkedIn badge attributes not found or invalid URL"
+      "ms": 7755,
+      "error": ""
     },
     "list-extractor": {
       "path": "/?url=https://example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 29,
       "error": ""
     },
     "loadbalancer-detect": {
@@ -1841,7 +1872,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2713,
+      "ms": 2820,
       "error": ""
     },
     "login-analyzer": {
@@ -1849,7 +1880,15 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1044,
+      "ms": 1560,
+      "error": ""
+    },
+    "mentoring": {
+      "path": "/auth/signin",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 3,
       "error": ""
     },
     "menu-extractor": {
@@ -1857,7 +1896,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 22,
+      "ms": 298,
       "error": ""
     },
     "merchant-profile": {
@@ -1865,7 +1904,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3113,
+      "ms": 13958,
       "error": ""
     },
     "microformats2-extractor": {
@@ -1873,7 +1912,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 19,
+      "ms": 341,
       "error": ""
     },
     "mime-trap": {
@@ -1881,7 +1920,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 777,
+      "ms": 1287,
       "error": ""
     },
     "mobile-friendly": {
@@ -1889,7 +1928,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 23,
+      "ms": 332,
       "error": ""
     },
     "nlp-extractinfo": {
@@ -1897,7 +1936,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 64,
+      "ms": 213,
       "error": ""
     },
     "node-js-proxy": {
@@ -1905,7 +1944,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 644,
+      "ms": 829,
       "error": ""
     },
     "node-proxy": {
@@ -1913,7 +1952,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 950,
+      "ms": 767,
       "error": ""
     },
     "node-search-bing": {
@@ -1921,24 +1960,24 @@
       "http": 500,
       "state": "error",
       "via": "lan",
-      "ms": 8269,
+      "ms": 1942,
       "error": "",
       "detail": "Error fetching search results"
     },
     "node-search-duck": {
       "path": "/?query=anthropic+claude",
-      "http": null,
-      "state": "unreachable",
+      "http": 200,
+      "state": "ok",
       "via": "lan",
-      "ms": 20020,
-      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+      "ms": 1438,
+      "error": ""
     },
     "ocr-pdf": {
       "path": "/?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1192,
+      "ms": 2073,
       "error": ""
     },
     "ocr-pdf-express": {
@@ -1946,7 +1985,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2435,
+      "ms": 3578,
       "error": ""
     },
     "office-locations": {
@@ -1954,24 +1993,24 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 475,
+      "ms": 854,
       "error": "",
       "detail": "success"
     },
     "open-redirect": {
       "path": "/go_open_redirect?target=example.com",
-      "http": null,
-      "state": "unreachable",
-      "via": "lan",
-      "ms": 20020,
-      "error": "URLError: <urlopen error [Errno 111] Connection refused>"
+      "http": 200,
+      "state": "ok",
+      "via": "edge",
+      "ms": 21938,
+      "error": ""
     },
     "outlink-graph": {
       "path": "/?target=example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 123,
       "error": ""
     },
     "page-load-metrics": {
@@ -1979,7 +2018,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 7500,
+      "ms": 5040,
       "error": ""
     },
     "passive-voice-detector": {
@@ -1987,7 +2026,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 117,
       "error": ""
     },
     "payment-detector": {
@@ -1995,7 +2034,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 235,
+      "ms": 576,
       "error": ""
     },
     "pentest-agent-state": {
@@ -2003,7 +2042,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 11,
+      "ms": 29,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2012,7 +2051,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 18,
+      "ms": 25,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2021,7 +2060,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 17,
+      "ms": 19,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2038,7 +2077,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 16,
+      "ms": 29,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2047,7 +2086,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 18,
+      "ms": 25,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2056,7 +2095,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 16,
+      "ms": 34,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2065,7 +2104,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 21,
+      "ms": 43,
       "error": ""
     },
     "pentest-cert-transparency": {
@@ -2073,24 +2112,16 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 17,
+      "ms": 28,
       "error": "",
       "detail": "Forbidden"
-    },
-    "pentest-chaos-sync": {
-      "path": "/lookup?root=example.com",
-      "http": 200,
-      "state": "ok",
-      "via": "lan",
-      "ms": 30,
-      "error": ""
     },
     "pentest-codec": {
       "path": "/encode?algo=base64&input=hello",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 21,
+      "ms": 31,
       "error": ""
     },
     "pentest-continuous-monitor": {
@@ -2098,7 +2129,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 12,
+      "ms": 24,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2107,7 +2138,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 9,
+      "ms": 55,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2116,7 +2147,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 24,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2125,7 +2156,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 23,
       "error": ""
     },
     "pentest-dedup-fingerprint": {
@@ -2133,7 +2164,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 23,
+      "ms": 33,
       "error": ""
     },
     "pentest-dependency-cve": {
@@ -2141,7 +2172,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 10,
+      "ms": 42,
       "error": ""
     },
     "pentest-disclosure-policy-finder": {
@@ -2149,7 +2180,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 25,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2158,7 +2189,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2,
+      "ms": 21,
       "error": ""
     },
     "pentest-favicon-hash": {
@@ -2166,7 +2197,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 17,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2175,7 +2206,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 31,
       "error": ""
     },
     "pentest-findings-store": {
@@ -2183,7 +2214,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15,
+      "ms": 42,
       "error": ""
     },
     "pentest-github-dorks": {
@@ -2191,7 +2222,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 33,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2200,7 +2231,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 13,
+      "ms": 57,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2209,7 +2240,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 12,
+      "ms": 31,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2218,7 +2249,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 49,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2227,7 +2258,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 9,
+      "ms": 35,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2236,7 +2267,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 20,
+      "ms": 50,
       "error": ""
     },
     "pentest-notify": {
@@ -2244,7 +2275,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 51,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2253,7 +2284,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 46,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2262,7 +2293,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 22,
+      "ms": 52,
       "error": ""
     },
     "pentest-orchestrator": {
@@ -2270,7 +2301,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 16,
+      "ms": 68,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2279,7 +2310,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 34,
       "error": ""
     },
     "pentest-payoff-tracker": {
@@ -2287,7 +2318,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 52,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2296,7 +2327,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 12,
+      "ms": 58,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2305,7 +2336,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 9,
+      "ms": 23,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2314,7 +2345,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16,
+      "ms": 67,
       "error": ""
     },
     "pentest-scope-guard": {
@@ -2322,7 +2353,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 18,
+      "ms": 70,
       "error": ""
     },
     "pentest-screenshot": {
@@ -2330,7 +2361,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 12,
+      "ms": 63,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2339,7 +2370,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 10,
+      "ms": 67,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2348,7 +2379,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16,
+      "ms": 81,
       "error": ""
     },
     "pentest-ssrf-prober": {
@@ -2356,7 +2387,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 16,
+      "ms": 51,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2365,7 +2396,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 52,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2374,7 +2405,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 60,
       "error": ""
     },
     "pentest-takeover-checker": {
@@ -2382,7 +2413,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 75,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2391,7 +2422,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 54,
       "error": ""
     },
     "pentest-target-normalizer": {
@@ -2399,7 +2430,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15,
+      "ms": 38,
       "error": ""
     },
     "pentest-triager-listener": {
@@ -2407,7 +2438,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15,
+      "ms": 29,
       "error": ""
     },
     "pentest-trufflehog": {
@@ -2415,7 +2446,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 13,
+      "ms": 23,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2424,7 +2455,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 9,
+      "ms": 18,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2433,7 +2464,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 13,
+      "ms": 30,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2442,7 +2473,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 14,
+      "ms": 33,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2451,7 +2482,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15,
+      "ms": 65,
       "error": ""
     },
     "pentest-ywh-sync": {
@@ -2459,7 +2490,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3451,
+      "ms": 3476,
       "error": ""
     },
     "phone-extractor": {
@@ -2467,7 +2498,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 19,
+      "ms": 1791,
       "error": "",
       "detail": "no_data"
     },
@@ -2476,7 +2507,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 3476,
       "error": ""
     },
     "postmessage": {
@@ -2484,7 +2515,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 13,
+      "ms": 47,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2493,7 +2524,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1960,
+      "ms": 5055,
       "error": ""
     },
     "price-range": {
@@ -2501,7 +2532,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 9,
+      "ms": 3037,
       "error": ""
     },
     "pricing-tier-parser": {
@@ -2509,7 +2540,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 3228,
       "error": ""
     },
     "promo-code-detector": {
@@ -2517,7 +2548,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 11,
+      "ms": 1588,
       "error": ""
     },
     "proto-pollution": {
@@ -2525,7 +2556,7 @@
       "http": 403,
       "state": "gated",
       "via": "lan",
-      "ms": 12,
+      "ms": 43,
       "error": "",
       "detail": "Forbidden"
     },
@@ -2534,7 +2565,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 653,
+      "ms": 695,
       "error": ""
     },
     "proxy-fingerprint": {
@@ -2542,7 +2573,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2413,
+      "ms": 4208,
       "error": ""
     },
     "pwa-manifest": {
@@ -2550,7 +2581,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1056,
+      "ms": 2299,
       "error": ""
     },
     "python-proxy": {
@@ -2558,7 +2589,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 526,
+      "ms": 856,
       "error": ""
     },
     "quote-extractor": {
@@ -2566,24 +2597,23 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 137,
+      "ms": 993,
       "error": ""
     },
     "random-proxy": {
       "path": "/?url=https://example.com",
-      "http": 400,
-      "state": "rejected",
+      "http": 301,
+      "state": "ok",
       "via": "lan",
-      "ms": 107,
-      "error": "",
-      "detail": "Got more than 8190 bytes when reading: b'a11y-quick.0crawl.com,accessibility-audit.0crawl.com,accessibility-score.0crawl"
+      "ms": 24,
+      "error": ""
     },
     "ratelimit-tester": {
       "path": "/?target=example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5316,
+      "ms": 7111,
       "error": ""
     },
     "readability-index": {
@@ -2591,7 +2621,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 49,
+      "ms": 1643,
       "error": ""
     },
     "reading-time-estimator": {
@@ -2599,7 +2629,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 1310,
       "error": ""
     },
     "redirect-tracer": {
@@ -2607,7 +2637,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 347,
+      "ms": 2622,
       "error": "",
       "detail": "success"
     },
@@ -2616,7 +2646,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8873,
+      "ms": 12431,
       "error": ""
     },
     "revenue-model": {
@@ -2624,7 +2654,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 1055,
+      "ms": 3619,
       "error": "",
       "detail": "no_data"
     },
@@ -2633,7 +2663,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 49,
+      "ms": 2771,
       "error": ""
     },
     "review-presence": {
@@ -2641,16 +2671,16 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 15,
+      "ms": 1223,
       "error": "",
-      "detail": "{\"sources\":[],\"domain\":\"example.com\",\"version\":\"0.4.7\",\"took_ms\":5,\"degraded\":[\"fetchcache_static:hit\",\"fetchcache_rende"
+      "detail": "{\"sources\":[],\"domain\":\"example.com\",\"version\":\"0.4.16\",\"took_ms\":72,\"degraded\":[\"fetchcache_static:hit\",\"fetchcache_ren"
     },
     "robots-analyzer": {
       "path": "/go_robots_analyzer?target=example.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6014,
+      "ms": 1910,
       "error": ""
     },
     "robots-parser": {
@@ -2658,7 +2688,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 707,
+      "ms": 2737,
       "error": ""
     },
     "scan-port": {
@@ -2666,7 +2696,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1040,
+      "ms": 1481,
       "error": ""
     },
     "scan-port-banner": {
@@ -2674,7 +2704,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1252,
+      "ms": 2164,
       "error": ""
     },
     "scan-port-ssh": {
@@ -2682,7 +2712,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2691,
+      "ms": 2656,
       "error": ""
     },
     "scc": {
@@ -2690,7 +2720,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 1122,
       "error": ""
     },
     "schema-extractor": {
@@ -2698,7 +2728,7 @@
       "http": 404,
       "state": "no-data",
       "via": "lan",
-      "ms": 2215,
+      "ms": 3634,
       "error": "",
       "detail": "target could not be fetched"
     },
@@ -2707,7 +2737,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 793,
+      "ms": 966,
       "error": ""
     },
     "search-duck": {
@@ -2715,7 +2745,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1405,
+      "ms": 1212,
       "error": ""
     },
     "search-duck-go": {
@@ -2723,7 +2753,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1322,
+      "ms": 1668,
       "error": ""
     },
     "seasonal-detector": {
@@ -2731,7 +2761,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 743,
       "error": ""
     },
     "secrets-scanner": {
@@ -2739,7 +2769,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 629,
+      "ms": 1830,
       "error": ""
     },
     "security-header-analyzer": {
@@ -2747,7 +2777,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 601,
+      "ms": 1456,
       "error": ""
     },
     "security-headers": {
@@ -2755,7 +2785,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5404,
+      "ms": 2326,
       "error": ""
     },
     "security-txt": {
@@ -2763,7 +2793,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 576,
+      "ms": 1545,
       "error": ""
     },
     "seo-audit": {
@@ -2771,7 +2801,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 21,
+      "ms": 411,
       "error": ""
     },
     "seo-basics": {
@@ -2779,7 +2809,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 412,
       "error": ""
     },
     "service-worker-detector": {
@@ -2787,7 +2817,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 237,
       "error": ""
     },
     "services-dashboard": {
@@ -2795,7 +2825,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2,
+      "ms": 9,
       "error": ""
     },
     "session-management": {
@@ -2803,7 +2833,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 936,
+      "ms": 808,
       "error": ""
     },
     "shipping-regions": {
@@ -2811,7 +2841,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2063,
+      "ms": 1971,
       "error": ""
     },
     "simulate-ddos": {
@@ -2819,7 +2849,15 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 0,
+      "ms": 1,
+      "error": ""
+    },
+    "site-capsule": {
+      "path": "/health",
+      "http": 200,
+      "state": "ok",
+      "via": "lan",
+      "ms": 2,
       "error": ""
     },
     "sitemap-finder": {
@@ -2827,7 +2865,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8125,
+      "ms": 2407,
       "error": ""
     },
     "smuggling-probe": {
@@ -2835,7 +2873,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 255,
+      "ms": 861,
       "error": ""
     },
     "social-graph": {
@@ -2843,7 +2881,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1435,
+      "ms": 1509,
       "error": ""
     },
     "social-proof-extractor": {
@@ -2851,7 +2889,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 97,
       "error": ""
     },
     "sourcemap-finder": {
@@ -2859,7 +2897,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 494,
+      "ms": 957,
       "error": ""
     },
     "structured-data-validator": {
@@ -2867,7 +2905,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 35,
       "error": ""
     },
     "subdomain-finder": {
@@ -2875,7 +2913,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5003,
+      "ms": 3158,
       "error": ""
     },
     "subdomain-takeover": {
@@ -2883,7 +2921,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 44,
+      "ms": 102,
       "error": ""
     },
     "substack-scraper": {
@@ -2891,7 +2929,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6187,
+      "ms": 6169,
       "error": ""
     },
     "svg-icon-inventory": {
@@ -2899,7 +2937,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 17,
+      "ms": 81,
       "error": ""
     },
     "svi": {
@@ -2907,7 +2945,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 552,
+      "ms": 307,
       "error": ""
     },
     "swagger-finder": {
@@ -2915,7 +2953,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1023,
+      "ms": 1228,
       "error": ""
     },
     "table-extractor": {
@@ -2923,7 +2961,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 16,
+      "ms": 63,
       "error": ""
     },
     "task-credential-broker": {
@@ -2931,7 +2969,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1,
+      "ms": 3,
       "error": ""
     },
     "team-member-extractor": {
@@ -2939,7 +2977,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3239,
+      "ms": 3838,
       "error": ""
     },
     "team-size": {
@@ -2947,7 +2985,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 14,
+      "ms": 131,
       "error": ""
     },
     "tech-stack": {
@@ -2955,7 +2993,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1115,
+      "ms": 939,
       "error": ""
     },
     "technology-stack": {
@@ -2963,7 +3001,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 8688,
+      "ms": 11879,
       "error": ""
     },
     "telnet-banner": {
@@ -2971,23 +3009,24 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 5113,
+      "ms": 7999,
       "error": ""
     },
     "testimonial-extractor": {
       "path": "/?url=https://example.com",
-      "http": 200,
-      "state": "ok",
+      "http": 503,
+      "state": "error",
       "via": "lan",
-      "ms": 12,
-      "error": ""
+      "ms": 3953,
+      "error": "",
+      "detail": "auth backend unavailable; retry shortly"
     },
     "tos-finder": {
       "path": "/?target=https://github.com",
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 4298,
+      "ms": 7041,
       "error": ""
     },
     "trust-decay": {
@@ -2995,7 +3034,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 106,
+      "ms": 574,
       "error": ""
     },
     "typosquat-finder": {
@@ -3003,7 +3042,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15392,
+      "ms": 13847,
       "error": ""
     },
     "ugc-detector": {
@@ -3011,7 +3050,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 37,
+      "ms": 3528,
       "error": ""
     },
     "update-frequency": {
@@ -3019,7 +3058,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 2643,
+      "ms": 6563,
       "error": ""
     },
     "url-shortener": {
@@ -3027,7 +3066,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3266,
+      "ms": 5409,
       "error": ""
     },
     "user-demographics": {
@@ -3035,7 +3074,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 15021,
+      "ms": 16992,
       "error": ""
     },
     "utils-readcontent": {
@@ -3043,7 +3082,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 69,
+      "ms": 87,
       "error": ""
     },
     "vendor-security-scorecard": {
@@ -3051,7 +3090,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 20,
+      "ms": 283,
       "error": ""
     },
     "video-content": {
@@ -3059,7 +3098,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 12,
+      "ms": 170,
       "error": ""
     },
     "voice-search": {
@@ -3067,7 +3106,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 140,
+      "ms": 319,
       "error": ""
     },
     "wayback-checker": {
@@ -3075,7 +3114,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 3024,
+      "ms": 2293,
       "error": ""
     },
     "web-vitals-report": {
@@ -3083,7 +3122,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 13,
+      "ms": 879,
       "error": ""
     },
     "website-carbon": {
@@ -3091,7 +3130,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1695,
+      "ms": 2006,
       "error": ""
     },
     "websocket-analyzer": {
@@ -3099,7 +3138,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 730,
+      "ms": 838,
       "error": ""
     },
     "wellknown-scanner": {
@@ -3107,7 +3146,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 7326,
+      "ms": 1970,
       "error": ""
     },
     "wp-plugins": {
@@ -3115,7 +3154,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6429,
+      "ms": 4361,
       "error": ""
     },
     "wps": {
@@ -3123,7 +3162,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1257,
+      "ms": 1380,
       "error": ""
     },
     "xss-payload": {
@@ -3131,7 +3170,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 1907,
+      "ms": 2011,
       "error": ""
     },
     "xss-scanner": {
@@ -3139,7 +3178,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 4660,
+      "ms": 2390,
       "error": ""
     },
     "zone-transfer": {
@@ -3147,7 +3186,7 @@
       "http": 200,
       "state": "ok",
       "via": "lan",
-      "ms": 6064,
+      "ms": 6160,
       "error": ""
     }
   }

@@ -1,0 +1,10 @@
+[Unit]
+Description=Run the registry example check every night
+
+[Timer]
+OnCalendar=*-*-* 02:40:00
+RandomizedDelaySec=600
+Persistent=true
+
+[Install]
+WantedBy=timers.target
