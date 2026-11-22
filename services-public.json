@@ -10051,6 +10051,12 @@
     "id": "pentest-chaos-sync",
     "kind": "container",
     "language": "go",
+    "lifecycle": {
+      "on_demand_since": "2026-11-22",
+      "reason": "Pentest dataset sync, not used right now. Stopped to free 9 GB on the 0docker host; start it again when a pentest needs it.",
+      "review_by": "2027-02-22",
+      "status": "on_demand"
+    },
     "mesh": "0exec",
     "name": "Pentest Chaos Sync",
     "rename_retire_at": "2026-06-18",

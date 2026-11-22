@@ -7418,7 +7418,13 @@
     "trl_ceiling_reason": "Delta-tracking and program ranking needed for 7+.",
     "trl_evidence": "v0.2.0 adds dataset_version (sha256(url|last_updated)) tracking, cursor-paginated /delta and /export endpoints, /stats with distinct-version counts, and admin-gated POST /sync; SQLite WAL + busy_timeout=5000 for syncer/reader concurrency; skip-unchanged short-circuit avoids redownloading unchanged Chaos zips; per-zip 60s HTTP timeout; ≥6 unit tests covering full sync, lookup, delta windowing, cursor pagination correctness across ≥3 pages, dataset_version stability, and admin-token gating; httptest fixtures serve canned chaos index + canned subdomain zips so tests are CGO-free and offline.",
     "version": "0.2.9",
-    "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i"
+    "coolify_app_uuid": "t17mzxrtpoygi5tvzj4hxz7i",
+    "lifecycle": {
+      "status": "on_demand",
+      "on_demand_since": "2026-11-22",
+      "reason": "Pentest dataset sync, not used right now. Stopped to free 9 GB on the 0docker host; start it again when a pentest needs it.",
+      "review_by": "2027-02-22"
+    }
   },
   "pentest-codec": {
     "params": [

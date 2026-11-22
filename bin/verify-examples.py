@@ -57,7 +57,7 @@ from urllib.parse import urlsplit
 REGISTRY_URL = "https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.json"
 MAX_BODY = 16 * 1024
 UA = "verify-examples/1.0 (+services-registry)"
-SKIP_LIFECYCLE_STATUSES = {"sunset"}
+SKIP_LIFECYCLE_STATUSES = {"sunset", "on_demand"}
 # Worst last. `gated` ranks low because it says "not measured" (our key was not accepted), not "the service is broken";
 # a replica that answers 5xx or the wrong route outranks a healthy one, and `unreachable` is never among answered replicas.
 WORST_FIRST = ("ok", "no-data", "gated", "method", "missing-param", "rejected", "not-found", "error", "unreachable")

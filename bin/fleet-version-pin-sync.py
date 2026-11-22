@@ -8,7 +8,7 @@ and checks GHCR for the wrong image tag, and `fleet-runner deploy-pool` refuses 
 
 What a run does (one at a time, flock in the unit; PAUSE file in the state directory = do nothing):
   1. a fresh checkout of services-registry main in its own work directory (never the shared /root/workspace one);
-  2. for every container service (not external, not sunset, repository under github.com/baditaflorin): the version
+  2. for every container service (not external, not sunset or on_demand, repository under github.com/baditaflorin): the version
      of the repository's main service.yaml (batched GraphQL through `gh`) and the version the running service
      reports on GET /version (the LAN docker hosts first for compose services, else the public URL);
   3. a pin is CHANGED only when the running version equals main (a release that is both merged and deployed; a
@@ -83,7 +83,7 @@ def candidates(services):
     for e in services:
         if e.get("kind") != "container" or e.get("runtime") == "external":
             continue
-        if (e.get("lifecycle") or {}).get("status") == "sunset":
+        if (e.get("lifecycle") or {}).get("status") in ("sunset", "on_demand"):
             continue
         repo = repo_name(e.get("repo_url"))
         if repo:

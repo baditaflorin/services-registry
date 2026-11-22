@@ -64,7 +64,7 @@ from urllib.parse import urlsplit, urlunsplit
 REGISTRY_URL = "https://raw.githubusercontent.com/baditaflorin/services-registry/main/services.json"
 MAX_BODY = 64 * 1024
 STATES = ("pass", "fail", "unreachable", "skip", "gated")
-SKIP_LIFECYCLE_STATUSES = {"sunset"}
+SKIP_LIFECYCLE_STATUSES = {"sunset", "on_demand"}
 UA = "fleet-selftest-poll/1.0 (+services-registry)"
 
 
