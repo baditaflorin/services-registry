@@ -112,7 +112,7 @@ active_ids() {  # key ids (not secret) of the active keys of the slug, newest fi
 import datetime, json, sys
 now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 try:
-    keys = json.load(sys.stdin)
+    keys = json.load(sys.stdin) or []   # `key list --json` prints null when no key exists
 except ValueError:
     sys.exit(0)
 act = [k for k in keys if k.get("user") == "examples-verifier" and not k.get("revoked_at") and (k.get("expires_at") or "9") > now]

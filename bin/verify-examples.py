@@ -13,6 +13,9 @@ Output (default services.examples.json, derived data: never edit by hand, regene
   {"checked_at": "...", "services": {"<id>": {"path", "http", "state", "via", "ms", "error", "detail"?,
                                               "replicas"?, "diverged"?}}}
 
+Edge fallback. A compose service that no --direct-hosts address answers (it runs on a host this machine does not probe) is asked
+through its public https address instead, with the same key (row `via: "edge"`). Only a service with neither answer is `unreachable`.
+
 Replicas. A service marked placement "replicable" runs on several hosts behind the gateway (nginx upstream, same
 host_port on every member), and the gateway may send any user to any of them. So every host of --direct-hosts is
 called, not only the first that answers: a host "answers" when it returns any HTTP status (a refused connection or a
@@ -178,7 +181,13 @@ def probe(svc, timeout, api_key, direct_hosts):
         calls = [judge(h, *fetch("http://%s:%d%s" % (h, int(port), path), timeout, api_key)) for h in direct_hosts]
         answered = [c for c in calls if c["http"] is not None]
         out["via"] = "lan"
-        if not answered:                               # nobody runs it there: the last host's reason, as before
+        if not answered and api_key and str(svc.get("url", "")).startswith("https://"):
+            # No listed host runs it (it lives on a host this machine does not probe): ask the public edge with the same key,
+            # which is scoped to the service hostnames. The gateway picks the replica, so no `replicas` row here.
+            host = urlsplit(svc["url"]).netloc
+            judged = judge(host, *fetch("https://%s%s" % (host, path), timeout, api_key))
+            out["via"] = "edge"
+        elif not answered:                             # nobody runs it there and there is no edge route: the last host's reason
             judged = calls[-1]
         else:
             judged = min(answered, key=lambda c: (-severity(c["state"]), answered.index(c)))

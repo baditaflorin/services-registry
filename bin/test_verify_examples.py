@@ -62,7 +62,7 @@ class TestProbe(unittest.TestCase):
 
         def fake(url, timeout, key):
             calls.append((url, key))
-            host = url.split("//")[1].split(":")[0]
+            host = url.split("//")[1].split("/")[0].split(":")[0]
             return table[host]
 
         return fake, calls
@@ -120,13 +120,31 @@ class TestProbe(unittest.TestCase):
         self.assertEqual([c["host"] for c in r["replicas"]], ["a", "c"])
         self.assertEqual((r["state"], r["diverged"]), ("error", True))
 
-    def test_nobody_answering_is_unreachable_with_the_last_reason_and_no_replicas(self):
+    def test_nobody_answering_without_a_key_is_unreachable_with_the_last_reason_and_no_replicas(self):
         fake, _ = self.answers({"a": (None, "", "first"), "b": (None, "", "last")})
         with mock.patch.object(ve, "fetch", fake):
-            _, r = ve.probe(SVC, 5, "k", ("a", "b"))
-        self.assertEqual((r["state"], r["http"], r["error"]), ("unreachable", None, "last"))
+            _, r = ve.probe(SVC, 5, None, ("a", "b"))
+        self.assertEqual((r["state"], r["http"], r["error"], r["via"]), ("unreachable", None, "last", "lan"))
         self.assertNotIn("replicas", r)
         self.assertNotIn("detail", r)
+
+    def test_nobody_answering_on_the_lan_falls_back_to_the_edge_with_the_key(self):
+        fake, calls = self.answers({"a": (None, "", "first"), "b": (None, "", "last"), "x.0crawl.com": (200, "{}", "")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a", "b"))
+        self.assertEqual(calls[-1], ("https://x.0crawl.com/?q=cats", "k"))
+        self.assertEqual((r["state"], r["http"], r["via"], r["error"]), ("ok", 200, "edge", ""))
+        self.assertNotIn("replicas", r)
+
+    def test_edge_fallback_reports_what_the_edge_says_and_never_runs_when_a_lan_host_answered(self):
+        fake, calls = self.answers({"a": (None, "", "first"), "x.0crawl.com": (None, "", "URLError: down")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a",))
+        self.assertEqual((r["state"], r["via"], r["error"]), ("unreachable", "edge", "URLError: down"))
+        fake, calls = self.answers({"a": (500, "", ""), "x.0crawl.com": (200, "{}", "")})
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe(SVC, 5, "k", ("a",))
+        self.assertEqual((r["state"], r["via"], len(calls)), ("error", "lan", 1))
 
     def test_the_key_goes_only_to_the_listed_hosts_on_the_services_own_port_and_never_to_a_redirect_target(self):
         fake, calls = self.answers({"10.0.0.1": (200, "{}", ""), "10.0.0.2": (200, "{}", "")})
