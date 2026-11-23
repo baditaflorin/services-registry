@@ -308,6 +308,18 @@ agents already held by an operator. Removing the hold permits recovery only
 after the full healthy sample window, followed by gradual reopening where
 configured. The hold does not cancel work already assigned to the node.
 
+The v2 `physical_memory` gate can also use a Prometheus instant query through
+an explicitly configured loopback HTTP proxy. Configure a tailnet Prometheus
+query URL, exact job, host, instance, fleet and role labels, the expected
+physical node name, and bounded age and clock-skew limits. The controller
+requests values and original scrape timestamps in one pinned-time query,
+requires exactly one fresh series for each value and timestamp from the same
+scrape, and treats transport errors, timeouts, redirects, oversized or
+ambiguous responses and failed identity checks as unsafe. See the example
+configuration. An active `admission_hold` intentionally skips metric polling;
+observe the source separately while the hold is in place. This gate does not
+replace an aggregate memory limit across concurrent jobs.
+
 Choose mount/device labels and thresholds from the hypervisor's actual node
 exporter output and expected peak write bursts. Run a dry-run and verify the
 exact labels and observed free bytes before enabling apply. During rollback,
