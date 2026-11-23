@@ -275,6 +275,67 @@ class HysteresisTests(unittest.TestCase):
 
 
 class HostAdmissionTests(unittest.TestCase):
+    def test_physical_exporter_identity_and_unique_memory_samples(self):
+        good='node_uname_info{nodename="physical"} 1\nnode_memory_MemAvailable_bytes 250\nnode_memory_MemTotal_bytes 1000\n'
+        self.assertEqual(controller.physical_memory_pct(good,"physical"),25)
+        for bad in (good.replace('nodename="physical"','nodename="other"'),
+                    good+'node_memory_MemAvailable_bytes{instance="other"} 500\n',
+                    good+'node_uname_info{nodename="physical"} 1\n',
+                    good.replace('250','NaN')):
+            with self.assertRaises(ValueError): controller.physical_memory_pct(bad,"physical")
+
+    def test_physical_memory_pressure_drains_even_when_guest_healthy(self):
+        config = config_v2()
+        config["nodes"][0]["physical_memory"] = {"metrics_url": "http://physical/metrics", "expected_nodename":"physical", "stop_pct": 20, "resume_pct": 25}
+        controller.validate_config(config)
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":False}])
+        state = {"version":2,"nodes":{}}
+        physical = 'node_uname_info{nodename="physical"} 1\nnode_memory_MemAvailable_bytes 190\nnode_memory_MemTotal_bytes 1000\n'
+        with patch.object(controller, "fetch_text", side_effect=[RECOVERED_METRICS, physical]), patch.object(controller, "log_event"):
+            self.assertTrue(controller.run_cycle(config,state,client,apply=True))
+        self.assertEqual(client.changed, [(1,True)])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["1"])
+
+    def test_missing_physical_metrics_fail_closed(self):
+        config = config_v2()
+        config["nodes"][0]["physical_memory"] = {"metrics_url": "http://physical/metrics", "expected_nodename":"physical", "stop_pct":20, "resume_pct":25}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":False}])
+        with patch.object(controller, "fetch_text", side_effect=[RECOVERED_METRICS,"node_memory_MemTotal_bytes 1000\n"]), patch.object(controller, "log_event"):
+            self.assertTrue(controller.run_cycle(config,{"version":2,"nodes":{}},client,apply=True))
+        self.assertEqual(client.changed, [(1,True)])
+
+    def test_physical_memory_hysteresis_and_schema(self):
+        p=controller.Pressure(None,80,80,(),True)
+        cfg={"metrics_url":"http://physical/metrics","expected_nodename":"physical","stop_pct":20,"resume_pct":25}
+        self.assertIn("physical_memory",controller.physical_memory_pressure(p,20,cfg).breaches)
+        self.assertFalse(controller.physical_memory_pressure(p,22,cfg).recovered)
+        self.assertTrue(controller.physical_memory_pressure(p,25,cfg).recovered)
+        for raw in ({"metrics_url":"x","expected_nodename":"physical","stop_pct":30,"resume_pct":20}, {"metrics_url":"x","expected_nodename":"physical","stop_pct":float("nan"),"resume_pct":30}):
+            config=config_v2(); config["nodes"][0]["physical_memory"]=raw
+            with self.assertRaises(ValueError): controller.validate_config(config)
+
+    def test_graded_physical_gate_waits_full_recovery_before_opening(self):
+        config=config_v2(); config["nodes"]=config["nodes"][:1]; config["resume_samples"]=2
+        config["thresholds"].update({"load_per_cpu_stop":3.0,"load_per_cpu_resume":2.5})
+        node=config["nodes"][0]
+        node["physical_memory"]={"metrics_url":"http://physical/metrics","expected_nodename":"physical","stop_pct":20,"resume_pct":30}
+        node["graded"]={"min_open_slots":1,"open_samples":1,"close_samples":1,"memory_full_pct":60}
+        controller.validate_config(config)
+        client=FakeClient([{"id":1,"name":"builder-agent","no_schedule":True,"last_contact":1000,"capacity":1}])
+        state={"version":2,"nodes":{"builder-a":{"managed_agent_ids":["1"],"recovery_samples":0,
+                "previous_snapshot":{"cpu_idle_seconds":100,"cpu_total_seconds":101,"memory_available_pct":80,"disk_available_pct":80}}}}
+        guest=('node_cpu_seconds_total{cpu="0",mode="idle"} 101\nnode_cpu_seconds_total{cpu="0",mode="user"} 1\nnode_load1 0.1\n'
+               'node_memory_MemAvailable_bytes 800\nnode_memory_MemTotal_bytes 1000\n'
+               'node_filesystem_avail_bytes{mountpoint="/"} 800\nnode_filesystem_size_bytes{mountpoint="/"} 1000\n')
+        between='node_uname_info{nodename="physical"} 1\nnode_memory_MemAvailable_bytes 250\nnode_memory_MemTotal_bytes 1000\n'
+        healthy='node_uname_info{nodename="physical"} 1\nnode_memory_MemAvailable_bytes 400\nnode_memory_MemTotal_bytes 1000\n'
+        with patch.object(controller,"fetch_text",side_effect=[guest,between,guest,healthy,guest,healthy]), patch.object(controller,"log_event"), patch.object(controller.time,"time",return_value=1000):
+            controller.run_cycle(config,state,client,apply=True)
+            controller.run_cycle(config,state,client,apply=True)
+            self.assertEqual(client.changed,[])
+            controller.run_cycle(config,state,client,apply=True)
+        self.assertEqual(client.changed,[(1,False)])
+
     def test_worker_lease_expiry_is_utc_and_fail_closed(self):
         deadline = "2026-12-17T14:59:50Z"
         before = controller.datetime(2026, 12, 17, 14, 59, 49, tzinfo=controller.timezone.utc).timestamp()
