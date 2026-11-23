@@ -3,8 +3,10 @@
 ## Optional physical memory gate
 
 Version-2 controller nodes may declare a `physical_memory` object containing
-`metrics_url`, `stop_pct` and `resume_pct`. The endpoint must expose exactly
-one physical host's node-exporter `MemAvailable` and `MemTotal` samples.
+`metrics_url`, `expected_nodename`, `stop_pct` and `resume_pct`. The endpoint
+must be a direct per-host node exporter (not a cached relay) exposing exactly
+one matching `node_uname_info` identity and one `MemAvailable` and `MemTotal`
+sample each.
 At or below the stop percentage, the controller immediately drains its own
 mapped agents even when the guest looks healthy. Missing, malformed or
 ambiguous host telemetry quarantines the node. It reopens only its own holds

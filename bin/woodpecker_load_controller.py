@@ -69,15 +69,20 @@ class Pressure:
     physical_memory_available_pct: float | None = None
 
 
-def physical_memory_pct(text: str) -> float:
+def physical_memory_pct(text: str, expected_nodename: str) -> float:
     """Read one host's physical memory, refusing ambiguous/malformed telemetry."""
     available = []
     total = []
-    for name, _labels, value in prometheus_samples(text):
+    identities = []
+    for name, labels, value in prometheus_samples(text):
         if name == "node_memory_MemAvailable_bytes":
             available.append(value)
         elif name == "node_memory_MemTotal_bytes":
             total.append(value)
+        elif name == "node_uname_info" and value == 1:
+            identities.append(labels.get("nodename"))
+    if identities != [expected_nodename]:
+        raise ValueError("physical exporter identity is missing, ambiguous or mismatched")
     if len(available) != 1 or len(total) != 1:
         raise ValueError("physical memory metrics are missing or ambiguous")
     if not math.isfinite(available[0]) or not math.isfinite(total[0]) or total[0] <= 0 or not 0 <= available[0] <= total[0]:
@@ -1109,7 +1114,7 @@ def run_cycle_v2(
                 backing_snapshot,
             )
             if physical_config is not None:
-                physical_pct = physical_memory_pct(fetch_text(physical_config["metrics_url"]))
+                physical_pct = physical_memory_pct(fetch_text(physical_config["metrics_url"]), physical_config["expected_nodename"])
                 pressure = physical_memory_pressure(pressure, physical_pct, physical_config)
         except (OSError, ValueError, urllib.error.URLError) as exc:
             fail_closed = bool(
@@ -1404,10 +1409,12 @@ def validate_config(config: dict[str, Any]) -> None:
             validate_backing_storage(node)
             physical = node.get("physical_memory")
             if physical is not None:
-                if not isinstance(physical, dict) or set(physical) != {"metrics_url", "stop_pct", "resume_pct"}:
-                    raise ValueError("physical_memory must declare metrics_url, stop_pct and resume_pct only")
+                if not isinstance(physical, dict) or set(physical) != {"metrics_url", "expected_nodename", "stop_pct", "resume_pct"}:
+                    raise ValueError("physical_memory must declare metrics_url, expected_nodename, stop_pct and resume_pct only")
                 if not isinstance(physical["metrics_url"], str) or not physical["metrics_url"]:
                     raise ValueError("physical_memory metrics_url must be non-empty")
+                if not isinstance(physical["expected_nodename"], str) or not physical["expected_nodename"]:
+                    raise ValueError("physical_memory expected_nodename must be non-empty")
                 for key in ("stop_pct", "resume_pct"):
                     value = physical[key]
                     if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= 100:
