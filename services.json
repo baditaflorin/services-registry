@@ -3058,7 +3058,7 @@
     "url": "https://domain-analytics-stack.0crawl.com",
     "health_url": "https://domain-analytics-stack.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_domain_analytics_stack",
-    "example_path": "/?domain=stripe.com",
+    "example_path": "/?domain=github.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -3082,8 +3082,8 @@
         "name": "domain",
         "required": true,
         "type": "string",
-        "description": "Fully-qualified domain to inspect (e.g. stripe.com).",
-        "example": "stripe.com"
+        "description": "Fully-qualified domain to inspect (e.g. github.com).",
+        "example": "github.com"
       },
       {
         "name": "q",
@@ -7413,7 +7413,7 @@
     "url": "https://legal-entity.0crawl.com",
     "health_url": "https://legal-entity.0crawl.com/health",
     "repo_url": "https://github.com/baditaflorin/go_legal_entity",
-    "example_path": "/?target=example.com",
+    "example_path": "/?target=github.com",
     "auth": {
       "type": "api_key",
       "header": "X-API-Key"
@@ -7438,7 +7438,7 @@
         "required": true,
         "type": "string",
         "description": "URL or domain to extract legal entity from",
-        "example": "example.com"
+        "example": "github.com"
       }
     ],
     "proxy_egress": true,
