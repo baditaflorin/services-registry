@@ -767,6 +767,7 @@ class LostPauseResponseTests(unittest.TestCase):
         # The record reached the state file before the request went out.
         self.assertEqual(len(persisted), 1)
         self.assertEqual(persisted[0]["nodes"]["builder-b"]["managed_agent_ids"], ["2"])
+        self.assertTrue(persisted[0]["nodes"]["builder-b"]["full_drain_pending_recovery"])
         return config, client, persisted[0]
 
     def test_v2_pause_applied_but_unanswered_is_restored_by_the_controller(self):
@@ -793,6 +794,20 @@ class LostPauseResponseTests(unittest.TestCase):
         self.assertEqual(client.changed, [])
         self.assertEqual(state["nodes"]["builder-b"]["managed_agent_ids"], [])
         self.assertFalse(state["nodes"]["builder-b"]["managed_no_schedule"])
+
+    def test_v2_ambiguous_pause_restart_keeps_graded_recovery_barrier(self):
+        config, client, state = self.quarantine_builder_b(applied=True)
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["resume_samples"] = 3
+        config["nodes"][1]["graded"] = {"load_per_cpu_full": 0.5, "open_samples": 1, "close_samples": 1}
+        for agent in client.remote_agents:
+            agent.update(capacity=1, last_contact=controller.time.time())
+        with patch.object(controller, "fetch_text", return_value=load_metrics(0.1)):
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [(2, True)])
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(2, True), (2, False)])
 
     def test_v1_pause_applied_but_unanswered_is_restored_by_the_controller(self):
         config = config_v1()
@@ -1336,7 +1351,7 @@ class GradedAdmissionTests(unittest.TestCase):
         config = config_v2()
         config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
         config["stop_samples"] = 10
-        config["resume_samples"] = 1
+        config["resume_samples"] = 20
         config["nodes"][0]["agent_names"] = ["g1", "g2", "g3", "g4"]
         config["nodes"][0]["graded"] = dict(self.GRADED)
         now = controller.time.time()
@@ -1352,6 +1367,64 @@ class GradedAdmissionTests(unittest.TestCase):
             for _ in range(2):
                 controller.run_cycle_v2(config, state, client, apply=True)
         self.assertEqual(client.changed, [(2, False)], "recovery reopens a single agent, not the whole host")
+
+    def test_fully_drained_graded_node_waits_full_recovery_window(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["resume_samples"] = 3
+        config["nodes"][0]["graded"] = dict(self.GRADED, open_samples=1)
+        now = controller.time.time()
+        client = FakeClient([
+            {"id": 1, "name": "builder-agent", "capacity": 1, "no_schedule": True, "last_contact": now},
+            {"id": 9, "name": "remote-agent", "capacity": 1, "no_schedule": False, "last_contact": now},
+        ])
+        state = {"nodes": {"builder-a": {"managed_agent_ids": ["1"]}}}
+        with patch.object(controller, "fetch_text", side_effect=lambda url: load_metrics(0.1)):
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [], "full drain must survive every incomplete recovery window")
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, False)])
+
+    def test_full_drain_barrier_survives_restart_and_manual_open(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["resume_samples"] = 3
+        config["nodes"][0]["agent_names"] = ["g1", "g2"]
+        config["nodes"][0]["graded"] = dict(self.GRADED, open_samples=1)
+        now = controller.time.time()
+        client = FakeClient([
+            {"id": 1, "name": "g1", "capacity": 1, "no_schedule": False, "last_contact": now},
+            {"id": 2, "name": "g2", "capacity": 1, "no_schedule": True, "last_contact": now},
+            {"id": 9, "name": "remote-agent", "capacity": 1, "no_schedule": False, "last_contact": now},
+        ])
+        state = {"nodes": {"builder-a": {"managed_agent_ids": ["1", "2"], "full_drain_pending_recovery": True}}}
+        with patch.object(controller, "fetch_text", side_effect=lambda url: load_metrics(0.1)):
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [])
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(2, False)])
+
+    def test_full_drain_recovery_window_restarts_after_new_pressure(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["resume_samples"] = 3
+        config["nodes"][0]["graded"] = dict(self.GRADED, open_samples=1)
+        now = controller.time.time()
+        client = FakeClient([
+            {"id": 1, "name": "builder-agent", "capacity": 1, "no_schedule": True, "last_contact": now},
+            {"id": 9, "name": "remote-agent", "capacity": 1, "no_schedule": False, "last_contact": now},
+        ])
+        state = {"nodes": {"builder-a": {"managed_agent_ids": ["1"]}}}
+        with patch.object(controller, "fetch_text") as fetch:
+            for load in (0.1, 0.1, 16, 0.1, 0.1):
+                fetch.return_value = load_metrics(load)
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [])
+            fetch.return_value = load_metrics(0.1)
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, False)])
 
     def test_config_validation_of_graded_admission(self):
         config = config_v2()

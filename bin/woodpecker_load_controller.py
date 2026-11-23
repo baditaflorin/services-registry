@@ -1094,6 +1094,13 @@ def run_cycle_v2(
         schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
         if schedulable:
             schedulable_nodes += 1
+        # A fully drained node must recover for the full hysteresis window
+        # before graded admission can reopen any of its managed holds. Infer
+        # this for older state files too, which did not record the barrier.
+        if not managed_ids:
+            node_state.pop("full_drain_pending_recovery", None)
+        elif not schedulable:
+            node_state["full_drain_pending_recovery"] = True
 
         backing_config = entry.get("backing_storage")
         physical_config = entry.get("physical_memory")
@@ -1151,6 +1158,12 @@ def run_cycle_v2(
             stop_samples=int(config["stop_samples"]),
             resume_samples=int(config["resume_samples"]),
         )
+        if (
+            node_state.get("full_drain_pending_recovery")
+            and pressure.recovered
+            and node_state["recovery_samples"] >= int(config["resume_samples"])
+        ):
+            node_state.pop("full_drain_pending_recovery", None)
         if (
             managed_ids
             and pressure.recovered
@@ -1243,6 +1256,9 @@ def run_cycle_v2(
                 minimum_schedulable_nodes=minimum_schedulable,
             )
             continue
+        # Record the full-node recovery barrier before the first API write;
+        # drain_recorded_first persists it together with the managed agent ID.
+        node_state["full_drain_pending_recovery"] = True
         drained = [
             drain_recorded_first(
                 client,
@@ -1287,6 +1303,12 @@ def run_cycle_v2(
         step, agent, facts = graded_step(
             node_state, ordered, fresh_ids, managed_ids, headroom, graded, bool(pressure.breaches) or physical_pending
         )
+        if step == "open" and node_state.get("full_drain_pending_recovery"):
+            # Keep the graded interval satisfied while the full-node recovery
+            # barrier is pending. Once the full window is met, reopening can
+            # begin immediately and subsequent agents still open gradually.
+            node_state["graded_open_samples"] = int(graded.get("open_samples", 6))
+            step, agent = None, None
         log_event(event="node_graded", node=name, proposed_action=step, **facts)
         if step is None or agent is None:
             continue

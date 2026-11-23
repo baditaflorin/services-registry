@@ -255,6 +255,14 @@ The default policy samples every 30 seconds, drains after
 ten overloaded samples, restores after twenty healthy samples, and keeps at
 least one physical host schedulable.
 
+For a graded node, a full node drain still requires the complete configured
+`resume_samples` recovery window before any controller-managed agent reopens.
+After that, agents reopen one at a time using the graded admission interval.
+A partially reduced node that was never fully drained continues to use the
+graded interval independently. The full-drain recovery barrier is recorded
+before the drain request, including when its response is lost; new pressure
+restarts the recovery window. Operator-held agents are not reopened.
+
 ### Gate guest-backed workers on hypervisor storage
 
 Guest filesystem metrics do not describe the hypervisor filesystem that stores
