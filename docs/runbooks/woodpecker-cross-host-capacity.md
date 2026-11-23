@@ -301,6 +301,13 @@ single group, but only controller-managed IDs are restored. Drain only stops
 new scheduling; it does not terminate workflows already assigned to those
 agents.
 
+For an operational incident requiring a node to remain closed to new work,
+set `admission_hold: true` on that v2 node. The controller records and drains
+any schedulable agents, keeps its managed holds closed, and does not claim
+agents already held by an operator. Removing the hold permits recovery only
+after the full healthy sample window, followed by gradual reopening where
+configured. The hold does not cancel work already assigned to the node.
+
 Choose mount/device labels and thresholds from the hypervisor's actual node
 exporter output and expected peak write bursts. Run a dry-run and verify the
 exact labels and observed free bytes before enabling apply. During rollback,

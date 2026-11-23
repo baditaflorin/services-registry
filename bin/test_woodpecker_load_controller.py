@@ -1167,6 +1167,54 @@ class GradedAdmissionTests(unittest.TestCase):
 
     GRADED = {"load_per_cpu_full": 0.5, "open_samples": 2, "close_samples": 2}
 
+    def test_admission_hold_preserves_manual_hold_and_recovery_window(self):
+        config = config_v2()
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["resume_samples"] = 3
+        node = config["nodes"][0]
+        node.update(agent_names=["g1", "g2", "manual"], graded=dict(self.GRADED, open_samples=1), admission_hold=True)
+        now = controller.time.time()
+        client = FakeClient([
+            {"id": 1, "name": "g1", "capacity": 1, "no_schedule": True, "last_contact": now},
+            {"id": 2, "name": "g2", "capacity": 1, "no_schedule": True, "last_contact": now},
+            {"id": 3, "name": "manual", "capacity": 1, "no_schedule": True, "last_contact": now},
+            {"id": 9, "name": "remote-agent", "capacity": 1, "no_schedule": False, "last_contact": now},
+        ])
+        state = {"nodes": {"builder-a": {"managed_agent_ids": ["1", "2"], "recovery_samples": 99}}}
+        with patch.object(controller, "fetch_text", return_value=load_metrics(0.1)):
+            for _ in range(4):
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [])
+                self.assertEqual(state["nodes"]["builder-a"]["recovery_samples"], 0)
+            del node["admission_hold"]
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [])
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, False)])
+        self.assertTrue(agent_by_id(client, 3)["no_schedule"])
+
+    def test_admission_hold_records_open_agent_before_drain_and_dry_run_is_read_only(self):
+        config = config_v2()
+        node = config["nodes"][0]
+        node["admission_hold"] = True
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+        state = {"nodes": {}}
+        with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS):
+            controller.run_cycle_v2(config, state, client, apply=False)
+        self.assertEqual(client.changed, [])
+        persisted = []
+        with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS):
+            controller.run_cycle_v2(config, state, client, apply=True, persist=lambda: persisted.append(copy.deepcopy(state)))
+        self.assertEqual(client.changed, [(1, True)])
+        saved = persisted[0]["nodes"]["builder-a"]
+        self.assertEqual(saved["managed_agent_ids"], ["1"])
+        self.assertTrue(saved["full_drain_pending_recovery"])
+        self.assertEqual(saved["recovery_samples"], 0)
+        node["admission_hold"] = "yes"
+        with self.assertRaisesRegex(ValueError, "admission_hold must be a boolean"):
+            controller.validate_config(config)
+
     def snapshot(self, load1, cpus=4, memory_available_pct=60.0):
         return controller.NodeSnapshot(
             0, 0, memory_available_pct, 50, load_per_cpu=load1 / cpus

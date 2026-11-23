@@ -1091,6 +1091,23 @@ def run_cycle_v2(
                         )
             continue
 
+        # Explicit operational hold: keep controller-managed agents closed,
+        # and close any currently open agents without disturbing running jobs.
+        # Previously operator-held IDs are never added to managed_agent_ids.
+        if entry.get("admission_hold", False):
+            schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
+            log_event(event="node_admission_hold", node=name, agents_to_drain=[a.get("id") for a in schedulable], apply=apply)
+            if apply:
+                node_state["full_drain_pending_recovery"] = True
+                node_state["recovery_samples"] = 0
+                for agent in schedulable:
+                    drain_recorded_first(
+                        client, agent, node_state, persist,
+                        node=name, agent=agent.get("name"), reason="admission_hold",
+                    )
+                    changed = True
+            continue
+
         schedulable = [agent for agent in agents if not bool(agent.get("no_schedule"))]
         if schedulable:
             schedulable_nodes += 1
@@ -1435,6 +1452,8 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError("each Woodpecker agent name must belong to exactly one node")
         for node in nodes:
             validate_backing_storage(node)
+            if "admission_hold" in node and not isinstance(node["admission_hold"], bool):
+                raise ValueError("admission_hold must be a boolean")
             physical = node.get("physical_memory")
             if physical is not None:
                 if not isinstance(physical, dict) or set(physical) != {"metrics_url", "expected_nodename", "stop_pct", "resume_pct"}:
