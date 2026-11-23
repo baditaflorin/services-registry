@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 """Hermetic tests for the pure parts of rollout_claude_md.py (canonical history, three-way merge). Cloning and pushing need GitHub and are not tested here.
 Run: python3 -m unittest discover -s <dir containing rollout_claude_md.py> -p 'test_rollout_claude_md.py'"""
+import argparse
+import contextlib
 import importlib.util
+import io
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
+from unittest import mock
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-spec = importlib.util.spec_from_file_location("rollout_claude_md", os.path.join(HERE, "rollout_claude_md.py"))
+SCRIPT = os.path.join(HERE, "rollout_claude_md.py")
+spec = importlib.util.spec_from_file_location("rollout_claude_md", SCRIPT)
 R = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(R)
 
@@ -196,6 +202,294 @@ class RolloutTest(unittest.TestCase):
         with open(os.path.join(d, "CLAUDE.md")) as f:
             self.assertEqual(f.read(), "two\n")
         self.assertFalse(os.path.exists(os.path.join(d, ".git", "index.lock")))
+
+
+# --- excludes.json, and the refusal to bury a short brief -----------------------------------------------------------------------------------------------------------
+# These drive the real entry points (cmd_plan, cmd_merge, cmd_weekly, the command line) against local bare repositories that stand in for GitHub. `plan` reuses a clone that
+# already exists in <work>/clones, so nothing is fetched; GIT_SSH_COMMAND=false makes any attempt to clone a repository that has no such clone fail at once.
+
+def fleet(generation, extra=""):
+    """a canonical revision: every revision rewrites every body line of the one before (as the real canonical's 84 revisions did), and ends in lines that never change"""
+    return "# Fleet\n\n" + "".join("## Section %d\n%s line %d\n\n" % (i, generation, i) for i in range(40)) + "## Last\nlast line\n" + extra
+
+
+FLEET1 = fleet("first")
+FLEET2 = fleet("second")
+FLEET3 = fleet("third", "\n## Newest\nnewest line\n")
+BRIEF = "# Product brief\n\nThis repository is a product, not a fleet service.\n\n## Run\nmake run\n"
+TAIL = "\n## Local tail\nrepo notes\n"
+SUBSET = "".join(FLEET3.splitlines(True)[:8])  # only lines the canonical has, so nothing of its own, and ten times smaller
+
+
+def content_lines(text):
+    return len([l for l in text.split("\n") if l.strip()])
+
+
+def excludes(*names):
+    return json.dumps({"_doc": "test", "_format_version": 1, "excludes": [{"repo": n, "reason": "test reason for " + n} for n in names]})
+
+
+def gitc(cwd, *a):
+    r = subprocess.run(["git", "-C", cwd, "-c", "user.name=t", "-c", "user.email=t@example.invalid"] + list(a), capture_output=True, text=True)
+    assert r.returncode == 0, "git %s: %s" % (" ".join(a), r.stderr)
+    return r.stdout.strip()
+
+
+class FleetCase(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        no_network = mock.patch.dict(os.environ, {"GIT_SSH_COMMAND": "false"})
+        no_network.start()
+        self.addCleanup(no_network.stop)
+        self.work = os.path.join(self.tmp.name, "work")
+        os.makedirs(self.work)
+        self.bare, self.seed = {}, {}
+
+    @staticmethod
+    def put(d, name, text):
+        with open(os.path.join(d, name), "w") as f:
+            f.write(text)
+
+    def make_registry(self, names, excludes_text, tag=""):
+        """a registry clone whose origin/main has three canonical revisions, services.json (repo_url of every name) and excludes.json (None = no such file)"""
+        bare = os.path.join(self.tmp.name, "registry%s.git" % tag)
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "main", bare], check=True)
+        seed = os.path.join(self.tmp.name, "registry-seed%s" % tag)
+        subprocess.run(["git", "clone", "-q", bare, seed], check=True, capture_output=True)
+        for text in (FLEET1, FLEET2, FLEET3):
+            self.put(seed, "CLAUDE.md", text)
+            gitc(seed, "add", "-A")
+            gitc(seed, "commit", "-q", "-m", "rev")
+        self.put(seed, "services.json", json.dumps({"services": [{"repo_url": "https://github.com/baditaflorin/" + n} for n in names]}))
+        if excludes_text is not None:
+            self.put(seed, "excludes.json", excludes_text)
+        gitc(seed, "add", "-A")
+        gitc(seed, "commit", "-q", "-m", "data")
+        gitc(seed, "push", "-q", "origin", "HEAD:main")
+        reg = os.path.join(self.tmp.name, "registry%s" % tag)
+        subprocess.run(["git", "clone", "-q", bare, reg], check=True, capture_output=True)
+        return reg
+
+    def make_remote(self, name, text):
+        """a bare repository standing in for GitHub, with a shallow clone of it in <work>/clones/<name> as `plan` leaves them"""
+        bare = os.path.join(self.tmp.name, "remotes", name + ".git")
+        subprocess.run(["git", "init", "-q", "--bare", "-b", "main", bare], check=True)
+        seed = os.path.join(self.tmp.name, "remotes", name + "-seed")
+        subprocess.run(["git", "clone", "-q", bare, seed], check=True, capture_output=True)
+        self.put(seed, "README.md", "readme\n")
+        self.put(seed, "CLAUDE.md", text)
+        gitc(seed, "add", "-A")
+        gitc(seed, "commit", "-q", "-m", "init")
+        gitc(seed, "push", "-q", "origin", "HEAD:main")
+        os.makedirs(os.path.join(self.work, "clones"), exist_ok=True)
+        subprocess.run(["git", "clone", "-q", "--depth", "1", "file://" + bare, os.path.join(self.work, "clones", name)], check=True, capture_output=True)
+        self.bare[name], self.seed[name] = bare, seed
+
+    def tip(self, name):
+        return gitc(self.bare[name], "rev-parse", "main")
+
+    def text(self, name):
+        return gitc(self.bare[name], "show", "main:CLAUDE.md") + "\n"
+
+    def branches(self, name):
+        return gitc(self.bare[name], "for-each-ref", "--format=%(refname:short)", "refs/heads").splitlines()
+
+    def plan(self, reg, repos):
+        with contextlib.redirect_stdout(io.StringIO()):
+            R.cmd_plan(argparse.Namespace(registry=reg, out=self.work, repos=repos, repos_file=None, workers=1))
+        with open(os.path.join(self.work, "plan.json")) as f:
+            return {r["repo"]: r for r in json.load(f)["rows"]}
+
+    def weekly(self, reg, extra=None):
+        with contextlib.redirect_stdout(io.StringIO()):
+            rc = R.cmd_weekly(argparse.Namespace(registry=reg, work=self.work, extra=extra, workers=1, apply_workers=1))
+        with open(os.path.join(self.work, "reports", "latest.json")) as f:
+            return rc, json.load(f)
+
+
+class ExcludesTest(FleetCase):
+    def test_weekly_skips_what_excludes_json_lists_and_still_rolls_out_to_the_rest(self):
+        # listed: a diverged short brief, a copy that is merely behind (an archived repository), and one that only the extra list names and that has no remote at all
+        reg = self.make_registry(["go_brief", "go_old", "go_tail", "go_plain"], excludes("go_brief", "Go_Old", "go_extra_never_cloned", "go_listed_nowhere"))
+        self.make_remote("go_brief", BRIEF)
+        self.make_remote("go_old", FLEET1)
+        self.make_remote("go_tail", FLEET2 + TAIL)  # diverged and merges cleanly: not listed, so still merged
+        self.make_remote("go_plain", FLEET1)  # behind: not listed, so still refreshed
+        extra = os.path.join(self.tmp.name, "extra.txt")
+        with open(extra, "w") as f:
+            f.write("# infra\ngo_extra_never_cloned\n")
+        before = {n: self.tip(n) for n in self.bare}
+
+        rc, rep = self.weekly(reg, extra)
+
+        self.assertEqual(rc, 0, rep["problems"])
+        self.assertEqual(rep["excluded"], ["go_brief", "go_extra_never_cloned", "go_old"])
+        self.assertEqual(rep["classified_before"], {"excluded": 3, "diverged": 1, "behind": 1})
+        self.assertEqual(rep["results"], {"pushed": 2})
+        self.assertEqual((rep["problems"], rep["not_reachable"]), ([], []))
+        for n in ("go_brief", "go_old"):  # neither merged nor pushed, whatever their copy looks like
+            self.assertEqual(self.tip(n), before[n], n)
+        self.assertEqual(self.text("go_brief"), BRIEF)
+        self.assertFalse(os.path.exists(os.path.join(self.work, "clones", "go_extra_never_cloned")), "a listed repository is not even cloned")
+        # the repositories that are not listed are served as before
+        self.assertNotEqual(self.tip("go_tail"), before["go_tail"])
+        self.assertIn("newest line", self.text("go_tail"))
+        self.assertIn("repo notes", self.text("go_tail"))
+        self.assertEqual(self.text("go_plain"), FLEET3)
+        # the logs the weekly report is checked against hold no row for a listed repository
+        rows = []
+        for log in ("apply_log.jsonl", "merge_log.jsonl"):
+            with open(os.path.join(self.work, log)) as f:
+                rows += [json.loads(l) for l in f if l.strip()]
+        self.assertEqual(sorted(x["repo"] for x in rows), ["go_plain", "go_tail"])
+
+    def test_a_plan_made_by_hand_skips_a_listed_repository_without_cloning_it(self):
+        reg = self.make_registry([], excludes("go_listed"))
+        self.make_remote("go_plain", FLEET1)
+        rows = self.plan(reg, "go_listed,go_plain")
+        self.assertEqual(rows["go_listed"]["status"], "excluded")
+        self.assertIn("test reason for go_listed", rows["go_listed"]["reason"])
+        self.assertEqual(rows["go_plain"]["status"], "behind")
+        self.assertFalse(os.path.exists(os.path.join(self.work, "clones", "go_listed")))
+
+    def test_a_weekly_run_in_which_everything_is_excluded_still_writes_its_report(self):
+        reg = self.make_registry(["go_brief"], excludes("go_brief"))
+        self.make_remote("go_brief", BRIEF)  # nothing to apply: apply writes no log on a fresh work directory
+        rc, rep = self.weekly(reg)
+        self.assertEqual((rc, rep["excluded"], rep["results"]), (0, ["go_brief"], {}))
+
+    def test_a_list_that_cannot_be_used_stops_the_plan_before_anything_is_cloned(self):
+        for tag, text in (("missing", None), ("broken", "{oops"), ("shape", '{"excludes": ["go_a"]}')):
+            with self.subTest(tag):
+                reg = self.make_registry(["go_a"], text, tag=tag)
+                out = os.path.join(self.tmp.name, "out-" + tag)
+                with self.assertRaises(R.ExcludesUnusable):
+                    R.cmd_plan(argparse.Namespace(registry=reg, out=out, repos="go_a", repos_file=None, workers=1))
+                self.assertFalse(os.path.exists(os.path.join(out, "clones")))
+
+    def test_the_command_line_stops_with_a_message_when_the_list_cannot_be_read(self):
+        reg = self.make_registry(["go_a"], "{oops")
+        p = subprocess.run([sys.executable, SCRIPT, "weekly", "--registry", reg, "--work", self.work], capture_output=True, text=True)
+        self.assertEqual(p.returncode, 1, p.stdout + p.stderr)
+        self.assertIn("excludes.json", p.stderr)
+        self.assertIn("stopped before anything was cloned or pushed", p.stderr)
+        self.assertFalse(os.path.exists(os.path.join(self.work, "plan.json")))
+        self.assertFalse(os.path.exists(os.path.join(self.work, "clones")))
+
+    def test_the_names_are_lower_cased_and_carry_their_reason(self):
+        got = R.parse_excludes(json.dumps({"excludes": [{"repo": " Go_Foo ", "reason": "r1"}, {"repo": "bar"}]}))
+        self.assertEqual(got, {"go_foo": "r1", "bar": ""})
+        self.assertEqual(R.parse_excludes('{"excludes": []}'), {}, "an empty list is a valid list: nothing is excluded")
+
+    def test_anything_that_is_not_the_list_is_unusable(self):
+        for bad in ("", "{oops", "[]", "{}", '{"excludes": null}', '{"excludes": {"a": 1}}', '{"excludes": ["go_a"]}', '{"excludes": [{"reason": "no repo"}]}',
+                    '{"excludes": [{"repo": ""}]}', '{"excludes": [{"repo": 7}]}'):
+            with self.subTest(bad=bad), self.assertRaises(R.ExcludesUnusable):
+                R.parse_excludes(bad)
+
+    def test_the_real_excludes_json_parses_and_still_lists_go_url_categorizer_api(self):
+        # This file stops the weekly rollout when it cannot be parsed, so CI checks it here, before it can reach origin/main. The entry below is the repository whose short
+        # CLAUDE.md the rollout merged the 141 KB canonical into on four Mondays (2026-11-02 .. 11-23): take it out only together with this assertion, on purpose.
+        with open(os.path.join(HERE, "..", "excludes.json")) as f:
+            names = R.parse_excludes(f.read())
+        self.assertIn("go-url-categorizer-api", names)
+
+
+class GrowthRefusalTest(unittest.TestCase):
+    def test_a_short_copy_with_lines_of_its_own_is_refused_and_the_note_says_what_to_do(self):
+        note = R.growth_refusal(BRIEF, FLEET3)
+        self.assertIn("excludes.json", note)
+        self.assertIn("--allow-growth", note)
+
+    def test_a_copy_near_the_canonical_is_not(self):
+        self.assertIsNone(R.growth_refusal(FLEET2 + TAIL, FLEET3 + TAIL))
+
+    def test_a_copy_that_does_not_grow_is_never_refused(self):
+        self.assertIsNone(R.growth_refusal(FLEET3, FLEET3))
+        self.assertIsNone(R.growth_refusal(FLEET3, FLEET2))
+
+    def test_the_limit_is_three_times(self):
+        self.assertIsNone(R.growth_refusal("x" * 100, "y" * 299))
+        self.assertIsNotNone(R.growth_refusal("x" * 100, "y" * 300))
+
+    def test_an_empty_copy_is_refused_without_dividing_by_zero(self):
+        self.assertIn("0 it has", R.growth_refusal("", "abc"))
+
+
+class MergeRailTest(FleetCase):
+    def setUp(self):
+        super(MergeRailTest, self).setUp()
+        self.reg = self.make_registry(["go_brief", "go_tail", "go_subset"], excludes())  # nothing is excluded: this is about the refusal
+        self.make_remote("go_brief", BRIEF)
+        self.make_remote("go_tail", FLEET2 + TAIL)
+        self.make_remote("go_subset", SUBSET)
+        self.plan(self.reg, "go_brief,go_tail,go_subset")
+
+    def merge(self, **kw):
+        ns = argparse.Namespace(registry=self.reg, out=self.work, only=None, push=True, prefer_canonical=True, replace_safe=True, allow_growth=False, workers=1)
+        vars(ns).update(kw)
+        with contextlib.redirect_stdout(io.StringIO()):
+            return {x["repo"]: x for x in R.cmd_merge(ns)}
+
+    def test_a_short_brief_is_refused_and_nothing_is_pushed_while_the_others_are_merged(self):
+        before = self.tip("go_brief")
+        res = self.merge()
+        self.assertEqual(res["go_brief"]["result"], "refused-growth")
+        self.assertIn("limit 3x", res["go_brief"]["note"])
+        self.assertEqual(self.tip("go_brief"), before)
+        self.assertEqual(self.branches("go_brief"), ["main"])
+        self.assertEqual(self.text("go_brief"), BRIEF)
+        self.assertEqual(res["go_tail"]["result"], "pushed")
+        self.assertIn("newest line", self.text("go_tail"))
+
+    def test_a_copy_with_no_lines_of_its_own_is_restored_however_small_it_is(self):
+        res = self.merge()
+        self.assertEqual(res["go_subset"]["result"], "pushed")
+        self.assertEqual(res["go_subset"]["replaced_safe"], content_lines(FLEET3) - content_lines(SUBSET))
+        self.assertEqual(self.text("go_subset"), FLEET3)
+
+    def test_a_dry_run_reports_the_refusal_too(self):
+        tips = {n: self.tip(n) for n in self.bare}
+        res = self.merge(push=False)
+        self.assertEqual(res["go_brief"]["result"], "refused-growth")
+        self.assertEqual(res["go_tail"]["result"], "resolved-not-pushed")
+        self.assertEqual({n: self.tip(n) for n in self.bare}, tips)
+
+    def test_allow_growth_merges_a_brief_by_hand(self):
+        res = self.merge(only="go_brief", allow_growth=True)
+        self.assertEqual(res["go_brief"]["result"], "pushed")
+        self.assertIn("newest line", self.text("go_brief"))
+        self.assertTrue(gitc(self.bare["go_brief"], "log", "-1", "--format=%s", "main").startswith("docs(claude): merge the services-registry canonical"))
+
+    def test_a_push_that_loses_a_race_is_redone_on_the_newer_tip(self):
+        self.put(self.seed["go_tail"], "README.md", "newer\n")  # the repository moved on after plan: the first push is rejected
+        gitc(self.seed["go_tail"], "add", "-A")
+        gitc(self.seed["go_tail"], "commit", "-q", "-m", "newer")
+        gitc(self.seed["go_tail"], "push", "-q", "origin", "HEAD:main")
+        res = self.merge(only="go_tail")
+        self.assertEqual(res["go_tail"]["result"], "pushed")
+        self.assertIn("newest line", self.text("go_tail"))
+
+    def test_a_newer_tip_that_is_a_short_brief_is_refused_too_and_nothing_goes_to_the_sync_branch(self):
+        self.put(self.seed["go_tail"], "CLAUDE.md", BRIEF)  # after plan, someone replaced the copy with a brief: the first push is rejected, the merge is redone on this tip
+        gitc(self.seed["go_tail"], "add", "-A")
+        gitc(self.seed["go_tail"], "commit", "-q", "-m", "a brief")
+        gitc(self.seed["go_tail"], "push", "-q", "origin", "HEAD:main")
+        newer = self.tip("go_tail")
+        res = self.merge(only="go_tail")
+        self.assertEqual(res["go_tail"]["result"], "refused-growth")
+        self.assertEqual(self.tip("go_tail"), newer)
+        self.assertEqual(self.branches("go_tail"), ["main"])
+
+    def test_weekly_reports_the_refusal_as_a_problem_and_still_serves_the_others(self):
+        before = self.tip("go_brief")
+        rc, rep = self.weekly(self.reg)
+        self.assertEqual(rc, 1)
+        self.assertEqual([(p["repo"], p["result"]) for p in rep["problems"]], [("go_brief", "refused-growth")])
+        self.assertEqual(rep["results"], {"pushed": 2, "refused-growth": 1})
+        self.assertEqual(rep["excluded"], [])
+        self.assertEqual(self.tip("go_brief"), before)
 
 
 if __name__ == "__main__":

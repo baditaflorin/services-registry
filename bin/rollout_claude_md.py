@@ -2,6 +2,7 @@
 """Roll the canonical CLAUDE.md (services-registry) out to the fleet's repositories. Deterministic, no LLM.
 
 Per repository it compares the blob of CLAUDE.md with the canonical's own history:
+  excluded   listed in the registry's excludes.json                 -> not cloned, never touched (that list is the fleet's one statement of repositories that are deliberately not part of it; an unreadable list stops the run)
   current    identical to the canonical now                         -> nothing to do
   absent     no CLAUDE.md                                           -> add it
   behind     identical to an OLDER canonical revision (N behind)    -> replace it (nothing repo-specific can be lost)
@@ -37,6 +38,35 @@ def canonical(reg):
             blobs.setdefault(b, (i, c[:9]))
     head = git(reg, "rev-parse", "--short=9", "origin/main")
     return text, git(reg, "rev-parse", "origin/main:CLAUDE.md"), blobs, head
+
+
+class ExcludesUnusable(RuntimeError):
+    """excludes.json cannot be read or understood. It is a guard: without it this tool cannot know which repositories it must not touch, so it stops
+    (fleet-runner stops the same way for a guard it cannot use)."""
+
+
+def parse_excludes(text):
+    """{lower-case repository name: reason} from the text of excludes.json ({"excludes": [{"repo": "...", "reason": "..."}]}); ExcludesUnusable when it is anything else"""
+    try:
+        out = {}
+        for e in json.loads(text)["excludes"]:
+            name = e["repo"].strip().lower()
+            if not name:
+                raise ValueError("an entry names no repository")
+            out[name] = str(e.get("reason", ""))
+        return out
+    except (ValueError, KeyError, TypeError, AttributeError) as err:
+        raise ExcludesUnusable('excludes.json is not {"excludes": [{"repo": ..., "reason": ...}, ...]} (%s: %s)' % (type(err).__name__, err))
+
+
+def load_excludes(registry):
+    """the registry's excludes.json at origin/main, read the way services.json is: the repositories that are deliberately NOT part of the fleet (name collisions,
+    archived repositories). fleet-runner skips them for every command that changes a repository; this tool never read the list, so it merged the canonical into
+    one of them, pushed into another and failed on the archived one on each of the last three Mondays (2026-11-23)."""
+    p = subprocess.run(["git", "-C", registry, "show", "origin/main:excludes.json"], capture_output=True, text=True)
+    if p.returncode:
+        raise ExcludesUnusable("origin/main has no readable excludes.json (%s)" % (p.stderr or p.stdout).strip()[:120])
+    return parse_excludes(p.stdout)
 
 
 def remote_default_branch(d):
@@ -101,10 +131,18 @@ def classify_one(repo, out, cblob, blobs):
 
 def cmd_plan(a):
     text, cblob, blobs, head = canonical(a.registry)
+    excl = load_excludes(a.registry)  # before a single clone: a list that cannot be read stops the run with nothing cloned and so nothing to push later
     repos = a.repos.split(",") if a.repos else [l.strip() for l in open(a.repos_file).read().splitlines() if l.strip()]
     os.makedirs(os.path.join(a.out, "clones"), exist_ok=True)
+
+    def row(r):
+        # a listed repository is not cloned: apply and merge only act on rows that are absent, behind or diverged, so they never see it
+        if r.lower() in excl:
+            return dict(repo=r, status="excluded", reason=excl[r.lower()][:200])
+        return classify_one(r, a.out, cblob, blobs)
+
     with cf.ThreadPoolExecutor(a.workers) as ex:
-        rows = list(ex.map(lambda r: classify_one(r, a.out, cblob, blobs), repos))
+        rows = list(ex.map(row, repos))
     with open(os.path.join(a.out, "plan.json"), "w") as f:
         json.dump(dict(canonical_blob=cblob, canonical_head=head, blobs={k: v[0] for k, v in blobs.items()}, rows=rows), f, indent=1)
     with open(os.path.join(a.out, "CLAUDE.md.canonical"), "w") as f:
@@ -344,6 +382,21 @@ def merge_prefer_canonical(registry, rev, mine, theirs):
     return "\n".join(out), r.returncode, over
 
 
+GROWTH_LIMIT = 3  # a three-way merge that makes the copy this many times bigger is refused (see growth_refusal)
+
+
+def growth_refusal(mine, merged):
+    """A three-way merge keeps the copy's own lines and brings in the whole canonical. When the copy is a small fraction of the canonical that is not the merge of
+    two copies of one document: it is a repository's own short document (a product brief, a stub) which the canonical would bury, and the repository's CI may cap
+    the size of CLAUDE.md while the [skip ci] commit hides the failure until the next pull request. -> why the merge is refused, or None.
+    Measured on the 2026-11-23 run: five diverged copies near the canonical stay at 1.0x, two short ones would have grown 15.6x and 22.8x."""
+    before, after = len(mine.encode("utf-8", "replace")), len(merged.encode("utf-8", "replace"))
+    if after >= GROWTH_LIMIT * max(before, 1):
+        return ("the merge would make CLAUDE.md %d bytes, %.1fx the %d it has (limit %dx): it looks like a short brief of the repository's own that the canonical would bury. "
+                "List the repository in excludes.json to keep it out of the rollout, or merge it once by hand with `merge --only <repo> --push --allow-growth`" % (after, after / float(max(before, 1)), before, GROWTH_LIMIT))
+    return None
+
+
 def cmd_merge(a):
     """For 'diverged' repositories: merge the new canonical into the local copy. Without --prefer-canonical only conflict-free merges are pushed (and only with --push);
     with it every copy is merged (both-inserted: keep both; both-changed: the canonical wins) and the replaced local wording is recorded in the commit message."""
@@ -374,10 +427,14 @@ def cmd_merge(a):
         x = dict(repo=r["repo"], base=rev[:9], conflicts=nconf, overridden=len(over), canonical=plan["canonical_head"])
         if restored is not None:
             x["replaced_safe"] = len(restored)
+        # a three-way merge (not the restore of a copy that holds nothing of its own) that would bury a short document is refused, in a dry run too
+        refusal = None if (safe is not None or getattr(a, "allow_growth", False)) else growth_refusal(mine, merged)
         if nconf and not a.prefer_canonical:
             x["result"] = "conflict"
         elif merged == mine:
             x["result"] = "unchanged"
+        elif refusal:
+            x["result"], x["note"] = "refused-growth", refusal
         elif not a.push:
             x["result"] = "clean-not-pushed" if not nconf else "resolved-not-pushed"
         else:
@@ -408,13 +465,18 @@ def cmd_merge(a):
                     rev2, _, own2 = closest_rev(texts, mine2)
                     safe2 = replace_safe(mine2, theirs, own2) if getattr(a, "replace_safe", False) else None
                     merged2, over2 = (safe2[0], []) if safe2 is not None else merge_prefer_canonical(a.registry, rev, mine2, theirs)[::2]
-                    if merged2 != mine2:
+                    refusal2 = None if (safe2 is not None or getattr(a, "allow_growth", False)) else growth_refusal(mine2, merged2)
+                    if refusal2:
+                        x["result"], x["note"] = "refused-growth", refusal2  # the newer tip is a short brief: nothing is pushed, not even to the sync branch
+                    elif merged2 != mine2:
                         with open(os.path.join(d, "CLAUDE.md"), "w") as f:
                             f.write(merged2)
                         git(d, "add", "CLAUDE.md")
                         subprocess.run(["git", "-C", d] + ID + ["commit", "-q", "-m", msg, "-m", body], capture_output=True, text=True, check=True)
                         p = subprocess.run(["git", "-C", d, "push", "-q", "origin", "HEAD"], capture_output=True, text=True)
-            if p.returncode == 0:
+            if x.get("result") == "refused-growth":
+                pass  # decided on the newer tip above
+            elif p.returncode == 0:
                 x["result"] = "pushed"
             else:
                 drop_skip_ci(d)
@@ -468,7 +530,8 @@ def ensure_prs(results, head):
 
 
 def cmd_weekly(a):
-    """plan -> apply -> merge the diverged copies (the canonical wins where both changed the same lines) -> PRs for protected repositories -> report.
+    """plan (repositories in excludes.json are skipped, an unreadable list stops the run) -> apply -> merge the diverged copies (the canonical wins where both changed the
+    same lines; a merge that would bury a short brief is refused) -> PRs for protected repositories -> report.
     Everything lives under --work (registry clone not needed to exist: it must already be a clone; this command fetches it)."""
     import datetime
     os.makedirs(a.work, exist_ok=True)
@@ -486,18 +549,19 @@ def cmd_weekly(a):
         before[r["status"]] = before.get(r["status"], 0) + 1
     apply_ns = argparse.Namespace(out=a.work, limit=None, only=None, exclude=None, no_push=False, workers=a.apply_workers)
     cmd_apply(apply_ns)
-    merge_ns = argparse.Namespace(registry=a.registry, out=a.work, only=None, push=True, prefer_canonical=True, replace_safe=True, workers=a.apply_workers)
+    merge_ns = argparse.Namespace(registry=a.registry, out=a.work, only=None, push=True, prefer_canonical=True, replace_safe=True, allow_growth=False, workers=a.apply_workers)
     merged = cmd_merge(merge_ns)
-    with open(os.path.join(a.work, "apply_log.jsonl")) as f:
-        applied = [json.loads(l) for l in f if l.strip()]
+    logp = os.path.join(a.work, "apply_log.jsonl")  # apply writes it only when it had something to do: a fresh --work where nothing is left to apply has none
+    applied = [json.loads(l) for l in open(logp) if l.strip()] if os.path.exists(logp) else []
     mine = [x for x in applied if x.get("canonical") == plan["canonical_head"]] + merged
     prs = ensure_prs(mine, plan["canonical_head"])
     tally = {}
     for x in mine:
         tally[x["result"]] = tally.get(x["result"], 0) + 1
-    bad = [x for x in mine if x["result"] in ("push-failed", "error", "conflict")]
+    bad = [x for x in mine if x["result"] in ("push-failed", "error", "conflict", "refused-growth")]
     clone_failed = [r["repo"] for r in plan["rows"] if r["status"] in ("clone-failed", "fetch-failed")]
-    rep = dict(date=datetime.date.today().isoformat(), canonical=plan["canonical_head"], blob=plan["canonical_blob"][:10], repositories=len(repos), classified_before=before, results=tally,
+    excluded = sorted(r["repo"] for r in plan["rows"] if r["status"] == "excluded")  # listed in excludes.json: not cloned, no row in apply_log or merge_log
+    rep = dict(date=datetime.date.today().isoformat(), canonical=plan["canonical_head"], blob=plan["canonical_blob"][:10], repositories=len(repos), classified_before=before, excluded=excluded, results=tally,
                problems=[dict(repo=x["repo"], result=x["result"], note=x.get("note", "")) for x in bad], not_reachable=clone_failed, prs_opened=prs)
     os.makedirs(os.path.join(a.work, "reports"), exist_ok=True)
     with open(os.path.join(a.work, "reports", rep["date"] + ".json"), "w") as f:
@@ -513,11 +577,14 @@ if __name__ == "__main__":
     p = sp.add_parser("plan"); p.add_argument("--registry", required=True); p.add_argument("--out", required=True)
     p.add_argument("--repos"); p.add_argument("--repos-file"); p.add_argument("--workers", type=int, default=6)
     dv = sp.add_parser("diverged"); dv.add_argument("--registry", required=True); dv.add_argument("--out", required=True)
-    mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--prefer-canonical", action="store_true"); mg.add_argument("--replace-safe", action="store_true", help="a copy with no lines of its own is replaced by the canonical (a three-way merge keeps the lines it lacks missing)"); mg.add_argument("--workers", type=int, default=4)
+    mg = sp.add_parser("merge"); mg.add_argument("--registry", required=True); mg.add_argument("--out", required=True); mg.add_argument("--only"); mg.add_argument("--push", action="store_true"); mg.add_argument("--prefer-canonical", action="store_true"); mg.add_argument("--replace-safe", action="store_true", help="a copy with no lines of its own is replaced by the canonical (a three-way merge keeps the lines it lacks missing)"); mg.add_argument("--allow-growth", action="store_true", help="also merge a copy that the merge would make %dx bigger or more (refused by default: such a copy is a short brief of the repository's own)" % GROWTH_LIMIT); mg.add_argument("--workers", type=int, default=4)
     wk = sp.add_parser("weekly"); wk.add_argument("--registry", required=True); wk.add_argument("--work", required=True); wk.add_argument("--extra", help="file with extra repository names (infrastructure repos that are not in services.json)")
     wk.add_argument("--workers", type=int, default=8); wk.add_argument("--apply-workers", type=int, default=5)
     q = sp.add_parser("apply"); q.add_argument("--out", required=True); q.add_argument("--limit", type=int); q.add_argument("--only"); q.add_argument("--exclude"); q.add_argument("--no-push", action="store_true"); q.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
     fn = {"plan": cmd_plan, "apply": cmd_apply, "diverged": cmd_diverged, "merge": cmd_merge, "weekly": cmd_weekly}[a.cmd]
-    rc = fn(a)
+    try:
+        rc = fn(a)
+    except ExcludesUnusable as e:
+        sys.exit("rollout_claude_md: %s; stopped before anything was cloned or pushed" % e)  # message on stderr, exit status 1
     sys.exit(rc if a.cmd == "weekly" and isinstance(rc, int) else 0)
