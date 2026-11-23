@@ -1,5 +1,6 @@
 ## 2026-11-23
 
+- fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `fleet-resolver-quorum` 0.2.5, `node-search-bing` 0.1.7, `quote-extractor` 0.1.18, `reverse-dns` 2.0.8.
 - examples: `domain-analytics-stack` and `legal-entity` examples now use github.com. stripe.com blocks the fetch (analytics-stack `target_blocked` 403, legal-entity `upstream_unavailable`), so the example answered 502 although the services were healthy; github.com answers 200 on both. Found by the nightly example check.
 
 - Woodpecker load controller: allow node-specific normalized load thresholds, quarantine nodes when required telemetry is missing, and reduce excess graded agents even when the last schedulable node is protected. Controller unit tests cover the new behavior.
