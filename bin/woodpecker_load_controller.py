@@ -16,14 +16,17 @@ run several times slower than on a quiet node.
 from __future__ import annotations
 
 import argparse
+import ipaddress
 import json
 import math
 import os
 import re
+import subprocess
 import sys
 import tempfile
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from dataclasses import dataclass, replace
@@ -32,6 +35,131 @@ from typing import Any, Callable
 
 
 LABEL_RE = re.compile(r'([a-zA-Z_][a-zA-Z0-9_]*)="((?:\\.|[^"\\])*)"')
+
+PROM_LABELS = ("job", "host", "instance", "fleet", "role")
+PROM_METRICS = {"up": "up", "identity": "node_uname_info", "available": "node_memory_MemAvailable_bytes", "total": "node_memory_MemTotal_bytes"}
+PROM_MAX_BYTES = 128 * 1024
+PROM_FETCH_CHILD = """import sys,urllib.request
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+opener = urllib.request.build_opener(NoRedirect())
+with opener.open(sys.argv[1],timeout=3) as r:
+    sys.stdout.buffer.write(r.read(131073))
+"""
+
+
+def unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def reject_json_constant(value: str) -> None:
+    raise ValueError("non-finite JSON constant")
+
+
+def validate_prometheus_source(source: dict[str, Any]) -> None:
+    keys = {"url", "proxy_url", *PROM_LABELS, "max_age_seconds", "max_skew_seconds"}
+    if not isinstance(source, dict) or set(source) != keys:
+        raise ValueError("prometheus physical source must declare URL, proxy, identity labels, and age/skew limits")
+    try:
+        url = urllib.parse.urlsplit(source["url"])
+        proxy = urllib.parse.urlsplit(source["proxy_url"])
+        address = ipaddress.ip_address(url.hostname or "")
+        valid = (url.scheme == "http" and address in ipaddress.ip_network("100.64.0.0/10")
+                 and url.port == 9090 and url.path == "/api/v1/query" and not url.query and not url.fragment
+                 and url.username is None and url.password is None
+                 and proxy.scheme == "http" and proxy.hostname == "127.0.0.1" and proxy.port is not None and proxy.port > 0
+                 and proxy.path in ("", "/") and not proxy.query and not proxy.fragment
+                 and proxy.username is None and proxy.password is None)
+    except (TypeError, ValueError):
+        valid = False
+    if not valid:
+        raise ValueError("prometheus physical source requires a tailnet URL and explicit loopback HTTP proxy")
+    for label in PROM_LABELS:
+        value = source[label]
+        if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_.:-]+", value):
+            raise ValueError("invalid prometheus identity label")
+    for key, cap in (("max_age_seconds", 300), ("max_skew_seconds", 10)):
+        value = source[key]
+        if isinstance(value, bool) or not isinstance(value, int) or not 1 <= value <= cap:
+            raise ValueError("invalid prometheus age or skew")
+
+
+def prometheus_physical_pct(source: dict[str, Any], expected_nodename: str) -> float:
+    """Read values plus original scrape times in one pinned, bounded query."""
+    validate_prometheus_source(source)
+    evaluation = int(time.time())
+    selector = "{" + ",".join('%s="%s"' % (k, source[k]) for k in PROM_LABELS) + "}"
+    expressions = []
+    for kind, metric in PROM_METRICS.items():
+        for suffix in ("", "_timestamp"):
+            expression = metric + selector
+            if suffix:
+                expression = "timestamp(" + expression + ")"
+            expressions.append('label_replace(%s,"probe_kind","%s","instance",".*")' % (expression, kind + suffix))
+    params = urllib.parse.urlencode({"query": " or ".join(expressions), "time": str(evaluation), "timeout": "3s"})
+    env = {"HTTP_PROXY": source["proxy_url"], "http_proxy": source["proxy_url"], "NO_PROXY": "", "no_proxy": ""}
+    try:
+        result = subprocess.run([sys.executable, "-c", PROM_FETCH_CHILD, source["url"] + "?" + params],
+                                env=env, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=4, check=True)
+    except (subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError) as exc:
+        raise ValueError("physical Prometheus transport failed or timed out") from exc
+    if len(result.stdout) > PROM_MAX_BYTES:
+        raise ValueError("physical Prometheus response too large")
+    try:
+        response = json.loads(result.stdout, object_pairs_hook=unique_json_object, parse_constant=reject_json_constant)
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise ValueError("malformed physical Prometheus response") from exc
+    return parse_prometheus_physical(response, source, expected_nodename, evaluation, time.time())
+
+
+def parse_prometheus_physical(response: Any, source: dict[str, Any], expected_nodename: str,
+                              evaluation: int, now: float) -> float:
+    if not math.isfinite(now) or abs(now - evaluation) > source["max_skew_seconds"]:
+        raise ValueError("physical Prometheus evaluation clock skew")
+    if not isinstance(response, dict) or response.get("status") != "success" or response.get("warnings") or response.get("infos"):
+        raise ValueError("physical Prometheus query failed")
+    data = response.get("data")
+    if not isinstance(data, dict) or data.get("resultType") != "vector":
+        raise ValueError("physical Prometheus result is not a vector")
+    rows = data.get("result")
+    if not isinstance(rows, list) or len(rows) != 8:
+        raise ValueError("physical Prometheus result is missing or ambiguous")
+    samples = {}
+    kinds = {n + s for n in PROM_METRICS for s in ("", "_timestamp")}
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("metric"), dict):
+            raise ValueError("malformed physical Prometheus series")
+        labels = row["metric"]
+        kind = labels.get("probe_kind")
+        if any(labels.get(k) != source[k] for k in PROM_LABELS) or kind not in kinds or kind in samples:
+            raise ValueError("physical Prometheus series identity is invalid or ambiguous")
+        if kind.startswith("identity") and labels.get("nodename") != expected_nodename:
+            raise ValueError("physical Prometheus node identity is invalid")
+        value = row.get("value")
+        if (not isinstance(value, list) or len(value) != 2 or isinstance(value[0], bool)
+                or not isinstance(value[0], (int, float)) or not isinstance(value[1], str)
+                or not re.fullmatch(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?", value[1])):
+            raise ValueError("malformed physical Prometheus sample")
+        stamp, number = float(value[0]), float(value[1])
+        if not math.isfinite(stamp) or not math.isfinite(number) or abs(stamp - evaluation) > 0.001:
+            raise ValueError("invalid physical Prometheus sample")
+        samples[kind] = number
+    if samples["up"] != 1 or samples["identity"] != 1:
+        raise ValueError("physical Prometheus target is down or identity is invalid")
+    stamps = [samples[n + "_timestamp"] for n in PROM_METRICS]
+    if any(t > now + source["max_skew_seconds"] or now - t > source["max_age_seconds"] for t in stamps):
+        raise ValueError("physical Prometheus scrape is stale or in the future")
+    if max(stamps) - min(stamps) > 0.001:
+        raise ValueError("physical Prometheus samples are from different scrapes")
+    if samples["total"] <= 0 or not 0 <= samples["available"] <= samples["total"]:
+        raise ValueError("physical Prometheus memory values are invalid")
+    return 100 * samples["available"] / samples["total"]
 
 
 @dataclass(frozen=True)
@@ -1141,7 +1269,10 @@ def run_cycle_v2(
                 backing_snapshot,
             )
             if physical_config is not None:
-                physical_pct = physical_memory_pct(fetch_text(physical_config["metrics_url"]), physical_config["expected_nodename"])
+                if "prometheus" in physical_config:
+                    physical_pct = prometheus_physical_pct(physical_config["prometheus"], physical_config["expected_nodename"])
+                else:
+                    physical_pct = physical_memory_pct(fetch_text(physical_config["metrics_url"]), physical_config["expected_nodename"])
                 pressure = physical_memory_pressure(pressure, physical_pct, physical_config)
         except (OSError, ValueError, urllib.error.URLError) as exc:
             fail_closed = bool(
@@ -1456,10 +1587,13 @@ def validate_config(config: dict[str, Any]) -> None:
                 raise ValueError("admission_hold must be a boolean")
             physical = node.get("physical_memory")
             if physical is not None:
-                if not isinstance(physical, dict) or set(physical) != {"metrics_url", "expected_nodename", "stop_pct", "resume_pct"}:
-                    raise ValueError("physical_memory must declare metrics_url, expected_nodename, stop_pct and resume_pct only")
-                if not isinstance(physical["metrics_url"], str) or not physical["metrics_url"]:
+                common = {"expected_nodename", "stop_pct", "resume_pct"}
+                if not isinstance(physical, dict) or set(physical) not in (common | {"metrics_url"}, common | {"prometheus"}):
+                    raise ValueError("physical_memory must declare one source, expected_nodename, stop_pct and resume_pct only")
+                if "metrics_url" in physical and (not isinstance(physical["metrics_url"], str) or not physical["metrics_url"]):
                     raise ValueError("physical_memory metrics_url must be non-empty")
+                if "prometheus" in physical:
+                    validate_prometheus_source(physical["prometheus"])
                 if not isinstance(physical["expected_nodename"], str) or not physical["expected_nodename"]:
                     raise ValueError("physical_memory expected_nodename must be non-empty")
                 for key in ("stop_pct", "resume_pct"):

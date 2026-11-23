@@ -52,6 +52,22 @@
       ],
       "metrics_url": "http://builder-c.example.internal:9100/metrics",
       "filesystem_mountpoint": "/",
+      "physical_memory": {
+        "expected_nodename": "pve-example",
+        "stop_pct": 10,
+        "resume_pct": 15,
+        "prometheus": {
+          "url": "http://100.64.0.1:9090/api/v1/query",
+          "proxy_url": "http://127.0.0.1:1056",
+          "job": "node-exporter",
+          "host": "pve-example",
+          "instance": "100.64.0.2:9100",
+          "fleet": "example",
+          "role": "hypervisor",
+          "max_age_seconds": 60,
+          "max_skew_seconds": 5
+        }
+      },
       "graded": {
         "min_open_slots": 1,
         "load_per_cpu_full": 0.5,

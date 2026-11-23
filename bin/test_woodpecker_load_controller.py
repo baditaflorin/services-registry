@@ -1161,6 +1161,150 @@ class LiveFeatureTests(unittest.TestCase):
         self.assertEqual(manual["reasons"], ["manual_or_external_no_schedule"])
 
 
+class PrometheusPhysicalSourceTests(unittest.TestCase):
+    def source(self):
+        return {"url": "http://100.123.48.115:9090/api/v1/query", "proxy_url": "http://127.0.0.1:1056",
+                "job": "infer_node_exporter_via_tailscale", "host": "infer-hypervisor",
+                "instance": "100.85.112.66:9100", "fleet": "0infer", "role": "hypervisor",
+                "max_age_seconds": 60, "max_skew_seconds": 5}
+
+    def response(self, available=8):
+        source = self.source()
+        values = {"up": 1, "identity": 1, "available": available, "total": 100}
+        rows = []
+        for name in controller.PROM_METRICS:
+            for suffix, value in (("", values[name]), ("_timestamp", 990)):
+                labels = {k: source[k] for k in controller.PROM_LABELS}
+                labels["probe_kind"] = name + suffix
+                if name == "identity":
+                    labels["nodename"] = "pve01"
+                rows.append({"metric": labels, "value": [1000, str(value)]})
+        return {"status": "success", "data": {"resultType": "vector", "result": rows}}
+
+    def row(self, data, kind):
+        return next(r for r in data["data"]["result"] if r["metric"]["probe_kind"] == kind)
+
+    def test_valid_source_and_rejects_insecure_or_invalid_configuration(self):
+        source = self.source()
+        controller.validate_prometheus_source(source)
+        for key, value in (("url", "http://evil.example:9090/api/v1/query"),
+                           ("url", "http://100.123.48.115:9090/other"),
+                           ("proxy_url", "http://evil.example:1056"),
+                           ("proxy_url", "http://user:pass@127.0.0.1:1056"),
+                           ("job", 'bad"label'), ("max_age_seconds", 301), ("max_skew_seconds", True)):
+            bad = dict(source, **{key: value})
+            with self.assertRaises(ValueError):
+                controller.validate_prometheus_source(bad)
+
+    def test_parser_fails_closed_on_missing_duplicate_wrong_identity_and_stale_data(self):
+        def duplicate(x):
+            x["data"]["result"][-1] = copy.deepcopy(x["data"]["result"][0])
+        for mutate in (
+            lambda x: x["data"]["result"].pop(), duplicate,
+            lambda x: self.row(x, "up")["value"].__setitem__(1, "0"),
+            lambda x: self.row(x, "identity")["metric"].__setitem__("nodename", "other"),
+            lambda x: self.row(x, "total")["metric"].__setitem__("instance", "other"),
+            lambda x: self.row(x, "available")["value"].__setitem__(1, "NaN"),
+            lambda x: self.row(x, "total_timestamp")["value"].__setitem__(1, "900"),
+            lambda x: self.row(x, "total_timestamp")["value"].__setitem__(1, "1006"),
+            lambda x: self.row(x, "total_timestamp")["value"].__setitem__(1, "989"),
+            lambda x: x.__setitem__("warnings", ["partial data"]),
+        ):
+            response = self.response()
+            mutate(response)
+            with self.assertRaises(ValueError):
+                controller.parse_prometheus_physical(response, self.source(), "pve01", 1000, 1000)
+        self.assertEqual(controller.parse_prometheus_physical(self.response(), self.source(), "pve01", 1000, 1000), 8)
+        with self.assertRaises(ValueError):
+            controller.parse_prometheus_physical(self.response(), self.source(), "pve01", 1000, 1006)
+
+    def test_transport_deadline_oversize_and_errors_fail_closed(self):
+        import subprocess
+        for effect in (subprocess.TimeoutExpired("probe", 4), OSError("unreachable"),
+                       subprocess.CalledProcessError(1, "probe")):
+            with patch.object(controller.subprocess, "run", side_effect=effect), self.assertRaises(ValueError):
+                controller.prometheus_physical_pct(self.source(), "pve01")
+        for body in (b"x" * (controller.PROM_MAX_BYTES + 1), b"not json", b'{"status":"success","status":"error"}', b'{"x":NaN}'):
+            result = subprocess.CompletedProcess([], 0, stdout=body)
+            with patch.object(controller.subprocess, "run", return_value=result), self.assertRaises(ValueError):
+                controller.prometheus_physical_pct(self.source(), "pve01")
+
+    def test_transport_refuses_http_redirects(self):
+        import http.server
+        import subprocess
+        import threading
+        paths = []
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):
+                paths.append(self.path)
+                self.send_response(302)
+                self.send_header("Location", "/other")
+                self.end_headers()
+            def log_message(self, *args):
+                pass
+        server = http.server.HTTPServer(("127.0.0.1", 0), Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            url = "http://127.0.0.1:%s/start" % server.server_port
+            result = subprocess.run([sys.executable, "-c", controller.PROM_FETCH_CHILD, url],
+                                    env={"no_proxy": "127.0.0.1", "NO_PROXY": "127.0.0.1"},
+                                    stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=4)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(paths, ["/start"])
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+
+    def test_full_cycle_drains_on_low_physical_memory_and_on_transport_failure(self):
+        import json
+        import subprocess
+        for body, error in ((json.dumps(self.response()).encode(), None), (None, OSError("unreachable"))):
+            config = config_v2()
+            config["nodes"] = [config["nodes"][0]]
+            config["nodes"][0]["physical_memory"] = {"prometheus": self.source(), "expected_nodename": "pve01", "stop_pct": 10, "resume_pct": 15}
+            controller.validate_config(config)
+            client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+            state = {"nodes": {}}
+            result = subprocess.CompletedProcess([], 0, stdout=body)
+            with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS), patch.object(controller.time, "time", return_value=1000), patch.object(controller, "log_event"), patch.object(controller.subprocess, "run", side_effect=error, return_value=result) as run:
+                controller.run_cycle_v2(config, state, client, apply=True)
+            self.assertEqual(client.changed, [(1, True)])
+            self.assertEqual(run.call_args.kwargs["timeout"], 4)
+            self.assertEqual(run.call_args.kwargs["env"]["http_proxy"], "http://127.0.0.1:1056")
+            self.assertEqual(run.call_args.kwargs["env"]["no_proxy"], "")
+
+    def test_hold_skips_source_and_release_requires_full_healthy_window(self):
+        import json
+        import subprocess
+        config = config_v2()
+        config["resume_samples"] = 3
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        node = config["nodes"][0]
+        node["graded"] = {"min_open_slots": 1, "open_samples": 1, "close_samples": 1, "load_per_cpu_full": 0.5}
+        node["admission_hold"] = True
+        node["physical_memory"] = {"prometheus": self.source(), "expected_nodename": "pve01", "stop_pct": 10, "resume_pct": 15}
+        controller.validate_config(config)
+        client = FakeClient([
+            {"id": 1, "name": "builder-agent", "no_schedule": True, "capacity": 1, "last_contact": 1000},
+            {"id": 2, "name": "remote-agent", "no_schedule": False, "capacity": 1, "last_contact": 1000},
+        ])
+        state = {"nodes": {"builder-a": {"managed_agent_ids": ["1"], "recovery_samples": 99}}}
+        with patch.object(controller, "fetch_text", return_value=load_metrics(0.1)), patch.object(controller.time, "time", return_value=1000), patch.object(controller, "log_event"), patch.object(controller.subprocess, "run", side_effect=AssertionError("hold must not probe")):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [])
+        self.assertEqual(state["nodes"]["builder-a"]["recovery_samples"], 0)
+        del node["admission_hold"]
+        result = subprocess.CompletedProcess([], 0, stdout=json.dumps(self.response(available=30)).encode())
+        with patch.object(controller, "fetch_text", return_value=load_metrics(0.1)), patch.object(controller.time, "time", return_value=1000), patch.object(controller, "log_event"), patch.object(controller.subprocess, "run", return_value=result):
+            for _ in range(2):
+                controller.run_cycle_v2(config, state, client, apply=True)
+                self.assertEqual(client.changed, [])
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, False)])
+
+
 class GradedAdmissionTests(unittest.TestCase):
     """A host with several one-slot agents opens as many as its headroom allows, one step at a
     time, instead of switching between all open and all drained."""
