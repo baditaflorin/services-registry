@@ -2213,9 +2213,9 @@
     "spiffe_merged_identity": true
   },
   "domain-analytics-stack": {
-    "example_path": "/?domain=stripe.com",
+    "example_path": "/?domain=github.com",
     "params": [
-      {"name": "domain", "required": true, "type": "string", "description": "Fully-qualified domain to inspect (e.g. stripe.com).", "example": "stripe.com"},
+      {"name": "domain", "required": true, "type": "string", "description": "Fully-qualified domain to inspect (e.g. github.com).", "example": "github.com"},
       {"name": "q", "required": false, "type": "string", "description": "Backward-compat alias for `domain`."},
       {"name": "url", "required": false, "type": "string", "description": "Optional non-root URL to inspect instead of the homepage."},
       {"name": "render", "required": false, "type": "string", "description": "Set to js to force one RenderJS audit even when static HTML already has detections."}
@@ -6334,8 +6334,9 @@
     "spiffe_merged_identity": true
   },
   "legal-entity": {
+    "example_path": "/?target=github.com",
     "params": [
-      {"name": "target", "required": true, "type": "string", "description": "URL or domain to extract legal entity from", "example": "example.com"}
+      {"name": "target", "required": true, "type": "string", "description": "URL or domain to extract legal entity from", "example": "github.com"}
     ],
     "env": {
       "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
