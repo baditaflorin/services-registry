@@ -1,6 +1,7 @@
 ## 2026-11-23
 
 - Woodpecker load controller: allow node-specific normalized load thresholds, quarantine nodes when required telemetry is missing, and reduce excess graded agents even when the last schedulable node is protected. Controller unit tests cover the new behavior.
+- rollout_claude_md: the weekly CLAUDE.md rollout now reads this repository's `excludes.json` (the list `fleet-runner` already honours) and does not clone, merge or push into a listed repository; a list that cannot be read stops the run before anything is cloned. The 2026-11-23 run had merged the canonical into `go-url-categorizer-api`, pushed into `cookiecutter-data-science` and failed on the archived `go_named_entity_recognizer` (the only problem of the weekly runs of 2026-11-09, 11-16 and 11-23): on the 2026-11-23 repository list (542) the new plan skips exactly those 3. `merge` also refuses (`refused-growth`, reported under `problems`) a three-way merge that would make a copy 3x bigger; `--allow-growth` does it by hand. Tests: `bin/test_rollout_claude_md.py` (20 new, hermetic). Check on the next run: the weekly report must name those 3 repositories under `excluded`.
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `html-proxy` 0.5.43, `infrastructure-fetch-cache` 0.3.73.
 
 ## 2026-11-22
