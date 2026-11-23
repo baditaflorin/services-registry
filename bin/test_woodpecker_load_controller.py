@@ -1079,6 +1079,42 @@ class LiveFeatureTests(unittest.TestCase):
         self.assertEqual(merged["cpu_stop_pct"], THRESHOLDS["cpu_stop_pct"])
         self.assertEqual(THRESHOLDS["disk_stop_pct"], 10)
 
+    def test_a_nodes_load_limits_override_only_that_node(self):
+        original = dict(LOAD_THRESHOLDS)
+        local = controller.thresholds_for_node(LOAD_THRESHOLDS, {"load_thresholds": {"stop": 0.8, "resume": 0.6}})
+        self.assertEqual((local["load_per_cpu_stop"], local["load_per_cpu_resume"]), (0.8, 0.6))
+        self.assertEqual(LOAD_THRESHOLDS, original)
+        current = controller.node_snapshot(load_metrics(4, idle=200), taken_at=30.0)  # 1.0/core
+        previous = controller.node_snapshot(load_metrics(1, idle=100), taken_at=0.0)
+        self.assertIn("cpu_load", controller.evaluate_pressure(current, previous, local).breaches)
+        self.assertNotIn("cpu_load", controller.evaluate_pressure(current, previous, LOAD_THRESHOLDS).breaches)
+
+    def test_node_load_limits_validate_and_constrain_graded_range(self):
+        config = config_v2()
+        config["thresholds"].update(load_per_cpu_stop=3.0, load_per_cpu_resume=2.5)
+        config["nodes"][0].update(load_thresholds={"stop": 0.8, "resume": 0.6}, graded={"load_per_cpu_full": 0.2})
+        controller.validate_config(config)
+        for value in ({"stop": 0.8}, {"stop": 0.8, "resume": 0.8}, {"stop": True, "resume": 0.2},
+                      {"stop": float("nan"), "resume": 0.2}, {"stop": 0.8, "resume": -1}):
+            broken = copy.deepcopy(config)
+            broken["nodes"][0]["load_thresholds"] = value
+            with self.assertRaises(ValueError):
+                controller.validate_config(broken)
+        broken = copy.deepcopy(config)
+        broken["nodes"][0]["graded"]["load_per_cpu_full"] = 0.8
+        with self.assertRaises(ValueError):
+            controller.validate_config(broken)
+
+    def test_missing_local_load_telemetry_quarantines_node(self):
+        config = config_v2()
+        config["nodes"][0]["load_thresholds"] = {"stop": 0.8, "resume": 0.6}
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+        state = {"version": 2, "nodes": {}}
+        with patch.object(controller, "fetch_text", return_value=RECOVERED_METRICS), patch.object(controller, "log_event"):
+            controller.run_cycle(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1, True)])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["1"])
+
     def test_config_validation_of_load_and_disk_thresholds(self):
         config = config_v2()
         config["thresholds"].update(load_per_cpu_stop=3.0, load_per_cpu_resume=2.5)
@@ -1245,6 +1281,24 @@ class GradedAdmissionTests(unittest.TestCase):
         self.assertEqual(client.changed, [(4, True)])
         self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"], ["4"])
         self.assertEqual(state["nodes"]["builder-a"].get("graded_close_samples"), 0)
+
+    def test_minimum_schedulable_node_still_closes_excess_graded_slots(self):
+        config = config_v2()
+        config["nodes"] = [config["nodes"][0]]
+        config["thresholds"] = copy.deepcopy(LOAD_THRESHOLDS)
+        config["stop_samples"], config["resume_samples"] = 1, 2
+        config["nodes"][0]["agent_names"] = ["g1", "g2", "g3", "g4"]
+        config["nodes"][0]["load_thresholds"] = {"stop": 0.8, "resume": 0.6}
+        config["nodes"][0]["graded"] = {"load_per_cpu_full": 0.2, "close_samples": 1, "min_open_slots": 1}
+        now = controller.time.time()
+        client = FakeClient([{"id": i, "name": f"g{i}", "capacity": 1, "no_schedule": False, "last_contact": now} for i in range(1, 5)])
+        state = {}
+        controller.validate_config(config)
+        with patch.object(controller, "fetch_text", return_value=load_metrics(8)):
+            for _ in range(5):
+                controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(4, True), (3, True), (2, True)])
+        self.assertFalse(agent_by_id(client, 1)["no_schedule"])
 
     def test_graded_pause_lost_response_reconciles_after_restart_and_preserves_manual_hold(self):
         for applied in (True, False):

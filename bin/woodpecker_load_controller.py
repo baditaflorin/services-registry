@@ -366,13 +366,16 @@ def thresholds_for_node(
     node: dict[str, Any],
 ) -> dict[str, float]:
     """The global thresholds with one node's (or v1 agent's) own limits on top: an optional
-    disk-space pair (disk_thresholds) and an optional I/O pressure pair. Both are properties
-    of a node's disks, not of the fleet."""
+    disk-space pair, a normalized load pair and an optional I/O pressure pair."""
     effective = dict(thresholds)
     disk_thresholds = node.get("disk_thresholds")
     if disk_thresholds is not None:
         effective["disk_stop_pct"] = float(disk_thresholds["stop_pct"])
         effective["disk_resume_pct"] = float(disk_thresholds["resume_pct"])
+    load_thresholds = node.get("load_thresholds")
+    if load_thresholds is not None:
+        effective["load_per_cpu_stop"] = float(load_thresholds["stop"])
+        effective["load_per_cpu_resume"] = float(load_thresholds["resume"])
     for key in IO_THRESHOLD_KEYS:
         if key in node:
             effective[key] = node[key]
@@ -1120,6 +1123,7 @@ def run_cycle_v2(
             fail_closed = bool(
                 backing_config is not None
                 or physical_config is not None
+                or entry.get("load_thresholds") is not None
                 or entry.get("fail_closed_on_metrics_error", False)
             )
             log_event(
@@ -1224,11 +1228,13 @@ def run_cycle_v2(
         key=lambda item: drain_priority(item[4]),
         reverse=True,
     )
+    protected_graded = set()
     for name, agents, schedulable, node_state, _pressure, action in critical_drains + normal_drains:
         if not schedulable:
             continue
         critical = action in {"critical_drain", "telemetry_quarantine"}
         if not critical and schedulable_nodes <= minimum_schedulable:
+            protected_graded.add(name)
             log_event(
                 event="node_drain_skipped",
                 node=name,
@@ -1258,7 +1264,7 @@ def run_cycle_v2(
     for name, agents, _schedulable, node_state, pressure, action in observations:
         if name not in graded_inputs or pressure is None:
             continue
-        if action in {"drain", "critical_drain", "telemetry_quarantine"}:
+        if action in {"drain", "critical_drain", "telemetry_quarantine"} and name not in protected_graded:
             continue
         entry, current, _ = graded_inputs[name]
         graded = entry["graded"]
@@ -1437,6 +1443,15 @@ def validate_config(config: dict[str, Any]) -> None:
                         raise ValueError(f"node disk_thresholds {key} must be between 0 and 100")
                 if disk_thresholds["resume_pct"] <= disk_thresholds["stop_pct"]:
                     raise ValueError("node disk resume percentage must be higher than stop percentage")
+            load_thresholds = node.get("load_thresholds")
+            if load_thresholds is not None:
+                if not isinstance(load_thresholds, dict) or set(load_thresholds) != {"stop", "resume"}:
+                    raise ValueError("node load_thresholds must declare stop and resume only")
+                stop, resume = load_thresholds["stop"], load_thresholds["resume"]
+                if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in (stop, resume)):
+                    raise ValueError("node load_thresholds must be finite numbers")
+                if not 0 <= resume < stop:
+                    raise ValueError("node load resume must be non-negative and lower than stop")
             if node.get("graded") is not None:
                 validate_graded(node, config["thresholds"])
             if (

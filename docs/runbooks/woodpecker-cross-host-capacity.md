@@ -1,5 +1,18 @@
 # Woodpecker cross-host execution capacity
 
+## Per-node load limits
+
+Version-2 nodes can set `load_thresholds` with finite normalized `stop` and
+`resume` values, where `0 <= resume < stop`. This changes only that node's
+load signal; other nodes retain the fleet defaults. A graded node uses the
+same stop value to reduce its open slots as load rises. When the last
+schedulable node is protected from a complete normal drain, graded admission
+can still close excess agents while retaining its configured minimum; a single
+agent can have multiple slots. A node with local load thresholds is quarantined
+when required metrics are unavailable. This is
+sampled admission, not a hard cap shared with other schedulers; running jobs
+continue and reservations from other systems may change between samples.
+
 ## Optional physical memory gate
 
 Version-2 controller nodes may declare a `physical_memory` object containing
