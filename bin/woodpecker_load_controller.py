@@ -26,7 +26,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Callable
 
@@ -66,6 +66,33 @@ class Pressure:
     backing_storage_available_pct: float | None = None
     backing_storage_available_bytes: int | None = None
     io_pressure_pct: float | None = None
+    physical_memory_available_pct: float | None = None
+
+
+def physical_memory_pct(text: str) -> float:
+    """Read one host's physical memory, refusing ambiguous/malformed telemetry."""
+    available = []
+    total = []
+    for name, _labels, value in prometheus_samples(text):
+        if name == "node_memory_MemAvailable_bytes":
+            available.append(value)
+        elif name == "node_memory_MemTotal_bytes":
+            total.append(value)
+    if len(available) != 1 or len(total) != 1:
+        raise ValueError("physical memory metrics are missing or ambiguous")
+    if not math.isfinite(available[0]) or not math.isfinite(total[0]) or total[0] <= 0 or not 0 <= available[0] <= total[0]:
+        raise ValueError("physical memory metrics are invalid")
+    return 100.0 * available[0] / total[0]
+
+
+def physical_memory_pressure(pressure: Pressure, available: float, policy: dict[str, Any]) -> Pressure:
+    """Combine independent host and guest admission; both must recover."""
+    breaches = pressure.breaches
+    if available <= policy["stop_pct"]:
+        breaches = (*breaches, "physical_memory")
+    return replace(pressure, breaches=breaches,
+                   recovered=pressure.recovered and available >= policy["resume_pct"],
+                   physical_memory_available_pct=available)
 
 
 def parse_labels(raw: str) -> dict[str, str]:
@@ -1061,6 +1088,7 @@ def run_cycle_v2(
             schedulable_nodes += 1
 
         backing_config = entry.get("backing_storage")
+        physical_config = entry.get("physical_memory")
         try:
             current = node_snapshot(
                 fetch_text(entry["metrics_url"]),
@@ -1080,9 +1108,13 @@ def run_cycle_v2(
                 backing_config,
                 backing_snapshot,
             )
+            if physical_config is not None:
+                physical_pct = physical_memory_pct(fetch_text(physical_config["metrics_url"]))
+                pressure = physical_memory_pressure(pressure, physical_pct, physical_config)
         except (OSError, ValueError, urllib.error.URLError) as exc:
             fail_closed = bool(
                 backing_config is not None
+                or physical_config is not None
                 or entry.get("fail_closed_on_metrics_error", False)
             )
             log_event(
@@ -1118,7 +1150,7 @@ def run_cycle_v2(
             # Restore only IDs this controller managed after all required
             # guest and backing-storage signals recover for the full window.
             action = "restore"
-        elif pressure.critical_storage_breach:
+        elif pressure.critical_storage_breach or "physical_memory" in pressure.breaches:
             action = "critical_drain"
         if entry.get("graded") is not None:
             # A graded host reopens one agent at a time (see graded_step), not all at once.
@@ -1134,6 +1166,7 @@ def run_cycle_v2(
             load_per_cpu=None if current.load_per_cpu is None else round(current.load_per_cpu, 3),
             io_pressure_pct=None if pressure.io_pressure_pct is None else round(pressure.io_pressure_pct, 2),
             memory_available_pct=round(pressure.memory_available_pct, 2),
+            physical_memory_available_pct=pressure.physical_memory_available_pct,
             disk_available_pct=round(pressure.disk_available_pct, 2),
             backing_storage_available_pct=pressure.backing_storage_available_pct,
             backing_storage_available_bytes=pressure.backing_storage_available_bytes,
@@ -1233,8 +1266,15 @@ def run_cycle_v2(
         }
         managed_ids = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
         headroom = graded_headroom(current, pressure, thresholds_for_node(thresholds, entry), graded)
+        physical_pending = (
+            entry.get("physical_memory") is not None
+            and (
+                pressure.physical_memory_available_pct < entry["physical_memory"]["resume_pct"]
+                or (managed_ids and node_state["recovery_samples"] < int(config["resume_samples"]))
+            )
+        )
         step, agent, facts = graded_step(
-            node_state, ordered, fresh_ids, managed_ids, headroom, graded, bool(pressure.breaches)
+            node_state, ordered, fresh_ids, managed_ids, headroom, graded, bool(pressure.breaches) or physical_pending
         )
         log_event(event="node_graded", node=name, proposed_action=step, **facts)
         if step is None or agent is None:
@@ -1362,6 +1402,18 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError("each Woodpecker agent name must belong to exactly one node")
         for node in nodes:
             validate_backing_storage(node)
+            physical = node.get("physical_memory")
+            if physical is not None:
+                if not isinstance(physical, dict) or set(physical) != {"metrics_url", "stop_pct", "resume_pct"}:
+                    raise ValueError("physical_memory must declare metrics_url, stop_pct and resume_pct only")
+                if not isinstance(physical["metrics_url"], str) or not physical["metrics_url"]:
+                    raise ValueError("physical_memory metrics_url must be non-empty")
+                for key in ("stop_pct", "resume_pct"):
+                    value = physical[key]
+                    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not 0 <= value <= 100:
+                        raise ValueError(f"physical_memory {key} must be a finite percentage")
+                if physical["resume_pct"] <= physical["stop_pct"]:
+                    raise ValueError("physical_memory resume percentage must be higher than stop percentage")
             disk_thresholds = node.get("disk_thresholds")
             if disk_thresholds is not None:
                 if not isinstance(disk_thresholds, dict):

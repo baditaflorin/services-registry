@@ -1,5 +1,23 @@
 # Woodpecker cross-host execution capacity
 
+## Optional physical memory gate
+
+Version-2 controller nodes may declare a `physical_memory` object containing
+`metrics_url`, `stop_pct` and `resume_pct`. The endpoint must expose exactly
+one physical host's node-exporter `MemAvailable` and `MemTotal` samples.
+At or below the stop percentage, the controller immediately drains its own
+mapped agents even when the guest looks healthy. Missing, malformed or
+ambiguous host telemetry quarantines the node. It reopens only its own holds
+after both guest and host metrics have recovered through the normal recovery
+window; operator-held agents stay held. Configure the endpoint and thresholds
+in the private fleet state, and verify reachability from each controller's
+service user before enabling it.
+
+This sampled gate is not an atomic limit shared with other schedulers. Running
+workflows are not interrupted, and Woodpecker, fleet-job and Buildx can still
+race between samples. Separate physical resource reservations are needed to
+enforce a hard shared budget.
+
 This runbook reproduces the deployed execution-plane design without storing
 private addresses or credentials in Git. Each repository keeps one
 authoritative Woodpecker control plane. Physical capacity is pooled by
