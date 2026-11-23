@@ -5773,7 +5773,7 @@
     "trl_ceiling_reason": null,
     "trl_evidence": "First-pass audit: the repo contains two implementations -- a small unused root-module library using the correct safehttp client, and the ACTUALLY DEPLOYED src/ hexagonal service which hand-rolled its own SSRF/dial/cache stack. Found and fixed a critical bug in the deployed service: an SSRF-checking dialer was built but then unconditionally overridden by a plain DNS-caching dialer with zero SSRF check -- the default client profile never had transport-layer SSRF protection at all. Live-proved: pre-fix, the real factory-built client successfully dialed 127.0.0.1:1. Confirmed real fleet-wide reach -- several domain-analysis services (gdpr-compliance, broken-links, payment-detector, etc) route through this proxy as a fallback tier. Fixed by wiring the checker into the actual dial path for both client profiles, closing SSRF-via-redirect and DNS-rebind gaps too. Also fixed the recurring fetch-cache-masking bug (CacheMiddleware ignored Cache-Control entirely) and an unbounded response-body read for chunked responses (Content-Length -1 fell through to unbounded io.ReadAll). Flagged, not fixed: a credit/auth-bypass path trusts a client-supplied X-Real-IP header, safe only if the gateway always overwrites it -- needs deploy-topology context. trl held at 6; trl_ceiling=7 added, held back specifically because this security control passed its own unit test while the real wiring silently discarded it -- should be integration-verified before trusting above 7. See PR #11 (merged), plus 3 pre-existing stale PRs (#1/#2 dependency bumps, #7 a real headless-Chrome pool leak fix from 2026-06) now CONFLICTING against this fix and left for manual follow-up.",
     "proxy_egress": true,
-    "version": "0.5.41"
+    "version": "0.5.43"
   },
   "http-method-tester": {
     "params": [
@@ -5963,7 +5963,7 @@
     "trl": 5,
     "trl_evidence": "Real-data audit (2026-07-06 live-traffic investigation, previously unsynced to registry despite a merged fix): live traffic (~330-480 req/s aggregate) showed the shared Webshare rotating egress proxy intermittently dropping/refusing connections or failing CONNECT independent of target-origin health -- roughly half of all /fetch requests were failing 502/504 in a 30-min window. render=default (the path most of the ~220-service fleet uses via fleetfetch) was a single-hop chain with no fallback/retry, and because it runs inside a singleflight group, one bad proxy draw failed every fleet caller waiting on that URL at once -- this explains the batches-of-failures-then-batches-of-success symptom reported against sibling service go_cdn_detector. Fixed: directRenderer.Render now retries up to 3 attempts (150ms backoff) on transient transport errors, skipping SSRF/validation errors a retry can't fix; a retry on a rotate-mode proxy gets a fresh exit IP, which meaningfully improves odds of success. Bumped 0.3.13->0.3.14. trl bumped 4->5; trl_ceiling=7 -- the fix addresses the amplification/no-retry gap at the shared cache layer, but the underlying Webshare account may have a hard concurrency/RPS cap that no in-process retry can fully compensate for; needs a post-deploy live-traffic check to confirm the 502/504 rate actually dropped. See github.com/baditaflorin/go_infrastructure_fetch_cache PR #18 (merged).",
     "health_url": "https://infrastructure-fetch-cache.0exec.com/_gw_health",
-    "version": "0.3.71",
+    "version": "0.3.73",
     "trl_assessed_at": "2026-08-04",
     "trl_assessor": "claude-sonnet-5-2026-08-04-merge-registry-sync"
   },
