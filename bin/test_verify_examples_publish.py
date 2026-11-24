@@ -31,6 +31,15 @@ class TestPublish(unittest.TestCase):
         self.assertTrue(vep.healthy(doc(), mass))        # nothing was ok before: nothing to protect
         self.assertTrue(vep.healthy(old, doc(**{"s%d" % i: ("gated" if i < 5 else "no-data") for i in range(10)})))
 
+    def test_age_in_days_and_the_heartbeat_threshold(self):
+        import datetime
+        now = datetime.datetime(2026, 11, 24, 12, 0, tzinfo=datetime.timezone.utc)
+        self.assertAlmostEqual(vep.age_days({"checked_at": "2026-11-22T12:00:00Z"}, now), 2.0)
+        self.assertIsNone(vep.age_days({}, now))
+        self.assertIsNone(vep.age_days({"checked_at": "garbage"}, now))
+        self.assertGreater(vep.age_days({"checked_at": "2026-11-17T11:00:00Z"}, now), vep.HEARTBEAT_DAYS)
+        self.assertLess(vep.age_days({"checked_at": "2026-11-19T12:00:00Z"}, now), vep.HEARTBEAT_DAYS)
+
     def test_tally(self):
         self.assertEqual(vep.tally(doc(a="ok", b="ok", c="error")), {"error": 1, "ok": 2})
 
