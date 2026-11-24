@@ -6,7 +6,8 @@
 The hub (and anything else that reads the registry) takes example state from the committed services.examples.json. The nightly
 check keeps its newest result on the builder; this publishes it, but only when something a reader can see changed:
 
-  - a service's `state` or `replicas` differ, or a service appeared or disappeared (checked_at alone never opens a PR);
+  - a service's `state` or `replicas` differ, or a service appeared or disappeared (checked_at alone never opens a PR) -- except
+    that a committed file older than HEARTBEAT_DAYS is refreshed anyway, so a reader can tell "nothing changed" from "the nightly stopped";
   - the run looks healthy: at least HEALTHY_SHARE of the services that were ok in the committed file are still ok or
     gated/no-data (a mass `unreachable` is a network or key problem on the builder, not 100 broken services);
   - no earlier bot/examples-* pull request is still open.
@@ -23,6 +24,7 @@ import subprocess
 import sys
 
 HEALTHY_SHARE = 0.8
+HEARTBEAT_DAYS = 6
 KEEP = ("ok", "gated", "no-data")
 
 
@@ -43,6 +45,15 @@ def healthy(old, new):
         return True
     still = sum(1 for k in was_ok if new["services"][k].get("state") in KEEP)
     return still >= HEALTHY_SHARE * len(was_ok)
+
+
+def age_days(doc, now=None):
+    """Days since the document's checked_at; None when it has none or it does not parse."""
+    try:
+        t = datetime.datetime.strptime(doc.get("checked_at", ""), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=datetime.timezone.utc)
+    except (ValueError, TypeError):
+        return None
+    return ((now or datetime.datetime.now(datetime.timezone.utc)) - t).total_seconds() / 86400
 
 
 def tally(doc):
@@ -76,14 +87,17 @@ def main(argv=None):
     target = os.path.join(a.workdir, "services.examples.json")
     old = json.load(open(target)) if os.path.exists(target) else {"services": {}}
     ch = diff(old, new)
-    if not ch:
+    age = age_days(old)
+    heartbeat = not ch and (age is None or age > HEARTBEAT_DAYS)
+    if not ch and not heartbeat:
         print("verify-examples-publish: nothing a reader can see changed (%d services)" % len(new.get("services", {})))
         return 0
     if not healthy(old, new):
         print("verify-examples-publish: NOT publishing: the run lost more than %d%% of the services that were ok (tally %s): "
               "a builder network or key problem, not %d broken services" % (round((1 - HEALTHY_SHARE) * 100), tally(new), len(ch)))
         return 1
-    print("verify-examples-publish: %d change(s): %s" % (len(ch), ", ".join("%s %s->%s" % c for c in ch[:12]) + (" ..." if len(ch) > 12 else "")))
+    print("verify-examples-publish: %s" % (("%d change(s): %s" % (len(ch), ", ".join("%s %s->%s" % c for c in ch[:12]) + (" ..." if len(ch) > 12 else "")))
+                                           if ch else "no change, but the committed file is %s days old: heartbeat refresh" % ("an unknown number of" if age is None else int(age))))
     if a.dry:
         return 0
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%MZ")
@@ -104,10 +118,10 @@ def main(argv=None):
         text = "## %s\n\n%s\n%s" % (day, line, text)
     open(cl, "w").write(text)
     run(["git", "add", "services.examples.json", "CHANGELOG.md"], cwd=a.workdir)
-    run(["git", "commit", "-q", "-m", "examples: nightly refresh (%d change(s))" % len(ch)], cwd=a.workdir)
+    run(["git", "commit", "-q", "-m", "examples: nightly refresh (%s)" % ("%d change(s)" % len(ch) if ch else "heartbeat")], cwd=a.workdir)
     run(["git", "push", "-q", "origin", branch], cwd=a.workdir)
     url = run(["gh", "pr", "create", "-R", a.repo, "--base", "main", "--head", branch, "--title",
-               "examples: nightly refresh (%d change(s))" % len(ch), "--body",
+               "examples: nightly refresh (%s)" % ("%d change(s)" % len(ch) if ch else "heartbeat"), "--body",
                "Automatic: the nightly example check (verify-examples-nightly on the builder) changed %d state(s):\n\n%s\n\nA run that lost most ok services is never published."
                % (len(ch), "\n".join("- `%s` %s -> %s" % c for c in ch[:40]))]).stdout.strip().splitlines()[-1]
     print("verify-examples-publish: opened", url)
