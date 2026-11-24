@@ -5,6 +5,7 @@ set -eu
 here=$(cd "$(dirname "$0")" && pwd)
 install -m 0755 "$here/../verify-examples-run.sh" /usr/local/bin/verify-examples-run
 install -m 0755 "$here/../verify-examples-metrics.py" /usr/local/bin/verify-examples-metrics
+install -m 0755 "$here/../verify-examples-publish.py" /usr/local/bin/verify-examples-publish
 install -m 0755 "$here/verify-examples-nightly.sh" /usr/local/bin/verify-examples-nightly
 install -m 0644 "$here/verify-examples-nightly.service" /etc/systemd/system/verify-examples-nightly.service
 install -m 0644 "$here/verify-examples-nightly.timer" /etc/systemd/system/verify-examples-nightly.timer
