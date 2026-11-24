@@ -1,5 +1,6 @@
 ## 2026-11-24
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `infrastructure-fetch-cache` 0.3.77.
 - examples: services.examples.json refreshed by the nightly check (error 2, gated 49, no-data 15, ok 323, unprobed 1); 6 state change(s): `domain-analytics-stack` error->ok, `domain-error-monitoring` ok->gated, `legal-entity` error->ok, `linkedin-attributes` ok->error, `node-search-bing` error->ok, `testimonial-extractor` error->ok.
 - verify-examples-publish: a committed `services.examples.json` older than 6 days is refreshed even when no state changed (heartbeat), so the hub's "checked" time shows the nightly is alive.
 - verify-examples-publish: the nightly check now publishes its result to `services.examples.json` by pull request (`bot/examples-*`, merged when CI is green), only when a service's state or replicas changed and the run looks healthy (a mass failure is never published). Opt out with `NO_PUBLISH` in `/var/lib/verify-examples`. Install: `bin/verify-examples-nightly.deploy/install.sh` on the builder.
