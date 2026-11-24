@@ -1,5 +1,6 @@
 ## 2026-11-24
 
+- examples: services.examples.json refreshed by the nightly check (error 2, gated 49, no-data 15, ok 323, unprobed 1); 6 state change(s): `domain-analytics-stack` error->ok, `domain-error-monitoring` ok->gated, `legal-entity` error->ok, `linkedin-attributes` ok->error, `node-search-bing` error->ok, `testimonial-extractor` error->ok.
 - verify-examples-publish: a committed `services.examples.json` older than 6 days is refreshed even when no state changed (heartbeat), so the hub's "checked" time shows the nightly is alive.
 - verify-examples-publish: the nightly check now publishes its result to `services.examples.json` by pull request (`bot/examples-*`, merged when CI is green), only when a service's state or replicas changed and the run looks healthy (a mass failure is never published). Opt out with `NO_PUBLISH` in `/var/lib/verify-examples`. Install: `bin/verify-examples-nightly.deploy/install.sh` on the builder.
 - verify-examples: a service whose first answer is `error` or `unreachable` is called once more after 4 s and the better answer is kept (row `retried: true`). The nightly check flagged geo-geocode, open-redirect and scan-port-ssh as regressions on 2026-11-24; all three were a single slow edge read or a dropped connection to an external target, with healthy `/health`.
