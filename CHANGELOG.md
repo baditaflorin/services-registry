@@ -1,5 +1,6 @@
 ## 2026-11-24
 
+- verify-examples: a service whose first answer is `error` or `unreachable` is called once more after 4 s and the better answer is kept (row `retried: true`). The nightly check flagged geo-geocode, open-redirect and scan-port-ssh as regressions on 2026-11-24; all three were a single slow edge read or a dropped connection to an external target, with healthy `/health`.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.10.
 - fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.47, `biz-classifier` 2.8.45, `company-name-extractor` 0.1.81.
 

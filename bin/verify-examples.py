@@ -16,6 +16,9 @@ Output (default services.examples.json, derived data: never edit by hand, regene
 Edge fallback. A compose service that no --direct-hosts address answers (it runs on a host this machine does not probe) is asked
 through its public https address instead, with the same key (row `via: "edge"`). Only a service with neither answer is `unreachable`.
 
+Retry. A service whose first answer is `error` or `unreachable` is called once more after RETRY_PAUSE seconds and the better of the two
+answers is kept (the row then carries `retried: true`), so a single slow upstream or dropped connection is not a regression.
+
 Replicas. A service marked placement "replicable" runs on several hosts behind the gateway (nginx upstream, same
 host_port on every member), and the gateway may send any user to any of them. So every host of --direct-hosts is
 called, not only the first that answers: a host "answers" when it returns any HTTP status (a refused connection or a
@@ -64,6 +67,8 @@ SKIP_LIFECYCLE_STATUSES = {"sunset", "on_demand"}
 # Worst last. `gated` ranks low because it says "not measured" (our key was not accepted), not "the service is broken";
 # a replica that answers 5xx or the wrong route outranks a healthy one, and `unreachable` is never among answered replicas.
 WORST_FIRST = ("ok", "no-data", "gated", "method", "missing-param", "rejected", "not-found", "error", "unreachable")
+RETRY_STATES = ("error", "unreachable")
+RETRY_PAUSE = 4.0
 MISSING = re.compile(r"missing|required|must (?:be )?(?:provide|supplied|set)|not provided", re.I)
 
 
@@ -207,6 +212,18 @@ def probe(svc, timeout, api_key, direct_hosts):
     return sid, out
 
 
+def probe_retry(svc, timeout, api_key, direct_hosts, pause=None):
+    """probe(), and once more after a pause when the answer is `error` or `unreachable`: the better answer is kept."""
+    sid, out = probe(svc, timeout, api_key, direct_hosts)
+    if out["state"] in RETRY_STATES:
+        time.sleep(RETRY_PAUSE if pause is None else pause)
+        _, again = probe(svc, timeout, api_key, direct_hosts)
+        if severity(again["state"]) < severity(out["state"]):
+            out = again
+        out["retried"] = True
+    return sid, out
+
+
 def render(results, now=None):
     now = now or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     return json.dumps({"checked_at": now, "services": {k: results[k] for k in sorted(results)}}, indent=2) + "\n"
@@ -260,7 +277,7 @@ def main(argv=None):
     log("checking the example of %d services (timeout=%.0fs, concurrency=%d, key=%s) ..." % (
         len(targets), a.timeout, a.concurrency, "yes" if api_key else "no"))
     with ThreadPoolExecutor(max_workers=a.concurrency) as ex:
-        results = dict(ex.map(lambda s: probe(s, a.timeout, api_key, direct), targets))
+        results = dict(ex.map(lambda s: probe_retry(s, a.timeout, api_key, direct), targets))
     with open(a.out, "w") as f:
         f.write(render(results))
     n_multi, diverged = replica_summary(results)

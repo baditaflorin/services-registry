@@ -186,6 +186,43 @@ class TestProbe(unittest.TestCase):
         self.assertEqual(r["state"], "unprobed")
 
 
+class TestRetry(unittest.TestCase):
+    def seq(self, answers):
+        """fetch() fake that answers from a list, one per call; records the call count."""
+        it = iter(answers)
+        calls = []
+
+        def fake(url, timeout, key):
+            calls.append(url)
+            return next(it)
+
+        return fake, calls
+
+    def run_retry(self, answers):
+        fake, calls = self.seq(answers)
+        with mock.patch.object(ve, "fetch", fake):
+            _, r = ve.probe_retry(SVC, 5, "k", ("h",), pause=0)
+        return r, calls
+
+    def test_a_failure_that_clears_on_the_second_call_is_ok_and_marked_retried(self):
+        r, calls = self.run_retry([(502, "", ""), (200, "{}", "")])
+        self.assertEqual((r["state"], r["http"], r["retried"], len(calls)), ("ok", 200, True, 2))
+
+    def test_a_failure_that_stays_is_kept_and_marked_retried(self):
+        r, calls = self.run_retry([(500, "", ""), (500, "", "")])
+        self.assertEqual((r["state"], r["retried"], len(calls)), ("error", True, 2))
+
+    def test_the_worse_second_answer_never_replaces_the_first(self):
+        r, _ = self.run_retry([(500, "", ""), (None, "", "URLError: down"), (None, "", "URLError: down")])  # 2nd probe: LAN, then edge
+        self.assertEqual(r["state"], "error")
+
+    def test_other_states_and_ok_are_not_retried(self):
+        for first in [(200, "{}", ""), (401, "", ""), (404, '{"status":"no_data"}', ""), (400, "bad", ""), (404, "404 page not found", "")]:
+            r, calls = self.run_retry([first])
+            self.assertEqual(len(calls), 1, first)
+            self.assertNotIn("retried", r)
+
+
 class TestOutput(unittest.TestCase):
     def test_render_is_sorted_and_never_holds_the_key(self):
         res = {"b": {"path": "/", "http": 200, "state": "ok", "via": "lan", "ms": 1, "error": ""},
