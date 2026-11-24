@@ -18,4 +18,8 @@ if [ "$rc" -ne 0 ] && [ "$rc" -ne 3 ]; then
 fi
 reg=$(/usr/local/bin/verify-examples-metrics --new "$OUT" --old "$STATE/previous.json" --out "$PROM")
 [ -n "$reg" ] && echo "verify-examples-nightly: REGRESSED (ok -> broken): $(echo "$reg" | tr '\n' ' ')" >&2
+# Publish the result to the registry (a pull request, only when a state changed and the run looks healthy). Never fails the unit.
+if [ "$rc" -eq 0 ] && [ ! -e "$STATE/NO_PUBLISH" ]; then
+  /usr/local/bin/verify-examples-publish --result "$OUT" || echo "verify-examples-nightly: publish did not finish (see above); the metrics are unaffected" >&2
+fi
 exit "$rc"     # 3 = the key could not be shown revoked: the unit fails so it is noticed
