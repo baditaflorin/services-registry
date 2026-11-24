@@ -1,3 +1,7 @@
+## 2026-11-24
+
+- fleet-version-pin-sync: 3 registry version pin(s) set to the version the service runs, which is also its repository main: `address-extractor` 3.4.47, `biz-classifier` 2.8.45, `company-name-extractor` 0.1.81.
+
 ## 2026-11-23
 
 - fleet-version-pin-sync: 8 registry version pin(s) set to the version the service runs, which is also its repository main: `company-size` 3.5.78, `domain-compliance-claim-scanner` 0.5.12, `domain-events-platform` 0.2.41, `google-taxonomy` 1.5.16, `legal-entity` 1.33.59, `price-range` 1.9.41, `pricing-tier-parser` 0.1.45, `seasonal-detector` 2.7.8.
