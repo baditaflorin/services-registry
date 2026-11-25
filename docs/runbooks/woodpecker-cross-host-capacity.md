@@ -422,6 +422,12 @@ Manual holds are preserved. Enabling this may extend CI queues or quarantine a
 node after controller startup or telemetry problems; monitor first and choose
 thresholds from actual workload data. Separate controllers, Buildx and
 fleet-job do not share an atomic resource reservation with this controller.
+The sample is checked immediately before and after each opening response; a
+late or ambiguous response triggers a best-effort re-close. A PATCH can still
+be applied after the pre-check and before the response returns, and the
+re-close can fail or be delayed. Neither instantaneous closure nor an atomic
+admission bound can be guaranteed over the API; an ambiguous delayed open may
+even arrive after the attempted re-close.
 
 ### Deployed with graded admission (2026-10-26)
 

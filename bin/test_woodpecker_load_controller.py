@@ -1775,6 +1775,37 @@ class IndependentCpuBusyTests(unittest.TestCase):
         self.assertEqual(client.changed, [])
         self.assertTrue(state["nodes"]["builder-a"]["full_drain_pending_recovery"])
 
+    def test_ambiguous_open_response_is_closed_again(self):
+        config = self.config(); config["resume_samples"] = 1
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1"],
+                 "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10),1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True}])
+        set_schedule = client.set_no_schedule
+        def ambiguous(agent,value):
+            set_schedule(agent,value)
+            if not value: raise OSError("response lost after application")
+        client.set_no_schedule = ambiguous
+        with patch.object(controller,"fetch_text",return_value=self.metrics(105,15)), patch.object(controller.time,"time",return_value=1030), patch.object(controller,"log_event"):
+            controller.run_cycle_v2(config,state,client,apply=True)
+        self.assertEqual(client.changed,[(1,False),(1,True)])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"],["1"])
+
+    def test_graded_open_response_delayed_past_expiry_is_closed_again(self):
+        config = self.config(); config["resume_samples"] = 1
+        config["nodes"][0]["graded"] = {"min_open_slots":1,"open_samples":1,"close_samples":1,"memory_full_pct":60}
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1"],
+                 "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10),1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True,"last_contact":1030,"capacity":1}])
+        now=[1030]; set_schedule=client.set_no_schedule
+        def delayed(agent,value):
+            set_schedule(agent,value)
+            if not value: now[0]=1130
+        client.set_no_schedule=delayed
+        with patch.object(controller,"fetch_text",return_value=self.metrics(105,15)), patch.object(controller.time,"time",side_effect=lambda:now[0]), patch.object(controller,"log_event"):
+            controller.run_cycle_v2(config,state,client,apply=True)
+        self.assertEqual(client.changed,[(1,False),(1,True)])
+        self.assertTrue(state["nodes"]["builder-a"]["full_drain_pending_recovery"])
+
 
 class HTTPClientPatchBody(unittest.TestCase):
     def test_drain_patch_keeps_name_and_custom_labels(self):

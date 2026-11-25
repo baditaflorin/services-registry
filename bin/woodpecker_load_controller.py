@@ -1487,9 +1487,23 @@ def run_cycle_v2(
                     changed = bool(opened) or changed
                     expired = True
                     break
-                client.set_no_schedule(agent, False)
+                try:
+                    client.set_no_schedule(agent, False)
+                except (OSError, ValueError) as exc:
+                    if configs_by_name[name].get("cpu_busy") is None:
+                        raise
+                    log_event(event="agent_open_unconfirmed", node=name, agent_id=agent.get("id"), error=str(exc))
+                    quarantine_expired_cpu(name, node_state, opened + [agent])
+                    changed = True
+                    expired = True
+                    break
                 restored.append(agent_id)
                 opened.append(agent)
+                if not cpu_guard_fresh(configs_by_name[name], node_state):
+                    quarantine_expired_cpu(name, node_state, opened)
+                    changed = True
+                    expired = True
+                    break
                 log_event(event="agent_restored", node=name, agent_id=agent.get("id"), agent=agent.get("name"))
         if restored and not expired:
             node_state["managed_agent_ids"] = sorted(managed_ids - set(restored))
@@ -1603,7 +1617,19 @@ def run_cycle_v2(
             )
             managed_ids.add(agent_id)
         else:
-            client.set_no_schedule(agent, False)
+            try:
+                client.set_no_schedule(agent, False)
+            except (OSError, ValueError) as exc:
+                if entry.get("cpu_busy") is None:
+                    raise
+                log_event(event="agent_open_unconfirmed", node=name, agent_id=agent_id, error=str(exc))
+                quarantine_expired_cpu(name, node_state, [a for a in agents if not bool(a.get("no_schedule")) and a is not agent] + [agent])
+                changed = True
+                continue
+            if not cpu_guard_fresh(entry, node_state):
+                quarantine_expired_cpu(name, node_state, [a for a in agents if not bool(a.get("no_schedule")) and a is not agent] + [agent])
+                changed = True
+                continue
             managed_ids.discard(agent_id)
         node_state["managed_agent_ids"] = sorted(managed_ids)
         node_state["managed_no_schedule"] = bool(managed_ids)
