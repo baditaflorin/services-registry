@@ -1,0 +1,11 @@
+[Unit]
+Description=Conservatively prune unused BuildKit cache on 0own
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/0own-buildkit-gc
+Nice=19
+IOSchedulingClass=idle
+TimeoutStartSec=15min
