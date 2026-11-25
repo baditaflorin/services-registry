@@ -1,5 +1,6 @@
 ## 2026-11-25
 
+- examples: services.examples.json refreshed by the nightly check (error 1, gated 48, no-data 15, ok 325, unprobed 1); 2 state change(s): `domain-error-monitoring` gated->ok, `linkedin-attributes` error->ok.
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.14, `composite-runner` 1.2.9, `infrastructure-fetch-cache` 0.3.79, `site-capsule` 0.4.3.
 
 ## 2026-11-24
