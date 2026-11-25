@@ -1,5 +1,6 @@
 ## 2026-11-25
 
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `site-capsule` 0.4.4.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `html-proxy` 0.5.45.
 - fleet-version-pin-sync: 4 registry version pin(s) set to the version the service runs, which is also its repository main: `capture-store` 1.2.14, `composite-runner` 1.2.9, `infrastructure-fetch-cache` 0.3.79, `site-capsule` 0.4.3.
 
