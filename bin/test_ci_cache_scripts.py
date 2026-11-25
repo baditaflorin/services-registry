@@ -17,6 +17,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "scripts" / "ci-cache"
 OVERRIDE = REPO / "templates" / "woodpecker-agent-ci-cache.override.yml"
+PIPE_PRUNE = SCRIPTS / "variants" / "0pipe-prune.sh"
 DAY = 86400
 
 BASH = shutil.which("bash")
@@ -40,6 +41,8 @@ def put(path, kb, age_days=0):
 
 @unittest.skipUnless(BASH, "bash is required")
 class PruneTests(unittest.TestCase):
+    prune_script = SCRIPTS / "prune.sh"
+
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="ci-cache-test-"))
         self.root = self.tmp / "woodpecker-ci"
@@ -56,7 +59,7 @@ class PruneTests(unittest.TestCase):
 
     def test_under_the_cap_nothing_is_deleted(self):
         put(self.root / "go-build" / "aa" / "old", 100, age_days=60)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "50")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-build-max-mb", "50")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((self.root / "go-build" / "aa" / "old").exists())
 
@@ -65,7 +68,7 @@ class PruneTests(unittest.TestCase):
         put(self.root / "go-build" / "bb" / "mid", 1100, age_days=10)
         put(self.root / "go-build" / "cc" / "new", 1100, age_days=0)
         # 2 MB cap: deleting old and mid reaches it, so the newest entry must survive and the run succeeds
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "2")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-build-max-mb", "2")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertFalse((self.root / "go-build" / "aa" / "old").exists())
         self.assertFalse((self.root / "go-build" / "bb" / "mid").exists())
@@ -74,10 +77,28 @@ class PruneTests(unittest.TestCase):
     def test_dry_run_deletes_nothing(self):
         put(self.root / "npm" / "a", 1100, age_days=40)
         put(self.root / "npm" / "b", 1100, age_days=40)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--npm-max-mb", "1", "--dry-run")
+        result = bash(self.prune_script, "--root", str(self.root), "--npm-max-mb", "1", "--dry-run")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("dry run", result.stdout)
         self.assertTrue((self.root / "npm" / "a").exists() and (self.root / "npm" / "b").exists())
+
+    def test_same_day_entries_are_trimmed_by_size(self):
+        entry = self.root / "go-build" / "aa" / "entry"
+        put(entry, 1500)
+        stamp = time.time() - 3600
+        os.utime(entry, (stamp, stamp))
+        result = bash(PIPE_PRUNE, "--root", str(self.root), "--go-build-max-mb", "1")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(entry.exists())
+        self.assertIn("low-water", result.stdout)
+
+    def test_temporary_and_recent_entries_are_not_pruned(self):
+        for name in ("tmp-cache", "entry.partial", "fresh"):
+            put(self.root / "go-build" / name, 600)
+        result = bash(PIPE_PRUNE, "--root", str(self.root), "--go-build-max-mb", "1")
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        for name in ("tmp-cache", "entry.partial", "fresh"):
+            self.assertTrue((self.root / "go-build" / name).exists())
 
     def test_modcache_prunes_old_read_only_modules_but_keeps_recent_ones(self):
         old_mod = self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0"
@@ -87,7 +108,7 @@ class PruneTests(unittest.TestCase):
         for target in (old_mod / "big.go", old_mod):  # Go leaves the module cache read-only
             target.chmod(0o444 if target.is_file() else 0o555)
         os.utime(old_mod, (time.time() - 60 * DAY,) * 2)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-mod-max-mb", "1")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-mod-max-mb", "1")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(old_mod.exists(), "old read-only module directory should be removed")
         self.assertTrue(new_mod.exists(), "a recently written module must be kept")
@@ -96,10 +117,25 @@ class PruneTests(unittest.TestCase):
         recent = self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0"
         put(recent / "big.go", 1500, age_days=2)
         result = bash(
-            SCRIPTS / "prune.sh", "--root", str(self.root), "--go-mod-max-mb", "1", "--mod-min-age-days", "14"
+            self.prune_script, "--root", str(self.root), "--go-mod-max-mb", "1", "--mod-min-age-days", "14"
         )
         self.assertEqual(result.returncode, 3, "the cap cannot be reached, and the run says so: " + result.stderr)
         self.assertTrue(recent.exists(), "in-use-looking modules are never pruned even over the cap")
+
+    def test_characterizes_unsafe_deletion_of_module_with_live_reader(self):
+        # Characterization of the current bug, not desired behavior or a safety test.
+        # Replace this assertion with an exclusion test when a shared barrier exists.
+        module = self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0"
+        source = module / "big.go"
+        put(source, 1500, age_days=60)
+        os.utime(module, (time.time() - 60 * DAY,) * 2)
+        with source.open("rb") as reader:
+            result = bash(self.prune_script, "--root", str(self.root), "--go-mod-max-mb", "1")
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertFalse(source.exists(), "a live reader is not an exclusion barrier")
+            self.assertEqual(reader.read(1), b"x")
+            with self.assertRaises(FileNotFoundError):
+                source.open("rb")
 
     def test_a_symlinked_cache_directory_is_never_followed(self):
         outside = self.tmp / "outside"
@@ -108,7 +144,7 @@ class PruneTests(unittest.TestCase):
         put(victim, 1100, age_days=90)
         shutil.rmtree(self.root / "go-build")
         os.symlink(outside, self.root / "go-build")
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "1")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-build-max-mb", "1")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("refusing symlinked", result.stdout)
         self.assertTrue(victim.exists(), "a file behind a symlinked cache directory must never be deleted")
@@ -122,7 +158,7 @@ class PruneTests(unittest.TestCase):
         big = self.root / "go-mod" / "github.com" / "x" / "big@v1.0.0"
         put(big / "f.go", 3000, age_days=60)
         os.utime(big, (time.time() - 60 * DAY,) * 2)  # the module directory itself must look old too
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-mod-max-mb", "1")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-mod-max-mb", "1")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertFalse(big.exists(), "the old module is pruned, so the cap is reached")
         self.assertTrue((outside / "precious").exists(), "must not reach through a planted symlink")
@@ -130,7 +166,7 @@ class PruneTests(unittest.TestCase):
     def test_a_cache_that_stays_over_its_cap_is_a_failure_with_an_alert_line(self):
         # the newest file can never be deleted, so a 1 MB cap is unreachable: that must not look like success
         put(self.root / "go-build" / "cc" / "new", 1100, age_days=0)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "1")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-build-max-mb", "1")
         self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
         self.assertIn("ALERT", result.stderr)
         self.assertIn("go-build", result.stderr)
@@ -139,13 +175,13 @@ class PruneTests(unittest.TestCase):
 
     def test_an_unreachable_module_cache_cap_is_a_failure_too(self):
         put(self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0" / "big.go", 1500, age_days=2)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-mod-max-mb", "1")
+        result = bash(self.prune_script, "--root", str(self.root), "--go-mod-max-mb", "1")
         self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
         self.assertIn("go-mod", result.stderr)
 
     def test_dry_run_never_fails_on_a_cap_it_has_not_tried_to_reach(self):
         put(self.root / "npm" / "a", 1100, age_days=0)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--npm-max-mb", "1", "--dry-run")
+        result = bash(self.prune_script, "--root", str(self.root), "--npm-max-mb", "1", "--dry-run")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertNotIn("ALERT", result.stderr)
 
@@ -164,7 +200,7 @@ class PruneTests(unittest.TestCase):
         prom.parent.mkdir()
         before = time.time()
         result = bash(
-            SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "1", "--npm-max-mb", "5",
+            self.prune_script, "--root", str(self.root), "--go-build-max-mb", "1", "--npm-max-mb", "5",
             "--prom", str(prom),
         )
         self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
@@ -190,7 +226,7 @@ class PruneTests(unittest.TestCase):
     def test_prom_file_says_zero_when_every_cache_is_under_its_cap(self):
         put(self.root / "go-build" / "aa" / "f", 100, age_days=0)
         prom = self.tmp / "ci-cache-prune.prom"
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--prom", str(prom))
+        result = bash(self.prune_script, "--root", str(self.root), "--prom", str(prom))
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         values = self.prom_values(prom)
         for cache in ("go-build", "go-mod", "npm"):
@@ -198,26 +234,26 @@ class PruneTests(unittest.TestCase):
 
     def test_prom_file_is_not_written_in_a_dry_run(self):
         prom = self.tmp / "ci-cache-prune.prom"
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--prom", str(prom), "--dry-run")
+        result = bash(self.prune_script, "--root", str(self.root), "--prom", str(prom), "--dry-run")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertFalse(prom.exists())
 
     def test_an_unwritable_prom_path_warns_but_does_not_change_the_prune_result(self):
         put(self.root / "go-build" / "aa" / "f", 100, age_days=0)
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--prom", str(self.tmp / "nodir" / "x.prom"))
+        result = bash(self.prune_script, "--root", str(self.root), "--prom", str(self.tmp / "nodir" / "x.prom"))
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("WARNING", result.stderr)
 
     def test_a_cache_exactly_at_its_cap_is_not_over_it(self):
         put(self.root / "npm" / "a", 1000, age_days=0)  # about 1 MB on disk, rounded up to exactly 1
         prom = self.tmp / "ci-cache-prune.prom"
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--npm-max-mb", "1", "--prom", str(prom))
+        result = bash(self.prune_script, "--root", str(self.root), "--npm-max-mb", "1", "--prom", str(prom))
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(self.prom_values(prom)['ci_cache_prune_over_cap{cache="npm"}'], 0)
         self.assertEqual(self.prom_values(prom)['ci_cache_prune_size_bytes{cache="npm"}'], 1024 * 1024)
 
     def test_prom_path_must_be_absolute(self):
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--prom", "relative.prom", cwd=self.tmp)
+        result = bash(self.prune_script, "--root", str(self.root), "--prom", "relative.prom", cwd=self.tmp)
         self.assertEqual(result.returncode, 2)
         self.assertIn("--prom must be an absolute path", result.stderr)
         self.assertFalse((self.tmp / "relative.prom").exists())
@@ -225,12 +261,17 @@ class PruneTests(unittest.TestCase):
     def test_refuses_dangerous_or_missing_roots(self):
         for bad in ("/", "/tmp", "/var/cache", "relative/path", str(self.tmp / "missing")):
             with self.subTest(root=bad):
-                result = bash(SCRIPTS / "prune.sh", "--root", bad)
+                result = bash(self.prune_script, "--root", bad)
                 self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
 
     def test_rejects_non_numeric_limits(self):
-        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--npm-max-mb", "lots")
+        result = bash(self.prune_script, "--root", str(self.root), "--npm-max-mb", "lots")
         self.assertEqual(result.returncode, 2)
+
+
+@unittest.skipUnless(BASH, "bash is required")
+class PipePruneTests(PruneTests):
+    prune_script = PIPE_PRUNE
 
 
 @unittest.skipUnless(BASH, "bash is required")

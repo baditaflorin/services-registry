@@ -47,7 +47,8 @@ steps:
     depends_on: []
     image: python:3.13-alpine
     commands:
-      - apk add --no-cache git bash curl
+      # The deployed cache prune uses GNU find's -printf and -P options.
+      - apk add --no-cache git bash curl findutils
       - |
         target="$${CI_COMMIT_TARGET_BRANCH:-$${CI_REPO_DEFAULT_BRANCH}}"
         source="$${CI_COMMIT_SOURCE_BRANCH:-$${CI_COMMIT_BRANCH}}"
