@@ -69,6 +69,13 @@ esac
         env["QM_RESULT"] = '{"exited":1,"exitcode":0}'
         result = subprocess.run(["bash", str(trigger)], env=env, capture_output=True)
         self.assertEqual(result.returncode, 0)
+        env["QM_RESULT"] = "not JSON"
+        self.assertNotEqual(subprocess.run(["bash", str(trigger)], env=env,
+                                           capture_output=True).returncode, 0)
+        self.psi.write_text("full avg10=8.00\n")
+        result = subprocess.run(["bash", str(trigger)], env=env, capture_output=True)
+        self.assertEqual(result.returncode, 0)
+        self.assertIn(b"deferring", result.stdout)
 
 
 if __name__ == "__main__":
