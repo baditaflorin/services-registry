@@ -112,14 +112,15 @@ name; `docker inspect` shows it as the label `com.docker.compose.project`).
    docker inspect "$(docker ps -q --filter label=wp_uuid | head -1)" \
      --format '{{range .HostConfig.Binds}}{{println .}}{{end}}'
    ```
-6. **Keep it bounded.** Schedule daily:
+6. **Existing schedule.** The deployed pilot currently runs daily:
    `scripts/ci-cache/prune.sh --root /var/cache/woodpecker-ci`, for example with the
    systemd timer in `templates/woodpecker-ci-cache-prune.{service,timer}` (install
    steps in the service file's header; 03:15 UTC, low priority). Go also trims its
    own build cache entries that were unused for 5 days; this is the hard cap. A cache
    still over its cap after the prune makes the script exit 3 (the unit shows as failed),
    and `--prom FILE` writes the sizes for `templates/prometheus-ci-cache-prune.rules.yml`
-   (see "Switching the cap alert on" below).
+   (see "Switching the cap alert on" below). The script can overlap active builds;
+   do not add or increase scheduled runs without the barrier in the safety note below.
 7. **Measure after 3 days** (so enough runs land on the pilot):
 
    ```sh

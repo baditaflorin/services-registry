@@ -119,8 +119,9 @@ class PruneTests(unittest.TestCase):
         self.assertEqual(result.returncode, 3, "the cap cannot be reached, and the run says so: " + result.stderr)
         self.assertTrue(recent.exists(), "in-use-looking modules are never pruned even over the cap")
 
-    def test_old_module_can_be_removed_even_while_a_reader_has_it_open(self):
-        # This documents a known concurrency hazard, not a safety guarantee.
+    def test_characterizes_unsafe_deletion_of_module_with_live_reader(self):
+        # Characterization of the current bug, not desired behavior or a safety test.
+        # Replace this assertion with an exclusion test when a shared barrier exists.
         module = self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0"
         source = module / "big.go"
         put(source, 1500, age_days=60)
@@ -130,6 +131,8 @@ class PruneTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertFalse(source.exists(), "a live reader is not an exclusion barrier")
             self.assertEqual(reader.read(1), b"x")
+            with self.assertRaises(FileNotFoundError):
+                source.open("rb")
 
     def test_a_symlinked_cache_directory_is_never_followed(self):
         outside = self.tmp / "outside"
