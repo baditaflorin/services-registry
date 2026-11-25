@@ -1,0 +1,10 @@
+[Unit]
+Description=Conservatively prune unused BuildKit cache on 0own
+After=pve-guests.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/0own-buildkit-gc-trigger
+Nice=19
+IOSchedulingClass=idle
+TimeoutStartSec=15min
