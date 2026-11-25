@@ -255,6 +255,75 @@ def prometheus_samples(text: str) -> list[tuple[str, dict[str, str], float]]:
     return samples
 
 
+def cpu_guard_sample(text: str, taken_at: float) -> dict[str, Any]:
+    """Strict per-core counters for the optional independent CPU admission guard."""
+    counters: dict[str, dict[str, float]] = {}
+    for line in text.splitlines():
+        if not line.startswith("node_cpu_seconds_total"):
+            continue
+        match = re.fullmatch(r'node_cpu_seconds_total\{(cpu="[^"\\]+",mode="[^"\\]+"|mode="[^"\\]+",cpu="[^"\\]+")\}\s+(\S+)', line)
+        if match is None:
+            raise ValueError("malformed CPU counter")
+        labels = parse_labels(match.group(1))
+        try:
+            value = float(match.group(2))
+        except ValueError as exc:
+            raise ValueError("invalid CPU counter") from exc
+        if not math.isfinite(value) or value < 0:
+            raise ValueError("invalid CPU counter")
+        cpu, mode = labels["cpu"], labels["mode"]
+        if mode in {"guest", "guest_nice"}:
+            continue
+        modes = counters.setdefault(cpu, {})
+        if mode in modes:
+            raise ValueError("duplicate CPU counter")
+        modes[mode] = value
+    if not counters:
+        raise ValueError("missing CPU counters")
+    mode_sets = [set(modes) for modes in counters.values()]
+    if not {"idle", "user", "system"}.issubset(mode_sets[0]) or any(modes != mode_sets[0] for modes in mode_sets):
+        raise ValueError("incomplete CPU counters")
+    return {"taken_at": taken_at, "counters": counters}
+
+
+def cpu_guard_pct(current: dict[str, Any], previous: Any, max_age: float) -> float:
+    """Compute busy share between complete scrapes; idle and iowait are not busy."""
+    try:
+        wall = current["taken_at"] - previous["taken_at"]
+        old = previous["counters"]
+        new = current["counters"]
+        if not math.isfinite(wall) or not 1 <= wall <= max_age or set(old) != set(new):
+            raise ValueError("CPU baseline is missing, stale or has changed cores")
+        busy = total = 0.0
+        for cpu, modes in new.items():
+            if set(modes) != set(old[cpu]):
+                raise ValueError("CPU counter modes changed")
+            for mode, value in modes.items():
+                delta = value - old[cpu][mode]
+                if not math.isfinite(delta) or delta < 0:
+                    raise ValueError("CPU counter reset or invalid baseline")
+                total += delta
+                if mode not in {"idle", "iowait"}:
+                    busy += delta
+        expected = wall * len(new)
+        if not math.isfinite(total) or not math.isfinite(busy) or not 0.5 * expected <= total <= 1.5 * expected:
+            raise ValueError("CPU counter advance is inconsistent with elapsed time")
+        return 100.0 * busy / total
+    except (TypeError, KeyError, AttributeError) as exc:
+        raise ValueError("CPU baseline is missing or invalid") from exc
+
+
+def cpu_guard_fresh(entry: dict[str, Any], state: dict[str, Any]) -> bool:
+    guard = entry.get("cpu_busy")
+    if guard is None:
+        return True
+    try:
+        age = time.time() - state["cpu_guard_baseline"]["taken_at"]
+        return math.isfinite(age) and 0 <= age <= guard["max_sample_age_seconds"]
+    except (TypeError, KeyError, AttributeError):
+        return False
+
+
 def node_snapshot(text: str, mountpoint: str = "/", taken_at: float | None = None) -> NodeSnapshot:
     cpu_idle = 0.0
     cpu_total = 0.0
@@ -504,6 +573,9 @@ def thresholds_for_node(
     if load_thresholds is not None:
         effective["load_per_cpu_stop"] = float(load_thresholds["stop"])
         effective["load_per_cpu_resume"] = float(load_thresholds["resume"])
+    if node.get("cpu_busy") is not None:
+        effective["cpu_busy_stop_pct"] = node["cpu_busy"]["stop_pct"]
+        effective["cpu_busy_resume_pct"] = node["cpu_busy"]["resume_pct"]
     for key in IO_THRESHOLD_KEYS:
         if key in node:
             effective[key] = node[key]
@@ -587,6 +659,10 @@ def graded_headroom(
     elif pressure.cpu_pct is not None:
         stop = thresholds["cpu_stop_pct"]
         full = float(graded.get("cpu_full_pct", thresholds["cpu_resume_pct"]))
+        shares.append(_clamp01((stop - pressure.cpu_pct) / (stop - full)))
+    if "cpu_busy_stop_pct" in thresholds and pressure.cpu_pct is not None:
+        stop = thresholds["cpu_busy_stop_pct"]
+        full = thresholds["cpu_busy_resume_pct"]
         shares.append(_clamp01((stop - pressure.cpu_pct) / (stop - full)))
     memory_stop = thresholds["memory_stop_pct"]
     memory_full = float(graded.get("memory_full_pct", thresholds["memory_resume_pct"]))
@@ -1249,11 +1325,20 @@ def run_cycle_v2(
 
         backing_config = entry.get("backing_storage")
         physical_config = entry.get("physical_memory")
+        cpu_guard = entry.get("cpu_busy")
         try:
+            metrics_text = fetch_text(entry["metrics_url"])
             current = node_snapshot(
-                fetch_text(entry["metrics_url"]),
+                metrics_text,
                 entry.get("filesystem_mountpoint", "/"),
             )
+            if cpu_guard is not None:
+                sample = cpu_guard_sample(metrics_text, current.taken_at)
+                previous_cpu = node_state.get("cpu_guard_baseline")
+                # Persist a valid baseline even when the first sample, a reset,
+                # or an expired interval requires a fail-closed warm-up cycle.
+                node_state["cpu_guard_baseline"] = sample
+                cpu_busy = cpu_guard_pct(sample, previous_cpu, cpu_guard["max_sample_age_seconds"])
             backing_snapshot = None
             if backing_config is not None:
                 backing_snapshot = filesystem_snapshot(
@@ -1268,16 +1353,27 @@ def run_cycle_v2(
                 backing_config,
                 backing_snapshot,
             )
+            if cpu_guard is not None:
+                breaches = pressure.breaches
+                if cpu_busy >= cpu_guard["stop_pct"]:
+                    breaches = (*breaches, "cpu_busy")
+                pressure = replace(pressure, cpu_pct=cpu_busy, breaches=breaches,
+                                   recovered=pressure.recovered and cpu_busy <= cpu_guard["resume_pct"])
             if physical_config is not None:
                 if "prometheus" in physical_config:
                     physical_pct = prometheus_physical_pct(physical_config["prometheus"], physical_config["expected_nodename"])
                 else:
                     physical_pct = physical_memory_pct(fetch_text(physical_config["metrics_url"]), physical_config["expected_nodename"])
                 pressure = physical_memory_pressure(pressure, physical_pct, physical_config)
+            if cpu_guard is not None:
+                sample_age = time.time() - sample["taken_at"]
+                if not math.isfinite(sample_age) or not 0 <= sample_age <= cpu_guard["max_sample_age_seconds"]:
+                    raise ValueError("CPU sample expired before admission decision")
         except (OSError, ValueError, urllib.error.URLError) as exc:
             fail_closed = bool(
                 backing_config is not None
                 or physical_config is not None
+                or cpu_guard is not None
                 or entry.get("load_thresholds") is not None
                 or entry.get("fail_closed_on_metrics_error", False)
             )
@@ -1322,6 +1418,10 @@ def run_cycle_v2(
             action = "restore"
         elif pressure.critical_storage_breach or "physical_memory" in pressure.breaches:
             action = "critical_drain"
+        elif "cpu_busy" in pressure.breaches and node_state["overload_samples"] >= int(config["stop_samples"]):
+            # An explicitly enabled safety limit must not be bypassed by the
+            # last-node availability floor after its hysteresis window.
+            action = "critical_drain"
         if entry.get("graded") is not None:
             # A graded host reopens one agent at a time (see graded_step), not all at once.
             if action == "restore":
@@ -1351,6 +1451,24 @@ def run_cycle_v2(
     if not apply:
         return False
 
+    # Other nodes and exporters may have taken time to scrape. Never admit
+    # based on a CPU sample which expired while this cycle was collecting.
+    configs_by_name = {entry["name"]: entry for entry in config["nodes"]}
+    for index, item in enumerate(observations):
+        name, agents, schedulable, node_state, pressure, action = item
+        if pressure is not None and not cpu_guard_fresh(configs_by_name[name], node_state):
+            node_state["overload_samples"] = node_state["recovery_samples"] = 0
+            observations[index] = (name, agents, schedulable, node_state, None, "telemetry_quarantine")
+            log_event(event="metrics_error", node=name, fail_closed=True, error="CPU sample expired before actions")
+
+    def quarantine_expired_cpu(name: str, node_state: dict[str, Any], opened: list[dict[str, Any]]) -> None:
+        node_state["overload_samples"] = node_state["recovery_samples"] = 0
+        node_state["full_drain_pending_recovery"] = True
+        log_event(event="metrics_error", node=name, fail_closed=True, error="CPU sample expired before opening")
+        for agent in opened:
+            drain_recorded_first(client, agent, node_state, persist, node=name,
+                                 agent=agent.get("name"), reason="telemetry_quarantine")
+
     minimum_schedulable = int(config.get("minimum_schedulable_nodes", 1))
     # Restore healthy capacity before drains; only controller-managed IDs can be
     # restored, so a manual no_schedule hold survives recovery.
@@ -1359,13 +1477,35 @@ def run_cycle_v2(
             continue
         managed_ids = {str(agent_id) for agent_id in node_state.get("managed_agent_ids", [])}
         restored = []
+        opened = list(schedulable)
+        expired = False
         for agent in agents:
             agent_id = str(agent.get("id"))
             if agent_id in managed_ids and bool(agent.get("no_schedule")):
-                client.set_no_schedule(agent, False)
+                if not cpu_guard_fresh(configs_by_name[name], node_state):
+                    quarantine_expired_cpu(name, node_state, opened)
+                    changed = bool(opened) or changed
+                    expired = True
+                    break
+                try:
+                    client.set_no_schedule(agent, False)
+                except (OSError, ValueError) as exc:
+                    if configs_by_name[name].get("cpu_busy") is None:
+                        raise
+                    log_event(event="agent_open_unconfirmed", node=name, agent_id=agent.get("id"), error=str(exc))
+                    quarantine_expired_cpu(name, node_state, opened + [agent])
+                    changed = True
+                    expired = True
+                    break
                 restored.append(agent_id)
+                opened.append(agent)
+                if not cpu_guard_fresh(configs_by_name[name], node_state):
+                    quarantine_expired_cpu(name, node_state, opened)
+                    changed = True
+                    expired = True
+                    break
                 log_event(event="agent_restored", node=name, agent_id=agent.get("id"), agent=agent.get("name"))
-        if restored:
+        if restored and not expired:
             node_state["managed_agent_ids"] = sorted(managed_ids - set(restored))
             node_state["managed_no_schedule"] = bool(node_state["managed_agent_ids"])
             if not schedulable:
@@ -1448,8 +1588,13 @@ def run_cycle_v2(
                 or (managed_ids and node_state["recovery_samples"] < int(config["resume_samples"]))
             )
         )
+        cpu_pending = (
+            entry.get("cpu_busy") is not None
+            and (pressure.cpu_pct > entry["cpu_busy"]["resume_pct"]
+                 or (managed_ids and node_state["recovery_samples"] < int(config["resume_samples"])))
+        )
         step, agent, facts = graded_step(
-            node_state, ordered, fresh_ids, managed_ids, headroom, graded, bool(pressure.breaches) or physical_pending
+            node_state, ordered, fresh_ids, managed_ids, headroom, graded, bool(pressure.breaches) or physical_pending or cpu_pending
         )
         if step == "open" and node_state.get("full_drain_pending_recovery"):
             # Keep the graded interval satisfied while the full-node recovery
@@ -1460,6 +1605,10 @@ def run_cycle_v2(
         log_event(event="node_graded", node=name, proposed_action=step, **facts)
         if step is None or agent is None:
             continue
+        if step == "open" and not cpu_guard_fresh(entry, node_state):
+            quarantine_expired_cpu(name, node_state, [a for a in agents if not bool(a.get("no_schedule"))])
+            changed = True
+            continue
         agent_id = str(agent.get("id"))
         if step == "close":
             drain_recorded_first(
@@ -1468,7 +1617,19 @@ def run_cycle_v2(
             )
             managed_ids.add(agent_id)
         else:
-            client.set_no_schedule(agent, False)
+            try:
+                client.set_no_schedule(agent, False)
+            except (OSError, ValueError) as exc:
+                if entry.get("cpu_busy") is None:
+                    raise
+                log_event(event="agent_open_unconfirmed", node=name, agent_id=agent_id, error=str(exc))
+                quarantine_expired_cpu(name, node_state, [a for a in agents if not bool(a.get("no_schedule")) and a is not agent] + [agent])
+                changed = True
+                continue
+            if not cpu_guard_fresh(entry, node_state):
+                quarantine_expired_cpu(name, node_state, [a for a in agents if not bool(a.get("no_schedule")) and a is not agent] + [agent])
+                changed = True
+                continue
             managed_ids.discard(agent_id)
         node_state["managed_agent_ids"] = sorted(managed_ids)
         node_state["managed_no_schedule"] = bool(managed_ids)
@@ -1583,6 +1744,18 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError("each Woodpecker agent name must belong to exactly one node")
         for node in nodes:
             validate_backing_storage(node)
+            cpu_guard = node.get("cpu_busy")
+            if cpu_guard is not None:
+                if not isinstance(cpu_guard, dict) or set(cpu_guard) != {"stop_pct", "resume_pct", "max_sample_age_seconds"}:
+                    raise ValueError("cpu_busy must declare stop_pct, resume_pct and max_sample_age_seconds only")
+                for key in cpu_guard:
+                    value = cpu_guard[key]
+                    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+                        raise ValueError(f"cpu_busy {key} must be finite")
+                if not 0 <= cpu_guard["resume_pct"] < cpu_guard["stop_pct"] <= 100:
+                    raise ValueError("cpu_busy resume must be lower than stop, both within 0..100")
+                if cpu_guard["max_sample_age_seconds"] < max(1, config.get("interval_seconds", 30)):
+                    raise ValueError("cpu_busy max_sample_age_seconds must cover the controller interval")
             if "admission_hold" in node and not isinstance(node["admission_hold"], bool):
                 raise ValueError("admission_hold must be a boolean")
             physical = node.get("physical_memory")

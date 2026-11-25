@@ -1645,6 +1645,168 @@ class GradedAdmissionTests(unittest.TestCase):
 
 
 
+class IndependentCpuBusyTests(unittest.TestCase):
+    def metrics(self, idle, user, system=10, load=0.1):
+        return (f'node_cpu_seconds_total{{cpu="0",mode="idle"}} {idle}\n'
+                f'node_cpu_seconds_total{{cpu="0",mode="user"}} {user}\n'
+                f'node_cpu_seconds_total{{cpu="0",mode="system"}} {system}\n'
+                f'node_load1 {load}\nnode_memory_MemAvailable_bytes 800\nnode_memory_MemTotal_bytes 1000\n'
+                'node_filesystem_avail_bytes{mountpoint="/"} 800\nnode_filesystem_size_bytes{mountpoint="/"} 1000\n')
+
+    def config(self):
+        config = config_v2()
+        config["nodes"] = config["nodes"][:1]
+        config["nodes"][0]["cpu_busy"] = {"stop_pct": 80, "resume_pct": 60, "max_sample_age_seconds": 90}
+        config["nodes"][0]["load_thresholds"] = {"stop": 1.5, "resume": 1.1}
+        config["stop_samples"] = 2
+        config["resume_samples"] = 2
+        controller.validate_config(config)
+        return config
+
+    def test_cpu_counter_integrity_and_expiry(self):
+        good = self.metrics(80, 10)
+        first = controller.cpu_guard_sample(good, 1000)
+        second = controller.cpu_guard_sample(self.metrics(85, 35), 1030)
+        self.assertAlmostEqual(controller.cpu_guard_pct(second, first, 90), 100 * 25 / 30)
+        for malformed in (good + good.splitlines()[0] + '\n', good.replace(' 80\n', ' NaN\n'),
+                          good.replace('mode="system"', 'mode="bad"'), good.replace(' 80\n', ' rubbish\n')):
+            with self.assertRaises(ValueError): controller.cpu_guard_sample(malformed, 1000)
+        for old in (None, first | {"taken_at": 900}, first | {"taken_at": 1040},
+                    controller.cpu_guard_sample(self.metrics(100, 10), 1000),
+                    first | {"counters": {"different": {"idle": 1}}}):
+            with self.assertRaises(ValueError): controller.cpu_guard_pct(second, old, 90)
+        with self.assertRaises(ValueError): controller.cpu_guard_pct(first | {"taken_at": 1030}, first, 90)
+
+    def test_low_load_high_cpu_requires_both_recoveries_and_warmup_fails_closed(self):
+        config = self.config()
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+        state = {"nodes": {}}
+        samples = [(1000, self.metrics(80,10)), (1030, self.metrics(85,35)),
+                   (1060, self.metrics(90,60)), (1090, self.metrics(115,65,load=1.3)),
+                   (1120, self.metrics(140,70)), (1150, self.metrics(165,75))]
+        with patch.object(controller, "fetch_text") as fetch, patch.object(controller.time, "time") as clock, patch.object(controller, "log_event"):
+            for now, metrics in samples:
+                fetch.return_value = metrics
+                clock.return_value = now
+                controller.run_cycle_v2(config, state, client, apply=True)
+                if now < 1150:
+                    self.assertEqual(client.changed, [(1, True)])
+        self.assertEqual(client.changed, [(1, True), (1, False)])
+
+    def test_high_cpu_drains_open_agent_after_hysteresis_even_at_node_floor(self):
+        config = self.config()
+        client = FakeClient([{"id": 1, "name": "builder-agent", "no_schedule": False}])
+        state = {"nodes": {"builder-a": {"cpu_guard_baseline": controller.cpu_guard_sample(self.metrics(80, 10), 1000)}}}
+        with patch.object(controller, "fetch_text") as fetch, patch.object(controller.time, "time") as clock, patch.object(controller, "log_event"):
+            for now, metrics in [(1030, self.metrics(85,35)), (1060, self.metrics(90,60))]:
+                fetch.return_value = metrics
+                clock.return_value = now
+                controller.run_cycle_v2(config, state, client, apply=True)
+            self.assertEqual(client.changed, [(1, True)])
+
+    def test_stale_or_bad_configuration_refuses(self):
+        for change in ({"stop_pct": 50, "resume_pct": 60, "max_sample_age_seconds":90},
+                       {"stop_pct": float('nan'), "resume_pct": 60, "max_sample_age_seconds":90},
+                       {"stop_pct": 80, "resume_pct": 60, "max_sample_age_seconds":1}):
+            config = self.config(); config["nodes"][0]["cpu_busy"] = change
+            with self.assertRaises(ValueError): controller.validate_config(config)
+        config = self.config(); client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":False}])
+        state = {"nodes":{"builder-a":{"cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10), 1000)}}}
+        with patch.object(controller, "fetch_text", return_value=self.metrics(85,35)), patch.object(controller.time, "time", return_value=1100), patch.object(controller, "log_event"):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertEqual(client.changed, [(1,True)])
+
+    def test_graded_waits_for_cpu_and_complete_recovery_window(self):
+        config = self.config()
+        config["nodes"][0]["graded"] = {"min_open_slots": 1, "open_samples": 1, "close_samples": 1, "memory_full_pct": 60}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True,"last_contact":1000,"capacity":1}])
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1"], "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10), 1000)}}}
+        samples = [(1030, self.metrics(89,31)), (1060, self.metrics(114,36)), (1090, self.metrics(139,41))]
+        with patch.object(controller, "fetch_text") as fetch, patch.object(controller.time, "time") as clock, patch.object(controller, "log_event"):
+            for now, metrics in samples:
+                fetch.return_value = metrics; clock.return_value = now
+                client.remote_agents[0]["last_contact"] = now
+                controller.run_cycle_v2(config, state, client, apply=True)
+                if now < 1090: self.assertEqual(client.changed, [])
+        self.assertEqual(client.changed, [(1,False)])
+
+    def test_sample_expiring_while_other_nodes_are_scraped_quarantines(self):
+        config = self.config(); config["nodes"].append(config_v2()["nodes"][1])
+        state = {"nodes":{"builder-a":{"cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10), 1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":False},
+                             {"id":2,"name":"remote-agent","no_schedule":False}])
+        now = [1030]
+        def fetch(url):
+            if "builder-b" in url: now[0] = 1130
+            return self.metrics(85,35)
+        with patch.object(controller, "fetch_text", side_effect=fetch), patch.object(controller.time, "time", side_effect=lambda: now[0]), patch.object(controller, "log_event"):
+            controller.run_cycle_v2(config, state, client, apply=True)
+        self.assertIn((1,True), client.changed)
+
+    def test_expiry_between_restore_patches_recloses_first_agent(self):
+        config = self.config(); config["resume_samples"] = 1
+        config["nodes"][0]["agent_names"] = ["builder-agent", "builder-agent-2"]
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1","2"],
+                 "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10),1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True},
+                             {"id":2,"name":"builder-agent-2","no_schedule":True}])
+        now = [1030]; set_schedule = client.set_no_schedule
+        def delayed(agent, value):
+            set_schedule(agent,value)
+            if not value: now[0] = 1130
+        client.set_no_schedule = delayed
+        with patch.object(controller,"fetch_text",return_value=self.metrics(105,15)), patch.object(controller.time,"time",side_effect=lambda:now[0]), patch.object(controller,"log_event"):
+            controller.run_cycle_v2(config,state,client,apply=True)
+        self.assertEqual(client.changed, [(1,False),(1,True)])
+        self.assertEqual(set(state["nodes"]["builder-a"]["managed_agent_ids"]), {"1","2"})
+        self.assertTrue(state["nodes"]["builder-a"]["full_drain_pending_recovery"])
+
+    def test_expiry_before_graded_open_keeps_closed(self):
+        config = self.config(); config["resume_samples"] = 1
+        config["nodes"][0]["graded"] = {"min_open_slots":1,"open_samples":1,"close_samples":1,"memory_full_pct":60}
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1"],
+                 "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10),1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True,"last_contact":1030,"capacity":1}])
+        now = [1030]; graded_step = controller.graded_step
+        def delayed(*args,**kwargs):
+            result = graded_step(*args,**kwargs); now[0] = 1130; return result
+        with patch.object(controller,"fetch_text",return_value=self.metrics(105,15)), patch.object(controller.time,"time",side_effect=lambda:now[0]), patch.object(controller,"graded_step",side_effect=delayed), patch.object(controller,"log_event"):
+            controller.run_cycle_v2(config,state,client,apply=True)
+        self.assertEqual(client.changed, [])
+        self.assertTrue(state["nodes"]["builder-a"]["full_drain_pending_recovery"])
+
+    def test_ambiguous_open_response_is_closed_again(self):
+        config = self.config(); config["resume_samples"] = 1
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1"],
+                 "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10),1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True}])
+        set_schedule = client.set_no_schedule
+        def ambiguous(agent,value):
+            set_schedule(agent,value)
+            if not value: raise OSError("response lost after application")
+        client.set_no_schedule = ambiguous
+        with patch.object(controller,"fetch_text",return_value=self.metrics(105,15)), patch.object(controller.time,"time",return_value=1030), patch.object(controller,"log_event"):
+            controller.run_cycle_v2(config,state,client,apply=True)
+        self.assertEqual(client.changed,[(1,False),(1,True)])
+        self.assertEqual(state["nodes"]["builder-a"]["managed_agent_ids"],["1"])
+
+    def test_graded_open_response_delayed_past_expiry_is_closed_again(self):
+        config = self.config(); config["resume_samples"] = 1
+        config["nodes"][0]["graded"] = {"min_open_slots":1,"open_samples":1,"close_samples":1,"memory_full_pct":60}
+        state = {"nodes":{"builder-a":{"managed_agent_ids":["1"],
+                 "cpu_guard_baseline":controller.cpu_guard_sample(self.metrics(80,10),1000)}}}
+        client = FakeClient([{"id":1,"name":"builder-agent","no_schedule":True,"last_contact":1030,"capacity":1}])
+        now=[1030]; set_schedule=client.set_no_schedule
+        def delayed(agent,value):
+            set_schedule(agent,value)
+            if not value: now[0]=1130
+        client.set_no_schedule=delayed
+        with patch.object(controller,"fetch_text",return_value=self.metrics(105,15)), patch.object(controller.time,"time",side_effect=lambda:now[0]), patch.object(controller,"log_event"):
+            controller.run_cycle_v2(config,state,client,apply=True)
+        self.assertEqual(client.changed,[(1,False),(1,True)])
+        self.assertTrue(state["nodes"]["builder-a"]["full_drain_pending_recovery"])
+
+
 class HTTPClientPatchBody(unittest.TestCase):
     def test_drain_patch_keeps_name_and_custom_labels(self):
         client = controller.HTTPClient("http://woodpecker.invalid", "token")

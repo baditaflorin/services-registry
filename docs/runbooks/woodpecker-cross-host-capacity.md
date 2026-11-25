@@ -392,6 +392,47 @@ live headroom, and opens or closes ONE agent per step to match it.
 - A node without `graded` behaves exactly as before. Log events: `node_graded`,
   `agent_graded_closed`, `agent_graded_opened`.
 
+### Optional independent CPU busy guard
+
+For version 2 nodes, `cpu_busy` can be configured alongside `load_thresholds`.
+It is disabled unless explicitly set; no thresholds are activated by this code.
+This example illustrates the schema, not recommended fleet settings:
+
+```json
+"cpu_busy": {"stop_pct": 80, "resume_pct": 60, "max_sample_age_seconds": 90}
+```
+
+Busy is the increase in CPU time excluding both idle and iowait, divided by the
+increase in total non-guest CPU time, summed across cores between two exporter
+scrapes. It measures the whole observed node, not just CI, and is not the same
+as load per core or PSI. `metrics_url` must address the observed node's direct
+node-exporter endpoint, not a caching relay: the wall-clock timestamp records
+when the controller received the scrape, not when a relay obtained the data.
+It measures the exporter host's CPU only: for example, the current 0pipe-build
+exporter runs in VM 100, so this is guest CPU, not CPU of the 0pipe hypervisor.
+Other VMs and hypervisor workloads can consume physical CPU independently;
+this guest signal alone cannot protect the entire physical server.
+Counters must be complete, nonnegative and monotonic,
+with unchanged cores/modes and a plausible rate. The interval must be between
+one second and `max_sample_age_seconds`; the max age must cover the controller
+interval. The first sample, stale/invalid telemetry or a counter reset causes
+fail-closed quarantine; a valid sample becomes the next baseline. Existing
+workflows continue running. Recovery requires all configured signals to stay
+healthy for the full configured recovery window. On graded nodes CPU busy also
+limits the share, interpolated between resume and stop; it can reduce capacity
+to zero even when load alone looks healthy. Sustained CPU stop closes all
+agents after `stop_samples`, overriding the last-node availability floor.
+Manual holds are preserved. Enabling this may extend CI queues or quarantine a
+node after controller startup or telemetry problems; monitor first and choose
+thresholds from actual workload data. Separate controllers, Buildx and
+fleet-job do not share an atomic resource reservation with this controller.
+The sample is checked immediately before and after each opening response; a
+late or ambiguous response triggers a best-effort re-close. A PATCH can still
+be applied after the pre-check and before the response returns, and the
+re-close can fail or be delayed. Neither instantaneous closure nor an atomic
+admission bound can be guaranteed over the API; an ambiguous delayed open may
+even arrive after the attempted re-close.
+
 ### Deployed with graded admission (2026-10-26)
 
 `ci.0exec.com` now runs the controller with `graded` blocks on two hosts; their extra
