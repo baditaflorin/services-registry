@@ -6,7 +6,9 @@
 # the directory this host's node_exporter reads textfiles from (/var/lib/prometheus/node-exporter on
 # the pilot host). The metrics feed templates/prometheus-ci-cache-prune.rules.yml.
 # A cache still over its cap after the prune makes prune.sh exit 3, so this unit shows as failed.
-# Safe while pipelines run (see scripts/ci-cache/prune.sh); it deletes only inside --root.
+# WARNING: the script does not coordinate with build jobs or concurrent invocations.
+# Age and cache-miss assumptions do not prove that a module is unused. Do not increase
+# frequency or start additional runs until all consumers share an enforced admission barrier.
 [Unit]
 Description=Keep the shared Woodpecker CI caches under their disk caps
 

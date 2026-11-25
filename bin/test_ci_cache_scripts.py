@@ -79,6 +79,24 @@ class PruneTests(unittest.TestCase):
         self.assertIn("dry run", result.stdout)
         self.assertTrue((self.root / "npm" / "a").exists() and (self.root / "npm" / "b").exists())
 
+    def test_same_day_entries_are_trimmed_by_size(self):
+        entry = self.root / "go-build" / "aa" / "entry"
+        put(entry, 1500)
+        stamp = time.time() - 3600
+        os.utime(entry, (stamp, stamp))
+        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "1")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertFalse(entry.exists())
+        self.assertIn("low-water", result.stdout)
+
+    def test_temporary_and_recent_entries_are_not_pruned(self):
+        for name in ("tmp-cache", "entry.partial", "fresh"):
+            put(self.root / "go-build" / name, 600)
+        result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-build-max-mb", "1")
+        self.assertEqual(result.returncode, 3, result.stdout + result.stderr)
+        for name in ("tmp-cache", "entry.partial", "fresh"):
+            self.assertTrue((self.root / "go-build" / name).exists())
+
     def test_modcache_prunes_old_read_only_modules_but_keeps_recent_ones(self):
         old_mod = self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0"
         new_mod = self.root / "go-mod" / "github.com" / "x" / "z@v2.0.0"
@@ -100,6 +118,18 @@ class PruneTests(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 3, "the cap cannot be reached, and the run says so: " + result.stderr)
         self.assertTrue(recent.exists(), "in-use-looking modules are never pruned even over the cap")
+
+    def test_old_module_can_be_removed_even_while_a_reader_has_it_open(self):
+        # This documents a known concurrency hazard, not a safety guarantee.
+        module = self.root / "go-mod" / "github.com" / "x" / "y@v1.0.0"
+        source = module / "big.go"
+        put(source, 1500, age_days=60)
+        os.utime(module, (time.time() - 60 * DAY,) * 2)
+        with source.open("rb") as reader:
+            result = bash(SCRIPTS / "prune.sh", "--root", str(self.root), "--go-mod-max-mb", "1")
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertFalse(source.exists(), "a live reader is not an exclusion barrier")
+            self.assertEqual(reader.read(1), b"x")
 
     def test_a_symlinked_cache_directory_is_never_followed(self):
         outside = self.tmp / "outside"

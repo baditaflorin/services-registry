@@ -135,6 +135,32 @@ name; `docker inspect` shows it as the label `com.docker.compose.project`).
      --first <first pipeline number> --last <last> --pilot-agent-id <id> --cutover <cutover UTC>
    ```
 
+## Current safety and monitoring limitations (2026-11-25)
+
+The script on 0pipe-build was copied into the repository byte-for-byte after its
+deployed version was found to differ from `main` (SHA-256
+`cb5ee642cff9aa2882c53b0066dbde9a33e966d9ba9c9594369499db33e37ea8`).
+This records existing behavior; it does not deploy the script or establish that
+other hosts run the same version. The live unit still runs once per day.
+
+**Pruning can overlap builds.** No shared admission barrier currently prevents
+Woodpecker, fleet-job, Buildx or other clients from using a cache during a prune.
+The Go module cache is pruned by modification age, which does not establish that
+a module is unused. The build and npm cache file checks likewise do not lock out
+readers. The script has no lock against other invocations. A one-time process
+check or a lock held only by the prune process does not close these races. Do not
+add runs or increase their frequency until all cache consumers and the cleanup
+share an enforced exclusion protocol and it has been tested end to end. This
+note does not change the currently running schedule.
+
+The `ci_cache_prune_size_bytes` and `ci_cache_prune_over_cap` series report the
+sizes *after* the last completed run; between runs they do not measure the growing
+cache or show an intermediate cap breach. Monitor root filesystem free space
+independently, including the daily low point. On 2026-11-25 0pipe-build's last
+seven days had a minimum of about 127 GiB available; after its 03:17 UTC prune
+completed at 03:41 UTC, it had about 263 GiB available. A linear forecast across
+the daily cleanup cycle is not a guaranteed exhaustion date.
+
 ## What the first run on a real host showed
 
 OBSERVED on the pilot host, 2026-10-17 (one run each, host busy):
@@ -388,7 +414,7 @@ second host.
 | 4 | No memory regression | **Not measured.** |
 | 5 | Reversible | **Not exercised** (the rollback was never run). |
 
-Why it failed: `prune.sh` deletes by file age down to files used in the last day, and stops there so it never touches a cache a running job is using. It logged `still N MB after deleting everything older than 0 days; cap M MB` and exited normally, so nothing alerted. The files used in one working day come to 14 to 27 GB, so a cap of 8 GB could not be reached by age alone. The caps were also never read from the env file that this runbook and the template named: `prune.sh` takes them as flags, so editing the env file would have changed nothing. Fixed here: the `go-build` default is now 28 GB, the template says where the caps really are, and the host got the same value through a drop-in. Built here so that it cannot go quiet again: `prune.sh` now exits 3 with an `ALERT` line when a cache is still over its cap after deleting everything it may (a dry run never does), and `--prom FILE` writes a node_exporter textfile (size, cap and over-cap flag per cache, and the time of the run). `templates/prometheus-ci-cache-prune.rules.yml` turns that into `CiCacheOverCap` and `CiCachePruneStale` (no finished run for 36 hours). Tests run the real script on throw-away directories; `promtool` was not available when this was written, so the two expressions were read, not run by Prometheus. Switched on 2026-11-06 (below). Read the journal with:
+Why it failed: the historical `prune.sh` deleted by modification age. Modification age did not establish whether a running job was using a file. It logged `still N MB after deleting everything older than 0 days; cap M MB` and exited normally, so nothing alerted. The files used in one working day come to 14 to 27 GB, so a cap of 8 GB could not be reached by age alone. The caps were also never read from the env file that this runbook and the template named: `prune.sh` takes them as flags, so editing the env file would have changed nothing. Fixed here: the `go-build` default is now 28 GB, the template says where the caps really are, and the host got the same value through a drop-in. Built here so that it cannot go quiet again: `prune.sh` now exits 3 with an `ALERT` line when a cache is still over its cap after deleting everything it may (a dry run never does), and `--prom FILE` writes a node_exporter textfile (size, cap and over-cap flag per cache, and the time of the run). `templates/prometheus-ci-cache-prune.rules.yml` turns that into `CiCacheOverCap` and `CiCachePruneStale` (no finished run for 36 hours). Tests run the real script on throw-away directories; `promtool` was not available when this was written, so the two expressions were read, not run by Prometheus. Switched on 2026-11-06 (below). Read the journal with:
 
 ```sh
 journalctl -u woodpecker-ci-cache-prune.service --since -14d --no-pager -o short-iso \
@@ -417,7 +443,7 @@ The existing `GOFLAGS=-p=2` and the agent's slot count stay as they are.
 
 Cache sizes were PREDICTED to be a few GB per Go version; measured on 10-21 to 11-01, one working
 day of go-build is 14 to 27 GB. The caps (`prune.sh` flags, not the env file)
-are the safety net and `prune.sh` enforces them without stopping running jobs.
+are targets enforced by `prune.sh` when it runs; the script does not coordinate with running jobs (see the current safety note above).
 
 ## Rollback
 
