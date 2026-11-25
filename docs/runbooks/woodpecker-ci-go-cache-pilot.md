@@ -138,11 +138,17 @@ name; `docker inspect` shows it as the label `com.docker.compose.project`).
 
 ## Current safety and monitoring limitations (2026-11-25)
 
-The script on 0pipe-build was copied into the repository byte-for-byte after its
-deployed version was found to differ from `main` (SHA-256
+The script on 0pipe-build was copied byte-for-byte to the separate reference
+`scripts/ci-cache/variants/0pipe-prune.sh` after it was found to differ from the
+generic `scripts/ci-cache/prune.sh` (SHA-256
 `cb5ee642cff9aa2882c53b0066dbde9a33e966d9ba9c9594369499db33e37ea8`).
-This records existing behavior; it does not deploy the script or establish that
-other hosts run the same version. The live unit still runs once per day.
+The generic version is used by the existing service template and matches the
+observed 0own-build-worker script (SHA-256 `9150b2335c7bbc558f4f3961658a4497154f999f723561264c452eb517a40a22`).
+On 2026-11-25, the deployed scripts on infer-builder-ci and docker-build-lv3
+matched the 0pipe variant's SHA-256 as well; their unit flags differ.
+This reference does not deploy or select the 0pipe variant anywhere, and does
+not establish which version unexamined hosts run. The live 0pipe unit still runs
+once per day.
 
 **Pruning can overlap builds.** No shared admission barrier currently prevents
 Woodpecker, fleet-job, Buildx or other clients from using a cache during a prune.

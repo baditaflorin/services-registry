@@ -4,27 +4,23 @@
 #   prune.sh --root /var/cache/woodpecker-ci [--go-build-max-mb N]
 #            [--go-mod-max-mb N] [--npm-max-mb N] [--mod-min-age-days D] [--prom FILE] [--dry-run]
 #
-# Safe to run while pipelines run. A missing Go build-cache or npm entry is just a
-# cache miss. This script never touches Docker images or volumes, and it never
-# deletes in-progress temp files (tmp*, *.tmp, *.temp, *.partial, or a file whose
-# mtime is under 30 seconds). The Go module cache is different (a build reads
-# extracted module directories), so it is only pruned by age, never below
-# --mod-min-age-days (default 14).
+# Safe to run while pipelines run: it only deletes whole files or whole module
+# directories that have not been touched for a while, oldest first, and a missing
+# cache entry is just a cache miss for the Go build cache and for npm. The Go
+# module cache is different (a build reads extracted module directories), so it
+# is only pruned by age, never below --mod-min-age-days (default 14).
 #
-# go-build and npm, when over their cap, are trimmed by size: oldest first by
-# atime, then mtime, down to a low-water mark of 80% of the cap, so the next
-# day's writes have some room. A cache already at or under its cap is left alone
-# even if it is above that 80% mark. Age-only deletion cannot enforce the cap
-# when every file is from the last day.
+# Go itself already trims build cache entries unused for 5 days; this script is
+# the hard cap on top of that, and the only pruning for the module and npm caches.
 #
-# A cache that is still over its cap after everything the script may delete is a
-# failure, not a quiet log line: the script prints ALERT on stderr and exits 3.
-# --prom FILE writes a node_exporter textfile (replaced atomically, never in a
-# dry run) with the size, the cap and an over-cap flag of each cache and the
-# time of the run, for templates/prometheus-ci-cache-prune.rules.yml.
+# A cache that is still over its cap after everything the script may delete is gone (the
+# files of the last day, modules younger than --mod-min-age-days) is a failure, not a quiet
+# log line: the script prints ALERT on stderr and exits 3. --prom FILE writes a node_exporter
+# textfile (replaced atomically, never in a dry run) with the size, the cap and an over-cap
+# flag of each cache and the time of the run, for templates/prometheus-ci-cache-prune.rules.yml.
 #
-# Portable on GNU/Linux (find -printf, du -sk). Exit status: 0 ok, 2 usage or
-# refused root, 3 a cache is still over its cap.
+# Portable on purpose (find -mtime, du -sk, no GNU-only flags) so it can be tested
+# on a laptop. Exit status: 0 ok, 2 usage or refused root, 3 a cache is still over its cap.
 set -euo pipefail
 
 ROOT=""
@@ -35,10 +31,6 @@ GO_BUILD_MAX_MB=28672
 GO_MOD_MAX_MB=6144
 NPM_MAX_MB=3072
 MOD_MIN_AGE_DAYS=14
-# After a cap breach, delete until this fraction of the cap remains (integer percent).
-LOW_WATER_PCT=80
-# Skip files written this recently: they may still be mid-rename.
-FRESH_SECONDS=30
 DRY_RUN=0
 
 die() { echo "prune.sh: $*" >&2; exit 2; }
@@ -53,7 +45,7 @@ while [[ $# -gt 0 ]]; do
     --mod-min-age-days) MOD_MIN_AGE_DAYS="${2:-}"; shift 2 ;;
     --prom) PROM="${2:-}"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
-    -h|--help) sed -n '2,27p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,23p' "$0"; exit 0 ;;
     *) die "unknown argument: $1" ;;
   esac
 done
@@ -71,105 +63,39 @@ for v in "${GO_BUILD_MAX_MB}" "${GO_MOD_MAX_MB}" "${NPM_MAX_MB}" "${MOD_MIN_AGE_
   [[ "${v}" =~ ^[0-9]+$ ]] || die "limits and ages must be non-negative integers (got '${v}')"
 done
 
-size_kb() { # size_kb <dir> -> kilobytes as reported by du, 0 if missing
+size_mb() { # size_mb <dir> -> megabytes rounded UP (so "over the cap" never hides a partial MB), 0 if missing
   [[ -d "$1" ]] || { echo 0; return; }
   local kb
   kb="$(du -sk "$1" 2>/dev/null | awk '{print $1}')"
-  echo "${kb:-0}"
+  echo $(( (${kb:-0} + 1023) / 1024 ))
 }
 
-size_mb() { # size_mb <dir> -> megabytes rounded UP (so "over the cap" never hides a partial MB), 0 if missing
-  local kb
-  kb="$(size_kb "$1")"
-  echo $(( (kb + 1023) / 1024 ))
-}
-
-# List regular cache files oldest-first (atime, then mtime). Skip temp/in-progress
-# names and files whose mtime is under FRESH_SECONDS. Never follows symlinks, never
-# crosses a filesystem boundary. Output: "<atime> <mtime> <kb> <path>" per line.
-list_prunable_files() {
-  local dir="$1" cutoff="$2"
-  # -P: do not follow symlinks. -type f: regular files only (not a planted symlink).
-  find -P "${dir}" -xdev -type f \
-    ! -name 'tmp*' ! -name '*.tmp' ! -name '*.temp' ! -name '*.partial' \
-    ! -name 'trim.txt' ! -name 'README' \
-    -printf '%A@\t%T@\t%k\t%p\n' 2>/dev/null \
-  | awk -F '\t' -v cutoff="${cutoff}" 'NF>=4 && $2+0<=cutoff {print}' \
-  | sort -n -k1,1 -k2,2
-}
-
-# trim_to_size <dir> <max_mb>: if the directory is over the cap, delete the oldest
-# eligible files until it is at or under 80% of the cap (the low-water mark). A
-# directory already at or under the cap is left alone.
-trim_to_size() {
-  local dir="$1" max_mb="$2"
-  local cap_kb target_kb target_mb current_kb current now cutoff pass
+# trim_by_age <dir> <max_mb>: delete files older than 30, 14, 7, 3, 1, then 0 days,
+# stopping as soon as the directory is under the cap. A missing file is a cache miss.
+trim_by_age() {
+  local dir="$1" max_mb="$2" days current
   [[ -d "${dir}" ]] || return 0
   # The tree is writable by containers: never follow a symlinked cache directory.
   if [[ -L "${dir}" ]]; then log "refusing symlinked ${dir}"; return 0; fi
-  cap_kb=$(( max_mb * 1024 ))
-  target_kb=$(( max_mb * 1024 * LOW_WATER_PCT / 100 ))
-  target_mb=$(( max_mb * LOW_WATER_PCT / 100 ))
-  current_kb="$(size_kb "${dir}")"
   current="$(size_mb "${dir}")"
-  if (( current_kb <= cap_kb )); then
+  if (( current <= max_mb )); then
     log "${dir}: ${current} MB <= ${max_mb} MB, nothing to do"
     return 0
   fi
-
-  now="$(date +%s)"
-  cutoff=$(( now - FRESH_SECONDS ))
-
-  if (( DRY_RUN )); then
-    local n=0 would_kb=0 atime mtime k path remain
-    remain="${current_kb}"
-    while IFS=$'\t' read -r atime mtime k path; do
-      [[ -n "${path}" ]] || continue
-      (( remain <= target_kb )) && break
-      n=$(( n + 1 ))
-      would_kb=$(( would_kb + k ))
-      remain=$(( remain - k ))
-    done < <(list_prunable_files "${dir}" "${cutoff}")
-    log "${dir}: ${current} MB > ${max_mb} MB; would delete ${n} file(s) (~${would_kb} KB) down to the ${target_mb} MB low-water mark (80% of cap) (dry run)"
-    return 0
-  fi
-
-  # A few passes: concurrent writers and 1K-block vs du differences can leave a
-  # remainder after the first estimated pass. Stop as soon as we are at or under
-  # the low-water mark, or when a pass deletes nothing more.
-  for pass in 1 2 3; do
-    current_kb="$(size_kb "${dir}")"
-    current="$(size_mb "${dir}")"
-    if (( current_kb <= target_kb )); then
-      break
+  for days in 30 14 7 3 1 0; do
+    if (( DRY_RUN )); then
+      local n
+      n="$(find "${dir}" -type f -mtime +"${days}" 2>/dev/null | wc -l | tr -d ' ')"
+      log "${dir}: ${current} MB > ${max_mb} MB; would delete ${n} file(s) older than ${days} day(s) (dry run)"
+      continue
     fi
-    now="$(date +%s)"
-    cutoff=$(( now - FRESH_SECONDS ))
-    local deleted=0 deleted_kb=0 remain atime mtime k path
-    remain="${current_kb}"
-    while IFS=$'\t' read -r atime mtime k path; do
-      [[ -n "${path}" ]] || continue
-      (( remain <= target_kb )) && break
-      # A container could have replaced the file with a symlink since we listed it.
-      [[ -f "${path}" && ! -L "${path}" ]] || continue
-      rm -f -- "${path}" || true
-      deleted=$(( deleted + 1 ))
-      deleted_kb=$(( deleted_kb + k ))
-      remain=$(( remain - k ))
-    done < <(list_prunable_files "${dir}" "${cutoff}")
-    find -P "${dir}" -xdev -mindepth 1 -depth -type d -empty -delete 2>/dev/null || true
+    find "${dir}" -type f -mtime +"${days}" -delete 2>/dev/null || true
+    find "${dir}" -mindepth 1 -type d -empty -delete 2>/dev/null || true
     current="$(size_mb "${dir}")"
-    log "${dir}: trimmed by size (oldest first, pass ${pass}): deleted ${deleted} file(s) (~${deleted_kb} KB); now ${current} MB (cap ${max_mb} MB, low-water ${target_mb} MB)"
-    if (( deleted == 0 )); then
-      break
-    fi
+    log "${dir}: deleted files older than ${days} day(s); now ${current} MB (cap ${max_mb} MB)"
+    if (( current <= max_mb )); then return 0; fi
   done
-
-  current="$(size_mb "${dir}")"
-  current_kb="$(size_kb "${dir}")"
-  if (( current_kb > cap_kb )); then
-    log "${dir}: still ${current} MB after size trim (oldest first, skipped temp and files newer than ${FRESH_SECONDS}s); cap ${max_mb} MB"
-  fi
+  (( DRY_RUN )) || log "${dir}: still ${current} MB after deleting everything older than 0 days; cap ${max_mb} MB"
 }
 
 # The module cache is read-only on disk (Go makes it so) and a running build reads
@@ -207,9 +133,9 @@ prune_modcache() {
   log "${dir}: pruned entries older than ${MOD_MIN_AGE_DAYS} day(s); now ${current} MB (cap ${max_mb} MB)"
 }
 
-trim_to_size "${ROOT}/go-build" "${GO_BUILD_MAX_MB}"
+trim_by_age "${ROOT}/go-build" "${GO_BUILD_MAX_MB}"
 prune_modcache "${ROOT}/go-mod" "${GO_MOD_MAX_MB}"
-trim_to_size "${ROOT}/npm" "${NPM_MAX_MB}"
+trim_by_age "${ROOT}/npm" "${NPM_MAX_MB}"
 
 go_build_mb="$(size_mb "${ROOT}/go-build")"
 go_mod_mb="$(size_mb "${ROOT}/go-mod")"
