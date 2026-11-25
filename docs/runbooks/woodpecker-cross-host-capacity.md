@@ -408,6 +408,10 @@ scrapes. It measures the whole observed node, not just CI, and is not the same
 as load per core or PSI. `metrics_url` must address the observed node's direct
 node-exporter endpoint, not a caching relay: the wall-clock timestamp records
 when the controller received the scrape, not when a relay obtained the data.
+It measures the exporter host's CPU only: for example, the current 0pipe-build
+exporter runs in VM 100, so this is guest CPU, not CPU of the 0pipe hypervisor.
+Other VMs and hypervisor workloads can consume physical CPU independently;
+this guest signal alone cannot protect the entire physical server.
 Counters must be complete, nonnegative and monotonic,
 with unchanged cores/modes and a plausible rate. The interval must be between
 one second and `max_sample_age_seconds`; the max age must cover the controller
