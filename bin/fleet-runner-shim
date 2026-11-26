@@ -18,6 +18,8 @@
 # Verify:
 #
 #   fleet-runner --help          # should print the remote binary's help
+#   FLEET_STANDBY_HOST=<ssh-alias> fleet-runner --standby-status
+#                                # inspect the explicitly chosen standby only
 #
 # Setting up a new Builder LXC 108 (after cloning or rebuilding):
 #
@@ -34,6 +36,8 @@
 #   FLEET_BASTION      default: root@0docker.com
 #   FLEET_LXC          default: 108
 #   FLEET_REMOTE_BIN   default: /usr/local/bin/fleet-runner
+#   FLEET_STANDBY_HOST SSH alias for the explicitly requested standby status.
+#                      No standby is selected automatically.
 #   FLEET_CALLER_HOST / FLEET_CALLER_USER / FLEET_CALLER_AGENT /
 #   FLEET_CALLER_SESSION
 #                      caller identity stamped on the remote audit log;
@@ -82,6 +86,28 @@
 #     Ctrl-C closes the channel; the remote command may keep running.
 
 set -euo pipefail
+
+# Bound SSH connection setup and detect a dead established connection without
+# changing SSH multiplexing. Long-running healthy commands are not time-limited.
+ssh_connection_opts=(-o ConnectTimeout=10 -o ConnectionAttempts=1 -o ServerAliveInterval=15 -o ServerAliveCountMax=3)
+ssh_opts=("${ssh_connection_opts[@]}")
+
+# This read-only inspection does not take a leadership lease, promote the
+# standby, forward credentials or execute a fleet-runner verb. Require an
+# explicit target; the operator's SSH configuration owns its identity/pinning.
+if [ "${1:-}" = "--standby-status" ]; then
+  if [ "$#" -ne 1 ]; then
+    printf '%s\n' 'usage: FLEET_STANDBY_HOST=<ssh-alias> fleet-runner --standby-status' >&2
+    exit 2
+  fi
+  standby_host=${FLEET_STANDBY_HOST:-}
+  if [ -z "$standby_host" ] || [[ "$standby_host" == -* ]]; then
+    printf '%s\n' 'fleet-runner (shim): set FLEET_STANDBY_HOST to a trusted SSH alias.' >&2
+    exit 2
+  fi
+  exec ssh "${ssh_opts[@]}" -o BatchMode=yes "$standby_host" \
+    'printf "role: "; if test -r /etc/fleet-builder/ROLE; then role=$(cat /etc/fleet-builder/ROLE); case "$role" in standby|leader) echo "$role";; *) echo unknown;; esac; else echo unavailable; fi; if test -r /etc/fleet-builder/BUILD; then awk -F= '\''($1 == "go_fleet_runner" || $1 == "fleet-state") && $2 ~ /^[0-9a-f]+$/ {print} $1 == "built" && $2 ~ /^[0-9TZ:-]+$/ {print}'\'' /etc/fleet-builder/BUILD; else echo "build record: unavailable"; fi; if test -x /usr/local/bin/fleet-runner-standby; then echo "standby binary: present"; else echo "standby binary: unavailable"; fi; for unit in fleet-runner-drift-heal.timer repo-converge.timer; do state=$(systemctl is-enabled "$unit" 2>/dev/null) || state=${state:-unavailable}; printf "%s: %s\n" "$unit" "$state"; done'
+fi
 
 BASTION="${FLEET_BASTION:-root@0docker.com}"
 LXC="${FLEET_LXC:-108}"
@@ -133,7 +159,6 @@ warn() { printf 'fleet-runner (shim): %s\n' "$*" >&2; }
 # macOS /bin/bash is 3.2: under `set -u` an EMPTY array expanded as "${a[@]}" is
 # "unbound variable", which broke every non-TTY call (agents, pipes). The
 # ${a[@]+"${a[@]}"} form expands to nothing when empty and is safe on 3.2 and 5.x.
-ssh_opts=()
 interactive=0
 if [ -t 0 ] && [ -t 1 ]; then ssh_opts+=(-t); interactive=1; fi
 
@@ -162,7 +187,11 @@ if [ -n "$local_secrets" ]; then
     probe_rc=0
     probe_env=""
     [ -n "$remote_env" ] && probe_env="env$remote_env "
-    probe_out=$(ssh "$BASTION" "pct exec $LXC -- ${probe_env}$REMOTE_BIN env-check --json" </dev/null 2>/dev/null) || probe_rc=$?
+    probe_out=$(ssh "${ssh_connection_opts[@]}" "$BASTION" "pct exec $LXC -- ${probe_env}$REMOTE_BIN env-check --json" </dev/null 2>/dev/null) || probe_rc=$?
+    if [ "$probe_rc" -eq 255 ]; then
+      warn "SSH or the builder's env-check exited 255; no credentials were sent and the requested command was not run."
+      exit 255
+    fi
     compact=$(printf '%s' "$probe_out" | tr -d ' \n\t\r')
     case "$compact" in
       *'"env_from_stdin":true'*) probe_ok=1 ;;
