@@ -1,3 +1,7 @@
+## 2026-11-26
+
+- fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `hub-scrapetheworld-org` 0.29.8.
+
 ## 2026-11-25
 
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `site-capsule` 0.4.4.
