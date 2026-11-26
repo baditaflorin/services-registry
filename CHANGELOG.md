@@ -1,5 +1,6 @@
 ## 2026-11-26
 
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `hub-scrapetheworld-org` 0.29.12, `infrastructure-fetch-cache` 0.3.80.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `hub-scrapetheworld-org` 0.29.11.
 - fleet-version-pin-sync: 1 registry version pin(s) set to the version the service runs, which is also its repository main: `hub-scrapetheworld-org` 0.29.8.
 
