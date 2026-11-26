@@ -38,9 +38,11 @@ n=$(( $(cat "$STUB_LOG/count" 2>/dev/null || echo 0) + 1 ))
 echo "$n" > "$STUB_LOG/count"
 : > "$STUB_LOG/ssh.$n.argv"
 for a in "$@"; do printf '%s\n' "$a" >> "$STUB_LOG/ssh.$n.argv"; done
+[ "${STUB_FAIL_SSH:-0}" != 1 ] || exit 255
 last=""
 for a in "$@"; do last="$a"; done
 case "$last" in
+  'printf "role: "'*) echo 'role: standby'; echo 'standby binary: present'; exit 0 ;;
   "pct exec "*" -- "*) rest=${last#*" -- "} ;;
   *) echo "stub ssh: unexpected remote command" >&2; exit 97 ;;
 esac
@@ -188,6 +190,44 @@ class ShimNonTTY(ShimCase):
             self.assertIn("FLEET_CALLER_HOST=laptop-test", argv)
             self.assertIn("deploy", self.bin_file(1, "argv"))
         self.each_bash(go)
+
+    def test_bounded_ssh_applies_to_probe_and_command(self):
+        p = self.run_shim(GITHUB_TOKEN=TOKEN1)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        self.assertEqual(self.calls(), 2)
+        for n in (1, 2):
+            argv = self.ssh_argv(n)
+            self.assertIn('ConnectTimeout=10', argv)
+            self.assertIn('ConnectionAttempts=1', argv)
+            self.assertIn('ServerAliveInterval=15', argv)
+            self.assertIn('ServerAliveCountMax=3', argv)
+        self.assert_no_secret_anywhere_on_a_command_line(p, TOKEN1)
+
+    def test_connection_failure_does_not_retry_or_send_credentials(self):
+        p = self.run_shim(GITHUB_TOKEN=TOKEN1, STUB_FAIL_SSH='1')
+        self.assertEqual(p.returncode, 255)
+        self.assertEqual(self.calls(), 1)
+        self.assertIn('requested command was not run', p.stderr)
+        self.assert_no_secret_anywhere_on_a_command_line(p, TOKEN1)
+
+    def test_standby_status_is_explicit_and_sends_no_credentials(self):
+        p = self.run_shim(args=('--standby-status',), FLEET_STANDBY_HOST='standby-test', GITHUB_TOKEN=TOKEN1)
+        self.assertEqual(p.returncode, 0, p.stderr)
+        self.assertEqual(self.calls(), 1)
+        self.assertIn('role: standby', p.stdout)
+        self.assertIn('BatchMode=yes', self.ssh_argv(1))
+        self.assertNotIn('env-check', self.ssh_argv(1))
+        self.assertNotIn('pct exec', self.ssh_argv(1))
+        self.assert_no_secret_anywhere_on_a_command_line(p, TOKEN1)
+
+    def test_standby_status_requires_explicit_host_and_no_extra_args(self):
+        for args, env in [(('--standby-status',), {}),
+                          (('--standby-status',), {'FLEET_STANDBY_HOST': '-oProxyCommand=bad'}),
+                          (('--standby-status', 'deploy'), {'FLEET_STANDBY_HOST': 'standby-test'})]:
+            with self.subTest(args=args, env=env):
+                p = self.run_shim(args=args, **env)
+                self.assertEqual(p.returncode, 2)
+                self.assertEqual(self.calls(), 0)
 
     def test_secret_builder_lacks_goes_on_stdin_only(self):
         def go(b):
