@@ -11111,9 +11111,11 @@
     "auth_help": "Use the X-API-Key header with a service-scoped broker key; credentials in URLs are rejected."
   },
   "fleet-activity": {
+    "mem_limit": "2560m",
     "env": {
       "GRAPH_ENABLED": "true",
-      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com"
+      "GRAPH_COLLECTOR_URL": "https://fleet-graph.0exec.com",
+      "RETENTION_DAYS": "30"
     },
     "auth": {
       "header": "X-API-Key",
