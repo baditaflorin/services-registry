@@ -30,7 +30,21 @@ def make_handler(token, seen):
             if self.headers.get("Authorization") != "Bearer " + token:
                 self._send(401, b"unauthorized")
                 return
-            seen.append(body)
+            seen.append(dict(body, _path=self.path))
+            if self.path == "/v1/logs/count":
+                if body.get("container_name") == "boom":
+                    out = {"status": "unavailable", "error": "OpenObserve query unavailable; this is not a zero count"}
+                else:
+                    out = {
+                        "status": "ok", "stream": "docker_logs", "bucket": body.get("bucket", "day"), "total": 30,
+                        "exact": "_" not in body.get("contains", ""),
+                        "buckets": [
+                            {"start": "2026-11-03T00:00:00Z", "end": "2026-11-04T00:00:00Z", "count": 10},
+                            {"start": "2026-11-04T00:00:00Z", "end": "2026-11-05T00:00:00Z", "count": 20},
+                        ],
+                    }
+                self._send(200, json.dumps(out).encode())
+                return
             if body.get("container_name") == "boom":
                 out = {"status": "unavailable", "error": "OpenObserve query unavailable; this is not an empty result"}
             else:
@@ -108,7 +122,8 @@ class RelayModeTest(unittest.TestCase):
         self.assertEqual(sent["contains"], "[ext-traits-backfill]")
         self.assertEqual(sent["limit"], 3)
         self.assertEqual(sent["order"], "desc")
-        self.assertEqual(set(sent), {"container_name", "host", "contains", "start", "end", "limit", "order"})
+        self.assertEqual(set(sent) - {"_path"}, {"container_name", "host", "contains", "start", "end", "limit", "order"})
+        self.assertEqual(sent["_path"], "/v1/logs")
 
     def test_logs_absolute_window_is_sent_oldest_first(self):
         self.seen.clear()
@@ -129,6 +144,56 @@ class RelayModeTest(unittest.TestCase):
         r = self.run_oo("logs", "c1", "--from", "last tuesday")
         self.assertEqual(r.returncode, 1)
         self.assertIn("invalid time", r.stderr)
+
+    def test_count_prints_one_line_per_bucket_and_a_total(self):
+        self.seen.clear()
+        r = self.run_oo("count", "go_capture_store-app-1", "--since", "2d", "--grep", "POST /v1/captures", "--host", "h1")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        lines = r.stdout.strip().splitlines()
+        self.assertEqual(len(lines), 3)
+        self.assertTrue(lines[0].startswith("2026-11-03T00:00:00Z") and lines[0].endswith("10"))
+        self.assertIn("total", lines[2])
+        self.assertIn("30", lines[2])
+        self.assertNotIn("upper bound", lines[2])
+        sent = self.seen[-1]
+        self.assertEqual(sent["_path"], "/v1/logs/count")
+        self.assertEqual(sent["container_name"], "go_capture_store-app-1")
+        self.assertEqual(sent["contains"], "POST /v1/captures")
+        self.assertEqual(sent["host"], "h1")
+        self.assertEqual(sent["bucket"], "day")
+        self.assertEqual(set(sent) - {"_path"}, {"container_name", "host", "contains", "start", "end", "bucket"})
+
+    def test_count_says_when_the_answer_is_an_upper_bound(self):
+        r = self.run_oo("count", "c1", "--grep", "client_ip", "--bucket", "hour", "--from", "2026-11-03T00:00:00Z", "--to", "2026-11-03T05:00:00Z")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("upper bound", r.stdout)
+        self.assertEqual(self.seen[-1]["bucket"], "hour")
+
+    def test_count_failure_is_an_error_not_zero(self):
+        r = self.run_oo("count", "boom")
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("unavailable", r.stderr)
+        self.assertNotIn("total", r.stdout)
+
+    def test_count_works_through_the_bastion_variant(self):
+        self.seen.clear()
+        remote_token = os.path.join(self.tmp, "remote-token")
+        with open(remote_token, "w") as f:
+            f.write(self.token + "\n")
+        env = {
+            "OO_RELAY_VIA": "bastion", "OO_RELAY_TOKEN_FILE": None, "OO_RELAY_SOCKS": "",
+            "OO_RELAY_REMOTE_TOKEN_FILE": remote_token,
+            "PATH": self.stubs + os.pathsep + os.environ["PATH"],
+        }
+        r = self.run_oo("count", "c1", "--since", "1d", **env)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(self.seen[-1]["_path"], "/v1/logs/count")
+
+    def test_count_needs_the_relay(self):
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("OO_", "OPENOBSERVE_"))}
+        r = subprocess.run(["bash", OO, "count", "c1"], capture_output=True, text=True, env=env, timeout=30)
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("relay", r.stderr)
 
     def test_grep_needs_a_container(self):
         r = self.run_oo("grep", "foo")

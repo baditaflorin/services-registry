@@ -66,6 +66,7 @@ func (r *relay) routes() http.Handler {
 	mux.Handle("POST /v1/fleet/logs", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, false) })))
 	mux.Handle("POST /v1/fleet/traces", r.authenticateTokens(r.fleetTokens, http.HandlerFunc(func(w http.ResponseWriter, q *http.Request) { r.fleetRead(w, q, true) })))
 	mux.Handle("POST /v1/logs", r.authenticate(http.HandlerFunc(r.logs)))
+	mux.Handle("POST /v1/logs/count", r.authenticate(http.HandlerFunc(r.logCount)))
 	return mux
 }
 
@@ -202,6 +203,15 @@ func shape(q builtQuery, in logRequest, hits []hit) logResponse {
 }
 
 func (r *relay) search(ctx context.Context, q builtQuery) ([]hit, error) {
+	body, err := r.searchRaw(ctx, q)
+	if err != nil {
+		return nil, err
+	}
+	return parseHits(body)
+}
+
+// searchRaw sends one fixed-shape query to OpenObserve and returns the raw body.
+func (r *relay) searchRaw(ctx context.Context, q builtQuery) ([]byte, error) {
 	payload, err := json.Marshal(map[string]any{
 		"query": map[string]any{
 			"sql":        q.SQL,
@@ -238,7 +248,7 @@ func (r *relay) search(ctx context.Context, q builtQuery) ([]hit, error) {
 	if len(body) > maxUpstreamBody {
 		return nil, errors.New("OpenObserve response too large")
 	}
-	return parseHits(body)
+	return body, nil
 }
 
 func parseHits(body []byte) ([]hit, error) {

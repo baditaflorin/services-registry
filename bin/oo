@@ -40,6 +40,13 @@
 #       than one docker host (rare, but container names aren't globally
 #       unique across the fleet).
 #
+#   oo count <container_name> [--since DURATION | --from TIME [--to TIME]] [--grep SUBSTRING] [--host HOST] [--bucket day|hour]
+#       RELAY MODE ONLY. How many log lines per UTC day (or hour, span at most
+#       24 h) a container wrote, optionally only those containing SUBSTRING.
+#       Numbers only, up to 7 days. Needs a relay that has POST /v1/logs/count
+#       (bin/oo-relay 0.3.0 or later). A substring with '%', '_' or '\' is matched
+#       loosely and the answer is then an upper bound ("exact": false is shown).
+#       Example: oo count go_capture_store-app-1 --since 7d --grep "POST /v1/captures"
 #   oo grep <pattern> [--since DURATION] [--container NAME] [--host HOST] [--limit N]
 #       Full-text search across EVERY container fleet-wide (not just one
 #       you already know the name of) — the actual "grep the fleet"
@@ -175,7 +182,7 @@
 #                           userspace tailscale proxy; set to "" to disable).
 #   The relay reads one container at a time over at most 7 days and returns at
 #   most 500 lines, so in relay mode: `logs`, `grep` (needs --container),
-#   `since-redeploy` and `context` work; every command that needs SQL or the
+#   `since-redeploy`, `context` and `count` work; every command that needs SQL or the
 #   whole fleet (query, errors, containers, hosts, summary, ...) says so and
 #   exits 2. A relay problem is an error, never "no matching lines".
 #   Example: oo logs domainscope-api --host 0docker_docker_prod \
@@ -342,7 +349,7 @@ sql_escape() {
 # Commands that can be answered from one container's lines, so the relay can serve them.
 relay_supports() {
   case "$1" in
-    logs|grep|since-redeploy|context|-h|--help|help|"") return 0 ;;
+    logs|grep|since-redeploy|context|count|-h|--help|help|"") return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -386,7 +393,8 @@ require_relay() {
 # relay_post — JSON payload on stdin, the relay's raw JSON answer on stdout.
 # Prints nothing (and returns non-zero) when the request could not be made.
 relay_post() {
-  local payload
+  local payload path="${1:-/v1/logs}"
+  [[ "$path" == /v1/logs || "$path" == /v1/logs/count ]] || { echo "relay_post: unsupported relay path" >&2; return 1; }
   payload=$(cat)
   case "$OO_RELAY_VIA" in
     direct)
@@ -398,7 +406,7 @@ relay_post() {
       fi
       curl -sS --connect-timeout 10 --max-time 60 \
         -K <(printf 'header = "Authorization: Bearer %s"\n' "$token") \
-        -X POST "${OO_RELAY_URL%/}/v1/logs" -H 'Content-Type: application/json' \
+        -X POST "${OO_RELAY_URL%/}${path}" -H 'Content-Type: application/json' \
         --data-binary "$payload"
       ;;
     bastion)
@@ -408,7 +416,7 @@ relay_post() {
       script='set -euo pipefail
 tok=$(tr -d "\r\n" < '"$OO_RELAY_REMOTE_TOKEN_FILE"')
 [[ $tok =~ ^[0-9a-f]{64}$ ]] || { echo "relay token file on the builder is missing or malformed" >&2; exit 3; }
-printf %s '"$b64"' | base64 -d | curl -sS --connect-timeout 10 --max-time 60 '"$proxy"' -K <(printf "header = \"Authorization: Bearer %s\"\n" "$tok") -X POST '"${OO_RELAY_URL%/}"'/v1/logs -H "Content-Type: application/json" --data-binary @-'
+printf %s '"$b64"' | base64 -d | curl -sS --connect-timeout 10 --max-time 60 '"$proxy"' -K <(printf "header = \"Authorization: Bearer %s\"\n" "$tok") -X POST '"${OO_RELAY_URL%/}${path}"' -H "Content-Type: application/json" --data-binary @-'
       printf -v remote 'pct exec %s -- bash -c %q' "$OO_RELAY_LXC" "$script"
       ssh "$BASTION" "$remote"
       ;;
@@ -701,6 +709,65 @@ for h in (reversed(hits) if sys.argv[1] == "1" else hits):
     msg = h.get("message", "")
     print(f"{ts} [{host}] {msg}")
 ' "$reverse_out"
+}
+
+cmd_count() {
+  local container="${1:?usage: oo count <container_name> [--since 7d | --from TIME [--to TIME]] [--grep SUBSTRING] [--host HOST] [--bucket day|hour]}"; shift || true
+  local since="7d" grep_pat="" host_filter="" from_t="" to_t="" bucket="day"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --from) from_t="$2"; shift 2 ;;
+      --to) to_t="$2"; shift 2 ;;
+      --since) since="$2"; shift 2 ;;
+      --grep) grep_pat="$2"; shift 2 ;;
+      --host) host_filter="$2"; shift 2 ;;
+      --bucket) bucket="$2"; shift 2 ;;
+      *) echo "unknown flag: $1" >&2; exit 1 ;;
+    esac
+  done
+  if ! relay_mode; then
+    echo "error: 'oo count' needs the read-only log relay (set OO_RELAY_URL). With OpenObserve credentials use 'oo rate' or 'oo query' instead." >&2
+    exit 2
+  fi
+  require_creds
+  local win_start win_end
+  if [[ -n "$from_t" || -n "$to_t" ]]; then
+    [[ -n "$from_t" ]] || { echo "--to needs --from" >&2; exit 1; }
+    win_start=$(time_to_us "$from_t") || exit 1
+    if [[ -n "$to_t" ]]; then win_end=$(time_to_us "$to_t") || exit 1; else win_end=$(relay_now_us); fi
+  else
+    win_start=$(relay_since_us "$since") || exit 1
+    win_end=$(relay_now_us)
+  fi
+  local payload rc=0
+  payload=$(python3 -c '
+import json, sys, datetime
+c, host, contains, start, end, bucket = sys.argv[1:7]
+def rfc(us):
+    return datetime.datetime.fromtimestamp(int(us) / 1e6, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+body = {"container_name": c, "start": rfc(start), "end": rfc(end), "bucket": bucket}
+if host: body["host"] = host
+if contains: body["contains"] = contains
+print(json.dumps(body))
+' "$container" "$host_filter" "$grep_pat" "$win_start" "$win_end" "$bucket") || rc=$?
+  [[ "$rc" -eq 0 ]] || { echo "error: invalid time range" >&2; exit 1; }
+  printf '%s' "$payload" | { relay_post /v1/logs/count || true; } | python3 -c '
+import json, sys
+raw = sys.stdin.read()
+def fail(m):
+    print("error: " + m, file=sys.stderr); sys.exit(1)
+if not raw.strip():
+    fail("empty response from the relay (connection/timeout failure, check OO_RELAY_URL, OO_RELAY_VIA and tailnet access)")
+try:
+    d = json.loads(raw)
+except json.JSONDecodeError:
+    fail("non-JSON response from the relay (an older relay without /v1/logs/count answers 404): " + raw.strip()[:200])
+if d.get("status") != "ok":
+    fail("relay: " + str(d.get("status", "error")) + (" - " + d["error"] if d.get("error") else ""))
+for b in d.get("buckets", []):
+    print("%s  %10d" % (b["start"], b["count"]))
+print("%-20s  %10d  (%s buckets%s)" % ("total", d.get("total", 0), d.get("bucket", "?"), "" if d.get("exact") else ", upper bound: the substring was matched loosely"))
+'
 }
 
 cmd_grep() {
@@ -1585,12 +1652,13 @@ main() {
   local cmd="${1:-}"; shift || true
   if relay_mode && ! relay_supports "$cmd"; then
     echo "error: 'oo ${cmd}' needs SQL or fleet-wide search, which the read-only log relay does not offer." >&2
-    echo "In relay mode use: logs, grep --container, since-redeploy, context. (Unset OO_RELAY_URL to use OpenObserve directly with its credentials.)" >&2
+    echo "In relay mode use: logs, grep --container, since-redeploy, context, count. (Unset OO_RELAY_URL to use OpenObserve directly with its credentials.)" >&2
     exit 2
   fi
   case "$cmd" in
     query) cmd_query "$@" ;;
     logs) cmd_logs "$@" ;;
+    count) cmd_count "$@" ;;
     grep) cmd_grep "$@" ;;
     errors) cmd_errors "$@" ;;
     since-redeploy) cmd_since_redeploy "$@" ;;
