@@ -1,3 +1,7 @@
+## 2026-11-28
+
+- fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `html-proxy` 0.5.46, `infrastructure-fetch-cache` 0.3.81.
+
 ## 2026-11-27
 
 - fleet-version-pin-sync: 2 registry version pin(s) set to the version the service runs, which is also its repository main: `ocr-pdf-express` 0.2.2, `site-capsule` 0.4.6.
